@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Neelesh Singh</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #007bff, #6610f2);
+      color: white;
+      text-align: center;
+    }
+
+    .container-box {
+      max-width: 900px;
+    }
+
+    .option-card {
+      background: white;
+      color: black;
+      padding: 30px;
+      border-radius: 15px;
+      margin: 15px;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .option-card:hover {
+      transform: translateY(-10px);
+    }
+
+    .title {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container container-box">
+
+  <h1 class="title">Welcome to Neelesh Singh's World</h1>
+  <p>Choose what you’d like to explore</p>
+
+  <div class="row">
+
+    <!-- PORTFOLIO -->
+    <div class="col-md-6">
+      <div class="option-card" onclick="location.href='portfolio.html'">
+        <h3>📊 Portfolio</h3>
+        <p>Explore my experience, projects, and product work</p>
+      </div>
+    </div>
+
+    <!-- TOOLKIT -->
+    <div class="col-md-6">
+      <div class="option-card" onclick="location.href='toolkit.html'">
+        <h3>🧰 PM Toolkit</h3>
+        <p>Templates, frameworks, and coaching services</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
