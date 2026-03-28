@@ -1,2 +1,264 @@
-<h1>PM Toolkit Coming Soon</h1>
-<p>This section will include templates, frameworks, and coaching.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>PM Toolkit - Neelesh Singh</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+
+  <style>
+
+    body {
+      background: #f8f9fa;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    /* CATEGORY TABS */
+    .category-tabs {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .tab-btn {
+      border: none;
+      padding: 10px 25px;
+      margin: 5px;
+      border-radius: 25px;
+      background: #e9ecef;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: #007bff;
+      color: white;
+    }
+
+    /* CARD */
+    .tool-card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .tool-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    }
+
+    /* MODAL */
+    .modal-content {
+      border-radius: 20px;
+      border: none;
+      box-shadow: 0 20px 80px rgba(0,0,0,0.25);
+    }
+
+    .btn-premium {
+      border-radius: 25px;
+      padding: 10px 25px;
+      font-weight: 600;
+    }
+
+    .btn-primary.btn-premium {
+      background: linear-gradient(45deg, #007bff, #6610f2);
+      border: none;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+  <div class="section-title">
+    <h2>PM Toolkit</h2>
+    <p>Frameworks, Templates & Coaching to level up your PM career</p>
+  </div>
+
+  <!-- CATEGORY TABS -->
+  <div class="category-tabs">
+    <button class="tab-btn active" onclick="showTab('digital')">Digital Products</button>
+    <button class="tab-btn" onclick="showTab('coaching')">Coaching</button>
+  </div>
+
+  <!-- DIGITAL PRODUCTS -->
+  <div id="digital" class="tab-content">
+
+    <div class="row">
+
+      <div class="col-md-4">
+        <div class="tool-card" onclick="openModal('uxModal')">
+          <h5>UX Psychology for PMs</h5>
+          <p>Understand user behavior & design thinking</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="tool-card" onclick="openModal('prdModal')">
+          <h5>PRD Templates</h5>
+          <p>Write structured and impactful PRDs</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="tool-card" onclick="openModal('processModal')">
+          <h5>Product Process Templates</h5>
+          <p>Discovery, roadmap, execution frameworks</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- COACHING -->
+  <div id="coaching" class="tab-content" style="display:none;">
+
+    <div class="row">
+
+      <div class="col-md-4">
+        <div class="tool-card" onclick="openModal('oneononeModal')">
+          <h5>1:1 Coaching</h5>
+          <p>Personalized PM guidance</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="tool-card" onclick="openModal('pmJourneyModal')">
+          <h5>Breaking into PM (3 Part Series)</h5>
+          <p>Mindset → Interviews → Offers</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="tool-card" onclick="openModal('mockModal')">
+          <h5>Mock Interviews</h5>
+          <p>Product + Design interview practice</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="tool-card" onclick="openModal('linkedinModal')">
+          <h5>LinkedIn Optimization</h5>
+          <p>Improve visibility & recruiter reach</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- UX -->
+<div class="modal fade" id="uxModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4">
+      <h4>UX Psychology for PMs</h4>
+      <p>Learn behavioral principles that drive product decisions.</p>
+      <button class="btn btn-primary btn-premium">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRD -->
+<div class="modal fade" id="prdModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4">
+      <h4>PRD Templates</h4>
+      <p>Templates used in real-world product teams.</p>
+      <button class="btn btn-primary btn-premium">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<div class="modal fade" id="processModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4">
+      <h4>Product Process Templates</h4>
+      <p>End-to-end product lifecycle frameworks.</p>
+      <button class="btn btn-primary btn-premium">Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- 1:1 -->
+<div class="modal fade" id="oneononeModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4">
+      <h4>1:1 Coaching</h4>
+      <p>Get personalized guidance for your PM journey.</p>
+      <button class="btn btn-primary btn-premium">Book Session</button>
+    </div>
+  </div>
+</div>
+
+<!-- PM JOURNEY -->
+<div class="modal fade" id="pmJourneyModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4">
+      <h4>Breaking into PM</h4>
+      <p>3-part structured journey into Product Management.</p>
+      <button class="btn btn-primary btn-premium">Explore Program</button>
+    </div>
+  </div>
+</div>
+
+<!-- MOCK -->
+<div class="modal fade" id="mockModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4">
+      <h4>Mock Interviews</h4>
+      <p>Practice product & design interviews with feedback.</p>
+      <button class="btn btn-primary btn-premium">Book Mock</button>
+    </div>
+  </div>
+</div>
+
+<!-- LINKEDIN -->
+<div class="modal fade" id="linkedinModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4">
+      <h4>LinkedIn Optimization</h4>
+      <p>Improve your profile for recruiter visibility.</p>
+      <button class="btn btn-primary btn-premium">Get Review</button>
+    </div>
+  </div>
+</div>
+
+<!-- JS -->
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+
+<script>
+function showTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+  document.getElementById(tabId).style.display = 'block';
+
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+function openModal(id) {
+  $('#' + id).modal('show');
+}
+</script>
+
+</body>
+</html>
