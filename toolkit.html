@@ -8,22 +8,29 @@
 <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 <link href="css/style.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
 <style>
 
 /* ===== BACKGROUND (MATCH LANDING) ===== */
+  html, body {
+  height: 100%;
+}
 body {
   font-family: 'Segoe UI', sans-serif;
   background: url('img/Back11.png') no-repeat center center/cover;
   position: relative;
+  min-height: 100vh;
 }
 
 body::before {
   content: "";
-  position: absolute;
+  position: fixed; /* KEY FIX */
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.92);
   z-index: 0;
 }
 
@@ -184,8 +191,8 @@ body::before {
       <div class="col-md-4 mb-3">
         <div class="tool-card" onclick="openModal('prdModal')">
           <div>
-            <h5>PRD Templates</h5>
-            <p>Structured documentation frameworks</p>
+            <h5>Product development Templates</h5>
+            <p>Structured documentations to build products</p>
           </div>
           <div class="card-arrow">→</div>
         </div>
@@ -204,8 +211,8 @@ body::before {
       <div class="col-md-4 mb-3">
         <div class="tool-card" onclick="openModal('processModal')">
           <div>
-            <h5>Product Process</h5>
-            <p>Discovery to delivery frameworks</p>
+            <h5>Product Process Templates</h5>
+            <p>Templates for product process from research to roll-out</p>
           </div>
           <div class="card-arrow">→</div>
         </div>
@@ -227,7 +234,7 @@ body::before {
 
       <div class="col-md-4 mb-3">
         <div class="tool-card" onclick="openModal('pmModal')">
-          <h5>Breaking into PM</h5>
+          <h5>Breaking into PM series</h5>
           <div class="card-arrow">→</div>
         </div>
       </div>
@@ -276,6 +283,240 @@ body::before {
   </div>
 </div>
 
+  <div class="modal fade" id="uxModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5>UX Phychology templates</h5>
+        <button class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p><b>What this is:</b> kjdashdsak</p>
+
+        <p><b>What you’ll get:</b></p>
+        <ul>
+          <li>PRD format</li>
+          <li>Acceptance criteria examples</li>
+          <li>Real-world use cases</li>
+        </ul>
+
+        <p><b>Delivery:</b> Downloadable PDF</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-premium">Download</button>
+        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <div class="modal fade" id="processModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5>Product development process templates</h5>
+        <button class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p><b>What this is:</b> A collection of structured PRD templates used in real-world teams.</p>
+
+        <p><b>What you’ll get:</b></p>
+        <ul>
+          <li>PRD format</li>
+          <li>Acceptance criteria examples</li>
+          <li>Real-world use cases</li>
+        </ul>
+
+        <p><b>Delivery:</b> Downloadable PDF</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-premium">Download</button>
+        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+  <div class="modal fade" id="oneononeModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5>Book a 30 mins 1:1 Discovery call with me</h5>
+        <button class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p><b>What this is:</b> A collection of structured PRD templates used in real-world teams.</p>
+
+        <p><b>What you’ll get:</b></p>
+        <ul>
+          <li>PRD format</li>
+          <li>Acceptance criteria examples</li>
+          <li>Real-world use cases</li>
+        </ul>
+
+        <p><b>Delivery:</b> Downloadable PDF</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-premium">Download</button>
+        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+   <div class="modal fade" id="pmModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5>Break into Product world - Part 1</h5>
+        <button class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p><b>What this is:</b> A collection of structured PRD templates used in real-world teams.</p>
+
+        <p><b>What you’ll get:</b></p>
+        <ul>
+          <li>PRD format</li>
+          <li>Acceptance criteria examples</li>
+          <li>Real-world use cases</li>
+        </ul>
+
+        <p><b>Delivery:</b> Downloadable PDF</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-premium">Download</button>
+        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+   <div class="modal fade" id="mockModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5>Pratice different product mock interview questions</h5>
+        <button class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p><b>What this is:</b> A collection of structured PRD templates used in real-world teams.</p>
+
+        <p><b>What you’ll get:</b></p>
+        <ul>
+          <li>PRD format</li>
+          <li>Acceptance criteria examples</li>
+          <li>Real-world use cases</li>
+        </ul>
+
+        <p><b>Delivery:</b> Downloadable PDF</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-premium">Download</button>
+        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+  
+
+  <!---->
+  
+  <div class="container mt-5">
+
+  <h3 class="text-center mb-4">Pricing</h3>
+
+  <div class="row">
+
+    <!-- BASIC -->
+    <div class="col-md-4">
+      <div class="tool-card text-center">
+        <h5>Starter</h5>
+        <h3>$19</h3>
+        <p>Access to all templates</p>
+        <button class="btn btn-primary btn-premium">Buy Now</button>
+      </div>
+    </div>
+
+    <!-- MOST POPULAR -->
+    <div class="col-md-4">
+      <div class="tool-card text-center" style="border:2px solid #007bff; position:relative;">
+        
+        <span style="position:absolute; top:-10px; right:10px; background:#007bff; color:white; padding:5px 10px; border-radius:15px; font-size:12px;">
+          Most Popular
+        </span>
+
+        <h5>Pro Toolkit</h5>
+        <h3>$49</h3>
+        <p>Templates + Interview Prep + Frameworks</p>
+        <button class="btn btn-primary btn-premium">Buy Now</button>
+      </div>
+    </div>
+
+    <!-- COACHING -->
+    <div class="col-md-4">
+      <div class="tool-card text-center">
+        <h5>Coaching</h5>
+        <h3>$99</h3>
+        <p>1:1 session + roadmap</p>
+        <button class="btn btn-primary btn-premium" onclick="openCalendly()">Book Now</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+  <div class="container mt-5">
+
+  <h3 class="text-center mb-4">What People Say</h3>
+
+  <div class="row">
+
+    <div class="col-md-4">
+      <div class="info-box">
+        <p>"These templates helped me crack my PM interview in 2 weeks."</p>
+        <b>- Aspiring PM</b>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="info-box">
+        <p>"The mock interviews were brutally honest and extremely helpful."</p>
+        <b>- Product Analyst</b>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="info-box">
+        <p>"Best investment I made for my PM career."</p>
+        <b>- Associate PM</b>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- FOOTER -->
 <div class="footer">
   © 2026 Neelesh Singh | Privacy Policy (Coming Soon)
@@ -295,6 +536,11 @@ function showTab(tabId, btn) {
 
 function openModal(id) {
   $('#' + id).modal('show');
+}
+  function openCalendly() {
+  Calendly.initPopupWidget({
+    url: 'https://calendly.com/YOUR_USERNAME'
+  });
 }
 </script>
 
