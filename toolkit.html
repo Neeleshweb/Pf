@@ -1,258 +1,296 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>PM Toolkit - Neelesh Singh</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<title>PM Toolkit - Neelesh Singh</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
+<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
 
-  <style>
+<style>
 
-    body {
-      background: #f8f9fa;
-    }
+/* ===== BACKGROUND (MATCH LANDING) ===== */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: url('img/Back11.png') no-repeat center center/cover;
+  position: relative;
+}
 
-    .section-title {
-      text-align: center;
-      margin-bottom: 40px;
-    }
+body::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.9);
+  z-index: 0;
+}
 
-    /* CATEGORY TABS */
-    .category-tabs {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+/* ===== HEADER ===== */
+.header {
+  position: relative;
+  z-index: 2;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+}
 
-    .tab-btn {
-      border: none;
-      padding: 10px 25px;
-      margin: 5px;
-      border-radius: 25px;
-      background: #e9ecef;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+.header a {
+  text-decoration: none;
+  color: #333;
+  margin-left: 20px;
+}
 
-    .tab-btn.active, .tab-btn:hover {
-      background: #007bff;
-      color: white;
-    }
+/* ===== MAIN ===== */
+.main {
+  position: relative;
+  z-index: 2;
+  padding: 40px;
+}
 
-    /* CARD */
-    .tool-card {
-      background: white;
-      border-radius: 15px;
-      padding: 20px;
-      margin-bottom: 20px;
-      cursor: pointer;
-      transition: 0.3s;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
+.section-title {
+  text-align: center;
+  margin-bottom: 10px;
+}
 
-    .tool-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-    }
+.section-subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 40px;
+}
 
-    /* MODAL */
-    .modal-content {
-      border-radius: 20px;
-      border: none;
-      box-shadow: 0 20px 80px rgba(0,0,0,0.25);
-    }
+/* ===== TABS ===== */
+.tab-btn {
+  border: none;
+  padding: 10px 25px;
+  border-radius: 25px;
+  background: #e9ecef;
+  margin: 5px;
+  cursor: pointer;
+}
 
-    .btn-premium {
-      border-radius: 25px;
-      padding: 10px 25px;
-      font-weight: 600;
-    }
+.tab-btn.active {
+  background: #007bff;
+  color: white;
+}
 
-    .btn-primary.btn-premium {
-      background: linear-gradient(45deg, #007bff, #6610f2);
-      border: none;
-    }
+/* ===== CARDS ===== */
+.tool-card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
 
-  </style>
+.tool-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+}
 
+.card-arrow {
+  text-align: right;
+  font-size: 18px;
+}
+
+/* ===== INFO SECTION ===== */
+.info-box {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+/* ===== MODAL ===== */
+.modal-content {
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+.btn-premium {
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-weight: 600;
+}
+
+.btn-primary.btn-premium {
+  background: linear-gradient(45deg, #007bff, #6610f2);
+  border: none;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+  color: #666;
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="container mt-5">
+<!-- HEADER -->
+<div class="header">
+  <div><b>PM Toolkit</b></div>
+  <div>
+    <a href="index.html">Home</a>
+    <a href="portfolio.html">Portfolio</a>
+  </div>
+</div>
 
-  <div class="section-title">
-    <h2>PM Toolkit</h2>
-    <p>Frameworks, Templates & Coaching to level up your PM career</p>
+<!-- MAIN -->
+<div class="main container">
+
+  <h2 class="section-title">PM Toolkit</h2>
+  <p class="section-subtitle">
+    Practical resources, frameworks & coaching to accelerate your Product Management journey
+  </p>
+
+  <!-- INFO SECTION -->
+  <div class="info-box">
+    <h5>What is this page?</h5>
+    <p>This toolkit is designed for aspiring and growing Product Managers who want practical, real-world resources and structured guidance.</p>
   </div>
 
-  <!-- CATEGORY TABS -->
-  <div class="category-tabs">
-    <button class="tab-btn active" onclick="showTab('digital')">Digital Products</button>
-    <button class="tab-btn" onclick="showTab('coaching')">Coaching</button>
+  <!-- TABS -->
+  <div class="text-center mb-4">
+    <button class="tab-btn active" onclick="showTab('digital', this)">Digital Products</button>
+    <button class="tab-btn" onclick="showTab('coaching', this)">Coaching</button>
   </div>
 
-  <!-- DIGITAL PRODUCTS -->
+  <!-- DIGITAL -->
   <div id="digital" class="tab-content">
-
     <div class="row">
 
-      <div class="col-md-4">
-        <div class="tool-card" onclick="openModal('uxModal')">
-          <h5>UX Psychology for PMs</h5>
-          <p>Understand user behavior & design thinking</p>
-        </div>
-      </div>
-
-      <div class="col-md-4">
+      <div class="col-md-4 mb-3">
         <div class="tool-card" onclick="openModal('prdModal')">
-          <h5>PRD Templates</h5>
-          <p>Write structured and impactful PRDs</p>
+          <div>
+            <h5>PRD Templates</h5>
+            <p>Structured documentation frameworks</p>
+          </div>
+          <div class="card-arrow">→</div>
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-4 mb-3">
+        <div class="tool-card" onclick="openModal('uxModal')">
+          <div>
+            <h5>UX Psychology</h5>
+            <p>Understand user behavior</p>
+          </div>
+          <div class="card-arrow">→</div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-3">
         <div class="tool-card" onclick="openModal('processModal')">
-          <h5>Product Process Templates</h5>
-          <p>Discovery, roadmap, execution frameworks</p>
+          <div>
+            <h5>Product Process</h5>
+            <p>Discovery to delivery frameworks</p>
+          </div>
+          <div class="card-arrow">→</div>
         </div>
       </div>
 
     </div>
-
   </div>
 
   <!-- COACHING -->
   <div id="coaching" class="tab-content" style="display:none;">
-
     <div class="row">
 
-      <div class="col-md-4">
+      <div class="col-md-4 mb-3">
         <div class="tool-card" onclick="openModal('oneononeModal')">
           <h5>1:1 Coaching</h5>
-          <p>Personalized PM guidance</p>
+          <div class="card-arrow">→</div>
         </div>
       </div>
 
-      <div class="col-md-4">
-        <div class="tool-card" onclick="openModal('pmJourneyModal')">
-          <h5>Breaking into PM (3 Part Series)</h5>
-          <p>Mindset → Interviews → Offers</p>
+      <div class="col-md-4 mb-3">
+        <div class="tool-card" onclick="openModal('pmModal')">
+          <h5>Breaking into PM</h5>
+          <div class="card-arrow">→</div>
         </div>
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-4 mb-3">
         <div class="tool-card" onclick="openModal('mockModal')">
           <h5>Mock Interviews</h5>
-          <p>Product + Design interview practice</p>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="tool-card" onclick="openModal('linkedinModal')">
-          <h5>LinkedIn Optimization</h5>
-          <p>Improve visibility & recruiter reach</p>
+          <div class="card-arrow">→</div>
         </div>
       </div>
 
     </div>
-
   </div>
 
 </div>
 
-<!-- ===== MODALS ===== -->
-
-<!-- UX -->
-<div class="modal fade" id="uxModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-4">
-      <h4>UX Psychology for PMs</h4>
-      <p>Learn behavioral principles that drive product decisions.</p>
-      <button class="btn btn-primary btn-premium">Download PDF</button>
-    </div>
-  </div>
-</div>
-
-<!-- PRD -->
+<!-- ===== MODAL EXAMPLE ===== -->
 <div class="modal fade" id="prdModal">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-4">
-      <h4>PRD Templates</h4>
-      <p>Templates used in real-world product teams.</p>
-      <button class="btn btn-primary btn-premium">Download PDF</button>
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5>PRD Templates</h5>
+        <button class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p><b>What this is:</b> A collection of structured PRD templates used in real-world teams.</p>
+
+        <p><b>What you’ll get:</b></p>
+        <ul>
+          <li>PRD format</li>
+          <li>Acceptance criteria examples</li>
+          <li>Real-world use cases</li>
+        </ul>
+
+        <p><b>Delivery:</b> Downloadable PDF</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-premium">Download</button>
+        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
+      </div>
+
     </div>
   </div>
 </div>
 
-<!-- PROCESS -->
-<div class="modal fade" id="processModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-4">
-      <h4>Product Process Templates</h4>
-      <p>End-to-end product lifecycle frameworks.</p>
-      <button class="btn btn-primary btn-premium">Download PDF</button>
-    </div>
-  </div>
+<!-- FOOTER -->
+<div class="footer">
+  © 2026 Neelesh Singh | Privacy Policy (Coming Soon)
 </div>
 
-<!-- 1:1 -->
-<div class="modal fade" id="oneononeModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-4">
-      <h4>1:1 Coaching</h4>
-      <p>Get personalized guidance for your PM journey.</p>
-      <button class="btn btn-primary btn-premium">Book Session</button>
-    </div>
-  </div>
-</div>
-
-<!-- PM JOURNEY -->
-<div class="modal fade" id="pmJourneyModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-4">
-      <h4>Breaking into PM</h4>
-      <p>3-part structured journey into Product Management.</p>
-      <button class="btn btn-primary btn-premium">Explore Program</button>
-    </div>
-  </div>
-</div>
-
-<!-- MOCK -->
-<div class="modal fade" id="mockModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-4">
-      <h4>Mock Interviews</h4>
-      <p>Practice product & design interviews with feedback.</p>
-      <button class="btn btn-primary btn-premium">Book Mock</button>
-    </div>
-  </div>
-</div>
-
-<!-- LINKEDIN -->
-<div class="modal fade" id="linkedinModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-4">
-      <h4>LinkedIn Optimization</h4>
-      <p>Improve your profile for recruiter visibility.</p>
-      <button class="btn btn-primary btn-premium">Get Review</button>
-    </div>
-  </div>
-</div>
-
-<!-- JS -->
 <script src="lib/jquery/jquery.min.js"></script>
 <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 
 <script>
-function showTab(tabId) {
+function showTab(tabId, btn) {
   document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
   document.getElementById(tabId).style.display = 'block';
 
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 }
 
 function openModal(id) {
