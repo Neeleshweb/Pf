@@ -50,91 +50,776 @@
   ======================================================= -->
 </head>
 
-<body>
+<body id="page-top">
 
-<div class="container-fluid">
-  <div class="row">
-
-    <!-- LEFT SIDEBAR -->
-    <div class="col-md-4" style="background:#f8f9fa; height:100vh; position:fixed; padding:30px;">
-
-      <div class="text-center">
-        <img src="img/aboutmephoto.jpeg" style="width:120px; border-radius:50%;">
-        <h2 class="mt-3">Neelesh Singh</h2>
-        <p><b>Product Manager | Ex-Developer</b></p>
-        <p>Helping developers become strong Product Managers</p>
-
-        <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank" class="btn btn-primary btn-sm mt-2">
-          Connect on LinkedIn
-        </a>
+  <!--/ Nav Star /-->
+  <nav class="navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand js-scroll" href="#page-top">NEELESH SINGH</a>
+      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
+        aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="navbar-collapse collapse justify-content-end" id="navbarDefault">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link js-scroll active" href="#home">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll" href="#about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll" href="#service">Interests</a>
+          </li>
+          
+          <li class="nav-item">
+            <a class="nav-link js-scroll" href="#work">Works</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll" href="#education">Education</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll" href="#publications">Publications</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll" href="#contact">Contact</a>
+          </li>
+        </ul>
       </div>
-
     </div>
+  </nav>
+  <!--/ Nav End /-->
 
-    <!-- RIGHT CONTENT -->
-    <div class="col-md-8 offset-md-4" style="padding:40px;">
+  <!--/ Intro Skew Star /-->
+  <div id="home" class="intro route bg-image" style="background-image: url(img/Back11.png)">
+    <div class="overlay-itro"></div>
+    <div class="intro-content display-table">
+      <div class="table-cell">
+        <div class="container">
+          <!--<p class="display-6 color-d">Hello, world!</p>-->
+          <h1 class="intro-title mb-4">
+        Discover My Digital Footprint in Product ->
+        <span id="slider" class="text-slider color-1"></span>
+    </h1>
+    <p class="intro-subtitle">
+        <strong class="text-slider"></strong>
+    </p>
+          
+          <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var items = ['Strategy', 'Innovation', 'Execution', 'Growth'];
+            var colors = ['color-1', 'color-2', 'color-3', 'color-4']; // Array of colors
+            var currentIndex = 0;
+            var slider = document.getElementById('slider');
 
-      <!-- TABS -->
-      <div class="mb-4">
-        <button class="btn btn-outline-primary mr-2" onclick="showTab('products')">Digital Products</button>
-        <button class="btn btn-outline-primary mr-2" onclick="showTab('coaching')">Coaching</button>
-      </div>
+            function updateSliderText() {
+                // Change the text content and update the color class
+                slider.textContent = items[currentIndex];
 
-      <!-- PRODUCTS TAB -->
-      <div id="products" class="tab-content">
+                // Remove the old color class and add the new one
+                slider.classList.remove(colors[(currentIndex - 1 + colors.length) % colors.length]);
+                slider.classList.add(colors[currentIndex]);
 
-        <div class="card mb-3 p-3" onclick="location.href='products/PRD Template.html'" style="cursor:pointer;">
-          <h4>Useful Templates</h4>
-          <p>Write clear and structured product requirement documents</p>
-          <span>→</span>
+                // Move to the next index
+                currentIndex = (currentIndex + 1) % items.length;
+            }
+
+            // Update text every 2 seconds (adjustable)
+            setInterval(updateSliderText, 2000);
+        });
+    </script>
+          <!-- <p class="pt-3"><a class="btn btn-primary btn js-scroll px-4" href="#about" role="button">Learn More</a></p> -->
         </div>
-
-        <div class="card mb-3 p-3" onclick="location.href='products/discovery.html'" style="cursor:pointer;">
-          <h4>Discovery Framework</h4>
-          <p>Structured approach to product discovery</p>
-          <span>→</span>
-        </div>
-
-        <div class="card mb-3 p-3" onclick="location.href='products/userstories.html'" style="cursor:pointer;">
-          <h4>User Story Guide</h4>
-          <p>Write better epics and user stories</p>
-          <span>→</span>
-        </div>
-
       </div>
-
-      <!-- COACHING TAB -->
-      <div id="coaching" class="tab-content" style="display:none;">
-
-        <div class="card mb-3 p-3" onclick="location.href='products/coaching.html'" style="cursor:pointer;">
-          <h4>1:1 PM Coaching</h4>
-          <p>Get guidance on transitioning into Product Management</p>
-          <span>→</span>
-        </div>
-
-      </div>
-
-      <!-- ABOUT SECTION -->
-      <div class="mt-5">
-        <h3>About Me</h3>
-        <p>
-          I’m a Product Manager with a background in software development, working on complex systems in CMMS and real estate platforms.
-          I focus on solving structured product problems and bridging the gap between business and engineering.
-        </p>
-      </div>
-
     </div>
-
   </div>
+  <!--/ Intro Skew End /-->
+
+  <section id="about" class="about-mf sect-pt4 route">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="box-shadow-full">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-sm-6 col-md-5">
+                    <div class="about-img">
+                      <img src="img/aboutmephoto.jpeg" class="img-fluid rounded b-shadow-a" alt="">
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-7">
+                    <div class="about-info">
+                      <p><span class="title-s">Name: </span> <span>Neelesh Singh</span></p>
+                      <p><span class="title-s">Profile: </span> <span>Technical Product Manager</span></p>
+                      <p><span class="title-s">Email: </span> <span>Neelesh.Singh@dal.ca</span></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="skill-mf">
+                  <p class="title-s">Major Skill Sets</p>
+                  <span>Roadmap planning and Prioritization</span><span class="pull-right">95%</span>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 95%;" aria-valuenow="95" aria-valuemin="0"
+                      aria-valuemax="100"></div>
+                  </div>
+                   <span>KPI selection</span> <span class="pull-right">80%</span>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0"
+                      aria-valuemax="100"></div>
+                  </div>
+                  <span>Business to Technical requirements</span> <span class="pull-right">100%</span>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+                      aria-valuemax="100"></div>
+                  </div>
+                  <span>Cross-Functional collaboration</span> <span class="pull-right">100%</span>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+                      aria-valuemax="100"></div>
+                  </div>
+                  <span>Lean Agile Principles</span> <span class="pull-right">90%</span>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0"
+                      aria-valuemax="100"></div>
+                  </div>
+                  <span>MVP experiments</span> <span class="pull-right">85%</span>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0"
+                      aria-valuemax="100"></div>
+                  </div>
+                  <span>Market Research & Competitive Analysis</span> <span class="pull-right">85%</span>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0"
+                      aria-valuemax="100"></div>
+                  </div>
+                   <span>Technical Software Engineering</span> <span class="pull-right">100%</span>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
+                      aria-valuemax="100"></div>
+                  </div>
+                  <span>Data-Driven Decision Making</span> <span class="pull-right">95%</span>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0"
+                      aria-valuemax="100"></div>
+                  </div>           
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="about-me pt-4 pt-md-0">
+                  <div class="title-box-2">
+                    <h5 class="title-left">
+                      About me
+                    </h5>
+                  </div>
+                <p class="lead">
+  <h5><b><i>My journey into product management began on the streets of Halifax (Nova Scotia, Canada), where I worked part-time as a food delivery driver during my master’s program. Parking in the city was a constant battle, with fines piling up and frustrations mounting. I wondered: was I alone in this struggle, or was this a widespread problem? Fueled by curiosity, I created a 
+    <a href="https://docs.google.com/forms/d/19LCzTekpEcQp2Uk9KffsT3wZ08-vwOJLmvovZQEUU1o/edit#responses" target="_blank" class="btn btn-success btn-sm">Google Forms Survey</a>
+    to find out. Sharing it across social media, I gathered over 34 responses, with a staggering 96% of participants echoing the need for a solution to this urban challenge. That moment—identifying a problem, validating it with data, and envisioning a solution—sparked my passion for product management.</i></b></h5>
+</p>
+
+                  <p class="lead">
+                    <h5><b><i>Since then, I’ve channeled that passion into building impactful products that address user pain points. At CoreLogic, I’ve led initiatives that blend innovation with strategy. Whether it was integrating AI assistants into MLSTOUCH to auto-generate property descriptions—growing the user base to over 1 million—or driving adoption with API integrations like Canva and Zapier, I’ve focused on solving real-world problems with measurable results. My work on OneHome.com further underscores my commitment to delivering seamless user experiences, improving retention by 15% and cutting support complaints by 40%.</i></b></h5>
+                  </p>
+                  <p class="lead">
+  <h5><b><i>Before stepping into product management, my technical foundation as a software engineer equipped me with a deep understanding of systems and the ability to bridge the gap between development teams and business needs. But my curiosity doesn’t stop at work. I channel my creative energy into writing books on 
+    Agile Product Management and experimenting in the kitchen, where I find joy in crafting delicious dishes. These hobbies reflect my belief in balance and continuous learning—values that fuel my approach to both work and life.</i></b></h5>
+</p>
+                   <p class="lead">
+                    <h5><b><i>From ideation to execution, my journey has always been about solving meaningful problems, and I can’t wait to tackle the next big challenge. Let’s build something extraordinary together, shall we?</i></b></h5>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!--/ Section Services Star /-->
+  <section id="service" class="services-mf route">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="title-box text-center">
+            <h3 class="title-a">
+              Interests
+            </h3>
+            <p class="subtitle-a">
+              <h4><b><i>Passions and activities that drive my product thinking.</i></b></h4>
+            </p>
+            <div class="line-mf"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="service-box">
+            <div class="service-ico">
+              <span class="ico-circle"><i class="ion-laptop"></i></span>
+            </div>
+            <div class="service-content">
+              <h2 class="s-title">Exploring Innovative Products Across Industries</h2>
+              <p class="s-description text-center">
+                <h5><b><i>I have a keen interest in discovering and experimenting with new products across various domains. This curiosity helps me identify usability gaps, generate ideas for improvements, and understand diverse user behaviors—insights that directly contribute to creating user-centric solutions in my role as a product manager.</i></b></h5>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-box">
+            <div class="service-ico">
+              <span class="ico-circle"><i class="ion-stats-bars"></i></span>
+            </div>
+            <div class="service-content">
+              <h2 class="s-title">Following Emerging Market Trends</h2>
+              <p class="s-description text-center">
+                <h5><b><i>I love diving into newsletters, Reddit forums like r/ProductManagement, and industry blogs to stay ahead of market trends. This habit keeps me informed about shifting consumer demands and innovative solutions that inspire product roadmaps.</i></b></h5>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-box">
+            <div class="service-ico">
+              <span class="ico-circle"><i class="ion-chatbubbles"></i></span>
+            </div>
+            <div class="service-content">
+              <h2 class="s-title">Decoding Customer Feedback</h2>
+              <p class="s-description text-center">
+               <h5><b><i>I frequently read app store reviews and product feedback on platforms like Trustpilot to understand real-world user experiences. Whether it’s spotting recurring pain points or creative feature suggestions, this helps me practice customer empathy and prioritize impactful improvements.</i></b></h5>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-box">
+            <div class="service-ico">
+              <span class="ico-circle"><i class="ion-person"></i></span>
+            </div>
+            <div class="service-content">
+              <h2 class="s-title">Building Empathy Through User-Stories</h2>
+              <p class="s-description text-center">
+               <h5><b><i>I enjoy engaging in conversations on Reddit forums like r/UserExperience and other social media channels, where users discuss their frustrations with existing products. These discussions inspire me to think critically about how to build features that better serve user needs and solve common problems.</i></b></h5>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-box">
+            <div class="service-ico">
+              <span class="ico-circle"><i class="ion-lightbulb"></i></span>
+            </div>
+            <div class="service-content">
+              <h2 class="s-title">Exploring Behavioral Psychology in Design</h2>
+              <p class="s-description text-center">
+               <h5><b><i>Books like "Hooked" by Nir Eyal and podcasts on behavioral psychology fascinate me. They fuel my understanding of how users form habits with products, enabling me to design features that align with their natural tendencies making them addictive to the product and therefore encourage engagement.</i></b></h5>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="service-box">
+            <div class="service-ico">
+              <span class="ico-circle"><i class="ion-settings"></i></span>
+            </div>
+            <div class="service-content">
+              <h2 class="s-title">Experimenting With Productivity Tools</h2>
+              <p class="s-description text-center">
+               <h5><b><i></i>I often try out tools like Notion, Asana, or Zapier to streamline my own workflows. Sharing my experiences with peers has helped me recommend tools that improve team collaboration and align with product goals.</b></h5>
+              </p>
+            </div>
+          </div>
+        </div>
+        
+            
+      </div>
+    </div>
+  </section>
+  <!--/ Section Services End /-->
+
+  <div class="section-counter paralax-mf bg-image" style="background-image: url(img/counters-bg.jpg)">
+    <div class="overlay-mf"></div>
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-sm-3 col-lg-3">
+                <div class="counter-box pt-4 pt-md-0">
+                    <div class="counter-ico">
+                        <span class="ico-circle"><i class="ion-ios-calendar-outline"></i></span>
+                    </div>
+                    <div class="counter-num">
+                        <p class="counter">5</p>
+                        <span class="counter-text">
+                            <h4><b><i>Years of Experience</i></b></h4>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-lg-3">
+                <div class="counter-box pt-4 pt-md-0">
+                    <div class="counter-ico">
+                        <span class="ico-circle"><i class="ion-cube"></i></span>
+                    </div>
+                    <div class="counter-num">
+                        <p class="counter">3</p>
+                        <span class="counter-text">
+                            <h4><b><i>Products Transformed</i></b></h4>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-lg-3">
+                <div class="counter-box pt-4 pt-md-0">
+                    <div class="counter-ico">
+                        <span class="ico-circle"><i class="ion-ribbon-a"></i></span>
+                    </div>
+                    <div class="counter-num">
+                        <p class="counter">9</p>
+                        <span class="counter-text">
+                            <h4><b><i>Awards</i></b></h4>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- JS -->
-<script>
-function showTab(tabId) {
-  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-  document.getElementById(tabId).style.display = 'block';
-}
+
+  <!--/ Section Portfolio Star /-->
+  <section id="work" class="portfolio-mf sect-pt4 route">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="title-box text-center">
+            <h3 class="title-a">
+              Professional Experience
+            </h3>
+            <p class="subtitle-a">
+                                 <H3></h3>
+            </p>
+            <div class="line-mf"></div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="work-box">
+              <div class="work-img">
+                <img src="img/technical.png" alt="" class="img-fluid">
+              </div>
+              <div class="work-content">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h2 class="w-title">CoreLogic</h2>
+                    <div class="w-more">
+                      <span class="w-ctegory">Technical Product Manager</span> / <span class="w-date">August 2023-Present</span>
+                      <br>
+                      <span class="w-description">
+                      <strong>Built and integrated AI Assistant for property descriptions with MLSTOUCH</strong>
+              <ul>
+                <li><strong>Solution (The What)</strong> – Integrated AI to auto-generate property descriptions from images and location metadata.</li>
+                <li><strong>Problem (The Why)</strong> – Eliminated manual listing creation, meeting agents' need for 5x faster, high-quality listings.</li>
+                <li><strong>Metrics</strong> – Achieved 11% user growth rate over Q2 2024, expanding MLSTOUCH’s user base from 900k to 1M.</li>
+              </ul>
+              <strong>Driving Adoption Rate through cross-platform third-party API Integrations</strong>
+              <ul>
+                <li><strong>Solution (The What)</strong> – Facilitated API integration with Canva for tailoring social media templates, Zapier for workflow automation between different APIs, and AR walk the property lines for immersive property exploration.</li>
+                <li><strong>Problem (The Why)</strong> – Addressed agents' challenges in marketing efficiency, productivity, and client engagement.</li>
+                <li><strong>Metrics</strong> – Improved multiple dimensions, boosting MLSTOUCH’s adoption rate by 18% annually.</li>
+              </ul>
+              <strong>Boosted Retention Rate of OneHome.com, and improved customer satisfaction for MLSTOUCH</strong>
+              <ul>
+                <li><strong>Solution (The What)</strong> – Built, integrated and launched a Centralized Service Layer (CSL) from 0 to 1 by collaborating cross-functionally between developers, UX designers, and QA to synchronize data across platforms.</li>
+                <li><strong>Challenge (The Why)</strong> – Resolved discrepancies where users faced inconsistent data, such as listings added to favorites on one platform not syncing with others or listings visible on MLSTOUCH, not available on Onehome.com. These caused frustrations leading to bad app reviews and frequent customer support complaints.</li>
+                <li><strong>Metrics</strong> – Reduced customer support complaints by 40%, improved app ratings from 4.6 to 4.8 on the App Store, and boosted retention rates by 15% quarterly for OneHome by delivering seamless experiences for both products.</li>
+              </ul>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="w-like">
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="work-box">
+              <div class="work-img">
+                <img src="img/product_consultant.png" alt="" class="img-fluid">
+              </div>
+              <div class="work-content">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h2 class="w-title">CGI</h2>
+                    <div class="w-more">
+                      <span class="w-ctegory">Product Consultant</span> / <span class="w-date">May 2021-July 2023</span>
+                      <br>
+                      <span class="w-description">
+                        <strong>Optimized Investment Solutions Through Model Portfolios</strong>
+              <ul>
+                <li><strong>Solution (The What)</strong> – Led the development of a model portfolio templates portal that provided mixed asset classes for different types of investors in seconds, significantly reducing portfolio construction time.</li>
+                <li><strong>Problem (The Why)</strong> – Tackled the inefficiency of manually creating tailored investment portfolios, which was time-intensive and inconsistent, affecting customer satisfaction and retention.</li>
+                <li><strong>Metrics</strong> – Achieved an 8% monthly increase in customer retention rates, enhancing investment outcomes for Fidelity’s existing clients under investment solutions.</li>
+              </ul>
+              <strong>Enhanced Business Value Delivery Through Prioritization</strong>
+              <ul>
+                <li><strong>Solution (The What)</strong> – Established an improved prioritization framework by optimizing JIRA ticket management, enabling a focus on high-value tasks using both qualitative and quantitative metrics.</li>
+                <li><strong>Problem (The Why)</strong> – Solved inefficiencies caused by scattered priorities, ensuring high-impact business needs were addressed effectively.</li>
+                <li><strong>Metrics</strong> – Increased business value delivery by 20% compared to the previous quarter, showcasing a measurable improvement in prioritization processes.</li>
+              </ul>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="w-like">
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="work-box">
+            
+              <div class="work-img">
+                <img src="img/software_engineer.png" alt="" class="img-fluid">
+              </div>
+              <div class="work-content">
+                <div class="row">
+                  <div class="col-sm-8">
+                    <h2 class="w-title">Tata Consultancy Services</h2>
+                    <div class="w-more">
+                      <span class="w-ctegory">Software Engineer</span> / <span class="w-date">Mar 2018-Nov 2019</span>
+                      <br>
+                      <span class="w-description">
+                      <strong>Developing APIs to Enhance Tax Processing</strong>
+              <ul>
+                <li><strong>The How</strong> – Formulated and developed an Income Tax Business Application (ITBA) for the Income Tax Department using Spring Boot API endpoints.</li>
+                <li><strong>Metrics</strong> – Minimized human errors in tax calculations and achieved a 10% reduction in maintenance costs.</li>
+              </ul>
+              <strong>Automating Data Conversion Processes</strong>
+              <ul>
+                <li><strong>The How</strong> – Devised and implemented a script using Java libraries to convert XLS data into XML format, automating the manual data conversion process.</li>
+                <li><strong>Metrics</strong> – Reduced the maintenance task time by 20%, improving overall efficiency.</li>
+              </ul></span>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <div class="w-like">
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
+
+ <section id="education" class="portfolio-mf sect-pt4 route">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title-box text-center">
+                    <h3 class="title-a">Education</h3>
+                    <p class="subtitle-a"></p>
+                    <div class="line-mf"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-5 mx-auto">
+                <div class="work-box">
+                    <div class="work-img">
+                        <img src="img/grad.jpg" alt="" class="img-fluid">
+                    </div>
+                    <div class="work-content">
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <h2 class="w-title">Dalhousie University, Canada</h2>
+                                <div class="w-more">
+                                    <span class="w-ctegory">Masters in Applied Computer Science</span> / <span class="w-date">Jan 2020-April 2021</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 mx-auto">
+                <div class="work-box">
+                    <div class="work-img">
+                        <img src="img/graduate.png" alt="" class="img-fluid">
+                    </div>
+                    <div class="work-content">
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <h2 class="w-title">Dr APJ Abdul Kalam Technical University, India</h2>
+                                <div class="w-more">
+                                    <span class="w-ctegory">Bachelors of Engineering and Technology in Information Technology</span> / <span class="w-date">Aug 2013-Aug 2017</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+  <section id="publications" class="portfolio-mf sect-pt4 route">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="title-box text-center">
+                    <h3 class="title-a">Publications</h3>
+                    <p class="subtitle-a">
+                      <strong>These books are based on my personal experiences and insights shared by fellow product managers. They are intended for beginners and should not be considered definitive guides. Perspectives may vary, and I continue to grow and learn as a product manager. Please approach the content with an open mind. I have a deep passion for sharing knowledge and experiences, believing that by learning and growing together, we can inspire and empower one another to achieve more.</strong> </p>
+                    <div class="line-mf"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-5 mx-auto">
+                <div class="work-box">
+                    <div class="work-img">
+                        <a href="https://www.amazon.ca/Product-Management-customer-centric-fundamental-enterprises-ebook/dp/B0BTCL5B8B/" target="_blank">
+                <img src="img/volume1.jpg" alt="" class="img-fluid">
+            </a>
+                    </div>
+                    <div class="work-content">
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <h2 class="w-title">
+  <a href="https://www.amazon.ca/Product-Management-customer-centric-fundamental-enterprises-ebook/dp/B0BTCL5B8B/" 
+     target="_blank" 
+     style="color: #007BFF; text-decoration: underline; font-weight: bold;">
+    Idea to Launch Journey for Product Managers
+  </a>
+</h2>
+                                <div class="w-more">
+                                    <span class="w-ctegory">Author - Neelesh Singh</span> / <span class="w-date"><b>Published - Jan 2023</b></span>
+                                  <br>
+                                  <span class="w-description">
+                                    <strong>This book offers a beginner-friendly guide to the WHY, WHAT, and HOW of product management, blending storytelling with actionable steps. Covering everything from ideation to launch, it delves into key areas like market research, competitor analysis, product-market fit, pricing, and MVP development. Learn to differentiate customer wants from product needs, anticipate competition, and create compelling roadmaps. Featuring a step-by-step framework, practical case studies, and agile methodologies, this book equips you to build customer-centric products and ace product management interviews. Whether you’re starting out or refining your skills, this guide lays a solid foundation for your journey</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5 mx-auto">
+                <div class="work-box">
+                    <div class="work-img">
+                        <a href="https://www.amazon.com/ultimate-guide-product-manager-management-ebook/dp/B0CGPJ8JQ9" target="_blank">
+                <img src="img/volume2.jpg" alt="" class="img-fluid">
+            </a>
+                    </div>
+                    <div class="work-content">
+                        <div class="row">
+                            <div class="col-sm-12 text-center">
+                                <h2 class="w-title">
+  <a href="https://www.amazon.com/ultimate-guide-product-manager-management-ebook/dp/B0CGPJ8JQ9" 
+     target="_blank" 
+     style="color: #007BFF; text-decoration: underline; cursor: pointer;">
+    Ultimate guide for product managers
+  </a>
+</h2
+                                <div class="w-more">
+                                    <span class="w-ctegory">Author - Neelesh Singh</span> / <span class="w-date"><b>Published - Aug 2023</b></span>
+                                  <br>
+                                  <span class="w-description"><strong>This book redefines product management by blending strategy, innovation, and actionable insights. Part One explores foundational skills like customer empathy, market assessment, and conflict resolution to build resilience and mastery. Part Two focuses on navigating organizational dynamics and resolving conflicts effectively. In Part Three, learn to tailor product management strategies for startups, mid-sized firms, and enterprises across B2B, B2C, SaaS, and more. Part Four dives into Agile workflows, sprint planning, and scaling products with cross-functional collaboration. Finally, uncover the technology and strategies behind leading digital products, including AI, APIs, and data-driven decision-making, to craft exceptional customer experiences.</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+  <!--/ Section Portfolio End /-->
+
+  <!--/ Section Testimonials Star /-->
+  
+
+  <!--/ Section Blog Star /-->
+  
+  <!--/ Section Blog End /-->
+
+  <!--/ Section Contact-Footer Star /-->
+  <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(img/overlay-bg.jpg)">
+    <div class="overlay-mf"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="contact-mf">
+            <div id="contact" class="box-shadow-full">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="title-box-2">
+                    <h5 class="title-left">
+                      Ping me
+                    </h5>
+                  </div>
+                  <div>
+                      <form action="" method="post" role="form" class="contactForm">
+                      <div id="sendmessage">Your message has been sent. Thank you, I will get in touch with you shortly.</div>
+                      <div id="errormessage"></div>
+                      <div class="row">
+                        <div class="col-md-12 mb-3">
+                          <div class="form-group">
+                            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+                            <div class="validation"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                          <div class="form-group">
+                            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
+                            <div class="validation"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <div class="form-group">
+                              <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
+                              <div class="validation"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                          <div class="form-group">
+                            <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
+                            <div class="validation"></div>
+                          </div>
+                        </div>
+                        <div class="col-md-12">
+                          <button type="submit" class="button button-a button-big button-rouded">Send Message</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="title-box-2 pt-4 pt-md-0">
+                    <h5 class="title-left">
+                      You made it this far reading about me woohooo!
+                    </h5>
+                  </div>
+                  <div class="more-info">
+                    <p class="lead">
+<strong>If you’ve scrolled all the way here, you probably already know I’m passionate about solving problems, building amazing products, and leaving users saying, “Wow, that’s exactly what I needed!”
+
+But hey, why stop here? Whether you have a million-dollar idea to brainstorm, need a product whisperer on your team, or just want to talk tech over coffee (or virtual coffee), I’d love to connect. Let’s make something awesome together.</strong>
+
+  
+                    </p>
+                    <ul class="list-ico">
+                      <li><span class="ion-ios-telephone"></span> +1(902)-880-9819</li>
+                      <li><span class="ion-email"></span> Neelesh.singh@dal.ca</li>
+                    </ul>
+                    <div class="button-group mt-4">
+        <button class="btn btn-primary" onclick="downloadResume()">Download Resume</button>
+        
+    </div>
+                    <script>
+    function downloadResume() {
+        const link = document.createElement('a');
+        link.href = 'img/Singh_Neelesh.pdf';
+        link.download = 'Singh_Neelesh.pdf';
+        link.click();
+    }
 </script>
+                 
+                   <div class="social-links text-center">
+  <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank" class="social-icon">
+    <i class="ion-social-linkedin"></i>
+  </a>
+  <a href="https://github.com/Neeleshweb" target="_blank" class="social-icon">
+    <i class="ion-social-github"></i>
+  </a>
+  <a href="https://www.facebook.com/NeeleshWeb.homefilescenter" target="_blank" class="social-icon">
+    <i class="ion-social-facebook"></i>
+  </a>
+  <a href="https://www.kaggle.com/warmachinezz" target="_blank" class="social-icon">
+    <i class="ion-ios-podium-outline"></i>
+  </a>
+</div>
+
+<!-- Updated Styling -->
+<style>
+  .social-links {
+    margin-top: 15px;
+    text-align: center;
+  }
+  .social-icon {
+    display: inline-block;
+    margin: 0 10px; /* Adds spacing between icons */
+    font-size: 24px; /* Increases icon size */
+    color: #555; /* Default icon color */
+    transition: color 0.3s ease; /* Smooth hover effect */
+  }
+  .social-icon:hover {
+    color: #007bff; /* Hover color */
+  }
+</style>
+                    
+                    
+                    
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="copyright-box">
+              <p class="copyright">&copy; Copyright <strong>2025</strong>. All Rights Reserved</p>
+              <div class="credits">
+               
+               
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </section>
+  <!--/ Section Contact-footer End /-->
+
+  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+  <div id="preloader"></div>
+
+  <!-- JavaScript Libraries -->
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script src="lib/jquery/jquery-migrate.min.js"></script>
+  <script src="lib/popper/popper.min.js"></script>
+  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="lib/easing/easing.min.js"></script>
+  <script src="lib/counterup/jquery.waypoints.min.js"></script>
+  <script src="lib/counterup/jquery.counterup.js"></script>
+  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+  <script src="lib/lightbox/js/lightbox.min.js"></script>
+  <script src="lib/typed/typed.min.js"></script>
+  <!-- Contact Form JavaScript File -->
+  <script src="contactform/contactform.js"></script>
+
+  <!-- Template Main Javascript File -->
+  <script src="js/main.js"></script>
 
 </body>
 </html>
