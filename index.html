@@ -6,34 +6,76 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
 <style>
 
-/* BACKGROUND */
+/* ===== BACKGROUND ===== */
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(to right, #f8fafc, #eef2f7);
+  flex-direction: column;
+  background: url('img/Back11.png') no-repeat center center/cover;
+  position: relative;
 }
 
-/* CONTAINER */
+/* Overlay for premium feel */
+body::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.85);
+  z-index: 0;
+}
+
+/* ===== HEADER ===== */
+.header {
+  position: relative;
+  z-index: 2;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.nav-links a {
+  margin-left: 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* ===== MAIN ===== */
 .main-container {
+  position: relative;
+  z-index: 2;
   text-align: center;
+  margin: auto;
   max-width: 1000px;
 }
 
 /* TITLE */
 .title {
-  font-size: 2.5rem;
+  font-size: 2.7rem;
   font-weight: 700;
 }
 
 .subtitle {
-  color: #555;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.microcopy {
+  color: #777;
+  font-size: 14px;
   margin-bottom: 40px;
 }
 
@@ -41,60 +83,78 @@ body {
 .option-card {
   background: white;
   padding: 30px;
-  border-radius: 15px;
+  border-radius: 20px;
   margin: 15px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
   opacity: 0;
   transform: translateY(30px);
-  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* FADE IN */
 .option-card.show {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* HOVER EFFECT */
 .option-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+  transform: translateY(-12px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
 }
 
-/* ICON */
 .card-icon {
-  font-size: 40px;
+  font-size: 42px;
   margin-bottom: 15px;
 }
 
-/* MODAL CUSTOM */
+/* ===== FOOTER ===== */
+.footer {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 15px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* ===== MODAL ===== */
 .modal-content {
-  border-radius: 15px;
-  animation: fadeInScale 0.4s ease;
-}
-
-@keyframes fadeInScale {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.modal-header {
-  border-bottom: none;
-}
-
-.modal-footer {
-  border-top: none;
-}
-
-.btn-primary {
   border-radius: 20px;
+  padding: 10px;
+  border: none;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.25);
+  animation: modalFade 0.4s ease;
+}
+
+@keyframes modalFade {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header h5 {
+  font-weight: 700;
+}
+
+/* PREMIUM BUTTONS */
+.btn-premium {
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-primary.btn-premium {
+  background: linear-gradient(45deg, #007bff, #6610f2);
+  border: none;
+}
+
+.btn-primary.btn-premium:hover {
+  transform: scale(1.05);
+}
+
+.btn-secondary.btn-premium {
+  background: #f1f1f1;
+  border: none;
 }
 
 </style>
@@ -102,28 +162,48 @@ body {
 
 <body>
 
+<!-- HEADER -->
+<div class="header">
+  <div class="brand">Neelesh Singh</div>
+  <div class="nav-links">
+    <a href="portfolio.html">Portfolio</a>
+    <a href="toolkit.html">Toolkit</a>
+  </div>
+</div>
+
+<!-- MAIN -->
 <div class="container main-container">
 
-  <h1 class="title">Welcome to My Digital World</h1>
-  <p class="subtitle">Choose your journey</p>
+  <h1 class="title">Choose Your Experience</h1>
+  <p class="subtitle">One platform. Multiple ways to engage.</p>
+  <p class="microcopy">Whether you're evaluating my work or learning from it — start here.</p>
 
   <div class="row">
 
-    <!-- PORTFOLIO CARD -->
-    <div class="col-md-6">
+    <!-- PORTFOLIO -->
+    <div class="col-md-4">
       <div class="option-card" onclick="openModal('portfolioModal')">
         <div class="card-icon">📊</div>
         <h4>Portfolio</h4>
-        <p>Explore my experience, case studies & product thinking</p>
+        <p>For recruiters & hiring managers</p>
       </div>
     </div>
 
-    <!-- TOOLKIT CARD -->
-    <div class="col-md-6">
+    <!-- TOOLKIT -->
+    <div class="col-md-4">
       <div class="option-card" onclick="openModal('toolkitModal')">
         <div class="card-icon">🧰</div>
         <h4>PM Toolkit</h4>
-        <p>Templates, frameworks & coaching for PMs</p>
+        <p>Templates, frameworks & guides</p>
+      </div>
+    </div>
+
+    <!-- THIRD PERSONA -->
+    <div class="col-md-4">
+      <div class="option-card" onclick="openModal('connectModal')">
+        <div class="card-icon">🤝</div>
+        <h4>Collaborate / Connect</h4>
+        <p>For founders, teams & networking</p>
       </div>
     </div>
 
@@ -131,99 +211,121 @@ body {
 
 </div>
 
-<!-- PORTFOLIO MODAL -->
-<div class="modal fade" id="portfolioModal" tabindex="-1">
+<!-- FOOTER -->
+<div class="footer">
+  Built with intent — Product Thinking by Neelesh Singh
+</div>
+
+<!-- ===== MODALS ===== -->
+
+<!-- PORTFOLIO -->
+<div class="modal fade" id="portfolioModal">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-3">
+    <div class="modal-content">
 
       <div class="modal-header">
         <h5>Portfolio Experience</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button class="close" data-dismiss="modal">&times;</button>
       </div>
 
-      <div class="modal-body text-left">
+      <div class="modal-body">
         <p><b>What you'll see:</b></p>
         <ul>
-          <li>Real-world product case studies</li>
-          <li>Impact-driven work experience</li>
-          <li>Technical + business problem solving</li>
+          <li>Impact-driven case studies</li>
+          <li>Product strategy & execution</li>
+          <li>Real-world problem solving</li>
         </ul>
 
-        <p><b>Best for:</b></p>
-        <ul>
-          <li>Recruiters</li>
-          <li>Hiring managers</li>
-          <li>Anyone evaluating my experience</li>
-        </ul>
+        <p><b>Best for:</b> Recruiters, Hiring Managers</p>
       </div>
 
       <div class="modal-footer">
-        <button class="btn btn-primary" onclick="goToPage('portfolio.html')">Explore</button>
-        <button class="btn btn-secondary" data-dismiss="modal">Back</button>
+        <button class="btn btn-primary btn-premium" onclick="goToPage('portfolio.html')">Explore</button>
+        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
       </div>
 
     </div>
   </div>
 </div>
 
-<!-- TOOLKIT MODAL -->
-<div class="modal fade" id="toolkitModal" tabindex="-1">
+<!-- TOOLKIT -->
+<div class="modal fade" id="toolkitModal">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-3">
+    <div class="modal-content">
 
       <div class="modal-header">
         <h5>PM Toolkit</h5>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <button class="close" data-dismiss="modal">&times;</button>
       </div>
 
-      <div class="modal-body text-left">
+      <div class="modal-body">
         <p><b>What you'll get:</b></p>
         <ul>
-          <li>PRD templates & frameworks</li>
-          <li>Discovery & user story guides</li>
-          <li>Practical PM resources</li>
+          <li>PRDs, templates, frameworks</li>
+          <li>Discovery & execution playbooks</li>
+          <li>Practical PM learning resources</li>
         </ul>
 
-        <p><b>Best for:</b></p>
-        <ul>
-          <li>Aspiring Product Managers</li>
-          <li>Developers transitioning to PM</li>
-          <li>PMs leveling up skills</li>
-        </ul>
+        <p><b>Best for:</b> Aspiring & growing PMs</p>
       </div>
 
       <div class="modal-footer">
-        <button class="btn btn-primary" onclick="goToPage('toolkit.html')">Explore</button>
-        <button class="btn btn-secondary" data-dismiss="modal">Back</button>
+        <button class="btn btn-primary btn-premium" onclick="goToPage('toolkit.html')">Explore</button>
+        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
       </div>
 
     </div>
   </div>
 </div>
 
-<!-- JS LIBS -->
+<!-- CONNECT -->
+<div class="modal fade" id="connectModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5>Collaborate & Connect</h5>
+        <button class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <p><b>What you can do:</b></p>
+        <ul>
+          <li>Discuss product ideas</li>
+          <li>Explore collaborations</li>
+          <li>Network with me</li>
+        </ul>
+
+        <p><b>Best for:</b> Founders, Teams, Professionals</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-premium" onclick="window.open('https://www.linkedin.com/in/neelesh-singh')">Connect</button>
+        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- JS -->
 <script src="lib/jquery/jquery.min.js"></script>
 <script src="lib/bootstrap/js/bootstrap.min.js"></script>
 
 <script>
-
-/* FADE-IN ANIMATION */
 window.onload = () => {
   document.querySelectorAll('.option-card').forEach((card, i) => {
     setTimeout(() => card.classList.add('show'), i * 200);
   });
 };
 
-/* OPEN MODAL */
 function openModal(id) {
   $('#' + id).modal('show');
 }
 
-/* NAVIGATION */
 function goToPage(page) {
   window.location.href = page;
 }
-
 </script>
 
 </body>
