@@ -1,77 +1,230 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Neelesh Singh</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Neelesh Singh</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #007bff, #6610f2);
-      color: white;
-      text-align: center;
-    }
+<style>
 
-    .container-box {
-      max-width: 900px;
-    }
+/* BACKGROUND */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to right, #f8fafc, #eef2f7);
+}
 
-    .option-card {
-      background: white;
-      color: black;
-      padding: 30px;
-      border-radius: 15px;
-      margin: 15px;
-      transition: 0.3s;
-      cursor: pointer;
-    }
+/* CONTAINER */
+.main-container {
+  text-align: center;
+  max-width: 1000px;
+}
 
-    .option-card:hover {
-      transform: translateY(-10px);
-    }
+/* TITLE */
+.title {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
 
-    .title {
-      margin-bottom: 40px;
-    }
-  </style>
+.subtitle {
+  color: #555;
+  margin-bottom: 40px;
+}
+
+/* CARD */
+.option-card {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  margin: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+/* FADE IN */
+.option-card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* HOVER EFFECT */
+.option-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+}
+
+/* ICON */
+.card-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+/* MODAL CUSTOM */
+.modal-content {
+  border-radius: 15px;
+  animation: fadeInScale 0.4s ease;
+}
+
+@keyframes fadeInScale {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-footer {
+  border-top: none;
+}
+
+.btn-primary {
+  border-radius: 20px;
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="container container-box">
+<div class="container main-container">
 
-  <h1 class="title">Welcome to Neelesh Singh's World</h1>
-  <p>Choose what you’d like to explore</p>
+  <h1 class="title">Welcome to My Digital World</h1>
+  <p class="subtitle">Choose your journey</p>
 
   <div class="row">
 
-    <!-- PORTFOLIO -->
+    <!-- PORTFOLIO CARD -->
     <div class="col-md-6">
-      <div class="option-card" onclick="location.href='portfolio.html'">
-        <h3>📊 Portfolio</h3>
-        <p>Explore my experience, projects, and product work</p>
+      <div class="option-card" onclick="openModal('portfolioModal')">
+        <div class="card-icon">📊</div>
+        <h4>Portfolio</h4>
+        <p>Explore my experience, case studies & product thinking</p>
       </div>
     </div>
 
-    <!-- TOOLKIT -->
+    <!-- TOOLKIT CARD -->
     <div class="col-md-6">
-      <div class="option-card" onclick="location.href='toolkit.html'">
-        <h3>🧰 PM Toolkit</h3>
-        <p>Templates, frameworks, and coaching services</p>
+      <div class="option-card" onclick="openModal('toolkitModal')">
+        <div class="card-icon">🧰</div>
+        <h4>PM Toolkit</h4>
+        <p>Templates, frameworks & coaching for PMs</p>
       </div>
     </div>
 
   </div>
 
 </div>
+
+<!-- PORTFOLIO MODAL -->
+<div class="modal fade" id="portfolioModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+
+      <div class="modal-header">
+        <h5>Portfolio Experience</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body text-left">
+        <p><b>What you'll see:</b></p>
+        <ul>
+          <li>Real-world product case studies</li>
+          <li>Impact-driven work experience</li>
+          <li>Technical + business problem solving</li>
+        </ul>
+
+        <p><b>Best for:</b></p>
+        <ul>
+          <li>Recruiters</li>
+          <li>Hiring managers</li>
+          <li>Anyone evaluating my experience</li>
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="goToPage('portfolio.html')">Explore</button>
+        <button class="btn btn-secondary" data-dismiss="modal">Back</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TOOLKIT MODAL -->
+<div class="modal fade" id="toolkitModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+
+      <div class="modal-header">
+        <h5>PM Toolkit</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <div class="modal-body text-left">
+        <p><b>What you'll get:</b></p>
+        <ul>
+          <li>PRD templates & frameworks</li>
+          <li>Discovery & user story guides</li>
+          <li>Practical PM resources</li>
+        </ul>
+
+        <p><b>Best for:</b></p>
+        <ul>
+          <li>Aspiring Product Managers</li>
+          <li>Developers transitioning to PM</li>
+          <li>PMs leveling up skills</li>
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-primary" onclick="goToPage('toolkit.html')">Explore</button>
+        <button class="btn btn-secondary" data-dismiss="modal">Back</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- JS LIBS -->
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+
+<script>
+
+/* FADE-IN ANIMATION */
+window.onload = () => {
+  document.querySelectorAll('.option-card').forEach((card, i) => {
+    setTimeout(() => card.classList.add('show'), i * 200);
+  });
+};
+
+/* OPEN MODAL */
+function openModal(id) {
+  $('#' + id).modal('show');
+}
+
+/* NAVIGATION */
+function goToPage(page) {
+  window.location.href = page;
+}
+
+</script>
 
 </body>
 </html>
