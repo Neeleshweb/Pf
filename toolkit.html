@@ -507,6 +507,79 @@
     .assess-recos li::before { content: '→'; color: var(--accent2); flex-shrink: 0; }
     .assess-recos a { color: var(--accent2); border-bottom: 1px dotted var(--accent2); }
 
+    /* ─── PRODUCT TEARDOWNS ─── */
+    .td-tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.8rem; }
+    .td-tab {
+      display: flex; align-items: center; gap: .5rem;
+      background: var(--card); border: 1px solid var(--border); color: var(--muted);
+      padding: .5rem 1rem; border-radius: var(--radius); font-size: .82rem;
+      font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all .2s;
+    }
+    .td-tab:hover { border-color: var(--border2); color: var(--white); }
+    .td-tab.active { background: var(--white); border-color: var(--white); color: var(--black); font-weight: 500; }
+    .td-tab .td-tab-emoji { font-size: 1rem; }
+
+    .td-stage { display: grid; grid-template-columns: 300px 1fr; gap: 2.5rem; align-items: start; }
+    .td-phone-col { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .td-phone {
+      width: 280px; height: 560px; background: #050505; border: 8px solid #1c1c1c;
+      border-radius: 36px; padding: 14px 10px; position: relative;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.55); flex-shrink: 0;
+    }
+    .td-notch { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); width: 90px; height: 20px; background: #1c1c1c; border-radius: 0 0 12px 12px; z-index: 5; }
+    .td-screen {
+      width: 100%; height: 100%; border-radius: 26px; overflow: hidden;
+      position: relative; display: flex; flex-direction: column;
+      transition: opacity .25s ease; padding: 34px 16px 18px;
+    }
+    .td-screen.fade { opacity: 0; }
+    .td-dots { display: flex; gap: .5rem; }
+    .td-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border2); cursor: pointer; transition: background .2s, transform .2s; }
+    .td-dot.active { background: var(--accent); transform: scale(1.3); }
+
+    .td-info { padding-top: .5rem; }
+    .td-step-label { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; color: var(--accent); margin-bottom: 1.2rem; }
+    .td-moment-label, .td-why-label { font-size: .68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted2); margin-bottom: .5rem; }
+    .td-moment { font-size: 1.05rem; color: var(--white); line-height: 1.6; margin-bottom: 1.5rem; font-weight: 500; }
+    .td-principle {
+      display: inline-block; font-size: .82rem; font-weight: 500;
+      color: var(--accent2); background: var(--accent2-dim);
+      border: 1px solid rgba(240,165,0,0.3); padding: .4rem .9rem;
+      border-radius: 100px; margin-bottom: 1.5rem;
+    }
+    .td-why { font-size: .92rem; color: #b5b0a8; line-height: 1.75; margin-bottom: 1.8rem; }
+    .td-nav { display: flex; gap: .8rem; }
+    .td-takeaway {
+      margin-top: 2rem; background: var(--card); border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2); border-radius: var(--radius);
+      padding: 1.3rem 1.5rem; font-size: .9rem; color: #b5b0a8; line-height: 1.7;
+    }
+    .td-takeaway strong { color: var(--white); font-weight: 500; }
+
+    /* phone mock building blocks */
+    .mk-status { display: flex; justify-content: space-between; align-items: center; font-size: .65rem; color: rgba(255,255,255,0.5); margin-bottom: 1rem; }
+    .mk-center { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: .5rem; }
+    .mk-big { font-size: 3.4rem; line-height: 1; }
+    .mk-bignum { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; line-height: .9; }
+    .mk-h { font-size: 1.05rem; font-weight: 600; color: #fff; }
+    .mk-sub { font-size: .78rem; opacity: .7; line-height: 1.4; }
+    .mk-card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: .9rem; width: 100%; }
+    .mk-btn { background: #fff; color: #111; font-size: .82rem; font-weight: 600; padding: .7rem; border-radius: 100px; text-align: center; width: 100%; }
+    .mk-btn.accent { background: var(--accent); color: #fff; }
+    .mk-btn.green { background: var(--green); color: #062; }
+    .mk-row { display: flex; align-items: center; gap: .6rem; width: 100%; }
+    .mk-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+    .mk-bar { height: 8px; background: rgba(255,255,255,0.15); border-radius: 4px; overflow: hidden; width: 100%; }
+    .mk-bar > div { height: 100%; border-radius: 4px; }
+    .mk-pill { font-size: .62rem; padding: .2rem .55rem; border-radius: 100px; display: inline-block; }
+    .mk-list { display: flex; flex-direction: column; gap: .55rem; width: 100%; }
+    .mk-stars { color: #ffce3d; font-size: .9rem; letter-spacing: 1px; }
+
+    @media (max-width: 768px) {
+      .td-stage { grid-template-columns: 1fr; justify-items: center; gap: 1.5rem; }
+      .td-info { padding-top: 0; width: 100%; }
+    }
+
     /* ─── TESTIMONIALS ─── */
     .testi-grid {
       display: grid;
@@ -754,6 +827,7 @@
   <ul class="nav-links">
     <li><a href="#templates" class="active">Templates</a></li>
     <li><a href="#tools">Tools</a></li>
+    <li><a href="#teardowns">Teardowns</a></li>
     <li><a href="#frameworks">Frameworks</a></li>
     <li><a href="#series">PM Series</a></li>
     <li><a href="#coaching">Coaching</a></li>
@@ -1313,6 +1387,46 @@
       </div>
     </div>
   </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════ PRODUCT TEARDOWNS SECTION ════════ -->
+<section class="section" id="teardowns">
+  <div class="sec-eyebrow">Psychology · Interactive Teardowns</div>
+  <div class="sec-title">Why Great Products Are <span>Impossible to Put Down</span></div>
+  <p style="color:var(--muted);font-size:.9rem;max-width:660px;margin-bottom:2rem;line-height:1.7">
+    The world's stickiest products aren't accidents — they're engineered with behavioral psychology. Walk through a real product moment-by-moment, and see the exact principle working on you at each step. <strong style="color:var(--white)">Pick a product and step through its journey.</strong>
+  </p>
+
+  <!-- case tabs -->
+  <div class="td-tabs" id="td-tabs"></div>
+
+  <div class="td-stage">
+    <!-- phone -->
+    <div class="td-phone-col">
+      <div class="td-phone">
+        <div class="td-notch"></div>
+        <div class="td-screen" id="td-screen"><!-- mock injected --></div>
+      </div>
+      <div class="td-dots" id="td-dots"></div>
+    </div>
+
+    <!-- annotation -->
+    <div class="td-info">
+      <div class="td-step-label" id="td-step-label">Step 1</div>
+      <div class="td-moment-label">The moment</div>
+      <p class="td-moment" id="td-moment"></p>
+      <div class="td-principle" id="td-principle"></div>
+      <div class="td-why-label">Why it works</div>
+      <p class="td-why" id="td-why"></p>
+      <div class="td-nav">
+        <button class="btn-sm outline" id="td-prev" onclick="tdPrev()">← Back</button>
+        <button class="btn-sm" id="td-next" onclick="tdNext()">Next step →</button>
+      </div>
+    </div>
+  </div>
+  <div class="td-takeaway" id="td-takeaway"></div>
 </section>
 
 <div class="divider"></div>
@@ -2231,6 +2345,142 @@
     renderAssessQ();
   }
   renderAssessQ();
+
+  /* ════════════════════════════════════════════════════════
+     PRODUCT TEARDOWNS — psychology behind addictive products
+     (Stylized, brand-neutral mockups — no screenshots/logos.
+      Company names used as factual UX commentary.)
+     ════════════════════════════════════════════════════════ */
+  const TEARDOWNS = [
+    {
+      app: 'Duolingo', emoji: '🦉', theme: 'linear-gradient(160deg,#58cc02,#3a8b02)',
+      takeaway: 'Duolingo stacks <strong>loss aversion, variable rewards, and social competition</strong> — so the cost of quitting always feels higher than the effort of one more lesson.',
+      steps: [
+        { mock:'<div class="mk-status"><span>9:41</span><span>📶 🔋</span></div><div class="mk-center"><div class="mk-big">🔥</div><div class="mk-bignum" style="color:#ff9600">47</div><div class="mk-h">Day streak!</div><div class="mk-sub">Practice today to keep it going</div></div><div class="mk-btn green">Start lesson</div>',
+          moment:'You open the app and the first thing you see is your 47-day streak — glowing, fragile, and entirely yours to lose.',
+          principle:'Loss Aversion + Streaks', why:'We feel the pain of losing something roughly twice as strongly as the pleasure of gaining it. A streak converts "I should practice" into "I can\'t lose what I\'ve built" — and the longer it grows, the more painful breaking it becomes.' },
+        { mock:'<div class="mk-status"><span>8:00 PM</span><span>📶 🔋</span></div><div class="mk-center"><div class="mk-card" style="text-align:left"><div class="mk-row"><div class="mk-avatar" style="background:#58cc02">🦉</div><div><div style="font-size:.8rem;font-weight:600;color:#fff">Duolingo</div><div class="mk-sub">now</div></div></div><div style="margin-top:.6rem;font-size:.82rem;color:#fff">Don\'t lose your streak! Just 5 minutes keeps your 47 days alive 🔥</div></div></div>',
+          moment:'A perfectly-timed evening notification lands right when you usually have a free moment.',
+          principle:'External Triggers (Hook Model)', why:'Habits need a trigger to fire. By learning when you\'re most likely to act and nudging you then, the product re-enters your routine before the habit has a chance to fade — turning an internal goal into an external prompt you simply respond to.' },
+        { mock:'<div class="mk-status"><span>9:42</span><span>📶 🔋</span></div><div class="mk-center"><div class="mk-big">🎁</div><div class="mk-h">Lesson complete!</div><div class="mk-sub">Open your reward chest…</div><div class="mk-row" style="justify-content:center;gap:.4rem;margin-top:.4rem"><span class="mk-pill" style="background:#ffce3d;color:#553">+30 XP</span><span class="mk-pill" style="background:#1cb0f6;color:#fff">+5 Gems?</span><span class="mk-pill" style="background:#ff4b4b;color:#fff">2× Boost?</span></div></div><div class="mk-btn green">Open chest</div>',
+          moment:'You finish a lesson and a reward chest appears — but you don\'t know what\'s inside until you tap.',
+          principle:'Variable Reward', why:'Predictable rewards get boring fast. Unpredictable ones trigger far stronger dopamine release — the same loop that powers slot machines. Not knowing whether you\'ll get 5 XP or a rare bonus keeps the action compelling far longer than a fixed payout would.' },
+        { mock:'<div class="mk-status"><span>9:43</span><span>📶 🔋</span></div><div style="font-size:.8rem;font-weight:600;color:#fff;margin-bottom:.7rem">🏆 Diamond League · 2 days left</div><div class="mk-list"><div class="mk-card mk-row"><span style="color:#ffce3d">1</span><div class="mk-avatar" style="background:#1cb0f6;width:30px;height:30px;font-size:.9rem">A</div><div style="font-size:.78rem;color:#fff">Aisha · 920 XP</div></div><div class="mk-card mk-row"><span style="opacity:.6">2</span><div class="mk-avatar" style="background:#ce82ff;width:30px;height:30px;font-size:.9rem">M</div><div style="font-size:.78rem;color:#fff">Marco · 880 XP</div></div><div class="mk-card mk-row" style="border-color:#58cc02"><span style="color:#58cc02">3</span><div class="mk-avatar" style="background:#58cc02;width:30px;height:30px;font-size:.9rem">You</div><div style="font-size:.78rem;color:#fff">You · 860 XP</div></div></div><div class="mk-sub" style="margin-top:.6rem;color:#ff9600">⬆ Top 3 advance — you\'re in the promotion zone!</div>',
+          moment:'You see yourself sitting at #3 in your league, just 20 XP from being overtaken — promotion is within reach.',
+          principle:'Social Comparison + Competition', why:'We instinctively measure ourselves against others. A live leaderboard turns solo practice into a contest, and "you\'re about to be demoted" or "one more lesson to advance" creates urgency that no personal goal could match.' }
+      ]
+    },
+    {
+      app: 'Tinder', emoji: '🔥', theme: 'linear-gradient(160deg,#fd297b,#ff5864,#ff655b)',
+      takeaway: 'Tinder reduces every decision to a single swipe, then rewards you <strong>unpredictably</strong> — minimal effort in, variable validation out. That\'s a loop few can resist.',
+      steps: [
+        { mock:'<div class="mk-status"><span>9:41</span><span>📶 🔋</span></div><div class="mk-card" style="flex:1;background:linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.3));display:flex;flex-direction:column;justify-content:flex-end;padding:1rem"><div class="mk-h">Jordan, 27</div><div class="mk-sub">2 km away · loves hiking</div></div><div class="mk-row" style="justify-content:center;gap:1.5rem;margin-top:1rem"><div class="mk-avatar" style="background:rgba(255,255,255,0.1);border:2px solid #ff4b4b;color:#ff4b4b;width:52px;height:52px">✕</div><div class="mk-avatar" style="background:rgba(255,255,255,0.1);border:2px solid #58cc02;color:#58cc02;width:52px;height:52px">♥</div></div>',
+          moment:'A profile fills the screen. Your only choice: swipe left, or swipe right. Nothing else.',
+          principle:'Hick\'s Law + Minimal Friction', why:'The more options and effort a decision requires, the longer we hesitate. By collapsing a complex judgment into one binary, near-effortless gesture, the product removes friction almost entirely — making it easy to keep going for "just one more".' },
+        { mock:'<div class="mk-center" style="background:transparent"><div class="mk-h" style="font-size:1.6rem;background:linear-gradient(90deg,#fff,#ffd9e2);-webkit-background-clip:text;background-clip:text;color:transparent">It\'s a Match!</div><div class="mk-row" style="justify-content:center;margin:1rem 0"><div class="mk-avatar" style="background:#ce82ff;width:60px;height:60px;font-size:1.5rem">😊</div><div class="mk-avatar" style="background:#1cb0f6;width:60px;height:60px;font-size:1.5rem;margin-left:-12px">😎</div></div><div class="mk-sub">You and Jordan liked each other</div></div><div class="mk-btn" style="background:#fff;color:#fd297b">Send a message</div>',
+          moment:'Out of nowhere — a celebratory "It\'s a Match!" animation. Someone liked you back.',
+          principle:'Variable Reward + Social Validation', why:'Matches arrive unpredictably, and each one is a small hit of social approval. Because you never know which swipe will produce one, every swipe carries anticipation — the intermittent payoff is exactly what makes the behavior so repeatable.' },
+        { mock:'<div class="mk-center"><div class="mk-big">⏳</div><div class="mk-h">You\'re out of Likes</div><div class="mk-sub">More Likes in</div><div class="mk-bignum" style="color:#fd297b;font-size:2.6rem">42:10</div></div><div class="mk-card" style="text-align:center;border-color:#fd297b"><div style="font-size:.8rem;color:#fff;margin-bottom:.5rem">Get unlimited Likes ✨</div><div class="mk-btn" style="background:linear-gradient(90deg,#fd297b,#ff655b);color:#fff">Upgrade to Gold</div></div>',
+          moment:'Mid-session, you hit a wall: out of likes. A countdown timer starts — or you can upgrade now.',
+          principle:'Scarcity + Artificial Constraint', why:'Limiting a free resource makes it feel more valuable and creates urgency. The countdown frames the choice as "wait and lose momentum, or pay to continue right now" — converting engagement into revenue at the exact moment of peak motivation.' },
+        { mock:'<div class="mk-status"><span>9:44</span><span>📶 🔋</span></div><div class="mk-center"><div class="mk-avatar" style="background:#ce82ff;width:64px;height:64px;font-size:1.6rem">😊</div><div class="mk-h">Your profile is 60% complete</div><div class="mk-bar"><div style="width:60%;background:#fd297b"></div></div><div class="mk-sub">Add 2 more photos to get 3× more matches</div></div><div class="mk-btn" style="background:#fd297b;color:#fff">Complete profile</div>',
+          moment:'A progress bar shows your profile is "60% complete" — with a clear nudge to finish.',
+          principle:'Zeigarnik Effect + Endowed Progress', why:'Unfinished tasks occupy our minds until they\'re resolved, and a progress bar that\'s already partly filled feels like momentum worth completing. Together they create a quiet, persistent pull to "just finish it" — deepening your investment in the product.' }
+      ]
+    },
+    {
+      app: 'Airbnb', emoji: '🏠', theme: 'linear-gradient(160deg,#ff385c,#bd1e59)',
+      takeaway: 'Airbnb lowers the perceived risk of booking a stranger\'s home with <strong>social proof, scarcity cues, and trust signals</strong> — then removes friction at the moment of decision.',
+      steps: [
+        { mock:'<div class="mk-status"><span>9:41</span><span>📶 🔋</span></div><div class="mk-card" style="padding:0;overflow:hidden"><div style="height:120px;background:linear-gradient(135deg,#ffb4c4,#ff385c);position:relative"><div style="position:absolute;top:8px;right:8px;font-size:1.3rem">🤍</div></div><div style="padding:.7rem"><div style="font-size:.82rem;font-weight:600;color:#fff">Cliffside Cabin · Tofino</div><div class="mk-sub">★ 4.98 · $212 night</div></div></div><div class="mk-sub" style="margin-top:.8rem;text-align:center">Tap 🤍 to save to a wishlist</div>',
+          moment:'You spot a place you love and tap the heart to save it to a wishlist for later.',
+          principle:'Endowment Effect + Zeigarnik', why:'The moment you save something, it starts to feel a little bit "yours" — and an open wishlist is an unfinished decision your mind keeps returning to. Saving costs nothing, but it quietly raises the odds you\'ll come back and book.' },
+        { mock:'<div class="mk-card" style="padding:0;overflow:hidden"><div style="height:100px;background:linear-gradient(135deg,#ffb4c4,#ff385c)"></div><div style="padding:.7rem"><span class="mk-pill" style="background:#fff;color:#ff385c;font-weight:600">🔥 Rare find</span><div style="font-size:.82rem;font-weight:600;color:#fff;margin-top:.5rem">Cliffside Cabin · Tofino</div><div class="mk-sub" style="color:#ff9c9c">⚠ 12 people are looking right now</div><div class="mk-sub">Usually booked — only 2 nights left this month</div></div></div>',
+          moment:'On the listing you see "Rare find," "12 people looking right now," and "usually booked."',
+          principle:'Scarcity + Social Proof', why:'Two forces combine: scarcity ("almost gone") and social proof ("others want this too"). Each tells your brain this option is valuable and time-sensitive, compressing deliberation and pushing you toward a faster commitment before you "miss out".' },
+        { mock:'<div class="mk-status"><span>9:42</span><span>📶 🔋</span></div><div class="mk-row" style="margin-bottom:.7rem"><div class="mk-avatar" style="background:#ff385c">🦸</div><div><div style="font-size:.8rem;font-weight:600;color:#fff">Hosted by Sara</div><span class="mk-pill" style="background:rgba(255,255,255,0.15);color:#fff">✦ Superhost</span></div></div><div class="mk-stars">★★★★★ <span style="color:#fff;font-size:.78rem">4.98 (320 reviews)</span></div><div class="mk-list" style="margin-top:.6rem"><div class="mk-card"><div class="mk-sub" style="color:#fff">"Spotless, exactly as pictured. Sara was amazing!"</div></div><div class="mk-card"><div class="mk-sub" style="color:#fff">"Best stay we\'ve had on Airbnb, hands down."</div></div></div>',
+          moment:'Before booking, you scroll through 320 five-star reviews and a "Superhost" badge.',
+          principle:'Social Proof + Authority', why:'Booking a stranger\'s home is risky. Hundreds of peer reviews and an earned badge act as trust shortcuts — we assume that if this many people had a great experience, we probably will too. The risk feels manageable, so we proceed.' },
+        { mock:'<div class="mk-center"><div class="mk-card" style="border-color:#ff385c"><div style="font-size:.8rem;color:#fff;font-weight:600">⚡ Instant Book</div><div class="mk-sub">Book now — no waiting for host approval</div></div><div class="mk-h" style="margin-top:.6rem">$636 total</div><div class="mk-sub">3 nights · free cancellation</div></div><div class="mk-btn" style="background:#ff385c;color:#fff">Reserve</div>',
+          moment:'At checkout, "Instant Book" is already on — one tap and the stay is yours, no approval wait.',
+          principle:'Default Effect + Friction Reduction', why:'Most people stick with whatever option is pre-selected. By defaulting to Instant Book and removing the request-and-wait step, the product shortens the path between intention and confirmation — and the shorter that path, the more bookings get completed.' }
+      ]
+    },
+    {
+      app: 'Spotify', emoji: '🎵', theme: 'linear-gradient(160deg,#1db954,#0a7a35)',
+      takeaway: 'Spotify makes the product feel like <strong>an extension of your identity</strong> — personalized, accumulating, and shareable — so leaving means abandoning a part of yourself.',
+      steps: [
+        { mock:'<div class="mk-center" style="background:transparent"><div class="mk-card" style="background:linear-gradient(135deg,#ff5e3a,#ffce3d,#1db954)"><div style="font-size:.7rem;color:#111;font-weight:600">YOUR 2024 WRAPPED</div><div class="mk-bignum" style="color:#111;font-size:3rem">41,200</div><div style="font-size:.78rem;color:#111;font-weight:600">minutes listened</div><div style="font-size:.7rem;color:#111;margin-top:.3rem">Top 0.5% of fans of your #1 artist</div></div></div><div class="mk-btn green">Share your Wrapped</div>',
+          moment:'At year\'s end, a vibrant, personalized "Wrapped" summarizes your listening — with a Share button front and center.',
+          principle:'Self-Expression + Social Currency', why:'People love content that says something about who they are. Wrapped turns your private habits into a colorful identity statement worth posting — and every share markets the product to friends for free. Your personality becomes the advertisement.' },
+        { mock:'<div class="mk-status"><span>9:41</span><span>📶 🔋</span></div><div class="mk-card" style="padding:0;overflow:hidden"><div style="height:110px;background:linear-gradient(135deg,#1db954,#191414);display:flex;align-items:flex-end;padding:.6rem"><div style="font-size:1.3rem">🎧</div></div><div style="padding:.7rem"><div style="font-size:.85rem;font-weight:600;color:#fff">Discover Weekly</div><div class="mk-sub">Made for you · updates every Monday</div></div></div><div class="mk-sub" style="text-align:center;margin-top:.7rem">30 songs we think you\'ll love</div>',
+          moment:'Every Monday, a fresh "Discover Weekly" playlist appears — built just for you.',
+          principle:'Personalization + Variable Reward', why:'A reliably scheduled but unpredictable reward is the strongest hook of all. You know a new mix arrives each Monday, but not what\'s in it — so you keep coming back to find out, and the personalization makes it feel made for you alone.' },
+        { mock:'<div class="mk-center"><div class="mk-big">🌅</div><div class="mk-h">indie morning chill</div><div class="mk-sub">Tuesday · your daylist</div><div class="mk-list" style="margin-top:.6rem"><div class="mk-card mk-row"><div class="mk-avatar" style="background:#1db954;width:28px;height:28px;font-size:.8rem">♪</div><div class="mk-sub" style="color:#fff">Updated for your morning vibe</div></div></div></div>',
+          moment:'Your "daylist" greets you by mood and time of day — "indie morning chill" — as if it knows you.',
+          principle:'IKEA Effect + Ownership', why:'We value things more when they feel co-created with us. A hyper-personalized, oddly-specific playlist named after your own habits feels like something you helped build — which makes it feel like yours, and far harder to walk away from.' },
+        { mock:'<div class="mk-status"><span>9:42</span><span>📶 🔋</span></div><div class="mk-row" style="margin-bottom:.7rem"><div class="mk-avatar" style="background:linear-gradient(135deg,#450af5,#c4efd9);width:54px;height:54px;font-size:1.4rem">💚</div><div><div style="font-size:.9rem;font-weight:600;color:#fff">Liked Songs</div><div class="mk-sub">1,204 songs</div></div></div><div class="mk-list"><div class="mk-card"><div class="mk-sub" style="color:#fff">Saved over 4 years</div></div></div><div class="mk-sub" style="text-align:center;margin-top:.6rem">Your whole music life, in one place</div>',
+          moment:'Your "Liked Songs" library has quietly grown to 1,204 tracks collected over years.',
+          principle:'Sunk Cost + Endowment', why:'The more you\'ve invested in building a library, the more leaving costs you. A growing collection of curated favorites raises the switching barrier — starting over elsewhere means abandoning years of accumulated effort, so you stay.' }
+      ]
+    }
+  ];
+
+  let tdCase = 0, tdStep = 0;
+
+  function renderTdTabs() {
+    const el = document.getElementById('td-tabs');
+    if (!el) return;
+    el.innerHTML = '';
+    TEARDOWNS.forEach((c, i) => {
+      const b = document.createElement('button');
+      b.className = 'td-tab' + (i === tdCase ? ' active' : '');
+      b.innerHTML = '<span class="td-tab-emoji">' + c.emoji + '</span> ' + c.app;
+      b.onclick = () => { tdCase = i; tdStep = 0; renderTd(); };
+      el.appendChild(b);
+    });
+  }
+  function renderTdDots() {
+    const el = document.getElementById('td-dots');
+    el.innerHTML = '';
+    TEARDOWNS[tdCase].steps.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.className = 'td-dot' + (i === tdStep ? ' active' : '');
+      d.onclick = () => { tdStep = i; renderTd(); };
+      el.appendChild(d);
+    });
+  }
+  function renderTd() {
+    const c = TEARDOWNS[tdCase];
+    const s = c.steps[tdStep];
+    renderTdTabs();
+    renderTdDots();
+    const screen = document.getElementById('td-screen');
+    screen.classList.add('fade');
+    setTimeout(() => {
+      screen.style.background = c.theme;
+      screen.innerHTML = s.mock;
+      screen.classList.remove('fade');
+    }, 180);
+    document.getElementById('td-step-label').textContent = 'Step ' + (tdStep + 1) + ' of ' + c.steps.length + ' · ' + c.app;
+    document.getElementById('td-moment').textContent = s.moment;
+    document.getElementById('td-principle').textContent = '🧠 ' + s.principle;
+    document.getElementById('td-why').textContent = s.why;
+    document.getElementById('td-prev').style.visibility = tdStep === 0 ? 'hidden' : 'visible';
+    const next = document.getElementById('td-next');
+    const isLast = tdStep === c.steps.length - 1;
+    next.textContent = isLast ? 'Start over ↻' : 'Next step →';
+    const tk = document.getElementById('td-takeaway');
+    if (isLast) { tk.innerHTML = '<strong>The takeaway —</strong> ' + c.takeaway; tk.style.display = 'block'; }
+    else { tk.style.display = 'none'; }
+  }
+  function tdNext() {
+    const c = TEARDOWNS[tdCase];
+    if (tdStep < c.steps.length - 1) tdStep++; else tdStep = 0;
+    renderTd();
+  }
+  function tdPrev() { if (tdStep > 0) { tdStep--; renderTd(); } }
+  renderTd();
 
 </script>
 </body>
