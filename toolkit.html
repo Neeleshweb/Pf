@@ -72,13 +72,15 @@
       color: var(--muted); transition: color .2s;
     }
     .nav-links a:hover, .nav-links a.active { color: var(--white); }
-    .nav-back {
-      font-size: .78rem; color: var(--muted); letter-spacing: .5px;
-      display: flex; align-items: center; gap: .4rem;
-      transition: color .2s;
+    .nav-home {
+      display: flex; align-items: center; gap: .45rem;
+      font-size: .8rem; color: var(--white); letter-spacing: .5px;
+      background: var(--accent); padding: .5rem 1.1rem;
+      border-radius: var(--radius); font-weight: 500;
+      transition: opacity .2s, transform .15s;
     }
-    .nav-back:hover { color: var(--white); }
-    .nav-back svg { width: 14px; height: 14px; }
+    .nav-home:hover { opacity: .9; transform: translateY(-1px); }
+    .nav-home svg { width: 15px; height: 15px; }
 
     /* ─── HERO ─── */
     .hero {
@@ -412,6 +414,99 @@
     .fw-name { font-size: .85rem; font-weight: 500; margin-bottom: .3rem; }
     .fw-desc { font-size: .78rem; color: var(--muted); line-height: 1.55; }
 
+    /* ─── INTERACTIVE TOOLS ─── */
+    .tool-card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 2rem;
+    }
+    .tool-head { margin-bottom: 1.5rem; }
+    .tool-tag {
+      display: inline-block; font-size: .7rem; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--accent3);
+      background: var(--accent3-dim); padding: .2rem .6rem;
+      border-radius: var(--radius); margin-bottom: .8rem;
+    }
+    .tool-tag.y { color: var(--accent2); background: var(--accent2-dim); }
+    .tool-head h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: .5px; margin-bottom: .5rem; }
+    .tool-head p { font-size: .86rem; color: var(--muted); line-height: 1.65; max-width: 640px; }
+
+    /* RICE table */
+    .rice-table-wrap { overflow-x: auto; margin-bottom: 1.2rem; }
+    .rice-table { width: 100%; border-collapse: collapse; min-width: 640px; }
+    .rice-table th {
+      text-align: left; font-size: .68rem; letter-spacing: .8px; text-transform: uppercase;
+      color: var(--muted); font-weight: 500; padding: .6rem .5rem;
+      border-bottom: 1px solid var(--border2);
+    }
+    .th-hint { color: var(--muted2); text-transform: none; letter-spacing: 0; font-size: .62rem; }
+    .rice-table td { padding: .5rem .5rem; border-bottom: 1px solid var(--border); }
+    .rice-table input, .rice-table select {
+      width: 100%; background: var(--black); border: 1px solid var(--border2);
+      border-radius: var(--radius); padding: .45rem .5rem; color: var(--white);
+      font-family: 'DM Sans', sans-serif; font-size: .82rem;
+    }
+    .rice-table input:focus, .rice-table select:focus { outline: none; border-color: var(--accent3); }
+    .rice-table input[type="text"] { min-width: 130px; }
+    .rice-score {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem;
+      color: var(--accent2); letter-spacing: .5px;
+    }
+    .rice-rank-1 td { background: rgba(240,165,0,0.06); }
+    .rice-del {
+      background: none; border: none; color: var(--muted2); font-size: 1rem;
+      cursor: pointer; padding: 0 .3rem; transition: color .2s;
+    }
+    .rice-del:hover { color: #ef4444; }
+    .rice-actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .rice-note { font-size: .78rem; color: var(--muted); line-height: 1.6; background: var(--black); padding: .8rem 1rem; border-radius: var(--radius); }
+
+    /* Assessment quiz */
+    .assess-progress { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 1.2rem; }
+    .assess-progress-bar { height: 100%; width: 12.5%; background: var(--accent2); transition: width .3s ease; }
+    .assess-qnum { font-size: .72rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent2); margin-bottom: .6rem; }
+    .assess-question { font-size: 1.15rem; font-weight: 500; line-height: 1.4; margin-bottom: 1.3rem; color: var(--white); }
+    .assess-options { display: flex; flex-direction: column; gap: .6rem; }
+    .assess-opt {
+      text-align: left; background: var(--black); border: 1px solid var(--border2);
+      color: var(--white); padding: .85rem 1rem; border-radius: var(--radius);
+      font-size: .88rem; cursor: pointer; transition: border-color .2s, background .2s;
+      font-family: 'DM Sans', sans-serif; line-height: 1.4;
+    }
+    .assess-opt:hover { border-color: var(--accent2); background: var(--card2); }
+    .assess-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 1.3rem; }
+    .assess-cat { font-size: .73rem; color: var(--muted2); letter-spacing: .5px; }
+
+    /* Assessment result */
+    .assess-score-head { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .assess-score-circle {
+      width: 110px; height: 110px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: baseline; justify-content: center;
+      background: conic-gradient(var(--accent2) var(--pct,0%), var(--border) 0);
+      position: relative;
+    }
+    .assess-score-circle::before {
+      content: ''; position: absolute; inset: 8px; border-radius: 50%; background: var(--card);
+    }
+    .assess-score-circle span {
+      position: relative; font-family: 'Bebas Neue', sans-serif; font-size: 2.6rem;
+      color: var(--accent2); line-height: 1;
+    }
+    .assess-score-circle small { position: relative; font-size: .8rem; color: var(--muted); }
+    .assess-level { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: .5px; margin-bottom: .3rem; }
+    .assess-level-desc { font-size: .85rem; color: var(--muted); line-height: 1.6; max-width: 420px; }
+    .assess-bars { display: flex; flex-direction: column; gap: .9rem; margin-bottom: 2rem; }
+    .assess-bar-row { display: grid; grid-template-columns: 150px 1fr 40px; align-items: center; gap: .8rem; }
+    .assess-bar-label { font-size: .8rem; color: var(--white); }
+    .assess-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .assess-bar-fill { height: 100%; border-radius: 4px; transition: width .8s ease; }
+    .assess-bar-val { font-size: .8rem; color: var(--muted); text-align: right; font-family: 'Bebas Neue', sans-serif; }
+    .assess-recos { background: var(--black); border-radius: var(--radius); padding: 1.3rem 1.5rem; }
+    .assess-recos h4 { font-size: .9rem; font-weight: 500; margin-bottom: .9rem; color: var(--white); }
+    .assess-recos ul { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+    .assess-recos li { font-size: .84rem; color: var(--muted); display: flex; align-items: flex-start; gap: .5rem; line-height: 1.5; }
+    .assess-recos li::before { content: '→'; color: var(--accent2); flex-shrink: 0; }
+    .assess-recos a { color: var(--accent2); border-bottom: 1px dotted var(--accent2); }
+
     /* ─── TESTIMONIALS ─── */
     .testi-grid {
       display: grid;
@@ -602,6 +697,30 @@
     }
     .modal-footer .btn-primary { flex: 1; text-align: center; }
 
+    /* ─── REGISTRATION FORM ─── */
+    .reg-form { display: flex; flex-direction: column; gap: 1rem; }
+    .reg-row { display: flex; gap: 1rem; }
+    .reg-row .reg-field { flex: 1; }
+    .reg-field { display: flex; flex-direction: column; }
+    .reg-field label {
+      font-size: .72rem; letter-spacing: .8px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .4rem;
+    }
+    .reg-field input {
+      background: var(--black); border: 1px solid var(--border2);
+      border-radius: var(--radius); padding: .7rem .8rem;
+      color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .9rem;
+      transition: border-color .2s;
+    }
+    .reg-field input:focus { outline: none; border-color: var(--accent); }
+    .reg-field input.invalid { border-color: #ef4444; }
+    .reg-error { font-size: .73rem; color: #ef4444; margin-top: .3rem; min-height: 1em; }
+    .reg-consent {
+      display: flex; align-items: flex-start; gap: .5rem;
+      font-size: .78rem; color: var(--muted); line-height: 1.5; cursor: pointer;
+    }
+    .reg-consent input { margin-top: .15rem; accent-color: var(--accent); flex-shrink: 0; }
+
     /* ─── RESPONSIVE ─── */
     @media (max-width: 768px) {
       .nav { padding: 0 1.2rem; }
@@ -634,16 +753,17 @@
   <div class="nav-logo">NEELESH<span>.</span>PM</div>
   <ul class="nav-links">
     <li><a href="#templates" class="active">Templates</a></li>
+    <li><a href="#tools">Tools</a></li>
     <li><a href="#frameworks">Frameworks</a></li>
     <li><a href="#series">PM Series</a></li>
     <li><a href="#coaching">Coaching</a></li>
     <li><a href="#books">Books</a></li>
   </ul>
-  <a href="https://neeleshpmtoolkit.com/index.html" class="nav-back">
+  <a href="https://neeleshpmtoolkit.com/index.html" class="nav-home">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M19 12H5M12 5l-7 7 7 7"/>
+      <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/>
     </svg>
-    Back to Home
+    Home
   </a>
 </nav>
 
@@ -1113,6 +1233,90 @@
 
 <div class="divider"></div>
 
+<!-- ════════ INTERACTIVE TOOLS SECTION ════════ -->
+<section class="section" id="tools">
+  <div class="sec-eyebrow b">Interactive · Use Them Live</div>
+  <div class="sec-title">PM <span class="b">Tools</span>, Not Just Templates</div>
+  <p style="color:var(--muted);font-size:.9rem;max-width:640px;margin-bottom:2.5rem;line-height:1.7">
+    Most resource libraries hand you a static PDF and wish you luck. These are <strong style="color:var(--white)">live, working tools</strong> you can use right now — no download, no signup. Practice the actual work of a PM, right here.
+  </p>
+
+  <!-- TOOL 1: RICE CALCULATOR -->
+  <div class="tool-card">
+    <div class="tool-head">
+      <div>
+        <div class="tool-tag">⚡ Live Tool</div>
+        <h3>RICE Prioritization Calculator</h3>
+        <p>Score and rank your features by Reach × Impact × Confidence ÷ Effort. The exact model PMs use to decide what to build next — now interactive.</p>
+      </div>
+    </div>
+    <div class="rice-table-wrap">
+      <table class="rice-table" id="rice-table">
+        <thead>
+          <tr>
+            <th style="min-width:140px">Feature / Initiative</th>
+            <th title="How many people affected per quarter">Reach <span class="th-hint">(users/qtr)</span></th>
+            <th title="How much it moves the needle per user">Impact</th>
+            <th title="How sure are you? %">Confidence</th>
+            <th title="Total person-months of work">Effort <span class="th-hint">(p-months)</span></th>
+            <th>RICE Score</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="rice-body"><!-- rows injected --></tbody>
+      </table>
+    </div>
+    <div class="rice-actions">
+      <button class="btn-sm" onclick="addRiceRow()">+ Add Feature</button>
+      <button class="btn-sm outline" onclick="sortRice()">↓ Rank by Score</button>
+      <button class="btn-sm outline" onclick="resetRice()">Reset Example</button>
+    </div>
+    <div class="rice-note">💡 <strong>Impact scale:</strong> 3 = massive, 2 = high, 1 = medium, 0.5 = low, 0.25 = minimal. Higher RICE score = higher priority.</div>
+  </div>
+
+  <!-- TOOL 2: PM READINESS ASSESSMENT -->
+  <div class="tool-card" style="margin-top:1.5rem">
+    <div class="tool-head">
+      <div>
+        <div class="tool-tag y">🎯 Self-Assessment</div>
+        <h3>What Kind of PM Are You? — Readiness Check</h3>
+        <p>Answer 8 quick questions to see your strengths across the core PM competencies, get a readiness score, and receive a personalized list of resources from this page to level up your weak spots.</p>
+      </div>
+    </div>
+
+    <div id="assess-quiz">
+      <div class="assess-progress"><div class="assess-progress-bar" id="assess-bar"></div></div>
+      <div class="assess-qnum" id="assess-qnum">Question 1 of 8</div>
+      <div class="assess-question" id="assess-question">Loading…</div>
+      <div class="assess-options" id="assess-options"></div>
+      <div class="assess-nav">
+        <button class="btn-sm outline" id="assess-back" onclick="assessBack()" style="visibility:hidden">← Back</button>
+        <span class="assess-cat" id="assess-cat"></span>
+      </div>
+    </div>
+
+    <div id="assess-result" style="display:none">
+      <div class="assess-score-head">
+        <div class="assess-score-circle" id="assess-score-circle">
+          <span id="assess-score-num">0</span><small>/100</small>
+        </div>
+        <div>
+          <div class="assess-level" id="assess-level">—</div>
+          <p class="assess-level-desc" id="assess-level-desc"></p>
+        </div>
+      </div>
+      <div class="assess-bars" id="assess-bars"></div>
+      <div class="assess-recos" id="assess-recos"></div>
+      <div class="rice-actions" style="margin-top:1.5rem">
+        <button class="btn-sm" onclick="restartAssess()">↻ Retake</button>
+        <button class="btn-sm outline" onclick="document.getElementById('templates').scrollIntoView({behavior:'smooth'})">Browse Resources ↑</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- ════════ FRAMEWORKS SECTION ════════ -->
 <section class="section" id="frameworks">
   <div class="sec-eyebrow y">Quick Reference</div>
@@ -1523,6 +1727,49 @@
   </div>
 </div>
 
+<!-- ════════ REGISTRATION / EMAIL GATE MODAL ════════ -->
+<div class="modal-overlay" id="reg-modal" onclick="handleRegOverlayClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeRegModal()">✕</button>
+    <div class="modal-top">
+      <div class="modal-type">🔓 Unlock Free Access</div>
+      <h3>One Step to All Resources</h3>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc">
+        Enter your details once and get instant access to <strong style="color:var(--white)">every template, framework, and resource</strong> on this page — completely free, forever. No spam, ever.
+      </p>
+      <div class="reg-form">
+        <div class="reg-row">
+          <div class="reg-field">
+            <label for="reg-first">First Name</label>
+            <input type="text" id="reg-first" placeholder="Jane" autocomplete="given-name" />
+            <div class="reg-error" id="err-first"></div>
+          </div>
+          <div class="reg-field">
+            <label for="reg-last">Last Name</label>
+            <input type="text" id="reg-last" placeholder="Doe" autocomplete="family-name" />
+            <div class="reg-error" id="err-last"></div>
+          </div>
+        </div>
+        <div class="reg-field">
+          <label for="reg-email">Email Address</label>
+          <input type="email" id="reg-email" placeholder="jane@example.com" autocomplete="email" />
+          <div class="reg-error" id="err-email"></div>
+        </div>
+        <label class="reg-consent">
+          <input type="checkbox" id="reg-consent" />
+          <span>I'd like to receive new PM resources and occasional updates from Neelesh. (optional)</span>
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" id="reg-submit" onclick="submitRegistration()">Unlock & Continue →</button>
+      <button class="btn-sm outline" onclick="closeRegModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script>
   /* ════════════════════════════════════════════════════════
      DOWNLOAD FILE MAP
@@ -1585,27 +1832,136 @@
     if (e.target === document.getElementById('modal')) closeModal();
   }
 
-  function handleDownload() {
-    const btn = document.getElementById('modal-cta');
-    const file = FILE_MAP[currentTitle];
+  /* ════════════════════════════════════════════════════════
+     LEAD CAPTURE / EMAIL GATE
+     ────────────────────────────────────────────────────────
+     Leads are (1) saved in the visitor's browser so they only
+     register once, and (2) sent to you via Formspree.
 
+     TO RECEIVE LEADS BY EMAIL:
+       1. Create a free account at https://formspree.io
+       2. Create a new form — you'll get an endpoint like
+          https://formspree.io/f/abcdwxyz
+       3. Paste that full URL below, replacing FORMSPREE_ENDPOINT.
+     Until you do, registrations still work and are stored in the
+     visitor's browser, but won't be emailed to you.
+     ════════════════════════════════════════════════════════ */
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
+  const REG_KEY = 'pmtoolkit_registered_user';
+
+  let pendingAction = null;
+
+  function getRegistration() {
+    try { return JSON.parse(localStorage.getItem(REG_KEY) || 'null'); }
+    catch (e) { return null; }
+  }
+  function isRegistered() { return !!getRegistration(); }
+
+  /* Runs `action` if the visitor has registered; otherwise opens the gate. */
+  function requireRegistration(action) {
+    if (isRegistered()) { action(); }
+    else { pendingAction = action; openRegModal(); }
+  }
+
+  function openRegModal() {
+    document.getElementById('reg-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('reg-first').focus(), 100);
+  }
+  function closeRegModal() {
+    document.getElementById('reg-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function handleRegOverlayClick(e) {
+    if (e.target === document.getElementById('reg-modal')) closeRegModal();
+  }
+
+  function submitRegistration() {
+    const first = document.getElementById('reg-first');
+    const last = document.getElementById('reg-last');
+    const email = document.getElementById('reg-email');
+    const consent = document.getElementById('reg-consent').checked;
+    let ok = true;
+
+    // reset
+    [first, last, email].forEach(i => i.classList.remove('invalid'));
+    ['err-first','err-last','err-email'].forEach(id => document.getElementById(id).textContent = '');
+
+    const nameRe = /^[A-Za-z][A-Za-z'’\- ]{1,}$/;
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    if (!nameRe.test(first.value.trim())) {
+      first.classList.add('invalid');
+      document.getElementById('err-first').textContent = 'Please enter a valid first name.';
+      ok = false;
+    }
+    if (!nameRe.test(last.value.trim())) {
+      last.classList.add('invalid');
+      document.getElementById('err-last').textContent = 'Please enter a valid last name.';
+      ok = false;
+    }
+    if (!emailRe.test(email.value.trim())) {
+      email.classList.add('invalid');
+      document.getElementById('err-email').textContent = 'Please enter a valid email address.';
+      ok = false;
+    }
+    if (!ok) return;
+
+    const lead = {
+      firstName: first.value.trim(),
+      lastName: last.value.trim(),
+      email: email.value.trim().toLowerCase(),
+      consent: consent,
+      registeredAt: new Date().toISOString()
+    };
+
+    // Save locally so they don't see the gate again
+    try { localStorage.setItem(REG_KEY, JSON.stringify(lead)); } catch (e) {}
+
+    // Send to Formspree (fire-and-forget; never blocks access)
+    if (FORMSPREE_ENDPOINT.indexOf('YOUR_FORM_ID') === -1) {
+      fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify(lead)
+      }).catch(() => {});
+    }
+
+    const btn = document.getElementById('reg-submit');
+    btn.textContent = '✓ Unlocked!';
+    btn.style.background = '#4ade80';
+    btn.style.color = '#080808';
+
+    setTimeout(() => {
+      btn.textContent = 'Unlock & Continue →';
+      btn.style.background = '';
+      btn.style.color = '';
+      closeRegModal();
+      if (pendingAction) { const a = pendingAction; pendingAction = null; a(); }
+    }, 700);
+  }
+
+  function handleDownload() {
+    // Gate every download behind registration
+    requireRegistration(doDownload);
+  }
+
+  function doDownload() {
+    // re-open the resource modal context is preserved via currentTitle
+    const file = FILE_MAP[currentTitle];
+    const btn = document.getElementById('modal-cta');
+    // If the resource modal was closed by the gate, just trigger the file
     if (file) {
-      // Real download: create a temporary link and click it
       const a = document.createElement('a');
       a.href = file;
       a.download = file.split('/').pop();
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      btn.textContent = '✓ Download started';
-      btn.style.background = '#4ade80';
-      btn.style.color = '#080808';
+      if (btn) { btn.textContent = '✓ Download started'; btn.style.background = '#4ade80'; btn.style.color = '#080808'; }
       setTimeout(() => closeModal(), 1400);
     } else {
-      // No file uploaded yet — friendly fallback
-      btn.textContent = '⏳ Coming soon — check back shortly!';
-      btn.style.background = '#4ade80';
-      btn.style.color = '#080808';
+      if (btn) { btn.textContent = '⏳ Coming soon — check back shortly!'; btn.style.background = '#4ade80'; btn.style.color = '#080808'; }
       setTimeout(() => closeModal(), 1800);
     }
   }
@@ -1646,9 +2002,12 @@
   }, { rootMargin: '-40% 0px -55% 0px' });
   sections.forEach(s => observer.observe(s));
 
-  /* ── ESC KEY ── */
+  /* ── ESC KEY + ENTER SUBMIT ── */
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { closeModal(); closeCoachingModal(); }
+    if (e.key === 'Escape') { closeModal(); closeCoachingModal(); closeRegModal(); }
+    if (e.key === 'Enter' && document.getElementById('reg-modal').classList.contains('open')) {
+      submitRegistration();
+    }
   });
 
   /* ── HERO STAT COUNT-UP ── */
@@ -1675,6 +2034,203 @@
     });
   }, { threshold: 0.5 });
   heroStatEls.forEach(el => statObserver.observe(el));
+
+  /* ════════════════════════════════════════════════════════
+     RICE PRIORITIZATION CALCULATOR
+     ════════════════════════════════════════════════════════ */
+  const RICE_EXAMPLE = [
+    { name: 'In-app onboarding flow', reach: 5000, impact: 2, conf: 80, effort: 2 },
+    { name: 'Dark mode', reach: 8000, impact: 0.5, conf: 100, effort: 1 },
+    { name: 'AI search assistant', reach: 12000, impact: 3, conf: 50, effort: 6 },
+    { name: 'CSV bulk export', reach: 1500, impact: 1, conf: 90, effort: 0.5 }
+  ];
+  let riceData = JSON.parse(JSON.stringify(RICE_EXAMPLE));
+
+  function riceScore(r) {
+    const eff = parseFloat(r.effort) || 0;
+    if (eff <= 0) return 0;
+    return ((parseFloat(r.reach)||0) * (parseFloat(r.impact)||0) * ((parseFloat(r.conf)||0)/100)) / eff;
+  }
+
+  function renderRice() {
+    const body = document.getElementById('rice-body');
+    if (!body) return;
+    const scored = riceData.map((r,i) => ({...r, _i:i, _s:riceScore(r)}));
+    const maxScore = Math.max(...scored.map(s => s._s), 0);
+    body.innerHTML = '';
+    riceData.forEach((r, i) => {
+      const s = riceScore(r);
+      const isTop = s === maxScore && maxScore > 0;
+      const tr = document.createElement('tr');
+      if (isTop) tr.className = 'rice-rank-1';
+      tr.innerHTML =
+        '<td><input type="text" value="' + escapeHtml(r.name) + '" oninput="updateRice(' + i + ',\'name\',this.value)"></td>' +
+        '<td><input type="number" min="0" value="' + r.reach + '" oninput="updateRice(' + i + ',\'reach\',this.value)"></td>' +
+        '<td><select onchange="updateRice(' + i + ',\'impact\',this.value)">' +
+          [3,2,1,0.5,0.25].map(v => '<option value="'+v+'"' + (parseFloat(r.impact)===v?' selected':'') + '>'+v+'</option>').join('') +
+        '</select></td>' +
+        '<td><input type="number" min="0" max="100" value="' + r.conf + '" oninput="updateRice(' + i + ',\'conf\',this.value)"></td>' +
+        '<td><input type="number" min="0.1" step="0.5" value="' + r.effort + '" oninput="updateRice(' + i + ',\'effort\',this.value)"></td>' +
+        '<td><span class="rice-score">' + (s ? s.toFixed(0) : '—') + '</span>' + (isTop ? ' 🏆' : '') + '</td>' +
+        '<td><button class="rice-del" onclick="delRice(' + i + ')" title="Remove">✕</button></td>';
+      body.appendChild(tr);
+    });
+  }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function updateRice(i, field, val) {
+    riceData[i][field] = (field === 'name') ? val : val;
+    // only re-render score cell live without losing focus: update score + top highlight
+    const s = riceScore(riceData[i]);
+    const rows = document.querySelectorAll('#rice-body tr');
+    if (rows[i]) {
+      const scoreCell = rows[i].querySelector('.rice-score');
+      if (scoreCell) scoreCell.textContent = s ? s.toFixed(0) : '—';
+    }
+    // recompute top highlight
+    const max = Math.max(...riceData.map(riceScore), 0);
+    rows.forEach((row, idx) => {
+      const isTop = riceScore(riceData[idx]) === max && max > 0;
+      row.className = isTop ? 'rice-rank-1' : '';
+      const sc = row.querySelector('.rice-score');
+      const td = sc ? sc.parentElement : null;
+      if (td) td.innerHTML = '<span class="rice-score">' + (riceScore(riceData[idx]) ? riceScore(riceData[idx]).toFixed(0) : '—') + '</span>' + (isTop ? ' 🏆' : '');
+    });
+  }
+  function addRiceRow() { riceData.push({ name: 'New feature', reach: 1000, impact: 1, conf: 70, effort: 1 }); renderRice(); }
+  function delRice(i) { riceData.splice(i, 1); renderRice(); }
+  function sortRice() { riceData.sort((a,b) => riceScore(b) - riceScore(a)); renderRice(); }
+  function resetRice() { riceData = JSON.parse(JSON.stringify(RICE_EXAMPLE)); renderRice(); }
+  renderRice();
+
+  /* ════════════════════════════════════════════════════════
+     PM READINESS SELF-ASSESSMENT
+     ════════════════════════════════════════════════════════ */
+  const ASSESS_Q = [
+    { cat: 'Strategy', q: 'When given a new product area, how comfortable are you defining a strategy and roadmap?',
+      opts: ['I focus on building a clear vision, themes, and a Now/Next/Later roadmap', 'I can prioritize features but struggle to tie them to a bigger vision', 'I mostly react to requests and stakeholder asks', 'Strategy feels abstract — I\'m not sure where to start'] },
+    { cat: 'Research', q: 'How do you decide what to build?',
+      opts: ['I run discovery, validate with users, and form hypotheses before building', 'I gather some feedback but often rely on intuition', 'I build what stakeholders or leadership request', 'I mostly go with my own product sense'] },
+    { cat: 'Execution', q: 'How confident are you writing PRDs and user stories engineers can build from?',
+      opts: ['Very — my specs reduce back-and-forth and ship cleanly', 'Decent, but I get a lot of clarifying questions', 'I write basic tickets but they often need rework', 'I rarely write formal specs'] },
+    { cat: 'Data', q: 'How do you measure whether a feature succeeded?',
+      opts: ['I define a North Star + leading indicators before launch and track them', 'I look at metrics after launch but don\'t always pre-define them', 'I rely on qualitative feedback more than data', 'I\'m not confident choosing the right metrics'] },
+    { cat: 'Prioritization', q: 'When everything is "urgent," how do you decide what comes first?',
+      opts: ['I use a scoring model (RICE/ICE) and tie to business impact', 'I weigh effort vs impact informally', 'I prioritize by who is asking loudest', 'I struggle to say no and overcommit'] },
+    { cat: 'Stakeholders', q: 'How do you handle conflicting stakeholder demands?',
+      opts: ['I map stakeholders, align on goals, and communicate trade-offs with data', 'I negotiate case-by-case but it can get political', 'I try to satisfy everyone and spread myself thin', 'Conflict management is a real weak spot for me'] },
+    { cat: 'Execution', q: 'How well do you work with engineering teams day-to-day?',
+      opts: ['Strong partnership — trust, clear specs, shared ownership', 'Good, though sometimes seen as the "feature factory"', 'Functional but occasionally tense', 'I find the PM-eng relationship difficult'] },
+    { cat: 'Career', q: 'Where are you in your PM journey right now?',
+      opts: ['Experienced PM looking to sharpen and level up', 'Working PM in my first year or two', 'Transitioning into PM from another role', 'Aspiring — trying to break in'] }
+  ];
+  // scoring: option index 0=3pts,1=2,2=1,3=0  (career question scores neutral but routes recos)
+  let assessIdx = 0;
+  let assessAnswers = [];
+
+  function renderAssessQ() {
+    const Q = ASSESS_Q[assessIdx];
+    document.getElementById('assess-bar').style.width = ((assessIdx / ASSESS_Q.length) * 100) + '%';
+    document.getElementById('assess-qnum').textContent = 'Question ' + (assessIdx + 1) + ' of ' + ASSESS_Q.length;
+    document.getElementById('assess-question').textContent = Q.q;
+    document.getElementById('assess-cat').textContent = 'Competency: ' + Q.cat;
+    document.getElementById('assess-back').style.visibility = assessIdx === 0 ? 'hidden' : 'visible';
+    const opts = document.getElementById('assess-options');
+    opts.innerHTML = '';
+    Q.opts.forEach((o, i) => {
+      const b = document.createElement('button');
+      b.className = 'assess-opt';
+      b.textContent = o;
+      b.onclick = () => assessAnswer(i);
+      opts.appendChild(b);
+    });
+  }
+  function assessAnswer(optIdx) {
+    assessAnswers[assessIdx] = optIdx;
+    if (assessIdx < ASSESS_Q.length - 1) { assessIdx++; renderAssessQ(); }
+    else showAssessResult();
+  }
+  function assessBack() { if (assessIdx > 0) { assessIdx--; renderAssessQ(); } }
+
+  function showAssessResult() {
+    document.getElementById('assess-bar').style.width = '100%';
+    // competency scores
+    const cats = {};
+    ASSESS_Q.forEach((Q, i) => {
+      if (Q.cat === 'Career') return;
+      const pts = [3,2,1,0][assessAnswers[i]] ?? 0;
+      if (!cats[Q.cat]) cats[Q.cat] = { sum: 0, max: 0 };
+      cats[Q.cat].sum += pts; cats[Q.cat].max += 3;
+    });
+    let totalSum = 0, totalMax = 0;
+    Object.values(cats).forEach(c => { totalSum += c.sum; totalMax += c.max; });
+    const overall = Math.round((totalSum / totalMax) * 100);
+
+    document.getElementById('assess-quiz').style.display = 'none';
+    const res = document.getElementById('assess-result');
+    res.style.display = 'block';
+
+    // animate score circle
+    const circle = document.getElementById('assess-score-circle');
+    document.getElementById('assess-score-num').textContent = overall;
+    circle.style.setProperty('--pct', overall + '%');
+
+    // level
+    let level, desc;
+    if (overall >= 80) { level = 'Product Leader'; desc = 'You operate like a seasoned PM. Focus on sharpening your weakest competency below and mentoring others.'; }
+    else if (overall >= 60) { level = 'Solid Operator'; desc = 'You have strong fundamentals. A few targeted areas below will push you toward senior-level impact.'; }
+    else if (overall >= 40) { level = 'Rising PM'; desc = 'You\'re building real momentum. The resources below will help you close key gaps fast.'; }
+    else { level = 'Future PM'; desc = 'Great starting point — everyone begins here. Follow the recommended path below to build core PM muscle.'; }
+    document.getElementById('assess-level').textContent = level;
+    document.getElementById('assess-level-desc').textContent = desc;
+
+    // bars
+    const palette = { Strategy:'var(--accent)', Research:'var(--accent3)', Execution:'var(--accent2)', Data:'#4ade80', Prioritization:'var(--accent)', Stakeholders:'var(--accent3)' };
+    const barsEl = document.getElementById('assess-bars');
+    barsEl.innerHTML = '';
+    const sortedCats = Object.entries(cats).map(([k,v]) => [k, Math.round((v.sum/v.max)*100)]).sort((a,b)=>a[1]-b[1]);
+    sortedCats.forEach(([cat, pct]) => {
+      const row = document.createElement('div');
+      row.className = 'assess-bar-row';
+      row.innerHTML = '<div class="assess-bar-label">' + cat + '</div>' +
+        '<div class="assess-bar-track"><div class="assess-bar-fill" style="width:0%;background:' + (palette[cat]||'var(--accent2)') + '"></div></div>' +
+        '<div class="assess-bar-val">' + pct + '</div>';
+      barsEl.appendChild(row);
+      requestAnimationFrame(() => { setTimeout(() => { row.querySelector('.assess-bar-fill').style.width = pct + '%'; }, 50); });
+    });
+
+    // recommendations: target two weakest competencies + career stage
+    const recoMap = {
+      Strategy: ['the <a onclick="document.getElementById(\'templates\').scrollIntoView({behavior:\'smooth\'})">Product Roadmap Canvas</a> and Business Case &amp; OKR Alignment template', 'Part 1 &amp; 2 of the <a onclick="document.getElementById(\'series\').scrollIntoView({behavior:\'smooth\'})">Breaking into Product</a> series'],
+      Research: ['the <a onclick="document.getElementById(\'templates\').scrollIntoView({behavior:\'smooth\'})">Discovery Brief, User Interview Script, and JTBD Guide</a>', 'the User Persona Kit to sharpen your research output'],
+      Execution: ['the <a onclick="document.getElementById(\'templates\').scrollIntoView({behavior:\'smooth\'})">PRD Template and Epic &amp; User Story Writing Kit</a>', 'Part 6: Working with Engineering Teams in the <a onclick="document.getElementById(\'series\').scrollIntoView({behavior:\'smooth\'})">series</a>'],
+      Data: ['the <a onclick="document.getElementById(\'templates\').scrollIntoView({behavior:\'smooth\'})">North Star Metric &amp; KPI Dashboard</a> and A/B Testing template', 'Part 7: Data-Driven Decision Making'],
+      Prioritization: ['the <a onclick="document.getElementById(\'templates\').scrollIntoView({behavior:\'smooth\'})">Prioritization Scoring Matrix</a> — and the live RICE calculator above', 'the RICE &amp; ICE entries in the <a onclick="document.getElementById(\'frameworks\').scrollIntoView({behavior:\'smooth\'})">frameworks cheatsheet</a>'],
+      Stakeholders: ['the <a onclick="document.getElementById(\'templates\').scrollIntoView({behavior:\'smooth\'})">Stakeholder Map &amp; Communication Plan</a>', 'a <a onclick="document.getElementById(\'coaching\').scrollIntoView({behavior:\'smooth\'})">Career Roadmap coaching session</a> to work through real scenarios']
+    };
+    const careerIdx = ASSESS_Q.findIndex(q => q.cat === 'Career');
+    const careerAns = assessAnswers[careerIdx];
+    const careerReco = [
+      'You\'re experienced — consider the <a onclick="document.getElementById(\'coaching\').scrollIntoView({behavior:\'smooth\'})">PRD/Case Study Review</a> to refine your craft',
+      'In your first years — the <a onclick="document.getElementById(\'series\').scrollIntoView({behavior:\'smooth\'})">full PM series</a> and 30-60-90 plan will compound fast',
+      'Transitioning in — start with the <a onclick="document.getElementById(\'series\').scrollIntoView({behavior:\'smooth\'})">Breaking into Product</a> series and PM Resume Kit',
+      'Breaking in — the <a onclick="document.getElementById(\'coaching\').scrollIntoView({behavior:\'smooth\'})">Break Into PM Accelerator</a> and free Discovery Call are built for you'
+    ][careerAns] || '';
+
+    const weakest = sortedCats.slice(0, 2).map(c => c[0]);
+    const recosEl = document.getElementById('assess-recos');
+    let lis = '';
+    weakest.forEach(cat => { if (recoMap[cat]) lis += '<li>To strengthen <strong style="color:#fff">' + cat + '</strong>: grab ' + recoMap[cat][0] + '.</li>'; });
+    if (careerReco) lis += '<li>' + careerReco + '.</li>';
+    recosEl.innerHTML = '<h4>📌 Your personalized next steps</h4><ul>' + lis + '</ul>';
+  }
+
+  function restartAssess() {
+    assessIdx = 0; assessAnswers = [];
+    document.getElementById('assess-result').style.display = 'none';
+    document.getElementById('assess-quiz').style.display = 'block';
+    renderAssessQ();
+  }
+  renderAssessQ();
 
 </script>
 </body>
