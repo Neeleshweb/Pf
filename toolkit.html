@@ -87,13 +87,55 @@
       min-height: 90vh;
       display: flex; flex-direction: column; justify-content: center;
     }
+    /* animated gradient orbs */
+    .hero::before, .hero::after {
+      content: ''; position: absolute; border-radius: 50%;
+      filter: blur(90px); opacity: .55; pointer-events: none; z-index: 0;
+    }
+    .hero::before {
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(232,84,10,0.45), transparent 70%);
+      top: -120px; left: -100px;
+      animation: float1 14s ease-in-out infinite;
+    }
+    .hero::after {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(240,165,0,0.30), transparent 70%);
+      bottom: -100px; right: 8%;
+      animation: float2 18s ease-in-out infinite;
+    }
+    @keyframes float1 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50% { transform: translate(60px,40px) scale(1.12); }
+    }
+    @keyframes float2 {
+      0%,100% { transform: translate(0,0) scale(1); }
+      50% { transform: translate(-50px,-30px) scale(1.18); }
+    }
+    /* subtle moving grid overlay */
+    .hero-grid {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 30%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 30%, transparent 80%);
+      animation: gridpan 30s linear infinite;
+    }
+    @keyframes gridpan {
+      from { background-position: 0 0, 0 0; }
+      to { background-position: 60px 60px, 60px 60px; }
+    }
+    /* keep hero content above background layers */
+    .hero > *:not(.hero-bg-word):not(.hero-grid) { position: relative; z-index: 2; }
     .hero-bg-word {
       position: absolute; right: -3vw; top: 50%;
       transform: translateY(-50%);
       font-family: 'Bebas Neue', sans-serif;
-      font-size: 22vw; color: rgba(255,255,255,0.018);
+      font-size: 22vw; color: rgba(255,255,255,0.022);
       letter-spacing: 12px; user-select: none; pointer-events: none;
-      white-space: nowrap; line-height: 1;
+      white-space: nowrap; line-height: 1; z-index: 1;
     }
     .hero-line {
       display: inline-flex; align-items: center; gap: .6rem;
@@ -200,16 +242,16 @@
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-      gap: 1px; background: var(--border);
+      gap: 1rem; background: transparent;
     }
-    .card-grid.gap { background: transparent; gap: 1rem; }
     .resource-card {
-      background: var(--black); padding: 1.8rem;
+      background: var(--card); padding: 1.8rem;
+      border: 1px solid var(--border); border-radius: var(--radius);
       position: relative; overflow: hidden;
-      transition: background .2s; cursor: pointer;
+      transition: background .2s, border-color .2s, transform .15s; cursor: pointer;
       display: flex; flex-direction: column;
     }
-    .resource-card:hover { background: var(--card); }
+    .resource-card:hover { background: var(--card2); border-color: var(--border2); transform: translateY(-2px); }
     .rc-stripe {
       position: absolute; top: 0; left: 0;
       width: 0; height: 3px; background: var(--accent);
@@ -257,7 +299,8 @@
     .resource-card.featured {
       grid-column: span 2; min-height: 260px;
       justify-content: space-between;
-      background: var(--card);
+      background: linear-gradient(145deg, var(--card2), var(--card));
+      border-color: var(--accent2);
     }
     .resource-card.featured h3 { font-size: 2rem; }
     .resource-card.featured::after {
@@ -350,14 +393,15 @@
     /* ─── FRAMEWORKS SECTION ─── */
     .fw-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1px; background: var(--border); margin-top: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: .8rem; background: transparent; margin-top: 1rem;
     }
     .fw-card {
-      background: var(--black); padding: 1.4rem;
-      transition: background .2s;
+      background: var(--card); padding: 1.4rem;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      transition: background .2s, border-color .2s, transform .15s;
     }
-    .fw-card:hover { background: var(--card); }
+    .fw-card:hover { background: var(--card2); border-color: var(--border2); transform: translateY(-2px); }
     .fw-abbr {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 2rem; letter-spacing: 1px;
@@ -398,27 +442,72 @@
     .testi-name { font-size: .85rem; font-weight: 500; }
     .testi-role { font-size: .75rem; color: var(--muted); }
 
-    /* ─── BOOKS BANNER ─── */
-    .books-banner {
+    /* ─── BOOKS ─── */
+    .books-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .book-feature {
+      display: flex; gap: 1.5rem; align-items: stretch;
       background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 2.5rem;
-      display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
-      margin: 3rem 0;
+      border-radius: var(--radius); padding: 1.8rem;
+      transition: border-color .25s, transform .2s;
     }
-    .books-banner-txt { flex: 1; min-width: 220px; }
-    .books-banner-txt h3 {
-      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; margin-bottom: .5rem;
+    .book-feature:hover { border-color: var(--border2); transform: translateY(-3px); }
+    /* 3D book cover */
+    .book-cover {
+      flex-shrink: 0; width: 130px; min-height: 195px;
+      border-radius: 2px 5px 5px 2px;
+      position: relative; overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), -1px 0 0 rgba(255,255,255,0.06) inset;
+      display: flex; align-items: flex-start;
+      transform: perspective(900px) rotateY(-12deg);
+      transition: transform .35s ease;
     }
-    .books-banner-txt p { font-size: .88rem; color: var(--muted); line-height: 1.65; }
-    .books-banner-ctas { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.2rem; }
+    .book-feature:hover .book-cover { transform: perspective(900px) rotateY(-4deg); }
+    .book-cover--1 { background: linear-gradient(150deg, #e8540a, #b53e05 70%, #7a2a03); }
+    .book-cover--2 { background: linear-gradient(150deg, #f0a500, #c47e00 70%, #8a5800); }
+    .book-cover-spine {
+      position: absolute; left: 0; top: 0; bottom: 0; width: 9px;
+      background: rgba(0,0,0,0.28);
+      box-shadow: 3px 0 5px rgba(0,0,0,0.15) inset;
+    }
+    .book-cover-content { padding: 1.1rem .9rem .9rem 1.3rem; color: #fff; height: 100%; display: flex; flex-direction: column; }
+    .book-cover-vol {
+      font-size: .58rem; letter-spacing: 2px; text-transform: uppercase;
+      opacity: .8; margin-bottom: .5rem;
+    }
+    .book-cover-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem;
+      line-height: 1.02; letter-spacing: .5px; margin-bottom: .4rem;
+    }
+    .book-cover-sub { font-size: .6rem; line-height: 1.4; opacity: .85; margin-bottom: auto; }
+    .book-cover-author {
+      font-size: .62rem; letter-spacing: .5px; opacity: .9;
+      padding-top: .6rem; margin-top: .6rem; border-top: 1px solid rgba(255,255,255,0.25);
+    }
+    .book-info { display: flex; flex-direction: column; }
+    .book-tag {
+      font-size: .7rem; color: var(--accent); letter-spacing: .5px;
+      margin-bottom: .7rem;
+    }
+    .book-tag.y { color: var(--accent2); }
+    .book-info h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .5px; margin-bottom: .6rem; line-height: 1.05; }
+    .book-info p { font-size: .82rem; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; flex: 1; }
+    .book-meta-row { display: flex; align-items: center; gap: .7rem; margin-bottom: 1.1rem; flex-wrap: wrap; }
+    .book-stars { color: var(--accent2); font-size: .85rem; letter-spacing: 1px; }
+    .book-meta-txt { font-size: .73rem; color: var(--muted2); }
     .book-btn {
+      align-self: flex-start;
       background: var(--accent-dim); color: var(--accent);
       border: 1px solid var(--accent);
-      padding: .5rem 1.2rem; border-radius: var(--radius);
+      padding: .5rem 1.3rem; border-radius: var(--radius);
       font-size: .82rem; font-weight: 500; letter-spacing: .2px;
       transition: background .2s;
     }
-    .book-btn:hover { background: rgba(232,84,10,0.25); }
+    .book-btn:hover { background: rgba(232,84,10,0.22); }
+    .book-btn.y { background: var(--accent2-dim); color: var(--accent2); border-color: var(--accent2); }
+    .book-btn.y:hover { background: rgba(240,165,0,0.20); }
 
     /* ─── CTA BANNER ─── */
     .cta-banner {
@@ -527,7 +616,12 @@
       .footer { padding: 1.5rem 1.2rem; flex-direction: column; }
       .series-item { grid-template-columns: 50px 1fr; gap: 1rem; }
       .si-num { font-size: 2.5rem; }
-      .books-banner { flex-direction: column; }
+      .books-grid { grid-template-columns: 1fr; }
+      .book-feature { flex-direction: column; align-items: center; text-align: center; }
+      .book-cover { transform: none; }
+      .book-feature:hover .book-cover { transform: none; }
+      .book-info { align-items: center; }
+      .book-btn { align-self: center; }
       .cta-banner { padding: 2rem 1.2rem; }
       .modal-footer { flex-direction: column; }
     }
@@ -555,6 +649,7 @@
 
 <!-- ════════ HERO ════════ -->
 <section class="hero">
+  <div class="hero-grid"></div>
   <div class="hero-bg-word">PM</div>
   <div class="hero-line">
     <div class="hero-dot"></div>
@@ -570,19 +665,19 @@
   </div>
   <div class="hero-stats">
     <div>
-      <div class="stat-val o">30+</div>
+      <div class="stat-val o" data-target="30+">30+</div>
       <div class="stat-lbl">Resources</div>
     </div>
     <div>
-      <div class="stat-val y">18</div>
+      <div class="stat-val y" data-target="18">18</div>
       <div class="stat-lbl">Templates</div>
     </div>
     <div>
-      <div class="stat-val b">5+</div>
+      <div class="stat-val b" data-target="5+">5+</div>
       <div class="stat-lbl">Years PM Experience</div>
     </div>
     <div>
-      <div class="stat-val o">1M+</div>
+      <div class="stat-val o" data-target="1M+">1M+</div>
       <div class="stat-lbl">Users on Shipped Products</div>
     </div>
     <div>
@@ -1242,34 +1337,63 @@
 <section class="section" id="books">
   <div class="sec-eyebrow">Published Works</div>
   <div class="sec-title">Books by <span>Neelesh</span></div>
-  <div class="books-banner">
-    <div class="books-banner-txt">
-      <h3>Two Books on Product Management</h3>
-      <p>
-        Written from real experience — not theory. Both books are written for PMs at every level, blending storytelling with actionable frameworks.
-        From ideation to launch, Agile to AI, and strategy to execution — these books cover the full PM journey.
-      </p>
-      <p style="font-size:.82rem;color:var(--muted2);margin-top:.8rem;font-style:italic">
-        Note: These books reflect personal experiences and insights. Perspectives grow and evolve — approach with an open mind.
-      </p>
-      <div class="books-banner-ctas">
-        <a href="https://www.amazon.ca/Product-Management-customer-centric-fundamental-enterprises-ebook/dp/B0BTCL5B8B/" target="_blank" class="book-btn">📘 Idea to Launch Journey →</a>
-        <a href="https://www.amazon.com/ultimate-guide-product-manager-management-ebook/dp/B0CGPJ8JQ9" target="_blank" class="book-btn">📗 Ultimate Guide for PMs →</a>
+  <p style="color:var(--muted);font-size:.9rem;max-width:600px;margin-bottom:2.5rem;line-height:1.7">
+    Two books written from real experience — not theory. Built for PMs at every stage, blending storytelling with actionable frameworks across the full product journey.
+  </p>
+
+  <div class="books-grid">
+
+    <!-- BOOK 1 -->
+    <div class="book-feature">
+      <div class="book-cover book-cover--1">
+        <div class="book-cover-spine"></div>
+        <div class="book-cover-content">
+          <div class="book-cover-vol">Volume One</div>
+          <div class="book-cover-title">Idea to Launch Journey</div>
+          <div class="book-cover-sub">A customer-centric approach to building products</div>
+          <div class="book-cover-author">Neelesh Singh</div>
+        </div>
+      </div>
+      <div class="book-info">
+        <div class="book-tag">📘 Jan 2023 · eBook + Paperback</div>
+        <h3>The Idea to Launch Journey</h3>
+        <p>A complete walkthrough of the product lifecycle — from spotting an opportunity to shipping a product customers love. Covers discovery, validation, building cross-functional alignment, and the fundamentals every PM in an enterprise setting needs.</p>
+        <div class="book-meta-row">
+          <span class="book-stars">★★★★★</span>
+          <span class="book-meta-txt">Ideal for aspiring & early-career PMs</span>
+        </div>
+        <a href="https://www.amazon.ca/Product-Management-customer-centric-fundamental-enterprises-ebook/dp/B0BTCL5B8B/" target="_blank" rel="noopener" class="book-btn">View on Amazon →</a>
       </div>
     </div>
-    <div style="display:flex;gap:1rem;flex-shrink:0">
-      <div style="width:100px;background:var(--black);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:1px;color:var(--accent)">VOL 1</div>
-        <div style="font-size:.7rem;color:var(--muted);margin-top:.3rem;line-height:1.4">Idea to Launch Journey</div>
-        <div style="font-size:.68rem;color:var(--muted2);margin-top:.5rem">Jan 2023</div>
+
+    <!-- BOOK 2 -->
+    <div class="book-feature">
+      <div class="book-cover book-cover--2">
+        <div class="book-cover-spine"></div>
+        <div class="book-cover-content">
+          <div class="book-cover-vol">Volume Two</div>
+          <div class="book-cover-title">The Ultimate Guide for Product Managers</div>
+          <div class="book-cover-sub">Strategy, execution & growth</div>
+          <div class="book-cover-author">Neelesh Singh</div>
+        </div>
       </div>
-      <div style="width:100px;background:var(--black);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:1px;color:var(--accent2)">VOL 2</div>
-        <div style="font-size:.7rem;color:var(--muted);margin-top:.3rem;line-height:1.4">Ultimate Guide for PMs</div>
-        <div style="font-size:.68rem;color:var(--muted2);margin-top:.5rem">Aug 2023</div>
+      <div class="book-info">
+        <div class="book-tag y">📗 Aug 2023 · eBook + Paperback</div>
+        <h3>The Ultimate Guide for PMs</h3>
+        <p>A deeper, more advanced companion — moving from fundamentals into strategy, prioritization, metrics, stakeholder leadership, and shipping in the age of AI. Packed with frameworks you can apply on Monday morning.</p>
+        <div class="book-meta-row">
+          <span class="book-stars">★★★★★</span>
+          <span class="book-meta-txt">Ideal for growing & senior PMs</span>
+        </div>
+        <a href="https://www.amazon.com/ultimate-guide-product-manager-management-ebook/dp/B0CGPJ8JQ9" target="_blank" rel="noopener" class="book-btn y">View on Amazon →</a>
       </div>
     </div>
+
   </div>
+
+  <p style="font-size:.8rem;color:var(--muted2);margin-top:2rem;font-style:italic;text-align:center">
+    Note: These books reflect personal experiences and insights. Perspectives grow and evolve — approach with an open mind.
+  </p>
 </section>
 
 <div class="divider"></div>
@@ -1400,6 +1524,25 @@
 </div>
 
 <script>
+  /* ════════════════════════════════════════════════════════
+     DOWNLOAD FILE MAP
+     ────────────────────────────────────────────────────────
+     To make any resource downloadable:
+       1. Put your file in a "downloads/" folder in your repo
+          (e.g.  downloads/prd-template.pdf)
+       2. Add an entry below:  'Exact Card Title' : 'downloads/your-file.pdf'
+     Any resource NOT listed here will show a friendly
+     "coming soon" message instead of a broken link.
+     ════════════════════════════════════════════════════════ */
+  const FILE_MAP = {
+    // 'The Complete PM Document Bundle': 'downloads/pm-document-bundle.zip',
+    // 'PRD Template — The One Engineers Actually Read': 'downloads/prd-template.pdf',
+    // 'Product Roadmap Canvas': 'downloads/roadmap-canvas.pdf',
+    // ... add the rest as you create each file
+  };
+
+  let currentTitle = '';
+
   /* ── FILTER ── */
   function filterCards(btn, cat) {
     document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
@@ -1412,11 +1555,15 @@
   /* ── RESOURCE MODAL ── */
   function openModal(type, title, desc, list, ctaLabel, color) {
     const el = (id) => document.getElementById(id);
+    currentTitle = title;
     el('modal-type').textContent = type;
     el('modal-type').className = 'modal-type' + (color === 'y' ? ' y' : color === 'b' ? ' b' : '');
     el('modal-title').textContent = title;
     el('modal-desc').textContent = desc;
-    el('modal-cta').textContent = ctaLabel || 'Download Free';
+    const cta = el('modal-cta');
+    cta.textContent = ctaLabel || 'Download Free';
+    cta.style.background = '';
+    cta.style.color = '';
     const ul = el('modal-list');
     ul.innerHTML = '';
     (list || []).forEach(item => {
@@ -1440,10 +1587,27 @@
 
   function handleDownload() {
     const btn = document.getElementById('modal-cta');
-    btn.textContent = '✓ Check back soon — file coming!';
-    btn.style.background = '#4ade80';
-    btn.style.color = '#080808';
-    setTimeout(() => closeModal(), 1800);
+    const file = FILE_MAP[currentTitle];
+
+    if (file) {
+      // Real download: create a temporary link and click it
+      const a = document.createElement('a');
+      a.href = file;
+      a.download = file.split('/').pop();
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      btn.textContent = '✓ Download started';
+      btn.style.background = '#4ade80';
+      btn.style.color = '#080808';
+      setTimeout(() => closeModal(), 1400);
+    } else {
+      // No file uploaded yet — friendly fallback
+      btn.textContent = '⏳ Coming soon — check back shortly!';
+      btn.style.background = '#4ade80';
+      btn.style.color = '#080808';
+      setTimeout(() => closeModal(), 1800);
+    }
   }
 
   /* ── COACHING MODAL ── */
@@ -1486,6 +1650,32 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') { closeModal(); closeCoachingModal(); }
   });
+
+  /* ── HERO STAT COUNT-UP ── */
+  function animateCount(el) {
+    const raw = el.dataset.target;
+    const num = parseInt(raw, 10);
+    if (isNaN(num)) return; // skip non-numeric like "Free"
+    const suffix = raw.replace(/[0-9]/g, '');
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.floor(eased * num) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = num + suffix;
+    }
+    requestAnimationFrame(tick);
+  }
+  const heroStatEls = document.querySelectorAll('.stat-val[data-target]');
+  const statObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { animateCount(entry.target); obs.unobserve(entry.target); }
+    });
+  }, { threshold: 0.5 });
+  heroStatEls.forEach(el => statObserver.observe(el));
+
 </script>
 </body>
 </html>
