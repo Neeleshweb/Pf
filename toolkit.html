@@ -1,505 +1,1491 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>PM Toolkit - Neelesh Singh</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="PM Toolkit by Neelesh Singh — Templates, frameworks, coaching and resources for aspiring and growing Product Managers."/>
+  <title>PM Toolkit — Neelesh Singh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet"/>
+  <style>
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black:   #080808;
+      --surface: #0f0f0f;
+      --card:    #141414;
+      --card2:   #191919;
+      --border:  #242424;
+      --border2: #2e2e2e;
+      --white:   #f0ece4;
+      --muted:   #6b6b6b;
+      --muted2:  #4a4a4a;
+      --accent:  #e8540a;
+      --accent2: #f0a500;
+      --accent3: #3b82f6;
+      --accent-dim: rgba(232,84,10,0.12);
+      --accent2-dim: rgba(240,165,0,0.10);
+      --accent3-dim: rgba(59,130,246,0.10);
+      --radius:  3px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: 'DM Sans', sans-serif; cursor: pointer; }
+    img { max-width: 100%; display: block; }
 
-<link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-<link href="css/style.css" rel="stylesheet">
-  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
-<style>
+    /* ─── NAV ─── */
+    .nav {
+      position: sticky; top: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 60px;
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; letter-spacing: 3px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links {
+      display: flex; align-items: center; gap: 0;
+      list-style: none;
+    }
+    .nav-links a {
+      display: block; padding: 0 1rem; height: 60px;
+      line-height: 60px;
+      font-size: .8rem; letter-spacing: .8px; text-transform: uppercase;
+      color: var(--muted); transition: color .2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-back {
+      font-size: .78rem; color: var(--muted); letter-spacing: .5px;
+      display: flex; align-items: center; gap: .4rem;
+      transition: color .2s;
+    }
+    .nav-back:hover { color: var(--white); }
+    .nav-back svg { width: 14px; height: 14px; }
 
-/* ===== BACKGROUND (MATCH LANDING) ===== */
-  html, body {
-  height: 100%;
-}
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: url('img/Back11.png') no-repeat center center/cover;
-  position: relative;
-  min-height: 100vh;
-}
+    /* ─── HERO ─── */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 6rem 2.5rem 5rem;
+      min-height: 90vh;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .hero-bg-word {
+      position: absolute; right: -3vw; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22vw; color: rgba(255,255,255,0.018);
+      letter-spacing: 12px; user-select: none; pointer-events: none;
+      white-space: nowrap; line-height: 1;
+    }
+    .hero-line {
+      display: inline-flex; align-items: center; gap: .6rem;
+      font-size: .72rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 2rem;
+    }
+    .hero-dot {
+      width: 6px; height: 6px; background: var(--accent); border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4.5rem, 10vw, 9.5rem);
+      line-height: .92; letter-spacing: 2px;
+      max-width: 900px; margin-bottom: 1.8rem;
+    }
+    .hero h1 em { color: var(--accent); font-style: normal; }
+    .hero h1 .y { color: var(--accent2); }
+    .hero-sub {
+      font-size: 1.1rem; color: var(--muted); line-height: 1.75;
+      max-width: 560px; margin-bottom: 3rem;
+    }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 5rem; }
+    .btn-primary {
+      background: var(--accent); color: #fff; border: none;
+      padding: .85rem 2.2rem; border-radius: var(--radius);
+      font-size: .9rem; font-weight: 500; letter-spacing: .3px;
+      transition: opacity .2s, transform .15s;
+    }
+    .btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent; color: var(--white);
+      border: 1px solid var(--border2);
+      padding: .85rem 2.2rem; border-radius: var(--radius);
+      font-size: .9rem; font-weight: 400; letter-spacing: .3px;
+      transition: border-color .2s;
+    }
+    .btn-ghost:hover { border-color: #555; }
+    .hero-stats {
+      display: flex; gap: 3.5rem; flex-wrap: wrap;
+      padding-top: 2.5rem; border-top: 1px solid var(--border);
+    }
+    .stat-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem; letter-spacing: 1px; line-height: 1;
+    }
+    .stat-val.o { color: var(--accent); }
+    .stat-val.y { color: var(--accent2); }
+    .stat-val.b { color: var(--accent3); }
+    .stat-lbl {
+      font-size: .73rem; text-transform: uppercase;
+      letter-spacing: 1.2px; color: var(--muted); margin-top: .3rem;
+    }
 
-body::before {
-  content: "";
-  position: fixed; /* KEY FIX */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255,255,255,0.92);
-  z-index: 0;
-}
+    /* ─── MARQUEE ─── */
+    .marquee-wrap {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: .9rem 0; overflow: hidden; background: var(--surface);
+    }
+    .marquee-track {
+      display: flex; gap: 2.5rem; width: max-content;
+      animation: marquee 28s linear infinite;
+    }
+    .marquee-track span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem; letter-spacing: 3px; text-transform: uppercase;
+      color: var(--muted2); white-space: nowrap;
+    }
+    .marquee-track span.dot { color: var(--accent); font-size: .5rem; }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-/* ===== HEADER ===== */
-.header {
-  position: relative;
-  z-index: 2;
-  padding: 20px 40px;
-  display: flex;
-  justify-content: space-between;
-}
+    /* ─── SECTION ─── */
+    .section { padding: 4rem 2.5rem; }
+    .section + .section { padding-top: 0; }
+    .sec-eyebrow {
+      font-size: .72rem; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: .5rem;
+    }
+    .sec-eyebrow.y { color: var(--accent2); }
+    .sec-eyebrow.b { color: var(--accent3); }
+    .sec-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem); letter-spacing: 1px;
+      margin-bottom: 2.5rem; line-height: 1;
+    }
+    .sec-title span { color: var(--accent); }
+    .sec-title .y { color: var(--accent2); }
+    .sec-title .b { color: var(--accent3); }
 
-.header a {
-  text-decoration: none;
-  color: #333;
-  margin-left: 20px;
-}
+    /* ─── FILTER BAR ─── */
+    .filters { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .fbtn {
+      background: var(--card); border: 1px solid var(--border);
+      color: var(--muted); padding: .38rem 1rem; border-radius: var(--radius);
+      font-size: .78rem; letter-spacing: .5px; text-transform: uppercase;
+      transition: all .2s;
+    }
+    .fbtn:hover { border-color: var(--border2); color: var(--white); }
+    .fbtn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-/* ===== MAIN ===== */
-.main {
-  position: relative;
-  z-index: 2;
-  padding: 40px;
-}
+    /* ─── CARD GRID ─── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1px; background: var(--border);
+    }
+    .card-grid.gap { background: transparent; gap: 1rem; }
+    .resource-card {
+      background: var(--black); padding: 1.8rem;
+      position: relative; overflow: hidden;
+      transition: background .2s; cursor: pointer;
+      display: flex; flex-direction: column;
+    }
+    .resource-card:hover { background: var(--card); }
+    .rc-stripe {
+      position: absolute; top: 0; left: 0;
+      width: 0; height: 3px; background: var(--accent);
+      transition: width .3s ease;
+    }
+    .resource-card:hover .rc-stripe { width: 100%; }
+    .rc-stripe.y { background: var(--accent2); }
+    .rc-stripe.b { background: var(--accent3); }
+    .rc-type {
+      font-size: .68rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: .7rem; font-weight: 500;
+    }
+    .rc-type.y { color: var(--accent2); }
+    .rc-type.b { color: var(--accent3); }
+    .rc-type.g { color: #4ade80; }
+    .resource-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem; letter-spacing: .4px; line-height: 1.05;
+      margin-bottom: .65rem;
+    }
+    .resource-card p {
+      font-size: .84rem; color: var(--muted);
+      line-height: 1.65; flex: 1; margin-bottom: 1.3rem;
+    }
+    .rc-footer { display: flex; align-items: center; justify-content: space-between; }
+    .rc-tags { display: flex; gap: .35rem; flex-wrap: wrap; }
+    .tag {
+      background: var(--card2); border: 1px solid var(--border);
+      color: var(--muted2); font-size: .66rem; padding: .18rem .5rem;
+      border-radius: var(--radius); letter-spacing: .2px;
+    }
+    .rc-dl {
+      display: flex; align-items: center; gap: .35rem;
+      font-size: .75rem; color: var(--accent); font-weight: 500;
+      border: none; background: none; padding: 0;
+      letter-spacing: .3px; white-space: nowrap;
+      transition: opacity .2s;
+    }
+    .rc-dl.y { color: var(--accent2); }
+    .rc-dl.b { color: var(--accent3); }
+    .rc-dl:hover { opacity: .75; }
+    .rc-dl svg { width: 13px; height: 13px; flex-shrink: 0; }
 
-.section-title {
-  text-align: center;
-  margin-bottom: 10px;
-}
+    /* FEATURED card */
+    .resource-card.featured {
+      grid-column: span 2; min-height: 260px;
+      justify-content: space-between;
+      background: var(--card);
+    }
+    .resource-card.featured h3 { font-size: 2rem; }
+    .resource-card.featured::after {
+      content: 'FEATURED';
+      position: absolute; top: 1.4rem; right: 1.4rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .7rem; letter-spacing: 3px;
+      color: var(--accent); border: 1px solid var(--accent);
+      padding: .15rem .5rem; border-radius: var(--radius);
+    }
 
-.section-subtitle {
-  text-align: center;
-  color: #666;
-  margin-bottom: 40px;
-}
+    /* ─── COACHING GRID ─── */
+    .coaching-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.2rem;
+    }
+    .coaching-card {
+      border: 1px solid var(--border); padding: 2rem;
+      border-radius: var(--radius); background: var(--card);
+      position: relative; overflow: hidden;
+      transition: border-color .25s, transform .2s;
+    }
+    .coaching-card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+    .coaching-card.featured-c { border-color: var(--accent); }
+    .coaching-badge {
+      display: inline-block; background: var(--accent-dim);
+      color: var(--accent); font-size: .68rem; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: .2rem .6rem;
+      border-radius: var(--radius); margin-bottom: 1rem;
+    }
+    .coaching-badge.y { background: var(--accent2-dim); color: var(--accent2); }
+    .coaching-badge.b { background: var(--accent3-dim); color: var(--accent3); }
+    .coaching-icon {
+      width: 44px; height: 44px; border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem; font-size: 1.3rem;
+    }
+    .coaching-icon.o { background: var(--accent-dim); }
+    .coaching-icon.y { background: var(--accent2-dim); }
+    .coaching-icon.b { background: var(--accent3-dim); }
+    .coaching-card h3 { font-size: 1rem; font-weight: 500; margin-bottom: .5rem; }
+    .coaching-card p { font-size: .84rem; color: var(--muted); line-height: 1.65; margin-bottom: 1.2rem; }
+    .coaching-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 1rem; border-top: 1px solid var(--border);
+    }
+    .coaching-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--accent); }
+    .coaching-price.y { color: var(--accent2); }
+    .coaching-price small { font-family: 'DM Sans', sans-serif; font-size: .72rem; color: var(--muted); font-weight: 400; margin-left: .2rem; }
+    .btn-sm {
+      background: var(--accent); color: #fff; border: none;
+      padding: .45rem 1.1rem; border-radius: var(--radius);
+      font-size: .8rem; font-weight: 500; letter-spacing: .2px;
+      transition: opacity .2s;
+    }
+    .btn-sm:hover { opacity: .85; }
+    .btn-sm.y { background: var(--accent2); color: #080808; }
+    .btn-sm.outline { background: transparent; color: var(--white); border: 1px solid var(--border2); }
+    .btn-sm.outline:hover { border-color: var(--accent); color: var(--accent); }
 
-/* ===== TABS ===== */
-.tab-btn {
-  border: none;
-  padding: 10px 25px;
-  border-radius: 25px;
-  background: #e9ecef;
-  margin: 5px;
-  cursor: pointer;
-}
+    /* ─── SERIES / TIMELINE ─── */
+    .series-list { display: flex; flex-direction: column; gap: 0; }
+    .series-item {
+      display: grid; grid-template-columns: 80px 1fr;
+      gap: 1.5rem; align-items: start;
+      padding: 2rem 0; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background .15s;
+    }
+    .series-item:hover .si-num { color: var(--accent); }
+    .si-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem; color: var(--border2);
+      line-height: 1; transition: color .2s; padding-top: .1rem;
+    }
+    .si-content h3 { font-size: 1.05rem; font-weight: 500; margin-bottom: .3rem; }
+    .si-content p { font-size: .84rem; color: var(--muted); line-height: 1.6; margin-bottom: .8rem; }
+    .si-tags { display: flex; gap: .35rem; flex-wrap: wrap; align-items: center; }
+    .badge-free {
+      font-size: .65rem; letter-spacing: 1.5px; text-transform: uppercase;
+      color: #4ade80; border: 1px solid #4ade8040; padding: .15rem .45rem;
+      border-radius: var(--radius);
+    }
+    .badge-new {
+      font-size: .65rem; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--accent); border: 1px solid var(--accent-dim); padding: .15rem .45rem;
+      border-radius: var(--radius);
+    }
 
-.tab-btn.active {
-  background: #007bff;
-  color: white;
-}
+    /* ─── FRAMEWORKS SECTION ─── */
+    .fw-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px; background: var(--border); margin-top: 1rem;
+    }
+    .fw-card {
+      background: var(--black); padding: 1.4rem;
+      transition: background .2s;
+    }
+    .fw-card:hover { background: var(--card); }
+    .fw-abbr {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem; letter-spacing: 1px;
+      color: var(--accent); margin-bottom: .4rem;
+    }
+    .fw-abbr.y { color: var(--accent2); }
+    .fw-abbr.b { color: var(--accent3); }
+    .fw-name { font-size: .85rem; font-weight: 500; margin-bottom: .3rem; }
+    .fw-desc { font-size: .78rem; color: var(--muted); line-height: 1.55; }
 
-/* ===== CARDS ===== */
-.tool-card {
-  background: white;
-  border-radius: 15px;
-  padding: 20px;
-  height: 160px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-}
+    /* ─── TESTIMONIALS ─── */
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    .testi-card {
+      background: var(--card); border: 1px solid var(--border);
+      padding: 1.6rem; border-radius: var(--radius); position: relative;
+    }
+    .testi-card::before {
+      content: '"';
+      font-family: 'Bebas Neue', sans-serif; font-size: 5rem;
+      color: var(--accent-dim); position: absolute; top: -.5rem; left: 1rem;
+      line-height: 1; pointer-events: none;
+    }
+    .testi-card p {
+      font-size: .88rem; color: #aaa; line-height: 1.7;
+      margin-bottom: 1rem; font-style: italic;
+    }
+    .testi-author { display: flex; align-items: center; gap: .7rem; }
+    .testi-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent-dim); display: flex; align-items: center;
+      justify-content: center; font-size: .8rem; font-weight: 500;
+      color: var(--accent); flex-shrink: 0;
+    }
+    .testi-name { font-size: .85rem; font-weight: 500; }
+    .testi-role { font-size: .75rem; color: var(--muted); }
 
-.tool-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-}
+    /* ─── BOOKS BANNER ─── */
+    .books-banner {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 2.5rem;
+      display: flex; align-items: center; gap: 2rem; flex-wrap: wrap;
+      margin: 3rem 0;
+    }
+    .books-banner-txt { flex: 1; min-width: 220px; }
+    .books-banner-txt h3 {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; margin-bottom: .5rem;
+    }
+    .books-banner-txt p { font-size: .88rem; color: var(--muted); line-height: 1.65; }
+    .books-banner-ctas { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: 1.2rem; }
+    .book-btn {
+      background: var(--accent-dim); color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: .5rem 1.2rem; border-radius: var(--radius);
+      font-size: .82rem; font-weight: 500; letter-spacing: .2px;
+      transition: background .2s;
+    }
+    .book-btn:hover { background: rgba(232,84,10,0.25); }
 
-.card-arrow {
-  text-align: right;
-  font-size: 18px;
-}
+    /* ─── CTA BANNER ─── */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--accent-dim), var(--accent2-dim));
+      border: 1px solid var(--border2); border-radius: var(--radius);
+      padding: 3rem; text-align: center; margin: 4rem 0 0;
+    }
+    .cta-banner h2 {
+      font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem;
+      margin-bottom: .6rem; letter-spacing: 1px;
+    }
+    .cta-banner p { font-size: .95rem; color: var(--muted); margin-bottom: 1.8rem; }
+    .cta-banner-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 
-/* ===== INFO SECTION ===== */
-.info-box {
-  background: white;
-  padding: 25px;
-  border-radius: 15px;
-  margin-bottom: 30px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-}
+    /* ─── DIVIDER ─── */
+    .divider {
+      height: 1px; background: var(--border);
+      margin: 0 2.5rem;
+    }
 
-/* ===== MODAL ===== */
-.modal-content {
-  border-radius: 20px;
-  padding: 20px;
-}
+    /* ─── FOOTER ─── */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; letter-spacing: 2px;
+    }
+    .footer-logo span { color: var(--accent); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: .78rem; color: var(--muted); letter-spacing: .3px; transition: color .2s; }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy { font-size: .75rem; color: var(--muted2); width: 100%; text-align: center; padding-top: 1rem; border-top: 1px solid var(--border); }
 
-.modal-header {
-  border-bottom: none;
-}
+    /* ─── MODAL ─── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.88); z-index: 999;
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--card); border: 1px solid var(--border2);
+      width: 100%; max-width: 520px; border-radius: var(--radius);
+      overflow: hidden; position: relative;
+    }
+    .modal-top {
+      padding: 2rem 2rem 0;
+    }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      background: none; border: none; color: var(--muted);
+      font-size: 1.2rem; line-height: 1; transition: color .2s;
+    }
+    .modal-close:hover { color: var(--white); }
+    .modal-type {
+      font-size: .68rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: .6rem;
+    }
+    .modal-type.y { color: var(--accent2); }
+    .modal-type.b { color: var(--accent3); }
+    .modal h3 {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+      margin-bottom: 1rem; line-height: 1.05;
+    }
+    .modal-body { padding: 0 2rem 1.5rem; }
+    .modal-desc { font-size: .88rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.2rem; }
+    .modal-includes {
+      background: var(--black); border-radius: var(--radius);
+      padding: 1.2rem; margin-bottom: 1.2rem;
+    }
+    .modal-includes-title {
+      font-size: .7rem; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .8rem;
+    }
+    .modal-includes ul { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+    .modal-includes li {
+      font-size: .84rem; color: var(--white);
+      display: flex; align-items: flex-start; gap: .5rem;
+    }
+    .modal-includes li::before {
+      content: '→'; color: var(--accent); flex-shrink: 0; margin-top: .1rem;
+    }
+    .modal-includes li.y::before { color: var(--accent2); }
+    .modal-footer {
+      padding: 1.2rem 2rem;
+      border-top: 1px solid var(--border);
+      display: flex; gap: .8rem;
+    }
+    .modal-footer .btn-primary { flex: 1; text-align: center; }
 
-.modal-footer {
-  border-top: none;
-}
-
-.btn-premium {
-  border-radius: 25px;
-  padding: 10px 25px;
-  font-weight: 600;
-}
-
-.btn-primary.btn-premium {
-  background: linear-gradient(45deg, #007bff, #6610f2);
-  border: none;
-}
-
-/* ===== FOOTER ===== */
-.footer {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  padding: 20px;
-  font-size: 13px;
-  color: #666;
-}
-
-</style>
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav { padding: 0 1.2rem; }
+      .nav-links { display: none; }
+      .hero { padding: 4rem 1.2rem 4rem; min-height: 80vh; }
+      .hero h1 { font-size: clamp(3.5rem, 14vw, 5.5rem); }
+      .section { padding: 3rem 1.2rem; }
+      .resource-card.featured { grid-column: span 1; }
+      .resource-card.featured::after { display: none; }
+      .hero-stats { gap: 2rem; }
+      .divider { margin: 0 1.2rem; }
+      .footer { padding: 1.5rem 1.2rem; flex-direction: column; }
+      .series-item { grid-template-columns: 50px 1fr; gap: 1rem; }
+      .si-num { font-size: 2.5rem; }
+      .books-banner { flex-direction: column; }
+      .cta-banner { padding: 2rem 1.2rem; }
+      .modal-footer { flex-direction: column; }
+    }
+  </style>
 </head>
-
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div><b>PM Toolkit</b></div>
-  <div>
-    <a href="index.html">Home</a>
-    <a href="portfolio.html">Portfolio</a>
+<!-- ════════ NAV ════════ -->
+<nav class="nav">
+  <div class="nav-logo">NEELESH<span>.</span>PM</div>
+  <ul class="nav-links">
+    <li><a href="#templates" class="active">Templates</a></li>
+    <li><a href="#frameworks">Frameworks</a></li>
+    <li><a href="#series">PM Series</a></li>
+    <li><a href="#coaching">Coaching</a></li>
+    <li><a href="#books">Books</a></li>
+  </ul>
+  <a href="https://neeleshpmtoolkit.com/index.html" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5M12 5l-7 7 7 7"/>
+    </svg>
+    Back to Home
+  </a>
+</nav>
+
+<!-- ════════ HERO ════════ -->
+<section class="hero">
+  <div class="hero-bg-word">PM</div>
+  <div class="hero-line">
+    <div class="hero-dot"></div>
+    <span>Free Resources — Updated Regularly</span>
   </div>
-</div>
-
-<!-- MAIN -->
-<div class="main container">
-
-  <h2 class="section-title">PM Toolkit</h2>
-  <p class="section-subtitle">
-    Practical resources, frameworks & coaching to accelerate your Product Management journey
+  <h1>EVERY TOOL<br/> A PM <em>NEEDS.</em><br/><span class="y">ALL IN ONE</span><br/>PLACE.</h1>
+  <p class="hero-sub">
+    Templates, frameworks, coaching and real-world resources by Neelesh Singh — a PM who has shipped products used by over 1 million people across CoreLogic, CGI, and beyond.
   </p>
+  <div class="hero-ctas">
+    <button class="btn-primary" onclick="document.getElementById('templates').scrollIntoView({behavior:'smooth'})">Explore Templates ↓</button>
+    <button class="btn-ghost" onclick="document.getElementById('coaching').scrollIntoView({behavior:'smooth'})">Book Coaching</button>
+  </div>
+  <div class="hero-stats">
+    <div>
+      <div class="stat-val o">30+</div>
+      <div class="stat-lbl">Resources</div>
+    </div>
+    <div>
+      <div class="stat-val y">18</div>
+      <div class="stat-lbl">Templates</div>
+    </div>
+    <div>
+      <div class="stat-val b">5+</div>
+      <div class="stat-lbl">Years PM Experience</div>
+    </div>
+    <div>
+      <div class="stat-val o">1M+</div>
+      <div class="stat-lbl">Users on Shipped Products</div>
+    </div>
+    <div>
+      <div class="stat-val y">Free</div>
+      <div class="stat-lbl">Always</div>
+    </div>
+  </div>
+</section>
 
-  <!-- INFO SECTION -->
-  <div class="info-box">
-    <h5>What is this page?</h5>
-    <p>This toolkit is designed for aspiring and growing Product Managers who want practical, real-world resources and structured guidance.</p>
+<!-- ════════ MARQUEE ════════ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>Discovery</span><span class="dot">✦</span>
+    <span>PRD Writing</span><span class="dot">✦</span>
+    <span>Prioritization</span><span class="dot">✦</span>
+    <span>UX Research</span><span class="dot">✦</span>
+    <span>Roadmapping</span><span class="dot">✦</span>
+    <span>Go-To-Market</span><span class="dot">✦</span>
+    <span>Stakeholder Management</span><span class="dot">✦</span>
+    <span>Agile & Sprints</span><span class="dot">✦</span>
+    <span>Metrics & KPIs</span><span class="dot">✦</span>
+    <span>User Personas</span><span class="dot">✦</span>
+    <span>Job Interviews</span><span class="dot">✦</span>
+    <span>Breaking into PM</span><span class="dot">✦</span>
+    <span>Discovery</span><span class="dot">✦</span>
+    <span>PRD Writing</span><span class="dot">✦</span>
+    <span>Prioritization</span><span class="dot">✦</span>
+    <span>UX Research</span><span class="dot">✦</span>
+    <span>Roadmapping</span><span class="dot">✦</span>
+    <span>Go-To-Market</span><span class="dot">✦</span>
+    <span>Stakeholder Management</span><span class="dot">✦</span>
+    <span>Agile & Sprints</span><span class="dot">✦</span>
+    <span>Metrics & KPIs</span><span class="dot">✦</span>
+    <span>User Personas</span><span class="dot">✦</span>
+    <span>Job Interviews</span><span class="dot">✦</span>
+    <span>Breaking into PM</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- ════════ TEMPLATES SECTION ════════ -->
+<section class="section" id="templates">
+  <div class="sec-eyebrow">Download Free</div>
+  <div class="sec-title">Product <span>Templates</span></div>
+
+  <div class="filters">
+    <button class="fbtn active" onclick="filterCards(this,'all')">All</button>
+    <button class="fbtn" onclick="filterCards(this,'strategy')">Strategy</button>
+    <button class="fbtn" onclick="filterCards(this,'research')">Research & Discovery</button>
+    <button class="fbtn" onclick="filterCards(this,'execution')">Execution</button>
+    <button class="fbtn" onclick="filterCards(this,'growth')">Growth & GTM</button>
+    <button class="fbtn" onclick="filterCards(this,'ux')">UX & Design</button>
+    <button class="fbtn" onclick="filterCards(this,'career')">Career</button>
   </div>
 
-  <!-- TABS -->
-  <div class="text-center mb-4">
-    <button class="tab-btn active" onclick="showTab('digital', this)">Digital Products</button>
-    <button class="tab-btn" onclick="showTab('coaching', this)">Coaching</button>
+  <div class="card-grid" id="templates-grid">
+
+    <!-- FEATURED -->
+    <div class="resource-card featured" data-cat="strategy"
+      onclick="openModal('Strategy','Ultimate PM Document Bundle','A curated bundle of the most essential PM documents used in real product teams — from discovery to launch. Based on Neelesh\'s work across CoreLogic and CGI.',['Complete PRD template with annotations','Discovery brief + hypothesis canvas','Go-to-market launch checklist','Stakeholder alignment one-pager','Sprint planning + retrospective board','Prioritization scoring matrix'],'Download Bundle','o')">
+      <div class="rc-stripe y"></div>
+      <div>
+        <div class="rc-type y">★ Bundle</div>
+        <h3>The Complete PM Document Bundle</h3>
+        <p>Everything you need from discovery to delivery — the exact templates used to ship products to 1M+ users. One download, zero fluff.</p>
+      </div>
+      <div class="rc-footer">
+        <div class="rc-tags">
+          <span class="tag">Strategy</span>
+          <span class="tag">Execution</span>
+          <span class="tag">Discovery</span>
+          <span class="tag">All-in-one</span>
+        </div>
+        <button class="rc-dl y">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Free Download
+        </button>
+      </div>
+    </div>
+
+    <!-- STRATEGY -->
+    <div class="resource-card" data-cat="strategy"
+      onclick="openModal('Strategy','Product Requirements Document (PRD) Template','A battle-tested PRD template structured for real engineering teams. Based on Neelesh\'s experience writing PRDs at CoreLogic that drove 18% adoption growth.',['Problem statement + context section','Scope, out-of-scope table','Functional & non-functional requirements','Acceptance criteria with examples','Edge cases + open questions log','Success metrics definition'],'Download PRD','o')">
+      <div class="rc-stripe"></div>
+      <div class="rc-type">Strategy</div>
+      <h3>PRD Template — The One Engineers Actually Read</h3>
+      <p>A structured Product Requirements Document with annotated guidance on every section. Built for clarity, not bureaucracy.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Strategy</span><span class="tag">Execution</span></div>
+        <button class="rc-dl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="strategy"
+      onclick="openModal('Strategy','Product Roadmap Canvas (Now / Next / Later)','A strategic planning canvas to align your team on what to build, when, and why — without drowning in Gantt charts.',['Now / Next / Later visual canvas','Quarterly planning worksheet','Theme-based vs feature-based view','Stakeholder communication version','Notion + PDF formats included','Instruction guide for remote teams'],'Download Roadmap','o')">
+      <div class="rc-stripe"></div>
+      <div class="rc-type">Strategy</div>
+      <h3>Product Roadmap Canvas</h3>
+      <p>Stop building feature lists. Start building direction. This canvas helps you align stakeholders on the why before the what.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Strategy</span><span class="tag">Roadmap</span></div>
+        <button class="rc-dl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="strategy"
+      onclick="openModal('Strategy','Prioritization Scoring Matrix','A weighted scoring template to prioritize features with data, not politics. Based on the RICE + opportunity scoring model.',['RICE scoring pre-built formula','Impact vs effort 2x2 canvas','Opportunity scoring worksheet','How to score across stakeholder groups','Sample filled example with real product','Google Sheets + PDF'],'Download Matrix','o')">
+      <div class="rc-stripe"></div>
+      <div class="rc-type">Strategy</div>
+      <h3>Prioritization Scoring Matrix</h3>
+      <p>Say no with data. Use weighted RICE scoring and opportunity mapping to cut through stakeholder noise and build what matters.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Strategy</span><span class="tag">Prioritization</span></div>
+        <button class="rc-dl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="strategy"
+      onclick="openModal('Strategy','Stakeholder Map & Communication Plan','Identify your stakeholders, understand their power-interest level, and plan your communication strategy for every sprint cycle.',['Stakeholder identification worksheet','Power-interest grid canvas','Communication cadence planner','Escalation path template','Real example from an enterprise product','Figma + PDF'],'Download Template','o')">
+      <div class="rc-stripe"></div>
+      <div class="rc-type">Strategy</div>
+      <h3>Stakeholder Map & Comms Plan</h3>
+      <p>Know who to update, when, and how. This template prevents the classic "why didn't you tell me?" moment from derailing your sprint.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Strategy</span><span class="tag">Stakeholders</span></div>
+        <button class="rc-dl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="strategy"
+      onclick="openModal('Strategy','Business Case & OKR Alignment Template','A one-pager format to tie your feature idea to company OKRs and business value — the document that gets executive buy-in.',['Problem-to-opportunity framing','OKR alignment mapping section','Revenue/cost impact estimates','Risk register (lite version)','One-page exec summary format','Word + PDF'],'Download Template','o')">
+      <div class="rc-stripe"></div>
+      <div class="rc-type">Strategy</div>
+      <h3>Business Case & OKR Alignment</h3>
+      <p>From idea to boardroom. A lean one-pager that connects your product initiative to company objectives and gets leadership buy-in fast.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Strategy</span><span class="tag">OKRs</span></div>
+        <button class="rc-dl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <!-- RESEARCH & DISCOVERY -->
+    <div class="resource-card" data-cat="research"
+      onclick="openModal('Research & Discovery','Discovery Brief + Problem Hypothesis Canvas','Start every product initiative right. This brief forces you to validate the problem before jumping to solutions — the habit that separates great PMs from average ones.',['Problem framing section','Hypothesis statement builder','Assumption mapping table','Research questions generator','Success criteria for discovery','Who to interview guide'],'Download Brief','b')">
+      <div class="rc-stripe b"></div>
+      <div class="rc-type b">Research & Discovery</div>
+      <h3>Discovery Brief & Hypothesis Canvas</h3>
+      <p>The discovery brief that makes your team stop assuming and start learning. Forces clarity before a single line of code is written.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Discovery</span><span class="tag">Research</span></div>
+        <button class="rc-dl b">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="research"
+      onclick="openModal('Research & Discovery','User Interview Script & Analysis Framework','The exact script format used to run 34+ research sessions. Includes question design tips, bias warnings, and a synthesis framework to turn raw notes into insights.',['Interview script template (5-phase structure)','Warm-up, probe, and close-out questions','Affinity mapping sheet for synthesis','Key insight extraction table','Bias checklist for interviewers','Recording consent template'],'Download Script','b')">
+      <div class="rc-stripe b"></div>
+      <div class="rc-type b">Research & Discovery</div>
+      <h3>User Interview Script & Synthesis Framework</h3>
+      <p>Ask better questions. Get honest answers. Based on the exact interview format used to validate a parking pain point with 96% user agreement.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Research</span><span class="tag">UX</span></div>
+        <button class="rc-dl b">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="research"
+      onclick="openModal('Research & Discovery','User Persona Kit (3 Persona Templates)','Research-backed persona templates that go beyond demographics. Captures behavioral patterns, frustration ladders, and goal matrices that actually influence product decisions.',['3 persona canvas templates','Behavioral mapping worksheet','Frustration ladder exercise','Goal + motivation matrix','Persona validation checklist','Figma community file + PDF'],'Download Persona Kit','b')">
+      <div class="rc-stripe b"></div>
+      <div class="rc-type b">Research & Discovery</div>
+      <h3>User Persona Kit</h3>
+      <p>Personas that your engineering team will actually reference. Built on behavior, not demographics — the difference between real insight and guesswork.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Research</span><span class="tag">Personas</span></div>
+        <button class="rc-dl b">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="research"
+      onclick="openModal('Research & Discovery','Jobs-to-be-Done (JTBD) Session Guide','Run effective JTBD interviews in 30 minutes. Uncover what users are really hiring your product to do — and build around that instead of feature requests.',['JTBD interview facilitation guide','Functional, social, emotional job mapping','Switch interview script','JTBD statement writing template','Insight prioritization worksheet','Miro template link'],'Download JTBD Guide','b')">
+      <div class="rc-stripe b"></div>
+      <div class="rc-type b">Research & Discovery</div>
+      <h3>JTBD Session Guide & Canvas</h3>
+      <p>Stop building features. Start understanding jobs. This guide helps you run JTBD interviews that reveal the real motivation behind user behavior.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Research</span><span class="tag">JTBD</span></div>
+        <button class="rc-dl b">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="research"
+      onclick="openModal('Research & Discovery','Competitive Analysis Framework','Map your market like a strategist. A structured template for documenting competitor strengths, weaknesses, positioning, and whitespace opportunities.',['Competitor profile canvas','Feature comparison matrix','Positioning map template','SWOT analysis for product teams','Market gap opportunity grid','Google Sheets + PDF'],'Download Framework','b')">
+      <div class="rc-stripe b"></div>
+      <div class="rc-type b">Research & Discovery</div>
+      <h3>Competitive Analysis Framework</h3>
+      <p>Know your battlefield. A structured way to map competitors, identify whitespace, and sharpen your product positioning before you build.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Research</span><span class="tag">Market</span></div>
+        <button class="rc-dl b">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <!-- EXECUTION -->
+    <div class="resource-card" data-cat="execution"
+      onclick="openModal('Execution','Sprint Planning & Retrospective Board','A two-week sprint template covering goal setting, capacity planning, daily standups, and retrospective structure — used by Neelesh at CoreLogic to ship 4 major features per quarter.',['Sprint goal canvas','Capacity calculator sheet','Daily standup format card','Definition of Done checklist','Retro board (What went well / What didn\'t / Actions)','Burndown chart template'],'Download Sprint Board','o')">
+      <div class="rc-stripe"></div>
+      <div class="rc-type">Execution</div>
+      <h3>Sprint Planning & Retro Board</h3>
+      <p>From sprint kickoff to retrospective — a complete template that makes your team's two weeks feel structured, not scrambled.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Agile</span><span class="tag">Sprints</span></div>
+        <button class="rc-dl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="execution"
+      onclick="openModal('Execution','Epic & User Story Writing Templates','Craft epics and user stories that actually communicate value — not just technical tasks. Based on real story sets written for CoreLogic\'s Centralized Service Layer.',['Epic template with strategy context','User story: As a / I want / So that','Acceptance criteria format (Given-When-Then)','Spike story template','Bug report standard format','Worked examples across 3 product types'],'Download Story Kit','o')">
+      <div class="rc-stripe"></div>
+      <div class="rc-type">Execution</div>
+      <h3>Epic & User Story Writing Kit</h3>
+      <p>Write stories developers love to build. The format that reduces back-and-forth, reduces rework, and ships faster — with real examples.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Execution</span><span class="tag">Agile</span></div>
+        <button class="rc-dl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="execution"
+      onclick="openModal('Execution','Release Notes & Launch Checklist','A complete pre-launch checklist and release notes template used to coordinate cross-functional launches — from engineering to CS to marketing.',['Pre-launch cross-functional checklist','Release notes format (internal & external)','Rollback plan template','Beta testing sign-off sheet','Launch communication timeline','Post-launch monitoring plan'],'Download Checklist','o')">
+      <div class="rc-stripe"></div>
+      <div class="rc-type">Execution</div>
+      <h3>Release Notes & Launch Checklist</h3>
+      <p>Nothing breaks launches like missing a step. This checklist caught the edge cases, coordinated the teams, and made launches at CoreLogic feel surgical.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Launch</span><span class="tag">Execution</span></div>
+        <button class="rc-dl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="execution"
+      onclick="openModal('Execution','API Integration Planning Doc','A structured doc for planning and aligning on third-party API integrations — from Zapier to Canva. Based on real integrations that drove 18% adoption growth.',['API purpose + business case section','Technical requirements handoff format','Partner onboarding checklist','Integration testing sign-off table','Error handling requirements','Security & data handling notes'],'Download API Doc','o')">
+      <div class="rc-stripe"></div>
+      <div class="rc-type">Execution</div>
+      <h3>API Integration Planning Template</h3>
+      <p>From Zapier to Canva — a planning doc that gets engineering, legal, and partners aligned before a single API call is made.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Technical</span><span class="tag">API</span></div>
+        <button class="rc-dl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <!-- GROWTH & GTM -->
+    <div class="resource-card" data-cat="growth"
+      onclick="openModal('Growth & GTM','Go-To-Market Playbook','A complete GTM template for launching a new feature or product. Built for cross-functional alignment — from product to marketing to customer success.',['Launch narrative & positioning matrix','Target segment + ICP definition','Channel strategy worksheet','Messaging ladder template','Success metrics dashboard plan','Post-launch retro template'],'Download GTM Playbook','y')">
+      <div class="rc-stripe y"></div>
+      <div class="rc-type y">Growth & GTM</div>
+      <h3>Go-To-Market Playbook</h3>
+      <p>Launch confidently. A complete GTM template that coordinates your messaging, channels, and team so nothing falls through the cracks on launch day.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">GTM</span><span class="tag">Launch</span></div>
+        <button class="rc-dl y">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="growth"
+      onclick="openModal('Growth & GTM','North Star Metric & KPI Dashboard','Define the one metric that matters and build a dashboard of leading indicators around it. Stop tracking vanity, start driving outcomes.',['North Star definition worksheet','Leading vs lagging indicator map','KPI selection guide for PMs','Weekly metrics review template','Experiment impact calculator','Data source mapping table'],'Download Dashboard','y')">
+      <div class="rc-stripe y"></div>
+      <div class="rc-type y">Growth & GTM</div>
+      <h3>North Star Metric & KPI Dashboard</h3>
+      <p>One metric to rule them all. The framework that helped drive a 15% retention increase and 40% reduction in support complaints at CoreLogic.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Metrics</span><span class="tag">Growth</span></div>
+        <button class="rc-dl y">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="growth"
+      onclick="openModal('Growth & GTM','A/B Testing Plan & Results Template','A structured test plan to run meaningful product experiments — from hypothesis to result analysis. No stats degree required.',['Hypothesis writing template','Test design checklist','Sample size calculator guide','Results analysis framework','Decision matrix (ship / iterate / kill)','Test documentation log'],'Download Test Plan','y')">
+      <div class="rc-stripe y"></div>
+      <div class="rc-type y">Growth & GTM</div>
+      <h3>A/B Testing Plan & Results Doc</h3>
+      <p>Experiment with confidence. A lightweight but rigorous test planning template so your experiments generate signal, not noise.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Growth</span><span class="tag">Experimentation</span></div>
+        <button class="rc-dl y">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <!-- UX & DESIGN -->
+    <div class="resource-card" data-cat="ux"
+      onclick="openModal('UX & Design','UX Psychology Cheat Sheet for PMs','The behavioral psychology principles every PM should know — from Hick\'s Law to the Fogg Behavior Model — with product application examples for each.',['12 key UX psychology principles','Application examples per principle','Anti-pattern warnings','Checklist for product review sessions','Habit formation loops (based on Hooked)','Quick reference PDF'],'Download Cheat Sheet','b')">
+      <div class="rc-stripe b"></div>
+      <div class="rc-type b">UX & Design</div>
+      <h3>UX Psychology Cheat Sheet for PMs</h3>
+      <p>Understand why users do what they do. 12 psychology principles with real product examples — make design decisions rooted in human behavior.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">UX</span><span class="tag">Psychology</span></div>
+        <button class="rc-dl b">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="ux"
+      onclick="openModal('UX & Design','UX Audit Template & Heuristic Checklist','A structured template to evaluate your product\'s UX quality — using Nielsen\'s 10 heuristics adapted for modern product teams.',['10 heuristic evaluation checklist','Severity rating scale','Issue log with priority matrix','Recommendations format','Before / after documentation table','Presentation template for findings'],'Download Audit Template','b')">
+      <div class="rc-stripe b"></div>
+      <div class="rc-type b">UX & Design</div>
+      <h3>UX Audit & Heuristic Review Template</h3>
+      <p>Identify usability issues before your users do. A structured audit template that turns gut feelings into a prioritized action plan.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">UX</span><span class="tag">Audit</span></div>
+        <button class="rc-dl b">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="ux"
+      onclick="openModal('UX & Design','Customer Journey Map Template','Visualize the complete experience your user goes through — from awareness to advocacy. Identify pain points and opportunities at every stage.',['5-stage journey map canvas','Touchpoint mapping sheet','Pain point + emotion tracker','Opportunity annotation guide','B2C and B2B journey variations','Figma community file'],'Download Journey Map','b')">
+      <div class="rc-stripe b"></div>
+      <div class="rc-type b">UX & Design</div>
+      <h3>Customer Journey Map Template</h3>
+      <p>See your product through your user's eyes. Map every touchpoint, emotion, and friction point from first click to loyal advocate.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">UX</span><span class="tag">Journey</span></div>
+        <button class="rc-dl b">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <!-- CAREER -->
+    <div class="resource-card" data-cat="career"
+      onclick="openModal('Career','PM Interview Prep Pack — Full Bundle','The complete preparation bundle for PM interviews — from case frameworks to behavioral answer templates. Based on Neelesh\'s hiring experience across enterprise tech.',['Product sense case framework (CIRCLES adapted)','Behavioral answer templates (STAR format)','Metrics case approach guide','Estimation question strategies','PM job description decoder','60-question practice bank'],'Download Interview Pack','g')">
+      <div class="rc-stripe" style="background:#4ade80"></div>
+      <div class="rc-type g">Career</div>
+      <h3>PM Interview Prep Pack</h3>
+      <p>Land the PM role. A complete bundle with case frameworks, STAR answer templates, and a 60-question practice bank for every interview type.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Career</span><span class="tag">Interviews</span></div>
+        <button class="rc-dl" style="color:#4ade80">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="career"
+      onclick="openModal('Career','PM Resume Template & LinkedIn Optimization Guide','The resume format that got Neelesh noticed at CoreLogic and CGI — impact-first, metrics-heavy, and ATS optimized.',['PM resume template (1-page + 2-page)','Impact statement formula guide','Metrics integration worksheet','ATS keyword list for PM roles','LinkedIn profile optimization checklist','Cover letter framework for PM applications'],'Download Resume Kit','g')">
+      <div class="rc-stripe" style="background:#4ade80"></div>
+      <div class="rc-type g">Career</div>
+      <h3>PM Resume & LinkedIn Optimization Kit</h3>
+      <p>Your resume is a product. Treat it like one. An impact-first, metrics-heavy format that gets through ATS and into a hiring manager's hands.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Career</span><span class="tag">Resume</span></div>
+        <button class="rc-dl" style="color:#4ade80">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
+    <div class="resource-card" data-cat="career"
+      onclick="openModal('Career','30-60-90 Day PM Onboarding Plan','Hit the ground running in your first PM role. A structured 90-day plan that builds credibility, surfaces quick wins, and sets you up for long-term impact.',['Week 1: listen & learn checklist','Month 1: stakeholder mapping activities','Month 2: first initiative planning guide','Month 3: roadmap alignment template','First sprint goals framework','Quick wins identification worksheet'],'Download 90-Day Plan','g')">
+      <div class="rc-stripe" style="background:#4ade80"></div>
+      <div class="rc-type g">Career</div>
+      <h3>30-60-90 Day PM Onboarding Plan</h3>
+      <p>Your first 90 days define your first year. A structured plan to build trust, find quick wins, and establish yourself as the PM your team deserves.</p>
+      <div class="rc-footer">
+        <div class="rc-tags"><span class="tag">Career</span><span class="tag">Onboarding</span></div>
+        <button class="rc-dl" style="color:#4ade80">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+      </div>
+    </div>
+
   </div>
+</section>
 
-  <!-- DIGITAL -->
-  <div id="digital" class="tab-content">
-    <div class="row">
+<div class="divider"></div>
 
-      <div class="col-md-4 mb-3">
-        <div class="tool-card" onclick="openModal('prdModal')">
-          <div>
-            <h5>Product development Templates</h5>
-            <p>Structured documentations to build products</p>
-          </div>
-          <div class="card-arrow">→</div>
+<!-- ════════ FRAMEWORKS SECTION ════════ -->
+<section class="section" id="frameworks">
+  <div class="sec-eyebrow y">Quick Reference</div>
+  <div class="sec-title">PM <span class="y">Frameworks</span> Cheatsheet</div>
+  <p style="color:var(--muted);font-size:.9rem;max-width:600px;margin-bottom:2rem;line-height:1.7">
+    The frameworks every PM should have memorized — with a one-line description of what each does and when to use it.
+  </p>
+  <div class="fw-grid">
+    <div class="fw-card"><div class="fw-abbr">RICE</div><div class="fw-name">Reach · Impact · Confidence · Effort</div><div class="fw-desc">Prioritization scoring model. Cuts through opinion-based backlog debates.</div></div>
+    <div class="fw-card"><div class="fw-abbr o">CIRCLES</div><div class="fw-name">PM Product Design Framework</div><div class="fw-desc">Comprehend, Identify, Report, Cut, List, Evaluate, Summarize. Ace product sense interviews.</div></div>
+    <div class="fw-card"><div class="fw-abbr b">JTBD</div><div class="fw-name">Jobs To Be Done</div><div class="fw-desc">Understand the real job users hire your product for. Surfaces motivations, not features.</div></div>
+    <div class="fw-card"><div class="fw-abbr">OKR</div><div class="fw-name">Objectives & Key Results</div><div class="fw-desc">Tie your product work to company goals. The bridge between strategy and execution.</div></div>
+    <div class="fw-card"><div class="fw-abbr y">HEART</div><div class="fw-name">Happiness·Engagement·Adoption·Retention·Task success</div><div class="fw-desc">Google's user-centered metrics framework. Measure UX quality at scale.</div></div>
+    <div class="fw-card"><div class="fw-abbr b">ICE</div><div class="fw-name">Impact · Confidence · Ease</div><div class="fw-desc">Lightweight prioritization for growth experiments. Fast, opinionated, useful.</div></div>
+    <div class="fw-card"><div class="fw-abbr o">5 WHYs</div><div class="fw-name">Root Cause Analysis</div><div class="fw-desc">Ask "why" 5 times to reach the real problem behind any customer complaint or metric drop.</div></div>
+    <div class="fw-card"><div class="fw-abbr">SWOT</div><div class="fw-name">Strengths·Weaknesses·Opportunities·Threats</div><div class="fw-desc">Strategic overview of a product or company in the competitive landscape.</div></div>
+    <div class="fw-card"><div class="fw-abbr y">KANO</div><div class="fw-name">Kano Model</div><div class="fw-desc">Classify features as Basic, Performance, or Delighters. Set expectations vs delight the right way.</div></div>
+    <div class="fw-card"><div class="fw-abbr b">STAR</div><div class="fw-name">Situation · Task · Action · Result</div><div class="fw-desc">Behavioral interview storytelling format. Makes your experience sound like a highlight reel.</div></div>
+    <div class="fw-card"><div class="fw-abbr">MoSCoW</div><div class="fw-name">Must / Should / Could / Won't</div><div class="fw-desc">Simple scope management for sprint and release planning. Fast and clear for cross-functional teams.</div></div>
+    <div class="fw-card"><div class="fw-abbr o">HOOK</div><div class="fw-name">Nir Eyal's Habit Loop</div><div class="fw-desc">Trigger → Action → Variable Reward → Investment. Build products that form habits, not dependencies.</div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════ SERIES SECTION ════════ -->
+<section class="section" id="series">
+  <div class="sec-eyebrow b">Free Learning Series</div>
+  <div class="sec-title">Breaking into <span class="b">Product</span></div>
+  <p style="color:var(--muted);font-size:.9rem;max-width:600px;margin-bottom:2.5rem;line-height:1.7">
+    A structured, 8-part series for anyone looking to transition into Product Management — from zero to your first PM role. Written from experience.
+  </p>
+  <div class="series-list">
+    <div class="series-item" onclick="openModal('Series — Part 1','Is Product Management Right for You?','An honest, unfiltered look at what PMs actually do — the exciting parts and the frustrating ones. Helps you decide before you invest months preparing.',['What a PM does day-to-day (real version)','PM vs APM vs TPM vs CPO — role clarity','The skills that transfer from other careers','3 signs you\'re built for PM','3 signs PM might frustrate you','Self-assessment worksheet'],'Read & Download','b')">
+      <div class="si-num">01</div>
+      <div class="si-content">
+        <h3>Is Product Management Right for You?</h3>
+        <p>An honest breakdown of what PMs actually do — the exciting parts and the mundane ones. Before you invest 6 months preparing, read this first.</p>
+        <div class="si-tags">
+          <span class="tag">Foundations</span>
+          <span class="tag">15 min read</span>
+          <span class="badge-free">Free</span>
         </div>
       </div>
-
-      <div class="col-md-4 mb-3">
-        <div class="tool-card" onclick="openModal('uxModal')">
-          <div>
-            <h5>UX Psychology</h5>
-            <p>Understand user behavior</p>
-          </div>
-          <div class="card-arrow">→</div>
+    </div>
+    <div class="series-item" onclick="openModal('Series — Part 2','Building Your PM Skill Stack','The specific skills that matter most for landing your first PM role — and how to develop them without a PM job.',['The 5 must-have PM skills (2024)','How to build each skill without a PM role','Side projects that signal PM readiness','Courses worth taking (and ones to skip)','Certifications: which ones actually help','90-day skill-building plan'],'Read & Download','b')">
+      <div class="si-num">02</div>
+      <div class="si-content">
+        <h3>Building Your PM Skill Stack</h3>
+        <p>The specific skills hiring managers look for — and how to develop them in your current role, before you ever have PM in your title.</p>
+        <div class="si-tags">
+          <span class="tag">Skills</span>
+          <span class="tag">12 min read</span>
+          <span class="badge-free">Free</span>
         </div>
       </div>
-
-      <div class="col-md-4 mb-3">
-        <div class="tool-card" onclick="openModal('processModal')">
-          <div>
-            <h5>Product Process Templates</h5>
-            <p>Templates for product process from research to roll-out</p>
-          </div>
-          <div class="card-arrow">→</div>
+    </div>
+    <div class="series-item" onclick="openModal('Series — Part 3','Crafting Your PM Story','How to frame your background as a strength, not a gap. The narrative framework that turned a software engineer\'s story into a compelling PM application.',['Career pivot narrative framework','Transferable skills translation guide','Storytelling for non-PM backgrounds','The "PM Moment" exercise','Application positioning strategies','Video script framework for cover letters'],'Read & Download','b')">
+      <div class="si-num">03</div>
+      <div class="si-content">
+        <h3>Crafting Your PM Story</h3>
+        <p>You don't need a PM title to have a PM story. How to frame your background as an asset — the narrative shift that changes how hiring managers see you.</p>
+        <div class="si-tags">
+          <span class="tag">Career Story</span>
+          <span class="tag">10 min read</span>
+          <span class="badge-free">Free</span>
         </div>
       </div>
-
     </div>
-  </div>
-
-  <!-- COACHING -->
-  <div id="coaching" class="tab-content" style="display:none;">
-    <div class="row">
-
-      <div class="col-md-4 mb-3">
-        <div class="tool-card" onclick="openModal('oneononeModal')">
-          <h5>1:1 Coaching</h5>
-          <div class="card-arrow">→</div>
+    <div class="series-item" onclick="openModal('Series — Part 4','Cracking the PM Interview','The four types of PM interview questions — and a framework for approaching each one without sounding scripted or rehearsed.',['Product sense (design a product)','Analytical (metrics & data)','Behavioral (STAR approach)','Technical (depth without code)','Estimation questions demystified','Sample answers for each type'],'Read & Download','b')">
+      <div class="si-num">04</div>
+      <div class="si-content">
+        <h3>Cracking the PM Interview</h3>
+        <p>Four types, four frameworks. A clear breakdown of how to approach every interview question type — with sample answers you can model without copying.</p>
+        <div class="si-tags">
+          <span class="tag">Interviews</span>
+          <span class="tag">18 min read</span>
+          <span class="badge-new">Most Read</span>
+          <span class="badge-free">Free</span>
         </div>
       </div>
-
-      <div class="col-md-4 mb-3">
-        <div class="tool-card" onclick="openModal('pmModal')">
-          <h5>Breaking into PM series</h5>
-          <div class="card-arrow">→</div>
+    </div>
+    <div class="series-item" onclick="openModal('Series — Part 5','Your First 90 Days as a PM','You got the job. Now what? A structured guide to your first three months — building credibility, identifying quick wins, and setting yourself up to lead.',['Week 1: listen before you speak','Month 1: mapping the landscape','Month 2: your first initiative','Month 3: establishing a cadence','How to handle your first setback','Quick wins identification formula'],'Read & Download','b')">
+      <div class="si-num">05</div>
+      <div class="si-content">
+        <h3>Your First 90 Days as a PM</h3>
+        <p>The playbook for landing and not squandering your first PM role. What to do in week 1, month 1, and month 3 — and what to avoid entirely.</p>
+        <div class="si-tags">
+          <span class="tag">Onboarding</span>
+          <span class="tag">14 min read</span>
+          <span class="badge-free">Free</span>
         </div>
       </div>
-
-      <div class="col-md-4 mb-3">
-        <div class="tool-card" onclick="openModal('mockModal')">
-          <h5>Mock Interviews</h5>
-          <div class="card-arrow">→</div>
+    </div>
+    <div class="series-item" onclick="openModal('Series — Part 6','Working with Engineering Teams','The PM-engineer relationship makes or breaks your product. A guide to building trust, writing clear specs, and resolving the tensions that always come up.',['How engineers think (PM translation guide)','Writing specs that reduce back-and-forth','How to push back without burning bridges','Reading technical debt signals','Running effective backlog grooming','Celebrating engineering wins publicly'],'Read & Download','b')">
+      <div class="si-num">06</div>
+      <div class="si-content">
+        <h3>Working with Engineering Teams</h3>
+        <p>The most important relationship you'll have as a PM. How to build trust with engineers, communicate clearly, and never be seen as "the feature factory manager".</p>
+        <div class="si-tags">
+          <span class="tag">Engineering</span>
+          <span class="tag">Cross-functional</span>
+          <span class="tag">11 min read</span>
+          <span class="badge-free">Free</span>
         </div>
       </div>
-
+    </div>
+    <div class="series-item" onclick="openModal('Series — Part 7','Data-Driven Decision Making for PMs','You don\'t need to be a data scientist. You do need to know which questions to ask, which metrics to track, and how to tell a story with numbers.',['Metrics that matter vs vanity metrics','SQL basics for PMs (no code required)','Building your first product dashboard','A/B testing without a data team','How to present data to executives','Analytics tools overview (free tier options)'],'Read & Download','b')">
+      <div class="si-num">07</div>
+      <div class="si-content">
+        <h3>Data-Driven Decision Making for PMs</h3>
+        <p>Numbers tell stories. This guide helps you ask the right questions, read the right metrics, and turn data into decisions your team will rally behind.</p>
+        <div class="si-tags">
+          <span class="tag">Data</span>
+          <span class="tag">Metrics</span>
+          <span class="tag">16 min read</span>
+          <span class="badge-new">New</span>
+          <span class="badge-free">Free</span>
+        </div>
+      </div>
+    </div>
+    <div class="series-item" onclick="openModal('Series — Part 8','Building in AI: What PMs Need to Know','AI is rewriting product development. What PMs need to know about LLMs, prompt design, AI feature evaluation, and shipping responsibly in 2024.',['How LLMs work (PM-level explanation)','Evaluating AI feature quality','Prompt engineering basics for PMs','AI integration risk frameworks','Real case study: CoreLogic AI assistant','Resources to stay current in AI/ML'],'Read & Download','b')">
+      <div class="si-num">08</div>
+      <div class="si-content">
+        <h3>Building in AI: What PMs Need to Know</h3>
+        <p>From the PM who integrated AI into a product used by 1M+ users. A practical, non-technical guide to shipping AI-powered features that actually work.</p>
+        <div class="si-tags">
+          <span class="tag">AI</span>
+          <span class="tag">Technical</span>
+          <span class="tag">20 min read</span>
+          <span class="badge-new">New</span>
+          <span class="badge-free">Free</span>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
+<div class="divider"></div>
+
+<!-- ════════ COACHING SECTION ════════ -->
+<section class="section" id="coaching">
+  <div class="sec-eyebrow y">1-on-1 with Neelesh</div>
+  <div class="sec-title">Coaching <span class="y">&</span> Sessions</div>
+  <p style="color:var(--muted);font-size:.9rem;max-width:600px;margin-bottom:2.5rem;line-height:1.7">
+    Direct, no-fluff coaching from a PM who has shipped at scale. Whether you're breaking in or levelling up — pick the session that fits your goal.
+  </p>
+  <div class="coaching-grid">
+
+    <div class="coaching-card">
+      <div class="coaching-badge">Most Popular</div>
+      <div class="coaching-icon o">🎯</div>
+      <h3>30-Min Discovery Call</h3>
+      <p>Not sure where to start? This call helps you diagnose your gaps, clarify your PM goals, and build a concrete action plan — in 30 minutes.</p>
+      <div class="coaching-meta">
+        <div class="coaching-price">Free <small>introductory</small></div>
+        <button class="btn-sm" onclick="openCoachingModal('30-Min Discovery Call','A focused 30-minute call to diagnose your gaps and build your action plan. No fluff, just direction.','Free')">Book Call</button>
+      </div>
+    </div>
+
+    <div class="coaching-card">
+      <div class="coaching-badge y">Deep Dive</div>
+      <div class="coaching-icon y">📄</div>
+      <h3>Resume & Portfolio Review</h3>
+      <p>Get your resume and portfolio reviewed by someone who knows what hiring managers at enterprise tech companies actually look for. Line-by-line feedback.</p>
+      <div class="coaching-meta">
+        <div class="coaching-price y">$49 <small>/ session</small></div>
+        <button class="btn-sm y" onclick="openCoachingModal('Resume & Portfolio Review','Line-by-line review of your PM resume, portfolio, and LinkedIn profile. With a written summary and action items.','$49')">Book Review</button>
+      </div>
+    </div>
+
+    <div class="coaching-card">
+      <div class="coaching-badge">Interview Prep</div>
+      <div class="coaching-icon o">🎤</div>
+      <h3>Mock PM Interview (60 Min)</h3>
+      <p>A full mock interview session — product sense, analytical, behavioral, and technical questions — with live feedback and a written evaluation after.</p>
+      <div class="coaching-meta">
+        <div class="coaching-price">$79 <small>/ session</small></div>
+        <button class="btn-sm" onclick="openCoachingModal('Mock PM Interview','Full 60-minute mock interview covering all question types with live + written feedback.','$79')">Book Session</button>
+      </div>
+    </div>
+
+    <div class="coaching-card">
+      <div class="coaching-badge y">Strategy</div>
+      <div class="coaching-icon y">🗺️</div>
+      <h3>PM Career Roadmap Session</h3>
+      <p>A 60-minute deep-dive into your career trajectory. Where you are, where you want to go, and the exact steps to get there — with accountability built in.</p>
+      <div class="coaching-meta">
+        <div class="coaching-price y">$99 <small>/ session</small></div>
+        <button class="btn-sm y" onclick="openCoachingModal('Career Roadmap Session','60-minute strategic session to map your PM career trajectory with specific, accountable action steps.','$99')">Book Session</button>
+      </div>
+    </div>
+
+    <div class="coaching-card">
+      <div class="coaching-badge">Hands-on</div>
+      <div class="coaching-icon o">⚙️</div>
+      <h3>PRD / Case Study Review</h3>
+      <p>Submit your PRD or product case study and get detailed written feedback on structure, clarity, impact framing, and how to make it interview-ready.</p>
+      <div class="coaching-meta">
+        <div class="coaching-price">$59 <small>/ document</small></div>
+        <button class="btn-sm" onclick="openCoachingModal('PRD / Case Study Review','Detailed written feedback on your PRD or case study — structure, clarity, and interview readiness.','$59')">Submit for Review</button>
+      </div>
+    </div>
+
+    <div class="coaching-card featured-c">
+      <div class="coaching-badge">4-Week Program</div>
+      <div class="coaching-icon y">🚀</div>
+      <h3>Break Into PM — Accelerator</h3>
+      <p>The full program. 4 weekly sessions + async feedback + resume + mock interviews + templates. Everything you need to go from "trying to break in" to landing an offer.</p>
+      <div class="coaching-meta">
+        <div class="coaching-price y">$299 <small>/ program</small></div>
+        <button class="btn-sm y" onclick="openCoachingModal('Break Into PM Accelerator','4-week intensive: weekly coaching sessions, async feedback, resume review, 2 mock interviews, and full template access. Limited spots.','$299')">Apply Now</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════ BOOKS SECTION ════════ -->
+<section class="section" id="books">
+  <div class="sec-eyebrow">Published Works</div>
+  <div class="sec-title">Books by <span>Neelesh</span></div>
+  <div class="books-banner">
+    <div class="books-banner-txt">
+      <h3>Two Books on Product Management</h3>
+      <p>
+        Written from real experience — not theory. Both books are written for PMs at every level, blending storytelling with actionable frameworks.
+        From ideation to launch, Agile to AI, and strategy to execution — these books cover the full PM journey.
+      </p>
+      <p style="font-size:.82rem;color:var(--muted2);margin-top:.8rem;font-style:italic">
+        Note: These books reflect personal experiences and insights. Perspectives grow and evolve — approach with an open mind.
+      </p>
+      <div class="books-banner-ctas">
+        <a href="https://www.amazon.ca/Product-Management-customer-centric-fundamental-enterprises-ebook/dp/B0BTCL5B8B/" target="_blank" class="book-btn">📘 Idea to Launch Journey →</a>
+        <a href="https://www.amazon.com/ultimate-guide-product-manager-management-ebook/dp/B0CGPJ8JQ9" target="_blank" class="book-btn">📗 Ultimate Guide for PMs →</a>
+      </div>
+    </div>
+    <div style="display:flex;gap:1rem;flex-shrink:0">
+      <div style="width:100px;background:var(--black);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:1px;color:var(--accent)">VOL 1</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-top:.3rem;line-height:1.4">Idea to Launch Journey</div>
+        <div style="font-size:.68rem;color:var(--muted2);margin-top:.5rem">Jan 2023</div>
+      </div>
+      <div style="width:100px;background:var(--black);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;text-align:center">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:.8rem;letter-spacing:1px;color:var(--accent2)">VOL 2</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-top:.3rem;line-height:1.4">Ultimate Guide for PMs</div>
+        <div style="font-size:.68rem;color:var(--muted2);margin-top:.5rem">Aug 2023</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════ TESTIMONIALS ════════ -->
+<section class="section">
+  <div class="sec-eyebrow b">Social Proof</div>
+  <div class="sec-title">What People <span class="b">Say</span></div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <p>These templates helped me crack my PM interview in 2 weeks. The PRD template especially — I used it in a take-home assignment and the hiring manager said it was the best they'd seen.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">AP</div>
+        <div><div class="testi-name">Aspiring PM</div><div class="testi-role">Transitioned from Software Engineering</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <p>The mock interviews were brutally honest and extremely helpful. Neelesh doesn't sugarcoat — he tells you exactly what's weak and how to fix it. I walked out of my real interview with confidence.</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:var(--accent2-dim);color:var(--accent2)">PA</div>
+        <div><div class="testi-name">Product Analyst</div><div class="testi-role">Fintech, Toronto</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <p>The JTBD guide changed how I run research sessions. I stopped asking what users want and started asking what they're trying to accomplish. My discovery output doubled in quality.</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:var(--accent3-dim);color:var(--accent3)">JR</div>
+        <div><div class="testi-name">Junior PM</div><div class="testi-role">SaaS, Vancouver</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <p>The North Star Metrics template helped me finally get stakeholder alignment on what we're optimizing for. Saved weeks of debate. Best investment I made for my PM career.</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:#4ade8020;color:#4ade80">SR</div>
+        <div><div class="testi-name">Associate PM</div><div class="testi-role">E-commerce, Halifax</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <p>Neelesh's 30-60-90 day plan made my first PM role transition smooth. I knew exactly what to do in week 1, when to start pushing for ownership, and how to establish trust fast.</p>
+      <div class="testi-author">
+        <div class="testi-avatar">MT</div>
+        <div><div class="testi-name">New PM</div><div class="testi-role">Real Estate Tech, Dallas</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <p>The AI chapter in the Breaking into PM series was incredibly relevant. Practical, honest, and written by someone who actually shipped an AI feature — not someone who just read about it.</p>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:var(--accent2-dim);color:var(--accent2)">KL</div>
+        <div><div class="testi-name">Senior Engineer → PM</div><div class="testi-role">AI Startup, San Francisco</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ CTA BANNER ════════ -->
+<section class="section">
+  <div class="cta-banner">
+    <h2>READY TO LEVEL UP YOUR PM GAME?</h2>
+    <p>Join hundreds of PMs using these templates, frameworks, and resources to ship better products and land better roles.</p>
+    <div class="cta-banner-btns">
+      <button class="btn-primary" onclick="document.getElementById('templates').scrollIntoView({behavior:'smooth'})">Browse All Templates ↑</button>
+      <button class="btn-ghost" onclick="document.getElementById('coaching').scrollIntoView({behavior:'smooth'})">Book a Coaching Call</button>
+      <a href="https://neeleshpmtoolkit.com/portfolio.html" class="btn-ghost" style="display:inline-block">View My Portfolio →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════ FOOTER ════════ -->
+<footer class="footer">
+  <div class="footer-logo">NEELESH<span>.</span>PM</div>
+  <div class="footer-links">
+    <a href="https://neeleshpmtoolkit.com/index.html">Home</a>
+    <a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio</a>
+    <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank">LinkedIn</a>
+    <a href="https://github.com/Neeleshweb" target="_blank">GitHub</a>
+    <a href="mailto:Neelesh.singh@dal.ca">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Neelesh Singh · PM Toolkit · Built with intent, shipped with care.</div>
+</footer>
+
+<!-- ════════ RESOURCE MODAL ════════ -->
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-top">
+      <div class="modal-type" id="modal-type"></div>
+      <h3 id="modal-title"></h3>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc" id="modal-desc"></p>
+      <div class="modal-includes">
+        <div class="modal-includes-title">What's included</div>
+        <ul id="modal-list"></ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" id="modal-cta" onclick="handleDownload()">Download Free</button>
+      <button class="btn-sm outline" onclick="closeModal()">Close</button>
+    </div>
+  </div>
 </div>
 
-<!-- ===== MODAL EXAMPLE ===== -->
-<div class="modal fade" id="prdModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5>PRD Templates</h5>
-        <button class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <div class="modal-body">
-        <p><b>What this is:</b> A collection of structured PRD templates used in real-world teams.</p>
-
-        <p><b>What you’ll get:</b></p>
+<!-- ════════ COACHING MODAL ════════ -->
+<div class="modal-overlay" id="coaching-modal" onclick="handleCoachingOverlayClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeCoachingModal()">✕</button>
+    <div class="modal-top">
+      <div class="modal-type y">Coaching Session</div>
+      <h3 id="cmodal-title"></h3>
+    </div>
+    <div class="modal-body">
+      <p class="modal-desc" id="cmodal-desc"></p>
+      <div class="modal-includes">
+        <div class="modal-includes-title">To book this session</div>
         <ul>
-          <li>PRD format</li>
-          <li>Acceptance criteria examples</li>
-          <li>Real-world use cases</li>
+          <li class="y">Email Neelesh.singh@dal.ca with the subject line: "<span id="cmodal-subject"></span>"</li>
+          <li class="y">Include a brief note about your background and your goal</li>
+          <li class="y">Neelesh will respond within 24 hours to confirm a time</li>
         </ul>
-
-        <p><b>Delivery:</b> Downloadable PDF</p>
       </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-primary btn-premium">Download</button>
-        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
-      </div>
-
+      <div style="font-size:.82rem;color:var(--muted);margin-top:.8rem">Price: <strong id="cmodal-price" style="color:var(--accent2)"></strong></div>
+    </div>
+    <div class="modal-footer">
+      <a href="mailto:Neelesh.singh@dal.ca" class="btn-primary" style="text-align:center;display:block" id="cmodal-mailto">Send Email →</a>
+      <button class="btn-sm outline" onclick="closeCoachingModal()">Close</button>
     </div>
   </div>
 </div>
-
-  <div class="modal fade" id="uxModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5>UX Phychology templates</h5>
-        <button class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <div class="modal-body">
-        <p><b>What this is:</b> kjdashdsak</p>
-
-        <p><b>What you’ll get:</b></p>
-        <ul>
-          <li>PRD format</li>
-          <li>Acceptance criteria examples</li>
-          <li>Real-world use cases</li>
-        </ul>
-
-        <p><b>Delivery:</b> Downloadable PDF</p>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-primary btn-premium">Download</button>
-        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-  <div class="modal fade" id="processModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5>Product development process templates</h5>
-        <button class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <div class="modal-body">
-        <p><b>What this is:</b> A collection of structured PRD templates used in real-world teams.</p>
-
-        <p><b>What you’ll get:</b></p>
-        <ul>
-          <li>PRD format</li>
-          <li>Acceptance criteria examples</li>
-          <li>Real-world use cases</li>
-        </ul>
-
-        <p><b>Delivery:</b> Downloadable PDF</p>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-primary btn-premium">Download</button>
-        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-
-  <div class="modal fade" id="oneononeModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5>Book a 30 mins 1:1 Discovery call with me</h5>
-        <button class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <div class="modal-body">
-        <p><b>What this is:</b> A collection of structured PRD templates used in real-world teams.</p>
-
-        <p><b>What you’ll get:</b></p>
-        <ul>
-          <li>PRD format</li>
-          <li>Acceptance criteria examples</li>
-          <li>Real-world use cases</li>
-        </ul>
-
-        <p><b>Delivery:</b> Downloadable PDF</p>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-primary btn-premium">Download</button>
-        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-
-   <div class="modal fade" id="pmModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5>Break into Product world - Part 1</h5>
-        <button class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <div class="modal-body">
-        <p><b>What this is:</b> A collection of structured PRD templates used in real-world teams.</p>
-
-        <p><b>What you’ll get:</b></p>
-        <ul>
-          <li>PRD format</li>
-          <li>Acceptance criteria examples</li>
-          <li>Real-world use cases</li>
-        </ul>
-
-        <p><b>Delivery:</b> Downloadable PDF</p>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-primary btn-premium">Download</button>
-        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-
-   <div class="modal fade" id="mockModal">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5>Pratice different product mock interview questions</h5>
-        <button class="close" data-dismiss="modal">&times;</button>
-      </div>
-
-      <div class="modal-body">
-        <p><b>What this is:</b> A collection of structured PRD templates used in real-world teams.</p>
-
-        <p><b>What you’ll get:</b></p>
-        <ul>
-          <li>PRD format</li>
-          <li>Acceptance criteria examples</li>
-          <li>Real-world use cases</li>
-        </ul>
-
-        <p><b>Delivery:</b> Downloadable PDF</p>
-      </div>
-
-      <div class="modal-footer">
-        <button class="btn btn-primary btn-premium">Download</button>
-        <button class="btn btn-secondary btn-premium" data-dismiss="modal">Back</button>
-      </div>
-
-    </div>
-  </div>
-</div>
-  
-
-  <!---->
-
-  <div class="container mt-5">
-
-  <h3 class="text-center mb-4">What People Say</h3>
-
-  <div class="row">
-
-    <div class="col-md-4">
-      <div class="info-box">
-        <p>"These templates helped me crack my PM interview in 2 weeks."</p>
-        <b>- Aspiring PM</b>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="info-box">
-        <p>"The mock interviews were brutally honest and extremely helpful."</p>
-        <b>- Product Analyst</b>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="info-box">
-        <p>"Best investment I made for my PM career."</p>
-        <b>- Associate PM</b>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-  © 2026 Neelesh Singh | Privacy Policy (Coming Soon)
-</div>
-
-<script src="lib/jquery/jquery.min.js"></script>
-<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 
 <script>
-function showTab(tabId, btn) {
-  document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-  document.getElementById(tabId).style.display = 'block';
+  /* ── FILTER ── */
+  function filterCards(btn, cat) {
+    document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('#templates-grid .resource-card').forEach(card => {
+      card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+    });
+  }
 
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-}
+  /* ── RESOURCE MODAL ── */
+  function openModal(type, title, desc, list, ctaLabel, color) {
+    const el = (id) => document.getElementById(id);
+    el('modal-type').textContent = type;
+    el('modal-type').className = 'modal-type' + (color === 'y' ? ' y' : color === 'b' ? ' b' : '');
+    el('modal-title').textContent = title;
+    el('modal-desc').textContent = desc;
+    el('modal-cta').textContent = ctaLabel || 'Download Free';
+    const ul = el('modal-list');
+    ul.innerHTML = '';
+    (list || []).forEach(item => {
+      const li = document.createElement('li');
+      if (color === 'y') li.classList.add('y');
+      li.textContent = item;
+      ul.appendChild(li);
+    });
+    el('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
 
-function openModal(id) {
-  $('#' + id).modal('show');
-}
-  function openCalendly() {
-  Calendly.initPopupWidget({
-    url: 'https://calendly.com/YOUR_USERNAME'
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+
+  function handleDownload() {
+    const btn = document.getElementById('modal-cta');
+    btn.textContent = '✓ Check back soon — file coming!';
+    btn.style.background = '#4ade80';
+    btn.style.color = '#080808';
+    setTimeout(() => closeModal(), 1800);
+  }
+
+  /* ── COACHING MODAL ── */
+  function openCoachingModal(title, desc, price) {
+    document.getElementById('cmodal-title').textContent = title;
+    document.getElementById('cmodal-desc').textContent = desc;
+    document.getElementById('cmodal-price').textContent = price;
+    document.getElementById('cmodal-subject').textContent = 'Coaching: ' + title;
+    document.getElementById('cmodal-mailto').href =
+      'mailto:Neelesh.singh@dal.ca?subject=Coaching: ' + encodeURIComponent(title) +
+      '&body=Hi Neelesh,%0D%0A%0D%0AI\'m interested in booking a ' + encodeURIComponent(title) + ' session.%0D%0A%0D%0AMy background: %0D%0AMy goal: ';
+    document.getElementById('coaching-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCoachingModal() {
+    document.getElementById('coaching-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleCoachingOverlayClick(e) {
+    if (e.target === document.getElementById('coaching-modal')) closeCoachingModal();
+  }
+
+  /* ── SMOOTH NAV ACTIVE STATE ── */
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  sections.forEach(s => observer.observe(s));
+
+  /* ── ESC KEY ── */
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closeModal(); closeCoachingModal(); }
   });
-}
 </script>
-
 </body>
 </html>
