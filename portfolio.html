@@ -1,825 +1,633 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>NEELESH SINGH</title>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta name="keywords" content="Product Manager, Product Management, Portfolio, Product Development, UX/UI, Agile, Scrum, Roadmap, Project Management, Leadership, Strategy, Innovation, Business Strategy, Stakeholder Management, Cross-functional Collaboration, Data-Driven, Product Lifecycle, Resume, Hiring Manager, Job Search, Corelogic, Real Estate, Real Estate Technology, Epic Writing, User Stories, Business Model">
-<meta name="description" content="Welcome to the portfolio of Neelesh Singh, an experienced Product Manager with over 5 years in creating successful product strategies, leading cross-functional teams, and delivering exceptional products. Discover my work in real estate technology and product management through detailed case studies, resumes, and user stories. This website serves as my digital resume for securing new product management opportunities.">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Neelesh Singh — Technical Product Manager. 5+ years shipping products used by 1M+ people. AI integration, 0→1 platforms, and measurable impact across CoreLogic, CGI, and TCS."/>
+  <meta name="keywords" content="Product Manager, Technical Product Manager, Product Management Portfolio, AI Product, CoreLogic, Real Estate Technology, Roadmap, Agile, Hiring Manager, Resume"/>
+  <title>Neelesh Singh — Technical Product Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black:#080808; --surface:#0f0f0f; --card:#141414; --card2:#191919;
+      --border:#242424; --border2:#2e2e2e; --white:#f0ece4; --muted:#6b6b6b; --muted2:#4a4a4a;
+      --accent:#e8540a; --accent2:#f0a500; --accent3:#3b82f6;
+      --accent-dim:rgba(232,84,10,0.12); --accent2-dim:rgba(240,165,0,0.10); --accent3-dim:rgba(59,130,246,0.10);
+      --green:#4ade80; --radius:3px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: 'DM Sans', sans-serif; cursor: pointer; }
+    img { max-width: 100%; display: block; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
 
-  <!-- Favicons -->
-  <meta name="google-site-verification" content="_YZb1PWEWNdMvPokHyHZfLTIqJvxEyUUanbHWvpvba8"/>
-  <link href="img/favicon.png" rel="icon">
-  <link href="img/apple-touch-icon.png" rel="apple-touch-icon">
+    /* NAV */
+    .nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; height: 60px; background: rgba(8,8,8,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 3px; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; list-style: none; }
+    .nav-links a { display: block; padding: 0 1rem; height: 60px; line-height: 60px; font-size: .8rem; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-actions { display: flex; align-items: center; gap: .7rem; }
+    .nav-toolkit { font-size: .78rem; color: var(--muted); letter-spacing: .5px; transition: color .2s; }
+    .nav-toolkit:hover { color: var(--white); }
+    .nav-home { display: flex; align-items: center; gap: .45rem; font-size: .8rem; color: #fff; letter-spacing: .5px; background: var(--accent); padding: .5rem 1.1rem; border-radius: var(--radius); font-weight: 500; transition: opacity .2s, transform .15s; }
+    .nav-home:hover { opacity: .9; transform: translateY(-1px); }
+    .nav-home svg { width: 15px; height: 15px; }
 
-  <!-- Bootstrap CSS File -->
-  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    /* HERO */
+    .hero { position: relative; overflow: hidden; padding: 5rem 2.5rem 4rem; min-height: 92vh; display: flex; align-items: center; }
+    .hero::before, .hero::after { content: ''; position: absolute; border-radius: 50%; filter: blur(90px); opacity: .5; pointer-events: none; z-index: 0; }
+    .hero::before { width: 480px; height: 480px; background: radial-gradient(circle, rgba(232,84,10,0.42), transparent 70%); top: -140px; left: -110px; animation: float1 14s ease-in-out infinite; }
+    .hero::after { width: 420px; height: 420px; background: radial-gradient(circle, rgba(59,130,246,0.28), transparent 70%); bottom: -120px; right: 4%; animation: float2 18s ease-in-out infinite; }
+    @keyframes float1 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(60px,40px) scale(1.12)} }
+    @keyframes float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-50px,-30px) scale(1.18)} }
+    .hero-grid { position: absolute; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 30%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 30%, transparent 80%); animation: gridpan 30s linear infinite; }
+    @keyframes gridpan { from{background-position:0 0,0 0} to{background-position:60px 60px,60px 60px} }
+    .hero-inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1.5fr 1fr; gap: 3rem; align-items: center; width: 100%; }
+    .hero-line { display: inline-flex; align-items: center; gap: .6rem; font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 1.6rem; }
+    .hero-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: blink 2s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 7vw, 6.5rem); line-height: .92; letter-spacing: 2px; margin-bottom: 1.4rem; }
+    .hero h1 em { color: var(--accent); font-style: normal; }
+    .hero h1 .y { color: var(--accent2); }
+    .hero-sub { font-size: 1.08rem; color: var(--muted); line-height: 1.75; max-width: 540px; margin-bottom: 2.2rem; }
+    .hero-sub strong { color: var(--white); font-weight: 500; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary { background: var(--accent); color: #fff; border: none; padding: .85rem 2rem; border-radius: var(--radius); font-size: .9rem; font-weight: 500; letter-spacing: .3px; transition: opacity .2s, transform .15s; display: inline-flex; align-items: center; gap: .5rem; }
+    .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: var(--white); border: 1px solid var(--border2); padding: .85rem 2rem; border-radius: var(--radius); font-size: .9rem; letter-spacing: .3px; transition: border-color .2s; display: inline-flex; align-items: center; gap: .5rem; }
+    .btn-ghost:hover { border-color: #555; }
+    .hero-photo-wrap { position: relative; justify-self: center; }
+    .hero-photo { width: 280px; height: 340px; object-fit: cover; border-radius: var(--radius); border: 1px solid var(--border2); filter: grayscale(0.2) contrast(1.05); }
+    .hero-photo-frame { position: absolute; inset: -12px; border: 1px solid var(--accent); border-radius: var(--radius); z-index: -1; }
+    .hero-photo-badge { position: absolute; bottom: -16px; left: -16px; background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius); padding: .7rem 1rem; }
+    .hero-photo-badge .b-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--accent2); line-height: 1; }
+    .hero-photo-badge .b-lbl { font-size: .66rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 
-  <!-- Libraries CSS Files -->
-  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="lib/animate/animate.min.css" rel="stylesheet">
-  <link href="lib/ionicons/css/ionicons.min.css" rel="stylesheet">
-  <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-  
-  <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    /* MARQUEE */
+    .marquee-wrap { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: .9rem 0; overflow: hidden; background: var(--surface); }
+    .marquee-track { display: flex; gap: 2.5rem; width: max-content; animation: marquee 30s linear infinite; }
+    .marquee-track span { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px; text-transform: uppercase; color: var(--muted2); white-space: nowrap; }
+    .marquee-track span.dot { color: var(--accent); font-size: .5rem; }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-  <!-- Main Stylesheet File -->
-  <link href="css/style.css" rel="stylesheet">
-<style>
-  .intro-title {
-            font-size: 3rem; /* Set the base font size for "Product" text */
-        }
-        /* Style for the text-slider with color change effect */
-        .text-slider {
-            font-weight: bold;
-            font-size: 3rem; /* Adjust the size if needed */
-            transition: color 0.5s ease-in-out; /* Smooth transition for color change */
-        }
+    /* SECTION */
+    .section { padding: 4.5rem 2.5rem; max-width: 1200px; margin: 0 auto; }
+    .sec-eyebrow { font-size: .72rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); margin-bottom: .6rem; }
+    .sec-eyebrow.y { color: var(--accent2); }
+    .sec-eyebrow.b { color: var(--accent3); }
+    .sec-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.2rem, 4.5vw, 3.4rem); letter-spacing: 1px; margin-bottom: 2.5rem; line-height: 1; }
+    .sec-title span { color: var(--accent); }
+    .sec-title .y { color: var(--accent2); }
+    .sec-title .b { color: var(--accent3); }
+    .divider { height: 1px; background: var(--border); max-width: 1200px; margin: 0 auto; }
 
-        /* Color choices for the text slider */
-        .color-1 { color: #3498db; } /* Blue */
-        .color-2 { color: #e74c3c; } /* Red */
-        .color-3 { color: #2ecc71; } /* Green */
-        .color-4 { color: #f39c12; } /* Yellow */
-    </style>
-  <!-- =======================================================
-    Theme Name: DevFolio
-    Theme URL: https://bootstrapmade.com/devfolio-bootstrap-portfolio-html-template/
-    Author: BootstrapMade.com
-    License: https://bootstrapmade.com/license/
-  ======================================================= -->
+    /* IMPACT STATS BAND */
+    .impact-band { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .impact-inner { max-width: 1200px; margin: 0 auto; padding: 2.5rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+    .impact-stat { text-align: center; }
+    .impact-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 3.6rem); line-height: 1; letter-spacing: 1px; }
+    .impact-num.o { color: var(--accent); } .impact-num.y { color: var(--accent2); } .impact-num.b { color: var(--accent3); } .impact-num.g { color: var(--green); }
+    .impact-lbl { font-size: .78rem; color: var(--muted); margin-top: .5rem; line-height: 1.4; }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    .about-text p { font-size: .95rem; color: #b5b0a8; line-height: 1.8; margin-bottom: 1.2rem; }
+    .about-text p strong { color: var(--white); font-weight: 500; }
+    .about-text .lead { font-size: 1.05rem; color: var(--white); }
+    .about-highlight { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); padding: 1.5rem; }
+    .about-highlight h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: .5px; margin-bottom: .8rem; }
+    .about-highlight p { font-size: .88rem; color: var(--muted); line-height: 1.7; }
+    .about-highlight .stat-line { color: var(--accent2); font-weight: 500; }
+
+    /* EXPERIENCE TIMELINE */
+    .exp-item { display: grid; grid-template-columns: 220px 1fr; gap: 2.5rem; padding: 2.5rem 0; border-top: 1px solid var(--border); }
+    .exp-item:first-child { border-top: none; }
+    .exp-side { position: sticky; top: 80px; align-self: start; }
+    .exp-company { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: .5px; line-height: 1; margin-bottom: .4rem; }
+    .exp-role { font-size: .88rem; color: var(--accent); font-weight: 500; margin-bottom: .2rem; }
+    .exp-dates { font-size: .78rem; color: var(--muted); letter-spacing: .3px; }
+    .exp-logo { width: 42px; height: 42px; border-radius: var(--radius); object-fit: contain; background: var(--card); padding: 6px; border: 1px solid var(--border); margin-bottom: 1rem; }
+    .exp-wins { display: flex; flex-direction: column; gap: 1.4rem; }
+    .exp-win { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; transition: border-color .2s, transform .15s; }
+    .exp-win:hover { border-color: var(--border2); transform: translateY(-2px); }
+    .exp-win h4 { font-size: 1rem; font-weight: 500; margin-bottom: .8rem; color: var(--white); line-height: 1.4; }
+    .exp-win-result { display: inline-flex; align-items: center; gap: .4rem; background: var(--accent2-dim); color: var(--accent2); font-size: .8rem; font-weight: 500; padding: .3rem .7rem; border-radius: var(--radius); margin-bottom: .9rem; }
+    .exp-win p { font-size: .86rem; color: var(--muted); line-height: 1.7; }
+    .exp-win p strong { color: #c8c3bb; font-weight: 500; }
+
+    /* CASE STUDY */
+    .case { background: linear-gradient(145deg, var(--card2), var(--card)); border: 1px solid var(--accent2); border-radius: var(--radius); padding: 2.5rem; }
+    .case-tag { display: inline-block; font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent2); border: 1px solid var(--accent2); padding: .2rem .6rem; border-radius: var(--radius); margin-bottom: 1.2rem; }
+    .case h3 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .5px; margin-bottom: 1.5rem; line-height: 1.05; }
+    .case-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin-bottom: 1.8rem; }
+    .case-step { background: var(--black); border-radius: var(--radius); padding: 1.3rem; border-top: 2px solid var(--accent); }
+    .case-step:nth-child(2) { border-top-color: var(--accent3); }
+    .case-step:nth-child(3) { border-top-color: var(--green); }
+    .case-step-label { font-size: .68rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: .6rem; }
+    .case-step p { font-size: .85rem; color: #b5b0a8; line-height: 1.65; }
+    .case-results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+    .case-result { text-align: center; }
+    .case-result .cr-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: var(--green); line-height: 1; }
+    .case-result .cr-lbl { font-size: .78rem; color: var(--muted); margin-top: .4rem; }
+
+    /* SKILLS */
+    .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem 3rem; }
+    .skill-row { }
+    .skill-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: .5rem; }
+    .skill-name { font-size: .88rem; color: var(--white); }
+    .skill-pct { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--accent2); }
+    .skill-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .skill-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); width: 0; transition: width 1s ease; }
+    .tools-row { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 2.5rem; }
+    .tool-chip { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: .4rem 1rem; font-size: .82rem; color: var(--muted); letter-spacing: .3px; }
+
+    /* PHILOSOPHY */
+    .phil-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; }
+    .phil-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.8rem; transition: border-color .2s, transform .15s; }
+    .phil-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+    .phil-num { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--accent); line-height: 1; margin-bottom: .8rem; }
+    .phil-card h4 { font-size: 1rem; font-weight: 500; margin-bottom: .6rem; }
+    .phil-card p { font-size: .85rem; color: var(--muted); line-height: 1.7; }
+
+    /* EDUCATION + RECOGNITION */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    .edu-item { display: flex; gap: 1rem; padding: 1.3rem 0; border-bottom: 1px solid var(--border); }
+    .edu-item:last-child { border-bottom: none; }
+    .edu-icon { width: 40px; height: 40px; flex-shrink: 0; background: var(--accent3-dim); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; }
+    .edu-icon svg { width: 20px; height: 20px; stroke: var(--accent3); fill: none; stroke-width: 1.5; }
+    .edu-item h4 { font-size: .95rem; font-weight: 500; margin-bottom: .2rem; }
+    .edu-item .edu-meta { font-size: .8rem; color: var(--muted); }
+    .recog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .recog-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem; text-align: center; }
+    .recog-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; line-height: 1; }
+    .recog-num.o { color: var(--accent); } .recog-num.y { color: var(--accent2); } .recog-num.b { color: var(--accent3); }
+    .recog-lbl { font-size: .76rem; color: var(--muted); margin-top: .4rem; }
+
+    /* BOOKS */
+    .books-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .book-feature { display: flex; gap: 1.5rem; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.8rem; transition: border-color .25s, transform .2s; }
+    .book-feature:hover { border-color: var(--border2); transform: translateY(-3px); }
+    .book-cover { flex-shrink: 0; width: 110px; height: 165px; border-radius: 2px 4px 4px 2px; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: perspective(900px) rotateY(-12deg); transition: transform .35s ease; }
+    .book-feature:hover .book-cover { transform: perspective(900px) rotateY(-4deg); }
+    .book-info { display: flex; flex-direction: column; }
+    .book-tag { font-size: .7rem; color: var(--accent); letter-spacing: .5px; margin-bottom: .6rem; }
+    .book-tag.y { color: var(--accent2); }
+    .book-info h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: .5px; margin-bottom: .5rem; line-height: 1.05; }
+    .book-info p { font-size: .8rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; flex: 1; }
+    .book-btn { align-self: flex-start; background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent); padding: .45rem 1.1rem; border-radius: var(--radius); font-size: .8rem; font-weight: 500; transition: background .2s; }
+    .book-btn:hover { background: rgba(232,84,10,0.22); }
+    .book-btn.y { background: var(--accent2-dim); color: var(--accent2); border-color: var(--accent2); }
+
+    /* CONTACT */
+    .contact { background: linear-gradient(135deg, var(--accent-dim), var(--accent2-dim)); border: 1px solid var(--border2); border-radius: var(--radius); padding: 3.5rem 2.5rem; text-align: center; }
+    .contact h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3rem); letter-spacing: 1px; margin-bottom: .8rem; }
+    .contact p { font-size: 1rem; color: var(--muted); max-width: 540px; margin: 0 auto 2rem; line-height: 1.7; }
+    .contact-methods { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+    .contact-method { display: flex; align-items: center; gap: .5rem; font-size: .9rem; color: var(--white); }
+    .contact-method svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 2; }
+    .contact-ctas { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* FOOTER */
+    .footer { border-top: 1px solid var(--border); padding: 2rem 2.5rem; max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; }
+    .footer-logo span { color: var(--accent); }
+    .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .footer-links a { font-size: .78rem; color: var(--muted); transition: color .2s; }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy { font-size: .75rem; color: var(--muted2); width: 100%; text-align: center; padding-top: 1rem; border-top: 1px solid var(--border); }
+
+    /* RESPONSIVE */
+    @media (max-width: 860px) {
+      .nav { padding: 0 1.2rem; }
+      .nav-links { display: none; }
+      .hero { padding: 3.5rem 1.2rem; min-height: auto; }
+      .hero-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .hero-photo-wrap { order: -1; }
+      .section { padding: 3rem 1.2rem; }
+      .impact-inner { grid-template-columns: 1fr 1fr; padding: 2rem 1.2rem; gap: 1.5rem; }
+      .about-grid, .skills-grid, .two-col, .books-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .exp-item { grid-template-columns: 1fr; gap: 1.2rem; }
+      .exp-side { position: static; }
+      .case-flow, .case-results { grid-template-columns: 1fr; }
+      .recog-grid { grid-template-columns: 1fr; }
+      .book-feature { flex-direction: column; align-items: center; text-align: center; }
+      .book-cover { transform: none; }
+      .footer { flex-direction: column; }
+    }
+  </style>
 </head>
+<body>
 
-<body id="page-top">
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">NEELESH <span>SINGH</span></div>
+  <ul class="nav-links">
+    <li><a href="#about" class="active">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#case">Case Study</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#writing">Writing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="https://neeleshpmtoolkit.com/toolkit.html" class="nav-toolkit">PM Toolkit ↗</a>
+    <a href="https://neeleshpmtoolkit.com/index.html" class="nav-home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
+      Home
+    </a>
+  </div>
+</nav>
 
-  <!--/ Nav Star /-->
-  <nav class="navbar navbar-b navbar-trans navbar-expand-md fixed-top" id="mainNav">
-    <div class="container">
-      <a class="navbar-brand js-scroll" href="#page-top">NEELESH SINGH</a>
-      <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarDefault"
-        aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <div class="navbar-collapse collapse justify-content-end" id="navbarDefault">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link js-scroll active" href="#home">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll" href="#about">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll" href="#service">Interests</a>
-          </li>
-          
-          <li class="nav-item">
-            <a class="nav-link js-scroll" href="#work">Works</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll" href="#education">Education</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll" href="#publications">Publications</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link js-scroll" href="#contact">Contact</a>
-          </li>
-        </ul>
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-line"><span class="hero-dot"></span> Open to Senior / Technical PM Roles</div>
+      <h1>I BUILD PRODUCTS<br/>PEOPLE <em>ACTUALLY</em><br/><span class="y">USE.</span></h1>
+      <p class="hero-sub">
+        I'm <strong>Neelesh Singh</strong> — a Technical Product Manager with <strong>5+ years</strong> turning ambiguous problems into shipped products. My work at CoreLogic is used by <strong>over 1 million people</strong>, and an engineering background means I speak fluent business <em>and</em> code.
+      </p>
+      <div class="hero-ctas">
+        <a href="Neelesh_Singh_Resume.pdf" download class="btn-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Résumé
+        </a>
+        <a href="#contact" class="btn-ghost">Get in Touch →</a>
       </div>
     </div>
-  </nav>
-  <!--/ Nav End /-->
-
-  <!--/ Intro Skew Star /-->
-  <div id="home" class="intro route bg-image" style="background-image: url(img/Back11.png)">
-    <div class="overlay-itro"></div>
-    <div class="intro-content display-table">
-      <div class="table-cell">
-        <div class="container">
-          <!--<p class="display-6 color-d">Hello, world!</p>-->
-          <h1 class="intro-title mb-4">
-        Discover My Digital Footprint in Product ->
-        <span id="slider" class="text-slider color-1"></span>
-    </h1>
-    <p class="intro-subtitle">
-        <strong class="text-slider"></strong>
-    </p>
-          
-          <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var items = ['Strategy', 'Innovation', 'Execution', 'Growth'];
-            var colors = ['color-1', 'color-2', 'color-3', 'color-4']; // Array of colors
-            var currentIndex = 0;
-            var slider = document.getElementById('slider');
-
-            function updateSliderText() {
-                // Change the text content and update the color class
-                slider.textContent = items[currentIndex];
-
-                // Remove the old color class and add the new one
-                slider.classList.remove(colors[(currentIndex - 1 + colors.length) % colors.length]);
-                slider.classList.add(colors[currentIndex]);
-
-                // Move to the next index
-                currentIndex = (currentIndex + 1) % items.length;
-            }
-
-            // Update text every 2 seconds (adjustable)
-            setInterval(updateSliderText, 2000);
-        });
-    </script>
-          <!-- <p class="pt-3"><a class="btn btn-primary btn js-scroll px-4" href="#about" role="button">Learn More</a></p> -->
-        </div>
+    <div class="hero-photo-wrap">
+      <div class="hero-photo-frame"></div>
+      <img class="hero-photo" src="https://neeleshpmtoolkit.com/img/aboutmephoto.jpeg" alt="Neelesh Singh" />
+      <div class="hero-photo-badge">
+        <div class="b-num">1M+</div>
+        <div class="b-lbl">Users Reached</div>
       </div>
     </div>
   </div>
-  <!--/ Intro Skew End /-->
+</header>
 
-  <section id="about" class="about-mf sect-pt4 route">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="box-shadow-full">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="row">
-                  <div class="col-sm-6 col-md-5">
-                    <div class="about-img">
-                      <img src="img/aboutmephoto.jpeg" class="img-fluid rounded b-shadow-a" alt="">
-                    </div>
-                  </div>
-                  <div class="col-sm-6 col-md-7">
-                    <div class="about-info">
-                      <p><span class="title-s">Name: </span> <span>Neelesh Singh</span></p>
-                      <p><span class="title-s">Profile: </span> <span>Technical Product Manager</span></p>
-                      <p><span class="title-s">Email: </span> <span>Neelesh.Singh@dal.ca</span></p>
-                    </div>
-                  </div>
-                </div>
-                <div class="skill-mf">
-                  <p class="title-s">Major Skill Sets</p>
-                  <span>Roadmap planning and Prioritization</span><span class="pull-right">95%</span>
-                  <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 95%;" aria-valuenow="95" aria-valuemin="0"
-                      aria-valuemax="100"></div>
-                  </div>
-                   <span>KPI selection</span> <span class="pull-right">80%</span>
-                  <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0"
-                      aria-valuemax="100"></div>
-                  </div>
-                  <span>Business to Technical requirements</span> <span class="pull-right">100%</span>
-                  <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-                      aria-valuemax="100"></div>
-                  </div>
-                  <span>Cross-Functional collaboration</span> <span class="pull-right">100%</span>
-                  <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-                      aria-valuemax="100"></div>
-                  </div>
-                  <span>Lean Agile Principles</span> <span class="pull-right">90%</span>
-                  <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0"
-                      aria-valuemax="100"></div>
-                  </div>
-                  <span>MVP experiments</span> <span class="pull-right">85%</span>
-                  <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0"
-                      aria-valuemax="100"></div>
-                  </div>
-                  <span>Market Research & Competitive Analysis</span> <span class="pull-right">85%</span>
-                  <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0"
-                      aria-valuemax="100"></div>
-                  </div>
-                   <span>Technical Software Engineering</span> <span class="pull-right">100%</span>
-                  <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0"
-                      aria-valuemax="100"></div>
-                  </div>
-                  <span>Data-Driven Decision Making</span> <span class="pull-right">95%</span>
-                  <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 95%" aria-valuenow="95" aria-valuemin="0"
-                      aria-valuemax="100"></div>
-                  </div>           
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="about-me pt-4 pt-md-0">
-                  <div class="title-box-2">
-                    <h5 class="title-left">
-                      About me
-                    </h5>
-                  </div>
-                <p class="lead">
-  <h5><b><i>My journey into product management began on the streets of Halifax (Nova Scotia, Canada), where I worked part-time as a food delivery driver during my master’s program. Parking in the city was a constant battle, with fines piling up and frustrations mounting. I wondered: was I alone in this struggle, or was this a widespread problem? Fueled by curiosity, I created a 
-    <a href="https://docs.google.com/forms/d/19LCzTekpEcQp2Uk9KffsT3wZ08-vwOJLmvovZQEUU1o/edit#responses" target="_blank" class="btn btn-success btn-sm">Google Forms Survey</a>
-    to find out. Sharing it across social media, I gathered over 34 responses, with a staggering 96% of participants echoing the need for a solution to this urban challenge. That moment—identifying a problem, validating it with data, and envisioning a solution—sparked my passion for product management.</i></b></h5>
-</p>
-
-                  <p class="lead">
-                    <h5><b><i>Since then, I’ve channeled that passion into building impactful products that address user pain points. At CoreLogic, I’ve led initiatives that blend innovation with strategy. Whether it was integrating AI assistants into MLSTOUCH to auto-generate property descriptions—growing the user base to over 1 million—or driving adoption with API integrations like Canva and Zapier, I’ve focused on solving real-world problems with measurable results. My work on OneHome.com further underscores my commitment to delivering seamless user experiences, improving retention by 15% and cutting support complaints by 40%.</i></b></h5>
-                  </p>
-                  <p class="lead">
-  <h5><b><i>Before stepping into product management, my technical foundation as a software engineer equipped me with a deep understanding of systems and the ability to bridge the gap between development teams and business needs. But my curiosity doesn’t stop at work. I channel my creative energy into writing books on 
-    Agile Product Management and experimenting in the kitchen, where I find joy in crafting delicious dishes. These hobbies reflect my belief in balance and continuous learning—values that fuel my approach to both work and life.</i></b></h5>
-</p>
-                   <p class="lead">
-                    <h5><b><i>From ideation to execution, my journey has always been about solving meaningful problems, and I can’t wait to tackle the next big challenge. Let’s build something extraordinary together, shall we?</i></b></h5>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!--/ Section Services Star /-->
-  <section id="service" class="services-mf route">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="title-box text-center">
-            <h3 class="title-a">
-              Interests
-            </h3>
-            <p class="subtitle-a">
-              <h4><b><i>Passions and activities that drive my product thinking.</i></b></h4>
-            </p>
-            <div class="line-mf"></div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="service-box">
-            <div class="service-ico">
-              <span class="ico-circle"><i class="ion-laptop"></i></span>
-            </div>
-            <div class="service-content">
-              <h2 class="s-title">Exploring Innovative Products Across Industries</h2>
-              <p class="s-description text-center">
-                <h5><b><i>I have a keen interest in discovering and experimenting with new products across various domains. This curiosity helps me identify usability gaps, generate ideas for improvements, and understand diverse user behaviors—insights that directly contribute to creating user-centric solutions in my role as a product manager.</i></b></h5>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="service-box">
-            <div class="service-ico">
-              <span class="ico-circle"><i class="ion-stats-bars"></i></span>
-            </div>
-            <div class="service-content">
-              <h2 class="s-title">Following Emerging Market Trends</h2>
-              <p class="s-description text-center">
-                <h5><b><i>I love diving into newsletters, Reddit forums like r/ProductManagement, and industry blogs to stay ahead of market trends. This habit keeps me informed about shifting consumer demands and innovative solutions that inspire product roadmaps.</i></b></h5>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="service-box">
-            <div class="service-ico">
-              <span class="ico-circle"><i class="ion-chatbubbles"></i></span>
-            </div>
-            <div class="service-content">
-              <h2 class="s-title">Decoding Customer Feedback</h2>
-              <p class="s-description text-center">
-               <h5><b><i>I frequently read app store reviews and product feedback on platforms like Trustpilot to understand real-world user experiences. Whether it’s spotting recurring pain points or creative feature suggestions, this helps me practice customer empathy and prioritize impactful improvements.</i></b></h5>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="service-box">
-            <div class="service-ico">
-              <span class="ico-circle"><i class="ion-person"></i></span>
-            </div>
-            <div class="service-content">
-              <h2 class="s-title">Building Empathy Through User-Stories</h2>
-              <p class="s-description text-center">
-               <h5><b><i>I enjoy engaging in conversations on Reddit forums like r/UserExperience and other social media channels, where users discuss their frustrations with existing products. These discussions inspire me to think critically about how to build features that better serve user needs and solve common problems.</i></b></h5>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="service-box">
-            <div class="service-ico">
-              <span class="ico-circle"><i class="ion-lightbulb"></i></span>
-            </div>
-            <div class="service-content">
-              <h2 class="s-title">Exploring Behavioral Psychology in Design</h2>
-              <p class="s-description text-center">
-               <h5><b><i>Books like "Hooked" by Nir Eyal and podcasts on behavioral psychology fascinate me. They fuel my understanding of how users form habits with products, enabling me to design features that align with their natural tendencies making them addictive to the product and therefore encourage engagement.</i></b></h5>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="service-box">
-            <div class="service-ico">
-              <span class="ico-circle"><i class="ion-settings"></i></span>
-            </div>
-            <div class="service-content">
-              <h2 class="s-title">Experimenting With Productivity Tools</h2>
-              <p class="s-description text-center">
-               <h5><b><i></i>I often try out tools like Notion, Asana, or Zapier to streamline my own workflows. Sharing my experiences with peers has helped me recommend tools that improve team collaboration and align with product goals.</b></h5>
-              </p>
-            </div>
-          </div>
-        </div>
-        
-            
-      </div>
-    </div>
-  </section>
-  <!--/ Section Services End /-->
-
-  <div class="section-counter paralax-mf bg-image" style="background-image: url(img/counters-bg.jpg)">
-    <div class="overlay-mf"></div>
-    <div class="container">
-        <div class="row justify-content-center text-center">
-            <div class="col-sm-3 col-lg-3">
-                <div class="counter-box pt-4 pt-md-0">
-                    <div class="counter-ico">
-                        <span class="ico-circle"><i class="ion-ios-calendar-outline"></i></span>
-                    </div>
-                    <div class="counter-num">
-                        <p class="counter">5</p>
-                        <span class="counter-text">
-                            <h4><b><i>Years of Experience</i></b></h4>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-lg-3">
-                <div class="counter-box pt-4 pt-md-0">
-                    <div class="counter-ico">
-                        <span class="ico-circle"><i class="ion-cube"></i></span>
-                    </div>
-                    <div class="counter-num">
-                        <p class="counter">3</p>
-                        <span class="counter-text">
-                            <h4><b><i>Products Transformed</i></b></h4>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-lg-3">
-                <div class="counter-box pt-4 pt-md-0">
-                    <div class="counter-ico">
-                        <span class="ico-circle"><i class="ion-ribbon-a"></i></span>
-                    </div>
-                    <div class="counter-num">
-                        <p class="counter">9</p>
-                        <span class="counter-text">
-                            <h4><b><i>Awards</i></b></h4>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>Product Strategy</span><span class="dot">✦</span>
+    <span>AI Integration</span><span class="dot">✦</span>
+    <span>0 → 1 Platforms</span><span class="dot">✦</span>
+    <span>Roadmapping</span><span class="dot">✦</span>
+    <span>Data-Driven Decisions</span><span class="dot">✦</span>
+    <span>Cross-Functional Leadership</span><span class="dot">✦</span>
+    <span>Agile Delivery</span><span class="dot">✦</span>
+    <span>API & Integrations</span><span class="dot">✦</span>
+    <span>User Research</span><span class="dot">✦</span>
+    <span>Product Strategy</span><span class="dot">✦</span>
+    <span>AI Integration</span><span class="dot">✦</span>
+    <span>0 → 1 Platforms</span><span class="dot">✦</span>
+    <span>Roadmapping</span><span class="dot">✦</span>
+    <span>Data-Driven Decisions</span><span class="dot">✦</span>
+    <span>Cross-Functional Leadership</span><span class="dot">✦</span>
+    <span>Agile Delivery</span><span class="dot">✦</span>
+    <span>API & Integrations</span><span class="dot">✦</span>
+    <span>User Research</span><span class="dot">✦</span>
+  </div>
 </div>
 
+<!-- IMPACT BAND -->
+<div class="impact-band">
+  <div class="impact-inner">
+    <div class="impact-stat"><div class="impact-num o" data-target="1M+">1M+</div><div class="impact-lbl">Users on products I've shipped</div></div>
+    <div class="impact-stat"><div class="impact-num y" data-target="40%">40%</div><div class="impact-lbl">Reduction in support complaints</div></div>
+    <div class="impact-stat"><div class="impact-num b" data-target="18%">18%</div><div class="impact-lbl">Annual product adoption lift</div></div>
+    <div class="impact-stat"><div class="impact-num g" data-target="15%">15%</div><div class="impact-lbl">Quarterly retention improvement</div></div>
+  </div>
+</div>
 
-  <!--/ Section Portfolio Star /-->
-  <section id="work" class="portfolio-mf sect-pt4 route">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="title-box text-center">
-            <h3 class="title-a">
-              Professional Experience
-            </h3>
-            <p class="subtitle-a">
-                                 <H3></h3>
-            </p>
-            <div class="line-mf"></div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="work-box">
-              <div class="work-img">
-                <img src="img/technical.png" alt="" class="img-fluid">
-              </div>
-              <div class="work-content">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h2 class="w-title">CoreLogic</h2>
-                    <div class="w-more">
-                      <span class="w-ctegory">Technical Product Manager</span> / <span class="w-date">August 2023-Present</span>
-                      <br>
-                      <span class="w-description">
-                      <strong>Built and integrated AI Assistant for property descriptions with MLSTOUCH</strong>
-              <ul>
-                <li><strong>Solution (The What)</strong> – Integrated AI to auto-generate property descriptions from images and location metadata.</li>
-                <li><strong>Problem (The Why)</strong> – Eliminated manual listing creation, meeting agents' need for 5x faster, high-quality listings.</li>
-                <li><strong>Metrics</strong> – Achieved 11% user growth rate over Q2 2024, expanding MLSTOUCH’s user base from 900k to 1M.</li>
-              </ul>
-              <strong>Driving Adoption Rate through cross-platform third-party API Integrations</strong>
-              <ul>
-                <li><strong>Solution (The What)</strong> – Facilitated API integration with Canva for tailoring social media templates, Zapier for workflow automation between different APIs, and AR walk the property lines for immersive property exploration.</li>
-                <li><strong>Problem (The Why)</strong> – Addressed agents' challenges in marketing efficiency, productivity, and client engagement.</li>
-                <li><strong>Metrics</strong> – Improved multiple dimensions, boosting MLSTOUCH’s adoption rate by 18% annually.</li>
-              </ul>
-              <strong>Boosted Retention Rate of OneHome.com, and improved customer satisfaction for MLSTOUCH</strong>
-              <ul>
-                <li><strong>Solution (The What)</strong> – Built, integrated and launched a Centralized Service Layer (CSL) from 0 to 1 by collaborating cross-functionally between developers, UX designers, and QA to synchronize data across platforms.</li>
-                <li><strong>Challenge (The Why)</strong> – Resolved discrepancies where users faced inconsistent data, such as listings added to favorites on one platform not syncing with others or listings visible on MLSTOUCH, not available on Onehome.com. These caused frustrations leading to bad app reviews and frequent customer support complaints.</li>
-                <li><strong>Metrics</strong> – Reduced customer support complaints by 40%, improved app ratings from 4.6 to 4.8 on the App Store, and boosted retention rates by 15% quarterly for OneHome by delivering seamless experiences for both products.</li>
-              </ul>
-                      </span>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="w-like">
-                    </div>
-                  </div>
-                </div>
-              </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="work-box">
-              <div class="work-img">
-                <img src="img/product_consultant.png" alt="" class="img-fluid">
-              </div>
-              <div class="work-content">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h2 class="w-title">CGI</h2>
-                    <div class="w-more">
-                      <span class="w-ctegory">Product Consultant</span> / <span class="w-date">May 2021-July 2023</span>
-                      <br>
-                      <span class="w-description">
-                        <strong>Optimized Investment Solutions Through Model Portfolios</strong>
-              <ul>
-                <li><strong>Solution (The What)</strong> – Led the development of a model portfolio templates portal that provided mixed asset classes for different types of investors in seconds, significantly reducing portfolio construction time.</li>
-                <li><strong>Problem (The Why)</strong> – Tackled the inefficiency of manually creating tailored investment portfolios, which was time-intensive and inconsistent, affecting customer satisfaction and retention.</li>
-                <li><strong>Metrics</strong> – Achieved an 8% monthly increase in customer retention rates, enhancing investment outcomes for Fidelity’s existing clients under investment solutions.</li>
-              </ul>
-              <strong>Enhanced Business Value Delivery Through Prioritization</strong>
-              <ul>
-                <li><strong>Solution (The What)</strong> – Established an improved prioritization framework by optimizing JIRA ticket management, enabling a focus on high-value tasks using both qualitative and quantitative metrics.</li>
-                <li><strong>Problem (The Why)</strong> – Solved inefficiencies caused by scattered priorities, ensuring high-impact business needs were addressed effectively.</li>
-                <li><strong>Metrics</strong> – Increased business value delivery by 20% compared to the previous quarter, showcasing a measurable improvement in prioritization processes.</li>
-              </ul>
-                      </span>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="w-like">
-                    </div>
-                  </div>
-                </div>
-              </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="work-box">
-            
-              <div class="work-img">
-                <img src="img/software_engineer.png" alt="" class="img-fluid">
-              </div>
-              <div class="work-content">
-                <div class="row">
-                  <div class="col-sm-8">
-                    <h2 class="w-title">Tata Consultancy Services</h2>
-                    <div class="w-more">
-                      <span class="w-ctegory">Software Engineer</span> / <span class="w-date">Mar 2018-Nov 2019</span>
-                      <br>
-                      <span class="w-description">
-                      <strong>Developing APIs to Enhance Tax Processing</strong>
-              <ul>
-                <li><strong>The How</strong> – Formulated and developed an Income Tax Business Application (ITBA) for the Income Tax Department using Spring Boot API endpoints.</li>
-                <li><strong>Metrics</strong> – Minimized human errors in tax calculations and achieved a 10% reduction in maintenance costs.</li>
-              </ul>
-              <strong>Automating Data Conversion Processes</strong>
-              <ul>
-                <li><strong>The How</strong> – Devised and implemented a script using Java libraries to convert XLS data into XML format, automating the manual data conversion process.</li>
-                <li><strong>Metrics</strong> – Reduced the maintenance task time by 20%, improving overall efficiency.</li>
-              </ul></span>
-                    </div>
-                  </div>
-                  <div class="col-sm-4">
-                    <div class="w-like">
-                      
-                    </div>
-                  </div>
-                </div>
-              </div>
-            
-          </div>
-        </div>
-        
-      </div>
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="sec-eyebrow">About</div>
+  <div class="sec-title">From a Parking Ticket to <span>Product</span></div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p class="lead">My path into product didn't start in a boardroom — it started behind the wheel.</p>
+      <p>While completing my master's in Halifax, I worked part-time as a food-delivery driver. Parking was a constant, expensive battle. Instead of just complaining, I did what a PM does: I <strong>validated the problem with data</strong>. I built a survey, shared it widely, and found that <strong>96% of 34 respondents</strong> felt the same pain. Identifying a real problem, proving it with evidence, and imagining a solution — that's the moment product management chose me.</p>
+      <p>Since then I've channeled that instinct into products that solve real problems with measurable results. At <strong>CoreLogic</strong>, I led AI and integration initiatives that grew a real-estate platform past <strong>1 million users</strong>. Before product, I spent years as a <strong>software engineer</strong> — which means I can sit with engineers in the architecture and with executives in the strategy, and translate seamlessly between them.</p>
+      <p>Outside of work, I write books on product management and experiment in the kitchen — both reflect the same belief: that the best results come from curiosity, iteration, and a little bit of bold.</p>
     </div>
-  </section>
-
- <section id="education" class="portfolio-mf sect-pt4 route">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="title-box text-center">
-                    <h3 class="title-a">Education</h3>
-                    <p class="subtitle-a"></p>
-                    <div class="line-mf"></div>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-5 mx-auto">
-                <div class="work-box">
-                    <div class="work-img">
-                        <img src="img/grad.jpg" alt="" class="img-fluid">
-                    </div>
-                    <div class="work-content">
-                        <div class="row">
-                            <div class="col-sm-12 text-center">
-                                <h2 class="w-title">Dalhousie University, Canada</h2>
-                                <div class="w-more">
-                                    <span class="w-ctegory">Masters in Applied Computer Science</span> / <span class="w-date">Jan 2020-April 2021</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-5 mx-auto">
-                <div class="work-box">
-                    <div class="work-img">
-                        <img src="img/graduate.png" alt="" class="img-fluid">
-                    </div>
-                    <div class="work-content">
-                        <div class="row">
-                            <div class="col-sm-12 text-center">
-                                <h2 class="w-title">Dr APJ Abdul Kalam Technical University, India</h2>
-                                <div class="w-more">
-                                    <span class="w-ctegory">Bachelors of Engineering and Technology in Information Technology</span> / <span class="w-date">Aug 2013-Aug 2017</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="about-highlight">
+      <h4>Why Teams Hire Me</h4>
+      <p>
+        I'm the rare PM who is genuinely <strong style="color:var(--white)">technical</strong> — I came up as an engineer, so I cut through ambiguity with developers and ship faster. I'm <strong style="color:var(--white)">relentlessly metric-driven</strong>: every initiative below is tied to a number that moved. And I'm <strong style="color:var(--white)">customer-obsessed</strong> — I start with the problem, validate it, then build.
+      </p>
+      <p style="margin-top:1rem">
+        <span class="stat-line">→ 1M+ users reached</span><br/>
+        <span class="stat-line">→ 3 products transformed</span><br/>
+        <span class="stat-line">→ 9 awards &amp; recognitions</span>
+      </p>
     </div>
+  </div>
 </section>
 
-  <section id="publications" class="portfolio-mf sect-pt4 route">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="title-box text-center">
-                    <h3 class="title-a">Publications</h3>
-                    <p class="subtitle-a">
-                      <strong>These books are based on my personal experiences and insights shared by fellow product managers. They are intended for beginners and should not be considered definitive guides. Perspectives may vary, and I continue to grow and learn as a product manager. Please approach the content with an open mind. I have a deep passion for sharing knowledge and experiences, believing that by learning and growing together, we can inspire and empower one another to achieve more.</strong> </p>
-                    <div class="line-mf"></div>
-                </div>
-            </div>
-        </div>
-        <div class="row justify-content-center">
-            <div class="col-md-5 mx-auto">
-                <div class="work-box">
-                    <div class="work-img">
-                        <a href="https://www.amazon.ca/Product-Management-customer-centric-fundamental-enterprises-ebook/dp/B0BTCL5B8B/" target="_blank">
-                <img src="img/volume1.jpg" alt="" class="img-fluid">
-            </a>
-                    </div>
-                    <div class="work-content">
-                        <div class="row">
-                            <div class="col-sm-12 text-center">
-                                <h2 class="w-title">
-  <a href="https://www.amazon.ca/Product-Management-customer-centric-fundamental-enterprises-ebook/dp/B0BTCL5B8B/" 
-     target="_blank" 
-     style="color: #007BFF; text-decoration: underline; font-weight: bold;">
-    Idea to Launch Journey for Product Managers
-  </a>
-</h2>
-                                <div class="w-more">
-                                    <span class="w-ctegory">Author - Neelesh Singh</span> / <span class="w-date"><b>Published - Jan 2023</b></span>
-                                  <br>
-                                  <span class="w-description">
-                                    <strong>This book offers a beginner-friendly guide to the WHY, WHAT, and HOW of product management, blending storytelling with actionable steps. Covering everything from ideation to launch, it delves into key areas like market research, competitor analysis, product-market fit, pricing, and MVP development. Learn to differentiate customer wants from product needs, anticipate competition, and create compelling roadmaps. Featuring a step-by-step framework, practical case studies, and agile methodologies, this book equips you to build customer-centric products and ace product management interviews. Whether you’re starting out or refining your skills, this guide lays a solid foundation for your journey</strong></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-5 mx-auto">
-                <div class="work-box">
-                    <div class="work-img">
-                        <a href="https://www.amazon.com/ultimate-guide-product-manager-management-ebook/dp/B0CGPJ8JQ9" target="_blank">
-                <img src="img/volume2.jpg" alt="" class="img-fluid">
-            </a>
-                    </div>
-                    <div class="work-content">
-                        <div class="row">
-                            <div class="col-sm-12 text-center">
-                                <h2 class="w-title">
-  <a href="https://www.amazon.com/ultimate-guide-product-manager-management-ebook/dp/B0CGPJ8JQ9" 
-     target="_blank" 
-     style="color: #007BFF; text-decoration: underline; cursor: pointer;">
-    Ultimate guide for product managers
-  </a>
-</h2
-                                <div class="w-more">
-                                    <span class="w-ctegory">Author - Neelesh Singh</span> / <span class="w-date"><b>Published - Aug 2023</b></span>
-                                  <br>
-                                  <span class="w-description"><strong>This book redefines product management by blending strategy, innovation, and actionable insights. Part One explores foundational skills like customer empathy, market assessment, and conflict resolution to build resilience and mastery. Part Two focuses on navigating organizational dynamics and resolving conflicts effectively. In Part Three, learn to tailor product management strategies for startups, mid-sized firms, and enterprises across B2B, B2C, SaaS, and more. Part Four dives into Agile workflows, sprint planning, and scaling products with cross-functional collaboration. Finally, uncover the technology and strategies behind leading digital products, including AI, APIs, and data-driven decision-making, to craft exceptional customer experiences.</strong></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="divider"></div>
+
+<!-- EXPERIENCE -->
+<section class="section" id="experience">
+  <div class="sec-eyebrow y">Track Record</div>
+  <div class="sec-title">Experience That <span class="y">Shipped</span></div>
+
+  <!-- CoreLogic -->
+  <div class="exp-item">
+    <div class="exp-side">
+      <img class="exp-logo" src="https://neeleshpmtoolkit.com/img/technical.png" alt="CoreLogic" />
+      <div class="exp-company">CoreLogic</div>
+      <div class="exp-role">Technical Product Manager</div>
+      <div class="exp-dates">Aug 2023 – Present</div>
     </div>
+    <div class="exp-wins">
+      <div class="exp-win">
+        <h4>Shipped an AI assistant that auto-generates property listings</h4>
+        <div class="exp-win-result">📈 900K → 1M+ users · 11% growth in one quarter</div>
+        <p>Agents were spending hours hand-writing listings. I led the integration of an AI assistant in <strong>MLSTOUCH</strong> that generates property descriptions from images and location metadata — making listing creation up to <strong>5× faster</strong> and pushing the platform past one million users.</p>
+      </div>
+      <div class="exp-win">
+        <h4>Drove adoption through cross-platform integrations</h4>
+        <div class="exp-win-result">📈 +18% adoption rate, year over year</div>
+        <p>I shipped integrations with <strong>Canva</strong> (social templates), <strong>Zapier</strong> (workflow automation), and AR property-line walkthroughs — directly addressing agents' marketing efficiency and client engagement, and lifting annual adoption 18%.</p>
+      </div>
+      <div class="exp-win">
+        <h4>Built a Centralized Service Layer from 0 → 1</h4>
+        <div class="exp-win-result">📈 −40% complaints · 4.6 → 4.8 rating · +15% retention</div>
+        <p>Users saw inconsistent data across MLSTOUCH and OneHome — favorites that didn't sync, listings that appeared on one platform but not the other. I led a cross-functional build of a Centralized Service Layer that synchronized data across products, eliminating the friction and the bad reviews it caused.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CGI -->
+  <div class="exp-item">
+    <div class="exp-side">
+      <img class="exp-logo" src="https://neeleshpmtoolkit.com/img/product_consultant.png" alt="CGI" />
+      <div class="exp-company">CGI</div>
+      <div class="exp-role">Product Consultant</div>
+      <div class="exp-dates">May 2021 – Jul 2023</div>
+    </div>
+    <div class="exp-wins">
+      <div class="exp-win">
+        <h4>Launched a model-portfolio portal for Fidelity</h4>
+        <div class="exp-win-result">📈 +8% monthly client retention</div>
+        <p>Advisors were building tailored investment portfolios by hand — slow and inconsistent. I led development of a portal that assembled mixed-asset portfolios in <strong>seconds</strong>, improving investment outcomes and lifting client retention 8% month over month.</p>
+      </div>
+      <div class="exp-win">
+        <h4>Rebuilt the team's prioritization framework</h4>
+        <div class="exp-win-result">📈 +20% business value delivered per quarter</div>
+        <p>Priorities were scattered across JIRA. I introduced a prioritization framework blending qualitative and quantitative signals so the team consistently focused on the highest-impact work — increasing delivered business value 20% quarter over quarter.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TCS -->
+  <div class="exp-item">
+    <div class="exp-side">
+      <img class="exp-logo" src="https://neeleshpmtoolkit.com/img/software_engineer.png" alt="Tata Consultancy Services" />
+      <div class="exp-company">TCS</div>
+      <div class="exp-role">Software Engineer</div>
+      <div class="exp-dates">Mar 2018 – Nov 2019</div>
+    </div>
+    <div class="exp-wins">
+      <div class="exp-win">
+        <h4>Built tax-processing APIs for the Income Tax Department</h4>
+        <div class="exp-win-result">📉 −10% maintenance cost</div>
+        <p>I designed and developed Spring Boot API endpoints for the Income Tax Business Application (ITBA), minimizing calculation errors and cutting maintenance costs by 10%. <strong>This is the engineering foundation</strong> that lets me lead technical products with credibility today.</p>
+      </div>
+      <div class="exp-win">
+        <h4>Automated a manual data-conversion process</h4>
+        <div class="exp-win-result">📉 −20% task time</div>
+        <p>I built a Java-based script to convert XLS data into XML automatically, removing a repetitive manual process and reducing the task's time by 20%.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
+<div class="divider"></div>
 
-  <!--/ Section Portfolio End /-->
-
-  <!--/ Section Testimonials Star /-->
-  
-
-  <!--/ Section Blog Star /-->
-  
-  <!--/ Section Blog End /-->
-
-  <!--/ Section Contact-Footer Star /-->
-  <section class="paralax-mf footer-paralax bg-image sect-mt4 route" style="background-image: url(img/overlay-bg.jpg)">
-    <div class="overlay-mf"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="contact-mf">
-            <div id="contact" class="box-shadow-full">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="title-box-2">
-                    <h5 class="title-left">
-                      Ping me
-                    </h5>
-                  </div>
-                  <div>
-                      <form action="" method="post" role="form" class="contactForm">
-                      <div id="sendmessage">Your message has been sent. Thank you, I will get in touch with you shortly.</div>
-                      <div id="errormessage"></div>
-                      <div class="row">
-                        <div class="col-md-12 mb-3">
-                          <div class="form-group">
-                            <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                            <div class="validation"></div>
-                          </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                          <div class="form-group">
-                            <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
-                            <div class="validation"></div>
-                          </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                            <div class="form-group">
-                              <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                              <div class="validation"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mb-3">
-                          <div class="form-group">
-                            <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-                            <div class="validation"></div>
-                          </div>
-                        </div>
-                        <div class="col-md-12">
-                          <button type="submit" class="button button-a button-big button-rouded">Send Message</button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="title-box-2 pt-4 pt-md-0">
-                    <h5 class="title-left">
-                      You made it this far reading about me woohooo!
-                    </h5>
-                  </div>
-                  <div class="more-info">
-                    <p class="lead">
-<strong>If you’ve scrolled all the way here, you probably already know I’m passionate about solving problems, building amazing products, and leaving users saying, “Wow, that’s exactly what I needed!”
-
-But hey, why stop here? Whether you have a million-dollar idea to brainstorm, need a product whisperer on your team, or just want to talk tech over coffee (or virtual coffee), I’d love to connect. Let’s make something awesome together.</strong>
-
-  
-                    </p>
-                    <ul class="list-ico">
-                      <li><span class="ion-ios-telephone"></span> +1(902)-880-9819</li>
-                      <li><span class="ion-email"></span> Neelesh.singh@dal.ca</li>
-                    </ul>
-                    <div class="button-group mt-4">
-        <button class="btn btn-primary" onclick="downloadResume()">Download Resume</button>
-        
+<!-- CASE STUDY -->
+<section class="section" id="case">
+  <div class="sec-eyebrow b">Featured Case Study</div>
+  <div class="sec-title">Anatomy of a <span class="b">0 → 1</span> Build</div>
+  <div class="case">
+    <div class="case-tag">CoreLogic · Centralized Service Layer</div>
+    <h3>One Source of Truth Across Two Products</h3>
+    <div class="case-flow">
+      <div class="case-step">
+        <div class="case-step-label">The Problem</div>
+        <p>MLSTOUCH and OneHome ran on disconnected data. A listing favorited on one app wouldn't appear on the other; some listings showed up on one platform and not the other. The result: confused users, 1-star reviews, and a flood of support tickets.</p>
+      </div>
+      <div class="case-step">
+        <div class="case-step-label">My Approach</div>
+        <p>Rather than patch each symptom, I diagnosed the root cause — no shared data layer. I aligned engineering, UX, and QA around building a Centralized Service Layer from scratch, defined the requirements bridging business needs and technical constraints, and sequenced delivery to de-risk the migration.</p>
+      </div>
+      <div class="case-step">
+        <div class="case-step-label">The Outcome</div>
+        <p>A single synchronized source of truth across both products. Data inconsistencies disappeared, the experience became seamless, and the metrics that matter to the business moved sharply in the right direction.</p>
+      </div>
     </div>
-                    <script>
-    function downloadResume() {
-        const link = document.createElement('a');
-        link.href = 'img/Singh_Neelesh.pdf';
-        link.download = 'Singh_Neelesh.pdf';
-        link.click();
+    <div class="case-results">
+      <div class="case-result"><div class="cr-num">−40%</div><div class="cr-lbl">Support complaints</div></div>
+      <div class="case-result"><div class="cr-num">4.6→4.8</div><div class="cr-lbl">App Store rating</div></div>
+      <div class="case-result"><div class="cr-num">+15%</div><div class="cr-lbl">Quarterly retention</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section class="section" id="skills">
+  <div class="sec-eyebrow">Capabilities</div>
+  <div class="sec-title">Core <span>Competencies</span></div>
+  <div class="skills-grid">
+    <div class="skill-row"><div class="skill-top"><span class="skill-name">Business → Technical Requirements</span><span class="skill-pct">100%</span></div><div class="skill-track"><div class="skill-fill" data-pct="100"></div></div></div>
+    <div class="skill-row"><div class="skill-top"><span class="skill-name">Cross-Functional Collaboration</span><span class="skill-pct">100%</span></div><div class="skill-track"><div class="skill-fill" data-pct="100"></div></div></div>
+    <div class="skill-row"><div class="skill-top"><span class="skill-name">Technical / Engineering Foundation</span><span class="skill-pct">100%</span></div><div class="skill-track"><div class="skill-fill" data-pct="100"></div></div></div>
+    <div class="skill-row"><div class="skill-top"><span class="skill-name">Roadmapping &amp; Prioritization</span><span class="skill-pct">95%</span></div><div class="skill-track"><div class="skill-fill" data-pct="95"></div></div></div>
+    <div class="skill-row"><div class="skill-top"><span class="skill-name">Data-Driven Decision Making</span><span class="skill-pct">95%</span></div><div class="skill-track"><div class="skill-fill" data-pct="95"></div></div></div>
+    <div class="skill-row"><div class="skill-top"><span class="skill-name">Lean &amp; Agile Principles</span><span class="skill-pct">90%</span></div><div class="skill-track"><div class="skill-fill" data-pct="90"></div></div></div>
+    <div class="skill-row"><div class="skill-top"><span class="skill-name">Market &amp; Competitive Research</span><span class="skill-pct">85%</span></div><div class="skill-track"><div class="skill-fill" data-pct="85"></div></div></div>
+    <div class="skill-row"><div class="skill-top"><span class="skill-name">MVP &amp; Experimentation</span><span class="skill-pct">85%</span></div><div class="skill-track"><div class="skill-fill" data-pct="85"></div></div></div>
+  </div>
+  <div class="tools-row">
+    <span class="tool-chip">Jira</span>
+    <span class="tool-chip">Confluence</span>
+    <span class="tool-chip">Figma</span>
+    <span class="tool-chip">Notion</span>
+    <span class="tool-chip">Asana</span>
+    <span class="tool-chip">Zapier</span>
+    <span class="tool-chip">SQL</span>
+    <span class="tool-chip">Spring Boot / Java</span>
+    <span class="tool-chip">REST APIs</span>
+    <span class="tool-chip">Product Analytics</span>
+    <span class="tool-chip">A/B Testing</span>
+    <span class="tool-chip">Agile / Scrum</span>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PHILOSOPHY -->
+<section class="section">
+  <div class="sec-eyebrow y">How I Work</div>
+  <div class="sec-title">My Product <span class="y">Philosophy</span></div>
+  <div class="phil-grid">
+    <div class="phil-card"><div class="phil-num">01</div><h4>Validate before you build</h4><p>Opinions are cheap; evidence is not. I pressure-test the problem with real users and data before committing a single sprint — the parking survey was just the beginning.</p></div>
+    <div class="phil-card"><div class="phil-num">02</div><h4>Speak both languages</h4><p>My engineering background means I translate fluently between business goals and technical reality — fewer misunderstandings, faster delivery, more trust on both sides.</p></div>
+    <div class="phil-card"><div class="phil-num">03</div><h4>Tie everything to a metric</h4><p>If I can't name the number a feature should move, it isn't ready. Every initiative I lead has a measurable outcome attached from day one.</p></div>
+    <div class="phil-card"><div class="phil-num">04</div><h4>Fix root causes, not symptoms</h4><p>It's tempting to patch the visible problem. I dig for the underlying cause — which is how a sync bug became a centralized platform that lifted retention.</p></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EDUCATION + RECOGNITION -->
+<section class="section">
+  <div class="two-col">
+    <div>
+      <div class="sec-eyebrow b">Education</div>
+      <div class="sec-title" style="margin-bottom:1.5rem">Where I <span class="b">Learned</span></div>
+      <div class="edu-item">
+        <div class="edu-icon"><svg viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2 3 6 3s6-2 6-3v-5"/></svg></div>
+        <div><h4>Dalhousie University, Canada</h4><div class="edu-meta">Master's in Applied Computer Science · Jan 2020 – Apr 2021</div></div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-icon"><svg viewBox="0 0 24 24"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2 3 6 3s6-2 6-3v-5"/></svg></div>
+        <div><h4>Dr. A.P.J. Abdul Kalam Technical University, India</h4><div class="edu-meta">B.E. &amp; Technology, Information Technology · 2013 – 2017</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-eyebrow">Recognition</div>
+      <div class="sec-title" style="margin-bottom:1.5rem">By the <span>Numbers</span></div>
+      <div class="recog-grid">
+        <div class="recog-card"><div class="recog-num o">5+</div><div class="recog-lbl">Years experience</div></div>
+        <div class="recog-card"><div class="recog-num y">3</div><div class="recog-lbl">Products transformed</div></div>
+        <div class="recog-card"><div class="recog-num b">9</div><div class="recog-lbl">Awards &amp; honors</div></div>
+        <div class="recog-card"><div class="recog-num y">2</div><div class="recog-lbl">Books published</div></div>
+        <div class="recog-card"><div class="recog-num o">1M+</div><div class="recog-lbl">Users reached</div></div>
+        <div class="recog-card"><div class="recog-num b">2</div><div class="recog-lbl">Countries worked in</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WRITING / BOOKS -->
+<section class="section" id="writing">
+  <div class="sec-eyebrow">Published Author</div>
+  <div class="sec-title">Two Books on <span>Product</span></div>
+  <p style="color:var(--muted);font-size:.92rem;max-width:600px;margin-bottom:2.5rem;line-height:1.7">
+    I've written two books on product management — distilling real experience into frameworks for the next generation of PMs. (Published as a personal endeavor; perspectives continue to evolve.)
+  </p>
+  <div class="books-grid">
+    <div class="book-feature">
+      <img class="book-cover" src="https://neeleshpmtoolkit.com/img/volume1.jpg" alt="Idea to Launch Journey" />
+      <div class="book-info">
+        <div class="book-tag">📘 Jan 2023</div>
+        <h4>Idea to Launch Journey</h4>
+        <p>A beginner-friendly guide to the WHY, WHAT, and HOW of product management — from market research and product-market fit to MVPs, pricing, and compelling roadmaps.</p>
+        <a href="https://www.amazon.ca/Product-Management-customer-centric-fundamental-enterprises-ebook/dp/B0BTCL5B8B/" target="_blank" rel="noopener" class="book-btn">View on Amazon →</a>
+      </div>
+    </div>
+    <div class="book-feature">
+      <img class="book-cover" src="https://neeleshpmtoolkit.com/img/volume2.jpg" alt="The Ultimate Guide for Product Managers" />
+      <div class="book-info">
+        <div class="book-tag y">📗 Aug 2023</div>
+        <h4>The Ultimate Guide for PMs</h4>
+        <p>An advanced companion on strategy, organizational dynamics, tailoring approaches across startups to enterprises, Agile at scale, and building with AI, APIs, and data.</p>
+        <a href="https://www.amazon.com/ultimate-guide-product-manager-management-ebook/dp/B0CGPJ8JQ9" target="_blank" rel="noopener" class="book-btn y">View on Amazon →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="contact">
+    <h2>LET'S BUILD SOMETHING EXTRAORDINARY</h2>
+    <p>If you're looking for a Technical PM who validates with data, ships with engineers, and obsesses over outcomes — I'd love to talk. Whether it's a role, a problem to brainstorm, or a virtual coffee.</p>
+    <div class="contact-methods">
+      <div class="contact-method">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+        Neelesh.Singh@dal.ca
+      </div>
+      <div class="contact-method">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        +1 (902) 880-9819
+      </div>
+    </div>
+    <div class="contact-ctas">
+      <a href="Neelesh_Singh_Resume.pdf" download class="btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Résumé
+      </a>
+      <a href="mailto:Neelesh.Singh@dal.ca" class="btn-ghost">Email Me →</a>
+      <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank" rel="noopener" class="btn-ghost">LinkedIn ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">NEELESH <span>SINGH</span></div>
+  <div class="footer-links">
+    <a href="https://neeleshpmtoolkit.com/index.html">Home</a>
+    <a href="https://neeleshpmtoolkit.com/toolkit.html">PM Toolkit</a>
+    <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/Neeleshweb" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.kaggle.com/warmachinezz" target="_blank" rel="noopener">Kaggle</a>
+    <a href="mailto:Neelesh.Singh@dal.ca">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Neelesh Singh · Technical Product Manager · Built to solve real problems.</div>
+</footer>
+
+<script>
+  /* Animate skill bars + impact numbers on scroll */
+  const skillObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.style.width = e.target.dataset.pct + '%'; obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.skill-fill').forEach(el => skillObserver.observe(el));
+
+  function animateCount(el) {
+    const raw = el.dataset.target;
+    const num = parseInt(raw, 10);
+    if (isNaN(num)) return;
+    const suffix = raw.replace(/[0-9]/g, '');
+    const start = performance.now(), dur = 1200;
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.floor(eased * num) + suffix;
+      if (p < 1) requestAnimationFrame(tick); else el.textContent = raw;
     }
+    requestAnimationFrame(tick);
+  }
+  const numObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => { if (e.isIntersecting) { animateCount(e.target); obs.unobserve(e.target); } });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.impact-num[data-target]').forEach(el => numObserver.observe(el));
+
+  /* Nav active state */
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const secs = document.querySelectorAll('section[id], header[id]');
+  const secObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id));
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  secs.forEach(s => secObserver.observe(s));
 </script>
-                 
-                   <div class="social-links text-center">
-  <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank" class="social-icon">
-    <i class="ion-social-linkedin"></i>
-  </a>
-  <a href="https://github.com/Neeleshweb" target="_blank" class="social-icon">
-    <i class="ion-social-github"></i>
-  </a>
-  <a href="https://www.facebook.com/NeeleshWeb.homefilescenter" target="_blank" class="social-icon">
-    <i class="ion-social-facebook"></i>
-  </a>
-  <a href="https://www.kaggle.com/warmachinezz" target="_blank" class="social-icon">
-    <i class="ion-ios-podium-outline"></i>
-  </a>
-</div>
-
-<!-- Updated Styling -->
-<style>
-  .social-links {
-    margin-top: 15px;
-    text-align: center;
-  }
-  .social-icon {
-    display: inline-block;
-    margin: 0 10px; /* Adds spacing between icons */
-    font-size: 24px; /* Increases icon size */
-    color: #555; /* Default icon color */
-    transition: color 0.3s ease; /* Smooth hover effect */
-  }
-  .social-icon:hover {
-    color: #007bff; /* Hover color */
-  }
-</style>
-                    
-                    
-                    
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-12">
-            <div class="copyright-box">
-              <p class="copyright">&copy; Copyright <strong>2025</strong>. All Rights Reserved</p>
-              <div class="credits">
-               
-               
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-  </section>
-  <!--/ Section Contact-footer End /-->
-
-  <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
-  <div id="preloader"></div>
-
-  <!-- JavaScript Libraries -->
-  <script src="lib/jquery/jquery.min.js"></script>
-  <script src="lib/jquery/jquery-migrate.min.js"></script>
-  <script src="lib/popper/popper.min.js"></script>
-  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-  <script src="lib/easing/easing.min.js"></script>
-  <script src="lib/counterup/jquery.waypoints.min.js"></script>
-  <script src="lib/counterup/jquery.counterup.js"></script>
-  <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-  <script src="lib/lightbox/js/lightbox.min.js"></script>
-  <script src="lib/typed/typed.min.js"></script>
-  <!-- Contact Form JavaScript File -->
-  <script src="contactform/contactform.js"></script>
-
-  <!-- Template Main Javascript File -->
-  <script src="js/main.js"></script>
-
 </body>
 </html>
