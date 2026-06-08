@@ -27,8 +27,11 @@
 
     /* NAV */
     .nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; height: 60px; background: rgba(8,8,8,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
-    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 3px; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 3px; display: flex; align-items: center; gap: .5rem; }
     .nav-logo span { color: var(--accent); }
+    .nav-logo .logo-box { width: 28px; height: 28px; border-radius: 7px; background: var(--accent); display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+    .nav-logo .logo-box svg { width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-logo .logo-word { font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem; letter-spacing: 2px; color: var(--white); }
     .nav-links { display: flex; align-items: center; list-style: none; }
     .nav-links a { display: block; padding: 0 1rem; height: 60px; line-height: 60px; font-size: .8rem; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); transition: color .2s; }
     .nav-links a:hover, .nav-links a.active { color: var(--white); }
@@ -48,16 +51,16 @@
     @keyframes float2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(-50px,-30px) scale(1.18)} }
     .hero-grid { position: absolute; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 30%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 30%, transparent 80%); animation: gridpan 30s linear infinite; }
     @keyframes gridpan { from{background-position:0 0,0 0} to{background-position:60px 60px,60px 60px} }
-    .hero-inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1.5fr 1fr; gap: 3rem; align-items: center; width: 100%; }
+    .hero-inner { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2.5rem; width: 100%; }
     .hero-line { display: inline-flex; align-items: center; gap: .6rem; font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 1.6rem; }
     .hero-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: blink 2s ease-in-out infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
     .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3.5rem, 7vw, 6.5rem); line-height: .92; letter-spacing: 2px; margin-bottom: 1.4rem; }
     .hero h1 em { color: var(--accent); font-style: normal; }
     .hero h1 .y { color: var(--accent2); }
-    .hero-sub { font-size: 1.08rem; color: var(--muted); line-height: 1.75; max-width: 540px; margin-bottom: 2.2rem; }
+    .hero-sub { font-size: 1.08rem; color: var(--muted); line-height: 1.75; max-width: 600px; margin: 0 auto 2.2rem; }
     .hero-sub strong { color: var(--white); font-weight: 500; }
-    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
     .btn-primary { background: var(--accent); color: #fff; border: none; padding: .85rem 2rem; border-radius: var(--radius); font-size: .9rem; font-weight: 500; letter-spacing: .3px; transition: opacity .2s, transform .15s; display: inline-flex; align-items: center; gap: .5rem; }
     .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
     .btn-ghost { background: transparent; color: var(--white); border: 1px solid var(--border2); padding: .85rem 2rem; border-radius: var(--radius); font-size: .9rem; letter-spacing: .3px; transition: border-color .2s; display: inline-flex; align-items: center; gap: .5rem; }
@@ -226,7 +229,10 @@
 
 <!-- NAV -->
 <nav class="nav">
-  <div class="nav-logo">NEELESH <span>SINGH</span></div>
+  <div class="nav-logo">
+    <span class="logo-box"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span>
+    <span class="logo-word">Portfolio</span>
+  </div>
   <ul class="nav-links">
     <li><a href="#about" class="active">About</a></li>
     <li><a href="#experience">Experience</a></li>
