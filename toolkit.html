@@ -58,9 +58,13 @@
     .nav-logo {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.3rem; letter-spacing: 3px;
-      display: flex; align-items: center; gap: 6px;
+      display: flex; align-items: center; gap: .5rem;
     }
     .nav-logo span { color: var(--accent); }
+    .nav-logo .logo-box { width: 28px; height: 28px; border-radius: 7px; background: var(--accent); display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+    .nav-logo .logo-box svg { width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-logo .logo-word { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: .2px; text-transform: none; color: var(--white); }
+    .nav-logo .logo-word .ac { color: var(--accent); }
     .nav-links {
       display: flex; align-items: center; gap: 0;
       list-style: none;
@@ -87,7 +91,7 @@
       position: relative; overflow: hidden;
       padding: 6rem 2.5rem 5rem;
       min-height: 90vh;
-      display: flex; flex-direction: column; justify-content: center;
+      display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
     }
     /* animated gradient orbs */
     .hero::before, .hero::after {
@@ -153,15 +157,15 @@
       font-family: 'Bebas Neue', sans-serif;
       font-size: clamp(4.5rem, 10vw, 9.5rem);
       line-height: .92; letter-spacing: 2px;
-      max-width: 900px; margin-bottom: 1.8rem;
+      max-width: 900px; margin: 0 auto 1.8rem;
     }
     .hero h1 em { color: var(--accent); font-style: normal; }
     .hero h1 .y { color: var(--accent2); }
     .hero-sub {
       font-size: 1.1rem; color: var(--muted); line-height: 1.75;
-      max-width: 560px; margin-bottom: 3rem;
+      max-width: 560px; margin: 0 auto 3rem;
     }
-    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 5rem; }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 5rem; justify-content: center; }
     .btn-primary {
       background: var(--accent); color: #fff; border: none;
       padding: .85rem 2.2rem; border-radius: var(--radius);
@@ -178,7 +182,7 @@
     }
     .btn-ghost:hover { border-color: #555; }
     .hero-stats {
-      display: flex; gap: 3.5rem; flex-wrap: wrap;
+      display: flex; gap: 3.5rem; flex-wrap: wrap; justify-content: center;
       padding-top: 2.5rem; border-top: 1px solid var(--border);
     }
     .stat-val {
@@ -507,6 +511,54 @@
     .assess-recos li::before { content: '→'; color: var(--accent2); flex-shrink: 0; }
     .assess-recos a { color: var(--accent2); border-bottom: 1px dotted var(--accent2); }
 
+    /* ─── NEW TOOLS: user story, A/B, funnel ─── */
+    .us-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.2rem; }
+    .us-ac-controls { display: flex; align-items: center; justify-content: space-between; margin-bottom: .8rem; flex-wrap: wrap; gap: .6rem; }
+    .us-ac-title { font-size: .72rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+    .us-ac-row { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: .6rem; margin-bottom: .6rem; align-items: center; }
+    .us-ac-row input { width: 100%; background: var(--black); border: 1px solid var(--border2); border-radius: var(--radius); padding: .5rem .6rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .82rem; }
+    .us-ac-row input:focus { outline: none; border-color: var(--accent); }
+    .us-output { margin-top: 1.2rem; background: var(--black); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .us-output-head { display: flex; align-items: center; justify-content: space-between; padding: .7rem 1rem; border-bottom: 1px solid var(--border); font-size: .8rem; color: var(--muted); }
+    .us-output pre { padding: 1.1rem; font-family: 'DM Sans', sans-serif; font-size: .88rem; color: #d8d3cb; line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+
+    .ab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem; }
+    .ab-variant { background: var(--black); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem; }
+    .ab-variant-label { font-size: .8rem; font-weight: 500; color: var(--accent); margin-bottom: .9rem; }
+    .ab-variant-label.b { color: var(--accent3); }
+    .ab-variant .reg-field { margin-bottom: .7rem; }
+    .ab-rate { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--accent); line-height: 1; margin-top: .3rem; }
+    .ab-rate.b { color: var(--accent3); }
+    .ab-result { border-radius: var(--radius); padding: 1.3rem 1.5rem; margin-bottom: 1rem; border: 1px solid var(--border2); }
+    .ab-result.win { background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.4); }
+    .ab-result.lose { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.4); }
+    .ab-result.flat { background: var(--card); }
+    .ab-verdict { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .5px; margin-bottom: .5rem; }
+    .ab-verdict.win { color: var(--green); } .ab-verdict.lose { color: #ef4444; } .ab-verdict.flat { color: var(--muted); }
+    .ab-detail { font-size: .88rem; color: #b5b0a8; line-height: 1.7; }
+    .ab-detail strong { color: var(--white); }
+
+    .funnel-row { display: grid; grid-template-columns: 1fr 120px 90px; gap: .8rem; align-items: center; margin-bottom: .7rem; }
+    .funnel-row input[type="text"] { background: var(--black); border: 1px solid var(--border2); border-radius: var(--radius); padding: .55rem .7rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .85rem; }
+    .funnel-row input[type="number"] { background: var(--black); border: 1px solid var(--border2); border-radius: var(--radius); padding: .55rem .7rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .85rem; }
+    .funnel-row input:focus { outline: none; border-color: var(--accent3); }
+    .funnel-conv { font-size: .82rem; font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; text-align: right; }
+    .funnel-conv.drop { color: #ef4444; } .funnel-conv.ok { color: var(--green); } .funnel-conv.first { color: var(--muted2); }
+    .funnel-bar-track { grid-column: 1 / -1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin: -.2rem 0 .5rem; }
+    .funnel-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent3), var(--accent2)); border-radius: 3px; transition: width .5s ease; }
+    .funnel-del { background: none; border: none; color: var(--muted2); cursor: pointer; font-size: .95rem; }
+    .funnel-del:hover { color: #ef4444; }
+    .funnel-summary { margin-top: 1.2rem; background: var(--black); border: 1px solid var(--border); border-left: 3px solid var(--accent3); border-radius: var(--radius); padding: 1.2rem 1.5rem; font-size: .9rem; color: #b5b0a8; line-height: 1.7; }
+    .funnel-summary strong { color: var(--white); }
+    .funnel-summary .big { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--accent2); letter-spacing: .5px; }
+
+    @media (max-width: 768px) {
+      .us-grid { grid-template-columns: 1fr; }
+      .us-ac-row { grid-template-columns: 1fr 1fr; }
+      .ab-grid { grid-template-columns: 1fr; }
+      .funnel-row { grid-template-columns: 1fr 90px 70px; }
+    }
+
     /* ─── PRODUCT TEARDOWNS ─── */
     .td-tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.8rem; }
     .td-tab {
@@ -823,7 +875,10 @@
 
 <!-- ════════ NAV ════════ -->
 <nav class="nav">
-  <div class="nav-logo">NEELESH<span>.</span>PM</div>
+  <div class="nav-logo">
+    <span class="logo-box"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+    <span class="logo-word">neeleshpm<span class="ac">toolkit</span></span>
+  </div>
   <ul class="nav-links">
     <li><a href="#templates" class="active">Templates</a></li>
     <li><a href="#tools">Tools</a></li>
@@ -1386,6 +1441,75 @@
         <button class="btn-sm outline" onclick="document.getElementById('templates').scrollIntoView({behavior:'smooth'})">Browse Resources ↑</button>
       </div>
     </div>
+  </div>
+
+  <!-- TOOL 3: USER STORY BUILDER -->
+  <div class="tool-card" style="margin-top:1.5rem">
+    <div class="tool-head">
+      <div>
+        <div class="tool-tag">✍️ Live Tool</div>
+        <h3>User Story &amp; Acceptance Criteria Builder</h3>
+        <p>Type who, what, and why — get a clean, ready-to-paste user story with Given/When/Then acceptance criteria. Stop staring at a blank Jira ticket.</p>
+      </div>
+    </div>
+    <div class="us-grid">
+      <div class="reg-field"><label>As a… (role)</label><input type="text" id="us-role" placeholder="returning customer" oninput="renderStory()" value="returning customer"></div>
+      <div class="reg-field"><label>I want to… (action)</label><input type="text" id="us-want" placeholder="save my payment methods" oninput="renderStory()" value="save my payment methods"></div>
+      <div class="reg-field"><label>So that… (benefit)</label><input type="text" id="us-benefit" placeholder="I can check out faster next time" oninput="renderStory()" value="I can check out faster next time"></div>
+    </div>
+    <div class="us-ac-controls">
+      <span class="us-ac-title">Acceptance criteria (Given / When / Then)</span>
+      <button class="btn-sm outline" onclick="addAcRow()">+ Add criterion</button>
+    </div>
+    <div id="us-ac-rows"></div>
+    <div class="us-output">
+      <div class="us-output-head"><span>📋 Generated story</span><button class="btn-sm" id="us-copy" onclick="copyStory()">Copy</button></div>
+      <pre id="us-output-text"></pre>
+    </div>
+  </div>
+
+  <!-- TOOL 4: A/B TEST SIGNIFICANCE CALCULATOR -->
+  <div class="tool-card" style="margin-top:1.5rem">
+    <div class="tool-head">
+      <div>
+        <div class="tool-tag y">🧪 Live Tool</div>
+        <h3>A/B Test Significance Calculator</h3>
+        <p>Drop in your variant numbers and instantly see conversion rates, uplift, and whether the result is statistically significant — before you ship the winner.</p>
+      </div>
+    </div>
+    <div class="ab-grid">
+      <div class="ab-variant">
+        <div class="ab-variant-label">Variant A (Control)</div>
+        <div class="reg-field"><label>Visitors</label><input type="number" id="ab-an" min="0" value="2400" oninput="renderAB()"></div>
+        <div class="reg-field"><label>Conversions</label><input type="number" id="ab-ac" min="0" value="120" oninput="renderAB()"></div>
+        <div class="ab-rate" id="ab-arate">5.00%</div>
+      </div>
+      <div class="ab-variant">
+        <div class="ab-variant-label b">Variant B (Test)</div>
+        <div class="reg-field"><label>Visitors</label><input type="number" id="ab-bn" min="0" value="2400" oninput="renderAB()"></div>
+        <div class="reg-field"><label>Conversions</label><input type="number" id="ab-bc" min="0" value="156" oninput="renderAB()"></div>
+        <div class="ab-rate b" id="ab-brate">6.50%</div>
+      </div>
+    </div>
+    <div class="ab-result" id="ab-result"></div>
+    <div class="rice-note">💡 Uses a two-proportion z-test. "Significant" means it's unlikely (&lt;5% chance) the difference is random — the 95% confidence bar PMs cite when calling a winner.</div>
+  </div>
+
+  <!-- TOOL 5: AARRR FUNNEL ANALYZER -->
+  <div class="tool-card" style="margin-top:1.5rem">
+    <div class="tool-head">
+      <div>
+        <div class="tool-tag b">📉 Live Tool</div>
+        <h3>Funnel &amp; Conversion Analyzer (AARRR)</h3>
+        <p>Enter how many users reach each stage of your funnel. See step-by-step drop-off, overall conversion, and the single biggest leak to fix first.</p>
+      </div>
+    </div>
+    <div id="funnel-rows"></div>
+    <div class="rice-actions">
+      <button class="btn-sm" onclick="addFunnelRow()">+ Add stage</button>
+      <button class="btn-sm outline" onclick="resetFunnel()">Reset example</button>
+    </div>
+    <div class="funnel-summary" id="funnel-summary"></div>
   </div>
 </section>
 
@@ -2353,24 +2477,6 @@
      ════════════════════════════════════════════════════════ */
   const TEARDOWNS = [
     {
-      app: 'Duolingo', emoji: '🦉', theme: 'linear-gradient(160deg,#58cc02,#3a8b02)',
-      takeaway: 'Duolingo stacks <strong>loss aversion, variable rewards, and social competition</strong> — so the cost of quitting always feels higher than the effort of one more lesson.',
-      steps: [
-        { mock:'<div class="mk-status"><span>9:41</span><span>📶 🔋</span></div><div class="mk-center"><div class="mk-big">🔥</div><div class="mk-bignum" style="color:#ff9600">47</div><div class="mk-h">Day streak!</div><div class="mk-sub">Practice today to keep it going</div></div><div class="mk-btn green">Start lesson</div>',
-          moment:'You open the app and the first thing you see is your 47-day streak — glowing, fragile, and entirely yours to lose.',
-          principle:'Loss Aversion + Streaks', why:'We feel the pain of losing something roughly twice as strongly as the pleasure of gaining it. A streak converts "I should practice" into "I can\'t lose what I\'ve built" — and the longer it grows, the more painful breaking it becomes.' },
-        { mock:'<div class="mk-status"><span>8:00 PM</span><span>📶 🔋</span></div><div class="mk-center"><div class="mk-card" style="text-align:left"><div class="mk-row"><div class="mk-avatar" style="background:#58cc02">🦉</div><div><div style="font-size:.8rem;font-weight:600;color:#fff">Duolingo</div><div class="mk-sub">now</div></div></div><div style="margin-top:.6rem;font-size:.82rem;color:#fff">Don\'t lose your streak! Just 5 minutes keeps your 47 days alive 🔥</div></div></div>',
-          moment:'A perfectly-timed evening notification lands right when you usually have a free moment.',
-          principle:'External Triggers (Hook Model)', why:'Habits need a trigger to fire. By learning when you\'re most likely to act and nudging you then, the product re-enters your routine before the habit has a chance to fade — turning an internal goal into an external prompt you simply respond to.' },
-        { mock:'<div class="mk-status"><span>9:42</span><span>📶 🔋</span></div><div class="mk-center"><div class="mk-big">🎁</div><div class="mk-h">Lesson complete!</div><div class="mk-sub">Open your reward chest…</div><div class="mk-row" style="justify-content:center;gap:.4rem;margin-top:.4rem"><span class="mk-pill" style="background:#ffce3d;color:#553">+30 XP</span><span class="mk-pill" style="background:#1cb0f6;color:#fff">+5 Gems?</span><span class="mk-pill" style="background:#ff4b4b;color:#fff">2× Boost?</span></div></div><div class="mk-btn green">Open chest</div>',
-          moment:'You finish a lesson and a reward chest appears — but you don\'t know what\'s inside until you tap.',
-          principle:'Variable Reward', why:'Predictable rewards get boring fast. Unpredictable ones trigger far stronger dopamine release — the same loop that powers slot machines. Not knowing whether you\'ll get 5 XP or a rare bonus keeps the action compelling far longer than a fixed payout would.' },
-        { mock:'<div class="mk-status"><span>9:43</span><span>📶 🔋</span></div><div style="font-size:.8rem;font-weight:600;color:#fff;margin-bottom:.7rem">🏆 Diamond League · 2 days left</div><div class="mk-list"><div class="mk-card mk-row"><span style="color:#ffce3d">1</span><div class="mk-avatar" style="background:#1cb0f6;width:30px;height:30px;font-size:.9rem">A</div><div style="font-size:.78rem;color:#fff">Aisha · 920 XP</div></div><div class="mk-card mk-row"><span style="opacity:.6">2</span><div class="mk-avatar" style="background:#ce82ff;width:30px;height:30px;font-size:.9rem">M</div><div style="font-size:.78rem;color:#fff">Marco · 880 XP</div></div><div class="mk-card mk-row" style="border-color:#58cc02"><span style="color:#58cc02">3</span><div class="mk-avatar" style="background:#58cc02;width:30px;height:30px;font-size:.9rem">You</div><div style="font-size:.78rem;color:#fff">You · 860 XP</div></div></div><div class="mk-sub" style="margin-top:.6rem;color:#ff9600">⬆ Top 3 advance — you\'re in the promotion zone!</div>',
-          moment:'You see yourself sitting at #3 in your league, just 20 XP from being overtaken — promotion is within reach.',
-          principle:'Social Comparison + Competition', why:'We instinctively measure ourselves against others. A live leaderboard turns solo practice into a contest, and "you\'re about to be demoted" or "one more lesson to advance" creates urgency that no personal goal could match.' }
-      ]
-    },
-    {
       app: 'Tinder', emoji: '🔥', theme: 'linear-gradient(160deg,#fd297b,#ff5864,#ff655b)',
       takeaway: 'Tinder reduces every decision to a single swipe, then rewards you <strong>unpredictably</strong> — minimal effort in, variable validation out. That\'s a loop few can resist.',
       steps: [
@@ -2422,6 +2528,186 @@
         { mock:'<div class="mk-status"><span>9:42</span><span>📶 🔋</span></div><div class="mk-row" style="margin-bottom:.7rem"><div class="mk-avatar" style="background:linear-gradient(135deg,#450af5,#c4efd9);width:54px;height:54px;font-size:1.4rem">💚</div><div><div style="font-size:.9rem;font-weight:600;color:#fff">Liked Songs</div><div class="mk-sub">1,204 songs</div></div></div><div class="mk-list"><div class="mk-card"><div class="mk-sub" style="color:#fff">Saved over 4 years</div></div></div><div class="mk-sub" style="text-align:center;margin-top:.6rem">Your whole music life, in one place</div>',
           moment:'Your "Liked Songs" library has quietly grown to 1,204 tracks collected over years.',
           principle:'Sunk Cost + Endowment', why:'The more you\'ve invested in building a library, the more leaving costs you. A growing collection of curated favorites raises the switching barrier — starting over elsewhere means abandoning years of accumulated effort, so you stay.' }
+      ]
+    },
+    {
+      app: 'Instagram', emoji: '📸', theme: 'linear-gradient(160deg,#833ab4,#fd1d1d,#fcb045)',
+      takeaway: 'Instagram blends <strong>infinite scroll, variable social rewards, and ephemeral FOMO</strong> — so there is never a natural moment to stop.',
+      steps: [
+        { mock:'<div class="mk-status"><span>9:41</span><span>📶 🔋</span></div><div class="mk-card" style="padding:0;overflow:hidden"><div class="mk-row" style="padding:.5rem;gap:.5rem"><div class="mk-avatar" style="background:linear-gradient(45deg,#f09433,#dc2743);width:28px;height:28px"></div><div class="mk-sub" style="color:#fff">travel.daily</div></div><div style="height:130px;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045)"></div><div class="mk-row" style="padding:.5rem;gap:.9rem;font-size:1.1rem">❤️ 💬 ✈️</div></div><div class="mk-sub" style="text-align:center;margin-top:.6rem">▼ there is always one more post</div>',
+          moment:'The feed never ends — there is always another post waiting just below the last one.',
+          principle:'Infinite Scroll (no stopping cue)', why:'Natural stopping points — page numbers, an end of list — give your brain permission to quit. Remove them and the default becomes "keep going," because nothing ever signals that it is time to stop.' },
+        { mock:'<div class="mk-center"><div class="mk-big">❤️</div><div class="mk-bignum" style="color:#fff;font-size:2.6rem">248</div><div class="mk-h">likes and counting</div><div class="mk-sub">+18 comments in the last hour</div></div>',
+          moment:'You post a photo, then keep checking back as likes and comments trickle in at random.',
+          principle:'Variable Social Reward', why:'Each like is a small hit of social approval, and because they arrive at unpredictable intervals you keep returning to check. That intermittent reinforcement is the same mechanism that makes slot machines so compelling.' },
+        { mock:'<div class="mk-status"><span>9:41</span><span>📶 🔋</span></div><div class="mk-row" style="gap:.7rem;justify-content:center;margin:1rem 0"><div class="mk-avatar" style="width:50px;height:50px;background:#222;border:2px solid #fd1d1d">😀</div><div class="mk-avatar" style="width:50px;height:50px;background:#222;border:2px solid #fcb045">🌴</div><div class="mk-avatar" style="width:50px;height:50px;background:#222;border:2px solid #833ab4">🐶</div></div><div class="mk-sub" style="text-align:center">12 new Stories · gone in 24h ⏳</div>',
+          moment:'A row of colored rings shows friends'+"'"+' Stories that vanish in 24 hours.',
+          principle:'Ephemerality + FOMO', why:'Content that disappears manufactures urgency — miss it and it is gone for good. The fear of missing out reliably converts "I will look later" into "I have to look right now".' }
+      ]
+    },
+    {
+      app: 'TikTok', emoji: '🎵', theme: 'linear-gradient(160deg,#010101,#69C9D0,#EE1D52)',
+      takeaway: 'TikTok turns every swipe into a personalized slot-machine pull — <strong>effortless, endless, and eerily accurate</strong>.',
+      steps: [
+        { mock:'<div class="mk-center" style="background:transparent"><div class="mk-card" style="flex:1;width:100%;background:linear-gradient(160deg,#69C9D0,#EE1D52);display:flex;align-items:flex-end;padding:.8rem"><div><div class="mk-h">For You</div><div class="mk-sub" style="color:#fff">▶ playing automatically</div></div></div></div>',
+          moment:'A video starts playing the instant you open the app — no choosing, no searching.',
+          principle:'Zero-Friction Autoplay', why:'By removing every decision — what to watch, when to press play — consumption becomes the path of least resistance. You do not start watching so much as simply never stop.' },
+        { mock:'<div class="mk-center"><div class="mk-big">👆</div><div class="mk-h">Swipe up for the next</div><div class="mk-card" style="margin-top:.5rem"><div class="mk-sub" style="color:#fff">Next video loading… 99% match for you</div></div></div>',
+          moment:'One flick reveals another perfectly-targeted video. Then another. Then another.',
+          principle:'Variable Reward + Personalization', why:'You never know if the next video is a dud or your new favorite, and the algorithm keeps the hit-rate just high enough. Unpredictable payoff plus uncanny relevance is the most potent attention loop built yet.' },
+        { mock:'<div class="mk-center"><div class="mk-bignum" style="color:#EE1D52">142</div><div class="mk-h">videos watched today</div><div class="mk-sub">…it only felt like five minutes</div></div>',
+          moment:'Time evaporates — what felt like five minutes turns out to have been an hour.',
+          principle:'Flow State + Time Distortion', why:'Short, complete, low-effort loops keep you in a frictionless flow where each clip resets the clock. Without external cues to mark time passing, you lose track of it entirely.' }
+      ]
+    },
+    {
+      app: 'YouTube', emoji: '▶️', theme: 'linear-gradient(160deg,#ff0000,#7a0000)',
+      takeaway: 'YouTube engineers <strong>the next click and the next autoplay</strong> — so one video quietly becomes an entire evening.',
+      steps: [
+        { mock:'<div class="mk-center"><div class="mk-card" style="width:100%;height:110px;background:#000;display:flex;align-items:center;justify-content:center;font-size:1.6rem">▶</div><div class="mk-card" style="border-color:#ff0000;text-align:center"><div class="mk-sub" style="color:#fff">Up next in</div><div class="mk-bignum" style="color:#ff0000;font-size:2rem">4</div><div class="mk-sub">Cancel</div></div></div>',
+          moment:'The video ends and the next one begins auto-playing in five… four… seconds.',
+          principle:'Default Effect + Friction Reduction', why:'Doing nothing now means watching more. By making "continue" the default and requiring a deliberate act to stop, passive inertia is quietly converted into endless watch time.' },
+        { mock:'<div class="mk-list">'+'<div class="mk-card mk-row"><div style="width:54px;height:34px;background:#444;border-radius:4px;flex-shrink:0"></div><div class="mk-sub" style="color:#fff">You won'+"'"+'t BELIEVE what happens…</div></div>'+'<div class="mk-card mk-row"><div style="width:54px;height:34px;background:#444;border-radius:4px;flex-shrink:0"></div><div class="mk-sub" style="color:#fff">The truth about… (gone wrong)</div></div>'+'<div class="mk-card mk-row"><div style="width:54px;height:34px;background:#444;border-radius:4px;flex-shrink:0"></div><div class="mk-sub" style="color:#fff">10 things you missed</div></div>'+'</div>',
+          moment:'A wall of thumbnails and titles promises exactly the kind of thing you love.',
+          principle:'Curiosity Gap + Variable Reward', why:'Thumbnails and titles open a curiosity gap your brain itches to close, and each click is an unpredictable payoff. The recommendation engine learns precisely which gaps you cannot resist.' },
+        { mock:'<div class="mk-status"><span>9:41</span><span>📶 🔋</span></div><div class="mk-center"><div class="mk-big">🔔</div><div class="mk-pill" style="background:#ff0000;color:#fff">3 new</div><div class="mk-h">Channels you follow just posted</div></div>',
+          moment:'A red badge tells you your favorite creators just uploaded something new.',
+          principle:'External Triggers', why:'Notifications re-summon you on the product'+"'"+'s schedule, not yours — turning an occasional visit into a reflex you act on the moment the badge appears.' }
+      ]
+    },
+    {
+      app: 'Netflix', emoji: '🎬', theme: 'linear-gradient(160deg,#e50914,#3a0006)',
+      takeaway: 'Netflix removes every reason to stop watching — <strong>no credits, no decisions, no end</strong>.',
+      steps: [
+        { mock:'<div class="mk-center"><div class="mk-card" style="width:100%;height:100px;background:#000"></div><div class="mk-card" style="border-color:#e50914;text-align:center;margin-top:.4rem"><div class="mk-sub" style="color:#fff">Next episode in</div><div class="mk-bignum" style="color:#e50914;font-size:1.8rem">5s</div></div><div class="mk-row" style="gap:.5rem;margin-top:.4rem"><span class="mk-pill" style="background:rgba(255,255,255,0.15);color:#fff">Skip intro</span></div></div>',
+          moment:'The credits barely begin before the next episode starts playing on its own.',
+          principle:'Default Effect + Reduced Friction', why:'The classic "should I watch one more?" decision is deleted entirely. Continuing is automatic; stopping takes a deliberate act — so the binge simply continues by default.' },
+        { mock:'<div class="mk-center" style="background:transparent"><div class="mk-h" style="font-size:1.3rem;letter-spacing:2px">TO BE<br>CONTINUED…</div></div>',
+          moment:'Each episode ends mid-tension — right at the moment you meant to log off.',
+          principle:'Zeigarnik Effect', why:'Our minds hate unresolved loops. A cliffhanger leaves a question open that nags until you watch the next episode to close it — so the writing and the player conspire to keep you hooked.' },
+        { mock:'<div class="mk-list">'+'<div class="mk-row" style="gap:.5rem"><div class="mk-card" style="height:60px;flex:1;background:linear-gradient(135deg,#e50914,#000)"></div><div class="mk-card" style="height:60px;flex:1;background:linear-gradient(135deg,#333,#000)"></div></div>'+'<div class="mk-row" style="gap:.5rem"><div class="mk-card" style="height:60px;flex:1;background:linear-gradient(135deg,#444,#000)"></div><div class="mk-card" style="height:60px;flex:1;background:linear-gradient(135deg,#e50914,#000)"></div></div>'+'</div><div class="mk-sub" style="text-align:center;margin-top:.5rem">Picked for you</div>',
+          moment:'Even the thumbnails somehow seem chosen specifically for your taste.',
+          principle:'Personalization', why:'The same title is shown with different artwork to different people, optimized for what each responds to. Relevance lowers the effort of choosing and raises the odds you will press play.' }
+      ]
+    },
+    {
+      app: 'Amazon', emoji: '📦', theme: 'linear-gradient(160deg,#ff9900,#cc6f00)',
+      takeaway: 'Amazon strips friction from buying and stacks <strong>social proof, scarcity, and one-click defaults</strong> at the decisive moment.',
+      steps: [
+        { mock:'<div class="mk-status"><span>9:41</span><span>📶 🔋</span></div><div class="mk-card" style="text-align:center"><div style="height:70px;background:#fff;border-radius:8px;margin-bottom:.5rem"></div><div class="mk-sub" style="color:#fff">Echo Dot · $34.99</div></div><div class="mk-btn" style="background:#ff9900;color:#111">Buy Now · 1-Click</div><div class="mk-sub" style="text-align:center;margin-top:.4rem">Arrives tomorrow</div>',
+          moment:'One tap and it is ordered — no cart, no forms, arriving tomorrow.',
+          principle:'Friction Reduction + Default', why:'Every extra checkout step loses buyers. Collapsing the purchase into a single tap with saved defaults shrinks the gap between impulse and order to almost zero — so impulses become purchases.' },
+        { mock:'<div class="mk-center"><div class="mk-stars">★★★★★</div><div class="mk-sub" style="color:#fff">12,480 ratings</div><div class="mk-card" style="border-color:#ff9900;text-align:center;margin-top:.4rem"><div style="color:#ff5252;font-weight:600;font-size:.85rem">⚠ Only 3 left in stock</div><div class="mk-sub">order soon</div></div></div>',
+          moment:'Thousands of reviews reassure you — and "only 3 left in stock" rushes you.',
+          principle:'Social Proof + Scarcity', why:'Mass reviews lower perceived risk while a low-stock warning raises urgency. Together they short-circuit deliberation: trusted by many, available to few, decide now.' },
+        { mock:'<div class="mk-card"><div class="mk-sub" style="color:#fff;margin-bottom:.5rem">Frequently bought together</div><div class="mk-row" style="gap:.4rem"><div style="width:34px;height:34px;background:#fff;border-radius:6px"></div><span style="color:#fff">+</span><div style="width:34px;height:34px;background:#eee;border-radius:6px"></div></div><div class="mk-pill" style="background:#ff9900;color:#111;margin-top:.5rem">Add both · save $8</div></div>',
+          moment:'At checkout it suggests two more things "frequently bought together."',
+          principle:'Anchoring + Cross-sell', why:'Presenting complementary items beside your choice, with a small bundle saving, anchors the decision as "add a little more" rather than "spend more" — lifting basket size with almost no friction.' }
+      ]
+    },
+    {
+      app: 'Uber', emoji: '🚗', theme: 'linear-gradient(160deg,#000000,#276ef1)',
+      takeaway: 'Uber replaces the anxiety of waiting with a <strong>live, ticking sense of progress</strong> — and locks you in before doubt creeps back.',
+      steps: [
+        { mock:'<div class="mk-card" style="flex:1;background:linear-gradient(160deg,#1a2a44,#000);position:relative;width:100%"><div style="position:absolute;top:40%;left:30%;font-size:1.4rem">🚗</div><div style="position:absolute;bottom:20%;right:25%;font-size:1.2rem">📍</div></div><div class="mk-card" style="text-align:center;margin-top:.4rem"><div class="mk-h">Arriving in 3 min</div><div class="mk-sub">Toyota Prius · ABC 123</div></div>',
+          moment:'A little car crawls toward you on the map, the ETA counting steadily down.',
+          principle:'Goal-Gradient + Anticipation', why:'Watching visible progress toward arrival makes the wait feel shorter and pulls you forward — motivation rises as the goal gets closer, so you stay glued to the screen instead of cancelling.' },
+        { mock:'<div class="mk-center"><div class="mk-sub">Your fare, locked upfront</div><div class="mk-bignum" style="color:#276ef1">$14.20</div><div class="mk-sub">🔒 price won'+"'"+'t change</div></div><div class="mk-btn" style="background:#276ef1;color:#fff">Confirm</div>',
+          moment:'You see the exact fare before you commit — no meter anxiety, no surprises.',
+          principle:'Certainty / Loss-Aversion Relief', why:'Uncertainty about cost is a major reason people hesitate. Locking the price upfront removes the fear of an unknown bill, lowering the psychological barrier to tapping "Confirm".' },
+        { mock:'<div class="mk-center"><div class="mk-avatar" style="background:#276ef1;width:54px;height:54px">🧑</div><div class="mk-h">Rate your trip</div><div class="mk-big" style="font-size:1.6rem">⭐⭐⭐⭐⭐</div></div>',
+          moment:'The moment the ride ends, a quick five-star prompt appears.',
+          principle:'Reciprocity + Commitment', why:'A tiny, easy request to rate keeps you engaged past the transaction and builds a two-way norm of accountability — small commitments that make the system feel trustworthy and you more likely to return.' }
+      ]
+    },
+    {
+      app: 'WhatsApp', emoji: '💬', theme: 'linear-gradient(160deg,#25d366,#0b6e3a)',
+      takeaway: 'WhatsApp uses <strong>read receipts, presence, and reciprocity</strong> to turn messaging into a loop neither side can easily exit.',
+      steps: [
+        { mock:'<div class="mk-list" style="margin-top:.5rem"><div class="mk-card" style="align-self:flex-start;max-width:80%;background:#fff"><div class="mk-sub" style="color:#111">Hey! Are you free tonight?</div></div><div class="mk-card" style="align-self:flex-start;max-width:60%"><div class="mk-sub" style="color:#fff">Aisha is typing…</div></div></div>',
+          moment:'You see "Aisha is typing…" appear — so you wait, watching the screen.',
+          principle:'Anticipation + Variable Reward', why:'The typing indicator creates suspense about an incoming, unpredictable reply. You linger in the chat rather than leaving, because something is about to happen at any second.' },
+        { mock:'<div class="mk-list" style="margin-top:.5rem"><div class="mk-card" style="align-self:flex-end;max-width:80%;background:#dcf8c6"><div class="mk-sub" style="color:#111">Sounds good, see you at 8!</div><div style="font-size:.6rem;color:#34b7f1;text-align:right">✓✓ Read 9:42</div></div></div>',
+          moment:'Two blue ticks confirm they have read your message.',
+          principle:'Reciprocity + Social Pressure', why:'Read receipts create an unspoken obligation — both sides know the message landed, so a reply feels owed. The norm of reciprocity keeps the conversation, and your attention, alive.' },
+        { mock:'<div class="mk-row" style="margin-top:.5rem"><div class="mk-avatar" style="background:#25d366">🙂</div><div><div style="font-size:.85rem;color:#fff;font-weight:600">Aisha</div><div class="mk-sub" style="color:#25d366">online</div></div></div>',
+          moment:'A contact'+"'"+'s status quietly reads "online" right now.',
+          principle:'Presence + FOMO', why:'Seeing someone active in this moment invites a real-time exchange and a subtle fear of missing it. Presence cues turn an asynchronous tool into a live one that is hard to step away from.' }
+      ]
+    },
+    {
+      app: 'X (Twitter)', emoji: '🐦', theme: 'linear-gradient(160deg,#000000,#1d9bf0)',
+      takeaway: 'X perfected the <strong>pull-to-refresh slot machine</strong> — endless, unpredictable, and always one swipe from something irresistible.',
+      steps: [
+        { mock:'<div class="mk-center"><div class="mk-big">↻</div><div class="mk-h">Pull to refresh</div><div class="mk-sub">loading fresh posts…</div></div>',
+          moment:'You pull down and the timeline reloads with a fresh batch of posts.',
+          principle:'Variable Reward (the slot-machine pull)', why:'Pull-to-refresh is a literal lever: you act, wait a beat, and receive an unpredictable batch of new content. That uncertainty is the very mechanic that makes slot machines — and feeds — so hard to put down.' },
+        { mock:'<div class="mk-status"><span>9:41</span><span>📶 🔋</span></div><div class="mk-center"><div class="mk-big">🔔</div><div class="mk-pill" style="background:#1d9bf0;color:#fff">17 new</div><div class="mk-sub">likes · replies · new followers</div></div>',
+          moment:'A red badge stacks up likes, replies, and new followers waiting for you.',
+          principle:'Social Validation + Triggers', why:'Each notification is a hit of social approval, batched to feel rewarding. The badge is a trigger you are conditioned to clear — and clearing it pulls you straight back into the feed.' },
+        { mock:'<div class="mk-card"><div class="mk-sub" style="color:#fff;margin-bottom:.4rem">Trending now</div><div class="mk-h" style="font-size:1rem">#YouAreMissingThis</div><div class="mk-sub">48,200 posts</div></div>',
+          moment:'A trends list hints that everyone is talking about something — without you.',
+          principle:'FOMO + Social Proof', why:'Trends signal a conversation happening right now that you might be missing. The fear of being out of the loop is a powerful pull back into the app to "see what is going on".' }
+      ]
+    },
+    {
+      app: 'Snapchat', emoji: '👻', theme: 'linear-gradient(160deg,#1c1c00,#3d3d00)',
+      takeaway: 'Snapchat invented the <strong>streak</strong> — weaponizing loss aversion and ephemerality to make daily use feel mandatory.',
+      steps: [
+        { mock:'<div class="mk-center"><div class="mk-big">🔥</div><div class="mk-bignum" style="color:#fffc00">128</div><div class="mk-h">You and Maya</div><div class="mk-sub">keep your Snapstreak alive!</div></div>',
+          moment:'A flame and a number show how many days straight you have snapped a friend.',
+          principle:'Loss Aversion + Social Streaks', why:'A streak built with a friend is a shared asset — breaking it lets someone else down, not just you. That social weight makes the daily snap feel obligatory, even when you have nothing to say.' },
+        { mock:'<div class="mk-center"><div class="mk-card" style="border-color:#fffc00;text-align:center"><div style="font-size:1.4rem">▢</div><div class="mk-sub" style="color:#fff">Tap to view · 1 photo</div></div><div class="mk-sub" style="margin-top:.5rem">deletes after viewing</div></div>',
+          moment:'A snap can be opened exactly once — then it is gone forever.',
+          principle:'Ephemerality + Scarcity', why:'One-time, vanishing content manufactures urgency and presence — you must look now, and fully, because there is no second chance. Scarcity of access raises attention and engagement.' },
+        { mock:'<div class="mk-center"><div class="mk-big">⌛</div><div class="mk-h" style="color:#fffc00">Streak about to end!</div><div class="mk-sub">Snap Maya in the next hour</div></div>',
+          moment:'An hourglass warns that a streak is just hours away from dying.',
+          principle:'Urgency + Loss Framing', why:'Framing the moment as imminent loss — "about to end" — triggers immediate action far more reliably than any positive reminder. The threat of losing days of streak is enough to reopen the app instantly.' }
+      ]
+    },
+    {
+      app: 'Reddit', emoji: '👽', theme: 'linear-gradient(160deg,#ff4500,#a52c00)',
+      takeaway: 'Reddit turns participation into a game of <strong>karma, votes, and a bottomless feed</strong> you helped build.',
+      steps: [
+        { mock:'<div class="mk-card"><div class="mk-row" style="gap:.6rem"><div style="display:flex;flex-direction:column;align-items:center;color:#ff4500"><span>▲</span><span style="font-size:.8rem">2.4k</span><span style="opacity:.4">▼</span></div><div class="mk-sub" style="color:#fff">TIL something genuinely fascinating about…</div></div></div><div class="mk-sub" style="text-align:center;margin-top:.4rem;color:#ff4500">you upvoted</div>',
+          moment:'A single tap upvotes a post and the counter ticks up.',
+          principle:'Social Validation + Low-Effort Action', why:'Voting is frictionless and instantly rewarding — you shape the community with one tap and get a nudge of dopamine from watching the count move. Easy actions with visible impact keep you participating.' },
+        { mock:'<div class="mk-list">'+'<div class="mk-card"><div class="mk-sub" style="color:#fff">r/todayilearned · 2.4k</div></div>'+'<div class="mk-card" style="opacity:.85"><div class="mk-sub" style="color:#fff">r/AskReddit · 891</div></div>'+'<div class="mk-card" style="opacity:.6"><div class="mk-sub" style="color:#fff">r/funny · 5.1k</div></div>'+'</div><div class="mk-sub" style="text-align:center;margin-top:.4rem">▼ it never ends</div>',
+          moment:'Posts keep loading forever as you scroll through your subreddits.',
+          principle:'Infinite Scroll', why:'With no end and no page breaks, there is never a built-in moment to stop. Each thread promises the next might be funnier or more useful, so continuous scrolling becomes the default.' },
+        { mock:'<div class="mk-center"><div class="mk-bignum" style="color:#ff4500">12,340</div><div class="mk-h">karma</div><div class="mk-pill" style="background:#ff4500;color:#fff">Top 1% commenter</div></div>',
+          moment:'Your accumulated karma marks your status in the community.',
+          principle:'Gamification + Endowment', why:'Karma is a score you have invested years building — a status symbol you own. The desire to grow it, and not abandon it, keeps you posting, commenting, and coming back.' }
+      ]
+    },
+    {
+      app: 'LinkedIn', emoji: '💼', theme: 'linear-gradient(160deg,#0a66c2,#063a6e)',
+      takeaway: 'LinkedIn taps <strong>professional status anxiety</strong> — completion meters, profile views, and a feed that rewards posting.',
+      steps: [
+        { mock:'<div class="mk-center"><div class="mk-avatar" style="background:#0a66c2;width:56px;height:56px">🧑</div><div class="mk-h">Profile 80%</div><div class="mk-bar"><div style="width:80%;background:#0a66c2"></div></div><div class="mk-sub">Almost All-Star — add one more skill</div></div>',
+          moment:'A meter says your profile is "80% — almost All-Star," nudging you to finish.',
+          principle:'Endowed Progress + Zeigarnik', why:'A nearly-complete bar feels like progress worth finishing, and the unfinished portion nags. Together they pull you to add one more detail — deepening your investment in the platform.' },
+        { mock:'<div class="mk-center"><div class="mk-big">🔒</div><div class="mk-h">7 people viewed you</div><div class="mk-sub">this week — tap to see who</div></div>',
+          moment:'A teaser says several people viewed your profile — tap to see who.',
+          principle:'Curiosity Gap', why:'Telling you something happened while withholding the details opens a curiosity gap your brain wants closed. The pull to "see who" reliably brings professionals back — and often nudges an upgrade.' },
+        { mock:'<div class="mk-card"><div class="mk-sub" style="color:#fff">Your post is performing</div><div class="mk-bignum" style="color:#0a66c2;font-size:2rem">1,240</div><div class="mk-sub">impressions · 38 reactions</div></div>',
+          moment:'Your post'+"'"+'s impressions and reactions climb in real time.',
+          principle:'Social Validation + Variable Reward', why:'Professional approval is high-stakes, and the metrics arrive unpredictably. Watching impressions tick up delivers status-affirming hits that make posting — and checking back — habitual.' }
+      ]
+    },
+    {
+      app: 'Pinterest', emoji: '📌', theme: 'linear-gradient(160deg,#e60023,#8a0015)',
+      takeaway: 'Pinterest pairs an <strong>endless visual feed</strong> with the quiet satisfaction of <strong>collecting</strong> — browsing becomes building.',
+      steps: [
+        { mock:'<div class="mk-row" style="gap:.5rem;align-items:flex-start"><div style="flex:1;display:flex;flex-direction:column;gap:.5rem"><div class="mk-card" style="height:70px;background:linear-gradient(135deg,#e60023,#ff7a8a)"></div><div class="mk-card" style="height:50px;background:linear-gradient(135deg,#444,#222)"></div></div><div style="flex:1;display:flex;flex-direction:column;gap:.5rem"><div class="mk-card" style="height:50px;background:linear-gradient(135deg,#888,#444)"></div><div class="mk-card" style="height:70px;background:linear-gradient(135deg,#e60023,#8a0015)"></div></div></div><div class="mk-sub" style="text-align:center;margin-top:.5rem">▼ the grid never ends</div>',
+          moment:'A staggered grid of images flows on without end.',
+          principle:'Infinite Scroll + Visual Variety', why:'A bottomless, irregular grid removes stopping cues and keeps the eye moving. Uneven layouts feel fresh with every scroll, so there is always a reason to look at one more row.' },
+        { mock:'<div class="mk-center"><div class="mk-card" style="height:80px;width:100%;background:linear-gradient(135deg,#e60023,#ff7a8a)"></div><div class="mk-sub" style="margin-top:.5rem">More ideas like this →</div><div class="mk-row" style="gap:.4rem;margin-top:.4rem"><div style="width:40px;height:40px;border-radius:8px;background:#444"></div><div style="width:40px;height:40px;border-radius:8px;background:#666"></div><div style="width:40px;height:40px;border-radius:8px;background:#e60023"></div></div></div>',
+          moment:'Save one pin and the feed fills with similar ideas you did not search for.',
+          principle:'Personalization + Variable Reward', why:'Each save teaches the feed what you love, and the next batch is an unpredictable mix of relevant finds. The better it gets at guessing, the more rewarding — and repeatable — browsing becomes.' },
+        { mock:'<div class="mk-list"><div class="mk-card mk-row"><div style="width:36px;height:36px;border-radius:6px;background:#e60023"></div><div class="mk-sub" style="color:#fff">Home · 84 pins</div></div><div class="mk-card mk-row"><div style="width:36px;height:36px;border-radius:6px;background:#666"></div><div class="mk-sub" style="color:#fff">Recipes · 52 pins</div></div></div><div class="mk-sub" style="text-align:center;margin-top:.4rem">your boards, still growing</div>',
+          moment:'Your saved pins organize into boards you have curated over time.',
+          principle:'Endowment + Zeigarnik', why:'Curated boards feel like something you own and are still building. Open, unfinished collections — a half-planned trip, an evolving mood board — keep pulling you back to add just one more pin.' }
       ]
     }
   ];
@@ -2481,6 +2767,151 @@
   }
   function tdPrev() { if (tdStep > 0) { tdStep--; renderTd(); } }
   renderTd();
+
+  /* ════════════════════════════════════════════════════════
+     TOOL 3 — USER STORY & ACCEPTANCE CRITERIA BUILDER
+     ════════════════════════════════════════════════════════ */
+  let acRows = [
+    { g: 'I am logged in', w: 'I save a new payment method', t: 'it appears as an option at checkout' },
+    { g: 'I have a saved card', w: 'I start a new order', t: 'my saved card is pre-selected' }
+  ];
+  function renderAcRows() {
+    const wrap = document.getElementById('us-ac-rows');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    acRows.forEach((r, i) => {
+      const row = document.createElement('div');
+      row.className = 'us-ac-row';
+      row.innerHTML =
+        '<input type="text" placeholder="Given…" value="' + escapeHtml(r.g) + '" oninput="updateAc(' + i + ',\'g\',this.value)">' +
+        '<input type="text" placeholder="When…" value="' + escapeHtml(r.w) + '" oninput="updateAc(' + i + ',\'w\',this.value)">' +
+        '<input type="text" placeholder="Then…" value="' + escapeHtml(r.t) + '" oninput="updateAc(' + i + ',\'t\',this.value)">' +
+        '<button class="rice-del" onclick="delAc(' + i + ')" title="Remove">✕</button>';
+      wrap.appendChild(row);
+    });
+  }
+  function updateAc(i, f, v) { acRows[i][f] = v; renderStory(); }
+  function addAcRow() { acRows.push({ g: '', w: '', t: '' }); renderAcRows(); renderStory(); }
+  function delAc(i) { acRows.splice(i, 1); renderAcRows(); renderStory(); }
+  function renderStory() {
+    const role = (document.getElementById('us-role').value || '…').trim();
+    const want = (document.getElementById('us-want').value || '…').trim();
+    const benefit = (document.getElementById('us-benefit').value || '…').trim();
+    let out = 'As a ' + role + ',\nI want to ' + want + ',\nso that ' + benefit + '.\n\nAcceptance Criteria:';
+    const valid = acRows.filter(r => (r.g || r.w || r.t));
+    if (valid.length === 0) out += '\n  • (add criteria above)';
+    valid.forEach((r, i) => {
+      out += '\n  ' + (i + 1) + '. GIVEN ' + (r.g || '…') + '\n     WHEN ' + (r.w || '…') + '\n     THEN ' + (r.t || '…');
+    });
+    document.getElementById('us-output-text').textContent = out;
+  }
+  function copyStory() {
+    const txt = document.getElementById('us-output-text').textContent;
+    const btn = document.getElementById('us-copy');
+    const done = () => { btn.textContent = '✓ Copied'; setTimeout(() => btn.textContent = 'Copy', 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(txt).then(done).catch(done); }
+    else { const t = document.createElement('textarea'); t.value = txt; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch(e){} document.body.removeChild(t); done(); }
+  }
+  renderAcRows(); renderStory();
+
+  /* ════════════════════════════════════════════════════════
+     TOOL 4 — A/B TEST SIGNIFICANCE CALCULATOR
+     ════════════════════════════════════════════════════════ */
+  function erf(x) {
+    const t = 1 / (1 + 0.3275911 * Math.abs(x));
+    const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x);
+    return x >= 0 ? y : -y;
+  }
+  function normalCDF(z) { return 0.5 * (1 + erf(z / Math.SQRT2)); }
+  function renderAB() {
+    const nA = parseFloat(document.getElementById('ab-an').value) || 0;
+    const cA = parseFloat(document.getElementById('ab-ac').value) || 0;
+    const nB = parseFloat(document.getElementById('ab-bn').value) || 0;
+    const cB = parseFloat(document.getElementById('ab-bc').value) || 0;
+    const pA = nA > 0 ? cA / nA : 0, pB = nB > 0 ? cB / nB : 0;
+    document.getElementById('ab-arate').textContent = (pA * 100).toFixed(2) + '%';
+    document.getElementById('ab-brate').textContent = (pB * 100).toFixed(2) + '%';
+    const res = document.getElementById('ab-result');
+    if (nA < 1 || nB < 1) { res.className = 'ab-result flat'; res.innerHTML = '<div class="ab-verdict flat">Enter visitors &amp; conversions</div>'; return; }
+    const uplift = pA > 0 ? ((pB - pA) / pA) * 100 : 0;
+    const pPool = (cA + cB) / (nA + nB);
+    const se = Math.sqrt(pPool * (1 - pPool) * (1 / nA + 1 / nB));
+    const z = se > 0 ? (pB - pA) / se : 0;
+    const pval = 2 * (1 - normalCDF(Math.abs(z)));
+    const conf = (1 - pval) * 100;
+    const sig = pval < 0.05;
+    let cls, verdict;
+    if (sig && pB > pA) { cls = 'win'; verdict = '✓ B wins — statistically significant'; }
+    else if (sig && pB < pA) { cls = 'lose'; verdict = '✗ B loses — significantly worse'; }
+    else { cls = 'flat'; verdict = '≈ Not yet significant — keep testing'; }
+    res.className = 'ab-result ' + cls;
+    res.innerHTML = '<div class="ab-verdict ' + cls + '">' + verdict + '</div>' +
+      '<div class="ab-detail">Variant B is <strong>' + (uplift >= 0 ? '+' : '') + uplift.toFixed(1) + '%</strong> vs control · ' +
+      'confidence <strong>' + conf.toFixed(1) + '%</strong> · p-value <strong>' + pval.toFixed(3) + '</strong>' +
+      (sig ? '' : '<br>You typically want 95% confidence (p &lt; 0.05) before calling it.') + '</div>';
+  }
+  renderAB();
+
+  /* ════════════════════════════════════════════════════════
+     TOOL 5 — AARRR FUNNEL / CONVERSION ANALYZER
+     ════════════════════════════════════════════════════════ */
+  const FUNNEL_EXAMPLE = [
+    { name: 'Acquisition (visited)', n: 10000 },
+    { name: 'Activation (signed up)', n: 3200 },
+    { name: 'Retention (came back)', n: 1450 },
+    { name: 'Revenue (paid)', n: 480 },
+    { name: 'Referral (invited)', n: 95 }
+  ];
+  let funnel = JSON.parse(JSON.stringify(FUNNEL_EXAMPLE));
+  function renderFunnel() {
+    const wrap = document.getElementById('funnel-rows');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    const top = funnel.length ? (parseFloat(funnel[0].n) || 0) : 0;
+    funnel.forEach((s, i) => {
+      const prev = i === 0 ? null : (parseFloat(funnel[i - 1].n) || 0);
+      const cur = parseFloat(s.n) || 0;
+      let conv = '—', convCls = 'first';
+      if (prev !== null) { const r = prev > 0 ? (cur / prev) * 100 : 0; conv = r.toFixed(1) + '%'; convCls = r < 50 ? 'drop' : 'ok'; }
+      const pctOfTop = top > 0 ? (cur / top) * 100 : 0;
+      const row = document.createElement('div');
+      row.className = 'funnel-row';
+      row.innerHTML =
+        '<input type="text" value="' + escapeHtml(s.name) + '" oninput="updateFunnel(' + i + ',\'name\',this.value)">' +
+        '<input type="number" min="0" value="' + cur + '" oninput="updateFunnel(' + i + ',\'n\',this.value)">' +
+        '<span class="funnel-conv ' + convCls + '">' + conv + '</span>';
+      wrap.appendChild(row);
+      const track = document.createElement('div');
+      track.className = 'funnel-bar-track';
+      track.innerHTML = '<div class="funnel-bar-fill" style="width:' + pctOfTop.toFixed(1) + '%"></div>';
+      wrap.appendChild(track);
+    });
+    renderFunnelSummary();
+  }
+  function renderFunnelSummary() {
+    const el = document.getElementById('funnel-summary');
+    if (funnel.length < 2) { el.innerHTML = 'Add at least two stages to analyze.'; return; }
+    const top = parseFloat(funnel[0].n) || 0, bottom = parseFloat(funnel[funnel.length - 1].n) || 0;
+    const overall = top > 0 ? (bottom / top) * 100 : 0;
+    // biggest drop
+    let worst = { idx: -1, rate: 101 };
+    for (let i = 1; i < funnel.length; i++) {
+      const prev = parseFloat(funnel[i - 1].n) || 0, cur = parseFloat(funnel[i].n) || 0;
+      const r = prev > 0 ? (cur / prev) * 100 : 0;
+      if (r < worst.rate) worst = { idx: i, rate: r };
+    }
+    let html = 'Overall conversion (top → bottom): <span class="big">' + overall.toFixed(1) + '%</span>';
+    if (worst.idx > 0) {
+      const lost = (100 - worst.rate).toFixed(0);
+      html += '<br><br>🚨 <strong>Biggest leak:</strong> the step into <strong>' + escapeHtml(funnel[worst.idx].name) +
+        '</strong> — you lose <strong>' + lost + '%</strong> of users here. Fix this stage first for the highest ROI.';
+    }
+    el.innerHTML = html;
+  }
+  function updateFunnel(i, f, v) { funnel[i][f] = (f === 'n') ? v : v; renderFunnel(); }
+  function addFunnelRow() { funnel.push({ name: 'New stage', n: 100 }); renderFunnel(); }
+  function resetFunnel() { funnel = JSON.parse(JSON.stringify(FUNNEL_EXAMPLE)); renderFunnel(); }
+  renderFunnel();
 
 </script>
 </body>
