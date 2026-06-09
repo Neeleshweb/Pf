@@ -928,6 +928,49 @@
       .cta-banner { padding: 2rem 1.2rem; }
       .modal-footer { flex-direction: column; }
     }
+      /* ===== Hamburger + mobile drawer ===== */
+    .hamburger { display: none; width: 42px; height: 42px; border: 1px solid var(--border2); background: var(--card); border-radius: 10px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; transition: background .2s, border-color .2s; }
+    .hamburger:hover { border-color: #444; }
+    .hamburger span { width: 18px; height: 2px; background: var(--white); border-radius: 2px; transition: transform .25s, opacity .2s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .mobile-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.6); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 400; }
+    .mobile-backdrop.open { opacity: 1; pointer-events: auto; }
+    .mobile-menu { position: fixed; top: 0; right: 0; height: 100%; width: min(330px, 86vw); background: var(--surface); border-left: 1px solid var(--border2); transform: translateX(102%); transition: transform .32s cubic-bezier(.4,0,.2,1); z-index: 401; display: flex; flex-direction: column; box-shadow: -24px 0 60px rgba(0,0,0,.55); }
+    .mobile-menu.open { transform: translateX(0); }
+    .mm-head { display: flex; align-items: center; justify-content: space-between; padding: 1.05rem 1.2rem; border-bottom: 1px solid var(--border); }
+    .mm-title { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2.5px; font-size: 1.25rem; color: var(--white); }
+    .mm-close { background: none; border: none; color: var(--muted); font-size: 1.15rem; cursor: pointer; width: 34px; height: 34px; border-radius: 8px; }
+    .mm-close:hover { background: var(--card); color: var(--white); }
+    .mm-body { padding: .55rem; overflow-y: auto; flex: 1; }
+    .mm-link { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .85rem 1rem; border-radius: 11px; color: var(--white); font-size: .95rem; cursor: pointer; transition: background .15s; }
+    .mm-link:hover, .mm-link:active { background: var(--card); }
+    .mm-caret { color: var(--muted); font-size: .7rem; transition: transform .25s; }
+    .mm-group.open > .mm-link .mm-caret { transform: rotate(180deg); }
+    .mm-sub { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+    .mm-group.open .mm-sub { max-height: 1600px; }
+    .mm-sub .mm-link { padding: .65rem 1rem .65rem 1.7rem; font-size: .85rem; color: var(--muted); }
+    .mm-sub .mm-link:hover { color: var(--white); }
+
+    /* ===== Modern search refresh (visual only) ===== */
+    .site-search { background: rgba(255,255,255,0.045); border-color: var(--border2); border-radius: 11px; }
+    .site-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,84,10,0.16); }
+    .search-ico { color: var(--muted); }
+    .search-drop { border-radius: 16px; border: 1px solid var(--border2); background: rgba(18,18,18,0.97); backdrop-filter: blur(16px); padding: .45rem; box-shadow: 0 24px 60px rgba(0,0,0,.62); }
+    .search-count { display: flex; align-items: center; gap: .45rem; font-size: .6rem; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); padding: .6rem .75rem; margin-bottom: .2rem; border-bottom: 1px solid var(--border); }
+    .search-count::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .search-item { align-items: flex-start; gap: .7rem; padding: .7rem .75rem; border-radius: 11px; position: relative; transition: background .15s; }
+    .search-item:hover, .search-item.kbd { background: var(--card2); }
+    .search-item.kbd { box-shadow: inset 2px 0 0 var(--accent); }
+    .search-snip { font-size: .82rem; color: #a9a39a; line-height: 1.5; }
+    .search-snip mark.snip { background: transparent; color: var(--accent2); font-weight: 600; }
+    .search-item-type { font-size: .55rem; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: var(--accent3); background: var(--accent3-dim); border: 1px solid rgba(59,130,246,0.28); padding: .2rem .5rem; border-radius: 100px; flex-shrink: 0; margin-top: .12rem; }
+    .search-empty { padding: 1.9rem 1rem 1.6rem; }
+    .search-empty svg { width: 84px; height: 84px; opacity: .92; }
+    .search-empty p { font-size: .85rem; color: var(--muted); }
+    mark.search-hl { background: linear-gradient(180deg, rgba(240,165,0,.92), rgba(232,84,10,.88)); color: #111; border-radius: 3px; padding: 0 2px; box-shadow: 0 0 0 1px rgba(240,165,0,.35); }
+    @media (max-width: 860px){ .hamburger { display: flex; } .nav-home { display: none; } }
   </style>
 </head>
 <body>
@@ -959,8 +1002,12 @@
       </svg>
       Home
     </a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
+
+<div class="mobile-backdrop" id="mobile-backdrop"></div>
+<aside class="mobile-menu" id="mobile-menu"><div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div><nav class="mm-body" id="mm-body"></nav></aside>
 
 <!-- ════════ HERO ════════ -->
 <section class="hero">
@@ -3240,6 +3287,35 @@
     document.addEventListener('click', function(e){ if(!e.target.closest('.nav-dd')) document.querySelectorAll('.nav-dd.open').forEach(function(x){x.classList.remove('open');}); });
   })();
 
+  /* ════════ MOBILE MENU (hamburger) ════════ */
+  (function(){
+    var body=document.getElementById('mm-body'), ham=document.getElementById('hamburger'), bd=document.getElementById('mobile-backdrop'), menu=document.getElementById('mobile-menu'), closeBtn=document.getElementById('mm-close');
+    if(!body || !ham || !menu) return;
+    function openMenu(){ menu.classList.add('open'); bd.classList.add('open'); ham.classList.add('open'); document.body.style.overflow='hidden'; }
+    function closeMenu(){ menu.classList.remove('open'); bd.classList.remove('open'); ham.classList.remove('open'); document.body.style.overflow=''; }
+    ham.addEventListener('click', function(){ menu.classList.contains('open') ? closeMenu() : openMenu(); });
+    bd.addEventListener('click', closeMenu);
+    closeBtn.addEventListener('click', closeMenu);
+    function smoothTo(el){ if(!el) return; var y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y, behavior:'smooth'}); }
+    function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn, 80); }; return a; }
+    function group(label, items){
+      var g=document.createElement('div'); g.className='mm-group';
+      var h=document.createElement('div'); h.className='mm-link'; h.innerHTML='<span>'+label+'</span><span class="mm-caret">▾</span>';
+      h.onclick=function(){ g.classList.toggle('open'); };
+      var sub=document.createElement('div'); sub.className='mm-sub';
+      items.forEach(function(it){ sub.appendChild(link(it.label, it.run)); });
+      g.appendChild(h); g.appendChild(sub); return g;
+    }
+    var TOOLS=[['RICE Prioritization Calculator','tool-rice'],['PM Readiness Self-Assessment','tool-assessment'],['User Story & Acceptance Criteria Builder','tool-userstory'],['A/B Test Significance Calculator','tool-abtest'],['Funnel & Conversion Analyzer (AARRR)','tool-funnel']];
+    body.appendChild(link('Templates', function(){ smoothTo(document.getElementById('templates')); }));
+    body.appendChild(group('Tools', TOOLS.map(function(t){ return {label:t[0], run:function(){ smoothTo(document.getElementById(t[1])); }}; })));
+    body.appendChild(group('Teardowns', TEARDOWNS.map(function(c,i){ return {label:c.emoji+'  '+c.app, run:function(){ tdCase=i; tdStep=0; renderTd(); smoothTo(document.getElementById('teardowns')); }}; })));
+    body.appendChild(group('Frameworks', FW_DATA.map(function(f,i){ return {label:f.abbr+' · '+f.name, run:function(){ smoothTo(document.getElementById('frameworks')); setTimeout(function(){ var el=document.getElementById('fw-card-'+i); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); }, 380); }}; })));
+    body.appendChild(link('PM Series', function(){ smoothTo(document.getElementById('series')); }));
+    body.appendChild(link('Coaching', function(){ smoothTo(document.getElementById('coaching')); }));
+    body.appendChild(link('Books', function(){ smoothTo(document.getElementById('books')); }));
+    body.appendChild(link('🏠  Home', function(){ window.location.href='https://neeleshpmtoolkit.com/index.html'; }));
+  })();
 </script>
 </body>
 </html>
