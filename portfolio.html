@@ -38,6 +38,24 @@
     .nav-actions { display: flex; align-items: center; gap: .7rem; }
     .nav-toolkit { font-size: .78rem; color: var(--muted); letter-spacing: .5px; transition: color .2s; }
     .nav-toolkit:hover { color: var(--white); }
+    /* search */
+    .search-wrap { position: relative; display: flex; align-items: center; }
+    .search-ico { position: absolute; left: .75rem; width: 14px; height: 14px; color: var(--muted); pointer-events: none; }
+    .site-search { width: 150px; background: var(--card); border: 1px solid var(--border2); border-radius: 100px; padding: .5rem .8rem .5rem 2.1rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .82rem; transition: width .2s, border-color .2s; }
+    .site-search::placeholder { color: var(--muted2); }
+    .site-search:focus { outline: none; width: 200px; border-color: var(--accent); }
+    .search-drop { position: absolute; top: 125%; right: 0; width: 300px; max-height: 380px; overflow-y: auto; background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius); padding: .4rem; display: none; z-index: 300; box-shadow: 0 14px 34px rgba(0,0,0,.55); }
+    .search-drop.open { display: block; }
+    .search-item { display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: .55rem .7rem; border-radius: 4px; cursor: pointer; }
+    .search-item:hover, .search-item.kbd { background: var(--card2); }
+    .search-item-label { font-size: .82rem; color: var(--white); line-height: 1.3; }
+    .search-item-type { font-size: .58rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); border: 1px solid var(--border2); padding: .12rem .45rem; border-radius: 100px; flex-shrink: 0; }
+    .search-empty { text-align: center; padding: 1.6rem 1rem 1.3rem; }
+    .search-empty svg { width: 92px; height: 92px; margin-bottom: .5rem; }
+    .search-empty p { font-size: .85rem; color: var(--muted); line-height: 1.5; }
+    .search-empty p b { color: var(--white); font-weight: 500; }
+    @media (max-width: 980px) { .site-search { width: 120px; } .site-search:focus { width: 160px; } }
+    @media (max-width: 860px) { .site-search { width: 110px; padding-left: 2rem; } .site-search:focus { width: 150px; } .search-drop { width: calc(100vw - 1.5rem); max-width: 340px; } .nav-actions { gap: .5rem; } }
     .nav-home { display: flex; align-items: center; gap: .45rem; font-size: .8rem; color: #fff; letter-spacing: .5px; background: var(--accent); padding: .5rem 1.1rem; border-radius: var(--radius); font-weight: 500; transition: opacity .2s, transform .15s; }
     .nav-home:hover { opacity: .9; transform: translateY(-1px); }
     .nav-home svg { width: 15px; height: 15px; }
@@ -242,6 +260,11 @@
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="nav-actions">
+    <div class="search-wrap">
+      <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="site-search" class="site-search" type="text" placeholder="Search…" autocomplete="off" aria-label="Search" />
+      <div class="search-drop" id="search-drop"></div>
+    </div>
     <a href="https://neeleshpmtoolkit.com/toolkit.html" class="nav-toolkit">PM Toolkit ↗</a>
     <a href="https://neeleshpmtoolkit.com/index.html" class="nav-home">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
@@ -483,7 +506,7 @@
 <div class="divider"></div>
 
 <!-- PHILOSOPHY -->
-<section class="section">
+<section class="section" id="philosophy">
   <div class="sec-eyebrow y">How I Work</div>
   <div class="sec-title">My Product <span class="y">Philosophy</span></div>
   <div class="phil-grid">
@@ -497,7 +520,7 @@
 <div class="divider"></div>
 
 <!-- EDUCATION + RECOGNITION -->
-<section class="section">
+<section class="section" id="education">
   <div class="two-col">
     <div>
       <div class="sec-eyebrow b">Education</div>
@@ -634,6 +657,41 @@
     });
   }, { rootMargin: '-40% 0px -55% 0px' });
   secs.forEach(s => secObserver.observe(s));
+
+  /* ════════ SITE SEARCH ════════ */
+  (function(){
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+    function smoothTo(id){ const el=document.getElementById(id); if(!el) return; const y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); }
+    const idx = [
+      {label:'About', type:'Section', go:'about'},
+      {label:'Experience', type:'Section', go:'experience'},
+      {label:'CoreLogic', type:'Experience', go:'experience'},
+      {label:'CGI', type:'Experience', go:'experience'},
+      {label:'Tata Consultancy (TCS)', type:'Experience', go:'experience'},
+      {label:'Featured Case Study', type:'Section', go:'case'},
+      {label:'Centralized Service Layer', type:'Case Study', go:'case'},
+      {label:'Skills & Competencies', type:'Section', go:'skills'},
+      {label:'Tools & Tech', type:'Skills', go:'skills'},
+      {label:'Product Philosophy', type:'Section', go:'philosophy'},
+      {label:'Education', type:'Section', go:'education'},
+      {label:'Recognition & Awards', type:'Section', go:'education'},
+      {label:'Books & Publications', type:'Section', go:'writing'},
+      {label:'Contact', type:'Section', go:'contact'},
+      {label:'Résumé / CV', type:'Download', go:'contact'}
+    ];
+    const input=document.getElementById('site-search'), drop=document.getElementById('search-drop');
+    let cur=-1, results=[];
+    function noResults(q){ return '<div class="search-empty"><svg viewBox="0 0 120 120" fill="none"><circle cx="50" cy="50" r="33" stroke="var(--border2)" stroke-width="5"/><line x1="73" y1="73" x2="101" y2="101" stroke="var(--border2)" stroke-width="6" stroke-linecap="round"/><circle cx="41" cy="46" r="3.2" fill="var(--muted)"/><circle cx="59" cy="46" r="3.2" fill="var(--muted)"/><path d="M41 63 Q50 54 59 63" stroke="var(--muted)" stroke-width="3" stroke-linecap="round" fill="none"/></svg><p>Sorry — we couldn\'t find <b>'+escapeHtml(q)+'</b>.<br>Try “experience”, “case study”, or “contact”.</p></div>'; }
+    function render(){ drop.innerHTML=''; if(results.length===0){ drop.innerHTML=noResults(input.value.trim()); drop.classList.add('open'); return; } results.forEach(function(it,n){ const d=document.createElement('div'); d.className='search-item'+(n===cur?' kbd':''); d.innerHTML='<span class="search-item-label">'+escapeHtml(it.label)+'</span><span class="search-item-type">'+it.type+'</span>'; d.onmousedown=function(e){ e.preventDefault(); smoothTo(it.go); close(); }; drop.appendChild(d); }); drop.classList.add('open'); }
+    function doSearch(){ const q=input.value.trim().toLowerCase(); if(q.length<3){ drop.classList.remove('open'); drop.innerHTML=''; results=[]; cur=-1; return; } results=idx.filter(function(it){ return it.label.toLowerCase().indexOf(q)!==-1; }).slice(0,10); cur=-1; render(); }
+    function close(){ drop.classList.remove('open'); input.value=''; results=[]; cur=-1; }
+    if(input){
+      input.addEventListener('input', doSearch);
+      input.addEventListener('focus', function(){ if(input.value.trim().length>=3) doSearch(); });
+      input.addEventListener('keydown', function(e){ if(!drop.classList.contains('open')) return; if(e.key==='ArrowDown'){ e.preventDefault(); cur=Math.min(cur+1,results.length-1); render(); } else if(e.key==='ArrowUp'){ e.preventDefault(); cur=Math.max(cur-1,0); render(); } else if(e.key==='Enter'){ if(cur>=0&&results[cur]){ smoothTo(results[cur].go); close(); } else if(results.length===1){ smoothTo(results[0].go); close(); } } else if(e.key==='Escape'){ close(); input.blur(); } });
+      document.addEventListener('click', function(e){ if(!e.target.closest('.search-wrap')) drop.classList.remove('open'); });
+    }
+  })();
 </script>
 </body>
 </html>
