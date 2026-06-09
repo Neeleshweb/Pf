@@ -31,6 +31,23 @@
     .nav-logo .logo-word { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: .2px; text-transform: none; color: var(--white); }
     .nav-logo .logo-word .ac { color: var(--accent); }
     .nav-links { display: flex; align-items: center; gap: .4rem; }
+    /* search */
+    .search-wrap { position: relative; display: flex; align-items: center; margin-right: .3rem; }
+    .search-ico { position: absolute; left: .75rem; width: 14px; height: 14px; color: var(--muted); pointer-events: none; }
+    .site-search { width: 150px; background: var(--card); border: 1px solid var(--border2); border-radius: 100px; padding: .5rem .8rem .5rem 2.1rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .82rem; transition: width .2s, border-color .2s; }
+    .site-search::placeholder { color: var(--muted2); }
+    .site-search:focus { outline: none; width: 200px; border-color: var(--accent); }
+    .search-drop { position: absolute; top: 125%; right: 0; width: 300px; max-height: 380px; overflow-y: auto; background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius); padding: .4rem; display: none; z-index: 300; box-shadow: 0 14px 34px rgba(0,0,0,.55); }
+    .search-drop.open { display: block; }
+    .search-item { display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: .55rem .7rem; border-radius: 4px; cursor: pointer; }
+    .search-item:hover, .search-item.kbd { background: var(--card2); }
+    .search-item-label { font-size: .82rem; color: var(--white); line-height: 1.3; }
+    .search-item-type { font-size: .58rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); border: 1px solid var(--border2); padding: .12rem .45rem; border-radius: 100px; flex-shrink: 0; }
+    .search-empty { text-align: center; padding: 1.6rem 1rem 1.3rem; }
+    .search-empty svg { width: 92px; height: 92px; margin-bottom: .5rem; }
+    .search-empty p { font-size: .85rem; color: var(--muted); line-height: 1.5; }
+    .search-empty p b { color: var(--white); font-weight: 500; }
+    @media (max-width: 600px) { .site-search { width: 110px; } .site-search:focus { width: 140px; } .search-drop { width: calc(100vw - 1.5rem); max-width: 320px; } }
     .nav-links a { font-size: .78rem; letter-spacing: .6px; text-transform: uppercase; color: var(--muted); padding: .5rem .9rem; border-radius: var(--radius); transition: color .2s, background .2s; }
     .nav-links a:hover { color: var(--white); background: var(--card); }
 
@@ -137,6 +154,11 @@
     <span class="logo-word">neeleshpm<span class="ac">toolkit</span></span>
   </div>
   <div class="nav-links">
+    <div class="search-wrap">
+      <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="site-search" class="site-search" type="text" placeholder="Search…" autocomplete="off" aria-label="Search" />
+      <div class="search-drop" id="search-drop"></div>
+    </div>
     <a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio</a>
     <a href="https://neeleshpmtoolkit.com/toolkit.html">Toolkit</a>
   </div>
@@ -253,6 +275,40 @@
   }
   const io = new IntersectionObserver((es,o)=>es.forEach(e=>{ if(e.isIntersecting){ animateCount(e.target); o.unobserve(e.target);} }),{threshold:.5});
   document.querySelectorAll('.diff-num[data-target]').forEach(el=>io.observe(el));
+
+  /* ════════ SITE SEARCH (hub → deep links) ════════ */
+  (function(){
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+    const P='https://neeleshpmtoolkit.com/portfolio.html', T='https://neeleshpmtoolkit.com/toolkit.html';
+    const idx = [
+      {label:'Portfolio (for recruiters)', type:'Page', url:P},
+      {label:'Experience', type:'Portfolio', url:P+'#experience'},
+      {label:'Featured Case Study', type:'Portfolio', url:P+'#case'},
+      {label:'Skills & Competencies', type:'Portfolio', url:P+'#skills'},
+      {label:'Résumé / Contact', type:'Portfolio', url:P+'#contact'},
+      {label:'PM Toolkit (for learners)', type:'Page', url:T},
+      {label:'Templates', type:'Toolkit', url:T+'#templates'},
+      {label:'Interactive Tools', type:'Toolkit', url:T+'#tools'},
+      {label:'RICE Calculator', type:'Toolkit', url:T+'#tools'},
+      {label:'PM Self-Assessment', type:'Toolkit', url:T+'#tools'},
+      {label:'Product Teardowns', type:'Toolkit', url:T+'#teardowns'},
+      {label:'Frameworks Cheatsheet', type:'Toolkit', url:T+'#frameworks'},
+      {label:'PM Series', type:'Toolkit', url:T+'#series'},
+      {label:'Coaching', type:'Toolkit', url:T+'#coaching'}
+    ];
+    const input=document.getElementById('site-search'), drop=document.getElementById('search-drop');
+    let cur=-1, results=[];
+    function noResults(q){ return '<div class="search-empty"><svg viewBox="0 0 120 120" fill="none"><circle cx="50" cy="50" r="33" stroke="var(--border2)" stroke-width="5"/><line x1="73" y1="73" x2="101" y2="101" stroke="var(--border2)" stroke-width="6" stroke-linecap="round"/><circle cx="41" cy="46" r="3.2" fill="var(--muted)"/><circle cx="59" cy="46" r="3.2" fill="var(--muted)"/><path d="M41 63 Q50 54 59 63" stroke="var(--muted)" stroke-width="3" stroke-linecap="round" fill="none"/></svg><p>Sorry — we couldn\'t find <b>'+escapeHtml(q)+'</b>.<br>Try “portfolio”, “teardowns”, or “templates”.</p></div>'; }
+    function go(url){ window.location.href=url; }
+    function render(){ drop.innerHTML=''; if(results.length===0){ drop.innerHTML=noResults(input.value.trim()); drop.classList.add('open'); return; } results.forEach(function(it,n){ const d=document.createElement('div'); d.className='search-item'+(n===cur?' kbd':''); d.innerHTML='<span class="search-item-label">'+escapeHtml(it.label)+'</span><span class="search-item-type">'+it.type+'</span>'; d.onmousedown=function(e){ e.preventDefault(); go(it.url); }; drop.appendChild(d); }); drop.classList.add('open'); }
+    function doSearch(){ const q=input.value.trim().toLowerCase(); if(q.length<3){ drop.classList.remove('open'); drop.innerHTML=''; results=[]; cur=-1; return; } results=idx.filter(function(it){ return it.label.toLowerCase().indexOf(q)!==-1; }).slice(0,10); cur=-1; render(); }
+    if(input){
+      input.addEventListener('input', doSearch);
+      input.addEventListener('focus', function(){ if(input.value.trim().length>=3) doSearch(); });
+      input.addEventListener('keydown', function(e){ if(!drop.classList.contains('open')) return; if(e.key==='ArrowDown'){ e.preventDefault(); cur=Math.min(cur+1,results.length-1); render(); } else if(e.key==='ArrowUp'){ e.preventDefault(); cur=Math.max(cur-1,0); render(); } else if(e.key==='Enter'){ if(cur>=0&&results[cur]) go(results[cur].url); else if(results.length===1) go(results[0].url); } else if(e.key==='Escape'){ drop.classList.remove('open'); input.blur(); } });
+      document.addEventListener('click', function(e){ if(!e.target.closest('.search-wrap')) drop.classList.remove('open'); });
+    }
+  })();
 </script>
 </body>
 </html>
