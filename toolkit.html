@@ -399,24 +399,44 @@
     /* ─── FRAMEWORKS SECTION ─── */
     .fw-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-      gap: .8rem; background: transparent; margin-top: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem; background: transparent; margin-top: 1.5rem;
+      align-items: start;
     }
     .fw-card {
       background: var(--card); padding: 1.4rem;
       border: 1px solid var(--border); border-radius: var(--radius);
-      transition: background .2s, border-color .2s, transform .15s;
+      transition: background .2s, border-color .2s, transform .15s, box-shadow .2s;
+      display: flex; flex-direction: column;
     }
     .fw-card:hover { background: var(--card2); border-color: var(--border2); transform: translateY(-2px); }
+    .fw-card.topfit { border-color: var(--accent2); box-shadow: 0 0 0 1px rgba(240,165,0,0.25); }
+    .fw-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; }
     .fw-abbr {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 2rem; letter-spacing: 1px;
-      color: var(--accent); margin-bottom: .4rem;
+      color: var(--accent); margin-bottom: .4rem; line-height: 1;
     }
     .fw-abbr.y { color: var(--accent2); }
     .fw-abbr.b { color: var(--accent3); }
+    .fw-badge { flex-shrink: 0; font-size: .58rem; letter-spacing: .5px; text-transform: uppercase; font-weight: 600; color: #111; background: var(--accent2); padding: .25rem .55rem; border-radius: 100px; margin-top: .25rem; white-space: nowrap; }
     .fw-name { font-size: .85rem; font-weight: 500; margin-bottom: .3rem; }
     .fw-desc { font-size: .78rem; color: var(--muted); line-height: 1.55; }
+    .fw-chips { display: flex; flex-wrap: wrap; gap: .3rem; margin-top: .7rem; }
+    .fw-chip { font-size: .6rem; padding: .22rem .5rem; border-radius: 4px; background: var(--surface); border: 1px solid var(--border2); color: #b5b0a8; letter-spacing: .2px; }
+    .fw-panel { margin-top: .9rem; padding-top: .9rem; border-top: 1px dashed var(--border2); }
+    .fw-panel-label { font-size: .62rem; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: .4rem; }
+    .fw-panel.general .fw-panel-label { color: var(--accent2); }
+    .fw-panel.industry .fw-panel-label { color: var(--accent3); }
+    .fw-panel-text { font-size: .8rem; color: #c2bdb4; line-height: 1.6; }
+    .fw-panel-text b { color: #fff; font-weight: 500; }
+    .fw-bestnote { margin-top: .6rem; font-size: .76rem; color: var(--accent2); line-height: 1.5; }
+    /* industry selector */
+    .fw-industry-bar { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .6rem; }
+    .fw-ind-pill { display: flex; align-items: center; gap: .4rem; background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: .5rem 1rem; border-radius: 100px; font-size: .82rem; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all .2s; }
+    .fw-ind-pill:hover { border-color: var(--border2); color: var(--white); }
+    .fw-ind-pill.active { background: var(--white); border-color: var(--white); color: var(--black); font-weight: 500; }
+    .fw-hint { font-size: .78rem; color: var(--muted2); margin: 0 0 .5rem; line-height: 1.6; }
 
     /* ─── INTERACTIVE TOOLS ─── */
     .tool-card {
@@ -1559,23 +1579,12 @@
 <section class="section" id="frameworks">
   <div class="sec-eyebrow y">Quick Reference</div>
   <div class="sec-title">PM <span class="y">Frameworks</span> Cheatsheet</div>
-  <p style="color:var(--muted);font-size:.9rem;max-width:600px;margin-bottom:2rem;line-height:1.7">
-    The frameworks every PM should have memorized — with a one-line description of what each does and when to use it.
+  <p style="color:var(--muted);font-size:.9rem;max-width:660px;margin-bottom:1.5rem;line-height:1.7">
+    Every PM should know these — but a framework means little until it meets your domain. <strong style="color:var(--white)">Pick your industry</strong> and watch each one re-tool itself for how you actually work, with a note on which framework fits your world best and why.
   </p>
-  <div class="fw-grid">
-    <div class="fw-card"><div class="fw-abbr">RICE</div><div class="fw-name">Reach · Impact · Confidence · Effort</div><div class="fw-desc">Prioritization scoring model. Cuts through opinion-based backlog debates.</div></div>
-    <div class="fw-card"><div class="fw-abbr o">CIRCLES</div><div class="fw-name">PM Product Design Framework</div><div class="fw-desc">Comprehend, Identify, Report, Cut, List, Evaluate, Summarize. Ace product sense interviews.</div></div>
-    <div class="fw-card"><div class="fw-abbr b">JTBD</div><div class="fw-name">Jobs To Be Done</div><div class="fw-desc">Understand the real job users hire your product for. Surfaces motivations, not features.</div></div>
-    <div class="fw-card"><div class="fw-abbr">OKR</div><div class="fw-name">Objectives & Key Results</div><div class="fw-desc">Tie your product work to company goals. The bridge between strategy and execution.</div></div>
-    <div class="fw-card"><div class="fw-abbr y">HEART</div><div class="fw-name">Happiness·Engagement·Adoption·Retention·Task success</div><div class="fw-desc">Google's user-centered metrics framework. Measure UX quality at scale.</div></div>
-    <div class="fw-card"><div class="fw-abbr b">ICE</div><div class="fw-name">Impact · Confidence · Ease</div><div class="fw-desc">Lightweight prioritization for growth experiments. Fast, opinionated, useful.</div></div>
-    <div class="fw-card"><div class="fw-abbr o">5 WHYs</div><div class="fw-name">Root Cause Analysis</div><div class="fw-desc">Ask "why" 5 times to reach the real problem behind any customer complaint or metric drop.</div></div>
-    <div class="fw-card"><div class="fw-abbr">SWOT</div><div class="fw-name">Strengths·Weaknesses·Opportunities·Threats</div><div class="fw-desc">Strategic overview of a product or company in the competitive landscape.</div></div>
-    <div class="fw-card"><div class="fw-abbr y">KANO</div><div class="fw-name">Kano Model</div><div class="fw-desc">Classify features as Basic, Performance, or Delighters. Set expectations vs delight the right way.</div></div>
-    <div class="fw-card"><div class="fw-abbr b">STAR</div><div class="fw-name">Situation · Task · Action · Result</div><div class="fw-desc">Behavioral interview storytelling format. Makes your experience sound like a highlight reel.</div></div>
-    <div class="fw-card"><div class="fw-abbr">MoSCoW</div><div class="fw-name">Must / Should / Could / Won't</div><div class="fw-desc">Simple scope management for sprint and release planning. Fast and clear for cross-functional teams.</div></div>
-    <div class="fw-card"><div class="fw-abbr o">HOOK</div><div class="fw-name">Nir Eyal's Habit Loop</div><div class="fw-desc">Trigger → Action → Variable Reward → Investment. Build products that form habits, not dependencies.</div></div>
-  </div>
+  <div class="fw-industry-bar" id="fw-industry-bar"></div>
+  <p class="fw-hint" id="fw-hint"></p>
+  <div class="fw-grid" id="fw-grid"></div>
 </section>
 
 <div class="divider"></div>
@@ -2912,6 +2921,195 @@
   function addFunnelRow() { funnel.push({ name: 'New stage', n: 100 }); renderFunnel(); }
   function resetFunnel() { funnel = JSON.parse(JSON.stringify(FUNNEL_EXAMPLE)); renderFunnel(); }
   renderFunnel();
+
+  /* ════════════════════════════════════════════════════════
+     FRAMEWORKS CHEATSHEET — industry-interactive
+     Pick an industry and every framework re-tools itself,
+     with a specific best-fit recommendation per framework.
+     ════════════════════════════════════════════════════════ */
+  const FW_INDUSTRIES = [
+    { k:'general', l:'General', e:'🎯' },
+    { k:'realestate', l:'Real Estate', e:'🏠' },
+    { k:'healthcare', l:'Healthcare', e:'🏥' },
+    { k:'fintech', l:'Fintech', e:'💳' },
+    { k:'cmms', l:'Maintenance (CMMS)', e:'🔧' },
+    { k:'edtech', l:'EdTech', e:'🎓' },
+    { k:'ecommerce', l:'E-commerce', e:'🛒' }
+  ];
+  const FW_LABEL = {};
+  FW_INDUSTRIES.forEach(i => { FW_LABEL[i.k] = i.l; });
+
+  const FW_DATA = [
+    { abbr:'RICE', cls:'', name:'Reach · Impact · Confidence · Effort', desc:'Prioritization scoring model. Cuts through opinion-based backlog debates.',
+      chips:['(Reach × Impact × Confidence) ÷ Effort'],
+      best:'ecommerce', bestWhy:'High traffic makes Reach measurable down to the session, and Impact maps straight to conversion and average order value — so the scores are unusually trustworthy and you can let RICE drive the roadmap aggressively.',
+      custom:{
+        realestate:'Reach becomes agents or listings touched per quarter (say, 8,000 MLS agents), not raw web traffic. Weight Impact toward deal-cycle outcomes — a feature that shortens time-to-close beats a cosmetic filter — and lower Confidence for buyer-side bets, since purchase cycles are long and seasonal.',
+        healthcare:'Segment Reach by clinical role: a feature reaching 500 physicians can outweigh one reaching 50,000 patients. Fold regulatory work into Effort — HIPAA review, clinical validation and audit trails routinely double an engineering estimate.',
+        fintech:'Score Impact in basis points of fraud loss or funds moved, not gut feel. Drop Confidence sharply for anything touching the ledger or compliance until risk review clears it, and add an explicit security tax to every Effort estimate.',
+        cmms:'Reach = technicians or assets affected (e.g. 1,200 work orders a month). Impact is highest for features that cut downtime or mean-time-to-repair — quantify it in hours of uptime recovered. Effort climbs for offline and rugged-device support.',
+        edtech:'Split Reach across students, teachers and admins — they value different things. Weight Impact toward learning outcomes and completion over raw engagement, and remember Confidence is seasonal: validate before the back-to-school window, not mid-semester.',
+        ecommerce:'Reach maps to monthly sessions or affected SKUs; Impact ties directly to conversion rate and AOV. With high traffic you can A/B test fast, so Confidence is often genuinely high — let RICE run the backlog here.'
+      } },
+    { abbr:'CIRCLES', cls:'o', name:'PM Product-Design Framework', desc:'Comprehend, Identify, Report, Cut, List, Evaluate, Summarize. Aces product-sense interviews.',
+      best:'edtech', bestWhy:'Its "Identify the customer" step forces you to separate student, teacher, parent and admin before designing anything — the exact disentangling EdTech teams most often skip and later regret.',
+      custom:{
+        realestate:'At "Identify the customer", always split the agent (who buys the software) from the consumer (the home buyer or seller) — they have opposing needs. At "Cut", prioritize the agent persona; they are the one who renews the contract.',
+        healthcare:'"Comprehend the situation" must load the regulatory and clinical-safety context up front, and "List solutions" should be filtered through "will this survive clinical governance?" before you let creativity run.',
+        fintech:'Spend extra time at "Report customer needs" on trust and security — the unspoken number-one need is "do not lose my money." Any solution that ignores it fails the "Evaluate trade-offs" step instantly.',
+        cmms:'The customer at "Identify" is rarely the buyer: a maintenance manager purchases, but the technician on the floor uses it. Cut toward the technician\'s reality — gloves on, poor signal, noisy plant.',
+        edtech:'"Identify the customer" is the make-or-break step here: student, teacher, parent and administrator are four customers with conflicting goals. CIRCLES shines because it forces you to pick one before you design.',
+        ecommerce:'Move fast through Comprehend and Identify (the shopper is well understood) and spend your time at "List solutions" and "Evaluate" — in commerce the differentiation lives in funnel mechanics, not user discovery.'
+      } },
+    { abbr:'JTBD', cls:'b', name:'Jobs To Be Done', desc:'Uncover the real job users hire your product for. Surfaces motivations, not features.',
+      best:'realestate', bestWhy:'An agent does not hire your software to "manage listings" — they hire it to "win the next listing and look like the neighbourhood expert." JTBD surfaces that reputation job and reshapes the roadmap toward instant CMAs and branded reports.',
+      custom:{
+        realestate:'The job is not "list a property" — it is "make me look like the local market expert so I win the listing." Reframing features around the agent\'s reputation changes what you build: branded reports, one-tap CMAs, social-ready collateral.',
+        healthcare:'Jobs split into functional ("document this visit in under two minutes") and emotional ("do not let me miss something that harms a patient"). The safety job usually dominates adoption — design for it first.',
+        fintech:'Users hire the product to feel in control of their money and avoid anxiety, not to "view a dashboard." The job is as emotional as functional — surfacing "you are on track" often beats adding another chart.',
+        cmms:'A crisp functional job: "restore the asset to working order with the least downtime." Map every feature to a step in it (diagnose → find part → fix → log) and cut anything that does not move that job forward.',
+        edtech:'The student\'s job ("understand and pass this") differs from the teacher\'s ("save grading time and spot who is struggling"). Write a separate job statement per persona or you will build for the wrong one.',
+        ecommerce:'The job is usually "help me decide quickly and trust the purchase." Reviews, sizing guides and the returns policy are hired to do the trust job — treat them as core, not peripheral.'
+      } },
+    { abbr:'OKR', cls:'', name:'Objectives & Key Results', desc:'Tie product work to company goals. The bridge between strategy and execution.',
+      chips:['1 Objective','3–5 Key Results'],
+      best:'fintech', bestWhy:'Fintech KRs can be tied to hard, audited numbers — funds processed, fraud in basis points, approval rates — so OKRs sidestep the vanity-metric trap that weakens them in softer domains.',
+      custom:{
+        realestate:'Orient Objectives around the deal funnel and use leading-indicator KRs like "listings created" and "time-to-close," because revenue lags by months. Avoid quarterly-revenue KRs — the cycle is simply too long to read.',
+        healthcare:'Pair every growth KR with a safety guardrail KR — e.g. "cut charting time 30% with zero increase in documentation errors." In healthcare an unguarded efficiency objective is genuinely dangerous.',
+        fintech:'KRs can be precise and auditable: "lift loan-approval rate to 72% while holding default rate at or below 3%." Use paired growth-versus-risk metrics so a team cannot game one at the other\'s expense.',
+        cmms:'Objectives target operational reliability; KRs are MTTR, uptime % and PM-compliance rate. These are already tracked on the plant floor, so your OKRs plug straight into existing dashboards.',
+        edtech:'Resist engagement-only KRs. Anchor Objectives to learning outcomes — "raise course completion to 60%" or "improve assessment scores 10%" — and treat time-in-app as a guardrail, never the goal.',
+        ecommerce:'KRs map cleanly onto the funnel: conversion rate, AOV, repeat-purchase rate. The risk is over-optimizing one stage, so set KRs across the whole funnel to avoid a local maximum.'
+      } },
+    { abbr:'HEART', cls:'y', name:'Happiness · Engagement · Adoption · Retention · Task success', desc:'Google\'s user-centred metrics framework. Measures UX quality at scale.',
+      chips:['Happiness','Engagement','Adoption','Retention','Task success'],
+      best:'edtech', bestWhy:'All five letters map cleanly to learning — Happiness as student confidence, Task success as lessons completed, Retention as re-enrollment — and the Adoption-versus-Retention split mirrors the semester lifecycle.',
+      custom:{
+        realestate:'Adoption and Task success matter most — agents are busy and churn fast. Define Task success as "create a branded listing in under three minutes." Happiness surveys are noisy with this audience; lean on behaviour instead.',
+        healthcare:'Reframe Happiness as reduced clinician burden — clicks per encounter, charting time — not delight. Task success is safety-critical: a failed task can mean a missed diagnosis, so weight it the heaviest of the five.',
+        fintech:'Retention is the headline — trust compounds over time. Track Happiness through trust and security NPS, and define Task success as completing a transfer without ever contacting support.',
+        cmms:'Task success dominates: did the technician close the work order correctly? Engagement is a trap here — more time in the app usually means the fix was hard. Optimize for fast, successful completion, not minutes spent.',
+        edtech:'The cleanest HEART fit of any industry: Happiness = student confidence, Engagement = active learning (not idle time), Adoption = activated classrooms, Retention = re-enrollment, Task success = lessons and assessments completed.',
+        ecommerce:'Engagement and Task success drive revenue, where Task success = a completed checkout with no errors. Watch Retention through repeat purchase and Happiness through post-purchase NPS and return rates.'
+      } },
+    { abbr:'ICE', cls:'b', name:'Impact · Confidence · Ease', desc:'Lightweight prioritization for growth experiments. Fast, opinionated, useful.',
+      best:'ecommerce', bestWhy:'You can validate an ICE bet in days when traffic is high, so its speed-over-rigor design fits the constant funnel-experiment cadence of commerce better than anywhere else.',
+      custom:{
+        realestate:'Lower your Confidence scores by default — real-estate experiments read slowly thanks to long, seasonal cycles. Favour Ease-heavy bets you can ship between selling seasons.',
+        healthcare:'Ease is rarely high — even small changes need validation. Use ICE only for non-clinical internal tooling; switch to RICE the moment anything becomes patient-facing.',
+        fintech:'Discount Confidence for anything touching money or compliance. ICE works best for marketing and onboarding experiments, not core ledger changes.',
+        cmms:'Great for quick technician-UX wins (barcode scan, offline mode). Ease is high for UI tweaks and low for hardware or IoT integrations — score it honestly.',
+        edtech:'Use ICE for engagement experiments, but sanity-check Impact against learning outcomes rather than clicks: an "easy, high-impact" badge feature may not move comprehension at all.',
+        ecommerce:'ICE\'s natural home — keep a constant queue of funnel experiments (PDP layout, checkout copy) and let high traffic resolve Confidence fast.'
+      } },
+    { abbr:'5 WHYs', cls:'o', name:'Root-Cause Analysis', desc:'Ask "why" five times to reach the real problem behind a complaint or metric drop.',
+      best:'cmms', bestWhy:'It was invented on the Toyota line for exactly this — tracing a machine failure back through the worn part and the missed lubrication to the PM schedule that never triggered. Each "why" lands on a concrete, fixable cause.',
+      custom:{
+        realestate:'Apply it to funnel drop-off: "agents stopped creating listings → the editor is slow → it reloads images on every keystroke → no debounce → the spec missed mobile data limits." You reach a fixable cause, not "agents do not like it."',
+        healthcare:'Pairs with the formal incident review that is already mandated. Use it on safety events — but document rigorously, because your 5 Whys may become part of a compliance record.',
+        fintech:'Run it on failed transactions or fraud incidents, and keep asking past the technical layer: the true root cause is often a risk rule or policy, not a line of code.',
+        cmms:'The textbook use case: "pump failed → bearing seized → no lubrication → PM task skipped → the schedule never triggered in the system." Each why points to a concrete fix, often inside your own scheduling logic.',
+        edtech:'Apply it to course drop-off: "students quit module 3 → the quiz is too hard → it tests content never introduced → the lesson order is wrong." It surfaces curriculum bugs, not just UX bugs.',
+        ecommerce:'Run it on cart abandonment: "checkout drop → shipping-cost shock → cost shown only at the final step → no early estimator." Five whys turns a vague metric into a precise fix.'
+      } },
+    { abbr:'SWOT', cls:'', name:'Strengths · Weaknesses · Opportunities · Threats', desc:'A strategic overview of a product or company in its competitive landscape.',
+      best:'fintech', bestWhy:'The Threats quadrant is uniquely decisive here — shifting regulation, entrenched incumbents and fraud vectors genuinely steer strategy, so a fintech SWOT drives real decisions instead of producing a generic four-box.',
+      custom:{
+        realestate:'Threats are usually portals and aggregators disintermediating the agent; Opportunities cluster around proprietary local and MLS data. Frame Strengths around the listing data only you hold.',
+        healthcare:'Weaknesses and Threats are dominated by compliance burden and EHR-interoperability debt. Opportunities often hide in workflow time-savings that competitors overlook.',
+        fintech:'Threats = regulatory shifts, incumbents and fraud; Strengths = trust, licences and security posture. Let the Threat quadrant drive the roadmap more than Opportunities — it is where fintech strategy is won or lost.',
+        cmms:'Opportunities cluster around IoT sensors and predictive maintenance; Threats are entrenched ERP suites that bundle a basic CMMS for free. Your Strength is the depth of your asset and work-order workflow.',
+        edtech:'Threats include free alternatives and glacial district procurement; Opportunities are outcome data and tight LMS integrations. Strength is often pedagogy that generalists cannot copy quickly.',
+        ecommerce:'Threats are marketplaces like Amazon and rising CAC; Strengths are brand and first-party data; Opportunities live in retention and subscription. It moves fast — revisit this SWOT often.'
+      } },
+    { abbr:'KANO', cls:'y', name:'Kano Model', desc:'Classifies features as Basics, Performance, or Delighters. Sets expectations vs delight the right way.',
+      chips:['Basic','Performance','Delighter'],
+      best:'healthcare', bestWhy:'The line between a Basic (safety, accuracy, compliance) and a Delighter is stark and non-negotiable; Kano forces teams to fund the unglamorous Basics that cause real harm — and instant churn — if they are missing.',
+      custom:{
+        realestate:'Basics: accurate listing data, fast search. Performance: speed of CMA and report generation. Delighters: AI-written descriptions, AR walkthroughs. Agents forgive a missing delighter but abandon you over wrong data — a Basic.',
+        healthcare:'Basics are safety and compliance, and they are invisible until violated, then catastrophic. Most roadmap effort should sit on Basics and Performance; delighters come last. Kano keeps the team honest about that order.',
+        fintech:'Security and accuracy are Basics — table stakes, zero tolerance. Performance is the speed of transfers and approvals. Delighters are insights, round-ups, goal tracking. Never trade a Basic for a Delighter.',
+        cmms:'Basics: reliable work-order logging, offline access. Performance: how fast you find an asset or part. Delighters: predictive alerts. On the plant floor a flashy delighter cannot rescue a Basic that fails mid-shift.',
+        edtech:'Basics: content loads, grades save. Performance: clarity and pacing. Delighters: gamification, streaks. The classic EdTech mistake is over-investing in delighters (badges) while a Basic (reliable grade sync) wobbles.',
+        ecommerce:'Basics: accurate stock, working checkout. Performance: page speed, search relevance. Delighters: personalization, one-tap reorder. Note that above a threshold, speed behaves less like Performance and more like a Basic.'
+      } },
+    { abbr:'STAR', cls:'b', name:'Situation · Task · Action · Result', desc:'A behavioural-interview storytelling format. Makes your experience sound like a highlight reel.',
+      best:'realestate', bestWhy:'Interviews for property-tech roles reward domain proof — a STAR "Result" framed as a deal-cycle metric ("cut time-to-close 18%") signals you understand the business, not just the UI.',
+      custom:{
+        realestate:'Make the Result a deal-cycle metric — "cut time-to-close 18%" lands harder than "improved the UX." Situations about aligning agents against consumer needs show real domain savvy.',
+        healthcare:'Choose Situations that show you balanced speed with safety, and let the Result pair an efficiency gain with a "zero adverse events / passed audit" clause.',
+        fintech:'Frame the Result as growth achieved inside a risk constraint — "+22% approvals, default rate flat." Interviewers reward candidates who refuse to trade safety for speed.',
+        cmms:'Pick Situations involving frontline or technician adoption, and put the Result in uptime or MTTR — it shows you grasp the operational stakes, not just the software.',
+        edtech:'Anchor the Result to a learning outcome (completion, scores), not engagement. Situations about reconciling teacher and student needs read as mature.',
+        ecommerce:'Quantify the Result in conversion, AOV or revenue. Fast, metric-dense STAR stories match the data-driven culture of commerce teams.'
+      } },
+    { abbr:'MoSCoW', cls:'', name:'Must / Should / Could / Won\'t', desc:'Simple scope management for sprint and release planning. Fast and clear for cross-functional teams.',
+      chips:['Must','Should','Could','Won\'t'],
+      best:'healthcare', bestWhy:'Healthcare has true, legally non-negotiable "Musts" — HIPAA fields, audit logs — and MoSCoW\'s rigid Must category acts as a firewall protecting them from being traded away in sprint negotiation.',
+      custom:{
+        realestate:'"Musts" are accurate data and MLS-compliance rules; seasonal tools (open-house features) are "Shoulds" timed to the selling season. Park agent vanity requests firmly in "Could."',
+        healthcare:'Reserve "Must" for compliance and safety items only — they are not negotiable in planning. This is MoSCoW\'s strongest use: a firewall around regulatory requirements.',
+        fintech:'Compliance and security controls are always "Must"; everything customer-facing competes for "Should" and "Could." Make the "Won\'t this release" explicit to manage risk-review expectations.',
+        cmms:'"Must" = work-order logging and offline reliability; "Won\'t-yet" = fancy analytics. On the plant floor an unreliable Must is worse than ten missing Coulds.',
+        edtech:'"Must" = grade integrity and accessibility (often legally required); "Could" = gamification. Tie the release to the academic calendar — a missed Must before term start is fatal.',
+        ecommerce:'"Must" = checkout and payment reliability through peak; freeze the "Won\'t" list aggressively before Black Friday. Scope discipline matters most when traffic spikes.'
+      } },
+    { abbr:'HOOK', cls:'o', name:'Nir Eyal\'s Habit Loop', desc:'Trigger → Action → Variable Reward → Investment. Builds products that form habits.',
+      chips:['Trigger','Action','Variable Reward','Investment'],
+      best:'edtech', bestWhy:'The variable-reward loop is what converts "I should study" into a daily streak — and daily-practice retention is the exact problem learning products live or die by.',
+      custom:{
+        realestate:'Triggers are external — new-lead alerts, price-drop notifications. The Investment is the agent\'s saved searches and branded templates: the more they configure, the stickier the tool. Use it sparingly, though — B2B users resent manipulative loops.',
+        healthcare:'Apply the Hook to patients (medication or exercise adherence), never to clinicians — manufacturing "engagement" for a busy doctor is harmful. For patients the variable reward is progress and encouragement; the investment is logged health data.',
+        fintech:'Trigger = a balance or spending alert; Variable Reward = round-up savings and "you saved $X" surprises; Investment = linked accounts and goals. Keep the rewards honest — dark-pattern loops invite regulatory scrutiny.',
+        cmms:'Largely does not apply: technicians use the tool because the job requires it, not from a habit loop. Reserve Hook thinking for optional behaviours like proactive inspections (trigger: a scheduled nudge; investment: inspection history).',
+        edtech:'The canonical fit: Trigger (reminder) → Action (one lesson) → Variable Reward (XP, unpredictable praise) → Investment (streak, progress, saved work). This loop is why practice products retain — just balance the habit with genuine learning.',
+        ecommerce:'Trigger = restock, price-drop and abandoned-cart emails; Variable Reward = deals and recommendations; Investment = wishlists, saved payment, loyalty points. A strong fit, but over-triggering drives unsubscribes.'
+      } }
+  ];
+
+  let fwInd = 'general';
+  function renderFwTabs() {
+    const bar = document.getElementById('fw-industry-bar'); if (!bar) return;
+    bar.innerHTML = '';
+    FW_INDUSTRIES.forEach(i => {
+      const b = document.createElement('button');
+      b.className = 'fw-ind-pill' + (i.k === fwInd ? ' active' : '');
+      b.innerHTML = '<span>' + i.e + '</span> ' + i.l;
+      b.onclick = () => { fwInd = i.k; renderFwTabs(); renderFwGrid(); };
+      bar.appendChild(b);
+    });
+  }
+  function renderFwGrid() {
+    const grid = document.getElementById('fw-grid'); if (!grid) return;
+    const hint = document.getElementById('fw-hint');
+    if (fwInd === 'general') {
+      hint.innerHTML = '💡 Each card shows the one industry it fits best, and exactly why. <b style="color:#c2bdb4">Tap an industry above</b> to re-tool all 12 frameworks for your world.';
+    } else {
+      hint.innerHTML = 'Showing how each framework adapts for <b style="color:#c2bdb4">' + FW_LABEL[fwInd] + '</b>. The ⭐ marks the frameworks best suited to ' + FW_LABEL[fwInd] + '.';
+    }
+    grid.innerHTML = '';
+    FW_DATA.forEach(f => {
+      const isTop = (fwInd !== 'general' && f.best === fwInd);
+      const card = document.createElement('div');
+      card.className = 'fw-card' + (isTop ? ' topfit' : '');
+      let html = '<div class="fw-card-head"><div class="fw-abbr ' + f.cls + '">' + f.abbr + '</div>' + (isTop ? '<span class="fw-badge">⭐ Top pick</span>' : '') + '</div>';
+      html += '<div class="fw-name">' + f.name + '</div>';
+      html += '<div class="fw-desc">' + f.desc + '</div>';
+      if (f.chips) html += '<div class="fw-chips">' + f.chips.map(c => '<span class="fw-chip">' + c + '</span>').join('') + '</div>';
+      if (fwInd === 'general') {
+        html += '<div class="fw-panel general"><div class="fw-panel-label">🎯 Best suited for ' + FW_LABEL[f.best] + '</div><div class="fw-panel-text">' + f.bestWhy + '</div></div>';
+      } else {
+        html += '<div class="fw-panel industry"><div class="fw-panel-label">In ' + FW_LABEL[fwInd] + '</div><div class="fw-panel-text">' + f.custom[fwInd] + '</div>';
+        if (isTop) html += '<div class="fw-bestnote">⭐ Best-fit framework for ' + FW_LABEL[fwInd] + ' — ' + f.bestWhy + '</div>';
+        html += '</div>';
+      }
+      card.innerHTML = html;
+      grid.appendChild(card);
+    });
+  }
+  renderFwTabs();
+  renderFwGrid();
 
 </script>
 </body>
