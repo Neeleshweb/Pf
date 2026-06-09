@@ -49,7 +49,7 @@
     .nav {
       position: sticky; top: 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 2.5rem;
+      padding: 0 1.5rem;
       height: 60px;
       background: rgba(8,8,8,0.92);
       backdrop-filter: blur(16px);
@@ -70,9 +70,9 @@
       list-style: none;
     }
     .nav-links a {
-      display: block; padding: 0 1rem; height: 60px;
-      line-height: 60px;
-      font-size: .8rem; letter-spacing: .8px; text-transform: uppercase;
+      display: block; padding: 0 .6rem; height: 60px;
+      line-height: 60px; white-space: nowrap;
+      font-size: .78rem; letter-spacing: .3px; text-transform: uppercase;
       color: var(--muted); transition: color .2s;
     }
     .nav-links a:hover, .nav-links a.active { color: var(--white); }
@@ -85,6 +85,40 @@
     }
     .nav-home:hover { opacity: .9; transform: translateY(-1px); }
     .nav-home svg { width: 15px; height: 15px; }
+
+    /* ─── NAV RIGHT / SEARCH / DROPDOWNS ─── */
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    /* nav dropdowns */
+    .nav-dd { position: relative; }
+    .nav-dd-menu { position: absolute; top: 100%; left: 0; min-width: 240px; background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius); padding: .4rem; display: none; flex-direction: column; gap: 1px; z-index: 300; box-shadow: 0 14px 34px rgba(0,0,0,.55); }
+    .nav-dd:hover .nav-dd-menu, .nav-dd.open .nav-dd-menu { display: flex; }
+    .nav-dd-menu.scroll { max-height: 340px; overflow-y: auto; }
+    .nav-dd-item { padding: .5rem .7rem; font-size: .8rem; color: var(--muted); border-radius: 4px; cursor: pointer; white-space: nowrap; text-transform: none; letter-spacing: 0; line-height: 1.3; }
+    .nav-dd-item:hover { background: var(--card2); color: var(--white); }
+    /* search */
+    .search-wrap { position: relative; display: flex; align-items: center; }
+    .search-ico { position: absolute; left: .75rem; width: 14px; height: 14px; color: var(--muted); pointer-events: none; }
+    .site-search { width: 140px; background: var(--card); border: 1px solid var(--border2); border-radius: 100px; padding: .5rem .8rem .5rem 2.1rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .82rem; transition: width .2s, border-color .2s; }
+    .site-search::placeholder { color: var(--muted2); }
+    .site-search:focus { outline: none; width: 220px; border-color: var(--accent); }
+    .search-drop { position: absolute; top: 125%; right: 0; width: 320px; max-height: 400px; overflow-y: auto; background: var(--card); border: 1px solid var(--border2); border-radius: var(--radius); padding: .4rem; display: none; z-index: 300; box-shadow: 0 14px 34px rgba(0,0,0,.55); }
+    .search-drop.open { display: block; }
+    .search-cat { font-size: .6rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted2); padding: .5rem .7rem .3rem; }
+    .search-item { display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: .55rem .7rem; border-radius: 4px; cursor: pointer; }
+    .search-item:hover, .search-item.kbd { background: var(--card2); }
+    .search-item-label { font-size: .82rem; color: var(--white); line-height: 1.3; }
+    .search-item-type { font-size: .58rem; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); border: 1px solid var(--border2); padding: .12rem .45rem; border-radius: 100px; flex-shrink: 0; }
+    .search-empty { text-align: center; padding: 1.6rem 1rem 1.3rem; }
+    .search-empty svg { width: 92px; height: 92px; margin-bottom: .5rem; }
+    .search-empty p { font-size: .85rem; color: var(--muted); line-height: 1.5; }
+    .search-empty p b { color: var(--white); font-weight: 500; }
+    @media (max-width: 980px) { .site-search { width: 120px; } .site-search:focus { width: 170px; } }
+    @media (max-width: 860px) {
+      .site-search { width: 110px; padding-left: 2rem; }
+      .site-search:focus { width: 150px; }
+      .search-drop { width: calc(100vw - 1.5rem); max-width: 340px; }
+      .nav-right { gap: .6rem; }
+    }
 
     /* ─── HERO ─── */
     .hero {
@@ -901,19 +935,26 @@
   </div>
   <ul class="nav-links">
     <li><a href="#templates" class="active">Templates</a></li>
-    <li><a href="#tools">Tools</a></li>
-    <li><a href="#teardowns">Teardowns</a></li>
-    <li><a href="#frameworks">Frameworks</a></li>
+    <li class="nav-dd"><a href="#tools" class="nav-dd-toggle">Tools ▾</a><div class="nav-dd-menu" id="dd-tools"></div></li>
+    <li class="nav-dd"><a href="#teardowns" class="nav-dd-toggle">Teardowns ▾</a><div class="nav-dd-menu scroll" id="dd-teardowns"></div></li>
+    <li class="nav-dd"><a href="#frameworks" class="nav-dd-toggle">Frameworks ▾</a><div class="nav-dd-menu scroll" id="dd-frameworks"></div></li>
     <li><a href="#series">PM Series</a></li>
     <li><a href="#coaching">Coaching</a></li>
     <li><a href="#books">Books</a></li>
   </ul>
-  <a href="https://neeleshpmtoolkit.com/index.html" class="nav-home">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/>
-    </svg>
-    Home
-  </a>
+  <div class="nav-right">
+    <div class="search-wrap">
+      <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="site-search" class="site-search" type="text" placeholder="Search the toolkit…" autocomplete="off" aria-label="Search" />
+      <div class="search-drop" id="search-drop"></div>
+    </div>
+    <a href="https://neeleshpmtoolkit.com/index.html" class="nav-home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/>
+      </svg>
+      Home
+    </a>
+  </div>
 </nav>
 
 <!-- ════════ HERO ════════ -->
@@ -1391,7 +1432,7 @@
   </p>
 
   <!-- TOOL 1: RICE CALCULATOR -->
-  <div class="tool-card">
+  <div class="tool-card" id="tool-rice">
     <div class="tool-head">
       <div>
         <div class="tool-tag">⚡ Live Tool</div>
@@ -1424,7 +1465,7 @@
   </div>
 
   <!-- TOOL 2: PM READINESS ASSESSMENT -->
-  <div class="tool-card" style="margin-top:1.5rem">
+  <div class="tool-card" id="tool-assessment" style="margin-top:1.5rem">
     <div class="tool-head">
       <div>
         <div class="tool-tag y">🎯 Self-Assessment</div>
@@ -1464,7 +1505,7 @@
   </div>
 
   <!-- TOOL 3: USER STORY BUILDER -->
-  <div class="tool-card" style="margin-top:1.5rem">
+  <div class="tool-card" id="tool-userstory" style="margin-top:1.5rem">
     <div class="tool-head">
       <div>
         <div class="tool-tag">✍️ Live Tool</div>
@@ -1489,7 +1530,7 @@
   </div>
 
   <!-- TOOL 4: A/B TEST SIGNIFICANCE CALCULATOR -->
-  <div class="tool-card" style="margin-top:1.5rem">
+  <div class="tool-card" id="tool-abtest" style="margin-top:1.5rem">
     <div class="tool-head">
       <div>
         <div class="tool-tag y">🧪 Live Tool</div>
@@ -1516,7 +1557,7 @@
   </div>
 
   <!-- TOOL 5: AARRR FUNNEL ANALYZER -->
-  <div class="tool-card" style="margin-top:1.5rem">
+  <div class="tool-card" id="tool-funnel" style="margin-top:1.5rem">
     <div class="tool-head">
       <div>
         <div class="tool-tag b">📉 Live Tool</div>
@@ -3089,10 +3130,11 @@
       hint.innerHTML = 'Showing how each framework adapts for <b style="color:#c2bdb4">' + FW_LABEL[fwInd] + '</b>. The ⭐ marks the frameworks best suited to ' + FW_LABEL[fwInd] + '.';
     }
     grid.innerHTML = '';
-    FW_DATA.forEach(f => {
+    FW_DATA.forEach((f, fwi) => {
       const isTop = (fwInd !== 'general' && f.best === fwInd);
       const card = document.createElement('div');
       card.className = 'fw-card' + (isTop ? ' topfit' : '');
+      card.id = 'fw-card-' + fwi;
       let html = '<div class="fw-card-head"><div class="fw-abbr ' + f.cls + '">' + f.abbr + '</div>' + (isTop ? '<span class="fw-badge">⭐ Top pick</span>' : '') + '</div>';
       html += '<div class="fw-name">' + f.name + '</div>';
       html += '<div class="fw-desc">' + f.desc + '</div>';
@@ -3110,6 +3152,80 @@
   }
   renderFwTabs();
   renderFwGrid();
+
+  /* ════════════════════════════════════════════════════════
+     SITE SEARCH + NAV DROPDOWNS
+     ════════════════════════════════════════════════════════ */
+  (function(){
+    function escapeHtml(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+    const NAV_TOOLS = [
+      {label:'RICE Prioritization Calculator', id:'tool-rice'},
+      {label:'PM Readiness Self-Assessment', id:'tool-assessment'},
+      {label:'User Story & Acceptance Criteria Builder', id:'tool-userstory'},
+      {label:'A/B Test Significance Calculator', id:'tool-abtest'},
+      {label:'Funnel & Conversion Analyzer (AARRR)', id:'tool-funnel'}
+    ];
+    function smoothTo(el){ if(!el) return; const y = el.getBoundingClientRect().top + window.pageYOffset - 70; window.scrollTo({top:y, behavior:'smooth'}); }
+    function flash(el){ if(!el) return; el.style.transition='box-shadow .3s'; el.style.boxShadow='0 0 0 2px var(--accent)'; setTimeout(function(){ el.style.boxShadow=''; }, 1500); }
+    function gotoSection(id){ smoothTo(document.getElementById(id)); }
+    function gotoTool(id){ const el=document.getElementById(id); smoothTo(el); flash(el); }
+    function gotoTeardown(i){ tdCase=i; tdStep=0; renderTd(); smoothTo(document.getElementById('teardowns')); }
+    function gotoFramework(i){ smoothTo(document.getElementById('frameworks')); setTimeout(function(){ flash(document.getElementById('fw-card-'+i)); }, 450); }
+    function gotoTemplate(title){ smoothTo(document.getElementById('templates')); setTimeout(function(){ const cards=[].slice.call(document.querySelectorAll('#templates-grid .resource-card')); const c=cards.filter(function(x){ const h=x.querySelector('h3'); return h && h.textContent.trim()===title; })[0]; if(c){ c.scrollIntoView({behavior:'smooth',block:'center'}); flash(c);} }, 450); }
+
+    // build search index
+    const idx = [];
+    NAV_TOOLS.forEach(function(t){ idx.push({label:t.label, type:'Tool', run:function(){gotoTool(t.id);}}); });
+    TEARDOWNS.forEach(function(c,i){ idx.push({label:c.app+' — teardown', type:'Teardown', run:function(){gotoTeardown(i);}}); });
+    FW_DATA.forEach(function(f,i){ idx.push({label:f.abbr+' — '+f.name, type:'Framework', run:function(){gotoFramework(i);}}); });
+    [].slice.call(document.querySelectorAll('#templates-grid .resource-card h3')).forEach(function(h){ const t=h.textContent.trim(); idx.push({label:t, type:'Template', run:function(){gotoTemplate(t);}}); });
+    [['Templates','templates'],['PM Series','series'],['Coaching','coaching'],['Books','books']].forEach(function(s){ idx.push({label:s[0], type:'Section', run:function(){gotoSection(s[1]);}}); });
+
+    const input = document.getElementById('site-search');
+    const drop = document.getElementById('search-drop');
+    let cur = -1, results = [];
+    function noResults(q){ return '<div class="search-empty"><svg viewBox="0 0 120 120" fill="none"><circle cx="50" cy="50" r="33" stroke="var(--border2)" stroke-width="5"/><line x1="73" y1="73" x2="101" y2="101" stroke="var(--border2)" stroke-width="6" stroke-linecap="round"/><circle cx="41" cy="46" r="3.2" fill="var(--muted)"/><circle cx="59" cy="46" r="3.2" fill="var(--muted)"/><path d="M41 63 Q50 54 59 63" stroke="var(--muted)" stroke-width="3" stroke-linecap="round" fill="none"/></svg><p>Sorry — we couldn\'t find <b>'+escapeHtml(q)+'</b>.<br>Try “RICE”, “Tinder”, “PRD”, or “roadmap”.</p></div>'; }
+    function render(){
+      drop.innerHTML='';
+      if(results.length===0){ drop.innerHTML = noResults(input.value.trim()); drop.classList.add('open'); return; }
+      results.forEach(function(it, n){
+        const d=document.createElement('div'); d.className='search-item'+(n===cur?' kbd':'');
+        d.innerHTML='<span class="search-item-label">'+escapeHtml(it.label)+'</span><span class="search-item-type">'+it.type+'</span>';
+        d.onmousedown=function(e){ e.preventDefault(); it.run(); close(); };
+        drop.appendChild(d);
+      });
+      drop.classList.add('open');
+    }
+    function doSearch(){
+      const q=input.value.trim().toLowerCase();
+      if(q.length<3){ drop.classList.remove('open'); drop.innerHTML=''; results=[]; cur=-1; return; }
+      results = idx.filter(function(it){ return it.label.toLowerCase().indexOf(q)!==-1; }).slice(0,10);
+      cur=-1; render();
+    }
+    function close(){ drop.classList.remove('open'); input.value=''; results=[]; cur=-1; }
+    if(input){
+      input.addEventListener('input', doSearch);
+      input.addEventListener('focus', function(){ if(input.value.trim().length>=3) doSearch(); });
+      input.addEventListener('keydown', function(e){
+        if(!drop.classList.contains('open')) return;
+        if(e.key==='ArrowDown'){ e.preventDefault(); cur=Math.min(cur+1, results.length-1); render(); }
+        else if(e.key==='ArrowUp'){ e.preventDefault(); cur=Math.max(cur-1, 0); render(); }
+        else if(e.key==='Enter'){ if(cur>=0 && results[cur]){ results[cur].run(); close(); } else if(results.length===1){ results[0].run(); close(); } }
+        else if(e.key==='Escape'){ close(); input.blur(); }
+      });
+      document.addEventListener('click', function(e){ if(!e.target.closest('.search-wrap')) drop.classList.remove('open'); });
+    }
+
+    // nav dropdowns
+    function fillDD(id, items){ const el=document.getElementById(id); if(!el) return; el.innerHTML=''; items.forEach(function(it){ const a=document.createElement('div'); a.className='nav-dd-item'; a.textContent=it.label; a.onclick=function(){ it.run(); const li=el.closest('.nav-dd'); if(li) li.classList.remove('open'); }; el.appendChild(a); }); }
+    fillDD('dd-tools', NAV_TOOLS.map(function(t){ return {label:t.label, run:function(){gotoTool(t.id);}}; }));
+    fillDD('dd-teardowns', TEARDOWNS.map(function(c,i){ return {label:c.emoji+'  '+c.app, run:function(){gotoTeardown(i);}}; }));
+    fillDD('dd-frameworks', FW_DATA.map(function(f,i){ return {label:f.abbr+' · '+f.name, run:function(){gotoFramework(i);}}; }));
+    [].slice.call(document.querySelectorAll('.nav-dd-toggle')).forEach(function(t){
+      t.addEventListener('click', function(e){ e.preventDefault(); const li=t.closest('.nav-dd'); const wasOpen=li.classList.contains('open'); document.querySelectorAll('.nav-dd.open').forEach(function(x){x.classList.remove('open');}); if(!wasOpen) li.classList.add('open'); });
+    });
+    document.addEventListener('click', function(e){ if(!e.target.closest('.nav-dd')) document.querySelectorAll('.nav-dd.open').forEach(function(x){x.classList.remove('open');}); });
+  })();
 
 </script>
 </body>
