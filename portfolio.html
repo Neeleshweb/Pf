@@ -289,6 +289,58 @@
     .search-empty p { font-size: .85rem; color: var(--muted); }
     mark.search-hl { background: linear-gradient(180deg, rgba(240,165,0,.92), rgba(232,84,10,.88)); color: #111; border-radius: 3px; padding: 0 2px; box-shadow: 0 0 0 1px rgba(240,165,0,.35); }
     @media (max-width: 860px){ .hamburger { display: flex; } .nav-toolkit, .nav-home { display: none; } }
+      /* ===== Experience interactive story teardowns ===== */
+    .exp-hint { font-size: .85rem; color: var(--muted); margin: -.4rem 0 1.7rem; max-width: 580px; line-height: 1.65; }
+    .exp-hint span { color: var(--white); }
+    .exp-story-btn { margin-top: 1rem; display: inline-flex; align-items: center; gap: .55rem; background: var(--card); border: 1px solid var(--border2); color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .8rem; font-weight: 500; padding: .55rem .95rem; border-radius: 100px; cursor: pointer; transition: border-color .2s, background .2s, transform .2s; }
+    .exp-story-btn:hover { border-color: var(--accent); background: var(--card2); transform: translateX(3px); }
+    .exp-story-btn .esb-ic { color: var(--accent); font-size: .7rem; }
+    .exp-story-btn .esb-n { color: var(--muted2); font-size: .72rem; border-left: 1px solid var(--border2); padding-left: .55rem; }
+
+    .expm-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.72); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 500; }
+    .expm-overlay.open { opacity: 1; pointer-events: auto; }
+    .expm-modal { position: relative; width: 100%; max-width: 620px; max-height: 88vh; overflow: hidden; background: var(--card); border: 1px solid var(--border2); border-radius: 18px; display: flex; flex-direction: column; box-shadow: 0 30px 80px rgba(0,0,0,.6); transform: translateY(12px) scale(.98); transition: transform .28s cubic-bezier(.4,0,.2,1); }
+    .expm-overlay.open .expm-modal { transform: none; }
+    .expm-progress { height: 4px; background: var(--border); flex-shrink: 0; }
+    .expm-progress-fill { height: 100%; width: 16%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .35s ease; }
+    .expm-close { position: absolute; top: .9rem; right: .9rem; width: 34px; height: 34px; border-radius: 8px; border: none; background: var(--surface); color: var(--muted); font-size: 1rem; cursor: pointer; z-index: 2; transition: background .2s, color .2s; }
+    .expm-close:hover { background: var(--card2); color: var(--white); }
+    .expm-head { padding: 1.4rem 1.6rem .3rem; flex-shrink: 0; }
+    .expm-company { font-size: .68rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+    .expm-feature { font-family: 'Bebas Neue', sans-serif; font-size: 1.55rem; letter-spacing: .5px; color: var(--white); margin-top: .2rem; line-height: 1.1; }
+    .expm-body { padding: .7rem 1.6rem 1.3rem; overflow-y: auto; }
+    .expm-step-no { font-size: .7rem; color: var(--muted2); letter-spacing: .5px; margin-bottom: .7rem; }
+    .expm-phase { display: inline-block; font-size: .62rem; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: .32rem .7rem; border-radius: 100px; margin-bottom: .8rem; }
+    .expm-phase.tone-neutral { color: var(--muted); background: rgba(255,255,255,.06); }
+    .expm-phase.tone-problem, .expm-phase.tone-warn { color: #ff8585; background: rgba(255,107,107,.13); }
+    .expm-phase.tone-validate { color: var(--accent3); background: var(--accent3-dim); }
+    .expm-phase.tone-build { color: var(--accent2); background: var(--accent2-dim); }
+    .expm-phase.tone-impact { color: #5fe08a; background: rgba(74,222,128,.13); }
+    .expm-title { font-size: 1.4rem; line-height: 1.25; color: var(--white); margin-bottom: .75rem; font-weight: 600; }
+    .expm-metric { display: inline-block; font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .5px; color: #5fe08a; background: rgba(74,222,128,.1); border: 1px solid rgba(74,222,128,.25); padding: .25rem .8rem; border-radius: 8px; margin-bottom: .85rem; }
+    .expm-text { font-size: .95rem; line-height: 1.7; color: #c9c4bb; }
+    .expm-text strong { color: var(--white); font-weight: 600; }
+    .expm-viz { margin-top: 1.15rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem; display: flex; gap: .7rem; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .ev-box { background: var(--card2); border: 1px solid var(--border2); border-radius: 8px; padding: .55rem .85rem; font-size: .78rem; color: var(--white); text-align: center; line-height: 1.3; }
+    .ev-box.dim { opacity: .5; }
+    .ev-box.win { background: #4ade80; color: #0a0a0a; border-color: #4ade80; font-weight: 600; }
+    .ev-arrow { color: var(--muted); font-size: 1.1rem; }
+    .ev-x { color: #ff6b6b; font-size: 1.4rem; font-weight: 700; }
+    .ev-tag { font-size: .73rem; color: var(--muted); width: 100%; text-align: center; }
+    .ev-hub { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #111; font-weight: 600; border-radius: 8px; padding: .55rem .9rem; font-size: .78rem; text-align: center; line-height: 1.2; }
+    .ev-bar-wrap { display: flex; align-items: flex-end; gap: .55rem; height: 86px; }
+    .ev-bar { width: 38px; background: var(--card2); border: 1px solid var(--border2); border-radius: 5px 5px 0 0; }
+    .ev-bar.hot { background: #ff6b6b; border-color: #ff6b6b; }
+    .ev-bar.win { background: #4ade80; border-color: #4ade80; }
+    .expm-foot { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.6rem; border-top: 1px solid var(--border); gap: 1rem; flex-shrink: 0; }
+    .expm-btn { background: none; border: 1px solid var(--border2); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: .85rem; padding: .55rem 1.1rem; border-radius: 8px; cursor: pointer; transition: color .2s, border-color .2s, background .2s; }
+    .expm-btn:hover { color: var(--white); border-color: #444; }
+    .expm-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .expm-btn.primary:hover { background: var(--accent2); border-color: var(--accent2); color: #111; }
+    .expm-dots { display: flex; gap: .4rem; flex-wrap: wrap; justify-content: center; }
+    .expm-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border2); cursor: pointer; transition: transform .2s, background .2s; }
+    .expm-dot.active { background: var(--accent); transform: scale(1.35); }
+    @media (max-width: 600px){ .expm-feature { font-size: 1.3rem; } .expm-title { font-size: 1.18rem; } .expm-head, .expm-body, .expm-foot { padding-left: 1.1rem; padding-right: 1.1rem; } .expm-btn { padding: .55rem .8rem; font-size: .8rem; } }
   </style>
 </head>
 <body>
@@ -419,6 +471,7 @@
 <section class="section" id="experience">
   <div class="sec-eyebrow y">Track Record</div>
   <div class="sec-title">Experience That <span class="y">Shipped</span></div>
+  <p class="exp-hint">More than a list of wins — each one is a short story. Tap <span>“See the full story”</span> to walk the journey: the before, the problem, how I validated it, what I built, and the impact (and what would have happened if we hadn't).</p>
 
   <!-- CoreLogic -->
   <div class="exp-item">
@@ -429,17 +482,17 @@
       <div class="exp-dates">Aug 2023 – Present</div>
     </div>
     <div class="exp-wins">
-      <div class="exp-win">
+      <div class="exp-win" data-story="clf1">
         <h4>Shipped an AI assistant that auto-generates property listings</h4>
         <div class="exp-win-result">📈 900K → 1M+ users · 11% growth in one quarter</div>
         <p>Agents were spending hours hand-writing listings. I led the integration of an AI assistant in <strong>MLSTOUCH</strong> that generates property descriptions from images and location metadata — making listing creation up to <strong>5× faster</strong> and pushing the platform past one million users.</p>
       </div>
-      <div class="exp-win">
+      <div class="exp-win" data-story="clf2">
         <h4>Drove adoption through cross-platform integrations</h4>
         <div class="exp-win-result">📈 +18% adoption rate, year over year</div>
         <p>I shipped integrations with <strong>Canva</strong> (social templates), <strong>Zapier</strong> (workflow automation), and AR property-line walkthroughs — directly addressing agents' marketing efficiency and client engagement, and lifting annual adoption 18%.</p>
       </div>
-      <div class="exp-win">
+      <div class="exp-win" data-story="clf3">
         <h4>Built a Centralized Service Layer from 0 → 1</h4>
         <div class="exp-win-result">📈 −40% complaints · 4.6 → 4.8 rating · +15% retention</div>
         <p>Users saw inconsistent data across MLSTOUCH and OneHome — favorites that didn't sync, listings that appeared on one platform but not the other. I led a cross-functional build of a Centralized Service Layer that synchronized data across products, eliminating the friction and the bad reviews it caused.</p>
@@ -456,12 +509,12 @@
       <div class="exp-dates">May 2021 – Jul 2023</div>
     </div>
     <div class="exp-wins">
-      <div class="exp-win">
+      <div class="exp-win" data-story="cgi1">
         <h4>Launched a model-portfolio portal for Fidelity</h4>
         <div class="exp-win-result">📈 +8% monthly client retention</div>
         <p>Advisors were building tailored investment portfolios by hand — slow and inconsistent. I led development of a portal that assembled mixed-asset portfolios in <strong>seconds</strong>, improving investment outcomes and lifting client retention 8% month over month.</p>
       </div>
-      <div class="exp-win">
+      <div class="exp-win" data-story="cgi2">
         <h4>Rebuilt the team's prioritization framework</h4>
         <div class="exp-win-result">📈 +20% business value delivered per quarter</div>
         <p>Priorities were scattered across JIRA. I introduced a prioritization framework blending qualitative and quantitative signals so the team consistently focused on the highest-impact work — increasing delivered business value 20% quarter over quarter.</p>
@@ -790,6 +843,140 @@
     [['About','about'],['Experience','experience'],['Case Study','case'],['Skills','skills'],['Philosophy','philosophy'],['Education','education'],['Writing','writing'],['Contact','contact']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
     body.appendChild(link('PM Toolkit ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/toolkit.html'; }));
     body.appendChild(link('🏠  Home', function(){ window.location.href='https://neeleshpmtoolkit.com/index.html'; }));
+  })();
+  /* ════════ EXPERIENCE STORY TEARDOWNS ════════ */
+  (function(){
+    var EXP_STORIES = {
+      clf1: {
+        company: 'CoreLogic · 2023–Present', feature: 'AI Listing Assistant — MLSTOUCH',
+        steps: [
+          { tone:'neutral', phase:'Before', title:'Every listing started with a blank box',
+            body:"Agents hand-wrote each property description from scratch — 30 to 45 minutes of wording and re-wording per listing. Between showings and calls, many posted thin, copy-pasted descriptions or skipped them entirely.",
+            viz:'<div class="expm-viz"><div class="ev-box">📝<br>Blank description…</div><div class="ev-tag">⏱ 30–45 min on every single listing</div></div>' },
+          { tone:'problem', phase:'The Problem', title:'Writing was the bottleneck to going live',
+            body:"The real gap was between “I have a new listing” and “it is live and compelling” — and that gap was the description field. The friction made MLSTOUCH feel like work rather than leverage, and listing quality suffered across the whole platform." },
+          { tone:'validate', phase:'How I validated it', title:'The data pointed to one field',
+            body:"I analyzed the listing-creation funnel and ran agent interviews. The description field was the single largest drop-off point — agents literally told me they would “do it later,” and later rarely came.",
+            viz:'<div class="expm-viz"><div class="ev-bar-wrap"><div class="ev-bar" style="height:35%"></div><div class="ev-bar" style="height:52%"></div><div class="ev-bar hot" style="height:100%"></div><div class="ev-bar" style="height:26%"></div></div><div class="ev-tag">Biggest fall-off: the description step</div></div>' },
+          { tone:'build', phase:'The Build', title:'An AI draft — with the agent in control',
+            body:"I led the integration of an assistant that reads listing photos and location metadata and drafts an MLS-compliant description in seconds. Two product calls mattered most: keep it one tap inside the existing flow, and keep the agent in control with editable, tone-adjustable drafts.",
+            viz:'<div class="expm-viz"><div class="ev-box">📷 Photos</div><span class="ev-arrow">→</span><div class="ev-hub">🤖 AI draft</div><span class="ev-arrow">→</span><div class="ev-box">📄 Polished listing</div></div>' },
+          { tone:'impact', phase:'The Impact', title:'5× faster — and past a million users', metric:'900K → 1M+ users · +11% in a quarter',
+            body:"Listing creation became up to 5× faster, descriptions grew richer and more consistent, and the unblocked flow helped push MLSTOUCH past one million users — roughly 11% growth in a single quarter.",
+            viz:'<div class="expm-viz"><div class="ev-bar-wrap"><div class="ev-bar" style="height:70%"></div><div class="ev-bar win" style="height:100%"></div></div><div class="ev-tag">900K → 1M+ users · one quarter</div></div>' },
+          { tone:'warn', phase:'If we had not built it', title:'The silent churn point stays open',
+            body:"The description field would still quietly bleed users, and rivals shipping AI drafting would have made MLSTOUCH feel dated overnight. The 100K+ users gained that quarter would likely have stalled — or defected to a faster tool." }
+        ]
+      },
+      clf2: {
+        company: 'CoreLogic · 2023–Present', feature: 'Cross-Platform Integrations',
+        steps: [
+          { tone:'neutral', phase:'Before', title:'The real workflow lived outside the product',
+            body:"Agents exported data out of MLSTOUCH into a patchwork of other apps — designing social posts in one, wiring follow-ups by hand, with no immersive way to show a property’s boundaries to a buyer." },
+          { tone:'problem', phase:'The Problem', title:'We owned the data, not the workflow',
+            body:"The platform stopped at “here is your listing data.” Everything agents did to actually market a property and win clients happened somewhere else — so MLSTOUCH captured very little of their real day, or their loyalty." },
+          { tone:'validate', phase:'How I validated it', title:'I mapped the agent’s real day',
+            body:"I mapped the end-to-end marketing journey and surveyed power users on the tools they touched daily. Three gaps rose to the top: social creative, workflow automation, and visual property walkthroughs.",
+            viz:'<div class="expm-viz"><div class="ev-box">🎨 Canva</div><div class="ev-box">⚙️ Zapier</div><div class="ev-box">📐 AR walkthrough</div></div>' },
+          { tone:'build', phase:'The Build', title:'Meet agents inside the tools they trust',
+            body:"I shipped native integrations — Canva social templates, Zapier workflow automation, and AR property-line walkthroughs — so agents could do their real work without ever leaving the platform.",
+            viz:'<div class="expm-viz"><div class="ev-box">🎨</div><span class="ev-arrow">→</span><div class="ev-hub">MLSTOUCH</div><span class="ev-arrow">←</span><div class="ev-box">⚙️</div></div>' },
+          { tone:'impact', phase:'The Impact & the stakes', title:'From data source to marketing hub', metric:'+18% adoption, year over year',
+            body:"Extending into the agent’s real workflow lifted annual adoption 18% — MLSTOUCH became a hub, not just a lookup. Had we stayed a “look-up the listing” utility, engagement would have plateaued and agents’ loyalty would have stayed with the marketing tools they already live in." }
+        ]
+      },
+      clf3: {
+        company: 'CoreLogic · 2023–Present', feature: 'Centralized Service Layer — 0 → 1',
+        steps: [
+          { tone:'neutral', phase:'Before', title:'Two products, two versions of the truth',
+            body:"MLSTOUCH and OneHome were used by the same people but did not talk to each other. A favorite saved on one would not appear on the other; a listing live on one was missing from the other.",
+            viz:'<div class="expm-viz"><div class="ev-box">MLSTOUCH</div><span class="ev-x">✕</span><div class="ev-box">OneHome</div></div>' },
+          { tone:'problem', phase:'The Problem', title:'Inconsistency was eroding trust',
+            body:"Users could not tell which platform was “right.” The mismatch generated confusion, support tickets, and one-star reviews that blamed the brand — not the underlying architecture.",
+            viz:'<div class="expm-viz"><div class="ev-tag">“Saved on one app, gone on the other.” → ⭐ 1-star review</div></div>' },
+          { tone:'validate', phase:'How I validated it', title:'The reviews and tickets agreed',
+            body:"I traced complaint themes and support tickets back to data-sync failures, then confirmed directly with users that the “it works here but not there” experience was a top frustration. The pattern was unmistakable." },
+          { tone:'build', phase:'The Build', title:'One source of truth, built from scratch',
+            body:"I led a cross-functional 0 → 1 build of a Centralized Service Layer that synchronized data across both products — a single backbone so favorites, listings, and updates stayed consistent everywhere.",
+            viz:'<div class="expm-viz"><div class="ev-box">MLSTOUCH</div><span class="ev-arrow">→</span><div class="ev-hub">Centralized<br>Service Layer</div><span class="ev-arrow">←</span><div class="ev-box">OneHome</div></div>' },
+          { tone:'impact', phase:'The Impact', title:'Friction gone, ratings up', metric:'−40% complaints · 4.6 → 4.8 · +15% retention',
+            body:"Complaints dropped 40%, the app-store rating climbed from 4.6 to 4.8, and retention rose 15%. Removing the inconsistency removed the very reason people were churning.",
+            viz:'<div class="expm-viz"><div class="ev-box">4.6 ★</div><span class="ev-arrow">→</span><div class="ev-box win">4.8 ★</div><div class="ev-tag">−40% complaints · +15% retention</div></div>' },
+          { tone:'warn', phase:'If we had not built it', title:'The cracks only widen',
+            body:"Every new feature would have multiplied the sync problem across two diverging products. Trust — and ratings — would have kept sliding, and the retention losses would compound with every single release." }
+        ]
+      },
+      cgi1: {
+        company: 'CGI · 2021–2023', feature: 'Model-Portfolio Portal — Fidelity',
+        steps: [
+          { tone:'neutral', phase:'Before', title:'Portfolios built by hand',
+            body:"Advisors assembled tailored, mixed-asset investment portfolios manually — a slow process that varied in quality from one advisor to the next." },
+          { tone:'problem', phase:'The Problem', title:'Slow, inconsistent, hard to scale',
+            body:"Manual assembly capped how many clients an advisor could serve well and introduced variability — a real risk in a domain where client trust is everything." },
+          { tone:'validate', phase:'How I validated it', title:'Watching the advisor workflow',
+            body:"Working closely with Fidelity stakeholders, I confirmed that portfolio construction was the slowest and most error-prone step in the advisor’s day — and the one they most wanted automated." },
+          { tone:'build', phase:'The Build', title:'Portfolios assembled in seconds',
+            body:"I led development of a portal that built mixed-asset portfolios in seconds from approved models — consistent, fast, and auditable end to end.",
+            viz:'<div class="expm-viz"><div class="ev-box">Approved models</div><span class="ev-arrow">→</span><div class="ev-hub">Portal</div><span class="ev-arrow">→</span><div class="ev-box">Portfolio in seconds</div></div>' },
+          { tone:'impact', phase:'The Impact & the stakes', title:'Better outcomes, stickier clients', metric:'+8% monthly client retention',
+            body:"Faster, more consistent portfolios improved client outcomes and lifted monthly retention 8%. Without it, advisors would have stayed capacity-bound and the inconsistency risk would have lingered on every account." }
+        ]
+      },
+      cgi2: {
+        company: 'CGI · 2021–2023', feature: 'Prioritization Framework Rebuild',
+        steps: [
+          { tone:'neutral', phase:'Before', title:'Priorities scattered across JIRA',
+            body:"The team’s priorities lived in scattered JIRA tickets with no shared logic for what actually mattered most." },
+          { tone:'problem', phase:'The Problem', title:'The loudest voice won — not the highest value',
+            body:"Without a consistent way to weigh work, effort drifted toward whoever pushed hardest instead of toward the highest-impact outcomes." },
+          { tone:'build', phase:'The Build', title:'A framework that blends signal types',
+            body:"I introduced a prioritization framework that combined qualitative and quantitative signals, giving the team a shared, defensible way to rank every piece of work.",
+            viz:'<div class="expm-viz"><div class="ev-tag">Qualitative + quantitative signals → one ranked backlog</div></div>' },
+          { tone:'impact', phase:'The Impact & the stakes', title:'20% more value, every quarter', metric:'+20% business value per quarter',
+            body:"The team consistently focused on the highest-impact work, lifting delivered business value 20% quarter over quarter. Without it, the team would have kept optimizing for noise instead of outcomes." }
+        ]
+      }
+    };
+
+    // build modal
+    var ov = document.createElement('div'); ov.className = 'expm-overlay'; ov.id = 'expm-overlay';
+    ov.innerHTML = '<div class="expm-modal" role="dialog" aria-modal="true"><div class="expm-progress"><div class="expm-progress-fill" id="expm-fill"></div></div><button class="expm-close" id="expm-close" aria-label="Close">✕</button><div class="expm-head"><div class="expm-company" id="expm-company"></div><div class="expm-feature" id="expm-feature"></div></div><div class="expm-body" id="expm-body"></div><div class="expm-foot"><button class="expm-btn" id="expm-prev">← Back</button><div class="expm-dots" id="expm-dots"></div><button class="expm-btn primary" id="expm-next">Next →</button></div></div>';
+    document.body.appendChild(ov);
+
+    var cur=null, idx=0;
+    var fill=document.getElementById('expm-fill'), bodyEl=document.getElementById('expm-body'), dotsEl=document.getElementById('expm-dots'), prevB=document.getElementById('expm-prev'), nextB=document.getElementById('expm-next');
+
+    function open(id){ cur=EXP_STORIES[id]; if(!cur) return; idx=0; document.getElementById('expm-company').textContent=cur.company; document.getElementById('expm-feature').textContent=cur.feature; ov.classList.add('open'); document.body.style.overflow='hidden'; render(); }
+    function close(){ ov.classList.remove('open'); document.body.style.overflow=''; }
+    function render(){
+      var s=cur.steps[idx], n=cur.steps.length;
+      fill.style.width=((idx+1)/n*100)+'%';
+      var h='<div class="expm-step-no">Chapter '+(idx+1)+' of '+n+'</div>';
+      h+='<div class="expm-phase tone-'+(s.tone||'neutral')+'">'+s.phase+'</div>';
+      h+='<h3 class="expm-title">'+s.title+'</h3>';
+      if(s.metric) h+='<div class="expm-metric">'+s.metric+'</div>';
+      h+='<p class="expm-text">'+s.body+'</p>';
+      if(s.viz) h+=s.viz;
+      bodyEl.innerHTML=h; bodyEl.scrollTop=0;
+      dotsEl.innerHTML='';
+      for(var k=0;k<n;k++){ var d=document.createElement('span'); d.className='expm-dot'+(k===idx?' active':''); (function(kk){ d.onclick=function(){ idx=kk; render(); }; })(k); dotsEl.appendChild(d); }
+      prevB.style.visibility = idx===0 ? 'hidden' : 'visible';
+      nextB.textContent = idx===n-1 ? 'Finish ✓' : 'Next →';
+    }
+    nextB.onclick=function(){ if(idx<cur.steps.length-1){ idx++; render(); } else close(); };
+    prevB.onclick=function(){ if(idx>0){ idx--; render(); } };
+    document.getElementById('expm-close').onclick=close;
+    ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+    document.addEventListener('keydown', function(e){ if(!ov.classList.contains('open')) return; if(e.key==='Escape') close(); else if(e.key==='ArrowRight') nextB.click(); else if(e.key==='ArrowLeft') prevB.click(); });
+
+    // attach buttons to tagged wins
+    [].slice.call(document.querySelectorAll('.exp-win[data-story]')).forEach(function(win){
+      var id=win.getAttribute('data-story'), st=EXP_STORIES[id]; if(!st) return;
+      var b=document.createElement('button'); b.className='exp-story-btn';
+      b.innerHTML='<span class="esb-ic">▶</span> See the full story <span class="esb-n">'+st.steps.length+' chapters</span>';
+      b.onclick=function(){ open(id); };
+      win.appendChild(b);
+    });
   })();
 </script>
 </body>
