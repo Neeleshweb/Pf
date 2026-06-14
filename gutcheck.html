@@ -234,6 +234,19 @@
     .sub-field input { min-height: 0; }
     .sub-field textarea:focus, .sub-field input:focus { outline: none; border-color: var(--accent3); }
 
+    /* AUTH */
+    .auth-bar { display: flex; align-items: center; justify-content: space-between; gap: .7rem; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .6rem .95rem; margin-bottom: 1rem; font-size: .82rem; color: var(--muted); }
+    .auth-bar .ab-user { color: #c9c4bb; }
+    .auth-bar .ab-user b { color: var(--white); }
+    .auth-bar button { font-size: .76rem; padding: .42rem .95rem; border-radius: 8px; cursor: pointer; }
+    .auth-bar .ab-in { background: var(--accent); color: #fff; border: none; font-weight: 600; }
+    .auth-bar .ab-in:hover { background: var(--accent2); color: #111; }
+    .auth-bar .ab-out { background: none; border: 1px solid var(--border2); color: var(--muted); }
+    .auth-bar .ab-out:hover { color: var(--white); border-color: #444; }
+    .call-locked { background: rgba(74,222,128,.07); border: 1px solid rgba(74,222,128,.3); color: var(--green); border-radius: 10px; padding: .7rem .95rem; margin-bottom: 1rem; font-size: .84rem; }
+    .gc-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px); background: var(--card); border: 1px solid var(--border2); color: var(--white); padding: .8rem 1.2rem; border-radius: 12px; font-size: .86rem; box-shadow: 0 18px 50px rgba(0,0,0,.5); opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 700; max-width: 90vw; text-align: center; }
+    .gc-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
     /* FOOTER */
     .footer { border-top: 1px solid var(--border); padding: 3rem 2.5rem 2.5rem; text-align: center; }
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; margin-bottom: 1rem; }
@@ -309,6 +322,7 @@
   <div class="sec-eyebrow">Today's Gut Check</div>
   <div class="sec-title">Make <span>The</span> Call</div>
   <p class="sec-sub">Read the situation, commit to a decision, and then — and only then — the crowd unlocks. No take-backs, just like the real thing. <strong>Come back tomorrow for a brand-new dilemma.</strong></p>
+  <div id="auth-bar" class="auth-bar" style="display:none"></div>
   <div id="call-mount"></div>
 </section>
 
@@ -406,6 +420,17 @@
   </div>
 </div>
 
+<!-- SIGN-IN MODAL -->
+<div class="aud-overlay" id="signin-overlay">
+  <div class="aud-modal" role="dialog" aria-modal="true">
+    <h3>SIGN IN TO MAKE THE CALL</h3>
+    <p id="signin-msg">No password — we email you a one-tap magic link. Your calls then sync across all your devices.</p>
+    <div class="sub-field"><label>Email</label><input id="signin-email" type="email" placeholder="you@work.com" autocomplete="email"></div>
+    <div style="display:flex;gap:.6rem;margin-top:.4rem"><button class="btn-primary" id="signin-send">Email me the link</button><button class="btn-ghost" id="signin-cancel">Cancel</button></div>
+    <div class="sub-ok" id="signin-ok">✓ Check your inbox for the magic link, then come back here.</div>
+  </div>
+</div>
+
 <script>
 /* ════════════════════════════════════════════════════════
    PM GUT CHECK — one real product call a day
@@ -425,9 +450,10 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var SB = null;
 try { if (GC_LIVE && window.supabase && window.supabase.createClient) SB = window.supabase.createClient(GC_URL, GC_CONFIG.anon); } catch(e){ console.warn('[GutCheck] client init failed:', e); SB = null; }
+var currentUser = null;
 
 function fetchDist(dilemmaId){ if(!SB) return Promise.resolve(null); return SB.rpc('gc_distribution',{ p_dilemma: dilemmaId }).then(function(res){ if(res && res.error){ console.warn('[GutCheck] distribution read error:', res.error); return null; } return (res && res.data) ? res.data : null; }).catch(function(e){ console.warn('[GutCheck] distribution failed:', e); return null; }); }
-function recordVote(d, key){ if(!SB) return Promise.resolve(); return SB.from('gc_votes').insert({ device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience }).then(function(res){ if(res && res.error) console.warn('[GutCheck] vote not saved:', res.error); }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); }); }
+function recordVote(d, key){ if(!SB) return Promise.resolve(); return SB.from('gc_votes').insert({ user_id: currentUser ? currentUser.id : null, device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience }).then(function(res){ if(res && res.error) console.warn('[GutCheck] vote not saved:', res.error); }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); }); }
 function saveSubscriber(email){ if(!SB) return Promise.resolve(); return SB.from('gc_subscribers').insert({ email: email, audience: GC.audience }).then(function(res){ if(res && res.error) console.warn('[GutCheck] subscribe error:', res.error); }).catch(function(e){ console.warn('[GutCheck] subscribe failed:', e); }); }
 function saveSubmission(p){ if(!SB) return Promise.resolve(); return SB.from('gc_submissions').insert(p).then(function(res){ if(res && res.error) console.warn('[GutCheck] submission error:', res.error); }).catch(function(e){ console.warn('[GutCheck] submission failed:', e); }); }
 
@@ -725,8 +751,8 @@ GC.device = GC.device || ('d_' + Math.random().toString(36).slice(2) + Date.now(
 var DEVICE_ID = GC.device;
 gcSave(GC);
 
-/* streak */
-(function(){
+/* streak (applied after profile loads so it's correct across devices) */
+function applyStreak(){
   function ds(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   var today = ds(new Date()), y = new Date(); y.setDate(y.getDate()-1);
   var yest = ds(y);
@@ -734,7 +760,7 @@ gcSave(GC);
   else if (GC.lastVisit === yest) { GC.streak = (GC.streak||0)+1; GC.lastVisit = today; }
   else { GC.streak = 1; GC.lastVisit = today; }
   gcSave(GC);
-})();
+}
 
 /* ---------- DAILY ROTATION ---------- */
 var EPOCH = Date.UTC(2026, 5, 9); // launch day: 9 Jun 2026 (day 0)
@@ -795,6 +821,7 @@ function renderToday(){
     + '<div class="call-top"><div class="call-date">Day '+(TODAY_INDEX+1)+' · <b>'+fmtDate(new Date())+'</b></div><div class="call-badges">'+badgesHTML(d)+'</div></div>'
     + '<div class="call-scenario">'+d.scenario+'</div>'
     + '<div class="call-q">'+d.q+'</div>'
+    + (answered ? '<div class="call-locked">✓ Your call is locked in for today. You can’t vote again until a new dilemma drops tomorrow.</div>' : '')
     + '<div id="today-opts"></div>';
   if (!answered) html += '<div class="call-reason"><label>Optional — your one-line reasoning (private, for your own reflection):</label><textarea id="today-reason" placeholder="I chose this because…"></textarea><div class="call-hint">Once you commit, the crowd unlocks. No take-backs.</div></div>';
   html += '<div id="today-reveal"></div></div>';
@@ -811,6 +838,7 @@ function renderToday(){
 }
 
 function commit(d, key){
+  if (SB && !currentUser){ openSignIn('Sign in to lock in your call — it then syncs across all your devices.'); return; }
   if (!GC.audience){ pendingCommit = { d:d, key:key }; openAud(); return; }
   doCommit(d, key);
 }
@@ -827,7 +855,7 @@ function doCommit(d, key){
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ if (b.querySelector('.opt-k') && b.querySelector('.opt-k').textContent===key){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } b.style.opacity=.96; });
   reveal(d, false);
   if (SB) { recordVote(d, key).then(function(){ enhanceLive(document.getElementById('today-reveal'), d); }); }
-  refreshRecord();
+  refreshRecord(); saveProfile();
 }
 
 function reveal(d, instant){
@@ -935,7 +963,7 @@ function buildArchDetail(item, d){
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ inp.style.borderColor='var(--red)'; inp.focus(); return; }
     inp.style.borderColor='var(--border2)';
     GC.subscribed = true; GC.email = v; gcSave(GC);
-    saveSubscriber(v);
+    saveSubscriber(v); saveProfile();
     ok.style.display='block'; note.textContent='Saved on your device for now. We’ll import early-list emails when daily sending goes live.'; inp.value=''; inp.placeholder='You’re on the list ✓';
   };
 })();
@@ -951,9 +979,10 @@ function buildArchDetail(item, d){
   openB.onclick=open; cancel.onclick=close;
   ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
   send.onclick=function(){
+    if(SB && !currentUser){ close(); openSignIn('Sign in to submit a dilemma — it lets us credit you and keeps out spam.'); return; }
     var sc=val('sm-scenario'), q=val('sm-q'), opts=val('sm-opts');
     if(sc.length<10 || q.length<5 || opts.length<5){ alert('Add a little more — the situation, the question, and at least two options.'); return; }
-    saveSubmission({ scenario:sc, question:q, options:opts, outcome:val('sm-outcome'), email:val('sm-email'), audience:GC.audience });
+    saveSubmission({ user_id: currentUser ? currentUser.id : null, scenario:sc, question:q, options:opts, outcome:val('sm-outcome'), email:(currentUser&&currentUser.email)||val('sm-email'), audience:GC.audience });
     ok.style.display='block'; send.disabled=true; send.textContent='Sent ✓';
     setTimeout(function(){ close(); send.disabled=false; send.textContent='Send for review'; ok.style.display='none';
       ['sm-scenario','sm-q','sm-opts','sm-outcome','sm-email'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; }); }, 1500);
@@ -965,8 +994,66 @@ document.getElementById('rec-reset').onclick = function(){
   if (!confirm('Reset your entire judgment profile? This can’t be undone.')) return;
   var keepVisit = GC.lastVisit;
   GC = { calls:{}, dims:{u:0,e:0,s:0,r:0}, decisions:0, audience:null, subscribed:false, streak:1, lastVisit:keepVisit };
-  gcSave(GC); renderToday(); renderArchive(); refreshRecord();
+  gcSave(GC); saveProfile(); renderToday(); renderArchive(); refreshRecord();
 };
+
+/* ---------- AUTH + PROFILE SYNC ---------- */
+function loadProfile(){
+  if(!SB || !currentUser) return Promise.resolve();
+  return SB.from('gc_profiles').select('data').eq('user_id', currentUser.id).maybeSingle().then(function(res){
+    if(res && !res.error && res.data && res.data.data){
+      var d = res.data.data;
+      GC.calls = d.calls || {}; GC.dims = d.dims || {u:0,e:0,s:0,r:0};
+      GC.decisions = d.decisions || 0; GC.audience = d.audience || GC.audience || null;
+      GC.subscribed = d.subscribed || GC.subscribed || false; GC.email = d.email || GC.email;
+      GC.streak = d.streak || GC.streak || 0; GC.lastVisit = d.lastVisit || GC.lastVisit;
+      gcSave(GC);
+    }
+  }).catch(function(e){ console.warn('[GutCheck] profile load failed:', e); });
+}
+function saveProfile(){
+  if(!SB || !currentUser) return;
+  SB.from('gc_profiles').upsert({ user_id: currentUser.id, data: {
+    calls:GC.calls, dims:GC.dims, decisions:GC.decisions, audience:GC.audience,
+    subscribed:GC.subscribed, email:GC.email, streak:GC.streak, lastVisit:GC.lastVisit
+  }, updated_at: new Date().toISOString() }, { onConflict:'user_id' }).then(function(res){
+    if(res && res.error) console.warn('[GutCheck] profile save failed:', res.error);
+  }).catch(function(e){ console.warn('[GutCheck] profile save failed:', e); });
+}
+function toast(msg){ var t=document.getElementById('gc-toast'); if(!t){ t=document.createElement('div'); t.id='gc-toast'; t.className='gc-toast'; document.body.appendChild(t); } t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); }, 3800); }
+function openSignIn(msg){ var m=document.getElementById('signin-msg'); if(m && msg) m.textContent=msg; var ok=document.getElementById('signin-ok'); if(ok) ok.style.display='none'; document.getElementById('signin-overlay').classList.add('open'); }
+function closeSignIn(){ document.getElementById('signin-overlay').classList.remove('open'); }
+function signOutUser(){ if(!SB) return; SB.auth.signOut().then(function(){ currentUser=null; updateAuthUI(); renderToday(); renderArchive(); refreshRecord(); toast('You’ve been signed out. Your progress is saved to your account — sign back in anytime.'); }); }
+function updateAuthUI(){
+  var bar=document.getElementById('auth-bar'); if(!bar) return;
+  if(!SB){ bar.style.display='none'; return; }
+  bar.style.display='flex';
+  if(currentUser){
+    bar.innerHTML='<span class="ab-user">✓ Signed in as <b>'+(currentUser.email||'you')+'</b> — your calls sync across all your devices.</span><button class="ab-out" id="ab-signout">Sign out</button>';
+    var so=document.getElementById('ab-signout'); if(so) so.onclick=signOutUser;
+  } else {
+    bar.innerHTML='<span>🔒 Sign in to make the call &amp; submit dilemmas — your progress then syncs across every device.</span><button class="ab-in" id="ab-signin">Sign in</button>';
+    var si=document.getElementById('ab-signin'); if(si) si.onclick=function(){ openSignIn('No password — we email you a one-tap magic link. Your calls then sync across all your devices.'); };
+  }
+}
+(function(){
+  var ov=document.getElementById('signin-overlay'); if(!ov) return;
+  var cancel=document.getElementById('signin-cancel'), send=document.getElementById('signin-send'), ok=document.getElementById('signin-ok'), inp=document.getElementById('signin-email');
+  if(cancel) cancel.onclick=closeSignIn;
+  ov.addEventListener('click', function(e){ if(e.target===ov) closeSignIn(); });
+  if(send) send.onclick=function(){
+    var email=(inp.value||'').trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ inp.style.borderColor='var(--red)'; inp.focus(); return; }
+    inp.style.borderColor='var(--border2)';
+    if(!SB){ toast('Sign-in activates once the site is connected to its backend.'); return; }
+    send.disabled=true; send.textContent='Sending…';
+    SB.auth.signInWithOtp({ email: email, options:{ emailRedirectTo: location.href.split('#')[0].split('?')[0] } }).then(function(res){
+      send.disabled=false; send.textContent='Email me the link';
+      if(res && res.error){ console.warn('[GutCheck] signin error:', res.error); toast('Could not send the link — please try again.'); }
+      else { ok.style.display='block'; }
+    }).catch(function(e){ send.disabled=false; send.textContent='Email me the link'; console.warn('[GutCheck] signin failed:', e); toast('Could not send the link — please try again.'); });
+  };
+})();
 
 /* ---------- INIT ---------- */
 function showCallLoading(){ mount.innerHTML = '<div class="call-card"><div style="color:var(--muted);font-size:.92rem;padding:1.6rem .3rem">Loading today\u2019s call\u2026</div></div>'; }
@@ -976,7 +1063,25 @@ function initToday(){
   showCallLoading();
   fetchTodaysScheduled().then(function(comm){ todaysDilemma = comm || fallback; renderToday(); }).catch(function(){ todaysDilemma = fallback; renderToday(); });
 }
-initToday(); renderArchive(); refreshRecord();
+function boot(){
+  updateAuthUI();
+  if(!SB){ applyStreak(); initToday(); renderArchive(); refreshRecord(); return; }
+  SB.auth.getSession().then(function(res){
+    var sess = res && res.data && res.data.session; currentUser = sess ? sess.user : null;
+    return currentUser ? loadProfile() : Promise.resolve();
+  }).then(function(){
+    applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord();
+  }).catch(function(){ applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord(); });
+  if(SB.auth.onAuthStateChange) SB.auth.onAuthStateChange(function(evt, sess){
+    var was = currentUser ? currentUser.id : null;
+    currentUser = sess ? sess.user : null;
+    var now = currentUser ? currentUser.id : null;
+    if(now === was){ updateAuthUI(); return; }
+    if(currentUser){ loadProfile().then(function(){ applyStreak(); updateAuthUI(); renderToday(); renderArchive(); refreshRecord(); toast('Signed in — you’re all set. Make your call.'); }); }
+    else { updateAuthUI(); renderToday(); renderArchive(); refreshRecord(); }
+  });
+}
+boot();
 
 /* ════════ MOBILE MENU ════════ */
 (function(){
