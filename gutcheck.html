@@ -408,6 +408,28 @@
 
 <script>
 /* ════════════════════════════════════════════════════════
+   CACHE BUSTER — bump SITE_VERSION on every deploy AND set the same
+   value in gc-version.json. Returning browsers auto-refresh to the
+   newest version (no hard-refresh needed). Fails silent if file absent.
+   ════════════════════════════════════════════════════════ */
+var SITE_VERSION = 'v1';
+(function(){
+  try {
+    fetch('gc-version.json?cb=' + Date.now(), { cache:'no-store' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(j){
+        if (j && j.version && j.version !== SITE_VERSION){
+          var flag = 'gc_reload_' + j.version;
+          if (!sessionStorage.getItem(flag)){
+            sessionStorage.setItem(flag, '1');
+            location.replace(location.pathname + '?v=' + encodeURIComponent(j.version) + location.hash);
+          }
+        }
+      }).catch(function(){});
+  } catch(e){}
+})();
+
+/* ════════════════════════════════════════════════════════
    PM GUT CHECK — one real product call a day
    Daily rotation (same for everyone), crowd reveal, judgment profile.
    Phase A: progress local (localStorage); crowd numbers are a labelled
@@ -418,8 +440,8 @@
    Paste your Project URL + anon public key below. Until you do, the page
    stays in the labelled "preview" mode and works exactly like Phase A. */
 var GC_CONFIG = {
-  url:  'https://oxxzygbfgmlnvavjmhct.supabase.co/rest/v1/',
-  anon: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc'
+  url:  'YOUR_SUPABASE_URL',
+  anon: 'YOUR_SUPABASE_ANON_KEY'
 };
 var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1$/,'').replace(/\/+$/,'');
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
@@ -430,6 +452,28 @@ function fetchDist(dilemmaId){ if(!SB) return Promise.resolve(null); return SB.r
 function recordVote(d, key){ if(!SB) return Promise.resolve(); return SB.from('gc_votes').insert({ device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience }).then(function(res){ if(res && res.error) console.warn('[GutCheck] vote not saved:', res.error); }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); }); }
 function saveSubscriber(email){ if(!SB) return Promise.resolve(); return SB.from('gc_subscribers').insert({ email: email, audience: GC.audience }).then(function(res){ if(res && res.error) console.warn('[GutCheck] subscribe error:', res.error); }).catch(function(e){ console.warn('[GutCheck] subscribe failed:', e); }); }
 function saveSubmission(p){ if(!SB) return Promise.resolve(); return SB.from('gc_submissions').insert(p).then(function(res){ if(res && res.error) console.warn('[GutCheck] submission error:', res.error); }).catch(function(e){ console.warn('[GutCheck] submission failed:', e); }); }
+
+/* ---- SCHEDULER: today's published dilemma (community/curated) takes priority over the built-in bank ---- */
+function localDateStr(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function parseOptions(text){
+  var lines = (text||'').split(/\r?\n/).map(function(l){ return l.trim(); }).filter(Boolean).slice(0,4);
+  var keys = ['A','B','C','D'];
+  return lines.map(function(l,i){ var t=l, d=''; var sep = l.indexOf(' — ')>=0?' — ':(l.indexOf(' | ')>=0?' | ':(l.indexOf(' - ')>=0?' - ':null)); if(sep){ var p=l.split(sep); t=p[0].trim(); d=p.slice(1).join(sep).trim(); } return { k:keys[i], t:t, d:d }; });
+}
+function fetchTodaysScheduled(){
+  if(!SB) return Promise.resolve(null);
+  return SB.rpc('gc_todays_dilemma', { p_date: localDateStr() }).then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] schedule read error:', res.error); return null; }
+    var row = res && res.data && res.data[0]; if(!row) return null;
+    var opts = parseOptions(row.options); if(opts.length < 2) return null;
+    return { id:'sub-'+row.id, tier:3, level:(row.level||'Senior'),
+      source: row.credit ? ('Community · '+row.credit) : 'Community submission',
+      scenario: row.scenario||'', q: row.question||'What would you do?', opts: opts,
+      best: ((row.best||'').trim().toUpperCase())||null, dims:null,
+      breakdown: row.breakdown || 'This dilemma came straight from the community — there isn\u2019t an official \u201cright\u201d answer here. What matters is whether your reasoning holds together.',
+      real: row.outcome||null, lesson: row.lesson||null };
+  }).catch(function(e){ console.warn('[GutCheck] schedule failed:', e); return null; });
+}
 function pctMap(d, map, total){ var out={}; if(total<1){ d.opts.forEach(function(o){ out[o.k]=0; }); return out; } var raw=d.opts.map(function(o){ return (map[o.k]||0)/total*100; }); var fl=raw.map(Math.floor); var rem=100-fl.reduce(function(a,b){return a+b;},0); var ord=raw.map(function(x,i){return [x-Math.floor(x),i];}).sort(function(a,b){return b[0]-a[0];}); for(var i=0;i<rem;i++) fl[ord[i][1]]++; var o={}; d.opts.forEach(function(op,i){ o[op.k]=fl[i]; }); return o; }
 function aggregate(d, rows){ var ov={},asp={},wrk={},tot=0,aT=0,wT=0; d.opts.forEach(function(o){ ov[o.k]=0; asp[o.k]=0; wrk[o.k]=0; }); rows.forEach(function(r){ var k=r.choice, n=Number(r.n)||0; if(!(k in ov)) return; ov[k]+=n; tot+=n; if(r.audience==='aspiring'){ asp[k]+=n; aT+=n; } else if(r.audience==='working'){ wrk[k]+=n; wT+=n; } }); return { total:tot, aspiringTotal:aT, workingTotal:wT, overall:pctMap(d,ov,tot), aspiring:pctMap(d,asp,aT), working:pctMap(d,wrk,wT) }; }
 function enhanceLive(scopeEl, d){ if(!SB || !scopeEl) return; fetchDist(d.id).then(function(rows){ if(!rows || !rows.length) return; var a=aggregate(d, rows); if(a.total<1) return; d.opts.forEach(function(o){ var row=scopeEl.querySelector('.dist-row[data-k="'+o.k+'"]'); if(row){ var bar=row.querySelector('.dist-bar i'); var dp=row.querySelector('.dp'); if(bar) bar.style.width=a.overall[o.k]+'%'; if(dp) dp.textContent=a.overall[o.k]+'%'; } }); ['aspiring','working'].forEach(function(ch){ var card=scopeEl.querySelector('.split-card[data-cohort="'+ch+'"]'); if(card){ d.opts.forEach(function(o){ var b=card.querySelector('.sc-row[data-k="'+o.k+'"] b'); if(b) b.textContent = a[ch+'Total']>0 ? a[ch][o.k]+'%' : '—'; }); } }); var tag=scopeEl.querySelector('.crowd-tag'); if(tag){ tag.textContent='Live · '+a.total+' PM'+(a.total===1?'':'s')+' have called this'; tag.style.color='var(--green)'; tag.style.borderColor='rgba(74,222,128,.4)'; } }); }
@@ -746,13 +790,16 @@ function refreshRecord(){
 
 /* ---------- RENDER TODAY ---------- */
 var mount = document.getElementById('call-mount');
+var todaysDilemma = null;
 function badgesHTML(d){
-  return '<span class="cb '+(d.tier===1?'t1':'t2')+'">'+(d.tier===1?'★ Real call I made':'Industry / public')+'</span>'
+  var tl = d.tier===1 ? '★ Real call I made' : (d.tier===3 ? '👥 From the community' : 'Industry / public');
+  var tc = d.tier===1 ? 't1' : 't2';
+  return '<span class="cb '+tc+'">'+tl+'</span>'
     + '<span class="cb lvl">'+d.level+'</span>'
     + '<span class="cb">'+d.source.split('·').slice(-1)[0].trim()+'</span>';
 }
 function renderToday(){
-  var d = dilemmaForIndex(TODAY_INDEX);
+  var d = todaysDilemma || dilemmaForIndex(TODAY_INDEX);
   var answered = d.id in GC.calls;
   var html = '<div class="call-card">'
     + '<div class="call-top"><div class="call-date">Day '+(TODAY_INDEX+1)+' · <b>'+fmtDate(new Date())+'</b></div><div class="call-badges">'+badgesHTML(d)+'</div></div>'
@@ -821,6 +868,10 @@ function reveal(d, instant){
     h += '<div class="rv-h g">✅ What I actually did</div>';
     if (d.best) h += '<span class="rv-match '+(hit?'hit':'miss')+'">'+(hit?'✓ You made my call':'You called it differently — here’s my reasoning')+'</span>';
     h += '<div class="rv-real"><p>'+d.real+'</p></div>';
+  } else if (d.tier===3){
+    var hit3 = d.best && youKey===d.best;
+    if (d.best) h += '<span class="rv-match '+(hit3?'hit':'miss')+'">'+(hit3?'✓ You made the call this one leans toward':'A different read — see the thinking above')+'</span>';
+    if (d.real){ h += '<div class="rv-h b">👥 What the submitter shared</div><div class="rv-real public"><p>'+d.real+'</p></div>'; }
   } else if (d.real){
     h += '<div class="rv-h b">🌍 What actually happened</div><div class="rv-real public"><p>'+d.real+'</p></div>';
   } else {
@@ -923,7 +974,14 @@ document.getElementById('rec-reset').onclick = function(){
 };
 
 /* ---------- INIT ---------- */
-renderToday(); renderArchive(); refreshRecord();
+function showCallLoading(){ mount.innerHTML = '<div class="call-card"><div style="color:var(--muted);font-size:.92rem;padding:1.6rem .3rem">Loading today\u2019s call\u2026</div></div>'; }
+function initToday(){
+  var fallback = dilemmaForIndex(TODAY_INDEX);
+  if (!SB){ todaysDilemma = fallback; renderToday(); return; }
+  showCallLoading();
+  fetchTodaysScheduled().then(function(comm){ todaysDilemma = comm || fallback; renderToday(); }).catch(function(){ todaysDilemma = fallback; renderToday(); });
+}
+initToday(); renderArchive(); refreshRecord();
 
 /* ════════ MOBILE MENU ════════ */
 (function(){
