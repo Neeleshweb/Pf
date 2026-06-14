@@ -226,6 +226,14 @@
     .aud-opt:hover { border-color: var(--accent); transform: translateX(3px); background: var(--card); }
     .aud-opt span { display: block; font-size: .76rem; color: var(--muted); font-weight: 400; margin-top: .2rem; }
 
+    /* SUBMIT */
+    .aud-modal.tall { max-width: 540px; max-height: 88vh; overflow-y: auto; text-align: left; }
+    .sub-field { margin-bottom: .8rem; }
+    .sub-field label { display: block; font-size: .76rem; color: var(--muted); margin-bottom: .35rem; }
+    .sub-field textarea, .sub-field input { width: 100%; background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: .65rem .85rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .85rem; resize: vertical; min-height: 48px; }
+    .sub-field input { min-height: 0; }
+    .sub-field textarea:focus, .sub-field input:focus { outline: none; border-color: var(--accent3); }
+
     /* FOOTER */
     .footer { border-top: 1px solid var(--border); padding: 3rem 2.5rem 2.5rem; text-align: center; }
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; margin-bottom: 1rem; }
@@ -242,6 +250,7 @@
       .dist-txt .dl { max-width: 60%; }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -349,6 +358,16 @@
   <button class="rec-reset" id="rec-reset">Reset my profile</button>
 </section>
 
+<!-- SUBMIT A DILEMMA -->
+<section class="section" id="submit">
+  <div class="call-card" style="padding:1.6rem 1.8rem">
+    <div class="sec-eyebrow b" style="margin-bottom:.5rem">Community</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.5px;margin-bottom:.4rem">Faced a tough call? Turn it into a Gut Check.</div>
+    <p style="font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem">The best dilemmas come from real rooms. Share a product fork you faced — if it's picked, PMs everywhere will test themselves on your call (credited, if you like). Every submission is reviewed before it goes live.</p>
+    <button class="btn-primary" id="open-submit">✍️ Submit your dilemma</button>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-logo">NEELESH<span>.</span>PM</div>
@@ -372,6 +391,21 @@
   </div>
 </div>
 
+<!-- SUBMIT MODAL -->
+<div class="aud-overlay" id="submit-overlay">
+  <div class="aud-modal tall" role="dialog" aria-modal="true">
+    <h3 style="text-align:center">SUBMIT A DILEMMA</h3>
+    <p style="text-align:center">A real product fork where smart people could disagree. Keep it anonymous — fuzz anything sensitive.</p>
+    <div class="sub-field"><label>The situation</label><textarea id="sm-scenario" placeholder="Set the scene: the product, what was at stake, who wanted what…"></textarea></div>
+    <div class="sub-field"><label>The decision / question</label><textarea id="sm-q" placeholder="What was the call you had to make?"></textarea></div>
+    <div class="sub-field"><label>The options (one per line, 2–4)</label><textarea id="sm-opts" placeholder="Ship the patch now&#10;Quantify the root cause first&#10;Escalate to leadership"></textarea></div>
+    <div class="sub-field"><label>What actually happened / your take (optional)</label><textarea id="sm-outcome"></textarea></div>
+    <div class="sub-field"><label>Email (optional — so we can credit you)</label><input id="sm-email" type="email" placeholder="you@work.com"></div>
+    <div style="display:flex;gap:.6rem;margin-top:.4rem"><button class="btn-primary" id="sm-send">Send for review</button><button class="btn-ghost" id="sm-cancel">Cancel</button></div>
+    <div class="sub-ok" id="sm-ok">✓ Thank you — your dilemma is in the review queue.</div>
+  </div>
+</div>
+
 <script>
 /* ════════════════════════════════════════════════════════
    PM GUT CHECK — one real product call a day
@@ -379,6 +413,25 @@
    Phase A: progress local (localStorage); crowd numbers are a labelled
    preview seeded per-dilemma. Phase B swaps getDist() for live Supabase.
    ════════════════════════════════════════════════════════ */
+
+/* ---------- SUPABASE (Phase B) ----------
+   Paste your Project URL + anon public key below. Until you do, the page
+   stays in the labelled "preview" mode and works exactly like Phase A. */
+var GC_CONFIG = {
+  url:  'https://oxxzygbfgmlnvavjmhct.supabase.co/rest/v1/',
+  anon: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc'
+};
+var GC_LIVE = (GC_CONFIG.url.indexOf('supabase.co') !== -1) && (GC_CONFIG.anon.length > 20);
+var SB = null;
+try { if (GC_LIVE && window.supabase && window.supabase.createClient) SB = window.supabase.createClient(GC_CONFIG.url, GC_CONFIG.anon); } catch(e){ SB = null; }
+
+function fetchDist(dilemmaId){ if(!SB) return Promise.resolve(null); return SB.rpc('gc_distribution',{ p_dilemma: dilemmaId }).then(function(res){ return (res && !res.error && res.data) ? res.data : null; }).catch(function(){ return null; }); }
+function recordVote(d, key){ if(!SB) return Promise.resolve(); return SB.from('gc_votes').insert({ device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience }).then(function(){}).catch(function(){}); }
+function saveSubscriber(email){ if(!SB) return Promise.resolve(); return SB.from('gc_subscribers').insert({ email: email, audience: GC.audience }).then(function(){}).catch(function(){}); }
+function saveSubmission(p){ if(!SB) return Promise.resolve(); return SB.from('gc_submissions').insert(p).then(function(){}).catch(function(){}); }
+function pctMap(d, map, total){ var out={}; if(total<1){ d.opts.forEach(function(o){ out[o.k]=0; }); return out; } var raw=d.opts.map(function(o){ return (map[o.k]||0)/total*100; }); var fl=raw.map(Math.floor); var rem=100-fl.reduce(function(a,b){return a+b;},0); var ord=raw.map(function(x,i){return [x-Math.floor(x),i];}).sort(function(a,b){return b[0]-a[0];}); for(var i=0;i<rem;i++) fl[ord[i][1]]++; var o={}; d.opts.forEach(function(op,i){ o[op.k]=fl[i]; }); return o; }
+function aggregate(d, rows){ var ov={},asp={},wrk={},tot=0,aT=0,wT=0; d.opts.forEach(function(o){ ov[o.k]=0; asp[o.k]=0; wrk[o.k]=0; }); rows.forEach(function(r){ var k=r.choice, n=Number(r.n)||0; if(!(k in ov)) return; ov[k]+=n; tot+=n; if(r.audience==='aspiring'){ asp[k]+=n; aT+=n; } else if(r.audience==='working'){ wrk[k]+=n; wT+=n; } }); return { total:tot, aspiringTotal:aT, workingTotal:wT, overall:pctMap(d,ov,tot), aspiring:pctMap(d,asp,aT), working:pctMap(d,wrk,wT) }; }
+function enhanceLive(scopeEl, d){ if(!SB || !scopeEl) return; fetchDist(d.id).then(function(rows){ if(!rows || !rows.length) return; var a=aggregate(d, rows); if(a.total<1) return; d.opts.forEach(function(o){ var row=scopeEl.querySelector('.dist-row[data-k="'+o.k+'"]'); if(row){ var bar=row.querySelector('.dist-bar i'); var dp=row.querySelector('.dp'); if(bar) bar.style.width=a.overall[o.k]+'%'; if(dp) dp.textContent=a.overall[o.k]+'%'; } }); ['aspiring','working'].forEach(function(ch){ var card=scopeEl.querySelector('.split-card[data-cohort="'+ch+'"]'); if(card){ d.opts.forEach(function(o){ var b=card.querySelector('.sc-row[data-k="'+o.k+'"] b'); if(b) b.textContent = a[ch+'Total']>0 ? a[ch][o.k]+'%' : '—'; }); } }); var tag=scopeEl.querySelector('.crowd-tag'); if(tag){ tag.textContent='Live · '+a.total+' PM'+(a.total===1?'':'s')+' have called this'; tag.style.color='var(--green)'; tag.style.borderColor='rgba(74,222,128,.4)'; } }); }
 
 /* ---------- DIMENSIONS ---------- */
 var DIM = { u:'🎯 User Focus', e:'📊 Evidence', s:'🤝 Stakeholders', r:'⚖️ Risk' };
@@ -633,6 +686,9 @@ GC.dims = GC.dims || {u:0,e:0,s:0,r:0};
 GC.decisions = GC.decisions || 0;
 GC.audience = GC.audience || null;    // 'aspiring' | 'working'
 GC.subscribed = GC.subscribed || false;
+GC.device = GC.device || ('d_' + Math.random().toString(36).slice(2) + Date.now().toString(36));
+var DEVICE_ID = GC.device;
+gcSave(GC);
 
 /* streak */
 (function(){
@@ -732,6 +788,7 @@ function doCommit(d, key){
   /* highlight chosen */
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ if (b.querySelector('.opt-k') && b.querySelector('.opt-k').textContent===key){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } b.style.opacity=.96; });
   reveal(d, false);
+  if (SB) { recordVote(d, key).then(function(){ enhanceLive(document.getElementById('today-reveal'), d); }); }
   refreshRecord(); renderArchive();
 }
 
@@ -741,16 +798,16 @@ function reveal(d, instant){
   var youKey = GC.calls[d.id];
   var h = '<div class="rv">';
   /* crowd */
-  h += '<div class="rv-h b">📊 How the crowd called it <span class="preview-tag">Preview · live community soon</span></div>';
+  h += '<div class="rv-h b">📊 How the crowd called it <span class="preview-tag crowd-tag">Preview · live community soon</span></div>';
   d.opts.forEach(function(o){
     var p = dist[o.k], you = (o.k===youKey);
-    h += '<div class="dist-row"><span class="dist-key">'+o.k+'</span><div class="dist-bar'+(you?' you':'')+'"><i data-w="'+p+'"></i><span class="dist-txt"><span class="dl">'+o.t+(you?'<span class="dist-you-tag">· your call</span>':'')+'</span><span class="dp">'+p+'%</span></span></div></div>';
+    h += '<div class="dist-row" data-k="'+o.k+'"><span class="dist-key">'+o.k+'</span><div class="dist-bar'+(you?' you':'')+'"><i data-w="'+p+'"></i><span class="dist-txt"><span class="dl">'+o.t+(you?'<span class="dist-you-tag">· your call</span>':'')+'</span><span class="dp">'+p+'%</span></span></div></div>';
   });
   /* audience split */
   var asp = distFor(d,'aspiring'), wrk = distFor(d,'working');
   h += '<div class="rv-split">'
-    + '<div class="split-card"><h6>🌱 Breaking-in PMs</h6>'+ d.opts.map(function(o){ return '<div class="sc-row"><span>'+o.k+'</span><b>'+asp[o.k]+'%</b></div>'; }).join('') +'</div>'
-    + '<div class="split-card"><h6>⚙️ Working PMs</h6>'+ d.opts.map(function(o){ return '<div class="sc-row"><span>'+o.k+'</span><b>'+wrk[o.k]+'%</b></div>'; }).join('') +'</div>'
+    + '<div class="split-card" data-cohort="aspiring"><h6>🌱 Breaking-in PMs</h6>'+ d.opts.map(function(o){ return '<div class="sc-row" data-k="'+o.k+'"><span>'+o.k+'</span><b>'+asp[o.k]+'%</b></div>'; }).join('') +'</div>'
+    + '<div class="split-card" data-cohort="working"><h6>⚙️ Working PMs</h6>'+ d.opts.map(function(o){ return '<div class="sc-row" data-k="'+o.k+'"><span>'+o.k+'</span><b>'+wrk[o.k]+'%</b></div>'; }).join('') +'</div>'
     + '</div>';
   /* your dims */
   var fx = d.dims && d.dims[youKey];
@@ -811,13 +868,14 @@ function buildArchDetail(item, d){
   var opts = item.querySelector('.arch-opts');
   d.opts.forEach(function(o){ var p=dist[o.k], you=o.k===youKey;
     var row = document.createElement('div'); row.className='dist-row';
-    row.innerHTML = '<span class="dist-key">'+o.k+'</span><div class="dist-bar'+(you?' you':'')+'"><i style="width:'+p+'%"></i><span class="dist-txt"><span class="dl">'+o.t+(you?'<span class="dist-you-tag">· your call</span>':'')+'</span><span class="dp">'+p+'%</span></span></div>';
+    row.className='dist-row'; row.setAttribute('data-k', o.k); row.innerHTML = '<span class="dist-key">'+o.k+'</span><div class="dist-bar'+(you?' you':'')+'"><i style="width:'+p+'%"></i><span class="dist-txt"><span class="dl">'+o.t+(you?'<span class="dist-you-tag">· your call</span>':'')+'</span><span class="dp">'+p+'%</span></span></div>';
     opts.appendChild(row);
   });
   var rev = item.querySelector('.arch-rev');
   var realHtml = d.real ? ('<div class="rv-h '+(d.tier===1?'g':'b')+'" style="margin-top:1.1rem">'+(d.tier===1?'✅ What I actually did':'🌍 What actually happened')+'</div><div class="rv-real '+(d.tier===1?'':'public')+'"><p>'+d.real+'</p></div>') : '';
   rev.innerHTML = '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'+realHtml+'<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'
-    + '<span class="preview-tag" style="margin-top:.8rem;display:inline-block">Crowd numbers are a preview · live community soon</span>';
+    + '<span class="preview-tag crowd-tag" style="margin-top:.8rem;display:inline-block">Crowd numbers are a preview · live community soon</span>';
+  if (SB) enhanceLive(item, d);
 }
 
 /* ---------- SUBSCRIBE (Phase A: local; Phase B: Supabase) ---------- */
@@ -830,8 +888,28 @@ function buildArchDetail(item, d){
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ inp.style.borderColor='var(--red)'; inp.focus(); return; }
     inp.style.borderColor='var(--border2)';
     GC.subscribed = true; GC.email = v; gcSave(GC);
-    /* Phase B hook: POST {email, audience} to Supabase here */
+    saveSubscriber(v);
     ok.style.display='block'; note.textContent='Saved on your device for now. We’ll import early-list emails when daily sending goes live.'; inp.value=''; inp.placeholder='You’re on the list ✓';
+  };
+})();
+
+/* ---------- SUBMIT A DILEMMA ---------- */
+(function(){
+  var openB=document.getElementById('open-submit'), ov=document.getElementById('submit-overlay'),
+      cancel=document.getElementById('sm-cancel'), send=document.getElementById('sm-send'), ok=document.getElementById('sm-ok');
+  if(!openB||!ov) return;
+  function val(id){ var e=document.getElementById(id); return e?(e.value||'').trim():''; }
+  function open(){ ov.classList.add('open'); }
+  function close(){ ov.classList.remove('open'); }
+  openB.onclick=open; cancel.onclick=close;
+  ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+  send.onclick=function(){
+    var sc=val('sm-scenario'), q=val('sm-q'), opts=val('sm-opts');
+    if(sc.length<10 || q.length<5 || opts.length<5){ alert('Add a little more — the situation, the question, and at least two options.'); return; }
+    saveSubmission({ scenario:sc, question:q, options:opts, outcome:val('sm-outcome'), email:val('sm-email'), audience:GC.audience });
+    ok.style.display='block'; send.disabled=true; send.textContent='Sent ✓';
+    setTimeout(function(){ close(); send.disabled=false; send.textContent='Send for review'; ok.style.display='none';
+      ['sm-scenario','sm-q','sm-opts','sm-outcome','sm-email'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; }); }, 1500);
   };
 })();
 
@@ -856,7 +934,7 @@ renderToday(); renderArchive(); refreshRecord();
   bd.addEventListener('click', closeMenu); closeBtn.addEventListener('click', closeMenu);
   function smoothTo(id){ var el=document.getElementById(id); if(!el) return; var y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); }
   function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn,80); }; return a; }
-  [["Today's Call",'today'],['The Archive','archive'],['Your Profile','profile'],['Get it by email','subscribe']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
+  [["Today's Call",'today'],['The Archive','archive'],['Your Profile','profile'],['Submit a dilemma','submit'],['Get it by email','subscribe']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
   body.appendChild(link('PM Toolkit ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/toolkit.html'; }));
   body.appendChild(link('Portfolio ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/portfolio.html'; }));
   body.appendChild(link('🏠  Home', function(){ window.location.href='https://neeleshpmtoolkit.com/index.html'; }));
