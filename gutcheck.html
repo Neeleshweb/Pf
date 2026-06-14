@@ -438,20 +438,30 @@ function parseOptions(text){
   var keys = ['A','B','C','D'];
   return lines.map(function(l,i){ var t=l, d=''; var sep = l.indexOf(' — ')>=0?' — ':(l.indexOf(' | ')>=0?' | ':(l.indexOf(' - ')>=0?' - ':null)); if(sep){ var p=l.split(sep); t=p[0].trim(); d=p.slice(1).join(sep).trim(); } return { k:keys[i], t:t, d:d }; });
 }
+function scheduleRowToDilemma(row){
+  if(!row) return null;
+  if(row.kind === 'bank'){ for(var i=0;i<BANK.length;i++){ if(BANK[i].id === row.bank_id) return BANK[i]; } return null; }
+  var opts = parseOptions(row.options); if(opts.length < 2) return null;
+  return { id: row.dilemma_id || 'sub-x', tier:3, level:(row.level||'Senior'),
+    source: row.credit ? ('Community · '+row.credit) : 'Community submission',
+    scenario: row.scenario||'', q: row.question||'What would you do?', opts: opts,
+    best: ((row.best||'').trim().toUpperCase())||null, dims:null,
+    breakdown: row.breakdown || 'This dilemma came straight from the community — there isn\u2019t an official \u201cright\u201d answer here. What matters is whether your reasoning holds together.',
+    real: row.outcome||null, lesson: row.lesson||null };
+}
 function fetchTodaysScheduled(){
   if(!SB) return Promise.resolve(null);
   return SB.rpc('gc_todays_dilemma', { p_date: localDateStr() }).then(function(res){
     if(res && res.error){ console.warn('[GutCheck] schedule read error:', res.error); return null; }
-    var row = res && res.data && res.data[0]; if(!row) return null;
-    if(row.kind === 'bank'){ for(var i=0;i<BANK.length;i++){ if(BANK[i].id === row.bank_id) return BANK[i]; } return null; }
-    var opts = parseOptions(row.options); if(opts.length < 2) return null;
-    return { id: row.dilemma_id || 'sub-x', tier:3, level:(row.level||'Senior'),
-      source: row.credit ? ('Community · '+row.credit) : 'Community submission',
-      scenario: row.scenario||'', q: row.question||'What would you do?', opts: opts,
-      best: ((row.best||'').trim().toUpperCase())||null, dims:null,
-      breakdown: row.breakdown || 'This dilemma came straight from the community — there isn\u2019t an official \u201cright\u201d answer here. What matters is whether your reasoning holds together.',
-      real: row.outcome||null, lesson: row.lesson||null };
+    return scheduleRowToDilemma(res && res.data && res.data[0]);
   }).catch(function(e){ console.warn('[GutCheck] schedule failed:', e); return null; });
+}
+function fetchArchive(){
+  if(!SB) return Promise.resolve(null);
+  return SB.rpc('gc_archive', { p_today: localDateStr(), p_limit: 60 }).then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] archive read error:', res.error); return null; }
+    return (res && res.data) ? res.data : null;
+  }).catch(function(e){ console.warn('[GutCheck] archive failed:', e); return null; });
 }
 
 function pctMap(d, map, total){ var out={}; if(total<1){ d.opts.forEach(function(o){ out[o.k]=0; }); return out; } var raw=d.opts.map(function(o){ return (map[o.k]||0)/total*100; }); var fl=raw.map(Math.floor); var rem=100-fl.reduce(function(a,b){return a+b;},0); var ord=raw.map(function(x,i){return [x-Math.floor(x),i];}).sort(function(a,b){return b[0]-a[0];}); for(var i=0;i<rem;i++) fl[ord[i][1]]++; var o={}; d.opts.forEach(function(op,i){ o[op.k]=fl[i]; }); return o; }
@@ -817,7 +827,7 @@ function doCommit(d, key){
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ if (b.querySelector('.opt-k') && b.querySelector('.opt-k').textContent===key){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } b.style.opacity=.96; });
   reveal(d, false);
   if (SB) { recordVote(d, key).then(function(){ enhanceLive(document.getElementById('today-reveal'), d); }); }
-  refreshRecord(); renderArchive();
+  refreshRecord();
 }
 
 function reveal(d, instant){
@@ -876,24 +886,28 @@ function closeAud(){ audOv.classList.remove('open'); }
 });
 
 /* ---------- ARCHIVE ---------- */
+function fmtDateStr(sv){ var p=(sv||'').split('-'); if(p.length!==3) return sv||''; var dt=new Date(Date.UTC(+p[0],+p[1]-1,+p[2])); return dt.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}); }
+function addArchItem(list, dateLabel, d){
+  var made = d.id in GC.calls, youKey = GC.calls[d.id];
+  var badge = d.tier===1 ? '★ Real call' : (d.tier===3 ? '👥 Community' : 'Industry / public');
+  var item = document.createElement('div'); item.className = 'arch-item';
+  item.innerHTML = '<div class="arch-top"><span class="arch-day">'+dateLabel+' · '+badge+'</span><span class="arch-status '+(made?'made':'missed')+'">'+(made?'✓ you called '+youKey:'· locked — not answered')+'</span></div>'
+    + '<div class="arch-title">'+d.scenario.replace(/<[^>]+>/g,'').slice(0,110)+'…</div>'
+    + '<div class="arch-status" style="color:var(--accent2)">▾ Tap to study this call</div>'
+    + '<div class="arch-detail"><div class="arch-q">'+d.q+'</div><div class="arch-opts"></div><div class="arch-rev"></div></div>';
+  item.querySelector('.arch-top').parentNode.onclick = function(e){ item.classList.toggle('open'); if (item.classList.contains('open') && !item._built){ buildArchDetail(item, d); item._built = true; } };
+  list.appendChild(item);
+}
 function renderArchive(){
   var list = document.getElementById('arch-list'); if(!list) return;
-  list.innerHTML = '';
-  if (TODAY_INDEX === 0){ list.innerHTML = '<div class="arch-empty">No past calls yet — today is day one. Come back tomorrow and this fills up.</div>'; return; }
-  var start = TODAY_INDEX - 1, stop = Math.max(0, TODAY_INDEX - 14);
-  for (var i = start; i >= stop; i--){
-    (function(idx){
-      var d = dilemmaForIndex(idx);
-      var made = d.id in GC.calls;
-      var item = document.createElement('div'); item.className = 'arch-item';
-      item.innerHTML = '<div class="arch-top"><span class="arch-day">Day '+(idx+1)+' · '+fmtDate(dateForIndex(idx))+'</span><span class="arch-status '+(made?'made':'missed')+'">'+(made?'✓ you called '+GC.calls[d.id]:'· locked — not answered')+'</span></div>'
-        + '<div class="arch-title">'+d.scenario.replace(/<[^>]+>/g,'').slice(0,110)+'…</div>'
-        + '<div class="arch-status" style="color:var(--accent2)">▾ Tap to study this call</div>'
-        + '<div class="arch-detail"><div class="arch-q">'+d.q+'</div><div class="arch-opts"></div><div class="arch-rev"></div></div>';
-      item.querySelector('.arch-top').parentNode.onclick = function(e){ item.classList.toggle('open'); if (item.classList.contains('open') && !item._built){ buildArchDetail(item, d); item._built = true; } };
-      list.appendChild(item);
-    })(i);
-  }
+  if(!SB){ list.innerHTML = '<div class="arch-empty">Past calls will appear here once the live archive is active.</div>'; return; }
+  list.innerHTML = '<div class="arch-empty">Loading past calls…</div>';
+  fetchArchive().then(function(rows){
+    list.innerHTML = '';
+    if(!rows || !rows.length){ list.innerHTML = '<div class="arch-empty">No past calls yet — today is the first one. Come back tomorrow and the archive fills up.</div>'; return; }
+    rows.forEach(function(row){ var d = scheduleRowToDilemma(row); if(d) addArchItem(list, fmtDateStr(row.publish_date), d); });
+    if(!list.children.length){ list.innerHTML = '<div class="arch-empty">No past calls to show yet.</div>'; }
+  }).catch(function(){ list.innerHTML = '<div class="arch-empty">Couldn’t load past calls right now — please refresh.</div>'; });
 }
 function buildArchDetail(item, d){
   var dist = distFor(d,'all'), youKey = GC.calls[d.id];
@@ -904,7 +918,8 @@ function buildArchDetail(item, d){
     opts.appendChild(row);
   });
   var rev = item.querySelector('.arch-rev');
-  var realHtml = d.real ? ('<div class="rv-h '+(d.tier===1?'g':'b')+'" style="margin-top:1.1rem">'+(d.tier===1?'✅ What I actually did':'🌍 What actually happened')+'</div><div class="rv-real '+(d.tier===1?'':'public')+'"><p>'+d.real+'</p></div>') : '';
+  var realLabel = d.tier===1 ? '✅ What I actually did' : (d.tier===3 ? '👥 What the submitter shared' : '🌍 What actually happened');
+  var realHtml = d.real ? ('<div class="rv-h '+(d.tier===1?'g':'b')+'" style="margin-top:1.1rem">'+realLabel+'</div><div class="rv-real '+(d.tier===1?'':'public')+'"><p>'+d.real+'</p></div>') : '';
   rev.innerHTML = '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'+realHtml+'<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'
     + '<span class="preview-tag crowd-tag" style="margin-top:.8rem;display:inline-block">Crowd numbers are a preview · live community soon</span>';
   if (SB) enhanceLive(item, d);
