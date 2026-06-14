@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="PM Gut Check by Neelesh Singh — one real product decision every day. Make the call, see how PMs around the world voted, then find out what actually happened. The daily judgment habit no AI can give you."/>
+  <title>PM Gut Check — Neelesh Singh</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black:#080808; --surface:#0f0f0f; --card:#141414; --card2:#191919;
+      --border:#242424; --border2:#2e2e2e; --white:#f0ece4; --muted:#6b6b6b; --muted2:#4a4a4a;
+      --accent:#e8540a; --accent2:#f0a500; --accent3:#3b82f6; --green:#4ade80; --red:#ff6b6b;
+      --accent-dim:rgba(232,84,10,0.12); --accent2-dim:rgba(240,165,0,0.10); --accent3-dim:rgba(59,130,246,0.10);
+      --radius:3px;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: 'DM Sans', sans-serif; cursor: pointer; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+    /* NAV */
+    .nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; height: 60px; background: rgba(8,8,8,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 3px; display: flex; align-items: center; gap: .5rem; }
+    .nav-logo .logo-box { width: 28px; height: 28px; border-radius: 7px; background: var(--accent); display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+    .nav-logo .logo-box svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-logo .logo-word { font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: .2px; color: var(--white); }
+    .nav-logo .logo-word .ac { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 0; list-style: none; }
+    .nav-links a { display: block; padding: 0 .6rem; height: 60px; line-height: 60px; white-space: nowrap; font-size: .78rem; letter-spacing: .3px; text-transform: uppercase; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-home { display: flex; align-items: center; gap: .45rem; font-size: .8rem; color: var(--white); letter-spacing: .5px; background: var(--accent); padding: .5rem 1.1rem; border-radius: var(--radius); font-weight: 500; transition: opacity .2s, transform .15s; }
+    .nav-home:hover { opacity: .9; transform: translateY(-1px); }
+    .nav-home svg { width: 15px; height: 15px; }
+    .search-wrap { position: relative; display: flex; align-items: center; }
+    .search-ico { position: absolute; left: .75rem; width: 14px; height: 14px; color: var(--muted); pointer-events: none; }
+    .site-search { width: 140px; background: rgba(255,255,255,0.045); border: 1px solid var(--border2); border-radius: 11px; padding: .5rem .8rem .5rem 2.1rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .82rem; transition: width .2s, border-color .2s, box-shadow .2s; }
+    .site-search::placeholder { color: var(--muted2); }
+    .site-search:focus { outline: none; width: 210px; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,84,10,0.16); }
+    .search-drop { position: absolute; top: 125%; right: 0; width: 320px; max-height: 400px; overflow-y: auto; background: rgba(18,18,18,0.97); backdrop-filter: blur(16px); border: 1px solid var(--border2); border-radius: 16px; padding: .45rem; display: none; z-index: 300; box-shadow: 0 24px 60px rgba(0,0,0,.62); }
+    .search-drop.open { display: block; }
+    .search-count { display: flex; align-items: center; gap: .45rem; font-size: .6rem; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); padding: .6rem .75rem; margin-bottom: .2rem; border-bottom: 1px solid var(--border); }
+    .search-count::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    .search-item { display: flex; align-items: flex-start; justify-content: space-between; gap: .7rem; padding: .7rem .75rem; border-radius: 11px; cursor: pointer; transition: background .15s; }
+    .search-item:hover, .search-item.kbd { background: var(--card2); }
+    .search-item.kbd { box-shadow: inset 2px 0 0 var(--accent); }
+    .search-snip { font-size: .82rem; color: #a9a39a; line-height: 1.5; }
+    .search-snip mark.snip { background: transparent; color: var(--accent2); font-weight: 600; }
+    .search-item-type { font-size: .55rem; font-weight: 600; letter-spacing: .6px; text-transform: uppercase; color: var(--accent3); background: var(--accent3-dim); border: 1px solid rgba(59,130,246,0.28); padding: .2rem .5rem; border-radius: 100px; flex-shrink: 0; margin-top: .12rem; }
+    .search-empty { text-align: center; padding: 1.9rem 1rem 1.6rem; }
+    .search-empty svg { width: 84px; height: 84px; margin-bottom: .5rem; opacity: .92; }
+    .search-empty p { font-size: .85rem; color: var(--muted); line-height: 1.5; }
+    .search-empty p b { color: var(--white); font-weight: 500; }
+    mark.search-hl { background: linear-gradient(180deg, rgba(240,165,0,.92), rgba(232,84,10,.88)); color: #111; border-radius: 3px; padding: 0 2px; box-shadow: 0 0 0 1px rgba(240,165,0,.35); }
+    .hamburger { display: none; width: 42px; height: 42px; border: 1px solid var(--border2); background: var(--card); border-radius: 10px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
+    .hamburger span { width: 18px; height: 2px; background: var(--white); border-radius: 2px; transition: transform .25s, opacity .2s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .mobile-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.6); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 400; }
+    .mobile-backdrop.open { opacity: 1; pointer-events: auto; }
+    .mobile-menu { position: fixed; top: 0; right: 0; height: 100%; width: min(330px, 86vw); background: var(--surface); border-left: 1px solid var(--border2); transform: translateX(102%); transition: transform .32s cubic-bezier(.4,0,.2,1); z-index: 401; display: flex; flex-direction: column; box-shadow: -24px 0 60px rgba(0,0,0,.55); }
+    .mobile-menu.open { transform: translateX(0); }
+    .mm-head { display: flex; align-items: center; justify-content: space-between; padding: 1.05rem 1.2rem; border-bottom: 1px solid var(--border); }
+    .mm-title { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2.5px; font-size: 1.25rem; }
+    .mm-close { background: none; border: none; color: var(--muted); font-size: 1.15rem; cursor: pointer; width: 34px; height: 34px; border-radius: 8px; }
+    .mm-close:hover { background: var(--card); color: var(--white); }
+    .mm-body { padding: .55rem; overflow-y: auto; flex: 1; }
+    .mm-link { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .85rem 1rem; border-radius: 11px; color: var(--white); font-size: .95rem; cursor: pointer; transition: background .15s; }
+    .mm-link:hover { background: var(--card); }
+    @media (max-width: 980px) { .site-search { width: 120px; } .site-search:focus { width: 170px; } }
+    @media (max-width: 860px) { .nav-links, .nav-home { display: none; } .hamburger { display: flex; } .site-search { width: 110px; padding-left: 2rem; } .site-search:focus { width: 150px; } .search-drop { width: calc(100vw - 1.5rem); max-width: 340px; } .nav-right { gap: .6rem; } }
+
+    /* HERO */
+    .hero { position: relative; overflow: hidden; padding: 5rem 2.5rem 3.5rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+    .hero::before, .hero::after { content: ''; position: absolute; border-radius: 50%; filter: blur(90px); opacity: .5; pointer-events: none; z-index: 0; }
+    .hero::before { width: 460px; height: 460px; background: radial-gradient(circle, rgba(232,84,10,0.45), transparent 70%); top: -130px; left: -100px; animation: float1 14s ease-in-out infinite; }
+    .hero::after { width: 400px; height: 400px; background: radial-gradient(circle, rgba(240,165,0,0.30), transparent 70%); bottom: -120px; right: 6%; animation: float2 18s ease-in-out infinite; }
+    @keyframes float1 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(60px,40px) scale(1.12);} }
+    @keyframes float2 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(-50px,-30px) scale(1.18);} }
+    .hero-grid { position: absolute; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 30%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 30%, transparent 80%); }
+    .hero-inner { position: relative; z-index: 1; max-width: 880px; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-size: .72rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent2); border: 1px solid rgba(240,165,0,.3); background: var(--accent2-dim); padding: .45rem 1rem; border-radius: 100px; margin-bottom: 1.5rem; }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 8vw, 5.8rem); letter-spacing: 2px; line-height: .98; }
+    .hero h1 .o { color: var(--accent); } .hero h1 .y { color: var(--accent2); }
+    .hero-sub { margin: 1.3rem auto 0; max-width: 660px; color: #b5b0a8; font-size: 1.02rem; line-height: 1.75; }
+    .hero-sub strong { color: var(--white); }
+    .hero-ctas { margin-top: 1.9rem; display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--accent); color: #fff; font-weight: 600; font-size: .9rem; padding: .85rem 1.7rem; border-radius: var(--radius); border: none; transition: transform .15s, background .2s; }
+    .btn-primary:hover { transform: translateY(-2px); background: var(--accent2); color: #111; }
+    .btn-ghost { background: transparent; color: var(--white); font-weight: 500; font-size: .9rem; padding: .85rem 1.7rem; border-radius: var(--radius); border: 1px solid var(--border2); transition: border-color .2s, transform .15s; }
+    .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .gym-strip { margin: 2.4rem auto 0; display: flex; gap: .7rem; flex-wrap: wrap; justify-content: center; }
+    .gym-stat { background: rgba(20,20,20,.75); border: 1px solid var(--border2); border-radius: 12px; padding: .7rem 1.15rem; min-width: 120px; backdrop-filter: blur(8px); }
+    .gym-stat b { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 1.55rem; letter-spacing: .5px; color: var(--accent2); line-height: 1.1; }
+    .gym-stat small { font-size: .64rem; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); }
+    .gym-stat.fire b { color: var(--accent); } .gym-stat.green b { color: var(--green); } .gym-stat.blue b { color: var(--accent3); }
+
+    /* SECTIONS */
+    .section { padding: 3.6rem 2.5rem; max-width: 920px; margin: 0 auto; }
+    .section.wide { max-width: 1160px; }
+    .sec-eyebrow { font-size: .7rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); margin-bottom: .8rem; font-weight: 600; }
+    .sec-eyebrow.y { color: var(--accent2); } .sec-eyebrow.b { color: var(--accent3); } .sec-eyebrow.g { color: var(--green); }
+    .sec-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3rem); letter-spacing: 1px; line-height: 1.04; margin-bottom: 1rem; }
+    .sec-title span { color: var(--accent); } .sec-title .y { color: var(--accent2); } .sec-title .b { color: var(--accent3); } .sec-title .g { color: var(--green); }
+    .sec-sub { color: var(--muted); font-size: .92rem; max-width: 680px; line-height: 1.7; margin-bottom: 2rem; }
+    .sec-sub strong { color: var(--white); }
+
+    /* TODAY'S CALL CARD */
+    .call-card { position: relative; background: var(--card); border: 1px solid var(--border2); border-radius: 16px; padding: 1.8rem; overflow: hidden; }
+    .call-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .call-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+    .call-date { font-size: .72rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); }
+    .call-date b { color: var(--accent2); }
+    .call-badges { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .cb { font-size: .58rem; font-weight: 600; letter-spacing: .8px; text-transform: uppercase; padding: .25rem .6rem; border-radius: 100px; border: 1px solid var(--border2); color: var(--muted); }
+    .cb.t1 { color: var(--accent); background: var(--accent-dim); border-color: rgba(232,84,10,.3); }
+    .cb.t2 { color: var(--accent3); background: var(--accent3-dim); border-color: rgba(59,130,246,.3); }
+    .cb.lvl { color: var(--accent2); background: var(--accent2-dim); border-color: rgba(240,165,0,.3); }
+    .call-scenario { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent2); border-radius: 8px; padding: 1.05rem 1.2rem; font-size: .94rem; line-height: 1.75; color: #c9c4bb; margin-bottom: 1.2rem; }
+    .call-scenario strong { color: var(--white); }
+    .call-q { font-size: 1.15rem; font-weight: 600; color: var(--white); margin-bottom: 1rem; line-height: 1.4; }
+    .call-opt { display: block; width: 100%; text-align: left; background: var(--card2); border: 1px solid var(--border2); border-radius: 12px; padding: .95rem 1.1rem; margin-bottom: .7rem; color: #c9c4bb; font-size: .88rem; line-height: 1.55; transition: border-color .2s, transform .15s, background .2s; }
+    .call-opt:hover { border-color: var(--accent); transform: translateX(3px); color: var(--white); }
+    .call-opt b { display: block; color: var(--white); font-size: .92rem; margin-bottom: .15rem; }
+    .call-opt .opt-k { color: var(--accent); margin-right: .4rem; }
+    .call-opt:disabled { cursor: default; transform: none; }
+    .call-reason { margin: .4rem 0 1rem; }
+    .call-reason label { font-size: .76rem; color: var(--muted); display: block; margin-bottom: .4rem; }
+    .call-reason textarea { width: 100%; background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: .7rem .9rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .85rem; resize: vertical; min-height: 56px; }
+    .call-reason textarea:focus { outline: none; border-color: var(--accent3); }
+    .call-hint { font-size: .76rem; color: var(--muted2); margin-top: .3rem; }
+
+    /* REVEAL */
+    .rv { animation: rvIn .4s ease both; }
+    @keyframes rvIn { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: none;} }
+    .rv-h { font-size: .68rem; letter-spacing: 1.6px; text-transform: uppercase; color: var(--accent2); font-weight: 700; margin: 1.5rem 0 .8rem; display: flex; align-items: center; gap: .5rem; }
+    .rv-h.b { color: var(--accent3); } .rv-h.g { color: var(--green); }
+    .preview-tag { font-size: .56rem; letter-spacing: .6px; text-transform: uppercase; color: var(--muted2); border: 1px solid var(--border2); border-radius: 100px; padding: .12rem .5rem; font-weight: 600; }
+    .dist-row { display: flex; align-items: center; gap: .7rem; margin-bottom: .55rem; }
+    .dist-key { width: 22px; font-size: .8rem; font-weight: 700; color: var(--muted); flex-shrink: 0; }
+    .dist-bar { flex: 1; height: 26px; background: var(--card2); border: 1px solid var(--border2); border-radius: 7px; overflow: hidden; position: relative; }
+    .dist-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, rgba(59,130,246,.5), rgba(59,130,246,.8)); border-radius: 6px 0 0 6px; transition: width .9s cubic-bezier(.3,.8,.3,1); }
+    .dist-bar.you i { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .dist-txt { position: absolute; top: 0; left: .6rem; right: .6rem; height: 100%; display: flex; align-items: center; justify-content: space-between; font-size: .76rem; pointer-events: none; }
+    .dist-txt .dl { color: var(--white); max-width: 74%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dist-txt .dp { color: var(--white); font-weight: 600; }
+    .dist-you-tag { font-size: .58rem; color: var(--accent2); font-weight: 600; margin-left: .4rem; }
+    .rv-split { display: flex; gap: .8rem; flex-wrap: wrap; margin-top: .7rem; }
+    .split-card { flex: 1; min-width: 180px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .8rem .95rem; }
+    .split-card h6 { font-size: .62rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+    .split-card .sc-row { display: flex; justify-content: space-between; font-size: .78rem; color: #c9c4bb; margin-bottom: .25rem; }
+    .split-card .sc-row b { color: var(--white); }
+    .rv-dims { display: flex; gap: .45rem; flex-wrap: wrap; margin-top: .4rem; }
+    .rv-dim { font-size: .68rem; padding: .28rem .65rem; border-radius: 100px; border: 1px solid var(--border2); color: var(--muted); }
+    .rv-dim.up { color: var(--green); border-color: rgba(74,222,128,.4); }
+    .rv-dim.down { color: var(--red); border-color: rgba(255,107,107,.4); }
+    .rv-break { font-size: .92rem; line-height: 1.75; color: #c9c4bb; }
+    .rv-break strong { color: var(--white); }
+    .rv-real { background: rgba(74,222,128,.07); border: 1px solid rgba(74,222,128,.3); border-radius: 12px; padding: 1.05rem 1.2rem; margin-top: .5rem; }
+    .rv-real.public { background: var(--accent3-dim); border-color: rgba(59,130,246,.3); }
+    .rv-real p { font-size: .9rem; line-height: 1.7; color: #c9c4bb; }
+    .rv-real p strong { color: var(--green); }
+    .rv-real.public p strong { color: var(--accent3); }
+    .rv-match { display: inline-block; font-size: .64rem; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; padding: .26rem .6rem; border-radius: 100px; margin-bottom: .7rem; }
+    .rv-match.hit { color: var(--green); background: rgba(74,222,128,.12); }
+    .rv-match.miss { color: var(--accent2); background: var(--accent2-dim); }
+    .rv-lesson { margin-top: 1.3rem; font-size: .95rem; font-style: italic; color: var(--white); border-top: 1px dashed var(--border2); padding-top: 1rem; }
+    .rv-lesson span { color: var(--accent2); font-style: normal; font-weight: 600; }
+    .rv-foot { margin-top: 1.4rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .rv-foot .rf-streak { font-size: .9rem; color: #c9c4bb; }
+    .rv-foot .rf-streak b { color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; }
+
+    /* SUBSCRIBE */
+    .sub-box { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; }
+    .sub-box input { flex: 1; min-width: 200px; background: var(--card); border: 1px solid var(--border2); border-radius: 10px; padding: .8rem 1rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .88rem; }
+    .sub-box input:focus { outline: none; border-color: var(--accent); }
+    .sub-box button { background: var(--accent); border: none; color: #fff; font-weight: 600; font-size: .88rem; padding: .8rem 1.4rem; border-radius: 10px; transition: background .2s; }
+    .sub-box button:hover { background: var(--accent2); color: #111; }
+    .sub-note { font-size: .74rem; color: var(--muted2); margin-top: .7rem; }
+    .sub-ok { color: var(--green); font-size: .88rem; margin-top: .7rem; display: none; }
+
+    /* ARCHIVE */
+    .arch-list { display: flex; flex-direction: column; gap: .7rem; }
+    .arch-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.3rem; cursor: pointer; transition: border-color .2s, background .2s; }
+    .arch-item:hover { border-color: var(--border2); background: var(--card2); }
+    .arch-top { display: flex; align-items: center; justify-content: space-between; gap: .8rem; flex-wrap: wrap; }
+    .arch-day { font-size: .68rem; letter-spacing: 1px; text-transform: uppercase; color: var(--muted2); }
+    .arch-title { font-size: .98rem; font-weight: 600; color: var(--white); margin: .35rem 0; line-height: 1.4; }
+    .arch-status { font-size: .72rem; }
+    .arch-status.made { color: var(--green); } .arch-status.missed { color: var(--muted); }
+    .arch-detail { display: none; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    .arch-item.open .arch-detail { display: block; }
+    .arch-q { font-size: .85rem; color: #c9c4bb; margin-bottom: .8rem; line-height: 1.6; }
+    .arch-empty { font-size: .85rem; color: var(--muted); }
+
+    /* PROFILE */
+    .rec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .9rem; margin-bottom: 1.7rem; }
+    .rec-tile { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.15rem; text-align: center; }
+    .rec-tile b { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 1px; color: var(--accent2); line-height: 1.1; }
+    .rec-tile small { font-size: .64rem; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); }
+    .rec-tile.fire b { color: var(--accent); } .rec-tile.green b { color: var(--green); } .rec-tile.blue b { color: var(--accent3); }
+    .dim-bars { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.5rem; }
+    .dim-bars h4 { font-size: .85rem; margin-bottom: 1rem; color: var(--white); }
+    .dim-row { display: flex; align-items: center; gap: .7rem; margin-bottom: .7rem; }
+    .dim-label { width: 130px; font-size: .76rem; color: var(--muted); flex-shrink: 0; }
+    .dim-track { flex: 1; height: 9px; background: var(--card2); border: 1px solid var(--border2); border-radius: 100px; overflow: hidden; }
+    .dim-track i { display: block; height: 100%; width: 50%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 100px; transition: width .8s cubic-bezier(.3,.8,.3,1); }
+    .rec-note { font-size: .8rem; color: var(--muted); line-height: 1.7; max-width: 660px; margin-top: 1.4rem; }
+    .rec-note b { color: var(--white); }
+    .rec-reset { margin-top: 1rem; background: none; border: 1px solid var(--border2); color: var(--muted); font-size: .78rem; padding: .5rem 1.1rem; border-radius: 100px; transition: color .2s, border-color .2s; }
+    .rec-reset:hover { color: var(--red); border-color: rgba(255,107,107,.5); }
+
+    /* AUDIENCE MODAL */
+    .aud-overlay { position: fixed; inset: 0; background: rgba(4,4,4,.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 1.3rem; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 600; }
+    .aud-overlay.open { opacity: 1; pointer-events: auto; }
+    .aud-modal { background: var(--card); border: 1px solid var(--border2); border-radius: 18px; padding: 2rem 1.8rem; max-width: 460px; width: 100%; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+    .aud-modal h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 1px; margin-bottom: .5rem; }
+    .aud-modal p { font-size: .86rem; color: var(--muted); margin-bottom: 1.4rem; line-height: 1.6; }
+    .aud-opt { display: block; width: 100%; background: var(--card2); border: 1px solid var(--border2); border-radius: 12px; padding: 1rem; margin-bottom: .7rem; color: var(--white); font-size: .92rem; font-weight: 500; transition: border-color .2s, transform .15s, background .2s; text-align: left; }
+    .aud-opt:hover { border-color: var(--accent); transform: translateX(3px); background: var(--card); }
+    .aud-opt span { display: block; font-size: .76rem; color: var(--muted); font-weight: 400; margin-top: .2rem; }
+
+    /* FOOTER */
+    .footer { border-top: 1px solid var(--border); padding: 3rem 2.5rem 2.5rem; text-align: center; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; margin-bottom: 1rem; }
+    .footer-logo span { color: var(--accent); }
+    .footer-links { display: flex; gap: 1.6rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    .footer-links a { font-size: .8rem; color: var(--muted); transition: color .2s; }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy { font-size: .72rem; color: var(--muted2); }
+
+    @media (max-width: 600px) {
+      .hero { padding: 3.6rem 1.2rem 3rem; }
+      .section { padding: 2.8rem 1.2rem; }
+      .call-card { padding: 1.2rem; }
+      .dist-txt .dl { max-width: 60%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">
+    <span class="logo-box"><svg viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0"/><line x1="12" y1="13" x2="16" y2="9"/><circle cx="12" cy="13" r="1.3" fill="#fff" stroke="none"/></svg></span>
+    <span class="logo-word">PM Gut <span class="ac">Check</span></span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#today" class="active">Today's Call</a></li>
+    <li><a href="#archive">The Archive</a></li>
+    <li><a href="#profile">Your Profile</a></li>
+    <li><a href="https://neeleshpmtoolkit.com/toolkit.html">Toolkit ↗</a></li>
+    <li><a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio ↗</a></li>
+  </ul>
+  <div class="nav-right">
+    <div class="search-wrap">
+      <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="site-search" class="site-search" type="text" placeholder="Search…" autocomplete="off" aria-label="Search" />
+      <div class="search-drop" id="search-drop"></div>
+    </div>
+    <a href="https://neeleshpmtoolkit.com/index.html" class="nav-home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
+      Home
+    </a>
+    <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-backdrop" id="mobile-backdrop"></div>
+<aside class="mobile-menu" id="mobile-menu"><div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div><nav class="mm-body" id="mm-body"></nav></aside>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">● One real product call. Every day.</div>
+    <h1>WHAT WOULD <span class="o">YOU</span> DO?<br>MAKE THE <span class="y">CALL.</span></h1>
+    <p class="hero-sub">Every day, one real product decision — from products used by millions, or my own work at <strong>FIIX, CoreLogic, and beyond</strong>. Make your call, then see <strong>how PMs around the world actually voted</strong> and what really happened. The one thing an AI prompt can't give you: <strong>a room full of other product minds.</strong></p>
+    <div class="hero-ctas">
+      <a href="#today" class="btn-primary">▶ Make today's call</a>
+      <a href="#profile" class="btn-ghost">Your judgment profile</a>
+    </div>
+    <div class="gym-strip">
+      <div class="gym-stat fire"><b id="gs-streak">0</b><small>🔥 day streak</small></div>
+      <div class="gym-stat"><b id="gs-decisions">0</b><small>calls made</small></div>
+      <div class="gym-stat green"><b id="gs-calib">—</b><small>matched the pros</small></div>
+      <div class="gym-stat blue"><b id="gs-level">Associate</b><small>judgment level</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- TODAY'S CALL -->
+<section class="section" id="today">
+  <div class="sec-eyebrow">Today's Gut Check</div>
+  <div class="sec-title">Make <span>The</span> Call</div>
+  <p class="sec-sub">Read the situation, commit to a decision, and then — and only then — the crowd unlocks. No take-backs, just like the real thing. <strong>Come back tomorrow for a brand-new dilemma.</strong></p>
+  <div id="call-mount"></div>
+</section>
+
+<!-- SUBSCRIBE -->
+<section class="section" id="subscribe">
+  <div class="call-card" style="padding:1.6rem 1.8rem">
+    <div class="sec-eyebrow y" style="margin-bottom:.5rem">Never miss a call</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.5px;margin-bottom:.4rem">Get tomorrow's Gut Check in your inbox</div>
+    <p style="font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem">One dilemma a day, plus the crowd's verdict from the day before. Protect your streak even when you forget to visit. No spam — just reps for your judgment.</p>
+    <div class="sub-box">
+      <input id="sub-email" type="email" placeholder="you@work.com" aria-label="Email" />
+      <button id="sub-btn">Join the early list →</button>
+    </div>
+    <div class="sub-ok" id="sub-ok">✓ You're on the list. Tomorrow's call is coming.</div>
+    <p class="sub-note" id="sub-note">Early access. You'll be among the first when daily emails go live.</p>
+  </div>
+</section>
+
+<!-- ARCHIVE -->
+<section class="section" id="archive">
+  <div class="sec-eyebrow b">The Archive</div>
+  <div class="sec-title">Past <span class="b">Calls</span></div>
+  <p class="sec-sub">Missed a day? Read any past dilemma and see how the crowd called it. <strong>Past calls are locked</strong> — you can study them, but the decision window has closed. That's the point: judgment is a daily practice.</p>
+  <div class="arch-list" id="arch-list"></div>
+</section>
+
+<!-- PROFILE -->
+<section class="section" id="profile">
+  <div class="sec-eyebrow g">Your proof</div>
+  <div class="sec-title">Your <span class="g">Judgment</span> Profile</div>
+  <p class="sec-sub">Every call you make is tracked <strong>privately on your device</strong>. Watch your judgment sharpen over time — and walk into interviews with receipts.</p>
+  <div class="rec-grid">
+    <div class="rec-tile fire"><b id="rec-streak">0</b><small>🔥 day streak</small></div>
+    <div class="rec-tile"><b id="rec-decisions">0</b><small>calls made</small></div>
+    <div class="rec-tile green"><b id="rec-calib">—</b><small>matched the pros</small></div>
+    <div class="rec-tile blue"><b id="rec-level">Associate</b><small>judgment level</small></div>
+    <div class="rec-tile"><b id="rec-aud">—</b><small>you identify as</small></div>
+  </div>
+  <div class="dim-bars">
+    <h4>How you tend to weigh decisions</h4>
+    <div class="dim-row"><span class="dim-label">🎯 User Focus</span><span class="dim-track"><i id="dim-u"></i></span></div>
+    <div class="dim-row"><span class="dim-label">📊 Evidence</span><span class="dim-track"><i id="dim-e"></i></span></div>
+    <div class="dim-row"><span class="dim-label">🤝 Stakeholders</span><span class="dim-track"><i id="dim-s"></i></span></div>
+    <div class="dim-row"><span class="dim-label">⚖️ Risk</span><span class="dim-track"><i id="dim-r"></i></span></div>
+  </div>
+  <p class="rec-note">Levels: <b>Associate</b> → <b>Senior</b> (40+ pts) → <b>Principal</b> (100+ pts). Earn points for every call you make, and a bonus when your call matches what a strong PM (or I) actually did. Your streak rewards coming back daily — because judgment isn't downloaded, it's built.</p>
+  <button class="rec-reset" id="rec-reset">Reset my profile</button>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-logo">NEELESH<span>.</span>PM</div>
+  <div class="footer-links">
+    <a href="https://neeleshpmtoolkit.com/index.html">Home</a>
+    <a href="https://neeleshpmtoolkit.com/toolkit.html">PM Toolkit</a>
+    <a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio</a>
+    <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank">LinkedIn</a>
+    <a href="mailto:Neelesh.singh@dal.ca">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Neelesh Singh · PM Gut Check · One real call a day.</div>
+</footer>
+
+<!-- AUDIENCE MODAL -->
+<div class="aud-overlay" id="aud-overlay">
+  <div class="aud-modal" role="dialog" aria-modal="true">
+    <h3>FIRST, WHO'S MAKING THE CALL?</h3>
+    <p>So we can show you how your call compares to PMs like you — and PMs ahead of you. One tap, changes nothing about the dilemma.</p>
+    <button class="aud-opt" data-aud="aspiring">🌱 I'm breaking into PM<span>Aspiring PM, student, or switching careers</span></button>
+    <button class="aud-opt" data-aud="working">⚙️ I'm a working PM<span>Currently in a product role, sharpening the craft</span></button>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════
+   PM GUT CHECK — one real product call a day
+   Daily rotation (same for everyone), crowd reveal, judgment profile.
+   Phase A: progress local (localStorage); crowd numbers are a labelled
+   preview seeded per-dilemma. Phase B swaps getDist() for live Supabase.
+   ════════════════════════════════════════════════════════ */
+
+/* ---------- DIMENSIONS ---------- */
+var DIM = { u:'🎯 User Focus', e:'📊 Evidence', s:'🤝 Stakeholders', r:'⚖️ Risk' };
+
+/* ---------- DILEMMA BANK (daily sequence = array order) ----------
+   tier: 1 = a real call Neelesh made | 2 = industry / public dilemma
+   best: the key Neelesh chose (t1) or the wise/known path (t2). null = genuine judgment call, no "right" answer.
+*/
+var BANK = [
+  { id:'cl-sync', tier:1, level:'Principal', source:'A real call I made · CoreLogic', tags:'platform · data · stakeholders',
+    scenario:'Two products — <strong>MLSTOUCH</strong> (agents) and <strong>OneHome</strong> (consumers) — serve the same people but don’t share data. Favorites saved on one vanish on the other; 1-star reviews are climbing and your VP just forwarded one titled <strong>“Fix this.”</strong> Engineering’s gut says a proper fix is a multi-month rebuild. Sales wants something visible this sprint.',
+    q:'Your first move?',
+    opts:[
+      {k:'A', t:'Ship a quick patch', d:'A banner: “Data may take 24h to sync.” Visible action, this week.'},
+      {k:'B', t:'Quantify the root cause first', d:'Trace complaints and tickets to their source before promising anything.'},
+      {k:'C', t:'Promise the full rebuild now', d:'Go to the VP: “We need months to rebuild the data layer. Trust me.”'}
+    ],
+    best:'B', dims:{ A:{u:-2,e:-1}, B:{e:2,u:1}, C:{s:-2,r:-1} },
+    breakdown:'The patch makes the <strong>symptom</strong> politer while users keep churning. “Trust me” with no evidence reads as gold-plating and invites a worse counter-offer. The strong move is to convert a political fight into an evidence problem: <strong>find the number first</strong>, then let the data make the argument for the real fix.',
+    real:'I quantified it: a large share of 1-star reviews and tickets traced to data-sync failures. That evidence justified building a <strong>Centralized Service Layer</strong> (a true 0→1 backbone). Result: <strong>complaints fell 40%, the rating climbed 4.6 → 4.8, and retention rose 15%</strong>. Fix the system, not the symptom — and never enter a VP’s office without a number.',
+    lesson:'Turn a political fight into an evidence problem.' },
+
+  { id:'ig-pivot', tier:2, level:'Associate', source:'Public product moment · Instagram', tags:'focus · 0→1 · courage',
+    scenario:'Your check-in app, <strong>Burbn</strong>, has loyal-but-tiny usage. Digging into the data, almost no one uses the check-ins, plans, or points — but the <strong>photo-sharing with filters</strong> is quietly on fire. The app is cluttered with everything you lovingly built.',
+    q:'What do you do?',
+    opts:[
+      {k:'A', t:'Add more to win', d:'Keep the photo feature but double down on check-ins and gamification to differentiate.'},
+      {k:'B', t:'Strip it to the one thing', d:'Cut nearly every feature and rebuild around photos + filters + sharing alone.'},
+      {k:'C', t:'A/B test slowly', d:'Hedge — quietly test a photo-first version while keeping Burbn alive.'}
+    ],
+    best:'B', dims:{ A:{r:-1,e:-1}, B:{u:2,e:1}, C:{r:0,u:-1} },
+    breakdown:'The hardest thing in product is killing things that work a little to protect the thing that works a lot. The data was pointing at one behavior; <strong>focus beat features</strong>. Hedging would have kept the clutter — and the confusion — alive.',
+    real:'The team stripped Burbn down to photos, filters, and sharing, and relaunched it as <strong>Instagram</strong>. It hit a million users in months and was acquired by Facebook within ~2 years. The lesson PMs cite to this day: <strong>find the one thing users love, and have the courage to cut the rest.</strong>',
+    lesson:'Subtraction is a product decision.' },
+
+  { id:'fiix-hierarchy', tier:1, level:'Senior', source:'A real call I made · FIIX', tags:'scope · timeline · capacity',
+    scenario:'You’re shipping a new org-hierarchy model — <strong>Root Org Units, Sites, and Divisions</strong> — committed for end of Q2. You planned it and asked Team Leads to decompose the epics over the break. You return to find <strong>none of the decomposition done</strong>, and the team’s estimate now says including Divisions pushes you past the quarter.',
+    q:'How do you protect the outcome?',
+    opts:[
+      {k:'A', t:'Keep full scope, slip the date', d:'Ship Root Org Units + Sites + Divisions, accept landing after the quarter.'},
+      {k:'B', t:'De-scope Divisions, hold the date', d:'Ship the foundational Root Org Units + Sites now; defer Divisions.'},
+      {k:'C', t:'Push the team to do all of it on time', d:'Hold scope and timeline; ask the team to absorb the crunch.'}
+    ],
+    best:'B', dims:{ A:{r:0,s:-1}, B:{u:1,r:1,s:1}, C:{r:-2,s:-1} },
+    breakdown:'Root Org Units and Sites were the <strong>foundational architecture</strong> that unlocked most of the value; Divisions were additive. Holding both scope and date by squeezing the team manufactures risk and erodes trust. The interesting part isn’t the cut — it’s what you do with the freed capacity.',
+    real:'I de-scoped Divisions and shipped the foundation on time. De-scoping freed engineering capacity — so rather than leave it idle, I pulled a customer-requested enhancement from <strong>Voice-of-Customer</strong> data into the gap. We delivered the hierarchy <strong>and</strong> a bonus customer win, in the quarter.',
+    lesson:'Scope reduction works best when paired with deliberate reinvestment.' },
+
+  { id:'cmms-failcodes', tier:2, level:'Senior', source:'Industry dilemma · CMMS / maintenance', tags:'data quality · adoption · friction',
+    scenario:'In your maintenance platform, <strong>failure codes</strong> (problem → cause → action) make reliability analytics possible — but only if technicians actually fill them in. Today they’re optional and usage is spotty, so the analytics are unreliable. A stakeholder proposes making them <strong>mandatory</strong> to close any work order.',
+    q:'Your call?',
+    opts:[
+      {k:'A', t:'Make them mandatory', d:'Force the fields at close. Clean data, immediately.'},
+      {k:'B', t:'Keep optional, nudge adoption', d:'Smart defaults, suggested codes, and reporting that rewards good data.'},
+      {k:'C', t:'Mandatory for some assets only', d:'Require codes on critical assets; optional elsewhere.'}
+    ],
+    best:null, dims:{ A:{e:1,u:-2}, B:{u:1,e:-1}, C:{u:1,e:1,r:1} },
+    breakdown:'This is a genuine judgment call with no clean answer. <strong>Mandatory fields</strong> buy clean data but tax the busiest user (a technician on a ladder) and breed garbage entries chosen just to escape the form. <strong>Pure nudging</strong> respects the user but may never reach data quality. Many strong PMs land on the targeted middle — require codes where the analytics matter most (critical assets), and earn the rest through better UX. There’s no universally right answer; there’s a right answer <strong>for your customers’ maturity</strong>.',
+    real:null,
+    lesson:'“Mandatory” is a tax on your most time-pressured user — spend it only where the data earns it.' },
+
+  { id:'cl-aibet', tier:1, level:'Senior', source:'A real call I made · CoreLogic', tags:'AI · scoping · trust',
+    scenario:'It’s peak AI hype. Leadership asks: <strong>“What’s our AI play?”</strong> Your platform serves 900K agents. Engineering is wary of accuracy, legal is wary of MLS-compliance rules, and you know the gap between an AI feature and an AI gimmick is about to define your roadmap.',
+    q:'Where do you start?',
+    opts:[
+      {k:'A', t:'Ship a chatbot', d:'Fastest visible answer to “what’s our AI play?”'},
+      {k:'B', t:'Find the measured friction first', d:'Pull the listing-creation funnel; see where agents actually lose time.'},
+      {k:'C', t:'Survey agents: “want AI?”', d:'Ask users directly if they’d use AI features.'}
+    ],
+    best:'B', dims:{ A:{u:-1,e:-1}, B:{e:2,u:1}, C:{e:0} },
+    breakdown:'A chatbot demos well and dies quietly. Surveys measure enthusiasm for a buzzword, not demand for a solution. The strong move anchors AI to a <strong>measured</strong> friction point so the feature has a job, not a vibe.',
+    real:'The funnel showed the <strong>description field</strong> was the biggest drop-off in listing creation. I anchored AI there — a one-tap draft from photos + metadata, with the <strong>agent in the loop</strong> for compliance. Listing creation got up to <strong>5× faster</strong>, and the platform grew <strong>900K → 1M+ (~+11% in a quarter)</strong>. The AI play that works is attached to a number.',
+    lesson:'Attach AI to a measured problem, keep the human in the loop.' },
+
+  { id:'netflix-qwikster', tier:2, level:'Senior', source:'Public product moment · Netflix', tags:'pricing · migration · timing',
+    scenario:'You run a beloved DVD-by-mail business, but you’re certain streaming is the future. The two businesses have different economics and you want to move fast. A plan emerges: <strong>split them into two separate brands and sites</strong>, with separate accounts and a price increase, to let streaming run free.',
+    q:'Do you split them?',
+    opts:[
+      {k:'A', t:'Split into two brands now', d:'Separate site, separate account, separate bill. Clean strategic break.'},
+      {k:'B', t:'Keep one account, migrate gradually', d:'One login, shift pricing and emphasis to streaming over time.'},
+      {k:'C', t:'Hold; let streaming grow inside the brand', d:'No structural change yet; invest quietly in streaming.'}
+    ],
+    best:'B', dims:{ A:{u:-2,r:-2}, B:{u:1,r:1}, C:{r:0,u:0} },
+    breakdown:'The strategy (bet on streaming) was right; the <strong>migration design</strong> was the trap. Forcing loyal customers into two logins and two bills overnight optimized for internal clarity at the expense of user experience — the cardinal migration sin.',
+    real:'Netflix announced the split (“<strong>Qwikster</strong>”) alongside a price hike. The backlash was severe — hundreds of thousands of cancellations and a sharp stock drop — and Netflix <strong>reversed the split within weeks</strong>. The strategy survived; the rollout didn’t. Lesson: <strong>right bet, wrong migration, real cost.</strong>',
+    lesson:'A correct strategy can still fail on a careless migration.' },
+
+  { id:'fiix-estimate', tier:1, level:'Principal', source:'A real call I made · FIIX', tags:'estimation · scope · evidence',
+    scenario:'A strategically important <strong>Global Site Selector</strong> (filter the whole product to chosen sites) comes back from estimation as <strong>too big for the quarter</strong>. Engineering proposes cutting scope to fit. The reduced version would deliver limited customer value.',
+    q:'Your move?',
+    opts:[
+      {k:'A', t:'Accept the estimate, de-scope', d:'Trust the number; ship the smaller version.'},
+      {k:'B', t:'Re-examine the estimate’s assumptions', d:'Check what the forecast is actually based on before cutting value.'},
+      {k:'C', t:'Push it to next quarter', d:'Defer the whole feature rather than ship a weak version.'}
+    ],
+    best:'B', dims:{ A:{e:-1,u:-1}, B:{e:2,r:1}, C:{r:0} },
+    breakdown:'Estimates feel like facts but are built on assumptions. Before sacrificing customer value, the strong PM audits the <strong>inputs</strong> — and an estimate calibrated on stale data is a scope cut waiting to happen for the wrong reason.',
+    real:'The forecast was based on ~10 historical sprints, including old periods that no longer reflected the team’s current throughput. Recent velocity was substantially higher. I challenged the assumption and asked the team to re-forecast on <strong>recent</strong> velocity — the work became achievable in-quarter <strong>with full scope</strong>. Challenge assumptions before you challenge scope.',
+    lesson:'Challenge the assumptions before you challenge the scope.' },
+
+  { id:'enterprise-bespoke', tier:2, level:'Senior', source:'Industry dilemma · B2B SaaS', tags:'roadmap · revenue · focus',
+    scenario:'Your biggest prospect — a <strong>seven-figure enterprise deal</strong> — will sign, but only if you build a fairly bespoke feature that maybe two other customers would ever use. Sales is ecstatic. The work would consume a meaningful chunk of next quarter’s roadmap.',
+    q:'What do you do?',
+    opts:[
+      {k:'A', t:'Build it — the revenue is real', d:'Take the deal; figure out reuse later.'},
+      {k:'B', t:'Decline; protect the roadmap', d:'Say no; stay focused on broadly valuable work.'},
+      {k:'C', t:'Find the general problem inside it', d:'Reframe the request into a capability many customers want; build that.'}
+    ],
+    best:'C', dims:{ A:{r:-1,s:1}, B:{u:0,s:-1}, C:{u:1,e:1,s:1} },
+    breakdown:'“Always say yes” turns your roadmap into a custom-dev shop; “always say no” leaves money and signal on the table. The senior move is to <strong>interrogate the request for the general problem</strong> underneath — often a marquee customer’s specific ask is a sharp version of a need many have. Build the capability, not the one-off.',
+    real:null,
+    lesson:'A big customer’s specific ask often hides a general capability — find it before you say yes or no.' },
+
+  { id:'cgi-advisor', tier:1, level:'Senior', source:'A real call I made · CGI / Fidelity', tags:'automation · workflow · trust',
+    scenario:'Financial advisors build tailored, mixed-asset portfolios <strong>by hand</strong> — slow, inconsistent advisor to advisor, and retention is flat. Leadership says “modernize,” but nobody agrees what that means. Some want full robo-automation.',
+    q:'Where do you begin?',
+    opts:[
+      {k:'A', t:'Automate it end-to-end', d:'Remove the manual work entirely; build robo-allocation.'},
+      {k:'B', t:'Shadow the workflow first', d:'Find the slowest, most error-prone step before proposing anything.'},
+      {k:'C', t:'Standardize with checklists', d:'Cheap, fast, low-risk: better docs and templates.'}
+    ],
+    best:'B', dims:{ A:{r:-1,u:-1}, B:{e:2,u:1}, C:{u:-1} },
+    breakdown:'Full automation collides with the advisor’s judgment (the service clients pay for) and a different regulatory regime; checklists leave the process just as slow. The strong move is to <strong>watch the work</strong> and separate the grind from the judgment.',
+    real:'Shadowing showed the grind was the <strong>assembly</strong>, not the advice. We built a portal that assembled compliant mixed-asset portfolios in <strong>seconds</strong> from approved models — advisors kept the judgment, the machine took the grind. <strong>Monthly retention rose 8%.</strong> Automate the grind, amplify the human.',
+    lesson:'Automate the grind; amplify the judgment.' },
+
+  { id:'slack-pivot', tier:2, level:'Senior', source:'Public product moment · Slack', tags:'pivot · 0→1 · insight',
+    scenario:'Your startup spent years building an online game. It isn’t taking off. But to build it, your team created an <strong>internal chat tool</strong> you all now can’t live without — searchable, channel-based, oddly delightful. The game is the company; the chat tool is a byproduct.',
+    q:'What’s the bet?',
+    opts:[
+      {k:'A', t:'Keep fighting for the game', d:'It’s what you set out to build; push harder on distribution.'},
+      {k:'B', t:'Pivot to the internal tool', d:'Bet the company on the chat tool you accidentally made.'},
+      {k:'C', t:'Spin the tool out as a side project', d:'Keep the game; release the tool quietly on the side.'}
+    ],
+    best:'B', dims:{ A:{e:-1,r:-1}, B:{u:2,e:1}, C:{r:0,u:-1} },
+    breakdown:'The signal wasn’t in the thing they intended to build — it was in <strong>their own behavior</strong> using the byproduct. Treating the tool as a side project would have starved the actual opportunity. Reading where the real pull is, even when it embarrasses the original plan, is the whole game.',
+    real:'The team bet the company on the byproduct and shipped it as <strong>Slack</strong> — one of the fastest-growing business tools of its era, later acquired for ~$27B. The original game (Glitch) was shut down. Sometimes the product is hiding in <strong>how you work, not what you set out to make.</strong>',
+    lesson:'The strongest signal is often your own behavior, not your plan.' },
+
+  { id:'fiix-refine', tier:1, level:'Senior', source:'A real call I made · FIIX', tags:'process · team · operating model',
+    scenario:'Backlog refinement is a mess. Requirements show up for the first time <strong>during</strong> the meeting, so sessions sprawl into clarification and guesswork — and after a recent project, story decomposition and engineering expectations were badly misaligned.',
+    q:'How do you fix the meeting?',
+    opts:[
+      {k:'A', t:'Product keeps leading, work it live', d:'Stay the course; drive requirements in real time.'},
+      {k:'B', t:'Introduce structured pre-refinement', d:'Team Leads review PRDs/UX/OPBs and decompose before the session.'},
+      {k:'C', t:'Write more detailed PRDs', d:'Fix it with documentation; keep the meeting format.'}
+    ],
+    best:'B', dims:{ A:{s:-1}, B:{e:2,s:1}, C:{e:0,s:0} },
+    breakdown:'If the meeting is where understanding is <strong>created</strong>, it will always sprawl. The fix moves discovery and decomposition <strong>earlier</strong> and shifts ownership to the people who’ll build it — so refinement becomes a validation step, not a first read.',
+    real:'I introduced a weekly pre-refinement: Product reviews upcoming work with Team Leads, who review PRDs/UX/OPBs, raise questions early, and own decomposition into epics/stories. Refinement became a <strong>Lead-led discussion</strong>, not a first reading. Estimates got sharper, open questions dropped, and the pipeline stayed healthy.',
+    lesson:'Refinement should validate understanding, not create it.' },
+
+  { id:'cmms-offline', tier:2, level:'Senior', source:'Industry dilemma · CMMS / field', tags:'cost · reliability · users',
+    scenario:'Your maintenance technicians work in basements, plant floors, and remote sites — often with <strong>no connectivity</strong>. Today the mobile app assumes a connection, and techs lose work or scribble on paper. Full <strong>offline mode</strong> (local storage, sync, conflict resolution) is a large, risky engineering investment.',
+    q:'Do you commit to offline?',
+    opts:[
+      {k:'A', t:'Build full offline mode', d:'Commit the quarter; it’s table-stakes for field work.'},
+      {k:'B', t:'Ship a lightweight cache first', d:'Let techs view + queue a few actions offline; measure real usage.'},
+      {k:'C', t:'Improve connectivity guidance instead', d:'Cheaper: better error states, retries, and “find signal” UX.'}
+    ],
+    best:null, dims:{ A:{u:2,r:-2}, B:{u:1,e:1,r:1}, C:{r:0,u:-1} },
+    breakdown:'A real judgment call. For a field-maintenance product, offline may genuinely be <strong>table stakes</strong> — but full offline sync is one of the hardest things to build well (conflict resolution is brutal), so betting the quarter is real risk. A defensible path is to ship a <strong>thin slice</strong> (view + queue) to validate the actual offline behavior before committing to full sync. The right answer depends on how central true-offline is to your buyers.',
+    real:null,
+    lesson:'Offline sync is easy to promise and brutal to build — validate the slice before betting the quarter.' },
+
+  { id:'dropbox-mvp', tier:2, level:'Associate', source:'Public product moment · Dropbox', tags:'validation · MVP · evidence',
+    scenario:'You believe in frictionless file sync, but building it is hard and the “magic” is tough to convey. Before pouring months into engineering, you need to know real people actually want this — and investors aren’t convinced the demand is there.',
+    q:'How do you validate before building?',
+    opts:[
+      {k:'A', t:'Just build the real product', d:'Conviction is high; ship it and let usage prove it.'},
+      {k:'B', t:'Make a demo video of the magic', d:'Show the seamless experience; measure signups from intent.'},
+      {k:'C', t:'Run a survey on demand', d:'Ask people whether they’d use file sync.'}
+    ],
+    best:'B', dims:{ A:{r:-1,e:-1}, B:{e:2,u:1}, C:{e:0} },
+    breakdown:'Surveys capture stated interest, not real intent; building first risks months on an unproven magic. A <strong>demo that shows the actual experience</strong> turns belief into a measurable signal (signups) at a fraction of the cost — the essence of a good MVP: maximize learning per unit of effort.',
+    real:'Dropbox’s founder made a short <strong>demo video</strong> showing the seamless sync (much of it not yet built). The beta waitlist jumped dramatically overnight — reportedly from ~5,000 to ~75,000 — validating demand before heavy engineering. <strong>The cheapest way to test a magic is to show it, not build it.</strong>',
+    lesson:'Test the magic by showing it before you build it.' },
+
+  { id:'fiix-facilities', tier:1, level:'Senior', source:'A real call I made · FIIX', tags:'validation · scope · evidence',
+    scenario:'During planning, <strong>UX proposes that Facilities support meter readings</strong> like other asset types. On the surface it’s consistent — lots of asset types already use meter-based maintenance. But you suspect facilities aren’t actually managed that way.',
+    q:'Your move?',
+    opts:[
+      {k:'A', t:'Build it — consistency is good', d:'Accept the UX recommendation; keep the model uniform.'},
+      {k:'B', t:'Validate whether the need is real', d:'Check usage, domain research, and SMEs before committing.'},
+      {k:'C', t:'Defer it, no decision', d:'Park it; revisit when someone complains.'}
+    ],
+    best:'B', dims:{ A:{r:-1,e:-1}, B:{e:2,u:1}, C:{u:-1} },
+    breakdown:'“Consistency” is a seductive reason to build the wrong thing. The strong move is to test whether the <strong>problem exists</strong> before spending engineering on a plausible-sounding feature — and to bring evidence, not opinion, to a disagreement with a partner team.',
+    real:'I validated with usage analysis, domain research, and SME input — facilities <strong>don’t</strong> need meter-driven maintenance the way traditional assets do. I shared the evidence with UX, who agreed. We avoided adding complexity with no customer value and preserved capacity for higher-priority work. The strongest product arguments are evidence-based, not opinion-based.',
+    lesson:'Validate that the problem exists before you build the plausible solution.' },
+
+  { id:'cmms-sunset', tier:2, level:'Senior', source:'Industry dilemma · B2B SaaS', tags:'sunset · loyalty · maintenance cost',
+    scenario:'A legacy feature is used by only <strong>~5% of customers</strong> — but they <em>love</em> it and a couple are vocal, large accounts. It’s expensive to maintain, blocks a platform upgrade, and slows every release. Killing it frees the team; keeping it placates a loud minority.',
+    q:'What do you do?',
+    opts:[
+      {k:'A', t:'Sunset it now', d:'Free the team; accept the angry emails.'},
+      {k:'B', t:'Keep it; it has fans', d:'Loyal customers matter more than maintenance cost.'},
+      {k:'C', t:'Sunset with a migration path', d:'Announce a runway, build a replacement workflow, migrate the 5% deliberately.'}
+    ],
+    best:'C', dims:{ A:{u:-2,s:-1}, B:{r:-1}, C:{u:1,s:1,r:1} },
+    breakdown:'A blunt sunset burns trust with your most loyal users (and maybe big logos); keeping it forever taxes every future release. The mature move is rarely <em>whether</em> to sunset — it’s <strong>how</strong>: a clear runway, a migration path, and white-glove help for the affected accounts so you free the team <em>and</em> keep the relationships.',
+    real:null,
+    lesson:'The question is rarely whether to sunset, but how humanely you do it.' },
+
+  { id:'twitter-280', tier:2, level:'Senior', source:'Public product moment · Twitter', tags:'identity · data · change',
+    scenario:'Your product’s defining constraint is a <strong>140-character limit</strong> — beloved, iconic, and the source of its culture. But data shows people hit the limit and abandon tweets, and cramming causes awkward abbreviations. There’s pressure to <strong>double it to 280</strong>. Purists will revolt.',
+    q:'Do you change the sacred constraint?',
+    opts:[
+      {k:'A', t:'Double it to 280', d:'Reduce friction; trust the data over the nostalgia.'},
+      {k:'B', t:'Keep 140 forever', d:'The constraint is the brand; don’t touch it.'},
+      {k:'C', t:'Test 280 with a small cohort first', d:'Roll out to a slice, measure behavior and backlash, then decide.'}
+    ],
+    best:'C', dims:{ A:{u:1,r:-1}, B:{e:-1}, C:{e:2,u:1,r:1} },
+    breakdown:'Changing an identity-defining constraint on gut — either way — is the risk. Shipping to everyone invites a backlash you can’t take back; refusing on nostalgia ignores real friction. The disciplined move is to <strong>test on a cohort</strong>, watch whether people actually abuse the extra room (they mostly didn’t), and let behavior settle the culture war.',
+    real:'Twitter rolled <strong>280 characters</strong> to a test group first, found most tweets still stayed short (the fear of endless walls of text didn’t materialize), and then expanded it broadly. The feared culture collapse never came. <strong>When changing something sacred, let a cohort’s behavior — not the loudest voices — make the call.</strong>',
+    lesson:'When touching something sacred, let a cohort’s behavior decide.' },
+
+  { id:'cmms-alerts', tier:2, level:'Associate', source:'Industry dilemma · notifications', tags:'engagement · trust · attention',
+    scenario:'Engagement is soft. A stakeholder wants to add <strong>more push notifications and email alerts</strong> — overdue work orders, asset warnings, weekly digests — to pull users back in. Early tests show more alerts <em>do</em> bump short-term logins.',
+    q:'Do you turn up the volume?',
+    opts:[
+      {k:'A', t:'Add the alerts — logins are up', d:'The metric moved; ship more notifications.'},
+      {k:'B', t:'Make alerts smarter, not louder', d:'Prioritize, bundle, and let users tune what matters; protect attention.'},
+      {k:'C', t:'Add them, but default everything off', d:'Ship all alerts; let users opt in.'}
+    ],
+    best:'B', dims:{ A:{u:-2,r:-1}, B:{u:2,e:1}, C:{u:0,r:0} },
+    breakdown:'A short-term login bump from more notifications is one of the most <strong>seductive vanity wins</strong> in product — it often trades long-term trust (and unsubscribes, muted apps) for a temporary metric. The strong move treats <strong>attention as the scarce resource</strong>: fewer, smarter, tunable alerts beat more, louder ones. Defaulting off avoids harm but may bury genuinely useful signals.',
+    real:null,
+    lesson:'A login bump from more alerts can quietly bankrupt the user’s trust — attention is the budget.' },
+
+  { id:'airbnb-scale', tier:2, level:'Associate', source:'Public product moment · Airbnb', tags:'early-stage · users · do-things-that-don’t-scale',
+    scenario:'Your early marketplace is stalling. Listings look unappealing — hosts upload dark, blurry phone photos and nobody books them. A teammate says “we’re a tech company, the fix has to <strong>scale</strong> — let’s build a photo-tips tool and auto-enhancement.” Growth is flat <em>now</em>.',
+    q:'What do you do this week?',
+    opts:[
+      {k:'A', t:'Build the scalable photo tool', d:'Engineer auto-enhancement and host education in-product.'},
+      {k:'B', t:'Go photograph listings yourself', d:'Rent a camera, visit hosts, take great photos by hand — and learn.'},
+      {k:'C', t:'Wait for hosts to improve', d:'Add guidelines and hope quality rises over time.'}
+    ],
+    best:'B', dims:{ A:{r:-1,e:-1}, B:{u:2,e:2}, C:{u:-1} },
+    breakdown:'Early on, the instinct to only build <em>scalable</em> things is a trap — it keeps you in the building away from the learning. Doing the <strong>unscalable</strong> thing by hand both fixes the immediate problem and teaches you what the eventual scalable product must do. You can’t automate a solution you haven’t found yet.',
+    real:'Airbnb’s founders rented a camera and <strong>photographed hosts’ listings themselves</strong>. Bookings rose, and the hands-on visits taught them what hosts and guests actually needed — insight that shaped the product. The famous lesson: <strong>do things that don’t scale</strong> to learn what eventually should.',
+    lesson:'Do the unscalable thing first — it’s how you learn what to scale.' }
+];
+
+/* ---------- STORE ---------- */
+var GC_KEY = 'pmgutcheck_v1';
+function gcLoad(){ try { return JSON.parse(localStorage.getItem(GC_KEY)) || {}; } catch(e){ return {}; } }
+function gcSave(s){ try { localStorage.setItem(GC_KEY, JSON.stringify(s)); } catch(e){} }
+var GC = gcLoad();
+GC.calls = GC.calls || {};            // {dilemmaId: 'A'}
+GC.dims = GC.dims || {u:0,e:0,s:0,r:0};
+GC.decisions = GC.decisions || 0;
+GC.audience = GC.audience || null;    // 'aspiring' | 'working'
+GC.subscribed = GC.subscribed || false;
+
+/* streak */
+(function(){
+  function ds(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  var today = ds(new Date()), y = new Date(); y.setDate(y.getDate()-1);
+  var yest = ds(y);
+  if (GC.lastVisit === today) {}
+  else if (GC.lastVisit === yest) { GC.streak = (GC.streak||0)+1; GC.lastVisit = today; }
+  else { GC.streak = 1; GC.lastVisit = today; }
+  gcSave(GC);
+})();
+
+/* ---------- DAILY ROTATION ---------- */
+var EPOCH = Date.UTC(2026, 5, 9); // launch day: 9 Jun 2026 (day 0)
+function dayIndexFor(date){ var utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()); return Math.floor((utc - EPOCH)/86400000); }
+var TODAY_INDEX = Math.max(0, dayIndexFor(new Date()));
+function dilemmaForIndex(i){ return BANK[((i % BANK.length) + BANK.length) % BANK.length]; }
+function dateForIndex(i){ var d = new Date(EPOCH + i*86400000); return d; }
+function fmtDate(d){ return d.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' }); }
+
+/* ---------- SEEDED PREVIEW DISTRIBUTION (Phase A) ---------- */
+function hashStr(s){ var h = 2166136261; for (var i=0;i<s.length;i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function mulberry(a){ return function(){ a |= 0; a = (a + 0x6D2B79F5) | 0; var t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function distFor(d, cohort){
+  var rng = mulberry(hashStr(d.id + (cohort||'all')));
+  var n = d.opts.length, w = [], sum = 0;
+  /* give the "best" option a gentle lift so previews look sensible */
+  for (var i=0;i<n;i++){ var base = 0.5 + rng(); if (d.best && d.opts[i].k === d.best) base += 0.8; w.push(base); sum += base; }
+  var pcts = w.map(function(x){ return x/sum*100; });
+  /* round to ints summing 100 (largest remainder) */
+  var floor = pcts.map(function(x){ return Math.floor(x); });
+  var rem = 100 - floor.reduce(function(a,b){ return a+b; }, 0);
+  var order = pcts.map(function(x,i){ return [x - Math.floor(x), i]; }).sort(function(a,b){ return b[0]-a[0]; });
+  for (var k=0;k<rem;k++) floor[order[k][1]]++;
+  var out = {}; d.opts.forEach(function(o,i){ out[o.k] = floor[i]; });
+  return out;
+}
+
+/* ---------- POINTS / LEVEL ---------- */
+function calibStats(){ var a=0,c=0; BANK.forEach(function(d){ if (d.best && (d.id in GC.calls)){ a++; if (GC.calls[d.id]===d.best) c++; } }); return {a:a,c:c}; }
+function gcPoints(){ var cs=calibStats(); return (GC.decisions||0)*3 + cs.c*5; }
+function gcLevel(){ var p=gcPoints(); return p>=100?'Principal':p>=40?'Senior':'Associate'; }
+
+function refreshRecord(){
+  var cs = calibStats();
+  function set(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; }
+  var calib = cs.a ? Math.round(cs.c/cs.a*100)+'%' : '—';
+  set('gs-streak', GC.streak||1); set('gs-decisions', GC.decisions||0); set('gs-calib', calib); set('gs-level', gcLevel());
+  set('rec-streak', GC.streak||1); set('rec-decisions', GC.decisions||0); set('rec-calib', cs.a?calib+' ('+cs.c+'/'+cs.a+')':'—'); set('rec-level', gcLevel());
+  set('rec-aud', GC.audience ? (GC.audience==='aspiring'?'Breaking in 🌱':'Working PM ⚙️') : '—');
+  /* dim bars (relative, centered at 50) */
+  ['u','e','s','r'].forEach(function(k){ var el=document.getElementById('dim-'+k); if(el){ var pct=Math.max(6, Math.min(100, 50 + (GC.dims[k]||0)*9)); el.style.width=pct+'%'; } });
+}
+
+/* ---------- RENDER TODAY ---------- */
+var mount = document.getElementById('call-mount');
+function badgesHTML(d){
+  return '<span class="cb '+(d.tier===1?'t1':'t2')+'">'+(d.tier===1?'★ Real call I made':'Industry / public')+'</span>'
+    + '<span class="cb lvl">'+d.level+'</span>'
+    + '<span class="cb">'+d.source.split('·').slice(-1)[0].trim()+'</span>';
+}
+function renderToday(){
+  var d = dilemmaForIndex(TODAY_INDEX);
+  var answered = d.id in GC.calls;
+  var html = '<div class="call-card">'
+    + '<div class="call-top"><div class="call-date">Day '+(TODAY_INDEX+1)+' · <b>'+fmtDate(new Date())+'</b></div><div class="call-badges">'+badgesHTML(d)+'</div></div>'
+    + '<div class="call-scenario">'+d.scenario+'</div>'
+    + '<div class="call-q">'+d.q+'</div>'
+    + '<div id="today-opts"></div>';
+  if (!answered) html += '<div class="call-reason"><label>Optional — your one-line reasoning (private, for your own reflection):</label><textarea id="today-reason" placeholder="I chose this because…"></textarea><div class="call-hint">Once you commit, the crowd unlocks. No take-backs.</div></div>';
+  html += '<div id="today-reveal"></div></div>';
+  mount.innerHTML = html;
+  var optWrap = document.getElementById('today-opts');
+  d.opts.forEach(function(o){
+    var b = document.createElement('button'); b.className='call-opt';
+    b.innerHTML = '<b><span class="opt-k">'+o.k+'</span>'+o.t+'</b>'+o.d;
+    if (answered){ b.disabled = true; if (GC.calls[d.id]===o.k){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } }
+    else b.onclick = function(){ commit(d, o.k); };
+    optWrap.appendChild(b);
+  });
+  if (answered) reveal(d, true);
+}
+
+function commit(d, key){
+  if (!GC.audience){ pendingCommit = { d:d, key:key }; openAud(); return; }
+  doCommit(d, key);
+}
+var pendingCommit = null;
+function doCommit(d, key){
+  GC.calls[d.id] = key;
+  GC.decisions = (GC.decisions||0) + 1;
+  var fx = d.dims && d.dims[key]; if (fx) for (var k in fx) GC.dims[k] = (GC.dims[k]||0) + fx[k];
+  gcSave(GC);
+  /* lock options */
+  [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ b.disabled=true; b.style.pointerEvents='none'; if (b.textContent.indexOf(key)===0 || b.querySelector('.opt-k').textContent===key){ } });
+  var rsn = document.querySelector('.call-reason'); if (rsn) rsn.style.display='none';
+  /* highlight chosen */
+  [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ if (b.querySelector('.opt-k') && b.querySelector('.opt-k').textContent===key){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } b.style.opacity=.96; });
+  reveal(d, false);
+  refreshRecord(); renderArchive();
+}
+
+function reveal(d, instant){
+  var mountR = document.getElementById('today-reveal');
+  var dist = distFor(d, 'all');
+  var youKey = GC.calls[d.id];
+  var h = '<div class="rv">';
+  /* crowd */
+  h += '<div class="rv-h b">📊 How the crowd called it <span class="preview-tag">Preview · live community soon</span></div>';
+  d.opts.forEach(function(o){
+    var p = dist[o.k], you = (o.k===youKey);
+    h += '<div class="dist-row"><span class="dist-key">'+o.k+'</span><div class="dist-bar'+(you?' you':'')+'"><i data-w="'+p+'"></i><span class="dist-txt"><span class="dl">'+o.t+(you?'<span class="dist-you-tag">· your call</span>':'')+'</span><span class="dp">'+p+'%</span></span></div></div>';
+  });
+  /* audience split */
+  var asp = distFor(d,'aspiring'), wrk = distFor(d,'working');
+  h += '<div class="rv-split">'
+    + '<div class="split-card"><h6>🌱 Breaking-in PMs</h6>'+ d.opts.map(function(o){ return '<div class="sc-row"><span>'+o.k+'</span><b>'+asp[o.k]+'%</b></div>'; }).join('') +'</div>'
+    + '<div class="split-card"><h6>⚙️ Working PMs</h6>'+ d.opts.map(function(o){ return '<div class="sc-row"><span>'+o.k+'</span><b>'+wrk[o.k]+'%</b></div>'; }).join('') +'</div>'
+    + '</div>';
+  /* your dims */
+  var fx = d.dims && d.dims[youKey];
+  if (fx){ var chips=''; for (var k in fx){ var v=fx[k]; chips += '<span class="rv-dim '+(v>0?'up':(v<0?'down':''))+'">'+DIM[k]+' '+(v>0?'+':'')+v+'</span>'; } if(chips) h += '<div class="rv-dims" style="margin-top:1rem">'+chips+'</div>'; }
+  /* breakdown */
+  h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>';
+  /* real / outcome */
+  if (d.tier===1 && d.real){
+    var hit = d.best && youKey===d.best;
+    h += '<div class="rv-h g">✅ What I actually did</div>';
+    if (d.best) h += '<span class="rv-match '+(hit?'hit':'miss')+'">'+(hit?'✓ You made my call':'You called it differently — here’s my reasoning')+'</span>';
+    h += '<div class="rv-real"><p>'+d.real+'</p></div>';
+  } else if (d.real){
+    h += '<div class="rv-h b">🌍 What actually happened</div><div class="rv-real public"><p>'+d.real+'</p></div>';
+  } else {
+    h += '<div class="rv-h">🤔 There’s no clean answer here</div><div class="rv-break">This is a genuine judgment call — strong PMs split on it. What matters is that your reasoning held together.</div>';
+  }
+  /* lesson */
+  h += '<div class="rv-lesson"><span>The takeaway:</span> '+d.lesson+'</div>';
+  /* foot */
+  h += '<div class="rv-foot"><div class="rf-streak">🔥 <b>'+(GC.streak||1)+'</b> day streak · come back tomorrow for a brand-new call</div><a href="#archive" class="btn-ghost" style="padding:.6rem 1.2rem">Browse the Archive →</a></div>';
+  h += '</div>';
+  mountR.innerHTML = h;
+  var doFill = function(){ [].slice.call(mountR.querySelectorAll('.dist-bar i')).forEach(function(i){ i.style.width = i.getAttribute('data-w')+'%'; }); };
+  if (instant) setTimeout(doFill, 60); else setTimeout(doFill, 120);
+}
+
+/* ---------- AUDIENCE MODAL ---------- */
+var audOv = document.getElementById('aud-overlay');
+function openAud(){ audOv.classList.add('open'); }
+function closeAud(){ audOv.classList.remove('open'); }
+[].slice.call(document.querySelectorAll('.aud-opt')).forEach(function(b){
+  b.onclick = function(){ GC.audience = b.getAttribute('data-aud'); gcSave(GC); closeAud(); refreshRecord(); if (pendingCommit){ var p=pendingCommit; pendingCommit=null; doCommit(p.d, p.key); } };
+});
+
+/* ---------- ARCHIVE ---------- */
+function renderArchive(){
+  var list = document.getElementById('arch-list'); if(!list) return;
+  list.innerHTML = '';
+  if (TODAY_INDEX === 0){ list.innerHTML = '<div class="arch-empty">No past calls yet — today is day one. Come back tomorrow and this fills up.</div>'; return; }
+  var start = TODAY_INDEX - 1, stop = Math.max(0, TODAY_INDEX - 14);
+  for (var i = start; i >= stop; i--){
+    (function(idx){
+      var d = dilemmaForIndex(idx);
+      var made = d.id in GC.calls;
+      var item = document.createElement('div'); item.className = 'arch-item';
+      item.innerHTML = '<div class="arch-top"><span class="arch-day">Day '+(idx+1)+' · '+fmtDate(dateForIndex(idx))+'</span><span class="arch-status '+(made?'made':'missed')+'">'+(made?'✓ you called '+GC.calls[d.id]:'· locked — not answered')+'</span></div>'
+        + '<div class="arch-title">'+d.scenario.replace(/<[^>]+>/g,'').slice(0,110)+'…</div>'
+        + '<div class="arch-status" style="color:var(--accent2)">▾ Tap to study this call</div>'
+        + '<div class="arch-detail"><div class="arch-q">'+d.q+'</div><div class="arch-opts"></div><div class="arch-rev"></div></div>';
+      item.querySelector('.arch-top').parentNode.onclick = function(e){ item.classList.toggle('open'); if (item.classList.contains('open') && !item._built){ buildArchDetail(item, d); item._built = true; } };
+      list.appendChild(item);
+    })(i);
+  }
+}
+function buildArchDetail(item, d){
+  var dist = distFor(d,'all'), youKey = GC.calls[d.id];
+  var opts = item.querySelector('.arch-opts');
+  d.opts.forEach(function(o){ var p=dist[o.k], you=o.k===youKey;
+    var row = document.createElement('div'); row.className='dist-row';
+    row.innerHTML = '<span class="dist-key">'+o.k+'</span><div class="dist-bar'+(you?' you':'')+'"><i style="width:'+p+'%"></i><span class="dist-txt"><span class="dl">'+o.t+(you?'<span class="dist-you-tag">· your call</span>':'')+'</span><span class="dp">'+p+'%</span></span></div>';
+    opts.appendChild(row);
+  });
+  var rev = item.querySelector('.arch-rev');
+  var realHtml = d.real ? ('<div class="rv-h '+(d.tier===1?'g':'b')+'" style="margin-top:1.1rem">'+(d.tier===1?'✅ What I actually did':'🌍 What actually happened')+'</div><div class="rv-real '+(d.tier===1?'':'public')+'"><p>'+d.real+'</p></div>') : '';
+  rev.innerHTML = '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'+realHtml+'<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'
+    + '<span class="preview-tag" style="margin-top:.8rem;display:inline-block">Crowd numbers are a preview · live community soon</span>';
+}
+
+/* ---------- SUBSCRIBE (Phase A: local; Phase B: Supabase) ---------- */
+(function(){
+  var btn = document.getElementById('sub-btn'), inp = document.getElementById('sub-email'), ok = document.getElementById('sub-ok'), note = document.getElementById('sub-note');
+  if (!btn) return;
+  if (GC.subscribed){ inp.value=''; inp.placeholder='You’re on the list ✓'; ok.style.display='block'; }
+  btn.onclick = function(){
+    var v = (inp.value||'').trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ inp.style.borderColor='var(--red)'; inp.focus(); return; }
+    inp.style.borderColor='var(--border2)';
+    GC.subscribed = true; GC.email = v; gcSave(GC);
+    /* Phase B hook: POST {email, audience} to Supabase here */
+    ok.style.display='block'; note.textContent='Saved on your device for now. We’ll import early-list emails when daily sending goes live.'; inp.value=''; inp.placeholder='You’re on the list ✓';
+  };
+})();
+
+/* ---------- RESET ---------- */
+document.getElementById('rec-reset').onclick = function(){
+  if (!confirm('Reset your entire judgment profile? This can’t be undone.')) return;
+  var keepVisit = GC.lastVisit;
+  GC = { calls:{}, dims:{u:0,e:0,s:0,r:0}, decisions:0, audience:null, subscribed:false, streak:1, lastVisit:keepVisit };
+  gcSave(GC); renderToday(); renderArchive(); refreshRecord();
+};
+
+/* ---------- INIT ---------- */
+renderToday(); renderArchive(); refreshRecord();
+
+/* ════════ MOBILE MENU ════════ */
+(function(){
+  var body=document.getElementById('mm-body'), ham=document.getElementById('hamburger'), bd=document.getElementById('mobile-backdrop'), menu=document.getElementById('mobile-menu'), closeBtn=document.getElementById('mm-close');
+  if(!body||!ham||!menu) return;
+  function openMenu(){ menu.classList.add('open'); bd.classList.add('open'); ham.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeMenu(){ menu.classList.remove('open'); bd.classList.remove('open'); ham.classList.remove('open'); document.body.style.overflow=''; }
+  ham.addEventListener('click', function(){ menu.classList.contains('open')?closeMenu():openMenu(); });
+  bd.addEventListener('click', closeMenu); closeBtn.addEventListener('click', closeMenu);
+  function smoothTo(id){ var el=document.getElementById(id); if(!el) return; var y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); }
+  function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn,80); }; return a; }
+  [["Today's Call",'today'],['The Archive','archive'],['Your Profile','profile'],['Get it by email','subscribe']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
+  body.appendChild(link('PM Toolkit ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/toolkit.html'; }));
+  body.appendChild(link('Portfolio ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/portfolio.html'; }));
+  body.appendChild(link('🏠  Home', function(){ window.location.href='https://neeleshpmtoolkit.com/index.html'; }));
+})();
+
+/* ════════ SITE SEARCH (full-text) ════════ */
+(function(){
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  var SECTIONS = { today:"Today's Call", subscribe:'Email', archive:'The Archive', profile:'Your Profile' };
+  function getSection(el){ var s=el.closest('section[id]'); if(s&&SECTIONS[s.id]) return SECTIONS[s.id]; if(el.closest('.hero')) return 'Home'; var a=el.closest('section,header,footer'); if(a){ if(a.tagName==='FOOTER') return 'Footer'; var t=a.querySelector('.sec-title,h1,h2'); if(t) return t.textContent.replace(/\s+/g,' ').trim().slice(0,28);} return 'Page'; }
+  var INLINE={STRONG:1,EM:1,SPAN:1,A:1,MARK:1,B:1,I:1,SMALL:1,CODE:1,U:1,SUP:1,SUB:1,LABEL:1};
+  function container(node){ var el=node.parentElement; while(el&&INLINE[el.tagName]&&el.parentElement){ el=el.parentElement; } return el; }
+  function buildEntries(){ var out=[],seen=[],w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){ return (n.nodeValue&&n.nodeValue.trim())?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT; }}),n; while(n=w.nextNode()){ var c=container(n); if(!c||seen.indexOf(c)!==-1) continue; if(c.closest('nav, .search-drop, script, style, noscript, .aud-overlay, [data-nosearch]')) continue; var text=c.textContent.replace(/\s+/g,' ').trim(); if(text.length<2) continue; seen.push(c); out.push({el:c,text:text,low:text.toLowerCase(),section:getSection(c)}); } return out; }
+  function snippet(text,pos,qlen){ var start=Math.max(0,pos-38),end=Math.min(text.length,pos+qlen+54); var pre=(start>0?'…':'')+text.slice(start,pos),mid=text.slice(pos,pos+qlen),suf=text.slice(pos+qlen,end)+(end<text.length?'…':''); return esc(pre)+'<mark class="snip">'+esc(mid)+'</mark>'+esc(suf); }
+  function clearHL(){ var ms=document.querySelectorAll('mark.search-hl'); for(var i=0;i<ms.length;i++){ var m=ms[i],p=m.parentNode; if(p){ p.replaceChild(document.createTextNode(m.textContent),m); p.normalize(); } } }
+  function highlight(el,q){ clearHL(); var lc=q.toLowerCase(); var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null),nodes=[],n; while(n=w.nextNode()){ if(n.nodeValue.toLowerCase().indexOf(lc)!==-1) nodes.push(n); } var first=null; nodes.forEach(function(tn){ var text=tn.nodeValue,low=text.toLowerCase(),frag=document.createDocumentFragment(),i=0,idx; while((idx=low.indexOf(lc,i))!==-1){ if(idx>i) frag.appendChild(document.createTextNode(text.slice(i,idx))); var mk=document.createElement('mark'); mk.className='search-hl'; mk.textContent=text.slice(idx,idx+q.length); frag.appendChild(mk); if(!first) first=mk; i=idx+q.length; } if(i<text.length) frag.appendChild(document.createTextNode(text.slice(i))); if(tn.parentNode) tn.parentNode.replaceChild(frag,tn); }); return first; }
+  var input=document.getElementById('site-search'), drop=document.getElementById('search-drop'); var results=[],cur=-1,hlTimer=null;
+  function noRes(q){ return '<div class="search-empty"><svg viewBox="0 0 120 120" fill="none"><circle cx="50" cy="50" r="33" stroke="var(--border2)" stroke-width="5"/><line x1="73" y1="73" x2="101" y2="101" stroke="var(--border2)" stroke-width="6" stroke-linecap="round"/><circle cx="41" cy="46" r="3.2" fill="var(--muted)"/><circle cx="59" cy="46" r="3.2" fill="var(--muted)"/><path d="M41 63 Q50 54 59 63" stroke="var(--muted)" stroke-width="3" stroke-linecap="round" fill="none"/></svg><p>Nothing for <b>'+esc(q)+'</b> on this page.<br>Try “estimate”, “AI”, or “scope”.</p></div>'; }
+  function render(q){ drop.innerHTML=''; if(results.length===0){ drop.innerHTML=noRes(q); drop.classList.add('open'); return; } var head=document.createElement('div'); head.className='search-count'; head.textContent=results.length+(results._t?'+ matches':(results.length===1?' match':' matches')); drop.appendChild(head); results.forEach(function(r,i){ var d=document.createElement('div'); d.className='search-item'+(i===cur?' kbd':''); d.innerHTML='<span class="search-snip">'+r.snip+'</span><span class="search-item-type">'+esc(r.section)+'</span>'; d.onmousedown=function(e){ e.preventDefault(); sel(r); }; drop.appendChild(d); }); drop.classList.add('open'); }
+  function sel(r){ drop.classList.remove('open'); try{ r.el.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} var f=highlight(r.el,r.q); if(f){ setTimeout(function(){ try{ f.scrollIntoView({behavior:'smooth',block:'center'}); }catch(e){} },320); } if(hlTimer) clearTimeout(hlTimer); hlTimer=setTimeout(clearHL,6000); }
+  function doSearch(){ var q=input.value.trim(); if(q.length<3){ drop.classList.remove('open'); drop.innerHTML=''; results=[]; cur=-1; return; } var lc=q.toLowerCase(),entries=buildEntries(),found=[]; for(var i=0;i<entries.length;i++){ var pos=entries[i].low.indexOf(lc); if(pos!==-1){ found.push({el:entries[i].el,section:entries[i].section,q:q,snip:snippet(entries[i].text,pos,q.length)}); if(found.length>=40){ found._t=true; break; } } } results=found; cur=-1; render(q); }
+  if(input){ input.addEventListener('input',doSearch); input.addEventListener('focus',function(){ if(input.value.trim().length>=3) doSearch(); }); input.addEventListener('keydown',function(e){ if(!drop.classList.contains('open')) return; if(e.key==='ArrowDown'){ e.preventDefault(); cur=Math.min(cur+1,results.length-1); render(input.value.trim()); var a=drop.querySelectorAll('.search-item')[cur]; if(a) a.scrollIntoView({block:'nearest'}); } else if(e.key==='ArrowUp'){ e.preventDefault(); cur=Math.max(cur-1,0); render(input.value.trim()); } else if(e.key==='Enter'){ if(cur>=0&&results[cur]) sel(results[cur]); else if(results[0]) sel(results[0]); } else if(e.key==='Escape'){ drop.classList.remove('open'); input.blur(); } }); document.addEventListener('click',function(e){ if(!e.target.closest('.search-wrap')) drop.classList.remove('open'); }); }
+})();
+</script>
+</body>
+</html>
