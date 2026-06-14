@@ -421,6 +421,7 @@
     <li><a href="#skills">Skills</a></li>
     <li><a href="#writing">Writing</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="https://neeleshpmtoolkit.com/gutcheck.html">Gut Check</a></li>
   </ul>
   <div class="nav-actions">
     <div class="search-wrap">
@@ -905,6 +906,7 @@
     function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn, 80); }; return a; }
     [['About','about'],['Experience','experience'],['Case Study','case'],['Skills','skills'],['Philosophy','philosophy'],['Education','education'],['Writing','writing'],['Contact','contact']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
     body.appendChild(link('PM Toolkit ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/toolkit.html'; }));
+    body.appendChild(link('🧭  Gut Check ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/gutcheck.html'; }));
     body.appendChild(link('🏠  Home', function(){ window.location.href='https://neeleshpmtoolkit.com/index.html'; }));
   })();
   /* ════════ EXPERIENCE STORY TEARDOWNS ════════ */
