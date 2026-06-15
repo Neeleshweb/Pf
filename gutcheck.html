@@ -1074,6 +1074,8 @@ function loadMyVotes(){
     if(res && !res.error && res.data){
       GC.calls = {};
       res.data.forEach(function(r){ if(r && r.dilemma_id) GC.calls[r.dilemma_id] = r.choice; });
+      /* "calls made" is derived from real votes so it can never drift out of sync */
+      GC.decisions = Object.keys(GC.calls).length;
       gcSave(GC);
     }
   }).catch(function(e){ console.warn('[GutCheck] votes load failed:', e); });
