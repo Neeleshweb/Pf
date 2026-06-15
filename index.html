@@ -199,6 +199,82 @@
     .search-empty p { font-size: .85rem; color: var(--muted); }
     mark.search-hl { background: linear-gradient(180deg, rgba(240,165,0,.92), rgba(232,84,10,.88)); color: #111; border-radius: 3px; padding: 0 2px; box-shadow: 0 0 0 1px rgba(240,165,0,.35); }
     @media (max-width: 860px){ .hamburger { display: flex; } .nav-links > a { display: none; } }
+
+    /* ===== WALKTHROUGH PREVIEW ===== */
+    .tw-preview { display:inline-flex; align-items:center; justify-content:center; gap:.4rem; margin-bottom:.6rem; padding:.6rem 1rem; border-radius:var(--radius); font-size:.8rem; font-weight:500; letter-spacing:.2px; cursor:pointer; background:transparent; border:1px solid var(--border2); color:var(--muted); transition:border-color .2s, color .2s, background .2s; }
+    .tw-preview:hover { color:var(--white); border-color:var(--white); background:var(--card2); }
+    .path.portfolio .tw-preview:hover { border-color:var(--accent); color:var(--accent); }
+    .path.toolkit .tw-preview:hover { border-color:var(--accent3); color:#8fb8f5; }
+    .path.gutcheck .tw-preview:hover { border-color:var(--accent2); color:var(--accent2); }
+    .tw-overlay { position:fixed; inset:0; background:rgba(4,4,4,.86); backdrop-filter:blur(8px); display:flex; align-items:center; justify-content:center; padding:1.2rem; opacity:0; pointer-events:none; transition:opacity .25s; z-index:700; --tw:var(--accent); }
+    .tw-overlay.open { opacity:1; pointer-events:auto; }
+    .tw-overlay.accent-o { --tw:var(--accent); } .tw-overlay.accent-b { --tw:var(--accent3); } .tw-overlay.accent-y { --tw:var(--accent2); }
+    .tw-modal { position:relative; width:100%; max-width:min(920px,94vw); background:var(--card); border:1px solid var(--border2); border-radius:16px; padding:1.5rem 1.4rem 1.3rem; box-shadow:0 24px 60px rgba(0,0,0,.6); }
+    .tw-close { position:absolute; top:.9rem; right:1rem; background:none; border:none; color:var(--muted); font-size:1.1rem; cursor:pointer; line-height:1; } .tw-close:hover { color:var(--white); }
+    .tw-head { margin-bottom:1rem; }
+    .tw-eyebrow { font-size:.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--tw); margin-bottom:.35rem; }
+    .tw-title { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; letter-spacing:.5px; line-height:1; }
+    .tw-stage { background:var(--surface); border:1px solid var(--border2); border-radius:12px; padding:.5rem; min-height:120px; display:flex; align-items:center; justify-content:center; }
+    .tw-shot { display:block; width:100%; height:auto; max-height:64vh; border-radius:8px; }
+    .tw-shot-fallback { padding:2rem 1rem; color:var(--muted); font-size:.85rem; text-align:center; }
+    .tw-cap { font-size:.86rem; color:#c9c4bb; line-height:1.55; margin:.9rem 0 1.1rem; min-height:2.6em; }
+    .tw-cap b { color:var(--white); font-weight:600; }
+    .tw-foot { display:flex; align-items:center; gap:.8rem; }
+    .tw-dots { display:flex; gap:.4rem; margin:0 auto; }
+    .tw-dot { width:7px; height:7px; border-radius:50%; background:var(--border2); cursor:pointer; transition:background .2s, transform .2s; }
+    .tw-dot.on { background:var(--tw); transform:scale(1.25); }
+    .tw-btn { background:var(--card2); border:1px solid var(--border2); color:var(--white); font-family:'DM Sans',sans-serif; font-size:.84rem; font-weight:500; padding:.6rem 1.1rem; border-radius:var(--radius); cursor:pointer; transition:background .2s, border-color .2s; }
+    .tw-btn:hover { background:var(--card); }
+    .tw-btn.primary { background:var(--white); color:#111; border-color:var(--white); }
+    .tw-btn.primary.go { background:var(--tw); border-color:var(--tw); color:#111; }
+    /* mini-preview building blocks */
+    .mp { width:100%; max-width:350px; }
+    .mp-frame { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:1rem 1.05rem; }
+    .mp-frame.quote { text-align:center; padding:1.4rem 1.1rem; }
+    .mp-label { font-size:.6rem; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); margin-bottom:.6rem; }
+    .mp-q { font-size:.9rem; color:var(--white); font-weight:500; line-height:1.45; margin-bottom:.7rem; }
+    .mp-by { font-size:.74rem; color:var(--muted); }
+    .mp-note { font-size:.72rem; color:var(--muted); margin-top:.7rem; font-style:italic; }
+    .mp-opt { border:1px solid var(--border2); border-radius:8px; padding:.5rem .7rem; font-size:.8rem; color:#c9c4bb; display:flex; justify-content:space-between; align-items:center; }
+    .mp-opt.sel { border-color:var(--accent2); background:var(--accent2-dim); color:var(--white); }
+    .mp-bar { height:8px; background:var(--card2); border-radius:100px; overflow:hidden; margin-top:.3rem; }
+    .mp-bar i { display:block; height:100%; border-radius:100px; }
+    .mp-flow { display:flex; align-items:center; justify-content:space-between; gap:.2rem; }
+    .mp-node { display:flex; flex-direction:column; align-items:center; gap:.3rem; font-size:1.3rem; flex:1; }
+    .mp-node span { font-size:.6rem; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); }
+    .mp-node.win span { color:var(--accent); }
+    .mp-arr { color:var(--muted2); font-size:.9rem; }
+    .mp-chip { display:inline-block; font-size:.68rem; font-weight:600; padding:.2rem .6rem; border-radius:100px; margin-bottom:.6rem; }
+    .mp-chip.orange { color:var(--accent); background:var(--accent-dim); border:1px solid var(--accent); }
+    .mp-result { font-size:.76rem; color:var(--accent2); background:var(--accent2-dim); border-radius:6px; padding:.35rem .6rem; display:inline-block; margin-bottom:.7rem; }
+    .mp-storybtn { font-size:.76rem; color:var(--muted); border:1px solid var(--border2); border-radius:8px; padding:.4rem .7rem; display:inline-block; }
+    .mp-quotemark { font-family:'Bebas Neue',sans-serif; font-size:2.6rem; color:var(--accent); line-height:.6; }
+    .mp-quote { font-size:.96rem; color:var(--white); line-height:1.5; font-style:italic; margin:.4rem 0 .7rem; }
+    .mp-books { display:flex; gap:.9rem; justify-content:center; }
+    .mp-book { width:104px; height:150px; border-radius:4px; padding:.7rem; display:flex; align-items:flex-end; box-shadow:0 8px 20px rgba(0,0,0,.4); }
+    .mp-book span { font-size:.74rem; font-weight:600; color:#fff; line-height:1.25; }
+    .mp-book.b1 { background:linear-gradient(155deg,#1e3a8a,#3b82f6); }
+    .mp-book.b2 { background:linear-gradient(155deg,#166534,#4ade80); }
+    .mp-scorewrap { display:flex; align-items:baseline; gap:.5rem; margin-bottom:.8rem; }
+    .mp-score { font-family:'Bebas Neue',sans-serif; font-size:2.8rem; color:var(--accent3); line-height:1; }
+    .mp-scorelbl { font-size:.66rem; letter-spacing:1px; text-transform:uppercase; color:var(--muted); }
+    .mp-comp { display:flex; align-items:center; gap:.6rem; margin-bottom:.45rem; font-size:.74rem; color:var(--muted); }
+    .mp-comp span { width:88px; flex-shrink:0; }
+    .mp-comp .mp-bar { flex:1; margin-top:0; }
+    .mp-tinder { background:var(--card2); border:1px solid var(--border2); border-radius:10px; padding:.9rem; margin-bottom:.7rem; }
+    .mp-swipe { display:flex; gap:.6rem; }
+    .mp-swipe span { flex:1; text-align:center; font-size:.78rem; font-weight:600; padding:.5rem; border-radius:8px; }
+    .mp-swipe .no { color:var(--red,#ff6b6b); border:1px solid rgba(255,107,107,.4); }
+    .mp-swipe .yes { color:var(--green); border:1px solid rgba(74,222,128,.4); }
+    .mp-chips { display:flex; gap:.4rem; margin-bottom:.7rem; }
+    .mp-pill { font-size:.72rem; padding:.3rem .7rem; border-radius:100px; border:1px solid var(--border2); color:var(--muted); }
+    .mp-pill.sel { border-color:var(--accent3); color:#8fb8f5; background:var(--accent3-dim); }
+    .mp-fw { font-size:.82rem; color:#c9c4bb; line-height:1.5; } .mp-fw b { color:var(--accent3); }
+    .mp-input { background:var(--card2); border:1px solid var(--border2); border-radius:7px; padding:.55rem .7rem; font-size:.78rem; color:var(--muted); margin-bottom:.5rem; }
+    .mp-input.short { width:70%; }
+    .mp-tier { display:flex; align-items:center; gap:.6rem; margin-top:.7rem; flex-wrap:wrap; }
+    .mp-tierbadge { font-size:.74rem; font-weight:600; color:var(--accent2); background:var(--accent2-dim); border:1px solid var(--accent2); border-radius:100px; padding:.25rem .65rem; }
+    .mp-tiernote { font-size:.72rem; color:var(--muted); }
   </style>
 </head>
 <body>
@@ -257,6 +333,7 @@
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Résumé, recognition &amp; published books</li>
         </ul>
         <div class="path-hook">"The rare PM who came up as an engineer — fluent in both business and code."</div>
+        <span class="tw-preview" data-tour="portfolio" role="button" tabindex="0">▶ &nbsp;60-second preview</span>
         <span class="path-cta">View the Portfolio →</span>
       </a>
 
@@ -275,6 +352,7 @@
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Interactive product teardowns &amp; coaching</li>
         </ul>
         <div class="path-hook">"Practice the actual work of a PM — not just read about it."</div>
+        <span class="tw-preview" data-tour="toolkit" role="button" tabindex="0">▶ &nbsp;60-second preview</span>
         <span class="path-cta">Open the Toolkit →</span>
       </a>
 
@@ -294,6 +372,7 @@
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Build a judgment streak &amp; track record over time</li>
         </ul>
         <div class="path-hook">"The daily judgment habit no AI can give you."</div>
+        <span class="tw-preview" data-tour="gutcheck" role="button" tabindex="0">▶ &nbsp;60-second preview</span>
         <span class="path-cta">Make today's call →</span>
       </a>
     </div>
@@ -441,5 +520,72 @@
   })();
 </script>
 <script src="https://neeleshpmtoolkit.com/gc-auth.js"></script>
+<!-- WALKTHROUGH MODAL -->
+<div class="tw-overlay" id="tw-overlay" aria-hidden="true">
+  <div class="tw-modal" role="dialog" aria-modal="true" aria-labelledby="tw-title">
+    <button class="tw-close" id="tw-close" aria-label="Close preview">✕</button>
+    <div class="tw-head"><div class="tw-eyebrow">Quick preview <span id="tw-stepno"></span></div><div class="tw-title" id="tw-title"></div></div>
+    <div class="tw-stage" id="tw-stage"></div>
+    <div class="tw-cap" id="tw-cap"></div>
+    <div class="tw-foot">
+      <button class="tw-btn" id="tw-prev">← Back</button>
+      <div class="tw-dots" id="tw-dots"></div>
+      <button class="tw-btn primary" id="tw-next">Next →</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var B='https://neeleshpmtoolkit.com/';
+  var IMG=B+'img/';
+  var TOURS = {
+    portfolio: { name:'The Portfolio', accent:'o', url:B+'portfolio.html', cta:'Open the Portfolio', steps:[
+      { img:IMG+'tour-pf1-anatomy.png', cap:'Walk a real <b>0\u21921 build</b> end to end \u2014 the problem, my approach, and the measurable outcome.' },
+      { img:IMG+'tour-pf2-experience.png', cap:'Every role is an <b>expandable story</b> \u2014 tap \u201Csee the full story\u201D for the before, the fork, the build, and the impact.' },
+      { img:IMG+'tour-pf3-philosophy.png', cap:'See exactly <b>how I think about product</b> \u2014 the principles I run every initiative by.' },
+      { img:IMG+'tour-pf4-books.png', cap:'And <b>two published books</b> on product management, from idea to launch.' }
+    ]},
+    toolkit: { name:'The PM Toolkit', accent:'b', url:B+'toolkit.html', cta:'Open the Toolkit', steps:[
+      { img:IMG+'tour-tk1-readiness.png', cap:'Take the <b>PM Readiness Check</b> \u2014 8 questions, a readiness score, and a personalized plan to level up.' },
+      { img:IMG+'tour-tk2-teardown.png', cap:'Swipe through real products in <b>interactive teardowns</b> \u2014 and see the exact psychology working on you.' },
+      { img:IMG+'tour-tk3-frameworks.png', cap:'Use the <b>Frameworks Cheatsheet</b> \u2014 pick your industry and every framework re-tools itself for how you work.' }
+    ]},
+    gutcheck: { name:'PM Gut Check', accent:'y', url:B+'gutcheck.html', cta:'Make today\u2019s call', steps:[
+      { img:IMG+'tour-gc1-vote.png', cap:'<b>Commit your call</b> on a real product dilemma \u2014 no take-backs, just like the real thing.' },
+      { img:IMG+'tour-gc2-reveal.png', cap:'Then <b>the crowd unlocks</b> \u2014 see how PMs split, how a strong PM weighs it, and how others reasoned.' },
+      { img:IMG+'tour-gc3-submit.png', cap:'<b>Submit your own dilemmas</b> and climb contributor tiers as PMs everywhere test themselves on your call.' }
+    ]}
+  };
+    var ov=document.getElementById('tw-overlay'); if(!ov) return;
+  var stage=document.getElementById('tw-stage'), capEl=document.getElementById('tw-cap'), dotsEl=document.getElementById('tw-dots'),
+      prevB=document.getElementById('tw-prev'), nextB=document.getElementById('tw-next'), stepNo=document.getElementById('tw-stepno'),
+      titleEl=document.getElementById('tw-title');
+  var cur=null, idx=0;
+  function render(){
+    var s=cur.steps[idx], n=cur.steps.length;
+    stage.innerHTML='<img class="tw-shot" alt="'+cur.name+' preview" src="'+s.img+'">';
+    var _im=stage.querySelector('img'); if(_im){ _im.onerror=function(){ stage.innerHTML='<div class="tw-shot-fallback">Screenshot loads on the live site \u2014 use the button below to view it there.</div>'; }; }
+    capEl.innerHTML=s.cap; stepNo.textContent='\u00B7 '+(idx+1)+' / '+n;
+    dotsEl.innerHTML='';
+    for(var k=0;k<n;k++){ var d=document.createElement('span'); d.className='tw-dot'+(k===idx?' on':''); (function(kk){ d.onclick=function(){ idx=kk; render(); }; })(k); dotsEl.appendChild(d); }
+    prevB.style.visibility = idx===0 ? 'hidden':'visible';
+    var last = idx===n-1;
+    nextB.textContent = last ? (cur.cta+' \u2192') : 'Next \u2192';
+    nextB.classList.toggle('go', last);
+  }
+  function open(key){ cur=TOURS[key]; if(!cur) return; idx=0; ov.className='tw-overlay open accent-'+cur.accent; titleEl.textContent=cur.name; ov.setAttribute('aria-hidden','false'); render(); document.body.style.overflow='hidden'; }
+  function close(){ ov.classList.remove('open'); ov.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+  nextB.onclick=function(){ if(idx<cur.steps.length-1){ idx++; render(); } else { window.location.href=cur.url; } };
+  prevB.onclick=function(){ if(idx>0){ idx--; render(); } };
+  document.getElementById('tw-close').onclick=close;
+  ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+  document.addEventListener('keydown', function(e){ if(!ov.classList.contains('open')) return; if(e.key==='Escape') close(); else if(e.key==='ArrowRight') nextB.click(); else if(e.key==='ArrowLeft') prevB.click(); });
+  [].slice.call(document.querySelectorAll('.tw-preview')).forEach(function(el){
+    function go(e){ e.preventDefault(); e.stopPropagation(); open(el.getAttribute('data-tour')); }
+    el.addEventListener('click', go);
+    el.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ go(e); } });
+  });
+})();
+</script>
 </body>
 </html>
