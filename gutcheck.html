@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Gut Check by Neelesh Singh — one real product decision every day. Make the call, see how PMs around the world voted, then find out what actually happened. The daily judgment habit no AI can give you."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://neeleshpmtoolkit.com/gutcheck.html"/>
+  <meta property="og:title" content="PM Gut Check — make the call before you see the crowd"/>
+  <meta property="og:description" content="One real product decision every day. Commit your call, see how PMs worldwide voted, then find out what actually happened."/>
+  <meta property="og:image" content="https://neeleshpmtoolkit.com/og-gutcheck.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="PM Gut Check — make the call before you see the crowd"/>
+  <meta name="twitter:description" content="Make one real product call a day. See how PMs worldwide voted, then what actually happened."/>
+  <meta name="twitter:image" content="https://neeleshpmtoolkit.com/og-gutcheck.png"/>
   <title>PM Gut Check — Neelesh Singh</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet"/>
   <style>
@@ -277,6 +286,20 @@
     .ep-photo-actions .btn-ghost { padding: .42rem .8rem; font-size: .78rem; }
     @media (max-width: 860px) { #nav-account { display: none !important; } }
 
+    /* SHARE */
+    .rv-foot-btns { display: flex; gap: .6rem; flex-wrap: wrap; }
+    .rec-share { display: inline-block; margin: 0 .6rem .6rem 0; background: var(--accent); color: #fff; border: none; font-weight: 600; font-size: .82rem; padding: .7rem 1.3rem; border-radius: 9px; cursor: pointer; }
+    .rec-share:hover { background: var(--accent2); color: #111; }
+    .share-modal { max-width: 580px; }
+    .share-sub { color: var(--muted); font-size: .85rem; margin: -.2rem 0 1rem; line-height: 1.5; }
+    .share-card-wrap { border: 1px solid var(--border2); border-radius: 12px; overflow: hidden; background: #0f0f0f; margin-bottom: 1rem; }
+    #share-canvas { display: block; width: 100%; height: auto; }
+    .share-cap-label { display: block; color: var(--muted); font-size: .76rem; margin-bottom: .35rem; }
+    #share-caption { width: 100%; background: var(--card2); border: 1px solid var(--border2); border-radius: 9px; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .85rem; line-height: 1.5; padding: .7rem .8rem; resize: vertical; }
+    .share-actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .85rem; }
+    .share-actions .btn-primary, .share-actions .btn-ghost { flex: 1; min-width: 140px; text-align: center; }
+    .share-close { width: 100%; margin-top: .6rem; }
+
     /* FOOTER */
     .footer { border-top: 1px solid var(--border); padding: 3rem 2.5rem 2.5rem; text-align: center; }
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; margin-bottom: 1rem; }
@@ -400,6 +423,7 @@
     <div class="dim-row"><span class="dim-label">⚖️ Risk</span><span class="dim-track"><i id="dim-r"></i></span></div>
   </div>
   <p class="rec-note">Levels: <b>Associate</b> → <b>Senior</b> (40+ pts) → <b>Principal</b> (100+ pts). Earn points for every call you make, and a bonus when your call matches what a strong PM (or I) actually did. Your streak rewards coming back daily — because judgment isn't downloaded, it's built.</p>
+  <button class="rec-share" id="rec-share">Share my judgment profile ↗</button>
   <button class="rec-reset" id="rec-reset">Reset my profile</button>
 </section>
 
@@ -482,6 +506,23 @@
   </div>
 </div>
 
+<!-- SHARE MODAL -->
+<div class="aud-overlay" id="share-overlay">
+  <div class="aud-modal share-modal" role="dialog" aria-modal="true">
+    <h3 id="share-title">SHARE YOUR CALL</h3>
+    <p class="share-sub">Spoiler-free — your network can take the same call. Post the image with the caption, or share the link.</p>
+    <div class="share-card-wrap"><canvas id="share-canvas" width="1200" height="630"></canvas></div>
+    <label class="share-cap-label" for="share-caption">Caption (edit freely):</label>
+    <textarea id="share-caption" rows="6"></textarea>
+    <div class="share-actions">
+      <button class="btn-primary" id="share-linkedin">Share on LinkedIn</button>
+      <button class="btn-ghost" id="share-copy">Copy caption</button>
+      <button class="btn-ghost" id="share-download">Download image</button>
+    </div>
+    <button class="btn-ghost share-close" id="share-close">Close</button>
+  </div>
+</div>
+
 <script>
 /* ════════════════════════════════════════════════════════
    PM GUT CHECK — one real product call a day
@@ -500,6 +541,17 @@ var GC_CONFIG = {
 var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1$/,'').replace(/\/+$/,'');
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
+/* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
+var SITE_VERSION = '2026-06-15-1';
+(function(){ try {
+  if (location.protocol === 'file:') return;
+  fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
+    if (!j || !j.version || j.version === SITE_VERSION) return;
+    var key = 'gc_cb_' + j.version;
+    try { if (sessionStorage.getItem(key)) return; sessionStorage.setItem(key,'1'); } catch(e){ return; }
+    location.replace(location.href.split('#')[0].split('?')[0] + '?v=' + encodeURIComponent(j.version));
+  }).catch(function(){});
+} catch(e){} })();
 var SB = null;
 try { if (GC_LIVE && window.supabase && window.supabase.createClient) SB = window.supabase.createClient(GC_URL, GC_CONFIG.anon); } catch(e){ console.warn('[GutCheck] client init failed:', e); SB = null; }
 var currentUser = null;
@@ -953,7 +1005,7 @@ function reveal(d, instant){
   /* lesson */
   h += '<div class="rv-lesson"><span>The takeaway:</span> '+d.lesson+'</div>';
   /* foot */
-  h += '<div class="rv-foot"><div class="rf-streak">🔥 <b>'+(GC.streak||1)+'</b> day streak · come back tomorrow for a brand-new call</div><a href="#archive" class="btn-ghost" style="padding:.6rem 1.2rem">Browse the Archive →</a></div>';
+  h += '<div class="rv-foot"><div class="rf-streak">🔥 <b>'+(GC.streak||1)+'</b> day streak · come back tomorrow for a brand-new call</div><div class="rv-foot-btns"><button class="btn-primary" data-share="call" style="padding:.6rem 1.2rem">Share my call ↗</button><a href="#archive" class="btn-ghost" style="padding:.6rem 1.2rem">Browse the Archive →</a></div></div>';
   h += '</div>';
   mountR.innerHTML = h;
   var doFill = function(){ [].slice.call(mountR.querySelectorAll('.dist-bar i')).forEach(function(i){ i.style.width = i.getAttribute('data-w')+'%'; }); };
@@ -1120,6 +1172,68 @@ function updateAuthUI(){
       if(res && res.error){ console.warn('[GutCheck] google signin error:', res.error); toast('Could not start Google sign-in — please try again.'); g.disabled=false; g.textContent='Continue with Google'; }
     }).catch(function(e){ console.warn('[GutCheck] google signin failed:', e); toast('Could not start Google sign-in.'); g.disabled=false; g.textContent='Continue with Google'; });
   };
+})();
+
+/* ---------- SHARE CARD (LinkedIn growth loop) ---------- */
+function shUnesc(s){ return String(s==null?'':s).replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'"); }
+function shWrap(ctx,text,x,y,maxW,lh,maxLines){
+  var words=(text||'').split(/\s+/), line='', lines=[];
+  for(var i=0;i<words.length;i++){ var t=line?line+' '+words[i]:words[i]; if(ctx.measureText(t).width>maxW && line){ lines.push(line); line=words[i]; } else line=t; }
+  if(line) lines.push(line);
+  if(lines.length>maxLines){ lines=lines.slice(0,maxLines); lines[maxLines-1]=lines[maxLines-1]+'\u2026'; }
+  lines.forEach(function(ln,i){ ctx.fillText(ln,x,y+i*lh); });
+  return y+lines.length*lh;
+}
+function shDisagree(d){ if(!d) return null; var k=GC.calls[d.id]; if(!k) return null; var p=null; var el=document.querySelector('#today-reveal .dist-row[data-k="'+k+'"] .dp'); if(el){ var n=parseInt(el.textContent,10); if(!isNaN(n)) p=n; } if(p==null){ try{ p=distFor(d,'all')[k]; }catch(e){} } return (p==null)?null:Math.max(0,100-p); }
+function renderShareCard(kind,d){
+  var c=document.getElementById('share-canvas'); if(!c||!c.getContext) return; var ctx=c.getContext('2d');
+  function draw(){
+    ctx.fillStyle='#0f0f0f'; ctx.fillRect(0,0,1200,630);
+    ctx.fillStyle='#e8540a'; ctx.fillRect(0,0,1200,10);
+    ctx.textBaseline='alphabetic'; ctx.textAlign='left';
+    ctx.font="46px 'Bebas Neue', Impact, sans-serif"; ctx.fillStyle='#f0ece4'; ctx.fillText('PM GUT ',70,102);
+    var w=ctx.measureText('PM GUT ').width; ctx.fillStyle='#e8540a'; ctx.fillText('CHECK',70+w,102);
+    ctx.textAlign='right'; ctx.fillStyle='#6b6b6b'; ctx.font="22px 'DM Sans', Arial, sans-serif"; ctx.fillText('neeleshpmtoolkit.com',1130,100); ctx.textAlign='left';
+    if(kind==='profile'){
+      var cs=calibStats(); var calib=cs.a?Math.round(cs.c/cs.a*100)+'%':'\u2014';
+      ctx.fillStyle='#6b6b6b'; ctx.font="600 26px 'DM Sans',Arial,sans-serif"; ctx.fillText('MY PM JUDGMENT',70,205);
+      ctx.fillStyle='#f0ece4'; ctx.font="116px 'Bebas Neue',Impact,sans-serif"; ctx.fillText(gcLevel().toUpperCase()+'-LEVEL',66,330);
+      function stat(x,big,small,color){ ctx.fillStyle=color; ctx.font="700 70px 'Bebas Neue',Impact,sans-serif"; ctx.fillText(big,x,475); ctx.fillStyle='#6b6b6b'; ctx.font="23px 'DM Sans',Arial,sans-serif"; ctx.fillText(small,x,515); }
+      stat(70,(GC.streak||1)+'','DAY STREAK','#f0a500');
+      stat(340,(GC.decisions||0)+'','CALLS MADE','#f0ece4');
+      stat(640,calib,'MATCHED THE PROS','#4ade80');
+      ctx.fillStyle='#e8540a'; ctx.font="600 30px 'DM Sans',Arial,sans-serif"; ctx.fillText('Make your call \u2192  neeleshpmtoolkit.com/gutcheck',70,592);
+    } else {
+      ctx.fillStyle='#6b6b6b'; ctx.font="600 26px 'DM Sans',Arial,sans-serif"; ctx.fillText("TODAY'S CALL  \u00B7  DAY "+(TODAY_INDEX+1),70,192);
+      ctx.fillStyle='#f0ece4'; ctx.font="600 52px 'DM Sans',Arial,sans-serif";
+      var endY=shWrap(ctx, shUnesc(d?d.q:'What would you do?'),70,266,1060,66,4);
+      var dis=shDisagree(d);
+      ctx.fillStyle='#f0a500'; ctx.font="600 36px 'DM Sans',Arial,sans-serif";
+      ctx.fillText(dis!=null ? (dis+'% of PMs made a different call.') : 'I committed before seeing the crowd.',70,Math.min(528,endY+56));
+      ctx.fillStyle='#e8540a'; ctx.font="600 30px 'DM Sans',Arial,sans-serif"; ctx.fillText("What's your call? \u2192  neeleshpmtoolkit.com/gutcheck",70,592);
+    }
+  }
+  try { if(document.fonts && document.fonts.ready){ document.fonts.ready.then(draw).catch(draw); setTimeout(draw,350); } else draw(); } catch(e){ try{ draw(); }catch(_){} }
+}
+function shareCaption(kind,d){
+  var url='https://neeleshpmtoolkit.com/gutcheck.html';
+  if(kind==='profile'){ var cs=calibStats(); var calib=cs.a?(Math.round(cs.c/cs.a*100)+'%'):'just getting started';
+    return 'My product-judgment scorecard on PM Gut Check \uD83E\uDDED\n\n\u2022 '+(GC.streak||1)+'-day streak\n\u2022 '+(GC.decisions||0)+' real calls made\n\u2022 Matched the strong-PM read: '+calib+'\n\nOne real product decision a day \u2014 you commit your call before seeing the crowd. Think you can read them better than me?\n\n'+url+'\n\n#productmanagement #productmanager #PMskills'; }
+  var dis=shDisagree(d);
+  return 'I made today\u2019s product call on PM Gut Check \u2014 committing before I saw how anyone else voted. \uD83E\uDDED\n\n'+(dis!=null?(dis+'% of PMs made a different call than me. '):'')+'What would you do?\n\n'+url+'\n\n#productmanagement #productmanager #PMskills';
+}
+function shCopy(t){ try{ if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t); return true; } }catch(e){} try{ var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); return true; }catch(e){} return false; }
+function openShare(kind,d){ var ov=document.getElementById('share-overlay'); if(!ov) return; var t=document.getElementById('share-title'); if(t) t.textContent = kind==='profile'?'SHARE YOUR JUDGMENT PROFILE':'SHARE YOUR CALL'; renderShareCard(kind,d); var cap=document.getElementById('share-caption'); if(cap) cap.value=shareCaption(kind,d); ov.classList.add('open'); ov._kind=kind; }
+function closeShare(){ var ov=document.getElementById('share-overlay'); if(ov) ov.classList.remove('open'); }
+(function(){
+  var ov=document.getElementById('share-overlay'); if(!ov) return;
+  ov.addEventListener('click', function(e){ if(e.target===ov) closeShare(); });
+  var cl=document.getElementById('share-close'); if(cl) cl.onclick=closeShare;
+  var li=document.getElementById('share-linkedin'); if(li) li.onclick=function(){ var cap=document.getElementById('share-caption').value; shCopy(cap); toast('Caption copied \u2014 paste it into your LinkedIn post.'); window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent('https://neeleshpmtoolkit.com/gutcheck.html'),'_blank','noopener'); };
+  var cp=document.getElementById('share-copy'); if(cp) cp.onclick=function(){ toast(shCopy(document.getElementById('share-caption').value)?'Caption copied.':'Select and copy the caption.'); };
+  var dl=document.getElementById('share-download'); if(dl) dl.onclick=function(){ var c=document.getElementById('share-canvas'); try{ var a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download='pm-gut-check.png'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }catch(e){ toast('Could not generate the image.'); } };
+  var rs=document.getElementById('rec-share'); if(rs) rs.onclick=function(){ openShare('profile'); };
+  document.addEventListener('click', function(e){ var el=e.target.closest && e.target.closest('[data-share]'); if(el){ e.preventDefault(); openShare(el.getAttribute('data-share'), todaysDilemma); } });
 })();
 
 /* ---------- ACCOUNT UI + PROFILE EDIT (front-end only) ---------- */
