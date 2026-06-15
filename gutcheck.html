@@ -300,6 +300,24 @@
     .share-actions .btn-primary, .share-actions .btn-ghost { flex: 1; min-width: 140px; text-align: center; }
     .share-close { width: 100%; margin-top: .6rem; }
 
+    /* REASONS FEED */
+    .rv-reasons { margin-top: 1.6rem; }
+    .rsn-count { background: var(--card2); color: var(--muted); border-radius: 20px; padding: .05rem .5rem; font-size: .7rem; margin-left: .35rem; vertical-align: middle; }
+    .rsn-loading, .rsn-empty { color: var(--muted); font-size: .86rem; padding: .55rem 0; line-height: 1.5; }
+    .rsn-list { display: flex; flex-direction: column; gap: .7rem; margin-top: .65rem; }
+    .rsn-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: .85rem 1rem; }
+    .rsn-card.mine { border-color: var(--accent-dim); background: rgba(232,84,10,.05); }
+    .rsn-top { display: flex; align-items: center; gap: .5rem; margin-bottom: .45rem; }
+    .rsn-badge { font-size: .72rem; font-weight: 600; color: #c9c4bb; background: var(--card2); border: 1px solid var(--border2); border-radius: 6px; padding: .18rem .5rem; max-width: 64%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rsn-you { font-size: .62rem; text-transform: uppercase; letter-spacing: .5px; color: var(--accent2); border: 1px solid var(--accent2-dim); border-radius: 6px; padding: .12rem .4rem; }
+    .rsn-time { color: var(--muted2); font-size: .72rem; margin-left: auto; white-space: nowrap; }
+    .rsn-text { color: #d8d3ca; font-size: .9rem; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+    .rsn-help { margin-top: .6rem; background: none; border: 1px solid var(--border2); color: var(--muted); border-radius: 8px; padding: .32rem .7rem; font-size: .76rem; cursor: pointer; display: inline-flex; align-items: center; gap: .3rem; }
+    .rsn-help:hover:not(:disabled) { border-color: var(--accent2); color: var(--white); }
+    .rsn-help.on { border-color: var(--green); color: var(--green); }
+    .rsn-help:disabled { cursor: default; opacity: .85; }
+    .rsn-hl { color: var(--muted2); }
+
     /* FOOTER */
     .footer { border-top: 1px solid var(--border); padding: 3rem 2.5rem 2.5rem; text-align: center; }
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; margin-bottom: 1rem; }
@@ -542,7 +560,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-15-1';
+var SITE_VERSION = '2026-06-15-2';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -557,7 +575,7 @@ try { if (GC_LIVE && window.supabase && window.supabase.createClient) SB = windo
 var currentUser = null;
 
 function fetchDist(dilemmaId){ if(!SB) return Promise.resolve(null); return SB.rpc('gc_distribution',{ p_dilemma: dilemmaId }).then(function(res){ if(res && res.error){ console.warn('[GutCheck] distribution read error:', res.error); return null; } return (res && res.data) ? res.data : null; }).catch(function(e){ console.warn('[GutCheck] distribution failed:', e); return null; }); }
-function recordVote(d, key){ if(!SB) return Promise.resolve(); return SB.from('gc_votes').insert({ user_id: currentUser ? currentUser.id : null, device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience }).then(function(res){ if(res && res.error) console.warn('[GutCheck] vote not saved:', res.error); }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); }); }
+function recordVote(d, key, reason){ if(!SB) return Promise.resolve(); var rsn=(reason||'').trim().slice(0,280); return SB.from('gc_votes').insert({ user_id: currentUser ? currentUser.id : null, device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience, reason: rsn.length?rsn:null }).then(function(res){ if(res && res.error) console.warn('[GutCheck] vote not saved:', res.error); }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); }); }
 function saveSubscriber(email){ if(!SB) return Promise.resolve(); return SB.from('gc_subscribers').insert({ email: email, audience: GC.audience }).then(function(res){ if(res && res.error) console.warn('[GutCheck] subscribe error:', res.error); }).catch(function(e){ console.warn('[GutCheck] subscribe failed:', e); }); }
 function saveSubmission(p){ if(!SB) return Promise.resolve(); return SB.from('gc_submissions').insert(p).then(function(res){ if(res && res.error) console.warn('[GutCheck] submission error:', res.error); }).catch(function(e){ console.warn('[GutCheck] submission failed:', e); }); }
 
@@ -930,7 +948,7 @@ function renderToday(){
     + '<div class="call-q">'+d.q+'</div>'
     + (answered ? '<div class="call-locked">✓ Your call is locked in for today. You can’t vote again until a new dilemma drops tomorrow.</div>' : '')
     + '<div id="today-opts"></div>';
-  if (!answered) html += '<div class="call-reason"><label>Optional — your one-line reasoning (private, for your own reflection):</label><textarea id="today-reason" placeholder="I chose this because…"></textarea><div class="call-hint">Once you commit, the crowd unlocks. No take-backs.</div></div>';
+  if (!answered) html += '<div class="call-reason"><label>Optional — add your reasoning. Shared <b>anonymously</b> with other PMs after they make their call.</label><textarea id="today-reason" maxlength="280" placeholder="I chose this because…"></textarea><div class="call-hint">Once you commit, the crowd unlocks. No take-backs.</div></div>';
   html += '<div id="today-reveal"></div></div>';
   mount.innerHTML = html;
   var optWrap = document.getElementById('today-opts');
@@ -957,11 +975,12 @@ function doCommit(d, key){
   gcSave(GC);
   /* lock options */
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ b.disabled=true; b.style.pointerEvents='none'; if (b.textContent.indexOf(key)===0 || b.querySelector('.opt-k').textContent===key){ } });
+  var reasonText=''; var rtEl=document.getElementById('today-reason'); if(rtEl) reasonText=(rtEl.value||'').trim().slice(0,280);
   var rsn = document.querySelector('.call-reason'); if (rsn) rsn.style.display='none';
   /* highlight chosen */
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ if (b.querySelector('.opt-k') && b.querySelector('.opt-k').textContent===key){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } b.style.opacity=.96; });
   reveal(d, false);
-  if (SB) { recordVote(d, key).then(function(){ enhanceLive(document.getElementById('today-reveal'), d); }); }
+  if (SB) { recordVote(d, key, reasonText).then(function(){ enhanceLive(document.getElementById('today-reveal'), d); loadReasons(d, document.getElementById('today-reveal')); }); }
   refreshRecord(); saveProfile();
 }
 
@@ -1004,10 +1023,12 @@ function reveal(d, instant){
   }
   /* lesson */
   h += '<div class="rv-lesson"><span>The takeaway:</span> '+d.lesson+'</div>';
+  h += '<div class="rv-reasons" id="reasons-feed"></div>';
   /* foot */
   h += '<div class="rv-foot"><div class="rf-streak">🔥 <b>'+(GC.streak||1)+'</b> day streak · come back tomorrow for a brand-new call</div><div class="rv-foot-btns"><button class="btn-primary" data-share="call" style="padding:.6rem 1.2rem">Share my call ↗</button><a href="#archive" class="btn-ghost" style="padding:.6rem 1.2rem">Browse the Archive →</a></div></div>';
   h += '</div>';
   mountR.innerHTML = h;
+  if (typeof loadReasons==='function') loadReasons(d, mountR);
   var doFill = function(){ [].slice.call(mountR.querySelectorAll('.dist-bar i')).forEach(function(i){ i.style.width = i.getAttribute('data-w')+'%'; }); };
   if (instant) setTimeout(doFill, 60); else setTimeout(doFill, 120);
 }
@@ -1173,6 +1194,47 @@ function updateAuthUI(){
     }).catch(function(e){ console.warn('[GutCheck] google signin failed:', e); toast('Could not start Google sign-in.'); g.disabled=false; g.textContent='Continue with Google'; });
   };
 })();
+
+/* ---------- POST-REVEAL: HOW OTHER PMs REASONED (gated behind voting) ---------- */
+var REASON_BAN = ['fuck','shit','bitch','cunt','asshole','nigger','faggot','rape','kill yourself','kys','retard','whore','slut'];
+function reasonClean(t){ var l=(t||'').toLowerCase(); for(var i=0;i<REASON_BAN.length;i++){ if(l.indexOf(REASON_BAN[i])>=0) return false; } return true; }
+function rsnTimeAgo(ts){ try{ var s=(Date.now()-new Date(ts).getTime())/1000; if(s<60) return 'just now'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; return Math.floor(s/86400)+'d ago'; }catch(e){ return ''; } }
+function rsnOptTitle(d,k){ for(var i=0;i<d.opts.length;i++){ if(d.opts[i].k===k) return d.opts[i].t; } return ''; }
+function loadReasons(d, scopeEl){
+  if(!d) return; var mount=(scopeEl||document).querySelector('#reasons-feed'); if(!mount) return;
+  if(!SB){ mount.innerHTML=''; return; }
+  mount.innerHTML='<div class="rv-h b">\uD83E\uDDE0 How other PMs reasoned</div><div class="rsn-loading">Loading reasoning from PMs who\u2019ve called this\u2026</div>';
+  SB.rpc('gc_reasons', { p_dilemma: d.id, p_limit: 12 }).then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] reasons error:', res.error); mount.innerHTML=''; return; }
+    var rows=(res && res.data)?res.data:[];
+    rows=rows.filter(function(r){ return r && r.reason && reasonClean(r.reason); });
+    renderReasons(mount, d, rows);
+  }).catch(function(e){ console.warn('[GutCheck] reasons failed:', e); mount.innerHTML=''; });
+}
+function renderReasons(mount, d, rows){
+  var head='<div class="rv-h b">\uD83E\uDDE0 How other PMs reasoned'+(rows.length?' <span class="rsn-count">'+rows.length+'</span>':'')+'</div>';
+  if(!rows.length){ mount.innerHTML=head+'<div class="rsn-empty">No one\u2019s explained their call yet. Add your reasoning above next time \u2014 it\u2019ll show here for others once they vote.</div>'; return; }
+  var html=head+'<div class="rsn-list">';
+  rows.forEach(function(r){
+    var k=r.choice||'', title=escHtml(rsnOptTitle(d,k));
+    html += '<div class="rsn-card'+(r.mine?' mine':'')+'">'
+      + '<div class="rsn-top"><span class="rsn-badge">'+escHtml(k)+(title?' \u00B7 '+title:'')+'</span>'+(r.mine?'<span class="rsn-you">you</span>':'')+'<span class="rsn-time">'+rsnTimeAgo(r.created_at)+'</span></div>'
+      + '<div class="rsn-text">'+escHtml(r.reason)+'</div>'
+      + '<button class="rsn-help'+(r.reacted?' on':'')+'" data-vote="'+escHtml(r.vote_id)+'"'+((r.mine||r.reacted)?' disabled':'')+'>\uD83D\uDC4D <span class="rsn-hc">'+(r.helpful||0)+'</span> <span class="rsn-hl">sharp</span></button>'
+      + '</div>';
+  });
+  html+='</div>';
+  mount.innerHTML=html;
+  [].slice.call(mount.querySelectorAll('.rsn-help')).forEach(function(btn){
+    btn.onclick=function(){
+      if(btn.disabled) return;
+      if(!SB || !currentUser){ openSignIn(); return; }
+      var vid=btn.getAttribute('data-vote'); btn.disabled=true; btn.classList.add('on');
+      var hc=btn.querySelector('.rsn-hc'); if(hc) hc.textContent=(parseInt(hc.textContent,10)||0)+1;
+      SB.rpc('gc_react', { p_vote_id: vid }).then(function(res){ if(res && res.error) console.warn('[GutCheck] react error:', res.error); }).catch(function(e){ console.warn('[GutCheck] react failed:', e); });
+    };
+  });
+}
 
 /* ---------- SHARE CARD (LinkedIn growth loop) ---------- */
 function shUnesc(s){ return String(s==null?'':s).replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'"); }
