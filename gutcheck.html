@@ -213,7 +213,22 @@
     .rec-tile { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.15rem; text-align: center; }
     .rec-tile b { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 1px; color: var(--accent2); line-height: 1.1; }
     .rec-tile small { font-size: .64rem; letter-spacing: .8px; text-transform: uppercase; color: var(--muted); }
-    .rec-tile.fire b { color: var(--accent); } .rec-tile.green b { color: var(--green); } .rec-tile.blue b { color: var(--accent3); }
+    .rec-tile.fire b { color: var(--accent); } .rec-tile.green b { color: var(--green); } .rec-tile.blue b { color: var(--accent3); } .rec-tile.amber b { color: var(--accent2); }
+    /* contributor tier */
+    .rec-subtier { margin: -.2rem 0 1.3rem; min-height: 0; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+    .ss-badge { display: inline-flex; align-items: center; gap: .35rem; font-size: .76rem; font-weight: 600; border-radius: 100px; padding: .3rem .75rem; border: 1px solid var(--border2); }
+    .ss-badge.t0 { color: var(--muted); background: var(--card2); }
+    .ss-badge.t1 { color: var(--green); background: rgba(74,222,128,.1); border-color: rgba(74,222,128,.4); }
+    .ss-badge.t2 { color: var(--accent2); background: var(--accent2-dim); border-color: var(--accent2); }
+    .ss-badge.t3 { color: var(--accent); background: var(--accent-dim); border-color: var(--accent); }
+    .ss-mini { font-size: .74rem; color: var(--muted); }
+    .sub-status { margin-bottom: 1rem; }
+    .sub-status .ss-row { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; margin-bottom: .7rem; }
+    .ss-counts { font-size: .8rem; color: var(--muted); } .ss-counts b { color: var(--white); font-family: 'Bebas Neue', sans-serif; font-size: 1.05rem; letter-spacing: .5px; }
+    .ss-bar { height: 7px; background: var(--card2); border: 1px solid var(--border); border-radius: 100px; overflow: hidden; }
+    .ss-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent2), var(--accent)); border-radius: 100px; transition: width .5s ease; }
+    .ss-next { font-size: .78rem; color: var(--muted); margin-top: .45rem; } .ss-next b { color: #c9c4bb; } .ss-next.ss-top { color: var(--accent2); }
+    .ss-hint { font-size: .8rem; color: var(--muted); background: var(--card2); border: 1px solid var(--border); border-radius: 10px; padding: .7rem .9rem; }
     .dim-bars { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.5rem; }
     .dim-bars h4 { font-size: .85rem; margin-bottom: 1rem; color: var(--white); }
     .dim-row { display: flex; align-items: center; gap: .7rem; margin-bottom: .7rem; }
@@ -432,7 +447,9 @@
     <div class="rec-tile green"><b id="rec-calib">—</b><small>matched the pros</small></div>
     <div class="rec-tile blue"><b id="rec-level">Associate</b><small>judgment level</small></div>
     <div class="rec-tile"><b id="rec-aud">—</b><small>you identify as</small></div>
+    <div class="rec-tile amber"><b id="rec-subs">0</b><small>dilemmas submitted</small></div>
   </div>
+  <div class="rec-subtier" id="rec-subtier"></div>
   <div class="dim-bars">
     <h4>How you tend to weigh decisions</h4>
     <div class="dim-row"><span class="dim-label">🎯 User Focus</span><span class="dim-track"><i id="dim-u"></i></span></div>
@@ -451,6 +468,7 @@
     <div class="sec-eyebrow b" style="margin-bottom:.5rem">Community</div>
     <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.5px;margin-bottom:.4rem">Faced a tough call? Turn it into a Gut Check.</div>
     <p style="font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem">The best dilemmas come from real rooms. Share a product fork you faced — if it's picked, PMs everywhere will test themselves on your call (credited, if you like). Every submission is reviewed before it goes live.</p>
+    <div class="sub-status" id="sub-status"></div>
     <button class="btn-primary" id="open-submit">✍️ Submit your dilemma</button>
   </div>
 </section>
@@ -560,7 +578,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-15-4';
+var SITE_VERSION = '2026-06-15-5';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1097,6 +1115,34 @@ function buildArchDetail(item, d){
   };
 })();
 
+/* ---------- CONTRIBUTOR TIERS (submission status) ---------- */
+var SUB_TIERS = [ { min:1, name:'Contributor', icon:'\uD83C\uDF31', cls:'t1' }, { min:5, name:'Curator', icon:'\u2B50', cls:'t2' }, { min:15, name:'Architect', icon:'\uD83D\uDC51', cls:'t3' } ];
+var subStats = { total:0, week:0, loaded:false };
+function subTierFor(total){ var cur=null,next=null,i; for(i=0;i<SUB_TIERS.length;i++){ if(total>=SUB_TIERS[i].min) cur=SUB_TIERS[i]; } for(i=0;i<SUB_TIERS.length;i++){ if(total<SUB_TIERS[i].min){ next=SUB_TIERS[i]; break; } } return { cur:cur, next:next }; }
+function loadSubStats(){
+  if(!SB || !currentUser){ applySubStatus(); return Promise.resolve(); }
+  return SB.rpc('gc_my_submission_stats').then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] sub-stats error:', res.error); applySubStatus(); return; }
+    var row=(res && res.data && res.data[0]) ? res.data[0] : {total:0,week:0};
+    subStats={ total:(+row.total||0), week:(+row.week||0), loaded:true }; applySubStatus();
+  }).catch(function(e){ console.warn('[GutCheck] sub-stats failed:', e); applySubStatus(); });
+}
+function applySubStatus(){
+  var total=subStats.total||0, week=subStats.week||0, t=subTierFor(total), cur=t.cur, next=t.next;
+  var rs=document.getElementById('rec-subs'); if(rs) rs.textContent=total;
+  var box=document.getElementById('sub-status'), rt=document.getElementById('rec-subtier');
+  if(!SB){ if(box) box.innerHTML=''; if(rt) rt.innerHTML=''; return; }
+  if(!currentUser){ if(box) box.innerHTML='<div class="ss-hint">Sign in to track your submissions and earn contributor status \u2014 it unlocks as you share real dilemmas.</div>'; if(rt) rt.innerHTML=''; return; }
+  var badge = cur ? ('<span class="ss-badge '+cur.cls+'">'+cur.icon+' '+cur.name+'</span>') : '<span class="ss-badge t0">\uD83C\uDF31 Not yet a contributor</span>';
+  var counts = '<span class="ss-counts"><b>'+total+'</b> all-time \u00B7 <b>'+week+'</b> this week</span>';
+  var prog;
+  if(next){ var prevMin=cur?cur.min:0, span=next.min-prevMin, done=total-prevMin, pct=Math.max(0,Math.min(100,Math.round(done/span*100))), remain=next.min-total;
+    prog='<div class="ss-bar"><i style="width:'+pct+'%"></i></div><div class="ss-next">'+remain+' more '+(remain===1?'submission':'submissions')+' to reach <b>'+next.icon+' '+next.name+'</b></div>'; }
+  else { prog='<div class="ss-bar"><i style="width:100%"></i></div><div class="ss-next ss-top">'+'\uD83D\uDC51 Top tier reached \u2014 you\u2019re an Architect of the community.</div>'; }
+  if(box) box.innerHTML='<div class="ss-row">'+badge+counts+'</div>'+prog;
+  if(rt){ if(cur){ rt.innerHTML=badge+(next?('<span class="ss-mini">'+(next.min-total)+' more to '+next.icon+' '+next.name+'</span>'):'<span class="ss-mini">top tier reached</span>'); } else { rt.innerHTML='<span class="ss-mini">Submit your first dilemma to become a \uD83C\uDF31 Contributor</span>'; } }
+}
+
 /* ---------- SUBMIT A DILEMMA ---------- */
 (function(){
   var openB=document.getElementById('open-submit'), ov=document.getElementById('submit-overlay'),
@@ -1111,7 +1157,7 @@ function buildArchDetail(item, d){
     if(SB && !currentUser){ close(); openSignIn('Sign in to submit a dilemma — it lets us credit you and keeps out spam.'); return; }
     var sc=val('sm-scenario'), q=val('sm-q'), opts=val('sm-opts');
     if(sc.length<10 || q.length<5 || opts.length<5){ alert('Add a little more — the situation, the question, and at least two options.'); return; }
-    saveSubmission({ user_id: currentUser ? currentUser.id : null, scenario:sc, question:q, options:opts, outcome:val('sm-outcome'), email:(currentUser&&currentUser.email)||val('sm-email'), audience:GC.audience });
+    saveSubmission({ user_id: currentUser ? currentUser.id : null, scenario:sc, question:q, options:opts, outcome:val('sm-outcome'), email:(currentUser&&currentUser.email)||val('sm-email'), audience:GC.audience }).then(function(){ subStats.total=(subStats.total||0)+1; subStats.week=(subStats.week||0)+1; applySubStatus(); loadSubStats(); });
     ok.style.display='block'; send.disabled=true; send.textContent='Sent ✓';
     setTimeout(function(){ close(); send.disabled=false; send.textContent='Send for review'; ok.style.display='none';
       ['sm-scenario','sm-q','sm-opts','sm-outcome','sm-email'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; }); }, 1500);
@@ -1383,7 +1429,7 @@ function boot(){
     var sess = res && res.data && res.data.session; currentUser = sess ? sess.user : null;
     return currentUser ? loadProfile().then(loadMyVotes) : Promise.resolve();
   }).then(function(){
-    applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord();
+    applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord(); loadSubStats();
   }).catch(function(){ applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord(); });
   if(SB.auth.onAuthStateChange) SB.auth.onAuthStateChange(function(evt, sess){
     var was = currentUser ? currentUser.id : null;
