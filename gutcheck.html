@@ -520,12 +520,15 @@ function scheduleRowToDilemma(row){
   if(!row) return null;
   if(row.kind === 'bank'){ for(var i=0;i<BANK.length;i++){ if(BANK[i].id === row.bank_id) return BANK[i]; } return null; }
   var opts = parseOptions(row.options); if(opts.length < 2) return null;
-  return { id: row.dilemma_id || 'sub-x', tier:3, level:(row.level||'Senior'),
-    source: row.credit ? ('Community · '+row.credit) : 'Community submission',
-    scenario: row.scenario||'', q: row.question||'What would you do?', opts: opts,
-    best: ((row.best||'').trim().toUpperCase())||null, dims:null,
-    breakdown: row.breakdown || 'This dilemma came straight from the community — there isn\u2019t an official \u201cright\u201d answer here. What matters is whether your reasoning holds together.',
-    real: row.outcome||null, lesson: row.lesson||null };
+  /* community content is user-supplied — escape every field so it can never inject HTML */
+  var esc = (typeof escHtml==='function') ? escHtml : function(x){ return String(x==null?'':x); };
+  opts = opts.map(function(o){ return { k:o.k, t:esc(o.t), d:esc(o.d) }; });
+  return { id: row.dilemma_id || 'sub-x', tier:3, level:esc(row.level||'Senior'),
+    source: row.credit ? ('Community · '+esc(row.credit)) : 'Community submission',
+    scenario: esc(row.scenario||''), q: esc(row.question||'What would you do?'), opts: opts,
+    best: ((row.best||'').trim().toUpperCase()).replace(/[^A-D]/g,'')||null, dims:null,
+    breakdown: row.breakdown ? esc(row.breakdown) : 'This dilemma came straight from the community — there isn\u2019t an official \u201cright\u201d answer here. What matters is whether your reasoning holds together.',
+    real: row.outcome ? esc(row.outcome) : null, lesson: row.lesson ? esc(row.lesson) : null };
 }
 function fetchTodaysScheduled(){
   if(!SB) return Promise.resolve(null);
