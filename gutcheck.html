@@ -560,7 +560,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-15-2';
+var SITE_VERSION = '2026-06-15-3';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1077,8 +1077,9 @@ function buildArchDetail(item, d){
   var realLabel = d.tier===1 ? '✅ What I actually did' : (d.tier===3 ? '👥 What the submitter shared' : '🌍 What actually happened');
   var realHtml = d.real ? ('<div class="rv-h '+(d.tier===1?'g':'b')+'" style="margin-top:1.1rem">'+realLabel+'</div><div class="rv-real '+(d.tier===1?'':'public')+'"><p>'+d.real+'</p></div>') : '';
   rev.innerHTML = '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'+realHtml+'<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'
-    + '<span class="preview-tag crowd-tag" style="margin-top:.8rem;display:inline-block">Crowd numbers are a preview · live community soon</span>';
-  if (SB) enhanceLive(item, d);
+    + '<span class="preview-tag crowd-tag" style="margin-top:.8rem;display:inline-block">Crowd numbers are a preview · live community soon</span>'
+    + '<div class="rv-reasons"></div>';
+  if (SB) { enhanceLive(item, d); loadReasons(d, item); }
 }
 
 /* ---------- SUBSCRIBE (Phase A: local; Phase B: Supabase) ---------- */
@@ -1201,7 +1202,7 @@ function reasonClean(t){ var l=(t||'').toLowerCase(); for(var i=0;i<REASON_BAN.l
 function rsnTimeAgo(ts){ try{ var s=(Date.now()-new Date(ts).getTime())/1000; if(s<60) return 'just now'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; return Math.floor(s/86400)+'d ago'; }catch(e){ return ''; } }
 function rsnOptTitle(d,k){ for(var i=0;i<d.opts.length;i++){ if(d.opts[i].k===k) return d.opts[i].t; } return ''; }
 function loadReasons(d, scopeEl){
-  if(!d) return; var mount=(scopeEl||document).querySelector('#reasons-feed'); if(!mount) return;
+  if(!d) return; var mount=(scopeEl||document).querySelector('.rv-reasons'); if(!mount) return;
   if(!SB){ mount.innerHTML=''; return; }
   mount.innerHTML='<div class="rv-h b">\uD83E\uDDE0 How other PMs reasoned</div><div class="rsn-loading">Loading reasoning from PMs who\u2019ve called this\u2026</div>';
   SB.rpc('gc_reasons', { p_dilemma: d.id, p_limit: 12 }).then(function(res){
