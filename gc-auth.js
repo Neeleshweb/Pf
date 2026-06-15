@@ -8,8 +8,8 @@
    PASTE the same Supabase URL + anon key you use in gutcheck.html:
    ============================================================ */
 (function () {
-  var SUPA_URL  = 'YOUR_SUPABASE_URL';
-  var SUPA_ANON = 'YOUR_SUPABASE_ANON_KEY';
+  var SUPA_URL  = 'https://oxxzygbfgmlnvavjmhct.supabase.co/rest/v1/';
+  var SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc';
 
   function cleanURL(u){ u=(u||'').trim().replace(/\/+$/,''); u=u.replace(/\/rest\/v1$/,'').replace(/\/+$/,''); return u; }
   SUPA_URL = cleanURL(SUPA_URL);
