@@ -247,6 +247,36 @@
     .gc-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px); background: var(--card); border: 1px solid var(--border2); color: var(--white); padding: .8rem 1.2rem; border-radius: 12px; font-size: .86rem; box-shadow: 0 18px 50px rgba(0,0,0,.5); opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s; z-index: 700; max-width: 90vw; text-align: center; }
     .gc-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+    /* ACCOUNT / PROFILE */
+    .nav-account { position: relative; display: flex; align-items: center; }
+    .nav-signin { background: var(--accent); color: #fff; border: none; font-weight: 600; font-size: .74rem; letter-spacing: .3px; text-transform: uppercase; padding: .55rem 1rem; border-radius: 9px; cursor: pointer; white-space: nowrap; }
+    .nav-signin:hover { background: var(--accent2); color: #111; }
+    .acct-btn { display: flex; align-items: center; gap: .3rem; background: none; border: none; cursor: pointer; padding: .15rem; border-radius: 40px; }
+    .acct-btn:hover .acct-caret { stroke: var(--white); }
+    .acct-caret { width: 15px; height: 15px; fill: none; stroke: var(--muted); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .gc-av { position: relative; border-radius: 50%; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #140d07; font-weight: 800; font-family: 'DM Sans', sans-serif; flex-shrink: 0; }
+    .gc-av i { font-style: normal; line-height: 1; letter-spacing: .4px; }
+    .gc-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .acct-menu { position: absolute; top: calc(100% + 10px); right: 0; width: 244px; background: var(--card); border: 1px solid var(--border2); border-radius: 12px; box-shadow: 0 22px 60px rgba(0,0,0,.55); padding: .5rem; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .18s, transform .18s; z-index: 420; }
+    .acct-menu.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .acct-head { display: flex; align-items: center; gap: .6rem; padding: .55rem .55rem .7rem; border-bottom: 1px solid var(--border); margin-bottom: .4rem; }
+    .acct-name { color: var(--white); font-weight: 600; font-size: .86rem; }
+    .acct-email { color: var(--muted); font-size: .72rem; word-break: break-all; }
+    .acct-item { width: 100%; text-align: left; background: none; border: none; color: #c9c4bb; font-size: .84rem; padding: .6rem .55rem; border-radius: 8px; cursor: pointer; display: flex; align-items: center; }
+    .acct-item:hover { background: var(--card2); color: var(--white); }
+    .mnav-account { padding: 1.1rem 1.2rem; border-bottom: 1px solid var(--border); flex-direction: column; gap: .6rem; }
+    .mnav-user { display: flex; align-items: center; gap: .6rem; margin-bottom: .2rem; }
+    .mnav-act { background: var(--accent); color: #fff; border: none; font-weight: 600; padding: .62rem 1rem; border-radius: 9px; cursor: pointer; font-size: .82rem; }
+    .mnav-act.ghost { background: none; border: 1px solid var(--border2); color: var(--muted); }
+    .auth-bar.greet { background: linear-gradient(120deg, var(--accent-dim), transparent); border-color: var(--border); }
+    .auth-bar .ab-greet { color: #d8d3ca; } .auth-bar .ab-greet b { color: var(--white); }
+    .auth-bar .ab-streak { color: var(--accent2); font-weight: 600; white-space: nowrap; }
+    .auth-bar .ab-hint { color: var(--muted); }
+    .ep-photo-row { display: flex; align-items: center; gap: 1rem; margin: .4rem 0 1.1rem; }
+    .ep-photo-actions { display: flex; flex-direction: column; gap: .45rem; }
+    .ep-photo-actions .btn-ghost { padding: .42rem .8rem; font-size: .78rem; }
+    @media (max-width: 860px) { #nav-account { display: none !important; } }
+
     /* FOOTER */
     .footer { border-top: 1px solid var(--border); padding: 3rem 2.5rem 2.5rem; text-align: center; }
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; margin-bottom: 1rem; }
@@ -290,12 +320,13 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
       Home
     </a>
+    <div class="nav-account" id="nav-account"></div>
     <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
 <div class="mobile-backdrop" id="mobile-backdrop"></div>
-<aside class="mobile-menu" id="mobile-menu"><div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div><nav class="mm-body" id="mm-body"></nav></aside>
+<aside class="mobile-menu" id="mobile-menu"><div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div><div id="mnav-account" class="mnav-account" style="display:none"></div><nav class="mm-body" id="mm-body"></nav></aside>
 
 <!-- HERO -->
 <section class="hero">
@@ -430,6 +461,24 @@
       Continue with Google
     </button>
     <button class="btn-ghost" id="signin-cancel" style="width:100%;margin-top:.6rem">Cancel</button>
+  </div>
+</div>
+
+<!-- EDIT PROFILE MODAL -->
+<div class="aud-overlay" id="editprofile-overlay">
+  <div class="aud-modal" role="dialog" aria-modal="true">
+    <h3>EDIT PROFILE</h3>
+    <div class="ep-photo-row">
+      <div id="ep-photo-preview"></div>
+      <div class="ep-photo-actions">
+        <button class="btn-ghost" id="ep-photo-btn" type="button">Change photo</button>
+        <button class="btn-ghost" id="ep-photo-google" type="button">Use Google photo</button>
+        <input type="file" id="ep-photo-file" accept="image/*" style="display:none">
+      </div>
+    </div>
+    <div class="sub-field"><label>First name</label><input id="ep-first" type="text" placeholder="First name" autocomplete="given-name"></div>
+    <div class="sub-field"><label>Last name</label><input id="ep-last" type="text" placeholder="Last name" autocomplete="family-name"></div>
+    <div style="display:flex;gap:.6rem;margin-top:.7rem"><button class="btn-primary" id="ep-save">Save</button><button class="btn-ghost" id="ep-cancel">Cancel</button></div>
   </div>
 </div>
 
@@ -1001,14 +1050,15 @@ document.getElementById('rec-reset').onclick = function(){
 };
 
 /* ---------- AUTH + PROFILE SYNC ---------- */
-function freshGC(){ return { calls:{}, dims:{u:0,e:0,s:0,r:0}, decisions:0, audience:null, subscribed:false, email:(currentUser&&currentUser.email)||null, streak:0, lastVisit:null, device:GC.device }; }
+function freshGC(){ return { calls:{}, dims:{u:0,e:0,s:0,r:0}, decisions:0, audience:null, subscribed:false, email:(currentUser&&currentUser.email)||null, streak:0, lastVisit:null, device:GC.device, firstName:'', lastName:'', avatar:null }; }
 function loadProfile(){
   if(!SB || !currentUser) return Promise.resolve();
   return SB.from('gc_profiles').select('data').eq('user_id', currentUser.id).maybeSingle().then(function(res){
     if(res && !res.error && res.data && res.data.data){
       var d = res.data.data;
       GC = { calls:d.calls||{}, dims:d.dims||{u:0,e:0,s:0,r:0}, decisions:d.decisions||0, audience:d.audience||null,
-             subscribed:d.subscribed||false, email:d.email||(currentUser.email), streak:d.streak||0, lastVisit:d.lastVisit||null, device:GC.device };
+             subscribed:d.subscribed||false, email:d.email||(currentUser.email), streak:d.streak||0, lastVisit:d.lastVisit||null, device:GC.device,
+             firstName:d.firstName||'', lastName:d.lastName||'', avatar:(d.avatar!==undefined?d.avatar:null) };
       gcSave(GC);
     } else {
       /* brand-new account: start fresh, do NOT inherit anonymous local state */
@@ -1020,7 +1070,8 @@ function saveProfile(){
   if(!SB || !currentUser) return;
   SB.from('gc_profiles').upsert({ user_id: currentUser.id, data: {
     calls:GC.calls, dims:GC.dims, decisions:GC.decisions, audience:GC.audience,
-    subscribed:GC.subscribed, email:GC.email, streak:GC.streak, lastVisit:GC.lastVisit
+    subscribed:GC.subscribed, email:GC.email, streak:GC.streak, lastVisit:GC.lastVisit,
+    firstName:GC.firstName||'', lastName:GC.lastName||'', avatar:(GC.avatar!==undefined?GC.avatar:null)
   }, updated_at: new Date().toISOString() }, { onConflict:'user_id' }).then(function(res){
     if(res && res.error) console.warn('[GutCheck] profile save failed:', res.error);
   }).catch(function(e){ console.warn('[GutCheck] profile save failed:', e); });
@@ -1030,16 +1081,18 @@ function openSignIn(msg){ var m=document.getElementById('signin-msg'); if(m && m
 function closeSignIn(){ document.getElementById('signin-overlay').classList.remove('open'); }
 function signOutUser(){ if(!SB) return; SB.auth.signOut().then(function(){ currentUser=null; GC=freshGC(); gcSave(GC); updateAuthUI(); renderToday(); renderArchive(); refreshRecord(); toast('You’ve been signed out. Your progress is saved to your account — sign back in anytime.'); }); }
 function updateAuthUI(){
-  var bar=document.getElementById('auth-bar'); if(!bar) return;
-  if(!SB){ bar.style.display='none'; return; }
+  var bar=document.getElementById('auth-bar'); if(!bar){ renderNavAccount(); return; }
+  if(!SB){ bar.style.display='none'; renderNavAccount(); return; }
   bar.style.display='flex';
   if(currentUser){
-    bar.innerHTML='<span class="ab-user">✓ Signed in as <b>'+(currentUser.email||'you')+'</b> — your calls sync across all your devices.</span><button class="ab-out" id="ab-signout">Sign out</button>';
-    var so=document.getElementById('ab-signout'); if(so) so.onclick=signOutUser;
+    seedIdentity();
+    bar.className='auth-bar greet';
+    bar.innerHTML='<span class="ab-greet">👋 Welcome back, <b>'+escHtml(identFirst())+'</b> — trust your gut on today’s call.</span>'+(GC.streak>1?'<span class="ab-streak">🔥 '+GC.streak+'-day streak</span>':'');
   } else {
-    bar.innerHTML='<span>🔒 Sign in to make the call &amp; submit dilemmas — your progress then syncs across every device.</span><button class="ab-in" id="ab-signin">Sign in</button>';
-    var si=document.getElementById('ab-signin'); if(si) si.onclick=function(){ openSignIn('No password — we email you a one-tap magic link. Your calls then sync across all your devices.'); };
+    bar.className='auth-bar';
+    bar.innerHTML='<span class="ab-hint">🔒 Sign in to make today’s call and build your judgment profile over time.</span>';
   }
+  renderNavAccount();
 }
 (function(){
   var ov=document.getElementById('signin-overlay'); if(!ov) return;
@@ -1052,6 +1105,75 @@ function updateAuthUI(){
     SB.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: location.href.split('#')[0].split('?')[0] } }).then(function(res){
       if(res && res.error){ console.warn('[GutCheck] google signin error:', res.error); toast('Could not start Google sign-in — please try again.'); g.disabled=false; g.textContent='Continue with Google'; }
     }).catch(function(e){ console.warn('[GutCheck] google signin failed:', e); toast('Could not start Google sign-in.'); g.disabled=false; g.textContent='Continue with Google'; });
+  };
+})();
+
+/* ---------- ACCOUNT UI + PROFILE EDIT (front-end only) ---------- */
+var epTempAvatar = undefined;
+function escHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function gMeta(){ return (currentUser && currentUser.user_metadata) ? currentUser.user_metadata : {}; }
+function identFirst(){ if(GC.firstName) return GC.firstName; var m=gMeta(); if(m.given_name) return m.given_name; var fn=m.full_name||m.name||''; if(fn) return fn.split(' ')[0]; if(currentUser&&currentUser.email) return currentUser.email.split('@')[0]; return 'there'; }
+function identFull(){ var f=(GC.firstName||'').trim(), l=(GC.lastName||'').trim(); if(f||l) return (f+' '+l).trim(); var m=gMeta(); return m.full_name||m.name||(currentUser&&currentUser.email)||'You'; }
+function identPhoto(){ return GC.avatar || gMeta().avatar_url || gMeta().picture || ''; }
+function identInitials(){ var f=identFirst()||'', l=(GC.lastName||''); var s=((f.charAt(0)||'')+(l.charAt(0)||'')).toUpperCase(); return s||'U'; }
+function avatarMarkup(size){ var ph=identPhoto(), dim='width:'+size+'px;height:'+size+'px;font-size:'+Math.round(size*0.42)+'px'; if(ph) return '<span class="gc-av" style="'+dim+'"><i>'+escHtml(identInitials())+'</i><img src="'+escHtml(ph)+'" alt="" onerror="this.remove()"></span>'; return '<span class="gc-av" style="'+dim+'"><i>'+escHtml(identInitials())+'</i></span>'; }
+function seedIdentity(){ if(!currentUser) return; var m=gMeta(), changed=false;
+  if(!GC.firstName){ var gf=m.given_name||((m.full_name||m.name||'').split(' ')[0])||''; if(gf){ GC.firstName=gf; changed=true; } }
+  if(!GC.lastName){ var fn=(m.full_name||m.name||''), parts=fn.split(' '); if(parts.length>1){ GC.lastName=parts.slice(1).join(' '); changed=true; } }
+  if(changed){ gcSave(GC); saveProfile(); }
+}
+function closeMobileMenuIfOpen(){ var menu=document.getElementById('mobile-menu'); if(menu&&menu.classList.contains('open')){ var bd=document.getElementById('mobile-backdrop'),ham=document.getElementById('hamburger'); menu.classList.remove('open'); if(bd)bd.classList.remove('open'); if(ham)ham.classList.remove('open'); document.body.style.overflow=''; } }
+function wireAccountMenu(){
+  var btn=document.getElementById('acct-btn'), menu=document.getElementById('acct-menu');
+  if(btn&&menu) btn.onclick=function(e){ e.stopPropagation(); menu.classList.toggle('open'); };
+  var ed=document.getElementById('acct-edit'); if(ed) ed.onclick=function(){ if(menu)menu.classList.remove('open'); openEditProfile(); };
+  var so=document.getElementById('acct-signout'); if(so) so.onclick=function(){ if(menu)menu.classList.remove('open'); signOutUser(); };
+  var med=document.getElementById('macct-edit'); if(med) med.onclick=function(){ closeMobileMenuIfOpen(); openEditProfile(); };
+  var mso=document.getElementById('macct-signout'); if(mso) mso.onclick=function(){ closeMobileMenuIfOpen(); signOutUser(); };
+  var mnsi=document.getElementById('mnav-signin'); if(mnsi) mnsi.onclick=function(){ closeMobileMenuIfOpen(); openSignIn(); };
+}
+function renderNavAccount(){
+  var d=document.getElementById('nav-account'), m=document.getElementById('mnav-account');
+  if(!SB){ if(d) d.style.display='none'; if(m) m.style.display='none'; return; }
+  if(d) d.style.display='flex';
+  if(currentUser){
+    if(m) m.style.display='flex';
+    if(d) d.innerHTML='<button class="acct-btn" id="acct-btn" aria-label="Account menu">'+avatarMarkup(30)+'<svg class="acct-caret" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>'
+      +'<div class="acct-menu" id="acct-menu"><div class="acct-head">'+avatarMarkup(40)+'<div class="acct-meta"><div class="acct-name">'+escHtml(identFull())+'</div><div class="acct-email">'+escHtml(currentUser.email||'')+'</div></div></div>'
+      +'<button class="acct-item" id="acct-edit">✏️&nbsp; Edit profile</button><button class="acct-item" id="acct-signout">↩&nbsp; Sign out</button></div>';
+    if(m) m.innerHTML='<div class="mnav-user">'+avatarMarkup(42)+'<div><div class="acct-name">'+escHtml(identFull())+'</div><div class="acct-email">'+escHtml(currentUser.email||'')+'</div></div></div><button class="mnav-act" id="macct-edit">Edit profile</button><button class="mnav-act ghost" id="macct-signout">Sign out</button>';
+  } else {
+    if(m){ m.style.display='flex'; m.innerHTML='<button class="mnav-act" id="mnav-signin">Sign in with Google</button>'; }
+    if(d) d.innerHTML='<button class="nav-signin" id="nav-signin">Sign in</button>';
+    var ns=document.getElementById('nav-signin'); if(ns) ns.onclick=function(){ openSignIn(); };
+  }
+  wireAccountMenu();
+}
+document.addEventListener('click', function(e){ var menu=document.getElementById('acct-menu'); if(menu && menu.classList.contains('open') && !e.target.closest('#nav-account')) menu.classList.remove('open'); });
+/* ----- Edit profile modal ----- */
+function epPreviewMarkup(){ var ph; if(epTempAvatar!==undefined){ ph = epTempAvatar || (gMeta().avatar_url||gMeta().picture||''); } else { ph=identPhoto(); } var dim='width:84px;height:84px;font-size:34px'; if(ph) return '<span class="gc-av" style="'+dim+'"><i>'+escHtml(identInitials())+'</i><img src="'+escHtml(ph)+'" alt="" onerror="this.remove()"></span>'; return '<span class="gc-av" style="'+dim+'"><i>'+escHtml(identInitials())+'</i></span>'; }
+function renderEpPhoto(){ var p=document.getElementById('ep-photo-preview'); if(p) p.innerHTML=epPreviewMarkup(); }
+function openEditProfile(){
+  var fEl=document.getElementById('ep-first'), lEl=document.getElementById('ep-last'), m=gMeta();
+  if(fEl) fEl.value=GC.firstName||m.given_name||((m.full_name||m.name||'').split(' ')[0])||'';
+  if(lEl) lEl.value=GC.lastName||((m.full_name||m.name||'').split(' ').slice(1).join(' '))||'';
+  epTempAvatar=undefined; renderEpPhoto();
+  var ov=document.getElementById('editprofile-overlay'); if(ov) ov.classList.add('open');
+}
+function closeEditProfile(){ var ov=document.getElementById('editprofile-overlay'); if(ov) ov.classList.remove('open'); }
+(function(){
+  var ov=document.getElementById('editprofile-overlay'); if(!ov) return;
+  ov.addEventListener('click', function(e){ if(e.target===ov) closeEditProfile(); });
+  var cancel=document.getElementById('ep-cancel'); if(cancel) cancel.onclick=closeEditProfile;
+  var pbtn=document.getElementById('ep-photo-btn'), pfile=document.getElementById('ep-photo-file'), pg=document.getElementById('ep-photo-google');
+  if(pbtn&&pfile) pbtn.onclick=function(){ pfile.click(); };
+  if(pfile) pfile.onchange=function(){ var file=pfile.files&&pfile.files[0]; if(!file) return; if(file.size>8*1024*1024){ toast('Please pick an image under 8MB.'); return; } var rd=new FileReader(); rd.onload=function(){ var img=new Image(); img.onload=function(){ var sz=128, c=document.createElement('canvas'); c.width=sz; c.height=sz; var ctx=c.getContext('2d'), side=Math.min(img.width,img.height), sx=(img.width-side)/2, sy=(img.height-side)/2; ctx.drawImage(img,sx,sy,side,side,0,0,sz,sz); try{ epTempAvatar=c.toDataURL('image/jpeg',0.82); }catch(err){ epTempAvatar=rd.result; } renderEpPhoto(); }; img.onerror=function(){ toast('That image could not be read.'); }; img.src=rd.result; }; rd.readAsDataURL(file); };
+  if(pg) pg.onclick=function(){ epTempAvatar=null; renderEpPhoto(); };
+  var save=document.getElementById('ep-save'); if(save) save.onclick=function(){
+    GC.firstName=((document.getElementById('ep-first')||{}).value||'').trim();
+    GC.lastName=((document.getElementById('ep-last')||{}).value||'').trim();
+    if(epTempAvatar!==undefined) GC.avatar=epTempAvatar;
+    gcSave(GC); saveProfile(); renderNavAccount(); updateAuthUI(); closeEditProfile(); toast('Profile updated.');
   };
 })();
 
