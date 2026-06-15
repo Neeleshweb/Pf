@@ -560,7 +560,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-15-3';
+var SITE_VERSION = '2026-06-15-4';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -964,8 +964,8 @@ function renderToday(){
 
 function commit(d, key){
   if (SB && !currentUser){ openSignIn('Sign in to lock in your call — it then syncs across all your devices.'); return; }
-  if (!GC.audience){ pendingCommit = { d:d, key:key }; openAud(); return; }
-  doCommit(d, key);
+  /* always confirm audience per vote so each call is tagged accurately */
+  pendingCommit = { d:d, key:key }; openAud();
 }
 var pendingCommit = null;
 function doCommit(d, key){
@@ -1022,7 +1022,7 @@ function reveal(d, instant){
     h += '<div class="rv-h">🤔 There’s no clean answer here</div><div class="rv-break">This is a genuine judgment call — strong PMs split on it. What matters is that your reasoning held together.</div>';
   }
   /* lesson */
-  h += '<div class="rv-lesson"><span>The takeaway:</span> '+d.lesson+'</div>';
+  if (d.lesson) h += '<div class="rv-lesson"><span>The takeaway:</span> '+d.lesson+'</div>';
   h += '<div class="rv-reasons" id="reasons-feed"></div>';
   /* foot */
   h += '<div class="rv-foot"><div class="rf-streak">🔥 <b>'+(GC.streak||1)+'</b> day streak · come back tomorrow for a brand-new call</div><div class="rv-foot-btns"><button class="btn-primary" data-share="call" style="padding:.6rem 1.2rem">Share my call ↗</button><a href="#archive" class="btn-ghost" style="padding:.6rem 1.2rem">Browse the Archive →</a></div></div>';
@@ -1076,7 +1076,7 @@ function buildArchDetail(item, d){
   var rev = item.querySelector('.arch-rev');
   var realLabel = d.tier===1 ? '✅ What I actually did' : (d.tier===3 ? '👥 What the submitter shared' : '🌍 What actually happened');
   var realHtml = d.real ? ('<div class="rv-h '+(d.tier===1?'g':'b')+'" style="margin-top:1.1rem">'+realLabel+'</div><div class="rv-real '+(d.tier===1?'':'public')+'"><p>'+d.real+'</p></div>') : '';
-  rev.innerHTML = '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'+realHtml+'<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'
+  rev.innerHTML = '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'+realHtml+(d.lesson?('<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'):'')
     + '<span class="preview-tag crowd-tag" style="margin-top:.8rem;display:inline-block">Crowd numbers are a preview · live community soon</span>'
     + '<div class="rv-reasons"></div>';
   if (SB) { enhanceLive(item, d); loadReasons(d, item); }
