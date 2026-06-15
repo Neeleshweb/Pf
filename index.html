@@ -81,7 +81,7 @@
     .hero-head p strong { color: var(--white); font-weight: 500; }
 
     /* PATH CHOICE */
-    .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
     .path { position: relative; display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.2rem; overflow: hidden; transition: border-color .25s, transform .2s, background .25s; cursor: pointer; }
     .path::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; transform: scaleX(0); transform-origin: left; transition: transform .3s ease; }
     .path:hover { transform: translateY(-4px); background: var(--card2); }
@@ -110,6 +110,13 @@
     .path-cta { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .85rem 1.5rem; border-radius: var(--radius); font-size: .9rem; font-weight: 500; letter-spacing: .3px; transition: opacity .2s, gap .2s; }
     .path.portfolio .path-cta { background: var(--accent); color: #fff; }
     .path.toolkit .path-cta { background: var(--accent3); color: #fff; }
+    .path.gutcheck:hover { border-color: var(--accent2); }
+    .path.gutcheck::before { background: var(--accent2); }
+    .path.gutcheck .path-icon { background: var(--accent2-dim); }
+    .path.gutcheck .path-for { color: var(--accent2); background: var(--accent2-dim); }
+    .path.gutcheck .path-list li svg { stroke: var(--accent2); }
+    .path.gutcheck .path-hook { background: var(--accent2-dim); color: #f3c87a; }
+    .path.gutcheck .path-cta { background: var(--accent2); color: #111; }
     .path:hover .path-cta { gap: .9rem; }
 
     /* DIFFERENTIATOR STRIP */
@@ -269,6 +276,24 @@
         <div class="path-hook">"Practice the actual work of a PM — not just read about it."</div>
         <span class="path-cta">Open the Toolkit →</span>
       </a>
+
+      <!-- GUT CHECK -->
+      <a class="path gutcheck" href="https://neeleshpmtoolkit.com/gutcheck.html">
+        <div class="path-top">
+          <div class="path-icon">🧭</div>
+          <div class="path-for">Every PM, Every Day</div>
+        </div>
+        <h2>PM Gut Check</h2>
+        <p class="path-tagline">One real product decision a day. Commit your call before you see the crowd — then find out how PMs worldwide voted, and what actually happened.</p>
+        <ul class="path-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>A fresh product dilemma every single day</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Commit, then see the crowd split — aspiring vs working PMs</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Real outcomes &amp; how a strong PM weighs the call</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Build a judgment streak &amp; track record over time</li>
+        </ul>
+        <div class="path-hook">"The daily judgment habit no AI can give you."</div>
+        <span class="path-cta">Make today's call →</span>
+      </a>
     </div>
 
     <!-- DIFFERENTIATOR STRIP -->
@@ -336,6 +361,7 @@
     function getSection(el){
       if(el.closest('.path.portfolio')) return 'Portfolio Path';
       if(el.closest('.path.toolkit')) return 'Toolkit Path';
+      if(el.closest('.path.gutcheck')) return 'Gut Check Path';
       if(el.closest('.hero-head')) return 'Intro';
       if(el.closest('.diff-strip')) return 'Highlights';
       if(el.closest('.why-line')) return 'Why Different';
