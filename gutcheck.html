@@ -1060,11 +1060,20 @@ function loadProfile(){
              subscribed:d.subscribed||false, email:d.email||(currentUser.email), streak:d.streak||0, lastVisit:d.lastVisit||null, device:GC.device,
              firstName:d.firstName||'', lastName:d.lastName||'', avatar:(d.avatar!==undefined?d.avatar:null) };
       gcSave(GC);
-    } else {
-      /* brand-new account: start fresh, do NOT inherit anonymous local state */
-      GC = freshGC(); gcSave(GC); saveProfile();
     }
+    /* no row yet: do NOT wipe or overwrite. The profile row is created on first
+       save, and the authoritative vote/locked state is loaded by loadMyVotes(). */
   }).catch(function(e){ console.warn('[GutCheck] profile load failed:', e); });
+}
+function loadMyVotes(){
+  if(!SB || !currentUser) return Promise.resolve();
+  return SB.from('gc_votes').select('dilemma_id,choice').eq('user_id', currentUser.id).then(function(res){
+    if(res && !res.error && res.data){
+      GC.calls = {};
+      res.data.forEach(function(r){ if(r && r.dilemma_id) GC.calls[r.dilemma_id] = r.choice; });
+      gcSave(GC);
+    }
+  }).catch(function(e){ console.warn('[GutCheck] votes load failed:', e); });
 }
 function saveProfile(){
   if(!SB || !currentUser) return;
@@ -1190,7 +1199,7 @@ function boot(){
   if(!SB){ applyStreak(); initToday(); renderArchive(); refreshRecord(); return; }
   SB.auth.getSession().then(function(res){
     var sess = res && res.data && res.data.session; currentUser = sess ? sess.user : null;
-    return currentUser ? loadProfile() : Promise.resolve();
+    return currentUser ? loadProfile().then(loadMyVotes) : Promise.resolve();
   }).then(function(){
     applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord();
   }).catch(function(){ applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord(); });
@@ -1199,7 +1208,7 @@ function boot(){
     currentUser = sess ? sess.user : null;
     var now = currentUser ? currentUser.id : null;
     if(now === was){ updateAuthUI(); return; }
-    if(currentUser){ loadProfile().then(function(){ applyStreak(); updateAuthUI(); renderToday(); renderArchive(); refreshRecord(); if(wasRedirect){ wasRedirect=false; toast('Signed in — you’re all set. Make your call.'); } }); }
+    if(currentUser){ loadProfile().then(loadMyVotes).then(function(){ applyStreak(); updateAuthUI(); renderToday(); renderArchive(); refreshRecord(); if(wasRedirect){ wasRedirect=false; toast('Signed in — you’re all set. Make your call.'); } }); }
     else { updateAuthUI(); renderToday(); renderArchive(); refreshRecord(); }
   });
 }
