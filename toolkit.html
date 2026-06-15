@@ -1003,6 +1003,7 @@
       </svg>
       Home
     </a>
+    <div id="gc-auth-slot" class="gc-auth-slot" style="display:none"></div>
     <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
@@ -2124,8 +2125,8 @@
      ════════════════════════════════════════════════════════ */
   const FILE_MAP = {
     // 'The Complete PM Document Bundle': 'downloads/pm-document-bundle.zip',
-    'PRD Template — The One Engineers Actually Read': 'downloads/prd-template.docx',
-     'Product Roadmap Canvas': 'downloads/product_roadmap.pdf',
+    // 'PRD Template — The One Engineers Actually Read': 'downloads/prd-template.pdf',
+    // 'Product Roadmap Canvas': 'downloads/roadmap-canvas.pdf',
     // ... add the rest as you create each file
   };
 
@@ -3319,5 +3320,6 @@
     body.appendChild(link('🏠  Home', function(){ window.location.href='https://neeleshpmtoolkit.com/index.html'; }));
   })();
 </script>
+<script src="https://neeleshpmtoolkit.com/gc-auth.js"></script>
 </body>
 </html>
