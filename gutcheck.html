@@ -333,6 +333,31 @@
     .rsn-help:disabled { cursor: default; opacity: .85; }
     .rsn-hl { color: var(--muted2); }
 
+    /* JUDGMENT JOURNAL */
+    .jr-summary{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1.6rem;}
+    .jr-stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.8rem 1.1rem;min-width:120px;flex:1;}
+    .jr-stat b{display:block;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.5px;color:var(--accent2);line-height:1.1;}
+    .jr-stat small{font-size:.64rem;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);}
+    .jr-list{display:flex;flex-direction:column;gap:.8rem;}
+    .jr-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.1rem 1.3rem;}
+    .jr-top{display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;margin-bottom:.5rem;}
+    .jr-date{font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;color:var(--muted2);}
+    .jr-match{font-size:.62rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:.22rem .6rem;border-radius:100px;}
+    .jr-match.hit{color:var(--green);background:rgba(74,222,128,.12);}
+    .jr-match.miss{color:var(--accent2);background:var(--accent2-dim);}
+    .jr-q{font-size:.95rem;color:var(--white);font-weight:500;line-height:1.45;margin-bottom:.5rem;}
+    .jr-call{font-size:.84rem;color:#c9c4bb;margin-bottom:.45rem;}
+    .jr-call b{color:var(--white);}
+    .jr-reason{font-size:.86rem;color:#d8d3ca;line-height:1.55;border-left:2px solid var(--border2);padding-left:.7rem;margin:.3rem 0 .55rem;font-style:italic;}
+    .jr-lesson{font-size:.8rem;color:var(--muted);line-height:1.5;border-top:1px dashed var(--border2);padding-top:.55rem;margin-top:.55rem;}
+    .jr-lesson span{color:var(--accent2);font-weight:600;font-style:normal;}
+    .jr-empty,.jr-note{font-size:.86rem;color:var(--muted);line-height:1.6;padding:.5rem 0;}
+    .jr-empty a{color:var(--accent2);}
+    .jr-note{margin-top:1rem;font-size:.78rem;color:var(--muted2);}
+    .jr-teaser{background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:1.6rem 1.5rem;text-align:center;}
+    .jr-teaser-h{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.5px;margin-bottom:.5rem;}
+    .jr-teaser p{font-size:.88rem;color:var(--muted);line-height:1.65;max-width:520px;margin:0 auto 1.2rem;}
+
     /* FOOTER */
     .footer { border-top: 1px solid var(--border); padding: 3rem 2.5rem 2.5rem; text-align: center; }
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 3px; margin-bottom: 1rem; }
@@ -363,6 +388,7 @@
     <li><a href="#today" class="active">Today's Call</a></li>
     <li><a href="#archive">The Archive</a></li>
     <li><a href="#profile">Your Profile</a></li>
+    <li><a href="#journal">Your Journal</a></li>
     <li><a href="https://neeleshpmtoolkit.com/toolkit.html">Toolkit ↗</a></li>
     <li><a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio ↗</a></li>
   </ul>
@@ -460,6 +486,14 @@
   <p class="rec-note">Levels: <b>Associate</b> → <b>Senior</b> (40+ pts) → <b>Principal</b> (100+ pts). Earn points for every call you make, and a bonus when your call matches what a strong PM (or I) actually did. Your streak rewards coming back daily — because judgment isn't downloaded, it's built.</p>
   <button class="rec-share" id="rec-share">Share my judgment profile ↗</button>
   <button class="rec-reset" id="rec-reset">Reset my profile</button>
+</section>
+
+<!-- JUDGMENT JOURNAL -->
+<section class="section" id="journal">
+  <div class="sec-eyebrow">Your mirror</div>
+  <div class="sec-title">Your Judgment <span>Journal</span></div>
+  <p class="sec-sub">Every call you've made — your decision, your reasoning, and how it lined up with a strong PM — in one place. Not a scoreboard. A record of <strong>how you think</strong>, so you can watch it sharpen.</p>
+  <div id="journal-mount"></div>
 </section>
 
 <!-- SUBMIT A DILEMMA -->
@@ -578,7 +612,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-15-6';
+var SITE_VERSION = '2026-06-15-7';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -945,6 +979,85 @@ function refreshRecord(){
   set('rec-aud', GC.audience ? (GC.audience==='aspiring'?'Breaking in 🌱':'Working PM ⚙️') : '—');
   /* dim bars (relative, centered at 50) */
   ['u','e','s','r'].forEach(function(k){ var el=document.getElementById('dim-'+k); if(el){ var pct=Math.max(6, Math.min(100, 50 + (GC.dims[k]||0)*9)); el.style.width=pct+'%'; } });
+  try { renderJournal(); } catch(e){}
+}
+
+/* ---------- JUDGMENT JOURNAL (Phase 2) ---------- */
+function jrFmtDate(ts){ if(!ts) return ''; try{ var d=new Date(ts); return d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}); }catch(e){ return ''; } }
+function jrOptTitle(d,k){ if(!d||!d.opts) return ''; for(var i=0;i<d.opts.length;i++){ if(d.opts[i].k===k) return d.opts[i].t; } return ''; }
+function jrResolve(id, amap){
+  for(var i=0;i<BANK.length;i++){ if(BANK[i].id===id) return { d:BANK[i], bank:true }; }
+  if(amap && amap[id]) return { d:amap[id], bank:false };
+  return { d:null, bank:false };
+}
+function jrSummaryHTML(entries){
+  var known = entries.filter(function(e){ return e.d && e.d.best; });
+  var hits = known.filter(function(e){ return e.choice===e.d.best; }).length;
+  var rate = known.length ? Math.round(hits/known.length*100) : null;
+  var dims = GC.dims||{u:0,e:0,s:0,r:0};
+  var arr = Object.keys(DIM).map(function(k){ return [k, dims[k]||0]; });
+  arr.sort(function(a,b){ return Math.abs(b[1])-Math.abs(a[1]); });
+  var lean = arr[0];
+  var leanTxt = (lean && lean[1]!==0) ? (DIM[lean[0]]+' '+(lean[1]>0?'+':'')+lean[1]) : '\u2014';
+  var h='<div class="jr-summary">';
+  h+='<div class="jr-stat"><b>'+entries.length+'</b><small>calls journaled</small></div>';
+  h+='<div class="jr-stat"><b>'+(rate==null?'\u2014':rate+'%')+'</b><small>matched the pros'+(known.length?' ('+hits+'/'+known.length+')':'')+'</small></div>';
+  h+='<div class="jr-stat"><b>'+(GC.streak||1)+'</b><small>\uD83D\uDD25 day streak</small></div>';
+  h+='<div class="jr-stat"><b>'+escHtml(leanTxt)+'</b><small>strongest lean</small></div>';
+  h+='</div>';
+  return h;
+}
+function jrEntryHTML(e){
+  var d=e.d, k=e.choice, bank=e.bank;
+  var ES = bank ? escHtml : function(x){ return String(x==null?'':x); };
+  var matchBadge='';
+  if(d && d.best){ var hit=(k===d.best); matchBadge='<span class="jr-match '+(hit?'hit':'miss')+'">'+(hit?'\u2713 matched the call':'called it differently')+'</span>'; }
+  var rawTitle = d ? (d.scenario||'').replace(/<[^>]+>/g,'').trim() : 'A past dilemma';
+  var title = rawTitle.length>120 ? rawTitle.slice(0,118)+'\u2026' : rawTitle;
+  var optT = d ? jrOptTitle(d,k) : '';
+  var src = d ? (d.tier===1?'\u2605 Real call':(d.tier===3?'\uD83D\uDC65 Community':'Industry / public')) : '';
+  var h='<div class="jr-card">';
+  var meta=[escHtml(jrFmtDate(e.created_at)), src].filter(Boolean).join(' \u00B7 ');
+  h+='<div class="jr-top"><span class="jr-date">'+meta+'</span>'+matchBadge+'</div>';
+  h+='<div class="jr-q">'+ES(title)+'</div>';
+  h+='<div class="jr-call">Your call: <b>'+escHtml(k)+(optT?' \u00B7 '+ES(optT):'')+'</b></div>';
+  if(e.reason){ h+='<div class="jr-reason">\u201C'+escHtml(e.reason)+'\u201D</div>'; }
+  if(d && d.lesson){ h+='<div class="jr-lesson"><span>Takeaway:</span> '+ES(d.lesson)+'</div>'; }
+  h+='</div>';
+  return h;
+}
+function fetchMyJournalVotes(){
+  if(!SB||!currentUser) return Promise.resolve([]);
+  return SB.from('gc_votes').select('dilemma_id,choice,reason,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] journal votes error:', res.error); return []; }
+    return (res && res.data) ? res.data : [];
+  }).catch(function(e){ console.warn('[GutCheck] journal votes failed:', e); return []; });
+}
+function renderJournal(){
+  var mountEl=document.getElementById('journal-mount');
+  if(!mountEl) return;
+  if(!SB){
+    var ids=Object.keys(GC.calls||{});
+    if(!ids.length){ mountEl.innerHTML='<div class="jr-empty">Make your first call and it\u2019ll appear here \u2014 your private record of how you decide.</div>'; return; }
+    var le=ids.map(function(id){ var r=jrResolve(id,null); return { d:r.d, bank:r.bank, choice:GC.calls[id], reason:null, created_at:null }; });
+    mountEl.innerHTML=jrSummaryHTML(le)+'<div class="jr-list">'+le.map(jrEntryHTML).join('')+'</div><div class="jr-note">Showing calls saved on this device. Sign in on the live site to sync your full journal with reasoning and dates.</div>';
+    return;
+  }
+  if(!currentUser){
+    mountEl.innerHTML='<div class="jr-teaser"><div class="jr-teaser-h">Your private judgment journal</div><p>Every call you make \u2014 your choice, your reasoning, and how it matched a strong PM \u2014 kept in one place, so you can watch your judgment sharpen over time.</p><button class="btn-primary" id="jr-signin">Sign in to start your journal</button></div>';
+    var b=document.getElementById('jr-signin'); if(b) b.onclick=function(){ openSignIn('Sign in to build your judgment journal \u2014 it then syncs across all your devices.'); };
+    return;
+  }
+  mountEl.innerHTML='<div class="jr-empty">Loading your journal\u2026</div>';
+  var token=(renderJournal._t=(renderJournal._t||0)+1);
+  Promise.all([ fetchMyJournalVotes(), fetchArchive() ]).then(function(res){
+    if(token!==renderJournal._t) return;
+    var votes=res[0]||[], arows=res[1]||[];
+    var amap={}; arows.forEach(function(r){ if(r && r.dilemma_id){ var dd=scheduleRowToDilemma(r); if(dd) amap[r.dilemma_id]=dd; } });
+    var ents=votes.map(function(v){ var r=jrResolve(v.dilemma_id,amap); return { d:r.d, bank:r.bank, choice:v.choice, reason:v.reason, created_at:v.created_at }; });
+    if(!ents.length){ mountEl.innerHTML='<div class="jr-empty">No calls yet \u2014 <a href="#today">make today\u2019s call</a> and your journal starts filling up.</div>'; return; }
+    mountEl.innerHTML=jrSummaryHTML(ents)+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
+  }).catch(function(){ if(token!==renderJournal._t) return; mountEl.innerHTML='<div class="jr-empty">Couldn\u2019t load your journal right now \u2014 please refresh.</div>'; });
 }
 
 /* ---------- RENDER TODAY ---------- */
@@ -1453,7 +1566,7 @@ boot();
   bd.addEventListener('click', closeMenu); closeBtn.addEventListener('click', closeMenu);
   function smoothTo(id){ var el=document.getElementById(id); if(!el) return; var y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); }
   function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn,80); }; return a; }
-  [["Today's Call",'today'],['The Archive','archive'],['Your Profile','profile'],['Submit a dilemma','submit'],['Get it by email','subscribe']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
+  [["Today's Call",'today'],['The Archive','archive'],['Your Profile','profile'],['Your Journal','journal'],['Submit a dilemma','submit'],['Get it by email','subscribe']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
   body.appendChild(link('PM Toolkit ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/toolkit.html'; }));
   body.appendChild(link('Portfolio ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/portfolio.html'; }));
   body.appendChild(link('🏠  Home', function(){ window.location.href='https://neeleshpmtoolkit.com/index.html'; }));
