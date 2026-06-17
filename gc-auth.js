@@ -21,6 +21,20 @@
 
   var SB = null, user = null, prof = null;
 
+  /* ── Additive public API for other page scripts (e.g. toolkit gating).
+        Does not change the widget's behaviour; just exposes the shared session. ── */
+  var authListeners = [], readyResolve = null;
+  var readyPromise = new Promise(function (res) { readyResolve = res; });
+  function notifyAuth(){ for (var i = 0; i < authListeners.length; i++) { try { authListeners[i](user); } catch (e) {} } }
+  window.GCAuth = {
+    ready: readyPromise,
+    getUser: function(){ return user; },
+    isSignedIn: function(){ return !!user; },
+    signIn: function(){ signIn(); },
+    signOut: function(){ signOut(); },
+    onChange: function(cb){ if (typeof cb === 'function') { authListeners.push(cb); try { cb(user); } catch (e) {} } }
+  };
+
   function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   function meta(){ return (user && user.user_metadata) ? user.user_metadata : {}; }
   function firstName(){ if(prof&&prof.firstName) return prof.firstName; var m=meta(); if(m.given_name) return m.given_name; var fn=m.full_name||m.name||''; if(fn) return fn.split(' ')[0]; if(user&&user.email) return user.email.split('@')[0]; return 'there'; }
@@ -68,6 +82,7 @@
       var si=document.getElementById('gca-signin'); if (si) si.onclick = signIn;
     }
     slot.style.display = 'flex';
+    notifyAuth();
   }
 
   document.addEventListener('click', function(e){ var m=document.getElementById('gca-menu'); if (m && m.classList.contains('open') && !e.target.closest('#gc-auth-slot')) m.classList.remove('open'); });
@@ -85,7 +100,9 @@
   function start(){
     try { injectStyles(); SB = window.supabase.createClient(SUPA_URL, SUPA_ANON); }
     catch(e){ slot.style.display='none'; return; }
-    SB.auth.getSession().then(function(res){ user=(res&&res.data&&res.data.session)?res.data.session.user:null; return user?loadProfile():null; }).then(render).catch(render);
+    SB.auth.getSession().then(function(res){ user=(res&&res.data&&res.data.session)?res.data.session.user:null; return user?loadProfile():null; })
+      .then(function(){ render(); if (readyResolve) { readyResolve(user); readyResolve = null; } })
+      .catch(function(){ render(); if (readyResolve) { readyResolve(user); readyResolve = null; } });
     if (SB.auth.onAuthStateChange) SB.auth.onAuthStateChange(function(evt, sess){
       var was=user?user.id:null; user=sess?sess.user:null; var now=user?user.id:null;
       if (now===was){ render(); return; }
