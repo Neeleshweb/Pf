@@ -322,8 +322,8 @@
     .rsn-list { display: flex; flex-direction: column; gap: .7rem; margin-top: .65rem; }
     .rsn-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: .85rem 1rem; }
     .rsn-card.mine { border-color: var(--accent-dim); background: rgba(232,84,10,.05); }
-    .rsn-top { display: flex; align-items: center; gap: .5rem; margin-bottom: .45rem; }
-    .rsn-badge { font-size: .72rem; font-weight: 600; color: #c9c4bb; background: var(--card2); border: 1px solid var(--border2); border-radius: 6px; padding: .18rem .5rem; max-width: 64%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .rsn-top { display: flex; align-items: flex-start; gap: .5rem; margin-bottom: .45rem; }
+    .rsn-badge { font-size: .72rem; font-weight: 600; color: #c9c4bb; background: var(--card2); border: 1px solid var(--border2); border-radius: 6px; padding: .2rem .5rem; max-width: 100%; line-height: 1.45; white-space: normal; overflow-wrap: anywhere; }
     .rsn-you { font-size: .62rem; text-transform: uppercase; letter-spacing: .5px; color: var(--accent2); border: 1px solid var(--accent2-dim); border-radius: 6px; padding: .12rem .4rem; }
     .rsn-time { color: var(--muted2); font-size: .72rem; margin-left: auto; white-space: nowrap; }
     .rsn-text { color: #d8d3ca; font-size: .9rem; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
@@ -612,7 +612,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-15-7';
+var SITE_VERSION = '2026-06-15-8';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
