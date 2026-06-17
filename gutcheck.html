@@ -258,6 +258,40 @@
     .sub-field input { min-height: 0; }
     .sub-field textarea:focus, .sub-field input:focus { outline: none; border-color: var(--accent3); }
 
+    /* SUBMIT WIZARD (stepped) */
+    .sm-progress { height: 4px; background: var(--border); border-radius: 100px; overflow: hidden; margin-bottom: .9rem; }
+    .sm-progress-fill { height: 100%; width: 25%; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .3s ease; }
+    .sm-stepno { font-size: .66rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent2); margin-bottom: .5rem; }
+    .sm-h { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .5px; margin-bottom: .3rem; }
+    .sm-sub { font-size: .82rem; color: var(--muted); line-height: 1.55; margin-bottom: 1rem; }
+    .sm-cats { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+    .sm-cat { display: flex; align-items: center; gap: .55rem; background: var(--card2); border: 1px solid var(--border2); border-radius: 11px; padding: .7rem .8rem; cursor: pointer; color: #c9c4bb; font-size: .84rem; font-weight: 500; text-align: left; transition: border-color .2s, background .2s, transform .15s; }
+    .sm-cat:hover { border-color: var(--accent2); transform: translateY(-1px); color: var(--white); }
+    .sm-cat.sel { border-color: var(--accent); background: var(--accent-dim); color: var(--white); }
+    .sm-cat .sm-cat-ic { font-size: 1.2rem; flex-shrink: 0; }
+    .sm-field { margin-bottom: .8rem; }
+    .sm-field label { display: block; font-size: .76rem; color: var(--muted); margin-bottom: .35rem; }
+    .sm-field textarea, .sm-field input { width: 100%; background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: .65rem .85rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .85rem; resize: vertical; }
+    .sm-field textarea { min-height: 96px; }
+    .sm-field input { min-height: 0; }
+    .sm-field textarea:focus, .sm-field input:focus { outline: none; border-color: var(--accent3); }
+    .sm-hint { font-size: .74rem; color: var(--muted2); margin-top: .3rem; line-height: 1.5; }
+    .sm-hint.warn { color: var(--accent2); }
+    .sm-opt { display: flex; gap: .5rem; align-items: flex-start; margin-bottom: .5rem; }
+    .sm-opt .sm-opt-k { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--accent); width: 18px; flex-shrink: 0; padding-top: .45rem; text-align: center; }
+    .sm-opt-fields { flex: 1; display: flex; flex-direction: column; gap: .35rem; }
+    .sm-opt-fields input { width: 100%; background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: .5rem .7rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .84rem; }
+    .sm-opt-fields input.det { font-size: .78rem; color: #c9c4bb; }
+    .sm-opt-fields input:focus { outline: none; border-color: var(--accent3); }
+    .sm-opt-del { background: none; border: none; color: var(--muted2); font-size: 1rem; cursor: pointer; padding: .3rem; flex-shrink: 0; }
+    .sm-opt-del:hover { color: var(--red); }
+    .sm-addopt { background: none; border: 1px solid var(--border2); color: var(--muted); font-size: .78rem; padding: .4rem .8rem; border-radius: 8px; cursor: pointer; margin-top: .2rem; }
+    .sm-addopt:hover { border-color: var(--accent2); color: var(--white); }
+    .sm-foot { display: flex; align-items: center; gap: .6rem; margin-top: 1.1rem; }
+    .sm-foot .btn-primary { margin-left: auto; }
+    .sm-review { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .9rem 1rem; font-size: .84rem; color: #c9c4bb; line-height: 1.6; }
+    .sm-review b { color: var(--white); }
+
     /* AUTH */
     .auth-bar { display: flex; align-items: center; justify-content: space-between; gap: .7rem; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .6rem .95rem; margin-bottom: 1rem; font-size: .82rem; color: var(--muted); }
     .auth-bar .ab-user { color: #c9c4bb; }
@@ -535,13 +569,14 @@
   <div class="aud-modal tall" role="dialog" aria-modal="true">
     <h3 style="text-align:center">SUBMIT A DILEMMA</h3>
     <p style="text-align:center">A real product fork where smart people could disagree. Keep it anonymous — fuzz anything sensitive.</p>
-    <div class="sub-field"><label>The situation</label><textarea id="sm-scenario" placeholder="Set the scene: the product, what was at stake, who wanted what…"></textarea></div>
-    <div class="sub-field"><label>The decision / question</label><textarea id="sm-q" placeholder="What was the call you had to make?"></textarea></div>
-    <div class="sub-field"><label>The options (one per line, 2–4)</label><textarea id="sm-opts" placeholder="Ship the patch now&#10;Quantify the root cause first&#10;Escalate to leadership"></textarea></div>
-    <div class="sub-field"><label>What actually happened / your take (optional)</label><textarea id="sm-outcome"></textarea></div>
-    <div class="sub-field"><label>Email (optional — so we can credit you)</label><input id="sm-email" type="email" placeholder="you@work.com"></div>
-    <div style="display:flex;gap:.6rem;margin-top:.4rem"><button class="btn-primary" id="sm-send">Send for review</button><button class="btn-ghost" id="sm-cancel">Cancel</button></div>
-    <div class="sub-ok" id="sm-ok">✓ Thank you — your dilemma is in the review queue.</div>
+    <div class="sm-progress"><div class="sm-progress-fill" id="sm-prog"></div></div>
+    <div class="sm-stepno" id="sm-stepno"></div>
+    <div id="sm-steps"></div>
+    <div class="sm-foot">
+      <button class="btn-ghost" id="sm-back" type="button">← Back</button>
+      <button class="btn-primary" id="sm-next" type="button">Next →</button>
+    </div>
+    <div class="sub-ok" id="sm-ok" style="margin-top:.8rem">✓ Thank you — your dilemma is in the review queue.</div>
   </div>
 </div>
 
@@ -612,7 +647,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-15-8';
+var SITE_VERSION = '2026-06-16-1';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1256,25 +1291,173 @@ function applySubStatus(){
   if(rt){ if(cur){ rt.innerHTML=badge+(next?('<span class="ss-mini">'+(next.min-total)+' more to '+next.icon+' '+next.name+'</span>'):'<span class="ss-mini">top tier reached</span>'); } else { rt.innerHTML='<span class="ss-mini">Submit your first dilemma to become a \uD83C\uDF31 Contributor</span>'; } }
 }
 
-/* ---------- SUBMIT A DILEMMA ---------- */
+/* ---------- SUBMIT A DILEMMA (stepped wizard) ---------- */
 (function(){
-  var openB=document.getElementById('open-submit'), ov=document.getElementById('submit-overlay'),
-      cancel=document.getElementById('sm-cancel'), send=document.getElementById('sm-send'), ok=document.getElementById('sm-ok');
+  var openB=document.getElementById('open-submit'), ov=document.getElementById('submit-overlay');
   if(!openB||!ov) return;
-  function val(id){ var e=document.getElementById(id); return e?(e.value||'').trim():''; }
-  function open(){ ov.classList.add('open'); }
+  var stepsEl=document.getElementById('sm-steps'), progEl=document.getElementById('sm-prog'),
+      stepNoEl=document.getElementById('sm-stepno'), backB=document.getElementById('sm-back'),
+      nextB=document.getElementById('sm-next'), okEl=document.getElementById('sm-ok');
+  if(!stepsEl||!nextB||!backB) return;
+
+  var CATS=[
+    { k:'prioritization', icon:'🎯', label:'Prioritization & scope',
+      scenario:'We committed to [feature] for [deadline]. Midway, [constraint] meant we couldn’t ship all of it. [Team A] wanted [X]; [Team B] wanted [Y].',
+      q:'What would you do?',
+      opts:[{t:'Ship the smaller version now',d:'Cut scope to hit the date'},{t:'Hold full scope, move the date',d:'Protect the experience, slip the deadline'},{t:'Cut scope, reinvest the freed capacity',d:'Trim, then redirect the team'}] },
+    { k:'validate', icon:'🔍', label:'Build vs. validate',
+      scenario:'There’s pressure to build [feature] because [reason]. But we haven’t confirmed [the real problem / demand]. Building it costs [effort].',
+      q:'Where do you start?',
+      opts:[{t:'Build it now',d:'Conviction is high — ship and learn'},{t:'Validate the problem first',d:'Test demand before committing'},{t:'Find the general need underneath',d:'Reframe into something broader'}] },
+    { k:'data', icon:'📊', label:'Data & metrics',
+      scenario:'[Metric] is [moving / flat]. [Stakeholder] reads it as [interpretation]. The data is ambiguous because [reason].',
+      q:'How do you read it?',
+      opts:[{t:'Act on the number',d:'The metric moved — respond'},{t:'Dig into why first',d:'Find the root cause before acting'},{t:'Instrument better, then decide',d:'Get cleaner data first'}] },
+    { k:'stakeholder', icon:'🤝', label:'Stakeholder conflict',
+      scenario:'[Person A] wants [X]. [Person B] wants [Y]. The call is due [when]. The real tension is [core conflict].',
+      q:'How do you resolve it?',
+      opts:[{t:'Side with [A]',d:'because…'},{t:'Side with [B]',d:'because…'},{t:'Reframe around a shared goal',d:'Find the goal both serve'}] },
+    { k:'pricing', icon:'💳', label:'Pricing & packaging',
+      scenario:'We’re deciding how to price or package [thing]. [Segment] expects [X]; the business needs [Y]. Today it’s [current state].',
+      q:'What’s the call?',
+      opts:[{t:'Keep it simple',d:'One clear price / option'},{t:'Tier it',d:'Segment by willingness to pay'},{t:'Bundle it',d:'Fold into existing plans'}] },
+    { k:'sunset', icon:'🌅', label:'Sunset & migration',
+      scenario:'[Feature] is used by [small %] of customers but [costs / blocks] [what]. A few [large / loud] accounts rely on it.',
+      q:'What do you do?',
+      opts:[{t:'Sunset it now',d:'Free the team, accept the churn'},{t:'Keep it',d:'Loyal users matter more'},{t:'Sunset with a migration path',d:'Runway plus a replacement'}] },
+    { k:'process', icon:'⚙️', label:'Process & team',
+      scenario:'Our [ritual / process] keeps [failing how]. The symptom is [X]; the likely root cause is [Y].',
+      q:'How do you fix it?',
+      opts:[{t:'Keep the current approach',d:'Push harder on it'},{t:'Change the process structurally',d:'Move work earlier or shift ownership'},{t:'Fix it with better docs',d:'Same format, more detail'}] },
+    { k:'ai', icon:'🤖', label:'AI / new tech',
+      scenario:'Leadership is asking about [AI / new tech] for [product]. The real friction users hit is [X]. The risk is [accuracy / compliance].',
+      q:'Where do you start?',
+      opts:[{t:'Ship the obvious feature fast',d:'e.g. a chatbot'},{t:'Anchor it to a measured friction',d:'Where users actually lose time'},{t:'Ask users first',d:'Survey for demand'}] },
+    { k:'other', icon:'✨', label:'Something else',
+      scenario:'', q:'What would you do?', opts:[{t:'',d:''},{t:'',d:''}] }
+  ];
+  var keys=['A','B','C','D'], TOTAL=4;
+  var S, step;
+
+  function freshState(){ return { category:null, scenario:'', scenarioTouched:false, question:'', options:[], outcome:'', credit:'', optsFromCat:false }; }
+  function catBy(k){ for(var i=0;i<CATS.length;i++){ if(CATS[i].k===k) return CATS[i]; } return null; }
+  function val(v){ return (v==null?'':String(v)).trim(); }
+  function esc(s){ return (typeof escHtml==='function'?escHtml:function(x){return String(x==null?'':x);})(s); }
+  function say(m){ if(typeof toast==='function') toast(m); }
+
+  function open(){
+    if(SB && !currentUser){ openSignIn('Sign in to submit a dilemma — it lets us credit you and keeps out spam.'); return; }
+    S=freshState(); step=0; if(okEl) okEl.style.display='none'; nextB.disabled=false;
+    ov.classList.add('open'); render();
+  }
   function close(){ ov.classList.remove('open'); }
-  openB.onclick=open; cancel.onclick=close;
+  openB.onclick=open;
   ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
-  send.onclick=function(){
+  backB.onclick=function(){ if(step===0){ close(); } else { step--; render(); } };
+  nextB.onclick=function(){ if(!validStep()) return; if(step<TOTAL-1){ step++; render(); } else { submit(); } };
+
+  function render(){
+    progEl.style.width=((step+1)/TOTAL*100)+'%';
+    stepNoEl.textContent='Step '+(step+1)+' of '+TOTAL;
+    if(step===0) renderCat();
+    else if(step===1) renderScenario();
+    else if(step===2) renderDecision();
+    else renderOutcome();
+    backB.textContent = step===0 ? 'Cancel' : '← Back';
+    nextB.textContent = step===TOTAL-1 ? 'Send for review' : 'Next →';
+  }
+
+  function renderCat(){
+    var h='<div class="sm-h">What kind of call was it?</div><div class="sm-sub">Pick the closest fit — it pre-fills a starting point you can fully edit. Nothing is locked.</div><div class="sm-cats">';
+    CATS.forEach(function(c){ h+='<button type="button" class="sm-cat'+(S.category===c.k?' sel':'')+'" data-k="'+c.k+'"><span class="sm-cat-ic">'+c.icon+'</span>'+esc(c.label)+'</button>'; });
+    h+='</div>';
+    stepsEl.innerHTML=h;
+    [].slice.call(stepsEl.querySelectorAll('.sm-cat')).forEach(function(b){ b.onclick=function(){ chooseCat(b.getAttribute('data-k')); }; });
+  }
+  function isDefaultQ(){ for(var i=0;i<CATS.length;i++){ if(S.question===CATS[i].q) return true; } return !S.question; }
+  function chooseCat(k){
+    S.category=k; var c=catBy(k);
+    if(!S.scenarioTouched) S.scenario=c.scenario;
+    if(isDefaultQ()) S.question=c.q;
+    if(!S.options.length || S.optsFromCat){ S.options=c.opts.map(function(o){ return {t:o.t,d:o.d}; }); S.optsFromCat=true; }
+    step=1; render();
+  }
+
+  function renderScenario(){
+    stepsEl.innerHTML='<div class="sm-h">Set the scene</div><div class="sm-sub">Fill in the [blanks] with the real specifics — or rewrite it your way. Keep it anonymous; fuzz anything sensitive.</div>'
+      +'<div class="sm-field"><label>The situation</label><textarea id="sm-scenario" placeholder="The product, what was at stake, who wanted what…"></textarea><div class="sm-hint" id="sm-sc-hint"></div></div>';
+    var ta=document.getElementById('sm-scenario'); ta.value=S.scenario;
+    ta.oninput=function(){ S.scenario=ta.value; S.scenarioTouched=true; scHint(); };
+    scHint();
+  }
+  function scHint(){ var el=document.getElementById('sm-sc-hint'); if(!el) return; if(/\[[^\]]+\]/.test(S.scenario||'')){ el.textContent='Tip: there are still [blanks] to fill in.'; el.className='sm-hint warn'; } else { el.textContent='A sentence or two is plenty.'; el.className='sm-hint'; } }
+
+  function renderDecision(){
+    stepsEl.innerHTML='<div class="sm-h">The decision</div><div class="sm-sub">What was the fork — and the 2–4 options? Edit the suggestions or replace them.</div>'
+      +'<div class="sm-field"><label>The question</label><input id="sm-q" type="text" placeholder="What was the call you had to make?"></div>'
+      +'<div class="sm-field"><label>The options</label><div id="sm-opts"></div>'
+      +'<button type="button" class="sm-addopt" id="sm-addopt">+ Add option</button></div>';
+    var q=document.getElementById('sm-q'); q.value=S.question; q.oninput=function(){ S.question=q.value; };
+    document.getElementById('sm-addopt').onclick=function(){ if(S.options.length<4){ S.options.push({t:'',d:''}); S.optsFromCat=false; renderOpts(); } };
+    renderOpts();
+  }
+  function renderOpts(){
+    var wrap=document.getElementById('sm-opts'); if(!wrap) return;
+    wrap.innerHTML='';
+    S.options.forEach(function(o,i){
+      var row=document.createElement('div'); row.className='sm-opt';
+      row.innerHTML='<span class="sm-opt-k">'+keys[i]+'</span><div class="sm-opt-fields">'
+        +'<input type="text" class="ti" placeholder="Option '+keys[i]+' — the choice" value="'+esc(o.t)+'">'
+        +'<input type="text" class="det" placeholder="One-line detail (optional)" value="'+esc(o.d)+'"></div>'
+        +(S.options.length>2?'<button type="button" class="sm-opt-del" title="Remove">✕</button>':'');
+      var ti=row.querySelector('.ti'), det=row.querySelector('.det'), del=row.querySelector('.sm-opt-del');
+      ti.oninput=function(){ S.options[i].t=ti.value; S.optsFromCat=false; };
+      det.oninput=function(){ S.options[i].d=det.value; S.optsFromCat=false; };
+      if(del) del.onclick=function(){ S.options.splice(i,1); S.optsFromCat=false; renderOpts(); };
+      wrap.appendChild(row);
+    });
+    var add=document.getElementById('sm-addopt'); if(add) add.style.display = S.options.length>=4 ? 'none':'inline-block';
+  }
+
+  function renderOutcome(){
+    var creditRow = (SB && currentUser)
+      ? '<div class="sm-hint" style="margin-bottom:.8rem">Submitting from your account — we’ll credit you unless you ask otherwise.</div>'
+      : '<div class="sm-field"><label>Email (optional — so we can credit you)</label><input id="sm-credit" type="email" placeholder="you@work.com"></div>';
+    stepsEl.innerHTML='<div class="sm-h">Outcome & submit</div><div class="sm-sub">Optional — what actually happened, or your own take. Then send it for review.</div>'
+      +'<div class="sm-field"><label>What happened / your take (optional)</label><textarea id="sm-outcome" placeholder="How did it play out? What did you learn?"></textarea></div>'
+      + creditRow
+      +'<div class="sm-review" id="sm-review"></div>';
+    var oc=document.getElementById('sm-outcome'); oc.value=S.outcome; oc.oninput=function(){ S.outcome=oc.value; };
+    var cr=document.getElementById('sm-credit'); if(cr){ cr.value=S.credit; cr.oninput=function(){ S.credit=cr.value; }; }
+    var c=catBy(S.category);
+    var optList=S.options.filter(function(o){ return val(o.t); }).map(function(o,i){ return keys[i]+'. '+esc(val(o.t)); }).join('<br>');
+    document.getElementById('sm-review').innerHTML='<b>'+(c?esc(c.label):'Dilemma')+'</b><br>'+esc(val(S.question)||'(no question yet)')+'<br><br>'+(optList||'(no options yet)');
+  }
+
+  function validStep(){
+    if(step===0){ if(!S.category){ say('Pick a category to start.'); return false; } return true; }
+    if(step===1){
+      var c=catBy(S.category);
+      if(val(S.scenario).length<10){ say('Add a bit more to the situation.'); return false; }
+      if(c && c.scenario && val(S.scenario)===val(c.scenario)){ say('Fill in the [blanks] with your real specifics first.'); return false; }
+      return true;
+    }
+    if(step===2){
+      if(val(S.question).length<5){ say('Add the decision or question.'); return false; }
+      if(S.options.filter(function(o){ return val(o.t).length>0; }).length<2){ say('Give at least two options.'); return false; }
+      return true;
+    }
+    return true;
+  }
+
+  function submit(){
     if(SB && !currentUser){ close(); openSignIn('Sign in to submit a dilemma — it lets us credit you and keeps out spam.'); return; }
-    var sc=val('sm-scenario'), q=val('sm-q'), opts=val('sm-opts');
-    if(sc.length<10 || q.length<5 || opts.length<5){ alert('Add a little more — the situation, the question, and at least two options.'); return; }
-    saveSubmission({ user_id: currentUser ? currentUser.id : null, scenario:sc, question:q, options:opts, outcome:val('sm-outcome'), email:(currentUser&&currentUser.email)||val('sm-email'), audience:GC.audience }).then(function(){ subStats.total=(subStats.total||0)+1; subStats.week=(subStats.week||0)+1; applySubStatus(); loadSubStats(); });
-    ok.style.display='block'; send.disabled=true; send.textContent='Sent ✓';
-    setTimeout(function(){ close(); send.disabled=false; send.textContent='Send for review'; ok.style.display='none';
-      ['sm-scenario','sm-q','sm-opts','sm-outcome','sm-email'].forEach(function(id){ var e=document.getElementById(id); if(e) e.value=''; }); }, 1500);
-  };
+    var opts=S.options.filter(function(o){ return val(o.t); }).map(function(o){ var t=val(o.t), d=val(o.d); return d ? (t+' — '+d) : t; }).join('\n');
+    saveSubmission({ user_id: currentUser ? currentUser.id : null, scenario:val(S.scenario), question:val(S.question), options:opts, outcome:val(S.outcome), email:(currentUser&&currentUser.email)||val(S.credit), audience:GC.audience })
+      .then(function(){ subStats.total=(subStats.total||0)+1; subStats.week=(subStats.week||0)+1; applySubStatus(); loadSubStats(); });
+    if(okEl) okEl.style.display='block'; nextB.disabled=true; nextB.textContent='Sent ✓';
+    setTimeout(function(){ close(); nextB.disabled=false; }, 1600);
+  }
 })();
 
 /* ---------- RESET ---------- */
