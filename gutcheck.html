@@ -555,6 +555,12 @@
   <div class="sec-eyebrow g">Your proof</div>
   <div class="sec-title">Your <span class="g">Judgment</span> Profile</div>
   <p class="sec-sub">Every call you make is tracked <strong>privately on your device</strong>. Watch your judgment sharpen over time — and walk into interviews with receipts.</p>
+  <div class="jr-teaser" id="rec-teaser" style="display:none">
+    <div class="jr-teaser-h">Your private judgment profile</div>
+    <p>Track your streak, your calibration, and how you weigh decisions — kept to your account and synced across your devices, so you can walk into interviews with receipts.</p>
+    <button class="btn-primary" id="rec-signin">Sign in to build your profile</button>
+  </div>
+  <div id="rec-body">
   <div class="rec-grid">
     <div class="rec-tile fire"><b id="rec-streak">0</b><small>🔥 day streak</small></div>
     <div class="rec-tile"><b id="rec-decisions">0</b><small>calls made</small></div>
@@ -574,6 +580,7 @@
   <p class="rec-note">Levels: <b>Associate</b> → <b>Senior</b> (40+ pts) → <b>Principal</b> (100+ pts). Earn points for every call you make, and a bonus when your call matches what a strong PM (or I) actually did. Your streak rewards coming back daily — because judgment isn't downloaded, it's built.</p>
   <button class="rec-share" id="rec-share">Share my judgment profile ↗</button>
   <button class="rec-reset" id="rec-reset">Reset my profile</button>
+  </div>
 </section>
 
 <!-- JUDGMENT JOURNAL -->
@@ -701,7 +708,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-16-2';
+var SITE_VERSION = '2026-06-16-3';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1068,6 +1075,11 @@ function refreshRecord(){
   set('rec-aud', GC.audience ? (GC.audience==='aspiring'?'Breaking in 🌱':'Working PM ⚙️') : '—');
   /* dim bars (relative, centered at 50) */
   ['u','e','s','r'].forEach(function(k){ var el=document.getElementById('dim-'+k); if(el){ var pct=Math.max(6, Math.min(100, 50 + (GC.dims[k]||0)*9)); el.style.width=pct+'%'; } });
+  var pGated = (SB && !currentUser);
+  var rb=document.getElementById('rec-body'), rt=document.getElementById('rec-teaser');
+  if(rb) rb.style.display = pGated ? 'none' : '';
+  if(rt) rt.style.display = pGated ? '' : 'none';
+  if(pGated){ var rs=document.getElementById('rec-signin'); if(rs) rs.onclick=function(){ openSignIn('Sign in to build your judgment profile \u2014 it then syncs across all your devices.'); }; }
   try { renderJournal(); } catch(e){}
 }
 
@@ -1602,7 +1614,7 @@ function applySubStatus(){
   document.addEventListener('keydown', function(e){ if(!ov.classList.contains('open')) return; if(e.key==='Escape') close(); else if(e.key==='ArrowRight') nextB.click(); else if(e.key==='ArrowLeft' && step>0) backB.click(); });
   if(replay) replay.onclick=function(e){ e.preventDefault(); open(); };
 
-  if(!seen()){ setTimeout(function(){ if(!seen() && !ov.classList.contains('open')) open(); }, 650); }
+  setTimeout(function(){ if(!ov.classList.contains('open')) open(); }, 650);
 })();
 
 /* ---------- RESET ---------- */
