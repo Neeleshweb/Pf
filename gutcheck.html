@@ -332,26 +332,40 @@
     @keyframes gw-draw { to { stroke-dashoffset: 0; } }
     @media (max-width: 520px) { .gw-title { font-size: 1.6rem; } .gw-scene { height: 140px; } .gw-stage { min-height: 270px; } .gw-copy { font-size: .85rem; } .gw-card { padding: 1.4rem 1.2rem 1.2rem; } }
 
-    /* MY SUBMISSION QUEUE */
-    .myq-wrap { background: linear-gradient(180deg, var(--card2), var(--card)); border: 1px solid var(--border2); border-radius: 16px; padding: 1.2rem 1.3rem; margin-top: 1.4rem; }
-    .myq-h { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; letter-spacing: .5px; margin-bottom: .3rem; }
-    .myq-intro { font-size: .78rem; color: var(--muted); line-height: 1.5; margin-bottom: .4rem; }
-    .myq-item { padding: .9rem 0; border-top: 1px solid var(--border); }
-    .myq-when { font-size: .74rem; color: var(--muted2); margin-bottom: .4rem; display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
-    .myq-tag { font-size: .6rem; letter-spacing: .5px; text-transform: uppercase; padding: .14rem .5rem; border-radius: 100px; font-weight: 700; }
+    /* MY SUBMISSION QUEUE (dashboard) */
+    .myq-wrap { background: linear-gradient(180deg, var(--card2), var(--card)); border: 1px solid var(--border2); border-radius: 18px; padding: 1.4rem 1.5rem; }
+    .myq-h { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: .5px; margin-bottom: .25rem; display: flex; align-items: center; gap: .5rem; }
+    .myq-intro { font-size: .82rem; color: var(--muted); line-height: 1.55; margin-bottom: 1.1rem; }
+    .myq-tabs { display: flex; gap: .3rem; flex-wrap: wrap; margin-bottom: 1.1rem; border-bottom: 1px solid var(--border); }
+    .myq-tab { background: none; border: none; border-bottom: 2px solid transparent; color: var(--muted); font-family: inherit; font-size: .82rem; font-weight: 600; padding: .5rem .7rem; cursor: pointer; display: flex; align-items: center; gap: .4rem; margin-bottom: -1px; }
+    .myq-tab:hover { color: var(--white); }
+    .myq-tab.active { color: var(--white); border-bottom-color: var(--accent); }
+    .myq-count { font-size: .64rem; background: var(--surface); border: 1px solid var(--border2); border-radius: 100px; padding: .05rem .42rem; color: var(--muted); font-weight: 700; }
+    .myq-tab.active .myq-count { background: var(--accent-dim); border-color: var(--accent); color: var(--accent2); }
+    .myq-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; margin-bottom: .7rem; }
+    .myq-card:last-child { margin-bottom: 0; }
+    .myq-cardtop { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .5rem; }
+    .myq-date { font-size: .72rem; color: var(--muted2); }
+    .myq-tag { font-size: .58rem; letter-spacing: .5px; text-transform: uppercase; padding: .14rem .5rem; border-radius: 100px; font-weight: 700; }
     .myq-tag.pend { color: var(--accent2); border: 1px solid var(--accent2); }
     .myq-tag.live { color: var(--green); border: 1px solid var(--green); }
     .myq-tag.appr { color: var(--accent3); border: 1px solid var(--accent3); }
-    .myq-q { font-size: .82rem; color: #c9c4bb; line-height: 1.5; margin-bottom: .55rem; font-style: italic; }
-    .myq-line { font-size: .9rem; color: var(--white); font-weight: 600; margin-bottom: .6rem; }
+    .myq-tag.warn { color: var(--accent); border: 1px solid var(--accent); }
+    .myq-opts { font-size: .66rem; color: var(--muted); margin-left: auto; white-space: nowrap; }
+    .myq-scn { font-size: .8rem; color: #b4afa6; line-height: 1.55; margin-bottom: .45rem; }
+    .myq-q { font-size: .92rem; color: var(--white); font-weight: 600; line-height: 1.4; margin-bottom: .7rem; }
+    .myq-pos { font-size: .85rem; color: var(--white); font-weight: 600; margin-bottom: .55rem; }
     .myq-track { display: flex; align-items: center; gap: .3rem; flex-wrap: wrap; margin-bottom: .55rem; }
-    .myq-seg { width: 26px; height: 8px; border-radius: 100px; background: var(--border2); }
+    .myq-seg { width: 24px; height: 8px; border-radius: 100px; background: var(--border2); }
     .myq-seg.you { width: auto; height: auto; padding: .16rem .55rem; background: var(--accent-dim); border: 1px solid var(--accent); color: var(--accent2); font-size: .6rem; font-weight: 800; letter-spacing: 1px; }
     .myq-more { font-size: .72rem; color: var(--muted); margin-left: .2rem; }
-    .myq-eta { font-size: .82rem; color: var(--accent2); font-weight: 600; }
+    .myq-eta { font-size: .85rem; color: var(--accent2); font-weight: 600; }
     .myq-note { font-size: .82rem; color: var(--muted); line-height: 1.55; }
-    .myq-item.compact .myq-line { font-weight: 500; font-size: .84rem; color: #c9c4bb; margin-bottom: 0; }
-    .myq-caveat { font-size: .68rem; color: var(--muted2); margin-top: .9rem; line-height: 1.5; border-top: 1px solid var(--border); padding-top: .7rem; }
+    .myq-link { display: inline-block; margin-top: .55rem; font-size: .78rem; color: var(--accent2); font-weight: 600; cursor: pointer; background: none; border: none; padding: 0; font-family: inherit; }
+    .myq-link:hover { text-decoration: underline; }
+    .myq-empty { text-align: center; padding: 1.2rem .5rem .4rem; }
+    .myq-empty p { font-size: .86rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.1rem; max-width: 460px; margin-left: auto; margin-right: auto; }
+    .myq-caveat { font-size: .68rem; color: var(--muted2); margin-top: 1rem; line-height: 1.5; border-top: 1px solid var(--border); padding-top: .7rem; }
 
     /* AUTH */
     .auth-bar { display: flex; align-items: center; justify-content: space-between; gap: .7rem; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .6rem .95rem; margin-bottom: 1rem; font-size: .82rem; color: var(--muted); }
@@ -546,7 +560,11 @@
   <p class="sec-sub">Read the situation, commit to a decision, and then — and only then — the crowd unlocks. No take-backs, just like the real thing. <strong>Come back tomorrow for a brand-new dilemma.</strong></p>
   <div id="auth-bar" class="auth-bar" style="display:none"></div>
   <div id="call-mount"></div>
-  <div id="myq-wrap" class="myq-wrap" style="display:none"></div>
+</section>
+
+<!-- YOUR SUBMISSIONS -->
+<section class="section" id="my-submissions" style="display:none">
+  <div id="myq-wrap" class="myq-wrap"></div>
 </section>
 
 <!-- SUBSCRIBE -->
@@ -730,7 +748,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-16-4';
+var SITE_VERSION = '2026-06-16-5';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1379,77 +1397,113 @@ function applySubStatus(){
   if(rt){ if(cur){ rt.innerHTML=badge+(next?('<span class="ss-mini">'+(next.min-total)+' more to '+next.icon+' '+next.name+'</span>'):'<span class="ss-mini">top tier reached</span>'); } else { rt.innerHTML='<span class="ss-mini">Submit your first dilemma to become a \uD83C\uDF31 Contributor</span>'; } }
 }
 
-/* ---------- MY SUBMISSION QUEUE ---------- */
-function myqClip(s){ s=(s||'').replace(/\s+/g,' ').trim(); return s.length>72 ? s.slice(0,70)+'…' : s; }
+/* ---------- MY SUBMISSION QUEUE (dashboard) ---------- */
+var myqRows = [], myqTab = '';
+function myqClip(s,n){ s=(s||'').replace(/\s+/g,' ').trim(); n=n||120; return s.length>n ? s.slice(0,n-1)+'\u2026' : s; }
+function myqOptCount(o){ if(!o) return 0; return o.split('\n').filter(function(l){ return l.trim().length>0; }).length; }
 function myqDate(d){ if(!d) return ''; try{ var x=String(d); var dt=/^\d{4}-\d{2}-\d{2}$/.test(x)?new Date(x+'T12:00:00'):new Date(x); return dt.toLocaleDateString(undefined,{month:'short',day:'numeric'}); }catch(e){ return String(d); } }
 function myqTrack(pos){
-  var ahead=Math.max(0,(pos||1)-1), maxd=9, shown=Math.min(ahead,maxd), s='', i;
+  var ahead=Math.max(0,(pos||1)-1), maxd=8, shown=Math.min(ahead,maxd), s='', i;
   for(i=0;i<shown;i++) s+='<span class="myq-seg"></span>';
   s+='<span class="myq-seg you">YOU</span>';
   if(ahead>maxd) s+='<span class="myq-more">+'+(ahead-maxd)+' more ahead</span>';
   return '<div class="myq-track">'+s+'</div>';
 }
-function myqActive(r){
+function myqHead(r, tag, tagcls){
+  var oc=myqOptCount(r.options);
+  return '<div class="myq-cardtop"><span class="myq-date">Submitted '+jrFmtDate(r.created_at)+'</span>'
+    + '<span class="myq-tag '+tagcls+'">'+tag+'</span>'
+    + (oc?'<span class="myq-opts">'+oc+' option'+(oc===1?'':'s')+'</span>':'')
+    + '</div>'
+    + (r.scenario?'<div class="myq-scn">'+escHtml(myqClip(r.scenario,170))+'</div>':'')
+    + (r.question?'<div class="myq-q">\u201C'+escHtml(myqClip(r.question,150))+'\u201D</div>':'');
+}
+function myqCardQueue(r){
   var pos=r.queue_pos||1, ahead=(r.ahead==null?pos-1:r.ahead), days=(r.days_until==null?pos:r.days_until);
-  var line = ahead<=0 ? 'You\u2019re next in line' : ('#'+pos+' in line \u2014 '+ahead+' '+(ahead===1?'dilemma goes':'dilemmas go')+' live before yours');
+  var posline = ahead<=0 ? 'You\u2019re next in line' : ('#'+pos+' in line \u2014 '+ahead+' '+(ahead===1?'dilemma goes':'dilemmas go')+' live before yours');
   var eta = ahead<=0 ? ('Goes live next \u2014 around '+myqDate(r.est_go_live)) : ('\u2248 '+days+' day'+(days===1?'':'s')+' away \u00B7 around '+myqDate(r.est_go_live));
-  return '<div class="myq-item">'
-    + '<div class="myq-when">Submitted '+jrFmtDate(r.created_at)+' <span class="myq-tag pend">In the queue</span></div>'
-    + (r.question?'<div class="myq-q">\u201C'+escHtml(myqClip(r.question))+'\u201D</div>':'')
-    + '<div class="myq-line">'+line+'</div>'
-    + myqTrack(pos)
+  return '<div class="myq-card">'+myqHead(r,'In the queue','pend')
+    + '<div class="myq-pos">'+posline+'</div>'+myqTrack(pos)
     + '<div class="myq-eta">'+eta+'</div></div>';
 }
-function myqFail(r){
-  return '<div class="myq-item">'
-    + '<div class="myq-when">Submitted '+jrFmtDate(r.created_at)+'</div>'
-    + (r.question?'<div class="myq-q">\u201C'+escHtml(myqClip(r.question))+'\u201D</div>':'')
-    + '<div class="myq-note">This one may not meet the content guidelines yet (it looks too short, or contains a link) \u2014 so it might not be selected. You can submit a fuller version anytime.</div></div>';
+function myqCardFail(r){
+  return '<div class="myq-card">'+myqHead(r,'Needs a tweak','warn')
+    + '<div class="myq-note">This one may not meet the guidelines yet (it looks too short, or contains a link), so the scheduler may skip it. Re-submit a fuller version and it\u2019ll join the queue.</div></div>';
 }
-function myqApproved(r){
-  return '<div class="myq-item">'
-    + '<div class="myq-when">Submitted '+jrFmtDate(r.created_at)+' <span class="myq-tag appr">Approved</span></div>'
-    + (r.question?'<div class="myq-q">\u201C'+escHtml(myqClip(r.question))+'\u201D</div>':'')
+function myqCardApproved(r){
+  return '<div class="myq-card">'+myqHead(r,'Approved','appr')
     + '<div class="myq-note">Approved and waiting to be scheduled \u2014 it\u2019ll appear as a daily call soon.</div></div>';
 }
-function myqLive(arr){
-  var dates=arr.map(function(r){ return r.live_date?myqDate(r.live_date):''; }).filter(Boolean);
-  var lbl = arr.length===1?'dilemma has':'dilemmas have';
-  return '<div class="myq-item compact"><div class="myq-line"><span class="myq-tag live">\u2713 Live</span> '+arr.length+' of your '+lbl+' gone live'+(dates.length?' \u00B7 '+dates.join(', '):'')+'</div></div>';
+function myqCardLive(r){
+  return '<div class="myq-card">'+myqHead(r,'Live','live')
+    + '<div class="myq-note">Went live on '+myqDate(r.live_date)+' \u2014 PMs everywhere can test themselves on your call.</div>'
+    + '<button class="myq-link" data-arch="1" type="button">Find it in the archive \u2197</button></div>';
 }
-function myqRejected(arr){
-  return '<div class="myq-item compact"><div class="myq-line">'+arr.length+' '+(arr.length===1?'submission was':'submissions were')+' not selected this time.</div></div>';
+function myqCardRejected(r){
+  return '<div class="myq-card">'+myqHead(r,'Not selected','warn')
+    + '<div class="myq-note">This one wasn\u2019t selected \u2014 usually because it didn\u2019t fit the guidelines. Feel free to submit another.</div></div>';
+}
+function myqPanel(tab, c){
+  if(tab==='queue')   return c.queue.map(myqCardQueue).join('') + c.fail.map(myqCardFail).join('');
+  if(tab==='approved')return c.approved.map(myqCardApproved).join('');
+  if(tab==='live')    return c.live.map(myqCardLive).join('');
+  if(tab==='rejected')return c.rejected.map(myqCardRejected).join('');
+  return '';
+}
+function myqTeaserHTML(){
+  return '<div class="myq-h">\uD83D\uDCE4 Your submissions</div>'
+    + '<div class="jr-teaser"><div class="jr-teaser-h">Track your dilemmas</div><p>Sign in to see where each dilemma you\u2019ve submitted sits in the queue, when it\u2019s estimated to go live, and which have already gone live for the community.</p><button class="btn-primary" id="myq-signin">Sign in to track submissions</button></div>';
 }
 function renderMyQueue(rows){
   var wrap=document.getElementById('myq-wrap'); if(!wrap) return;
-  rows=rows||[];
-  var active=[],approved=[],pendingFail=[],live=[],rejected=[];
-  rows.forEach(function(r){
+  myqRows = rows||[];
+  if(!myqRows.length){
+    wrap.innerHTML='<div class="myq-h">\uD83D\uDCE4 Your submissions</div>'
+      +'<div class="myq-empty"><p>You haven\u2019t shared a dilemma yet. Turn a real product fork you\u2019ve faced into a Gut Check \u2014 if it\u2019s picked, PMs everywhere will test themselves on your call.</p><button class="btn-primary" id="myq-submit" type="button">Submit your first dilemma</button></div>';
+    var sb=document.getElementById('myq-submit'); if(sb) sb.onclick=function(){ var o=document.getElementById('open-submit'); if(o) o.click(); };
+    wrap.style.display=''; return;
+  }
+  var queue=[],fail=[],approved=[],live=[],rejected=[];
+  myqRows.forEach(function(r){
     var st=(r.status||'pending');
-    if(st==='pending'){ if(r.would_pass) active.push(r); else pendingFail.push(r); }
-    else if(st==='scheduled'){ live.push(r); }
-    else if(st==='rejected'){ rejected.push(r); }
-    else if(st==='approved'){ approved.push(r); }
+    if(st==='pending'){ if(r.would_pass) queue.push(r); else fail.push(r); }
+    else if(st==='scheduled') live.push(r);
+    else if(st==='rejected') rejected.push(r);
     else approved.push(r);
   });
-  if(!active.length && !approved.length && !pendingFail.length && !live.length && !rejected.length){ wrap.style.display='none'; wrap.innerHTML=''; return; }
-  var h='<div class="myq-h">\uD83D\uDCE4 Your submissions</div>';
-  if(active.length||approved.length||pendingFail.length) h+='<div class="myq-intro">One new dilemma goes live each day \u2014 community submissions are chosen oldest-first.</div>';
-  active.forEach(function(r){ h+=myqActive(r); });
-  pendingFail.forEach(function(r){ h+=myqFail(r); });
-  approved.forEach(function(r){ h+=myqApproved(r); });
-  if(live.length) h+=myqLive(live);
-  if(rejected.length) h+=myqRejected(rejected);
-  if(active.length) h+='<div class="myq-caveat">Timing is estimated \u2014 actual go-live can shift if earlier submissions aren\u2019t selected, and assumes the daily scheduler runs as usual.</div>';
+  var cats={queue:queue,fail:fail,approved:approved,live:live,rejected:rejected};
+  var tabs=[];
+  if(queue.length+fail.length) tabs.push({k:'queue',label:'In queue',n:queue.length+fail.length});
+  if(approved.length) tabs.push({k:'approved',label:'Approved',n:approved.length});
+  if(live.length) tabs.push({k:'live',label:'Live',n:live.length});
+  if(rejected.length) tabs.push({k:'rejected',label:'Not selected',n:rejected.length});
+  var keys=tabs.map(function(t){ return t.k; });
+  if(keys.indexOf(myqTab)<0) myqTab = keys[0] || '';
+  var h='<div class="myq-h">\uD83D\uDCE4 Your submissions</div>'
+    + '<div class="myq-intro">One new dilemma goes live each day \u2014 community submissions are chosen oldest-first. Here\u2019s where yours stand.</div>'
+    + '<div class="myq-tabs">';
+  tabs.forEach(function(t){ h+='<button class="myq-tab'+(t.k===myqTab?' active':'')+'" data-tab="'+t.k+'" type="button">'+t.label+' <span class="myq-count">'+t.n+'</span></button>'; });
+  h+='</div><div class="myq-panel">'+myqPanel(myqTab,cats)+'</div>';
+  if(myqTab==='queue' && queue.length) h+='<div class="myq-caveat">Timing is estimated \u2014 actual go-live can shift if earlier submissions aren\u2019t selected, and assumes the daily scheduler runs as usual.</div>';
   wrap.innerHTML=h; wrap.style.display='';
+  [].slice.call(wrap.querySelectorAll('.myq-tab')).forEach(function(b){ b.onclick=function(){ myqTab=b.getAttribute('data-tab'); renderMyQueue(myqRows); }; });
+  [].slice.call(wrap.querySelectorAll('[data-arch]')).forEach(function(b){ b.onclick=function(){ var a=document.getElementById('archive'); if(a&&a.scrollIntoView) a.scrollIntoView({behavior:'smooth',block:'start'}); }; });
 }
 function loadMyQueue(){
-  var wrap=document.getElementById('myq-wrap'); if(!wrap) return Promise.resolve();
-  if(!SB || !currentUser){ wrap.style.display='none'; wrap.innerHTML=''; return Promise.resolve(); }
+  var sec=document.getElementById('my-submissions'), wrap=document.getElementById('myq-wrap');
+  if(!wrap) return Promise.resolve();
+  function showSec(on){ if(sec) sec.style.display = on?'':'none'; }
+  if(!SB){ showSec(false); return Promise.resolve(); }
+  if(!currentUser){
+    showSec(true); wrap.style.display=''; wrap.innerHTML=myqTeaserHTML();
+    var b=document.getElementById('myq-signin'); if(b) b.onclick=function(){ openSignIn('Sign in to track your submitted dilemmas \u2014 where they are in the queue and when they go live.'); };
+    return Promise.resolve();
+  }
+  showSec(true);
   return SB.rpc('gc_my_queue').then(function(res){
-    if(res && res.error){ console.warn('[GutCheck] my-queue error:', res.error); wrap.style.display='none'; return; }
+    if(res && res.error){ console.warn('[GutCheck] my-queue error:', res.error); showSec(false); return; }
     renderMyQueue(res && res.data ? res.data : []);
-  }).catch(function(e){ console.warn('[GutCheck] my-queue failed:', e); wrap.style.display='none'; });
+  }).catch(function(e){ console.warn('[GutCheck] my-queue failed:', e); showSec(false); });
 }
 
 /* ---------- SUBMIT A DILEMMA (stepped wizard) ---------- */
