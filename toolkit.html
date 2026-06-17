@@ -2063,51 +2063,28 @@
       <div style="font-size:.82rem;color:var(--muted);margin-top:.8rem">Price: <strong id="cmodal-price" style="color:var(--accent2)"></strong></div>
     </div>
     <div class="modal-footer">
-      <a href="mailto:Neelesh.singh@dal.ca" class="btn-primary" style="text-align:center;display:block" id="cmodal-mailto">Send Email →</a>
+      <button class="btn-primary" id="cmodal-cta" style="text-align:center;display:block;width:100%" onclick="handleCoachingBook()">Book this session →</button>
       <button class="btn-sm outline" onclick="closeCoachingModal()">Close</button>
     </div>
   </div>
 </div>
 
-<!-- ════════ REGISTRATION / EMAIL GATE MODAL ════════ -->
-<div class="modal-overlay" id="reg-modal" onclick="handleRegOverlayClick(event)">
+<!-- ════════ GOOGLE LOGIN MODAL ════════ -->
+<div class="modal-overlay" id="login-modal" onclick="handleLoginOverlayClick(event)">
   <div class="modal">
-    <button class="modal-close" onclick="closeRegModal()">✕</button>
+    <button class="modal-close" onclick="closeLoginModal()">✕</button>
     <div class="modal-top">
-      <div class="modal-type">🔓 Unlock Free Access</div>
-      <h3>One Step to All Resources</h3>
+      <div class="modal-type">🔓 Sign in to continue</div>
+      <h3 id="login-modal-title">Sign in to download</h3>
     </div>
     <div class="modal-body">
-      <p class="modal-desc">
-        Enter your details once and get instant access to <strong style="color:var(--white)">every template, framework, and resource</strong> on this page — completely free, forever. No spam, ever.
+      <p class="modal-desc" id="login-modal-desc">
+        Sign in with Google for instant access to every template and resource — free, no forms, and linked to your account across the site.
       </p>
-      <div class="reg-form">
-        <div class="reg-row">
-          <div class="reg-field">
-            <label for="reg-first">First Name</label>
-            <input type="text" id="reg-first" placeholder="Jane" autocomplete="given-name" />
-            <div class="reg-error" id="err-first"></div>
-          </div>
-          <div class="reg-field">
-            <label for="reg-last">Last Name</label>
-            <input type="text" id="reg-last" placeholder="Doe" autocomplete="family-name" />
-            <div class="reg-error" id="err-last"></div>
-          </div>
-        </div>
-        <div class="reg-field">
-          <label for="reg-email">Email Address</label>
-          <input type="email" id="reg-email" placeholder="jane@example.com" autocomplete="email" />
-          <div class="reg-error" id="err-email"></div>
-        </div>
-        <label class="reg-consent">
-          <input type="checkbox" id="reg-consent" />
-          <span>I'd like to receive new PM resources and occasional updates from Neelesh. (optional)</span>
-        </label>
-      </div>
     </div>
     <div class="modal-footer">
-      <button class="btn-primary" id="reg-submit" onclick="submitRegistration()">Unlock & Continue →</button>
-      <button class="btn-sm outline" onclick="closeRegModal()">Cancel</button>
+      <button class="btn-primary" id="login-google-btn" onclick="loginWithGoogle()">Continue with Google</button>
+      <button class="btn-sm outline" onclick="closeLoginModal()">Cancel</button>
     </div>
   </div>
 </div>
@@ -2123,11 +2100,47 @@
      Any resource NOT listed here will show a friendly
      "coming soon" message instead of a broken link.
      ════════════════════════════════════════════════════════ */
+  /* ════════════════════════════════════════════════════════
+     DOWNLOAD FILE MAP  —  keys are the EXACT resource titles.
+     To enable a download, paste a path or URL as the value, e.g.
+        'Prioritization Scoring Matrix': 'downloads/prioritization-matrix.pdf',
+     or a hosted direct-download link. Any key left as '' shows a
+     friendly "coming soon" message instead of a broken link.
+     The login gate works regardless of whether a file is set.
+     ════════════════════════════════════════════════════════ */
   const FILE_MAP = {
-    // 'The Complete PM Document Bundle': 'downloads/pm-document-bundle.zip',
-    // 'PRD Template — The One Engineers Actually Read': 'downloads/prd-template.pdf',
-    // 'Product Roadmap Canvas': 'downloads/roadmap-canvas.pdf',
-    // ... add the rest as you create each file
+    'Ultimate PM Document Bundle': '',
+    'Product Requirements Document (PRD) Template': '',
+    'Product Roadmap Canvas (Now / Next / Later)': '',
+    'Prioritization Scoring Matrix': '',
+    'Stakeholder Map & Communication Plan': '',
+    'Business Case & OKR Alignment Template': '',
+    'Discovery Brief + Problem Hypothesis Canvas': '',
+    'User Interview Script & Analysis Framework': '',
+    'User Persona Kit (3 Persona Templates)': '',
+    'Jobs-to-be-Done (JTBD) Session Guide': '',
+    'Competitive Analysis Framework': '',
+    'Sprint Planning & Retrospective Board': '',
+    'Epic & User Story Writing Templates': '',
+    'Release Notes & Launch Checklist': '',
+    'API Integration Planning Doc': '',
+    'Go-To-Market Playbook': '',
+    'North Star Metric & KPI Dashboard': '',
+    'A/B Testing Plan & Results Template': '',
+    'UX Psychology Cheat Sheet for PMs': '',
+    'UX Audit Template & Heuristic Checklist': '',
+    'Customer Journey Map Template': '',
+    'PM Interview Prep Pack — Full Bundle': '',
+    'PM Resume Template & LinkedIn Optimization Guide': '',
+    '30-60-90 Day PM Onboarding Plan': '',
+    'Is Product Management Right for You?': '',
+    'Building Your PM Skill Stack': '',
+    'Crafting Your PM Story': '',
+    'Cracking the PM Interview': '',
+    'Your First 90 Days as a PM': '',
+    'Working with Engineering Teams': '',
+    'Data-Driven Decision Making for PMs': '',
+    'Building in AI: What PMs Need to Know': '',
   };
 
   let currentTitle = '';
@@ -2175,117 +2188,94 @@
   }
 
   /* ════════════════════════════════════════════════════════
-     LEAD CAPTURE / EMAIL GATE
+     LOGIN GATE  (replaces the old email / lead-capture modal)
      ────────────────────────────────────────────────────────
-     Leads are (1) saved in the visitor's browser so they only
-     register once, and (2) sent to you via Formspree.
-
-     TO RECEIVE LEADS BY EMAIL:
-       1. Create a free account at https://formspree.io
-       2. Create a new form — you'll get an endpoint like
-          https://formspree.io/f/abcdwxyz
-       3. Paste that full URL below, replacing FORMSPREE_ENDPOINT.
-     Until you do, registrations still work and are stored in the
-     visitor's browser, but won't be emailed to you.
+     Every "download" / "book" action now requires a Google
+     sign-in via the SHARED session (gc-auth.js → window.GCAuth).
+     Visitors already signed in (from any page on the site)
+     proceed immediately; everyone else sees the Google login
+     modal and, after signing in, the action resumes itself.
      ════════════════════════════════════════════════════════ */
-  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/YOUR_FORM_ID';
-  const REG_KEY = 'pmtoolkit_registered_user';
+  const PENDING_KEY = 'pmtoolkit_pending_action';
 
-  let pendingAction = null;
+  /* ── Coaching: paste your scheduling link (Calendly / Cal.com) here.
+        While this is empty, booking falls back to the email flow.    ── */
+  const COACHING_SCHEDULE_URL = '';
 
-  function getRegistration() {
-    try { return JSON.parse(localStorage.getItem(REG_KEY) || 'null'); }
-    catch (e) { return null; }
+  let pendingLoginAction = null;   // descriptor held until the Google redirect
+  let currentCoaching = null;      // {title, desc, price} for the open coaching modal
+
+  function authUser() { return (window.GCAuth && window.GCAuth.getUser) ? window.GCAuth.getUser() : null; }
+  function isSignedIn() { return !!authUser(); }
+
+  /* Runs `action` now if signed in; otherwise opens the Google login modal. */
+  function requireLogin(descriptor, action) {
+    if (isSignedIn()) { action(); return; }
+    pendingLoginAction = descriptor;
+    openLoginModal(descriptor);
   }
-  function isRegistered() { return !!getRegistration(); }
 
-  /* Runs `action` if the visitor has registered; otherwise opens the gate. */
-  function requireRegistration(action) {
-    if (isRegistered()) { action(); }
-    else { pendingAction = action; openRegModal(); }
-  }
-
-  function openRegModal() {
-    document.getElementById('reg-modal').classList.add('open');
+  function openLoginModal(descriptor) {
+    const t = document.getElementById('login-modal-title');
+    const d = document.getElementById('login-modal-desc');
+    if (descriptor && descriptor.kind === 'coaching') {
+      if (t) t.textContent = 'Sign in to book this session';
+      if (d) d.textContent = 'Sign in with Google to continue — it links your booking to your account, with no forms to fill out.';
+    } else {
+      if (t) t.textContent = 'Sign in to download';
+      if (d) d.textContent = 'Sign in with Google for instant access to every template and resource — free, no forms, and linked to your account across the site.';
+    }
+    const btn = document.getElementById('login-google-btn');
+    if (btn) { btn.textContent = 'Continue with Google'; btn.disabled = false; }
+    document.getElementById('login-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
-    setTimeout(() => document.getElementById('reg-first').focus(), 100);
   }
-  function closeRegModal() {
-    document.getElementById('reg-modal').classList.remove('open');
+  function closeLoginModal() {
+    document.getElementById('login-modal').classList.remove('open');
     document.body.style.overflow = '';
   }
-  function handleRegOverlayClick(e) {
-    if (e.target === document.getElementById('reg-modal')) closeRegModal();
+  function handleLoginOverlayClick(e) {
+    if (e.target === document.getElementById('login-modal')) closeLoginModal();
   }
 
-  function submitRegistration() {
-    const first = document.getElementById('reg-first');
-    const last = document.getElementById('reg-last');
-    const email = document.getElementById('reg-email');
-    const consent = document.getElementById('reg-consent').checked;
-    let ok = true;
-
-    // reset
-    [first, last, email].forEach(i => i.classList.remove('invalid'));
-    ['err-first','err-last','err-email'].forEach(id => document.getElementById(id).textContent = '');
-
-    const nameRe = /^[A-Za-z][A-Za-z'’\- ]{1,}$/;
-    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-
-    if (!nameRe.test(first.value.trim())) {
-      first.classList.add('invalid');
-      document.getElementById('err-first').textContent = 'Please enter a valid first name.';
-      ok = false;
+  /* "Continue with Google": persist the intended action across the OAuth
+     redirect, then start sign-in (full-page redirect back to this page). */
+  function loginWithGoogle() {
+    try { if (pendingLoginAction) localStorage.setItem(PENDING_KEY, JSON.stringify(pendingLoginAction)); } catch (e) {}
+    const btn = document.getElementById('login-google-btn');
+    if (window.GCAuth && window.GCAuth.signIn) {
+      if (btn) { btn.textContent = 'Redirecting to Google…'; btn.disabled = true; }
+      window.GCAuth.signIn();
     }
-    if (!nameRe.test(last.value.trim())) {
-      last.classList.add('invalid');
-      document.getElementById('err-last').textContent = 'Please enter a valid last name.';
-      ok = false;
-    }
-    if (!emailRe.test(email.value.trim())) {
-      email.classList.add('invalid');
-      document.getElementById('err-email').textContent = 'Please enter a valid email address.';
-      ok = false;
-    }
-    if (!ok) return;
-
-    const lead = {
-      firstName: first.value.trim(),
-      lastName: last.value.trim(),
-      email: email.value.trim().toLowerCase(),
-      consent: consent,
-      registeredAt: new Date().toISOString()
-    };
-
-    // Save locally so they don't see the gate again
-    try { localStorage.setItem(REG_KEY, JSON.stringify(lead)); } catch (e) {}
-
-    // Send to Formspree (fire-and-forget; never blocks access)
-    if (FORMSPREE_ENDPOINT.indexOf('YOUR_FORM_ID') === -1) {
-      fetch(FORMSPREE_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify(lead)
-      }).catch(() => {});
-    }
-
-    const btn = document.getElementById('reg-submit');
-    btn.textContent = '✓ Unlocked!';
-    btn.style.background = '#4ade80';
-    btn.style.color = '#080808';
-
-    setTimeout(() => {
-      btn.textContent = 'Unlock & Continue →';
-      btn.style.background = '';
-      btn.style.color = '';
-      closeRegModal();
-      if (pendingAction) { const a = pendingAction; pendingAction = null; a(); }
-    }, 700);
   }
+
+  /* After returning from Google (the page reloads), resume what they intended. */
+  function resumePendingAction() {
+    let raw = null;
+    try { raw = localStorage.getItem(PENDING_KEY); } catch (e) {}
+    if (!raw) return;
+    try { localStorage.removeItem(PENDING_KEY); } catch (e) {}
+    let d = null;
+    try { d = JSON.parse(raw); } catch (e) { return; }
+    if (!d || !isSignedIn()) return;          // only resume if actually signed in now
+    if (d.kind === 'download') { currentTitle = d.title; doDownload(); }
+    else if (d.kind === 'coaching') { openCoachingModal(d.title, d.desc, d.price); }
+  }
+
+  /* Wait for the shared auth to be ready, then resume any pending action. */
+  function whenAuthReady(cb) {
+    function go() { try { window.GCAuth.ready.then(function () { cb(); }); } catch (e) { cb(); } }
+    if (window.GCAuth && window.GCAuth.ready) { go(); return; }
+    let tries = 0;
+    const t = setInterval(function () {
+      if (window.GCAuth && window.GCAuth.ready) { clearInterval(t); go(); }
+      else if (++tries > 100) { clearInterval(t); }   // ~5s safety net
+    }, 50);
+  }
+  whenAuthReady(resumePendingAction);
 
   function handleDownload() {
-    // Gate every download behind registration
-    requireRegistration(doDownload);
+    requireLogin({ kind: 'download', title: currentTitle }, doDownload);
   }
 
   function doDownload() {
@@ -2310,15 +2300,34 @@
 
   /* ── COACHING MODAL ── */
   function openCoachingModal(title, desc, price) {
+    currentCoaching = { title: title, desc: desc, price: price };
     document.getElementById('cmodal-title').textContent = title;
     document.getElementById('cmodal-desc').textContent = desc;
     document.getElementById('cmodal-price').textContent = price;
     document.getElementById('cmodal-subject').textContent = 'Coaching: ' + title;
-    document.getElementById('cmodal-mailto').href =
-      'mailto:Neelesh.singh@dal.ca?subject=Coaching: ' + encodeURIComponent(title) +
-      '&body=Hi Neelesh,%0D%0A%0D%0AI\'m interested in booking a ' + encodeURIComponent(title) + ' session.%0D%0A%0D%0AMy background: %0D%0AMy goal: ';
+    const cta = document.getElementById('cmodal-cta');
+    if (cta) { cta.textContent = 'Book this session →'; cta.disabled = false; }
     document.getElementById('coaching-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
+  }
+
+  /* Booking is gated by login; once signed in we open the scheduler
+     (or fall back to email until COACHING_SCHEDULE_URL is set). */
+  function handleCoachingBook() {
+    if (!currentCoaching) return;
+    requireLogin({ kind: 'coaching', title: currentCoaching.title, desc: currentCoaching.desc, price: currentCoaching.price }, doCoachingAction);
+  }
+  function doCoachingAction() {
+    const title = currentCoaching ? currentCoaching.title : 'Coaching';
+    if (COACHING_SCHEDULE_URL) {
+      window.open(COACHING_SCHEDULE_URL, '_blank', 'noopener');
+    } else {
+      window.location.href = 'mailto:Neelesh.singh@dal.ca?subject=Coaching: ' + encodeURIComponent(title) +
+        '&body=Hi Neelesh,%0D%0A%0D%0AI\'m interested in booking a ' + encodeURIComponent(title) + ' session.%0D%0A%0D%0AMy background: %0D%0AMy goal: ';
+    }
+    const btn = document.getElementById('cmodal-cta');
+    if (btn) { btn.textContent = COACHING_SCHEDULE_URL ? '✓ Opening scheduler…' : '✓ Opening email…'; }
+    setTimeout(closeCoachingModal, 1400);
   }
 
   function closeCoachingModal() {
@@ -2344,12 +2353,9 @@
   }, { rootMargin: '-40% 0px -55% 0px' });
   sections.forEach(s => observer.observe(s));
 
-  /* ── ESC KEY + ENTER SUBMIT ── */
+  /* ── ESC KEY ── */
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { closeModal(); closeCoachingModal(); closeRegModal(); }
-    if (e.key === 'Enter' && document.getElementById('reg-modal').classList.contains('open')) {
-      submitRegistration();
-    }
+    if (e.key === 'Escape') { closeModal(); closeCoachingModal(); closeLoginModal(); }
   });
 
   /* ── HERO STAT COUNT-UP ── */
