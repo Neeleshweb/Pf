@@ -82,7 +82,7 @@
 
     /* PATH CHOICE */
     .paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem; }
-    .path { position: relative; display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.2rem; overflow: hidden; transition: border-color .25s, transform .2s, background .25s; cursor: pointer; }
+    .path { position: relative; display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2.8rem 2.2rem 2.2rem; overflow: hidden; transition: border-color .25s, transform .2s, background .25s; cursor: pointer; }
     .path::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; transform: scaleX(0); transform-origin: left; transition: transform .3s ease; }
     .path:hover { transform: translateY(-4px); background: var(--card2); }
     .path:hover::before { transform: scaleX(1); }
@@ -90,11 +90,11 @@
     .path.portfolio::before { background: var(--accent); }
     .path.toolkit:hover { border-color: var(--accent3); }
     .path.toolkit::before { background: var(--accent3); }
-    .path-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.3rem; }
+    .path-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.3rem; }
     .path-icon { width: 56px; height: 56px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 1.7rem; }
     .path.portfolio .path-icon { background: var(--accent-dim); }
     .path.toolkit .path-icon { background: var(--accent3-dim); }
-    .path-for { font-size: .68rem; letter-spacing: 1.5px; text-transform: uppercase; padding: .3rem .7rem; border-radius: 100px; }
+    .path-for { font-size: .68rem; letter-spacing: 1.5px; text-transform: uppercase; padding: .3rem .7rem; border-radius: 100px; max-width: 60%; text-align: right; }
     .path.portfolio .path-for { color: var(--accent); background: var(--accent-dim); }
     .path.toolkit .path-for { color: var(--accent3); background: var(--accent3-dim); }
     .path h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; letter-spacing: 1px; line-height: 1; margin-bottom: .6rem; }
