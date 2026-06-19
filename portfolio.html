@@ -404,7 +404,55 @@
     .at-fstat b { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--accent2); letter-spacing: .5px; }
     .at-fstat small { font-size: .68rem; color: var(--muted); }
     @media (max-width: 600px){ .atour-stage { padding: 1.7rem 1.1rem 4.6rem; min-height: 440px; } .at-choice-card { width: 100%; } }
-  </style>
+  
+/* ===== Phase 1: 0->1 process flow + teardowns ===== */
+.flow-sub{color:var(--muted);font-size:.95rem;max-width:640px;margin:0 0 2.2rem;}
+.stp{margin-top:1.5rem;}
+.stp-rail{display:flex;gap:.4rem;overflow-x:auto;padding-bottom:.8rem;scrollbar-width:thin;}
+.stp-node{flex:0 0 auto;display:flex;align-items:center;gap:.55rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:.6rem .8rem;cursor:pointer;transition:border-color .18s,background .18s;white-space:nowrap;}
+.stp-node:hover{border-color:var(--border2);}
+.stp-node:focus-visible{outline:2px solid var(--accent3);outline-offset:2px;}
+.stp-num{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;line-height:1;color:var(--muted);min-width:1.4em;text-align:center;}
+.stp-lbl{font-size:.8rem;color:#bdb8ae;font-weight:500;}
+.stp-node.active{background:var(--card2);border-color:var(--ac);}
+.stp-node.active .stp-num{color:var(--ac);}
+.stp-node.active .stp-lbl{color:var(--white);}
+.stp-prog{height:2px;background:var(--border);border-radius:2px;margin:.2rem 0 1.4rem;overflow:hidden;}
+.stp-prog i{display:block;height:100%;background:var(--ac);width:0;transition:width .3s ease;}
+.stp-panel{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1.8rem;min-height:200px;}
+.stp-ey{font-size:.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--ac);font-weight:600;margin-bottom:.5rem;}
+.stp-h{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:.5px;line-height:1.05;margin-bottom:.9rem;color:var(--white);}
+.stp-panel p{color:#cfc9bf;font-size:.95rem;margin-bottom:.8rem;}
+.stp-panel ul{list-style:none;margin:.4rem 0 1rem;}
+.stp-panel li{position:relative;padding-left:1.3rem;color:#cfc9bf;font-size:.92rem;margin-bottom:.5rem;}
+.stp-panel li::before{content:"▸";position:absolute;left:0;color:var(--ac);font-weight:700;}
+.tdchips{display:flex;flex-wrap:wrap;gap:.45rem;margin:.3rem 0 .2rem;}
+.tdchip{font-size:.72rem;letter-spacing:.4px;color:#c9c4bb;background:var(--card2);border:1px solid var(--border2);border-radius:20px;padding:.32rem .7rem;}
+.tdchip.m{border-color:rgba(240,165,0,.4);color:var(--accent2);}
+.stp-out{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:.86rem;color:var(--muted);}
+.stp-out b{color:var(--white);font-weight:600;}
+.stp-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.2rem;gap:1rem;}
+.stp-btn{background:none;border:1px solid var(--border2);color:#c9c4bb;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:600;padding:.5rem 1rem;border-radius:var(--radius);cursor:pointer;transition:.18s;}
+.stp-btn:hover:not(:disabled){border-color:var(--ac);color:var(--white);}
+.stp-btn:disabled{opacity:.35;cursor:not-allowed;}
+.stp-count{font-size:.78rem;color:var(--muted);}
+.seg-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.6rem 0 .2rem;}
+.seg{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;}
+.seg-name{font-size:.74rem;letter-spacing:.5px;text-transform:uppercase;font-weight:700;margin-bottom:.5rem;}
+.seg-name.a{color:var(--accent2);} .seg-name.b{color:var(--accent3);}
+.seg p{font-size:.88rem;color:#cfc9bf;margin:0;}
+.res-row{display:flex;flex-wrap:wrap;gap:1.4rem;margin:.4rem 0 .6rem;}
+.res b{display:block;font-family:'Bebas Neue',sans-serif;font-size:2.1rem;color:var(--green);line-height:1;letter-spacing:.5px;}
+.res small{display:block;font-size:.74rem;color:var(--muted);margin-top:.25rem;}
+.td-head{margin-bottom:.3rem;}
+.td-tag{font-size:.74rem;letter-spacing:.5px;text-transform:uppercase;color:var(--accent3);font-weight:600;margin-bottom:.5rem;}
+.td-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.6rem,3.5vw,2.2rem);letter-spacing:.5px;line-height:1.05;color:var(--white);}
+.td-line{color:var(--muted);font-size:.92rem;margin-top:.2rem;}
+.td-block{margin-bottom:3.5rem;}
+.phil-strip-title{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;margin:3rem 0 1.2rem;}
+@media (max-width:720px){.seg-grid{grid-template-columns:1fr;}.stp-panel{padding:1.3rem;}}
+
+</style>
 </head>
 <body>
 
@@ -640,30 +688,24 @@
 
 <!-- CASE STUDY -->
 <section class="section" id="case">
-  <div class="sec-eyebrow b">Featured Case Study</div>
-  <div class="sec-title">Anatomy of a <span class="b">0 → 1</span> Build</div>
-  <div class="case">
-    <div class="case-tag">CoreLogic · Centralized Service Layer</div>
-    <h3>One Source of Truth Across Two Products</h3>
-    <div class="case-flow">
-      <div class="case-step">
-        <div class="case-step-label">The Problem</div>
-        <p>MLSTOUCH and OneHome ran on disconnected data. A listing favorited on one app wouldn't appear on the other; some listings showed up on one platform and not the other. The result: confused users, 1-star reviews, and a flood of support tickets.</p>
-      </div>
-      <div class="case-step">
-        <div class="case-step-label">My Approach</div>
-        <p>Rather than patch each symptom, I diagnosed the root cause — no shared data layer. I aligned engineering, UX, and QA around building a Centralized Service Layer from scratch, defined the requirements bridging business needs and technical constraints, and sequenced delivery to de-risk the migration.</p>
-      </div>
-      <div class="case-step">
-        <div class="case-step-label">The Outcome</div>
-        <p>A single synchronized source of truth across both products. Data inconsistencies disappeared, the experience became seamless, and the metrics that matter to the business moved sharply in the right direction.</p>
-      </div>
+  <div class="sec-eyebrow b">Featured Teardowns</div>
+  <div class="sec-title" style="margin-bottom:.6rem">Two <span class="b">0 → 1</span> Builds, End to End</div>
+  <p class="flow-sub">Not summaries — the full arc of two products I built at CoreLogic: where things stood, who it hurt, what I built, how it landed, and what would have happened if I hadn’t.</p>
+  <div class="td-block">
+    <div class="td-head">
+      <div class="td-tag">CoreLogic · 2023–2025</div>
+      <div class="td-title">Centralized Service Layer <span style="color:var(--accent3)">— 0 → 1</span></div>
+      <div class="td-line">One source of truth across two products.</div>
     </div>
-    <div class="case-results">
-      <div class="case-result"><div class="cr-num">−40%</div><div class="cr-lbl">Support complaints</div></div>
-      <div class="case-result"><div class="cr-num">4.6→4.8</div><div class="cr-lbl">App Store rating</div></div>
-      <div class="case-result"><div class="cr-num">+15%</div><div class="cr-lbl">Quarterly retention</div></div>
+    <div class="stp" id="td-csl" style="--ac:var(--accent3)"></div>
+  </div>
+  <div class="td-block" style="margin-bottom:0">
+    <div class="td-head">
+      <div class="td-tag">CoreLogic · 2023–2025</div>
+      <div class="td-title">AI Listing Description Generator <span style="color:var(--accent3)">— MLSTOUCH</span></div>
+      <div class="td-line">From blank page to publish-ready in seconds.</div>
     </div>
+    <div class="stp" id="td-ai" style="--ac:var(--accent3)"></div>
   </div>
 </section>
 
@@ -704,12 +746,17 @@
 <!-- PHILOSOPHY -->
 <section class="section" id="philosophy">
   <div class="sec-eyebrow y">How I Work</div>
-  <div class="sec-title">My Product <span class="y">Philosophy</span></div>
+  <div class="sec-title" style="margin-bottom:.6rem">How I Build, <span class="y">0 → 1</span></div>
+  <p class="flow-sub">Every product I ship runs through the same loop — evidence before opinion, validation before build, alignment before code. Click through each stage.</p>
+  <div class="stp" id="flow" style="--ac:var(--accent2)"></div>
+  <div class="phil-strip-title">The principles underneath it</div>
   <div class="phil-grid">
     <div class="phil-card"><div class="phil-num">01</div><h4>Validate before you build</h4><p>Opinions are cheap; evidence is not. I pressure-test the problem with real users and data before committing a single sprint — the parking survey was just the beginning.</p></div>
     <div class="phil-card"><div class="phil-num">02</div><h4>Speak both languages</h4><p>My engineering background means I translate fluently between business goals and technical reality — fewer misunderstandings, faster delivery, more trust on both sides.</p></div>
     <div class="phil-card"><div class="phil-num">03</div><h4>Tie everything to a metric</h4><p>If I can't name the number a feature should move, it isn't ready. Every initiative I lead has a measurable outcome attached from day one.</p></div>
     <div class="phil-card"><div class="phil-num">04</div><h4>Fix root causes, not symptoms</h4><p>It's tempting to patch the visible problem. I dig for the underlying cause — which is how a sync bug became a centralized platform that lifted retention.</p></div>
+    <div class="phil-card"><div class="phil-num">05</div><h4>Align before you code</h4><p>I don't start a build I can't get buy-in for. The PRD and plan go to stakeholders first, so engineering starts with everyone committed to the same outcome.</p></div>
+    <div class="phil-card"><div class="phil-num">06</div><h4>Launch is the start, not the finish</h4><p>Shipping isn't done. I run the go-to-market and measure against the metric the feature was meant to move — then feed what I learn back in.</p></div>
   </div>
 </section>
 
@@ -1283,6 +1330,95 @@
       lead.insertAdjacentElement('afterend', lb);
     }
   })();
+</script>
+<script>
+(function(){
+function makeStepper(mountId, steps){
+  var root=document.getElementById(mountId); if(!root) return;
+  var i=0;
+  var rail=document.createElement('div'); rail.className='stp-rail';
+  var prog=document.createElement('div'); prog.className='stp-prog'; var bar=document.createElement('i'); prog.appendChild(bar);
+  var panel=document.createElement('div'); panel.className='stp-panel';
+  var nav=document.createElement('div'); nav.className='stp-nav';
+  var prev=document.createElement('button'); prev.className='stp-btn'; prev.type='button'; prev.textContent='\u2190 Back';
+  var count=document.createElement('span'); count.className='stp-count';
+  var next=document.createElement('button'); next.className='stp-btn'; next.type='button'; next.textContent='Next \u2192';
+  nav.appendChild(prev); nav.appendChild(count); nav.appendChild(next);
+  steps.forEach(function(s,idx){
+    var n=document.createElement('button'); n.className='stp-node'; n.type='button'; n.setAttribute('aria-label',s.label);
+    n.innerHTML='<span class="stp-num">'+(idx+1)+'</span><span class="stp-lbl">'+s.label+'</span>';
+    n.onclick=function(){ go(idx); }; rail.appendChild(n);
+  });
+  root.appendChild(rail); root.appendChild(prog); root.appendChild(panel); root.appendChild(nav);
+  function render(){
+    var s=steps[i];
+    panel.innerHTML='<div class="stp-ey">'+(s.ey||('Step '+(i+1)))+'</div><div class="stp-h">'+s.h+'</div>'+s.body;
+    var nodes=rail.querySelectorAll('.stp-node');
+    for(var k=0;k<nodes.length;k++){ nodes[k].classList.toggle('active', k===i); }
+    if(nodes[i]) nodes[i].scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+    bar.style.width=(((i+1)/steps.length)*100)+'%';
+    count.textContent=(i+1)+' / '+steps.length;
+    prev.disabled=(i===0); next.disabled=(i===steps.length-1);
+  }
+  function go(idx){ i=Math.max(0,Math.min(steps.length-1,idx)); render(); }
+  prev.onclick=function(){ go(i-1); }; next.onclick=function(){ go(i+1); }; render();
+}
+function seg2(aN,aT,bN,bT){ return '<div class="seg-grid"><div class="seg"><div class="seg-name a">'+aN+'</div><p>'+aT+'</p></div><div class="seg"><div class="seg-name b">'+bN+'</div><p>'+bT+'</p></div></div>'; }
+function out(t){ return '<div class="stp-out"><b>Output:</b> '+t+'</div>'; }
+
+makeStepper('flow',[
+ {label:'Discovery & Research',ey:'Stage 1 \u00b7 Discovery',h:'Validate the problem before assuming it',
+  body:'<p>I never take a problem at face value. I confirm it exists, and size it, with two lenses before anything gets built:</p><ul><li><b>Quantitative</b> \u2014 surveys to a real population to measure how widespread the pain is.</li><li><b>Qualitative</b> \u2014 1:1 interviews with SMEs and users to understand the <i>why</i> behind the numbers.</li></ul><div class="tdchips"><span class="tdchip m">Surveys</span><span class="tdchip m">SME interviews</span><span class="tdchip m">User research</span></div>'+out('A validated problem statement and a clear picture of who it affects.')},
+ {label:'Validate with Data',ey:'Stage 2 \u00b7 Evidence',h:'Pressure-test feedback against reality',
+  body:'<p>What users <i>say</i> and what the system <i>does</i> aren\u2019t always the same. I pull product and behavioral data to see how the current experience actually performs, and confirm the reported problem shows up in the numbers.</p><div class="tdchips"><span class="tdchip m">Product analytics</span><span class="tdchip m">Behavioral data</span><span class="tdchip m">Funnel review</span></div>'+out('Evidence the problem is real, where it happens, and how big it is.')},
+ {label:'Solutioning & MVP',ey:'Stage 3 \u00b7 Solutioning',h:'Build options, not a single bet',
+  body:'<p>I draft multiple solution directions instead of committing to the first idea. Then I put MVPs in front of SMEs and <b>A/B test</b> them to see which actually performs, gather feedback, and iterate.</p><ul><li>Several solution candidates, not one.</li><li>MVP + A/B test with SMEs.</li><li>Iterate on real feedback until the direction solidifies.</li></ul><div class="tdchips"><span class="tdchip m">Multiple concepts</span><span class="tdchip m">MVP</span><span class="tdchip m">A/B testing</span><span class="tdchip m">SME feedback</span></div>'+out('A validated direction and a sharp product vision for the feature.')},
+ {label:'Competitive Analysis',ey:'Stage 4 \u00b7 Market',h:'Know the field before you commit',
+  body:'<p>Before locking scope, I check whether what we\u2019re about to build already exists in the market. I analyze competitors, find the gaps, and adjust the plan so we\u2019re building something differentiated \u2014 not reinventing what\u2019s already out there.</p><div class="tdchips"><span class="tdchip m">Competitor teardown</span><span class="tdchip m">Gap analysis</span><span class="tdchip m">Differentiation</span></div>'+out('A sharpened, differentiated plan with a clear reason to build.')},
+ {label:'Define & Document',ey:'Stage 5 \u00b7 Definition',h:'Make it buildable',
+  body:'<p>With the direction validated, I write the PRD and the delivery docs \u2014 epics, user stories, and acceptance criteria \u2014 so engineering has an unambiguous spec to execute against.</p><div class="tdchips"><span class="tdchip m">PRD</span><span class="tdchip m">Epics &amp; stories</span><span class="tdchip m">Acceptance criteria</span></div>'+out('A spec the team can build from without guesswork.')},
+ {label:'Stakeholder Alignment',ey:'Stage 6 \u00b7 Alignment',h:'Align before a line of code',
+  body:'<p>I present the PRD and plan to stakeholders and secure buy-in <b>before</b> development starts \u2014 so there are no surprises mid-build and everyone is committed to the same outcome.</p><div class="tdchips"><span class="tdchip m">Stakeholder review</span><span class="tdchip m">Buy-in</span><span class="tdchip m">Scope sign-off</span></div>'+out('Approved, funded, and aligned \u2014 dev can start with confidence.')},
+ {label:'Build & Ship',ey:'Stage 7 \u00b7 Delivery',h:'Execute with engineering',
+  body:'<p>Engineering builds; I stay close \u2014 unblocking, clarifying edge cases, protecting scope, and keeping the work tied to the outcome we agreed on.</p><div class="tdchips"><span class="tdchip m">Sprint delivery</span><span class="tdchip m">Unblock &amp; clarify</span><span class="tdchip m">Scope protection</span></div>'+out('A shipped feature that does what the evidence said it should.')},
+ {label:'Go-to-Market',ey:'Stage 8 \u00b7 GTM',h:'Land it, don\u2019t just launch it',
+  body:'<p>A launch isn\u2019t the finish line. I run the go-to-market \u2014 positioning, enablement, and rollout \u2014 then measure against the metric the feature was meant to move, and feed what I learn back into the loop.</p><div class="tdchips"><span class="tdchip m">Positioning</span><span class="tdchip m">Enablement</span><span class="tdchip m">Rollout</span><span class="tdchip m">Measure &amp; learn</span></div>'+out('Adoption and measurable impact \u2014 then back to Stage 1.')},
+]);
+
+makeStepper('td-csl',[
+ {label:'Before',ey:'Where it stood',h:'Two products, two disconnected data stores',
+  body:'<p>MLSTOUCH (the agent app) and OneHome (the consumer portal) ran on <b>separate data</b>. The same listing or saved item could exist in one and be missing from the other.</p>'},
+ {label:'The Problem',ey:'The problem',h:'Nothing stayed in sync',
+  body:'<p>A listing favorited on one app didn\u2019t appear on the other; some listings showed on MLSTOUCH but never reached OneHome. The inconsistency eroded trust \u2014 driving bad app reviews and a steady stream of support complaints.</p>'},
+ {label:'Who it hurt',ey:'Affected users',h:'Two segments, two kinds of pain',
+  body:'<p>The same root cause hurt both sides of the marketplace differently:</p>'+seg2('Agents \u00b7 MLSTOUCH','Listings they managed didn\u2019t reliably surface on the consumer side \u2014 lost exposure and a weaker link to their clients.','Buyers \u00b7 OneHome','Favorites and listings were inconsistent across web and mobile \u2014 frustration and a product they couldn\u2019t fully trust.')},
+ {label:'The Solution',ey:'What I built',h:'A Centralized Service Layer, 0 \u2192 1',
+  body:'<p>Instead of patching symptoms, I diagnosed the root cause \u2014 there was no shared data layer \u2014 and aligned engineering, UX, and QA to build a <b>Centralized Service Layer</b> from scratch. Both the MLSTOUCH mobile app and the OneHome web app now write to and read from it: one source of truth both products stay in sync with.</p><div class="tdchips"><span class="tdchip">Root-cause diagnosis</span><span class="tdchip">0 \u2192 1 build</span><span class="tdchip">Cross-functional (Eng \u00b7 UX \u00b7 QA)</span></div>'},
+ {label:'Results',ey:'How it landed',h:'Inconsistencies disappeared; the metrics moved',
+  body:'<div class="res-row"><div class="res"><b>\u221240%</b><small>Support complaints</small></div><div class="res"><b>4.6\u21924.8</b><small>App Store rating</small></div><div class="res"><b>+15%</b><small>Quarterly retention (OneHome)</small></div></div>'+seg2('Agents \u00b7 MLSTOUCH','When an agent saves a listing for a connected client, the client is notified that their agent picked something for them \u2014 building trust and helping agents win more clients each month.','Buyers \u00b7 OneHome','Fully in sync across web and mobile \u2014 favorite a listing on OneHome.com and it instantly appears in Favorites on the mobile app.')},
+ {label:'What I learned',ey:'The lesson',h:'Make the bold infrastructure bet',
+  body:'<p>Don\u2019t be afraid to make the bold infrastructure bet when customers have wanted something for a long time but it kept getting pushed back for technical reasons. It took real time to build \u2014 but the payoff was large: MLSTOUCH\u2019s App Store rating climbed and OneHome\u2019s quarterly retention rose 15% as customers started trusting the product again.</p>'},
+ {label:'If I hadn\u2019t built it',ey:'The counterfactual',h:'Churn was already climbing',
+  body:'<p>Without the CSL, data stays unsynced \u2014 stale listings and a broken link between agents and their clients, leading to disappointment on both sides. We were already seeing churn climb the prior quarter, and the data traced it straight to this. Left unaddressed for a year at that rate, it would have pushed agents and clients to competitors with a more synced experience \u2014 and put us in serious trouble.</p>'},
+]);
+
+makeStepper('td-ai',[
+ {label:'Before',ey:'Where it stood',h:'Every listing description, written by hand',
+  body:'<p>Agents wrote property descriptions by hand for every listing \u2014 slow, repetitive, and inconsistent in quality from one agent to the next.</p>'},
+ {label:'The Problem',ey:'The problem',h:'Manual listing creation was a bottleneck',
+  body:'<p>Creating listings by hand cost agents time they didn\u2019t have, and quality varied. They needed high-quality listings dramatically faster \u2014 the bar was roughly <b>5\u00d7 faster</b>.</p>'},
+ {label:'Who it hurt',ey:'Affected users',h:'Which agents felt it most',
+  body:'<p>All agents wrote descriptions, but the pain wasn\u2019t evenly distributed \u2014 so I built for two segments:</p>'+seg2('High-activity, tech-savvy agents','Young, experienced agents who used the app most \u2014 above a set monthly listing threshold. The volume made manual writing the biggest drag on their day.','Lower-activity agents','Older, less tech-savvy agents who posted less often \u2014 they needed the speed too, but with far less complexity.')},
+ {label:'The Solution',ey:'What I built',h:'AI that drafts the listing \u2014 tuned per segment',
+  body:'<p>I integrated AI to <b>auto-generate property descriptions</b> from each listing\u2019s images and location metadata \u2014 a publish-ready draft in seconds, inside MLSTOUCH. And I tuned the experience per segment:</p>'+seg2('High-activity, tech-savvy agents','The advanced experience \u2014 prompt refinement to sharpen the description, plus a choice of AI models.','Lower-activity agents','A streamlined version \u2014 a single basic model, no extra controls.')+'<div class="tdchips"><span class="tdchip">AI generation</span><span class="tdchip">Image + metadata inputs</span><span class="tdchip">Per-segment tuning</span><span class="tdchip">In-product (MLSTOUCH)</span></div>'},
+ {label:'Results',ey:'How it landed',h:'Adoption drove real growth',
+  body:'<div class="res-row"><div class="res"><b>900k\u21921M</b><small>MLSTOUCH users (+100k in the quarter)</small></div><div class="res"><b>+11%</b><small>User growth, Q2 2024</small></div></div>'+seg2('High-activity, tech-savvy agents','Strongest adoption \u2014 they loved generating descriptions on the fly, and drove most of the growth.','Lower-activity agents','Received it well too, with the simpler experience \u2014 steady uptake, led by the active segment.')},
+ {label:'What I learned',ey:'The lesson',h:'First to break into AI \u2014 and we got it right',
+  body:'<p>This was our first time building on AI, and at significant scale. We were the first among our competitors to break into AI, so it had to be done right. We pulled it off: a surge in engagement and 100k new users in the quarter, pushing past 1 million agents on the app.</p>'},
+ {label:'If I hadn\u2019t built it',ey:'The counterfactual',h:'AI is becoming table stakes',
+  body:'<p>AI is becoming table stakes. Every competitor now ships an AI listing capability \u2014 without it we\u2019d have fallen behind and lost users. Building it when we did was the right tactical move at the right time.</p>'},
+]);
+})();
 </script>
 <script src="https://neeleshpmtoolkit.com/gc-auth.js"></script>
 </body>
