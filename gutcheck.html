@@ -762,7 +762,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-19-7';
+var SITE_VERSION = '2026-06-19-8';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -822,7 +822,7 @@ function aggregate(d, rows){ var ov={},asp={},wrk={},tot=0,aT=0,wT=0; d.opts.for
 function enhanceLive(scopeEl, d){ if(!SB || !scopeEl) return; fetchDist(d.id).then(function(rows){ if(!rows || !rows.length) return; var a=aggregate(d, rows); if(a.total<1) return; d.opts.forEach(function(o){ var row=scopeEl.querySelector('.dist-row[data-k="'+o.k+'"]'); if(row){ var bar=row.querySelector('.dist-bar i'); var dp=row.querySelector('.dp'); if(bar) bar.style.width=a.overall[o.k]+'%'; if(dp) dp.textContent=a.overall[o.k]+'%'; } }); ['aspiring','working'].forEach(function(ch){ var card=scopeEl.querySelector('.split-card[data-cohort="'+ch+'"]'); if(card){ d.opts.forEach(function(o){ var b=card.querySelector('.sc-row[data-k="'+o.k+'"] b'); if(b) b.textContent = a[ch+'Total']>0 ? a[ch][o.k]+'%' : '—'; }); } }); var tag=scopeEl.querySelector('.crowd-tag'); if(tag){ tag.textContent='Live · '+a.total+' PM'+(a.total===1?'':'s')+' have called this'; tag.style.color='var(--green)'; tag.style.borderColor='rgba(74,222,128,.4)'; } }); }
 
 /* ---------- DIMENSIONS ---------- */
-var DIM = { u:'🎯 User Focus', e:'📊 Evidence', s:'🤝 Stakeholders', r:'⚖️ Risk' };
+var DIM = { u:'🎯 User Focus', e:'📊 Evidence', s:'🤝 Stakeholders', r:'⚖️ Risk', b:'💰 Business Impact', v:'🔭 Long-term Vision', f:'⚙️ Feasibility' };
 
 /* ---------- DILEMMA BANK (daily sequence = array order) ----------
    tier: 1 = a real call Neelesh made | 2 = industry / public dilemma
@@ -1147,13 +1147,13 @@ function jrResolve(id, amap){
   return { d:null, bank:false };
 }
 function fingerprintHTML(entries){
-  entries=entries||[]; var dims=GC.dims||{u:0,e:0,s:0,r:0}; var order=['u','e','s','r'];
+  entries=entries||[]; var dims=GC.dims||{}; var order=Object.keys(DIM);
   var maxAbs=1; order.forEach(function(k){ maxAbs=Math.max(maxAbs,Math.abs(dims[k]||0)); });
-  var pd={u:[0,0],e:[0,0],s:[0,0],r:[0,0]}, cf={1:[0,0],2:[0,0],3:[0,0]};
+  var pd={}; order.forEach(function(k){ pd[k]=[0,0]; }); var cf={1:[0,0],2:[0,0],3:[0,0]};
   entries.forEach(function(e){ var d=e.d; if(!d||!d.best) return; var hit=(e.choice===d.best);
     if(d.dims&&d.dims[d.best]){ var fx=d.dims[d.best],pk=null,pv=0; for(var k in fx){ if(Math.abs(fx[k])>pv){pv=Math.abs(fx[k]);pk=k;} } if(pk&&pd[pk]){ pd[pk][1]++; if(hit) pd[pk][0]++; } }
     var c=GC.conf&&GC.conf[d.id]; if(c&&cf[c]){ cf[c][1]++; if(hit) cf[c][0]++; } });
-  var rows=order.map(function(k){ var v=dims[k]||0, pct=Math.round(Math.abs(v)/maxAbs*100); var cal=pd[k][1]?('matched '+pd[k][0]+'/'+pd[k][1]):'';
+  var rows=order.filter(function(k){ return (dims[k]||0)!==0 || pd[k][1]>0; }).map(function(k){ var v=dims[k]||0, pct=Math.round(Math.abs(v)/maxAbs*100); var cal=pd[k][1]?('matched '+pd[k][0]+'/'+pd[k][1]):'';
     return '<div class="fp-row"><span class="fp-dim">'+DIM[k]+'</span><div class="fp-track"><i class="'+(v>=0?'pos':'neg')+'" style="width:'+pct+'%"></i></div><span class="fp-val">'+(v>0?'+':'')+v+'</span><span class="fp-cal">'+cal+'</span></div>'; }).join('');
   function rate(b){ return b[1]?Math.round(b[0]/b[1]*100):null; }
   var labels={3:'Confident',2:'Fairly sure',1:'Hunch'};
@@ -1162,7 +1162,7 @@ function fingerprintHTML(entries){
   if(r3!=null&&r1!=null){ note=(r3>=r1+10)?'Well-calibrated \u2014 your confident calls land more often than your hunches.':(r1>r3?'Watch for overconfidence \u2014 your hunches match as often as your confident calls.':'Your confidence and accuracy track closely.'); }
   else { note='Make a few more calls (with a confidence) to reveal whether you\u2019re well-calibrated or overconfident.'; }
   var h='<div class="fp"><div class="fp-h">\uD83E\uDDEC Your judgment fingerprint</div><div class="fp-sub">How you weigh each dimension across your calls \u2014 and where you match the pros.</div>';
-  h+=rows;
+  h+=(rows||'<div class="fp-empty" style="font-size:.82rem;color:var(--muted);font-style:italic;margin:.2rem 0 .4rem;">Answer dilemmas with dimension tags to map how you weigh decisions.</div>');
   h+='<div class="fp-confwrap"><div class="fp-cch">Calibration by confidence</div><div class="fp-ccrow">'+confCells+'</div><div class="fp-note">'+note+'</div></div></div>';
   return h;
 }
