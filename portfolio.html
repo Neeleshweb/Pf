@@ -1350,17 +1350,17 @@ function makeStepper(mountId, steps){
     n.onclick=function(){ go(idx); }; rail.appendChild(n);
   });
   root.appendChild(rail); root.appendChild(prog); root.appendChild(panel); root.appendChild(nav);
-  function render(){
+  function render(scroll){
     var s=steps[i];
     panel.innerHTML='<div class="stp-ey">'+(s.ey||('Step '+(i+1)))+'</div><div class="stp-h">'+s.h+'</div>'+s.body;
     var nodes=rail.querySelectorAll('.stp-node');
     for(var k=0;k<nodes.length;k++){ nodes[k].classList.toggle('active', k===i); }
-    if(nodes[i]) nodes[i].scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+    if(scroll && nodes[i]) nodes[i].scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
     bar.style.width=(((i+1)/steps.length)*100)+'%';
     count.textContent=(i+1)+' / '+steps.length;
     prev.disabled=(i===0); next.disabled=(i===steps.length-1);
   }
-  function go(idx){ i=Math.max(0,Math.min(steps.length-1,idx)); render(); }
+  function go(idx){ i=Math.max(0,Math.min(steps.length-1,idx)); render(true); }
   prev.onclick=function(){ go(i-1); }; next.onclick=function(){ go(i+1); }; render();
 }
 function seg2(aN,aT,bN,bT){ return '<div class="seg-grid"><div class="seg"><div class="seg-name a">'+aN+'</div><p>'+aT+'</p></div><div class="seg"><div class="seg-name b">'+bN+'</div><p>'+bT+'</p></div></div>'; }
