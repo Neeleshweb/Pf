@@ -522,9 +522,8 @@
   <ul class="nav-links">
     <li><a href="#today" class="active">Today's Call</a></li>
     <li><a href="#archive">The Archive</a></li>
-    <li><a href="#profile">Your Profile</a></li>
-    <li><a href="#journal">Your Journal</a></li>
-    <li><a href="https://neeleshpmtoolkit.com/toolkit.html">Toolkit ↗</a></li>
+    <li><a href="#profile">Your Gut Check</a></li>
+        <li><a href="https://neeleshpmtoolkit.com/toolkit.html">Toolkit ↗</a></li>
     <li><a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio ↗</a></li>
   </ul>
   <div class="nav-right">
@@ -567,7 +566,7 @@
     <p class="hero-sub">Every day, one real product decision — from products used by millions, or my own work at <strong>FIIX, CoreLogic, and beyond</strong>. Make your call, then see <strong>how PMs around the world actually voted</strong> and what really happened. The one thing an AI prompt can't give you: <strong>a room full of other product minds.</strong></p>
     <div class="hero-ctas">
       <a href="#today" class="btn-primary">▶ Make today's call</a>
-      <a href="#profile" class="btn-ghost">Your judgment profile</a>
+      <a href="#profile" class="btn-ghost">Your Gut Check</a>
       <button type="button" class="btn-ghost gw-replay" id="gw-replay">How it works</button>
     </div>
     <div class="gym-strip">
@@ -619,7 +618,7 @@
 <!-- PROFILE -->
 <section class="section" id="profile">
   <div class="sec-eyebrow g">Your proof</div>
-  <div class="sec-title">Your <span class="g">Judgment</span> Profile</div>
+  <div class="sec-title">Your <span class="g">Gut Check</span></div>
   <p class="sec-sub">Every call you make is tracked <strong>privately on your device</strong>. Watch your judgment sharpen over time — and walk into interviews with receipts.</p>
   <div class="jr-teaser" id="rec-teaser" style="display:none">
     <div class="jr-teaser-h">Your private judgment profile</div>
@@ -636,13 +635,7 @@
     <div class="rec-tile amber"><b id="rec-subs">0</b><small>dilemmas submitted</small></div>
   </div>
   <div class="rec-subtier" id="rec-subtier"></div>
-  <div class="dim-bars">
-    <h4>How you tend to weigh decisions</h4>
-    <div class="dim-row"><span class="dim-label">🎯 User Focus</span><span class="dim-track"><i id="dim-u"></i></span></div>
-    <div class="dim-row"><span class="dim-label">📊 Evidence</span><span class="dim-track"><i id="dim-e"></i></span></div>
-    <div class="dim-row"><span class="dim-label">🤝 Stakeholders</span><span class="dim-track"><i id="dim-s"></i></span></div>
-    <div class="dim-row"><span class="dim-label">⚖️ Risk</span><span class="dim-track"><i id="dim-r"></i></span></div>
-  </div>
+  <div id="journal-mount"></div>
   <p class="rec-note">Levels: <b>Associate</b> → <b>Senior</b> (40+ pts) → <b>Principal</b> (100+ pts). Earn points for every call you make, and a bonus when your call matches what a strong PM (or I) actually did. Your streak rewards coming back daily — because judgment isn't downloaded, it's built.</p>
   <button class="rec-share" id="rec-share">Share my judgment profile ↗</button>
   <button class="rec-reset" id="rec-reset">Reset my profile</button>
@@ -650,12 +643,7 @@
 </section>
 
 <!-- JUDGMENT JOURNAL -->
-<section class="section" id="journal">
-  <div class="sec-eyebrow">Your mirror</div>
-  <div class="sec-title">Your Judgment <span>Journal</span></div>
-  <p class="sec-sub">Every call you've made — your decision, your reasoning, and how it lined up with a strong PM — in one place. Not a scoreboard. A record of <strong>how you think</strong>, so you can watch it sharpen.</p>
-  <div id="journal-mount"></div>
-</section>
+
 
 <!-- SUBMIT A DILEMMA -->
 <section class="section" id="submit">
@@ -774,7 +762,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-19-6';
+var SITE_VERSION = '2026-06-19-7';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1099,7 +1087,7 @@ function applyStreak(){
   if (GC.lastVisit === today) {}
   else if (GC.lastVisit === yest) { GC.streak = (GC.streak||0)+1; GC.lastVisit = today; }
   else { GC.streak = 1; GC.lastVisit = today; }
-  gcSave(GC);
+  gcSave(GC); if (SB && currentUser) saveProfile();
 }
 
 /* ---------- DAILY ROTATION ---------- */
@@ -1228,7 +1216,7 @@ function renderJournal(){
     var ids=Object.keys(GC.calls||{});
     if(!ids.length){ mountEl.innerHTML='<div class="jr-empty">Make your first call and it\u2019ll appear here \u2014 your private record of how you decide.</div>'; return; }
     var le=ids.map(function(id){ var r=jrResolve(id,null); return { d:r.d, bank:r.bank, choice:GC.calls[id], reason:null, created_at:null }; });
-    mountEl.innerHTML=jrSummaryHTML(le)+fingerprintHTML(le)+'<div class="jr-list">'+le.map(jrEntryHTML).join('')+'</div><div class="jr-note">Showing calls saved on this device. Sign in on the live site to sync your full journal with reasoning and dates.</div>';
+    mountEl.innerHTML=fingerprintHTML(le)+'<div class="jr-list">'+le.map(jrEntryHTML).join('')+'</div><div class="jr-note">Showing calls saved on this device. Sign in on the live site to sync your full journal with reasoning and dates.</div>';
     return;
   }
   if(!currentUser){
@@ -1244,7 +1232,7 @@ function renderJournal(){
     var amap={}; arows.forEach(function(r){ if(r && r.dilemma_id){ var dd=scheduleRowToDilemma(r); if(dd) amap[r.dilemma_id]=dd; } });
     var ents=votes.map(function(v){ var r=jrResolve(v.dilemma_id,amap); return { d:r.d, bank:r.bank, choice:v.choice, reason:v.reason, created_at:v.created_at }; });
     if(!ents.length){ mountEl.innerHTML='<div class="jr-empty">No calls yet \u2014 <a href="#today">make today\u2019s call</a> and your journal starts filling up.</div>'; return; }
-    mountEl.innerHTML=jrSummaryHTML(ents)+fingerprintHTML(ents)+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
+    mountEl.innerHTML=fingerprintHTML(ents)+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
   }).catch(function(){ if(token!==renderJournal._t) return; mountEl.innerHTML='<div class="jr-empty">Couldn\u2019t load your journal right now \u2014 please refresh.</div>'; });
 }
 
@@ -1369,7 +1357,7 @@ function addArchItem(list, dateLabel, d){
   var badge = d.tier===1 ? '★ Real call' : (d.tier===3 ? '👥 Community' : 'Industry / public');
   var item = document.createElement('div'); item.className = 'arch-item';
   item.innerHTML = '<div class="arch-top"><span class="arch-day">'+dateLabel+' · '+badge+'</span><span class="arch-status '+(made?'made':'missed')+'">'+(made?'✓ you called '+youKey:'· locked — not answered')+'</span></div>'
-    + '<div class="arch-title">'+d.scenario.replace(/<[^>]+>/g,'').slice(0,110)+'…</div>'
+    + '<div class="arch-title">'+d.scenario.replace(/<[^>]+>/g,'')+'</div>'
     + '<div class="arch-status" style="color:var(--accent2)">▾ Tap to study this call</div>'
     + '<div class="arch-detail"><div class="arch-q">'+d.q+'</div><div class="arch-opts"></div><div class="arch-rev"></div></div>';
   item.querySelector('.arch-top').parentNode.onclick = function(e){ item.classList.toggle('open'); if (item.classList.contains('open') && !item._built){ buildArchDetail(item, d); item._built = true; } };
@@ -2104,7 +2092,7 @@ boot();
   bd.addEventListener('click', closeMenu); closeBtn.addEventListener('click', closeMenu);
   function smoothTo(id){ var el=document.getElementById(id); if(!el) return; var y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); }
   function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn,80); }; return a; }
-  [["Today's Call",'today'],['The Archive','archive'],['Your Profile','profile'],['Your Journal','journal'],['Submit a dilemma','submit'],['Get it by email','subscribe']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
+  [["Today's Call",'today'],['The Archive','archive'],['Your Gut Check','profile'],['Submit a dilemma','submit'],['Get it by email','subscribe']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
   body.appendChild(link('PM Toolkit ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/toolkit.html'; }));
   body.appendChild(link('Portfolio ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/portfolio.html'; }));
   body.appendChild(link('🏠  Home', function(){ window.location.href='https://neeleshpmtoolkit.com/index.html'; }));
@@ -2113,7 +2101,7 @@ boot();
 /* ════════ SITE SEARCH (full-text) ════════ */
 (function(){
   function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
-  var SECTIONS = { today:"Today's Call", subscribe:'Email', archive:'The Archive', profile:'Your Profile' };
+  var SECTIONS = { today:"Today's Call", subscribe:'Email', archive:'The Archive', profile:'Your Gut Check' };
   function getSection(el){ var s=el.closest('section[id]'); if(s&&SECTIONS[s.id]) return SECTIONS[s.id]; if(el.closest('.hero')) return 'Home'; var a=el.closest('section,header,footer'); if(a){ if(a.tagName==='FOOTER') return 'Footer'; var t=a.querySelector('.sec-title,h1,h2'); if(t) return t.textContent.replace(/\s+/g,' ').trim().slice(0,28);} return 'Page'; }
   var INLINE={STRONG:1,EM:1,SPAN:1,A:1,MARK:1,B:1,I:1,SMALL:1,CODE:1,U:1,SUP:1,SUB:1,LABEL:1};
   function container(node){ var el=node.parentElement; while(el&&INLINE[el.tagName]&&el.parentElement){ el=el.parentElement; } return el; }
