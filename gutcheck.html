@@ -144,6 +144,32 @@
     .call-reason textarea { width: 100%; background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: .7rem .9rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .85rem; resize: vertical; min-height: 56px; }
     .call-reason textarea:focus { outline: none; border-color: var(--accent3); }
     .call-hint { font-size: .76rem; color: var(--muted2); margin-top: .3rem; }
+    .call-reason label .req { color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: .6rem; letter-spacing: .5px; border: 1px solid var(--accent); border-radius: 4px; padding: .04rem .3rem; margin-left: .15rem; }
+    .call-conf { margin: .6rem 0 .2rem; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+    .call-conf.cc-err .cc-q { color: var(--red); }
+    .cc-q { font-size: .76rem; color: var(--muted); }
+    .cc-opts { display: flex; gap: .4rem; }
+    .cc-btn { background: var(--surface); border: 1px solid var(--border2); color: #c9c4bb; font-family: inherit; font-size: .76rem; padding: .35rem .7rem; border-radius: 20px; cursor: pointer; transition: .15s; }
+    .cc-btn:hover { border-color: var(--muted); }
+    .cc-btn.sel { background: var(--accent3); border-color: var(--accent3); color: #fff; font-weight: 600; }
+    .fp { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; margin: .2rem 0 1.2rem; }
+    .fp-h { font-family: 'Bebas Neue', sans-serif; letter-spacing: .5px; font-size: 1.15rem; color: var(--white); }
+    .fp-sub { font-size: .76rem; color: var(--muted); margin: .15rem 0 .8rem; }
+    .fp-row { display: flex; align-items: center; gap: .6rem; margin: .32rem 0; }
+    .fp-dim { flex: 0 0 120px; font-size: .8rem; color: #cfc9bf; }
+    .fp-track { flex: 1; height: 8px; background: var(--surface); border: 1px solid var(--border2); border-radius: 6px; overflow: hidden; }
+    .fp-track i { display: block; height: 100%; border-radius: 6px; }
+    .fp-track i.pos { background: var(--accent2); }
+    .fp-track i.neg { background: var(--accent3); }
+    .fp-val { flex: 0 0 34px; text-align: right; font-size: .78rem; color: var(--muted); }
+    .fp-cal { flex: 0 0 96px; font-size: .7rem; color: var(--green); text-align: right; }
+    .fp-confwrap { margin-top: .9rem; padding-top: .8rem; border-top: 1px solid var(--border); }
+    .fp-cch { font-size: .72rem; letter-spacing: .5px; text-transform: uppercase; color: var(--muted); margin-bottom: .5rem; }
+    .fp-ccrow { display: flex; gap: 1.4rem; }
+    .fp-cc b { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--green); line-height: 1; }
+    .fp-cc small { font-size: .68rem; color: var(--muted); }
+    .fp-note { font-size: .78rem; color: #bdb8ae; margin-top: .6rem; font-style: italic; }
+    @media (max-width:520px){ .fp-dim{flex-basis:84px;} .fp-cal{display:none;} }
 
     /* REVEAL */
     .rv { animation: rvIn .4s ease both; }
@@ -748,7 +774,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-16-5';
+var SITE_VERSION = '2026-06-19-6';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1057,6 +1083,7 @@ function gcSave(s){ try { localStorage.setItem(GC_KEY, JSON.stringify(s)); } cat
 var GC = gcLoad();
 GC.calls = GC.calls || {};            // {dilemmaId: 'A'}
 GC.dims = GC.dims || {u:0,e:0,s:0,r:0};
+GC.conf = GC.conf || {};               // {dilemmaId: 1|2|3} confidence
 GC.decisions = GC.decisions || 0;
 GC.audience = GC.audience || null;    // 'aspiring' | 'working'
 GC.subscribed = GC.subscribed || false;
@@ -1131,6 +1158,26 @@ function jrResolve(id, amap){
   if(amap && amap[id]) return { d:amap[id], bank:false };
   return { d:null, bank:false };
 }
+function fingerprintHTML(entries){
+  entries=entries||[]; var dims=GC.dims||{u:0,e:0,s:0,r:0}; var order=['u','e','s','r'];
+  var maxAbs=1; order.forEach(function(k){ maxAbs=Math.max(maxAbs,Math.abs(dims[k]||0)); });
+  var pd={u:[0,0],e:[0,0],s:[0,0],r:[0,0]}, cf={1:[0,0],2:[0,0],3:[0,0]};
+  entries.forEach(function(e){ var d=e.d; if(!d||!d.best) return; var hit=(e.choice===d.best);
+    if(d.dims&&d.dims[d.best]){ var fx=d.dims[d.best],pk=null,pv=0; for(var k in fx){ if(Math.abs(fx[k])>pv){pv=Math.abs(fx[k]);pk=k;} } if(pk&&pd[pk]){ pd[pk][1]++; if(hit) pd[pk][0]++; } }
+    var c=GC.conf&&GC.conf[d.id]; if(c&&cf[c]){ cf[c][1]++; if(hit) cf[c][0]++; } });
+  var rows=order.map(function(k){ var v=dims[k]||0, pct=Math.round(Math.abs(v)/maxAbs*100); var cal=pd[k][1]?('matched '+pd[k][0]+'/'+pd[k][1]):'';
+    return '<div class="fp-row"><span class="fp-dim">'+DIM[k]+'</span><div class="fp-track"><i class="'+(v>=0?'pos':'neg')+'" style="width:'+pct+'%"></i></div><span class="fp-val">'+(v>0?'+':'')+v+'</span><span class="fp-cal">'+cal+'</span></div>'; }).join('');
+  function rate(b){ return b[1]?Math.round(b[0]/b[1]*100):null; }
+  var labels={3:'Confident',2:'Fairly sure',1:'Hunch'};
+  var confCells=[3,2,1].map(function(n){ var r=rate(cf[n]); return '<div class="fp-cc"><b>'+(r==null?'\u2014':r+'%')+'</b><small>'+labels[n]+(cf[n][1]?' ('+cf[n][0]+'/'+cf[n][1]+')':'')+'</small></div>'; }).join('');
+  var r3=rate(cf[3]), r1=rate(cf[1]), note;
+  if(r3!=null&&r1!=null){ note=(r3>=r1+10)?'Well-calibrated \u2014 your confident calls land more often than your hunches.':(r1>r3?'Watch for overconfidence \u2014 your hunches match as often as your confident calls.':'Your confidence and accuracy track closely.'); }
+  else { note='Make a few more calls (with a confidence) to reveal whether you\u2019re well-calibrated or overconfident.'; }
+  var h='<div class="fp"><div class="fp-h">\uD83E\uDDEC Your judgment fingerprint</div><div class="fp-sub">How you weigh each dimension across your calls \u2014 and where you match the pros.</div>';
+  h+=rows;
+  h+='<div class="fp-confwrap"><div class="fp-cch">Calibration by confidence</div><div class="fp-ccrow">'+confCells+'</div><div class="fp-note">'+note+'</div></div></div>';
+  return h;
+}
 function jrSummaryHTML(entries){
   var known = entries.filter(function(e){ return e.d && e.d.best; });
   var hits = known.filter(function(e){ return e.choice===e.d.best; }).length;
@@ -1181,7 +1228,7 @@ function renderJournal(){
     var ids=Object.keys(GC.calls||{});
     if(!ids.length){ mountEl.innerHTML='<div class="jr-empty">Make your first call and it\u2019ll appear here \u2014 your private record of how you decide.</div>'; return; }
     var le=ids.map(function(id){ var r=jrResolve(id,null); return { d:r.d, bank:r.bank, choice:GC.calls[id], reason:null, created_at:null }; });
-    mountEl.innerHTML=jrSummaryHTML(le)+'<div class="jr-list">'+le.map(jrEntryHTML).join('')+'</div><div class="jr-note">Showing calls saved on this device. Sign in on the live site to sync your full journal with reasoning and dates.</div>';
+    mountEl.innerHTML=jrSummaryHTML(le)+fingerprintHTML(le)+'<div class="jr-list">'+le.map(jrEntryHTML).join('')+'</div><div class="jr-note">Showing calls saved on this device. Sign in on the live site to sync your full journal with reasoning and dates.</div>';
     return;
   }
   if(!currentUser){
@@ -1197,7 +1244,7 @@ function renderJournal(){
     var amap={}; arows.forEach(function(r){ if(r && r.dilemma_id){ var dd=scheduleRowToDilemma(r); if(dd) amap[r.dilemma_id]=dd; } });
     var ents=votes.map(function(v){ var r=jrResolve(v.dilemma_id,amap); return { d:r.d, bank:r.bank, choice:v.choice, reason:v.reason, created_at:v.created_at }; });
     if(!ents.length){ mountEl.innerHTML='<div class="jr-empty">No calls yet \u2014 <a href="#today">make today\u2019s call</a> and your journal starts filling up.</div>'; return; }
-    mountEl.innerHTML=jrSummaryHTML(ents)+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
+    mountEl.innerHTML=jrSummaryHTML(ents)+fingerprintHTML(ents)+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
   }).catch(function(){ if(token!==renderJournal._t) return; mountEl.innerHTML='<div class="jr-empty">Couldn\u2019t load your journal right now \u2014 please refresh.</div>'; });
 }
 
@@ -1220,7 +1267,7 @@ function renderToday(){
     + '<div class="call-q">'+d.q+'</div>'
     + (answered ? '<div class="call-locked">✓ Your call is locked in for today. You can’t vote again until a new dilemma drops tomorrow.</div>' : '')
     + '<div id="today-opts"></div>';
-  if (!answered) html += '<div class="call-reason"><label>Optional — add your reasoning. Shared <b>anonymously</b> with other PMs after they make their call.</label><textarea id="today-reason" maxlength="280" placeholder="I chose this because…"></textarea><div class="call-hint">Once you commit, the crowd unlocks. No take-backs.</div></div>';
+  if (!answered) html += '<div class="call-reason"><label>Your reasoning <span class="req">required</span> — shared <b>anonymously</b> with other PMs after they make their call.</label><textarea id="today-reason" maxlength="280" placeholder="I chose this because…"></textarea><div class="call-conf"><span class="cc-q">How sure are you?</span><div class="cc-opts"><button type="button" class="cc-btn" data-c="1">Hunch</button><button type="button" class="cc-btn" data-c="2">Fairly sure</button><button type="button" class="cc-btn" data-c="3">Confident</button></div></div><div class="call-hint">Reason + confidence are required. Once you commit, the crowd unlocks. No take-backs.</div></div>';
   html += '<div id="today-reveal"></div></div>';
   mount.innerHTML = html;
   var optWrap = document.getElementById('today-opts');
@@ -1231,17 +1278,19 @@ function renderToday(){
     else b.onclick = function(){ commit(d, o.k); };
     optWrap.appendChild(b);
   });
+  if(!answered){ var __ccb=[].slice.call(document.querySelectorAll('.cc-btn')); __ccb.forEach(function(cb){ cb.onclick=function(){ __ccb.forEach(function(x){x.classList.remove('sel');}); cb.classList.add('sel'); var __cc=document.querySelector('.call-conf'); if(__cc) __cc.classList.remove('cc-err'); }; }); }
   if (answered) reveal(d, true);
 }
 
 function commit(d, key){
   if (SB && !currentUser){ openSignIn('Sign in to lock in your call — it then syncs across all your devices.'); return; }
   /* always confirm audience per vote so each call is tagged accurately */
-  pendingCommit = { d:d, key:key }; openAud();
+  var __rt=document.getElementById('today-reason'); var __reason=__rt?(__rt.value||'').trim():''; if(!__reason){ if(__rt){ __rt.style.borderColor='var(--red)'; __rt.focus(); } var __rh=document.querySelector('.call-hint'); if(__rh){ __rh.textContent='Add your reasoning to lock your call.'; __rh.style.color='var(--red)'; } return; } var __ce=document.querySelector('.cc-btn.sel'); if(!__ce){ var __cc=document.querySelector('.call-conf'); if(__cc) __cc.classList.add('cc-err'); return; } if(__rt) __rt.style.borderColor=''; pendingCommit = { d:d, key:key, conf:+__ce.getAttribute('data-c') }; openAud();
 }
 var pendingCommit = null;
-function doCommit(d, key){
+function doCommit(d, key, conf){
   GC.calls[d.id] = key;
+  if (conf) GC.conf[d.id] = conf;
   GC.decisions = (GC.decisions||0) + 1;
   var fx = d.dims && d.dims[key]; if (fx) for (var k in fx) GC.dims[k] = (GC.dims[k]||0) + fx[k];
   gcSave(GC);
@@ -1310,7 +1359,7 @@ var audOv = document.getElementById('aud-overlay');
 function openAud(){ audOv.classList.add('open'); }
 function closeAud(){ audOv.classList.remove('open'); }
 [].slice.call(document.querySelectorAll('.aud-opt')).forEach(function(b){
-  b.onclick = function(){ GC.audience = b.getAttribute('data-aud'); gcSave(GC); closeAud(); refreshRecord(); if (pendingCommit){ var p=pendingCommit; pendingCommit=null; doCommit(p.d, p.key); } };
+  b.onclick = function(){ GC.audience = b.getAttribute('data-aud'); gcSave(GC); closeAud(); refreshRecord(); if (pendingCommit){ var p=pendingCommit; pendingCommit=null; doCommit(p.d, p.key, p.conf); } };
 });
 
 /* ---------- ARCHIVE ---------- */
@@ -1770,7 +1819,7 @@ function loadMyQueue(){
 document.getElementById('rec-reset').onclick = function(){
   if (!confirm('Reset your entire judgment profile? This can’t be undone.')) return;
   var keepVisit = GC.lastVisit;
-  GC = { calls:{}, dims:{u:0,e:0,s:0,r:0}, decisions:0, audience:null, subscribed:false, streak:1, lastVisit:keepVisit };
+  GC = { calls:{}, conf:{}, dims:{u:0,e:0,s:0,r:0}, decisions:0, audience:null, subscribed:false, streak:1, lastVisit:keepVisit };
   gcSave(GC); saveProfile(); renderToday(); renderArchive(); refreshRecord();
 };
 
@@ -1781,7 +1830,7 @@ function loadProfile(){
   return SB.from('gc_profiles').select('data').eq('user_id', currentUser.id).maybeSingle().then(function(res){
     if(res && !res.error && res.data && res.data.data){
       var d = res.data.data;
-      GC = { calls:d.calls||{}, dims:d.dims||{u:0,e:0,s:0,r:0}, decisions:d.decisions||0, audience:d.audience||null,
+      GC = { calls:d.calls||{}, conf:d.conf||{}, dims:d.dims||{u:0,e:0,s:0,r:0}, decisions:d.decisions||0, audience:d.audience||null,
              subscribed:d.subscribed||false, email:d.email||(currentUser.email), streak:d.streak||0, lastVisit:d.lastVisit||null, device:GC.device,
              firstName:d.firstName||'', lastName:d.lastName||'', avatar:(d.avatar!==undefined?d.avatar:null) };
       gcSave(GC);
@@ -1805,7 +1854,7 @@ function loadMyVotes(){
 function saveProfile(){
   if(!SB || !currentUser) return;
   SB.from('gc_profiles').upsert({ user_id: currentUser.id, data: {
-    calls:GC.calls, dims:GC.dims, decisions:GC.decisions, audience:GC.audience,
+    calls:GC.calls, conf:GC.conf, dims:GC.dims, decisions:GC.decisions, audience:GC.audience,
     subscribed:GC.subscribed, email:GC.email, streak:GC.streak, lastVisit:GC.lastVisit,
     firstName:GC.firstName||'', lastName:GC.lastName||'', avatar:(GC.avatar!==undefined?GC.avatar:null)
   }, updated_at: new Date().toISOString() }, { onConflict:'user_id' }).then(function(res){
