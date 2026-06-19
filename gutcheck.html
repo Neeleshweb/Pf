@@ -152,6 +152,14 @@
     .cc-btn { background: var(--surface); border: 1px solid var(--border2); color: #c9c4bb; font-family: inherit; font-size: .76rem; padding: .35rem .7rem; border-radius: 20px; cursor: pointer; transition: .15s; }
     .cc-btn:hover { border-color: var(--muted); }
     .cc-btn.sel { background: var(--accent3); border-color: var(--accent3); color: #fff; font-weight: 600; }
+    .call-predict { margin: .2rem 0; }
+    .call-predict.cp-err .cp-q { color: var(--red); }
+    .cp-q { font-size: .78rem; color: var(--muted); display: block; margin-bottom: .4rem; }
+    .cp-opts { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .cp-btn { background: var(--surface); border: 1px solid var(--border2); color: #c9c4bb; font-family: inherit; font-weight: 600; font-size: .8rem; min-width: 2.2rem; padding: .35rem .6rem; border-radius: 8px; cursor: pointer; transition: .15s; }
+    .cp-btn:hover { border-color: var(--muted); }
+    .cp-btn.sel { background: var(--accent2); border-color: var(--accent2); color: #140d07; }
+    .cp-why { font-size: .72rem; color: var(--muted2); margin-top: .4rem; }
     .fp { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; margin: .2rem 0 1.2rem; }
     .fp-h { font-family: 'Bebas Neue', sans-serif; letter-spacing: .5px; font-size: 1.15rem; color: var(--white); }
     .fp-sub { font-size: .76rem; color: var(--muted); margin: .15rem 0 .8rem; }
@@ -762,7 +770,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-19-8';
+var SITE_VERSION = '2026-06-19-10';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -777,7 +785,7 @@ try { if (GC_LIVE && window.supabase && window.supabase.createClient) SB = windo
 var currentUser = null;
 
 function fetchDist(dilemmaId){ if(!SB) return Promise.resolve(null); return SB.rpc('gc_distribution',{ p_dilemma: dilemmaId }).then(function(res){ if(res && res.error){ console.warn('[GutCheck] distribution read error:', res.error); return null; } return (res && res.data) ? res.data : null; }).catch(function(e){ console.warn('[GutCheck] distribution failed:', e); return null; }); }
-function recordVote(d, key, reason){ if(!SB) return Promise.resolve(); var rsn=(reason||'').trim().slice(0,280); return SB.from('gc_votes').insert({ user_id: currentUser ? currentUser.id : null, device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience, reason: rsn.length?rsn:null }).then(function(res){ if(res && res.error) console.warn('[GutCheck] vote not saved:', res.error); }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); }); }
+function recordVote(d, key, reason, pred){ if(!SB) return Promise.resolve(); var rsn=(reason||'').trim().slice(0,280); return SB.from('gc_votes').insert({ user_id: currentUser ? currentUser.id : null, device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience, reason: rsn.length?rsn:null, prediction: pred?{win:pred}:null }).then(function(res){ if(res && res.error) console.warn('[GutCheck] vote not saved:', res.error); }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); }); }
 function saveSubscriber(email){ if(!SB) return Promise.resolve(); return SB.from('gc_subscribers').insert({ email: email, audience: GC.audience }).then(function(res){ if(res && res.error) console.warn('[GutCheck] subscribe error:', res.error); }).catch(function(e){ console.warn('[GutCheck] subscribe failed:', e); }); }
 function saveSubmission(p){ if(!SB) return Promise.resolve(); return SB.from('gc_submissions').insert(p).then(function(res){ if(res && res.error) console.warn('[GutCheck] submission error:', res.error); }).catch(function(e){ console.warn('[GutCheck] submission failed:', e); }); }
 
@@ -798,7 +806,7 @@ function scheduleRowToDilemma(row){
   return { id: row.dilemma_id || 'sub-x', tier:3, level:esc(row.level||'Senior'),
     source: row.credit ? ('Community · '+esc(row.credit)) : 'Community submission',
     scenario: esc(row.scenario||''), q: esc(row.question||'What would you do?'), opts: opts,
-    best: ((row.best||'').trim().toUpperCase()).replace(/[^A-D]/g,'')||null, dims:null,
+    best: ((row.best||'').trim().toUpperCase()).replace(/[^A-D]/g,'')||null, dims:(function(){ try{ var x=(typeof row.dims==='string')?JSON.parse(row.dims):row.dims; return (x&&typeof x==='object')?x:null; }catch(e){ return null; } })(),
     breakdown: row.breakdown ? esc(row.breakdown) : 'This dilemma came straight from the community — there isn\u2019t an official \u201cright\u201d answer here. What matters is whether your reasoning holds together.',
     real: row.outcome ? esc(row.outcome) : null, lesson: row.lesson ? esc(row.lesson) : null };
 }
@@ -1256,6 +1264,7 @@ function renderToday(){
     + (answered ? '<div class="call-locked">✓ Your call is locked in for today. You can’t vote again until a new dilemma drops tomorrow.</div>' : '')
     + '<div id="today-opts"></div>';
   if (!answered) html += '<div class="call-reason"><label>Your reasoning <span class="req">required</span> — shared <b>anonymously</b> with other PMs after they make their call.</label><textarea id="today-reason" maxlength="280" placeholder="I chose this because…"></textarea><div class="call-conf"><span class="cc-q">How sure are you?</span><div class="cc-opts"><button type="button" class="cc-btn" data-c="1">Hunch</button><button type="button" class="cc-btn" data-c="2">Fairly sure</button><button type="button" class="cc-btn" data-c="3">Confident</button></div></div><div class="call-hint">Reason + confidence are required. Once you commit, the crowd unlocks. No take-backs.</div></div>';
+  if (!answered && d.tier===3) html += '<div class="call-predict"><span class="cp-q">Last one \u2014 which option do you think the room will pick <b>most</b>? <span class="req">required</span></span><div class="cp-opts">'+d.opts.map(function(o){ return '<button type="button" class="cp-btn" data-pk="'+o.k+'" title="'+o.t+'">'+o.k+'</button>'; }).join('')+'</div><div class="cp-why">Powers your <b>surprisingly-popular</b> score \u2014 options that beat what people expect are right more often than a plain vote count.</div></div>';
   html += '<div id="today-reveal"></div></div>';
   mount.innerHTML = html;
   var optWrap = document.getElementById('today-opts');
@@ -1267,16 +1276,17 @@ function renderToday(){
     optWrap.appendChild(b);
   });
   if(!answered){ var __ccb=[].slice.call(document.querySelectorAll('.cc-btn')); __ccb.forEach(function(cb){ cb.onclick=function(){ __ccb.forEach(function(x){x.classList.remove('sel');}); cb.classList.add('sel'); var __cc=document.querySelector('.call-conf'); if(__cc) __cc.classList.remove('cc-err'); }; }); }
+  if(!answered){ var __cpb=[].slice.call(document.querySelectorAll('.cp-btn')); __cpb.forEach(function(pb){ pb.onclick=function(){ __cpb.forEach(function(x){x.classList.remove('sel');}); pb.classList.add('sel'); var __cp=document.querySelector('.call-predict'); if(__cp) __cp.classList.remove('cp-err'); }; }); }
   if (answered) reveal(d, true);
 }
 
 function commit(d, key){
   if (SB && !currentUser){ openSignIn('Sign in to lock in your call — it then syncs across all your devices.'); return; }
   /* always confirm audience per vote so each call is tagged accurately */
-  var __rt=document.getElementById('today-reason'); var __reason=__rt?(__rt.value||'').trim():''; if(!__reason){ if(__rt){ __rt.style.borderColor='var(--red)'; __rt.focus(); } var __rh=document.querySelector('.call-hint'); if(__rh){ __rh.textContent='Add your reasoning to lock your call.'; __rh.style.color='var(--red)'; } return; } var __ce=document.querySelector('.cc-btn.sel'); if(!__ce){ var __cc=document.querySelector('.call-conf'); if(__cc) __cc.classList.add('cc-err'); return; } if(__rt) __rt.style.borderColor=''; pendingCommit = { d:d, key:key, conf:+__ce.getAttribute('data-c') }; openAud();
+  var __rt=document.getElementById('today-reason'); var __reason=__rt?(__rt.value||'').trim():''; if(!__reason){ if(__rt){ __rt.style.borderColor='var(--red)'; __rt.focus(); } var __rh=document.querySelector('.call-hint'); if(__rh){ __rh.textContent='Add your reasoning to lock your call.'; __rh.style.color='var(--red)'; } return; } var __ce=document.querySelector('.cc-btn.sel'); if(!__ce){ var __cc=document.querySelector('.call-conf'); if(__cc) __cc.classList.add('cc-err'); return; } if(__rt) __rt.style.borderColor=''; var __pred=null; if (d.tier===3){ var __pe=document.querySelector('.cp-btn.sel'); var __cp2=document.querySelector('.call-predict'); if(__cp2 && !__pe){ __cp2.classList.add('cp-err'); return; } if(__pe) __pred=__pe.getAttribute('data-pk'); } pendingCommit = { d:d, key:key, conf:+__ce.getAttribute('data-c'), pred:__pred }; openAud();
 }
 var pendingCommit = null;
-function doCommit(d, key, conf){
+function doCommit(d, key, conf, pred){
   GC.calls[d.id] = key;
   if (conf) GC.conf[d.id] = conf;
   GC.decisions = (GC.decisions||0) + 1;
@@ -1289,7 +1299,7 @@ function doCommit(d, key, conf){
   /* highlight chosen */
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ if (b.querySelector('.opt-k') && b.querySelector('.opt-k').textContent===key){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } b.style.opacity=.96; });
   reveal(d, false);
-  if (SB) { recordVote(d, key, reasonText).then(function(){ enhanceLive(document.getElementById('today-reveal'), d); loadReasons(d, document.getElementById('today-reveal')); }); }
+  if (SB) { recordVote(d, key, reasonText, pred).then(function(){ enhanceLive(document.getElementById('today-reveal'), d); loadReasons(d, document.getElementById('today-reveal')); }); }
   refreshRecord(); saveProfile();
 }
 
@@ -1347,7 +1357,7 @@ var audOv = document.getElementById('aud-overlay');
 function openAud(){ audOv.classList.add('open'); }
 function closeAud(){ audOv.classList.remove('open'); }
 [].slice.call(document.querySelectorAll('.aud-opt')).forEach(function(b){
-  b.onclick = function(){ GC.audience = b.getAttribute('data-aud'); gcSave(GC); closeAud(); refreshRecord(); if (pendingCommit){ var p=pendingCommit; pendingCommit=null; doCommit(p.d, p.key, p.conf); } };
+  b.onclick = function(){ GC.audience = b.getAttribute('data-aud'); gcSave(GC); closeAud(); refreshRecord(); if (pendingCommit){ var p=pendingCommit; pendingCommit=null; doCommit(p.d, p.key, p.conf, p.pred); } };
 });
 
 /* ---------- ARCHIVE ---------- */
