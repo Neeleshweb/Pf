@@ -808,7 +808,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-20-2';
+var SITE_VERSION = '2026-06-20-3';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -871,7 +871,8 @@ function injectRoomVerdict(d, box, isLive){
   if(!box || !SB || !SB.rpc) return;
   SB.rpc('gc_room_consensus',{p_dilemma_id:d.id}).then(function(res){
     if(!box) return;
-    if(!res || res.error || !res.data || !res.data.length){ box.innerHTML='<div class="rv-break">Not enough calls yet to read the room — '+(isLive?'check back as more PMs vote.':'this one closed before a clear pattern formed.')+'</div>'; return; }
+    if(res && res.error){ console.warn('[GutCheck verdict] rpc error:', res.error); box.innerHTML='<div class="rv-break">Couldn’t load the room’s verdict (server) — see console.</div>'; return; }
+    if(!res || !res.data || !res.data.length){ box.innerHTML='<div class="rv-break">Not enough calls yet to read the room — '+(isLive?'check back as more PMs vote.':'this one closed before a clear pattern formed.')+'</div>'; return; }
     var rows=res.data.slice(); var total=0, totalPred=0;
     rows.forEach(function(r){ total+=(+r.votes||0); totalPred+=(+r.predicted||0); });
     if(total<3){ box.innerHTML='<div class="rv-break">Only '+total+' call'+(total===1?'':'s')+' so far — the room’s verdict needs a few more to mean something'+(isLive?'.':' (this one closed early).')+'</div>'; return; }
@@ -890,7 +891,7 @@ function injectRoomVerdict(d, box, isLive){
     h+='</div>';
     h+='<div class="rvv-foot">'+(isLive?'Provisional — this firms up as more PMs make the call.':'Final read from the PMs who called it.')+'</div>';
     h+='</div>'; box.innerHTML=h;
-  }).catch(function(){ if(box) box.innerHTML='<div class="rv-break">Couldn’t load the room’s verdict right now.</div>'; });
+  }).catch(function(e){ console.warn('[GutCheck verdict] threw:', e); if(box) box.innerHTML='<div class="rv-break">Couldn’t load the room’s verdict right now — see console.</div>'; });
 }
 /* ---------- DIMENSIONS ---------- */
 var DIM = { u:'🎯 User Focus', e:'📊 Evidence', s:'🤝 Stakeholders', r:'⚖️ Risk', b:'💰 Business Impact', v:'🔭 Long-term Vision', f:'⚙️ Feasibility' };
@@ -1389,7 +1390,7 @@ function doCommit(d, key, conf, pred){
   /* lock options */
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ b.disabled=true; b.style.pointerEvents='none'; if (b.textContent.indexOf(key)===0 || b.querySelector('.opt-k').textContent===key){ } });
   var reasonText=''; var rtEl=document.getElementById('today-reason'); if(rtEl) reasonText=(rtEl.value||'').trim().slice(0,280);
-  var rsn = document.querySelector('.call-reason'); if (rsn) rsn.style.display='none';
+  ['.call-reason','.call-predict','.call-go','.call-howto'].forEach(function(__s){ var __e=document.querySelector(__s); if(__e) __e.style.display='none'; });
   /* highlight chosen */
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ if (b.querySelector('.opt-k') && b.querySelector('.opt-k').textContent===key){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } b.style.opacity=.96; });
   reveal(d, false);
