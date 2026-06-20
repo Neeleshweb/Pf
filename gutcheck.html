@@ -808,7 +808,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-20-3';
+var SITE_VERSION = '2026-06-20-4';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -879,11 +879,12 @@ function injectRoomVerdict(d, box, isLive){
     var sp=null; rows.forEach(function(r){ if(r.is_sp) sp=r; }); if(!sp) sp=rows[0];
     var hasPred=totalPred>0;
     var optTitle=function(k){ var o=(d.opts||[]).filter(function(x){return x.k===k;})[0]; return o?o.t:''; };
+    var _esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c];}); };
     var why = hasPred
       ? '<b>Surprisingly popular</b> = the option that drew <b>more</b> votes than people expected it to. The answer the majority assumes will win often can’t back itself up — while the one people quietly underrate pulls ahead, and that underrated pick is right more often than the plain crowd favorite.'
       : '<b>Surprisingly popular</b> rewards the option that beats what people expected — the answer the majority underrates. There aren’t enough predictions yet to compute it, so for now this is simply the most-chosen option; the signal sharpens as more PMs log their read on the room.';
     var h='<div class="rvv">';
-    h+='<div class="rvv-pick"><span class="rvv-k">'+sp.opt+'</span><span class="rvv-pt"><b>'+esc(optTitle(sp.opt))+'</b><small>'+(isLive?'the room’s pick so far':'the room’s answer')+'</small></span></div>';
+    h+='<div class="rvv-pick"><span class="rvv-k">'+sp.opt+'</span><span class="rvv-pt"><b>'+_esc(optTitle(sp.opt))+'</b><small>'+(isLive?'the room’s pick so far':'the room’s answer')+'</small></span></div>';
     h+='<div class="rvv-why">'+why+'</div>';
     h+='<div class="rvv-rows">';
     rows.forEach(function(r){ var vs=Math.round((+r.vote_share||0)*100), ps=Math.round((+r.pred_share||0)*100);
