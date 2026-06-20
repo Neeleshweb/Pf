@@ -19,7 +19,7 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --black:#080808; --surface:#0f0f0f; --card:#141414; --card2:#191919;
-      --border:#242424; --border2:#2e2e2e; --white:#f0ece4; --muted:#6b6b6b; --muted2:#4a4a4a;
+      --border:#242424; --border2:#2e2e2e; --white:#f0ece4; --muted:#9d968c; --muted2:#8c867c;
       --accent:#e8540a; --accent2:#f0a500; --accent3:#3b82f6; --green:#4ade80; --red:#ff6b6b;
       --accent-dim:rgba(232,84,10,0.12); --accent2-dim:rgba(240,165,0,0.10); --accent3-dim:rgba(59,130,246,0.10);
       --radius:3px;
@@ -808,7 +808,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-20-4';
+var SITE_VERSION = '2026-06-20-10';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
