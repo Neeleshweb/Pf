@@ -144,7 +144,7 @@
     .call-reason textarea { width: 100%; background: var(--surface); border: 1px solid var(--border2); border-radius: 10px; padding: .7rem .9rem; color: var(--white); font-family: 'DM Sans', sans-serif; font-size: .85rem; resize: vertical; min-height: 56px; }
     .call-reason textarea:focus { outline: none; border-color: var(--accent3); }
     .call-hint { font-size: .76rem; color: var(--muted2); margin-top: .3rem; }
-    .call-reason label .req { color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: .6rem; letter-spacing: .5px; border: 1px solid var(--accent); border-radius: 4px; padding: .04rem .3rem; margin-left: .15rem; }
+    .call-reason label .req, .cc-q .req, .cp-q .req { color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: .6rem; letter-spacing: .5px; border: 1px solid var(--accent); border-radius: 4px; padding: .04rem .3rem; margin-left: .15rem; }
     .call-conf { margin: .6rem 0 .2rem; display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
     .call-conf.cc-err .cc-q { color: var(--red); }
     .cc-q { font-size: .76rem; color: var(--muted); }
@@ -160,6 +160,14 @@
     .cp-btn:hover { border-color: var(--muted); }
     .cp-btn.sel { background: var(--accent2); border-color: var(--accent2); color: #140d07; }
     .cp-why { font-size: .72rem; color: var(--muted2); margin-top: .4rem; }
+    .call-howto { font-size: .8rem; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: .5rem .7rem; margin: 0 0 .8rem; }
+    .call-opt.sel { border-color: var(--accent) !important; background: var(--card) !important; box-shadow: 0 0 0 1px var(--accent) inset; }
+    .call-go { margin-top: .8rem; }
+    .call-submit { width: 100%; background: var(--accent); color: #fff; border: none; font-family: inherit; font-weight: 700; font-size: .95rem; padding: .7rem 1rem; border-radius: 10px; cursor: pointer; transition: .15s; }
+    .call-submit:not(:disabled):hover { filter: brightness(1.08); }
+    .call-submit:disabled { background: var(--surface); color: var(--muted2); cursor: not-allowed; border: 1px solid var(--border2); }
+    .call-missing { font-size: .74rem; color: var(--muted); margin-top: .45rem; text-align: center; }
+    .call-missing.ready { color: var(--accent2); }
     .rec-legend { font-size: .72rem; color: var(--muted2); line-height: 1.55; margin: .1rem 0 .1rem; }
     .fp { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; margin: .2rem 0 1.2rem; }
     .fp-h { font-family: 'Bebas Neue', sans-serif; letter-spacing: .5px; font-size: 1.15rem; color: var(--white); }
@@ -783,7 +791,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-19-12';
+var SITE_VERSION = '2026-06-20-1';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1286,10 +1294,12 @@ function renderToday(){
     + '<div class="call-top"><div class="call-date">Day '+(TODAY_INDEX+1)+' · <b>'+fmtDate(new Date())+'</b></div><div class="call-badges">'+badgesHTML(d)+'</div></div>'
     + '<div class="call-scenario">'+d.scenario+'</div>'
     + '<div class="call-q">'+d.q+'</div>'
+    + (answered ? '' : '<div class="call-howto">'+(d.tier===3 ? 'Make your call: pick an option, then add your reasoning, your confidence, and your read on the room — then lock it in.' : 'Make your call: pick an option, then add your reasoning and your confidence — then lock it in.')+'</div>')
     + (answered ? '<div class="call-locked">✓ Your call is locked in for today. You can’t vote again until a new dilemma drops tomorrow.</div>' : '')
     + '<div id="today-opts"></div>';
-  if (!answered) html += '<div class="call-reason"><label>Your reasoning <span class="req">required</span> — shared <b>anonymously</b> with other PMs after they make their call.</label><textarea id="today-reason" maxlength="280" placeholder="I chose this because…"></textarea><div class="call-conf"><span class="cc-q">How sure are you?</span><div class="cc-opts"><button type="button" class="cc-btn" data-c="1">Hunch</button><button type="button" class="cc-btn" data-c="2">Fairly sure</button><button type="button" class="cc-btn" data-c="3">Confident</button></div></div><div class="call-hint">Reason + confidence are required. Once you commit, the crowd unlocks. No take-backs.</div></div>';
+  if (!answered) html += '<div class="call-reason"><label>Your reasoning <span class="req">required</span> — shared <b>anonymously</b> with other PMs after they make their call.</label><textarea id="today-reason" maxlength="280" placeholder="I chose this because…"></textarea><div class="call-conf"><span class="cc-q">How sure are you? <span class="req">required</span></span><div class="cc-opts"><button type="button" class="cc-btn" data-c="1">Hunch</button><button type="button" class="cc-btn" data-c="2">Fairly sure</button><button type="button" class="cc-btn" data-c="3">Confident</button></div></div><div class="call-hint">Reason + confidence are required. Once you commit, the crowd unlocks. No take-backs.</div></div>';
   if (!answered && d.tier===3) html += '<div class="call-predict"><span class="cp-q">Last one \u2014 which option do you think the room will pick <b>most</b>? <span class="req">required</span></span><div class="cp-opts">'+d.opts.map(function(o){ return '<button type="button" class="cp-btn" data-pk="'+o.k+'" title="'+o.t+'">'+o.k+'</button>'; }).join('')+'</div><div class="cp-why">Powers your <b>surprisingly-popular</b> score \u2014 options that beat what people expect are right more often than a plain vote count.</div></div>';
+  if (!answered) html += '<div class="call-go"><button type="button" class="call-submit" id="call-submit" disabled>Lock in my call →</button><div class="call-missing" id="call-missing"></div></div>';
   html += '<div id="today-reveal"></div></div>';
   mount.innerHTML = html;
   var optWrap = document.getElementById('today-opts');
@@ -1297,14 +1307,31 @@ function renderToday(){
     var b = document.createElement('button'); b.className='call-opt';
     b.innerHTML = '<b><span class="opt-k">'+o.k+'</span>'+o.t+'</b>'+o.d;
     if (answered){ b.disabled = true; if (GC.calls[d.id]===o.k){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } }
-    else b.onclick = function(){ commit(d, o.k); };
+    else b.onclick = function(){ selectOption(d, o.k, b); };
     optWrap.appendChild(b);
   });
-  if(!answered){ var __ccb=[].slice.call(document.querySelectorAll('.cc-btn')); __ccb.forEach(function(cb){ cb.onclick=function(){ __ccb.forEach(function(x){x.classList.remove('sel');}); cb.classList.add('sel'); var __cc=document.querySelector('.call-conf'); if(__cc) __cc.classList.remove('cc-err'); }; }); }
-  if(!answered){ var __cpb=[].slice.call(document.querySelectorAll('.cp-btn')); __cpb.forEach(function(pb){ pb.onclick=function(){ __cpb.forEach(function(x){x.classList.remove('sel');}); pb.classList.add('sel'); var __cp=document.querySelector('.call-predict'); if(__cp) __cp.classList.remove('cp-err'); }; }); }
+  if(!answered){ var __ccb=[].slice.call(document.querySelectorAll('.cc-btn')); __ccb.forEach(function(cb){ cb.onclick=function(){ __ccb.forEach(function(x){x.classList.remove('sel');}); cb.classList.add('sel'); var __cc=document.querySelector('.call-conf'); if(__cc) __cc.classList.remove('cc-err'); checkReady(d); }; }); }
+  if(!answered){ var __cpb=[].slice.call(document.querySelectorAll('.cp-btn')); __cpb.forEach(function(pb){ pb.onclick=function(){ __cpb.forEach(function(x){x.classList.remove('sel');}); pb.classList.add('sel'); var __cp=document.querySelector('.call-predict'); if(__cp) __cp.classList.remove('cp-err'); checkReady(d); }; }); }
+  if(!answered){ pendingChoice=null; var __rt2=document.getElementById('today-reason'); if(__rt2) __rt2.oninput=function(){ checkReady(d); }; var __sb=document.getElementById('call-submit'); if(__sb) __sb.onclick=function(){ if(pendingChoice) commit(d, pendingChoice); }; checkReady(d); }
   if (answered) reveal(d, true);
 }
 
+var pendingChoice = null;
+function selectOption(d, key, btn){
+  pendingChoice = key;
+  [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ b.classList.remove('sel'); });
+  if(btn) btn.classList.add('sel');
+  checkReady(d);
+}
+function checkReady(d){
+  var btn=document.getElementById('call-submit'); if(!btn) return; var miss=document.getElementById('call-missing'); var need=[];
+  if(!pendingChoice) need.push('an option');
+  var rt=document.getElementById('today-reason'); if(!rt || !(rt.value||'').trim()) need.push('your reasoning');
+  if(!document.querySelector('.cc-btn.sel')) need.push('your confidence');
+  if(d && d.tier===3 && !document.querySelector('.cp-btn.sel')) need.push('your read on the room');
+  if(need.length){ btn.disabled=true; if(miss){ miss.textContent='Still need: '+need.join(', ')+'.'; miss.classList.remove('ready'); } }
+  else { btn.disabled=false; if(miss){ miss.textContent='All set — lock it in.'; miss.classList.add('ready'); } }
+}
 function commit(d, key){
   if (SB && !currentUser){ openSignIn('Sign in to lock in your call — it then syncs across all your devices.'); return; }
   /* always confirm audience per vote so each call is tagged accurately */
