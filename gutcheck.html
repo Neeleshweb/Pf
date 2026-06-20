@@ -168,6 +168,23 @@
     .call-submit:disabled { background: var(--surface); color: var(--muted2); cursor: not-allowed; border: 1px solid var(--border2); }
     .call-missing { font-size: .74rem; color: var(--muted); margin-top: .45rem; text-align: center; }
     .call-missing.ready { color: var(--accent2); }
+    .rvv { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .8rem .9rem; }
+    .rvv-pick { display: flex; align-items: center; gap: .6rem; margin-bottom: .6rem; }
+    .rvv-pick .rvv-k { display: inline-flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; border-radius: 8px; background: var(--accent); color: #fff; font-weight: 800; font-size: 1rem; flex: 0 0 auto; }
+    .rvv-pt { display: flex; flex-direction: column; line-height: 1.25; }
+    .rvv-pt b { color: var(--white); font-size: .92rem; }
+    .rvv-pt small { color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .5px; }
+    .rvv-why { font-size: .82rem; color: var(--muted); line-height: 1.55; margin-bottom: .7rem; }
+    .rvv-rows { display: flex; flex-direction: column; gap: .35rem; margin-bottom: .6rem; }
+    .rvv-row { display: flex; align-items: center; gap: .5rem; font-size: .78rem; opacity: .68; }
+    .rvv-row.sp { opacity: 1; }
+    .rvv-rk { width: 1.3rem; font-weight: 700; color: var(--muted2); flex: 0 0 auto; text-align: center; }
+    .rvv-row.sp .rvv-rk { color: var(--accent); }
+    .rvv-bar { flex: 1; height: 7px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .rvv-bar i { display: block; height: 100%; background: var(--muted2); border-radius: 4px; }
+    .rvv-row.sp .rvv-bar i { background: var(--accent); }
+    .rvv-n { flex: 0 0 auto; color: var(--muted); font-size: .72rem; white-space: nowrap; }
+    .rvv-foot { font-size: .72rem; color: var(--muted2); font-style: italic; }
     .rec-legend { font-size: .72rem; color: var(--muted2); line-height: 1.55; margin: .1rem 0 .1rem; }
     .fp { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; margin: .2rem 0 1.2rem; }
     .fp-h { font-family: 'Bebas Neue', sans-serif; letter-spacing: .5px; font-size: 1.15rem; color: var(--white); }
@@ -791,7 +808,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-20-1';
+var SITE_VERSION = '2026-06-20-2';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -850,6 +867,31 @@ function pctMap(d, map, total){ var out={}; if(total<1){ d.opts.forEach(function
 function aggregate(d, rows){ var ov={},asp={},wrk={},tot=0,aT=0,wT=0; d.opts.forEach(function(o){ ov[o.k]=0; asp[o.k]=0; wrk[o.k]=0; }); rows.forEach(function(r){ var k=r.choice, n=Number(r.n)||0; if(!(k in ov)) return; ov[k]+=n; tot+=n; if(r.audience==='aspiring'){ asp[k]+=n; aT+=n; } else if(r.audience==='working'){ wrk[k]+=n; wT+=n; } }); return { total:tot, aspiringTotal:aT, workingTotal:wT, overall:pctMap(d,ov,tot), aspiring:pctMap(d,asp,aT), working:pctMap(d,wrk,wT) }; }
 function enhanceLive(scopeEl, d){ if(!SB || !scopeEl) return; fetchDist(d.id).then(function(rows){ if(!rows || !rows.length) return; var a=aggregate(d, rows); if(a.total<1) return; d.opts.forEach(function(o){ var row=scopeEl.querySelector('.dist-row[data-k="'+o.k+'"]'); if(row){ var bar=row.querySelector('.dist-bar i'); var dp=row.querySelector('.dp'); if(bar) bar.style.width=a.overall[o.k]+'%'; if(dp) dp.textContent=a.overall[o.k]+'%'; } }); ['aspiring','working'].forEach(function(ch){ var card=scopeEl.querySelector('.split-card[data-cohort="'+ch+'"]'); if(card){ d.opts.forEach(function(o){ var b=card.querySelector('.sc-row[data-k="'+o.k+'"] b'); if(b) b.textContent = a[ch+'Total']>0 ? a[ch][o.k]+'%' : '—'; }); } }); var tag=scopeEl.querySelector('.crowd-tag'); if(tag){ tag.textContent='Live · '+a.total+' PM'+(a.total===1?'':'s')+' have called this'; tag.style.color='var(--green)'; tag.style.borderColor='rgba(74,222,128,.4)'; } }); }
 
+function injectRoomVerdict(d, box, isLive){
+  if(!box || !SB || !SB.rpc) return;
+  SB.rpc('gc_room_consensus',{p_dilemma_id:d.id}).then(function(res){
+    if(!box) return;
+    if(!res || res.error || !res.data || !res.data.length){ box.innerHTML='<div class="rv-break">Not enough calls yet to read the room — '+(isLive?'check back as more PMs vote.':'this one closed before a clear pattern formed.')+'</div>'; return; }
+    var rows=res.data.slice(); var total=0, totalPred=0;
+    rows.forEach(function(r){ total+=(+r.votes||0); totalPred+=(+r.predicted||0); });
+    if(total<3){ box.innerHTML='<div class="rv-break">Only '+total+' call'+(total===1?'':'s')+' so far — the room’s verdict needs a few more to mean something'+(isLive?'.':' (this one closed early).')+'</div>'; return; }
+    var sp=null; rows.forEach(function(r){ if(r.is_sp) sp=r; }); if(!sp) sp=rows[0];
+    var hasPred=totalPred>0;
+    var optTitle=function(k){ var o=(d.opts||[]).filter(function(x){return x.k===k;})[0]; return o?o.t:''; };
+    var why = hasPred
+      ? '<b>Surprisingly popular</b> = the option that drew <b>more</b> votes than people expected it to. The answer the majority assumes will win often can’t back itself up — while the one people quietly underrate pulls ahead, and that underrated pick is right more often than the plain crowd favorite.'
+      : '<b>Surprisingly popular</b> rewards the option that beats what people expected — the answer the majority underrates. There aren’t enough predictions yet to compute it, so for now this is simply the most-chosen option; the signal sharpens as more PMs log their read on the room.';
+    var h='<div class="rvv">';
+    h+='<div class="rvv-pick"><span class="rvv-k">'+sp.opt+'</span><span class="rvv-pt"><b>'+esc(optTitle(sp.opt))+'</b><small>'+(isLive?'the room’s pick so far':'the room’s answer')+'</small></span></div>';
+    h+='<div class="rvv-why">'+why+'</div>';
+    h+='<div class="rvv-rows">';
+    rows.forEach(function(r){ var vs=Math.round((+r.vote_share||0)*100), ps=Math.round((+r.pred_share||0)*100);
+      h+='<div class="rvv-row'+(r.is_sp?' sp':'')+'"><span class="rvv-rk">'+r.opt+'</span><span class="rvv-bar"><i style="width:'+vs+'%"></i></span><span class="rvv-n">'+vs+'% chose'+(hasPred?' · '+ps+'% expected to':'')+'</span></div>'; });
+    h+='</div>';
+    h+='<div class="rvv-foot">'+(isLive?'Provisional — this firms up as more PMs make the call.':'Final read from the PMs who called it.')+'</div>';
+    h+='</div>'; box.innerHTML=h;
+  }).catch(function(){ if(box) box.innerHTML='<div class="rv-break">Couldn’t load the room’s verdict right now.</div>'; });
+}
 /* ---------- DIMENSIONS ---------- */
 var DIM = { u:'🎯 User Focus', e:'📊 Evidence', s:'🤝 Stakeholders', r:'⚖️ Risk', b:'💰 Business Impact', v:'🔭 Long-term Vision', f:'⚙️ Feasibility' };
 
@@ -1376,7 +1418,8 @@ function reveal(d, instant){
   var fx = d.dims && d.dims[youKey];
   if (fx){ var chips=''; for (var k in fx){ var v=fx[k]; chips += '<span class="rv-dim '+(v>0?'up':(v<0?'down':''))+'">'+DIM[k]+' '+(v>0?'+':'')+v+'</span>'; } if(chips) h += '<div class="rv-dims" style="margin-top:1rem">'+chips+'</div>'; }
   /* breakdown */
-  h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>';
+  if (d.tier===3){ h += '<div class="rv-h y">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'; }
+  else { h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
   /* real / outcome */
   if (d.tier===1 && d.real){
     var hit = d.best && youKey===d.best;
@@ -1399,6 +1442,7 @@ function reveal(d, instant){
   h += '<div class="rv-foot"><div class="rf-streak">🔥 <b>'+(GC.streak||1)+'</b> day streak · come back tomorrow for a brand-new call</div><div class="rv-foot-btns"><button class="btn-primary" data-share="call" style="padding:.6rem 1.2rem">Share my call ↗</button><a href="#archive" class="btn-ghost" style="padding:.6rem 1.2rem">Browse the Archive →</a></div></div>';
   h += '</div>';
   mountR.innerHTML = h;
+  if (d.tier===3) injectRoomVerdict(d, mountR.querySelector('.rvv-mount'), true);
   if (typeof loadReasons==='function') loadReasons(d, mountR);
   var doFill = function(){ [].slice.call(mountR.querySelectorAll('.dist-bar i')).forEach(function(i){ i.style.width = i.getAttribute('data-w')+'%'; }); };
   if (instant) setTimeout(doFill, 60); else setTimeout(doFill, 120);
@@ -1447,10 +1491,12 @@ function buildArchDetail(item, d){
   var rev = item.querySelector('.arch-rev');
   var realLabel = d.tier===1 ? '✅ What I actually did' : (d.tier===3 ? '👥 What the submitter shared' : '🌍 What actually happened');
   var realHtml = d.real ? ('<div class="rv-h '+(d.tier===1?'g':'b')+'" style="margin-top:1.1rem">'+realLabel+'</div><div class="rv-real '+(d.tier===1?'':'public')+'"><p>'+d.real+'</p></div>') : '';
-  rev.innerHTML = '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'+realHtml+(d.lesson?('<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'):'')
+  var bk = (d.tier===3) ? '<div class="rv-h y" style="margin-top:1.1rem">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>' : '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>';
+  rev.innerHTML = bk+realHtml+(d.lesson?('<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'):'')
     + '<span class="preview-tag crowd-tag" style="margin-top:.8rem;display:inline-block">Crowd numbers are a preview · live community soon</span>'
     + '<div class="rv-reasons"></div>';
   if (SB) { enhanceLive(item, d); loadReasons(d, item); }
+  if (d.tier===3) injectRoomVerdict(d, rev.querySelector('.rvv-mount'), false);
 }
 
 /* ---------- SUBSCRIBE (Phase A: local; Phase B: Supabase) ---------- */
