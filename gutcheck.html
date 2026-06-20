@@ -160,6 +160,7 @@
     .cp-btn:hover { border-color: var(--muted); }
     .cp-btn.sel { background: var(--accent2); border-color: var(--accent2); color: #140d07; }
     .cp-why { font-size: .72rem; color: var(--muted2); margin-top: .4rem; }
+    .rec-legend { font-size: .72rem; color: var(--muted2); line-height: 1.55; margin: .1rem 0 .1rem; }
     .fp { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.2rem; margin: .2rem 0 1.2rem; }
     .fp-h { font-family: 'Bebas Neue', sans-serif; letter-spacing: .5px; font-size: 1.15rem; color: var(--white); }
     .fp-sub { font-size: .76rem; color: var(--muted); margin: .15rem 0 .8rem; }
@@ -637,11 +638,13 @@
   <div class="rec-grid">
     <div class="rec-tile fire"><b id="rec-streak">0</b><small>🔥 day streak</small></div>
     <div class="rec-tile"><b id="rec-decisions">0</b><small>calls made</small></div>
-    <div class="rec-tile green"><b id="rec-calib">—</b><small>matched the pros</small></div>
+    <div class="rec-tile green" title="On curated dilemmas (real calls + industry) with a known best, how often your pick matched what a strong PM actually did."><b id="rec-calib">—</b><small>matched the pros</small></div>
+    <div class="rec-tile green" title="On member-submitted dilemmas, how often your pick matched the room’s answer — scored by the surprisingly-popular method, not a plain vote count."><b id="rec-room">—</b><small>matched the room</small></div>
     <div class="rec-tile blue"><b id="rec-level">Associate</b><small>judgment level</small></div>
     <div class="rec-tile"><b id="rec-aud">—</b><small>you identify as</small></div>
     <div class="rec-tile amber"><b id="rec-subs">0</b><small>dilemmas submitted</small></div>
   </div>
+  <div class="rec-legend"><b>Matched the pros</b> — curated dilemmas with a known best. <b>Matched the room</b> — community dilemmas, scored by the <b>surprisingly-popular</b> method (the answer that beats what people expected, which is right more often than the plain majority).</div>
   <div class="rec-subtier" id="rec-subtier"></div>
   <div id="journal-mount"></div>
   <p class="rec-note">Levels: <b>Associate</b> → <b>Senior</b> (40+ pts) → <b>Principal</b> (100+ pts). Earn points for every call you make, and a bonus when your call matches what a strong PM (or I) actually did. Your streak rewards coming back daily — because judgment isn't downloaded, it's built.</p>
@@ -770,7 +773,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-19-10';
+var SITE_VERSION = '2026-06-19-11';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1241,6 +1244,18 @@ function renderJournal(){
     var ents=votes.map(function(v){ var r=jrResolve(v.dilemma_id,amap); return { d:r.d, bank:r.bank, choice:v.choice, reason:v.reason, created_at:v.created_at }; });
     if(!ents.length){ mountEl.innerHTML='<div class="jr-empty">No calls yet \u2014 <a href="#today">make today\u2019s call</a> and your journal starts filling up.</div>'; return; }
     mountEl.innerHTML=fingerprintHTML(ents)+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
+    (function(){ var rEl=document.getElementById('rec-room'); if(!rEl||!SB) return;
+      var cels=ents.filter(function(e){ return e.d && e.d.tier===3 && e.d.id; });
+      if(!cels.length){ return; }
+      var ids=cels.map(function(e){ return e.d.id; });
+      SB.rpc('gc_room_sp',{p_ids:ids}).then(function(res){
+        if(!res || res.error || !res.data) return; var m={}; res.data.forEach(function(r){ m[r.dilemma_id]=r; });
+        var MIN=3, tot=0, mat=0;
+        cels.forEach(function(e){ var r=m[e.d.id]; if(r && (+r.total_votes)>=MIN){ tot++; if(e.choice && e.choice===r.sp_opt) mat++; } });
+        if(tot>0){ rEl.textContent=Math.round(mat/tot*100)+'%'; rEl.title='You matched the room on '+mat+' of '+tot+' community dilemmas (with \u2265'+MIN+' votes).'; }
+        else { rEl.textContent='\u2014'; rEl.title='Shows once your community dilemmas have enough votes to form a consensus.'; }
+      }).catch(function(){});
+    })();
   }).catch(function(){ if(token!==renderJournal._t) return; mountEl.innerHTML='<div class="jr-empty">Couldn\u2019t load your journal right now \u2014 please refresh.</div>'; });
 }
 
