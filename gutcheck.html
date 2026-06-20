@@ -326,6 +326,16 @@
     .sm-foot .btn-primary { margin-left: auto; }
     .sm-review { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .9rem 1rem; font-size: .84rem; color: #c9c4bb; line-height: 1.6; }
     .sm-review b { color: var(--white); }
+    .sm-dims { margin-top: .7rem; }
+    .sm-dims-h { font-size: .72rem; letter-spacing: 1px; text-transform: uppercase; color: var(--accent2); margin-bottom: .5rem; }
+    .sm-dims-opt { color: var(--muted2); text-transform: none; letter-spacing: 0; font-size: .68rem; margin-left: .3rem; }
+    .sm-dims-status { font-size: .8rem; color: var(--muted); font-style: italic; }
+    .sm-dims-row { display: flex; align-items: flex-start; gap: .5rem; margin-bottom: .4rem; }
+    .sm-dims-ok { display: inline-flex; align-items: center; justify-content: center; min-width: 1.4rem; height: 1.4rem; border-radius: 6px; background: var(--surface); color: var(--accent); font-weight: 700; font-size: .76rem; border: 1px solid var(--border); flex: 0 0 auto; }
+    .sm-dims-chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .sm-dchip { background: var(--surface); border: 1px solid var(--border2); color: #c9c4bb; font-family: inherit; font-size: .74rem; padding: .25rem .5rem; border-radius: 999px; cursor: pointer; transition: .12s; }
+    .sm-dchip:hover { border-color: var(--muted); }
+    .sm-dchip.off { opacity: .4; text-decoration: line-through; }
 
     /* JOURNEY WALKTHROUGH */
     .gw-overlay { position: fixed; inset: 0; background: rgba(4,4,4,.9); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; padding: 1.2rem; opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 650; }
@@ -773,7 +783,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-19-11';
+var SITE_VERSION = '2026-06-19-12';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -790,7 +800,7 @@ var currentUser = null;
 function fetchDist(dilemmaId){ if(!SB) return Promise.resolve(null); return SB.rpc('gc_distribution',{ p_dilemma: dilemmaId }).then(function(res){ if(res && res.error){ console.warn('[GutCheck] distribution read error:', res.error); return null; } return (res && res.data) ? res.data : null; }).catch(function(e){ console.warn('[GutCheck] distribution failed:', e); return null; }); }
 function recordVote(d, key, reason, pred){ if(!SB) return Promise.resolve(); var rsn=(reason||'').trim().slice(0,280); return SB.from('gc_votes').insert({ user_id: currentUser ? currentUser.id : null, device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience, reason: rsn.length?rsn:null, prediction: pred?{win:pred}:null }).then(function(res){ if(res && res.error) console.warn('[GutCheck] vote not saved:', res.error); }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); }); }
 function saveSubscriber(email){ if(!SB) return Promise.resolve(); return SB.from('gc_subscribers').insert({ email: email, audience: GC.audience }).then(function(res){ if(res && res.error) console.warn('[GutCheck] subscribe error:', res.error); }).catch(function(e){ console.warn('[GutCheck] subscribe failed:', e); }); }
-function saveSubmission(p){ if(!SB) return Promise.resolve(); return SB.from('gc_submissions').insert(p).then(function(res){ if(res && res.error) console.warn('[GutCheck] submission error:', res.error); }).catch(function(e){ console.warn('[GutCheck] submission failed:', e); }); }
+function saveSubmission(p){ if(!SB) return Promise.resolve(); return SB.from('gc_submissions').insert(p).then(function(res){ if(res && res.error){ if(p && p.dims!==undefined){ var p2={}; for(var k in p){ if(k!=='dims') p2[k]=p[k]; } return SB.from('gc_submissions').insert(p2).then(function(r2){ if(r2 && r2.error) console.warn('[GutCheck] submission error:', r2.error); }); } console.warn('[GutCheck] submission error:', res.error); } }).catch(function(e){ console.warn('[GutCheck] submission failed:', e); }); }
 
 /* ---- SCHEDULER READ: today's published dilemma (community gets priority; cron also rotates the bank) ---- */
 function localDateStr(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
@@ -1616,7 +1626,7 @@ function loadMyQueue(){
   var keys=['A','B','C','D'], TOTAL=4;
   var S, step;
 
-  function freshState(){ return { category:null, scenario:'', scenarioTouched:false, question:'', options:[], outcome:'', credit:'', optsFromCat:false }; }
+  function freshState(){ return { category:null, scenario:'', scenarioTouched:false, question:'', options:[], outcome:'', credit:'', optsFromCat:false, dimsDraft:null, dimsOff:{} }; }
   function catBy(k){ for(var i=0;i<CATS.length;i++){ if(CATS[i].k===k) return CATS[i]; } return null; }
   function val(v){ return (v==null?'':String(v)).trim(); }
   function esc(s){ return (typeof escHtml==='function'?escHtml:function(x){return String(x==null?'':x);})(s); }
@@ -1696,6 +1706,40 @@ function loadMyQueue(){
     var add=document.getElementById('sm-addopt'); if(add) add.style.display = S.options.length>=4 ? 'none':'inline-block';
   }
 
+  function renderDimsDraft(){
+    var box=document.getElementById('sm-dims'); if(!box) return;
+    if(!SB || !SB.functions || !SB.functions.invoke){ box.style.display='none'; return; }
+    S.dimsDraft=null; S.dimsOff={}; box.style.display='';
+    var opts=S.options.filter(function(o){ return val(o.t); }).map(function(o,i){ return { k:keys[i], t:val(o.t), d:val(o.d) }; });
+    if(opts.length<2){ box.style.display='none'; return; }
+    box.innerHTML='<div class="sm-dims-h">\uD83E\uDDEC Judgment tags <span class="sm-dims-opt">auto-suggested</span></div><div class="sm-dims-status">Reading your dilemma\u2026</div>';
+    var reqId=(renderDimsDraft._n=(renderDimsDraft._n||0)+1);
+    SB.functions.invoke('super-action', { body:{ scenario:val(S.scenario), question:val(S.question), options:opts } }).then(function(res){
+      if(reqId!==renderDimsDraft._n) return;
+      var d = res && res.data && res.data.dims;
+      if((res && res.error) || !d || !Object.keys(d).length){ dimsFail(); return; }
+      S.dimsDraft=d; S.dimsOff={}; drawDims();
+    }).catch(function(){ if(reqId!==renderDimsDraft._n) return; dimsFail(); });
+  }
+  function dimsFail(){ var box=document.getElementById('sm-dims'); if(box) box.innerHTML='<div class="sm-dims-h">\uD83E\uDDEC Judgment tags</div><div class="sm-dims-status">Couldn\u2019t auto-tag this one \u2014 no problem, it\u2019ll publish untagged.</div>'; }
+  function drawDims(){
+    var box=document.getElementById('sm-dims'); if(!box||!S.dimsDraft) return; var any=false;
+    var h='<div class="sm-dims-h">\uD83E\uDDEC Judgment tags <span class="sm-dims-opt">tap any that don\u2019t fit to drop them</span></div>';
+    Object.keys(S.dimsDraft).forEach(function(ok){ var dm=S.dimsDraft[ok]; if(!dm) return; var chips='';
+      Object.keys(dm).forEach(function(dk){ if(!DIM[dk]) return; any=true; var off=S.dimsOff[ok+':'+dk];
+        chips+='<button type="button" class="sm-dchip'+(off?' off':'')+'" data-o="'+ok+'" data-d="'+dk+'">'+DIM[dk]+(dm[dk]<0?' \u2193':'')+'</button>'; });
+      if(chips) h+='<div class="sm-dims-row"><span class="sm-dims-ok">'+ok+'</span><span class="sm-dims-chips">'+chips+'</span></div>'; });
+    if(!any){ box.style.display='none'; return; }
+    box.innerHTML=h;
+    [].slice.call(box.querySelectorAll('.sm-dchip')).forEach(function(b){ b.onclick=function(){ var key=b.getAttribute('data-o')+':'+b.getAttribute('data-d'); if(S.dimsOff[key]){ delete S.dimsOff[key]; b.classList.remove('off'); } else { S.dimsOff[key]=1; b.classList.add('off'); } }; });
+  }
+  function buildConfirmedDims(){
+    if(!S.dimsDraft) return null; var out={};
+    Object.keys(S.dimsDraft).forEach(function(ok){ var dm=S.dimsDraft[ok]; if(!dm) return; var m={};
+      Object.keys(dm).forEach(function(dk){ if(!DIM[dk]) return; if(S.dimsOff && S.dimsOff[ok+':'+dk]) return; if(dm[dk]) m[dk]=dm[dk]; });
+      if(Object.keys(m).length) out[ok]=m; });
+    return Object.keys(out).length ? out : null;
+  }
   function renderOutcome(){
     var creditRow = (SB && currentUser)
       ? '<div class="sm-hint" style="margin-bottom:.8rem">Submitting from your account — we’ll credit you unless you ask otherwise.</div>'
@@ -1703,12 +1747,13 @@ function loadMyQueue(){
     stepsEl.innerHTML='<div class="sm-h">Outcome & submit</div><div class="sm-sub">Optional — what actually happened, or your own take. Then send it for review.</div>'
       +'<div class="sm-field"><label>What happened / your take (optional)</label><textarea id="sm-outcome" placeholder="How did it play out? What did you learn?"></textarea></div>'
       + creditRow
-      +'<div class="sm-review" id="sm-review"></div>';
+      +'<div class="sm-review" id="sm-review"></div><div class="sm-dims" id="sm-dims"></div>';
     var oc=document.getElementById('sm-outcome'); oc.value=S.outcome; oc.oninput=function(){ S.outcome=oc.value; };
     var cr=document.getElementById('sm-credit'); if(cr){ cr.value=S.credit; cr.oninput=function(){ S.credit=cr.value; }; }
     var c=catBy(S.category);
     var optList=S.options.filter(function(o){ return val(o.t); }).map(function(o,i){ return keys[i]+'. '+esc(val(o.t)); }).join('<br>');
     document.getElementById('sm-review').innerHTML='<b>'+(c?esc(c.label):'Dilemma')+'</b><br>'+esc(val(S.question)||'(no question yet)')+'<br><br>'+(optList||'(no options yet)');
+    renderDimsDraft();
   }
 
   function validStep(){
@@ -1730,7 +1775,7 @@ function loadMyQueue(){
   function submit(){
     if(SB && !currentUser){ close(); openSignIn('Sign in to submit a dilemma — it lets us credit you and keeps out spam.'); return; }
     var opts=S.options.filter(function(o){ return val(o.t); }).map(function(o){ var t=val(o.t), d=val(o.d); return d ? (t+' — '+d) : t; }).join('\n');
-    saveSubmission({ user_id: currentUser ? currentUser.id : null, scenario:val(S.scenario), question:val(S.question), options:opts, outcome:val(S.outcome), email:(currentUser&&currentUser.email)||val(S.credit), audience:GC.audience })
+    saveSubmission({ user_id: currentUser ? currentUser.id : null, scenario:val(S.scenario), question:val(S.question), options:opts, outcome:val(S.outcome), email:(currentUser&&currentUser.email)||val(S.credit), audience:GC.audience, dims:buildConfirmedDims() })
       .then(function(){ subStats.total=(subStats.total||0)+1; subStats.week=(subStats.week||0)+1; applySubStatus(); loadSubStats(); loadMyQueue(); });
     if(okEl) okEl.style.display='block'; nextB.disabled=true; nextB.textContent='Sent ✓';
     setTimeout(function(){ close(); nextB.disabled=false; }, 1600);
