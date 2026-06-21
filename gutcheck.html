@@ -590,7 +590,7 @@
 .feed-dot{opacity:.45;margin:0 .1rem}
 .feed-empty{color:var(--muted);font-size:.9rem;padding:1rem 0}
 .myd-cat{margin:-.1rem 0 .1rem}
-.fbar{display:flex;align-items:center;gap:.6rem;margin:1rem 0 1.3rem;flex-wrap:nowrap;min-width:0}
+.fbar{display:flex;align-items:center;gap:.6rem;margin:1rem 0 1.3rem;flex-wrap:wrap;min-width:0}
 .fbar-dd{position:relative;flex:0 0 auto}
 .fbar-ddbtn{display:inline-flex;align-items:center;gap:.4rem;background:var(--card);border:1px solid var(--border2);color:var(--white);font-size:.82rem;font-weight:600;padding:.5rem .8rem;border-radius:11px;cursor:pointer;transition:border-color .15s;white-space:nowrap}
 .fbar-ddbtn:hover{border-color:var(--accent)}
@@ -602,12 +602,10 @@
 .fbar-mi:hover{background:var(--card2);color:var(--white)}
 .fbar-mi.on{color:var(--white);font-weight:700}
 .fbar-ck{color:var(--accent);font-weight:800}
-.fbar-pills{display:flex;align-items:center;gap:.45rem;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:.2rem .1rem;flex:1 1 auto;min-width:0;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 18px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 18px),transparent 100%)}
-.fbar-pills::-webkit-scrollbar{display:none}
+.fbar-pills{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;padding:.1rem 0;flex:1 1 240px;min-width:0}
 .fbar-pill{flex:0 0 auto;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:.8rem;font-weight:600;padding:.4rem .8rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:all .15s}
 .fbar-pill:hover{border-color:var(--accent);color:var(--white)}
-.fbar-pill.on{background:var(--accent);border-color:var(--accent);color:#1a1106}
-@media(max-width:560px){.fbar{flex-wrap:wrap}.fbar-pills{order:3;width:100%;flex-basis:100%}}
+.fbar-pill.on{background:rgba(232,84,10,.16);border-color:var(--accent);color:var(--white);font-weight:700}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -867,7 +865,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-3';
+var SITE_VERSION = '2026-06-21-6';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -992,7 +990,7 @@ function renderFeedControls(){
   mountFilterBar(box, {
     menus:[{ icon:'\u21C5', value:feedSort, options:[
       {v:'recent',label:'Most recent'},{v:'popular',label:'Most popular'},
-      {v:'expiring',label:'About to expire'},{v:'category',label:'By category'}
+      {v:'expiring',label:'About to expire'}
     ], onPick:function(v){ feedSort=v; loadFeed(); } }],
     pills:{ value:feedCategory, options:categoryPillOptions(), onPick:function(v){ feedCategory=v; loadFeed(); } }
   });
@@ -1665,7 +1663,7 @@ function renderArchControls(){
   mountFilterBar(box, {
     menus:[
       { icon:'\u21C5', value:archSort, options:[
-        {v:'recent',label:'Most recent'},{v:'votes',label:'Most voted'},{v:'category',label:'By category'}
+        {v:'recent',label:'Most recent'},{v:'votes',label:'Most voted'}
       ], onPick:function(v){ archSort=v; renderArchive(); } },
       { icon:'\u25A6', value:archFilter, options:showOpts, onPick:function(v){ archFilter=v; renderArchive(); } }
     ],
