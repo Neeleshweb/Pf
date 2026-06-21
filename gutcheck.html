@@ -865,7 +865,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-7';
+var SITE_VERSION = '2026-06-21-10';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1401,13 +1401,21 @@ function jrResolve(id, amap){
   if(amap && amap[id]) return { d:amap[id], bank:false };
   return { d:null, bank:false };
 }
-function fingerprintHTML(entries){
-  entries=entries||[]; var dims=GC.dims||{}; var order=Object.keys(DIM);
+function fingerprintHTML(entries, roomSP){
+  entries=entries||[]; roomSP=roomSP||{}; var order=Object.keys(DIM); var MIN=3;
+  /* dims derived from the actual resolved calls when available (DB-sourced), else the cumulative profile value */
+  var dims;
+  if(entries.length){ dims={}; order.forEach(function(k){ dims[k]=0; });
+    entries.forEach(function(e){ var d=e.d; if(d && d.dims && e.choice!=null){ var fx=d.dims[e.choice]; if(fx){ for(var k in fx){ if(dims[k]!=null) dims[k]+=fx[k]; } } } });
+  } else { dims=GC.dims||{}; }
   var maxAbs=1; order.forEach(function(k){ maxAbs=Math.max(maxAbs,Math.abs(dims[k]||0)); });
   var pd={}; order.forEach(function(k){ pd[k]=[0,0]; }); var cf={1:[0,0],2:[0,0],3:[0,0]};
-  entries.forEach(function(e){ var d=e.d; if(!d||!d.best) return; var hit=(e.choice===d.best);
-    if(d.dims&&d.dims[d.best]){ var fx=d.dims[d.best],pk=null,pv=0; for(var k in fx){ if(Math.abs(fx[k])>pv){pv=Math.abs(fx[k]);pk=k;} } if(pk&&pd[pk]){ pd[pk][1]++; if(hit) pd[pk][0]++; } }
-    var c=GC.conf&&GC.conf[d.id]; if(c&&cf[c]){ cf[c][1]++; if(hit) cf[c][0]++; } });
+  entries.forEach(function(e){ var d=e.d; if(!d) return;
+    var hit=null;
+    if(d.best){ hit=(e.choice===d.best);
+      if(d.dims&&d.dims[d.best]){ var fx=d.dims[d.best],pk=null,pv=0; for(var k in fx){ if(Math.abs(fx[k])>pv){pv=Math.abs(fx[k]);pk=k;} } if(pk&&pd[pk]){ pd[pk][1]++; if(hit) pd[pk][0]++; } }
+    } else if(d.tier===3){ var rs=roomSP[d.id]; if(rs && rs.total>=MIN && rs.sp){ hit=(e.choice===rs.sp); } }
+    if(hit!==null){ var c=GC.conf&&GC.conf[d.id]; if(c&&cf[c]){ cf[c][1]++; if(hit) cf[c][0]++; } } });
   var rows=order.filter(function(k){ return (dims[k]||0)!==0 || pd[k][1]>0; }).map(function(k){ var v=dims[k]||0, pct=Math.round(Math.abs(v)/maxAbs*100); var cal=pd[k][1]?('matched '+pd[k][0]+'/'+pd[k][1]):'';
     return '<div class="fp-row"><span class="fp-dim">'+DIM[k]+'</span><div class="fp-track"><i class="'+(v>=0?'pos':'neg')+'" style="width:'+pct+'%"></i></div><span class="fp-val">'+(v>0?'+':'')+v+'</span><span class="fp-cal">'+cal+'</span></div>'; }).join('');
   function rate(b){ return b[1]?Math.round(b[0]/b[1]*100):null; }
@@ -1415,8 +1423,8 @@ function fingerprintHTML(entries){
   var confCells=[3,2,1].map(function(n){ var r=rate(cf[n]); return '<div class="fp-cc"><b>'+(r==null?'\u2014':r+'%')+'</b><small>'+labels[n]+(cf[n][1]?' ('+cf[n][0]+'/'+cf[n][1]+')':'')+'</small></div>'; }).join('');
   var r3=rate(cf[3]), r1=rate(cf[1]), note;
   if(r3!=null&&r1!=null){ note=(r3>=r1+10)?'Well-calibrated \u2014 your confident calls land more often than your hunches.':(r1>r3?'Watch for overconfidence \u2014 your hunches match as often as your confident calls.':'Your confidence and accuracy track closely.'); }
-  else { note='Make a few more calls (with a confidence) to reveal whether you\u2019re well-calibrated or overconfident.'; }
-  var h='<div class="fp"><div class="fp-h">\uD83E\uDDEC Your judgment fingerprint</div><div class="fp-sub">How you weigh each dimension across your calls \u2014 and where you match the pros.</div>';
+  else { note='Make a few more calls (with a confidence) on dilemmas that have a verdict to see whether you\u2019re well-calibrated or overconfident.'; }
+  var h='<div class="fp"><div class="fp-h">\uD83E\uDDEC Your judgment fingerprint</div><div class="fp-sub">How you weigh each dimension across your calls \u2014 and where you match the pros or the room.</div>';
   h+=(rows||'<div class="fp-empty" style="font-size:.82rem;color:var(--muted);font-style:italic;margin:.2rem 0 .4rem;">Answer dilemmas with dimension tags to map how you weigh decisions.</div>');
   h+='<div class="fp-confwrap"><div class="fp-cch">Calibration by confidence</div><div class="fp-ccrow">'+confCells+'</div><div class="fp-note">'+note+'</div></div></div>';
   return h;
@@ -1481,25 +1489,28 @@ function renderJournal(){
   }
   mountEl.innerHTML='<div class="jr-empty">Loading your journal\u2026</div>';
   var token=(renderJournal._t=(renderJournal._t||0)+1);
-  Promise.all([ fetchMyJournalVotes(), fetchArchive() ]).then(function(res){
+  fetchMyJournalVotes().then(function(votes){
     if(token!==renderJournal._t) return;
-    var votes=res[0]||[], arows=res[1]||[];
-    var amap={}; arows.forEach(function(r){ if(r && r.dilemma_id){ var dd=scheduleRowToDilemma(r); if(dd) amap[r.dilemma_id]=dd; } });
-    var ents=votes.map(function(v){ var r=jrResolve(v.dilemma_id,amap); return { d:r.d, bank:r.bank, choice:v.choice, reason:v.reason, created_at:v.created_at }; });
-    if(!ents.length){ mountEl.innerHTML='<div class="jr-empty">No calls yet \u2014 <a href="#today">make today\u2019s call</a> and your journal starts filling up.</div>'; return; }
-    mountEl.innerHTML=fingerprintHTML(ents)+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
-    (function(){ var rEl=document.getElementById('rec-room'); if(!rEl||!SB) return;
-      var cels=ents.filter(function(e){ return e.d && e.d.tier===3 && e.d.id; });
-      if(!cels.length){ return; }
-      var ids=cels.map(function(e){ return e.d.id; });
-      SB.rpc('gc_room_sp',{p_ids:ids}).then(function(res){
-        if(!res || res.error || !res.data) return; var m={}; res.data.forEach(function(r){ m[r.dilemma_id]=r; });
-        var MIN=3, tot=0, mat=0;
-        cels.forEach(function(e){ var r=m[e.d.id]; if(r && (+r.total_votes)>=MIN){ tot++; if(e.choice && e.choice===r.sp_opt) mat++; } });
-        if(tot>0){ rEl.textContent=Math.round(mat/tot*100)+'%'; rEl.title='You matched the room on '+mat+' of '+tot+' community dilemmas (with \u2265'+MIN+' votes).'; }
-        else { rEl.textContent='\u2014'; rEl.title='Shows once your community dilemmas have enough votes to form a consensus.'; }
-      }).catch(function(){});
-    })();
+    votes=votes||[];
+    if(!votes.length){ mountEl.innerHTML='<div class="jr-empty">No calls yet \u2014 <a href="#today">make today\u2019s call</a> and your journal starts filling up.</div>'; return; }
+    var ids=votes.map(function(v){ return v.dilemma_id; }).filter(Boolean);
+    return SB.rpc('gc_dilemmas_by_ids',{p_ids:ids}).then(function(dres){
+      if(token!==renderJournal._t) return;
+      var amap={}; if(dres && dres.data){ dres.data.forEach(function(r){ if(r && r.dilemma_id){ var dd=scheduleRowToDilemma(r); if(dd) amap[r.dilemma_id]=dd; } }); }
+      var ents=votes.map(function(v){ var r=jrResolve(v.dilemma_id,amap); return { d:r.d, bank:r.bank, choice:v.choice, reason:v.reason, created_at:v.created_at }; });
+      var cids=ents.filter(function(e){ return e.d && e.d.tier===3 && e.d.id; }).map(function(e){ return e.d.id; });
+      var spP = cids.length ? SB.rpc('gc_room_sp',{p_ids:cids}) : Promise.resolve({data:[]});
+      return spP.then(function(spres){
+        if(token!==renderJournal._t) return;
+        var roomSP={}; if(spres && spres.data){ spres.data.forEach(function(r){ roomSP[r.dilemma_id]={sp:r.sp_opt,total:(+r.total_votes||0)}; }); }
+        mountEl.innerHTML=fingerprintHTML(ents, roomSP)+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
+        var rEl=document.getElementById('rec-room');
+        if(rEl){ var MIN=3,tot=0,mat=0; ents.forEach(function(e){ if(e.d && e.d.tier===3){ var rr=roomSP[e.d.id]; if(rr && rr.total>=MIN){ tot++; if(e.choice && e.choice===rr.sp) mat++; } } });
+          if(tot>0){ rEl.textContent=Math.round(mat/tot*100)+'%'; rEl.title='You matched the room on '+mat+' of '+tot+' community dilemmas (with \u2265'+MIN+' votes).'; }
+          else { rEl.textContent='\u2014'; rEl.title='Shows once your community dilemmas have enough votes to form a consensus.'; }
+        }
+      });
+    });
   }).catch(function(){ if(token!==renderJournal._t) return; mountEl.innerHTML='<div class="jr-empty">Couldn\u2019t load your journal right now \u2014 please refresh.</div>'; });
 }
 
