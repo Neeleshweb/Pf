@@ -567,6 +567,23 @@
 .feed-card-foot{font-size:.76rem;color:var(--muted);margin-top:auto}
 .feed-voted{color:var(--green);font-weight:600}
 .sm-err{background:rgba(229,90,43,.12);border:1px solid var(--accent);color:var(--accent2);font-size:.84rem;line-height:1.5;padding:.7rem .85rem;border-radius:8px;margin-bottom:.9rem}
+.myd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.9rem;margin-top:1rem}
+.myd-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.6rem}
+.myd-top{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap}
+.myd-status{font-size:.74rem;font-weight:700;letter-spacing:.2px}
+.myd-status.open{color:var(--green)}
+.myd-status.closed{color:var(--muted)}
+.myd-votes{font-size:.74rem;color:var(--muted);font-weight:600}
+.myd-scn{font-size:.9rem;line-height:1.5;color:var(--white)}
+.myd-verdict{margin-top:.2rem}
+.myd-open{align-self:flex-start;background:none;border:none;color:var(--accent2);font-size:.82rem;font-weight:600;cursor:pointer;padding:.2rem 0;margin-top:auto}
+.myd-open:hover{text-decoration:underline}
+.arch-controls{display:flex;flex-direction:column;gap:.5rem;margin:0 0 1.1rem}
+.arch-ctl-row{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap}
+.arch-ctl-lbl{font-size:.74rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-right:.2rem;min-width:2.6rem}
+.arch-chip{background:var(--card2);border:1px solid var(--border2);color:var(--muted);font-size:.8rem;font-weight:600;padding:.35rem .8rem;border-radius:20px;cursor:pointer;transition:all .15s}
+.arch-chip:hover{border-color:var(--accent)}
+.arch-chip.on{background:var(--accent);border-color:var(--accent);color:#1a1106}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -672,6 +689,7 @@
   <div class="sec-eyebrow b">The Archive</div>
   <div class="sec-title">Past <span class="b">Calls</span></div>
   <p class="sec-sub">Missed a day? Read any past dilemma and see how the crowd called it. <strong>Past calls are locked</strong> — you can study them, but the decision window has closed. That's the point: judgment is a daily practice.</p>
+  <div class="arch-controls" id="arch-controls"></div>
   <div class="arch-list" id="arch-list"></div>
 </section>
 
@@ -824,7 +842,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-1';
+var SITE_VERSION = '2026-06-21-2';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -873,7 +891,7 @@ function fetchTodaysScheduled(){
 }
 function fetchArchive(){
   if(!SB) return Promise.resolve(null);
-  return SB.rpc('gc_archive_v2', { p_limit: 60, p_offset: 0, p_sort: 'recent', p_filter: 'all', p_uid: (currentUser?currentUser.id:null) }).then(function(res){
+  return SB.rpc('gc_archive_v2', { p_limit: 60, p_offset: 0, p_sort: archSort, p_filter: archFilter, p_uid: (currentUser?currentUser.id:null) }).then(function(res){
     if(res && res.error){ console.warn('[GutCheck] archive read error:', res.error); return null; }
     return (res && res.data) ? res.data : null;
   }).catch(function(e){ console.warn('[GutCheck] archive failed:', e); return null; });
@@ -1221,13 +1239,21 @@ var DEVICE_ID = GC.device;
 gcSave(GC);
 
 /* streak (applied after profile loads so it's correct across devices) */
+function bumpVoteStreak(){
+  function ds(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  var today = ds(new Date()), y = new Date(); y.setDate(y.getDate()-1); var yest = ds(y);
+  if (GC.lastVoteDay === today) { /* already counted a vote today */ }
+  else if (GC.lastVoteDay === yest) { GC.streak = (GC.streak||0)+1; GC.lastVoteDay = today; }
+  else { GC.streak = 1; GC.lastVoteDay = today; }
+  GC.lastVisit = today;
+  gcSave(GC);
+}
 function applyStreak(){
   function ds(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
-  var today = ds(new Date()), y = new Date(); y.setDate(y.getDate()-1);
-  var yest = ds(y);
-  if (GC.lastVisit === today) {}
-  else if (GC.lastVisit === yest) { GC.streak = (GC.streak||0)+1; GC.lastVisit = today; }
-  else { GC.streak = 1; GC.lastVisit = today; }
+  var today = ds(new Date()), y = new Date(); y.setDate(y.getDate()-1); var yest = ds(y);
+  /* streak now counts consecutive days you VOTED. If your last vote wasn't today or yesterday, it has lapsed. */
+  if (GC.lastVoteDay){ if (GC.lastVoteDay !== today && GC.lastVoteDay !== yest){ GC.streak = 0; } }
+  else if (GC.streak == null) { GC.streak = 0; }
   gcSave(GC); if (SB && currentUser) saveProfile();
 }
 
@@ -1464,7 +1490,7 @@ function doCommit(d, key, conf, pred){
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ if (b.querySelector('.opt-k') && b.querySelector('.opt-k').textContent===key){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } b.style.opacity=.96; });
   reveal(d, false);
   if (SB) { recordVote(d, key, reasonText, pred).then(function(){ enhanceLive(document.getElementById('today-reveal'), d); loadReasons(d, document.getElementById('today-reveal')); }); }
-  refreshRecord(); saveProfile();
+  bumpVoteStreak(); refreshRecord(); saveProfile();
 }
 
 function reveal(d, instant){
@@ -1539,8 +1565,26 @@ function addArchItem(list, dateLabel, d){
   item.querySelector('.arch-top').parentNode.onclick = function(e){ item.classList.toggle('open'); if (item.classList.contains('open') && !item._built){ buildArchDetail(item, d); item._built = true; } };
   list.appendChild(item);
 }
+var archSort = 'recent', archFilter = 'all';
+function renderArchControls(){
+  var box = document.getElementById('arch-controls'); if(!box) return;
+  if(!SB){ box.innerHTML = ''; return; }
+  if(archFilter === 'mine' && !currentUser) archFilter = 'all';
+  var sorts = [['recent','Most recent'],['votes','Most voted']];
+  var filters = [['all','All'],['community','Community'],['bank','Featured']];
+  if(currentUser) filters.push(['mine','Mine']);
+  var h = '<div class="arch-ctl-row"><span class="arch-ctl-lbl">Sort</span>';
+  sorts.forEach(function(s){ h += '<button type="button" class="arch-chip'+(archSort===s[0]?' on':'')+'" data-sort="'+s[0]+'">'+s[1]+'</button>'; });
+  h += '</div><div class="arch-ctl-row"><span class="arch-ctl-lbl">Show</span>';
+  filters.forEach(function(f){ h += '<button type="button" class="arch-chip'+(archFilter===f[0]?' on':'')+'" data-filter="'+f[0]+'">'+f[1]+'</button>'; });
+  h += '</div>';
+  box.innerHTML = h;
+  [].slice.call(box.querySelectorAll('[data-sort]')).forEach(function(b){ b.onclick = function(){ archSort = b.getAttribute('data-sort'); renderArchive(); }; });
+  [].slice.call(box.querySelectorAll('[data-filter]')).forEach(function(b){ b.onclick = function(){ archFilter = b.getAttribute('data-filter'); renderArchive(); }; });
+}
 function renderArchive(){
   var list = document.getElementById('arch-list'); if(!list) return;
+  renderArchControls();
   if(!SB){ list.innerHTML = '<div class="arch-empty">Past calls will appear here once the live archive is active.</div>'; return; }
   list.innerHTML = '<div class="arch-empty">Loading past calls…</div>';
   fetchArchive().then(function(rows){
@@ -1666,8 +1710,8 @@ function myqPanel(tab, c){
   return '';
 }
 function myqTeaserHTML(){
-  return '<div class="myq-h">\uD83D\uDCE4 Your submissions</div>'
-    + '<div class="jr-teaser"><div class="jr-teaser-h">Track your dilemmas</div><p>Sign in to see where each dilemma you\u2019ve submitted sits in the queue, when it\u2019s estimated to go live, and which have already gone live for the community.</p><button class="btn-primary" id="myq-signin">Sign in to track submissions</button></div>';
+  return '<div class="myq-h">\uD83D\uDCE4 Your dilemmas</div>'
+    + '<div class="jr-teaser"><div class="jr-teaser-h">Track your dilemmas</div><p>Sign in to see every dilemma you\u2019ve posted \u2014 live vote tallies while it\u2019s open, and the room\u2019s final verdict once it closes.</p><button class="btn-primary" id="myq-signin">Sign in to track your dilemmas</button></div>';
 }
 function renderMyQueue(rows){
   var wrap=document.getElementById('myq-wrap'); if(!wrap) return;
@@ -1704,6 +1748,55 @@ function renderMyQueue(rows){
   [].slice.call(wrap.querySelectorAll('.myq-tab')).forEach(function(b){ b.onclick=function(){ myqTab=b.getAttribute('data-tab'); renderMyQueue(myqRows); }; });
   [].slice.call(wrap.querySelectorAll('[data-arch]')).forEach(function(b){ b.onclick=function(){ var a=document.getElementById('archive'); if(a&&a.scrollIntoView) a.scrollIntoView({behavior:'smooth',block:'start'}); }; });
 }
+var mydRowsById = {};
+function mydIsClosed(r){ return r && r.closes_at ? (new Date(r.closes_at) <= new Date()) : false; }
+function renderMyDilemmas(rows){
+  var wrap = document.getElementById('myq-wrap'); if(!wrap) return;
+  rows = rows || [];
+  if(!rows.length){
+    wrap.innerHTML = '<div class="myq-h">\uD83D\uDCE4 Your dilemmas</div>'
+      + '<div class="myq-empty"><p>You haven\u2019t posted a dilemma yet. Turn a real product fork you\u2019ve faced into a Gut Check \u2014 it goes live the moment you post it, and PMs can start voting right away.</p><button class="btn-primary" id="myq-submit" type="button">Post your first dilemma</button></div>';
+    var sb = document.getElementById('myq-submit'); if(sb) sb.onclick = function(){ var o = document.getElementById('open-submit'); if(o) o.click(); };
+    wrap.style.display = ''; return;
+  }
+  rows = rows.slice().sort(function(a,b){
+    var ca = mydIsClosed(a), cb = mydIsClosed(b);
+    if(ca !== cb) return ca ? 1 : -1;
+    var ta = a.closes_at ? new Date(a.closes_at).getTime() : 0, tb = b.closes_at ? new Date(b.closes_at).getTime() : 0;
+    return ca ? (tb - ta) : (ta - tb);
+  });
+  var openN = rows.filter(function(r){ return !mydIsClosed(r); }).length;
+  var h = '<div class="myq-h">\uD83D\uDCE4 Your dilemmas</div>'
+    + '<div class="myq-intro">Posted dilemmas go live instantly and collect votes for 48 hours, then lock with a final verdict.'
+    + (openN ? ' <b>'+openN+'</b> of yours '+(openN===1?'is':'are')+' still open.' : ' All of yours have closed.') + '</div>'
+    + '<div class="myd-grid">';
+  rows.forEach(function(r){
+    var closed = mydIsClosed(r);
+    var scn = (r.scenario||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(); if(scn.length>170) scn = scn.slice(0,169)+'\u2026';
+    var status = closed ? '\uD83D\uDD12 Closed \u00B7 final verdict' : '\uD83D\uDFE2 Open \u00B7 '+feedTimeLeft(r.closes_at);
+    h += '<div class="myd-card">'
+      + '<div class="myd-top"><span class="myd-status '+(closed?'closed':'open')+'">'+status+'</span><span class="myd-votes" id="mydv-'+escHtml(r.dilemma_id)+'">\u2026</span></div>'
+      + '<div class="myd-scn">'+escHtml(scn)+'</div>'
+      + (closed ? '<div class="myd-verdict rvv-mount" id="mydver-'+escHtml(r.dilemma_id)+'"><div class="rv-break">Reading the room\u2026</div></div>' : '')
+      + '<button type="button" class="myd-open" data-open="'+escHtml(r.dilemma_id)+'">'+(closed?'Study it in the archive \u2193':'Open it \u2192')+'</button>'
+      + '</div>';
+  });
+  h += '</div>';
+  wrap.innerHTML = h; wrap.style.display = '';
+  mydRowsById = {}; rows.forEach(function(r){ mydRowsById[r.dilemma_id] = r; });
+  rows.forEach(function(r){
+    if(!SB) return;
+    var d = scheduleRowToDilemma(r); if(!d) return;
+    fetchDist(d.id).then(function(dd){ var n=0; if(dd && dd.length) dd.forEach(function(x){ n += Number(x.n)||0; }); var el = document.getElementById('mydv-'+r.dilemma_id); if(el) el.textContent = n+' vote'+(n===1?'':'s'); });
+    if(mydIsClosed(r)){ var box = document.getElementById('mydver-'+r.dilemma_id); if(box) injectRoomVerdict(d, box, false); }
+  });
+  [].slice.call(wrap.querySelectorAll('.myd-open')).forEach(function(b){
+    b.onclick = function(){ var r = mydRowsById[b.getAttribute('data-open')]; if(!r) return;
+      if(mydIsClosed(r)){ var a = document.getElementById('archive'); if(a && a.scrollIntoView) a.scrollIntoView({behavior:'smooth',block:'start'}); }
+      else { var d = scheduleRowToDilemma(r); if(d){ todaysDilemma = d; renderToday(); var cm = document.getElementById('call-mount'); if(cm && cm.scrollIntoView) cm.scrollIntoView({behavior:'smooth',block:'start'}); loadFeed(); } }
+    };
+  });
+}
 function loadMyQueue(){
   var sec=document.getElementById('my-submissions'), wrap=document.getElementById('myq-wrap');
   if(!wrap) return Promise.resolve();
@@ -1715,10 +1808,10 @@ function loadMyQueue(){
     return Promise.resolve();
   }
   showSec(true);
-  return SB.rpc('gc_my_queue').then(function(res){
-    if(res && res.error){ console.warn('[GutCheck] my-queue error:', res.error); showSec(false); return; }
-    renderMyQueue(res && res.data ? res.data : []);
-  }).catch(function(e){ console.warn('[GutCheck] my-queue failed:', e); showSec(false); });
+  return SB.rpc('gc_my_dilemmas', { p_uid: currentUser.id }).then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] my-dilemmas error:', res.error); showSec(false); return; }
+    renderMyDilemmas(res && res.data ? res.data : []);
+  }).catch(function(e){ console.warn('[GutCheck] my-dilemmas failed:', e); showSec(false); });
 }
 
 /* ---------- SUBMIT A DILEMMA (stepped wizard) ---------- */
@@ -2038,14 +2131,14 @@ document.getElementById('rec-reset').onclick = function(){
 };
 
 /* ---------- AUTH + PROFILE SYNC ---------- */
-function freshGC(){ return { calls:{}, dims:{u:0,e:0,s:0,r:0}, decisions:0, audience:null, subscribed:false, email:(currentUser&&currentUser.email)||null, streak:0, lastVisit:null, device:GC.device, firstName:'', lastName:'', avatar:null }; }
+function freshGC(){ return { calls:{}, dims:{u:0,e:0,s:0,r:0}, decisions:0, audience:null, subscribed:false, email:(currentUser&&currentUser.email)||null, streak:0, lastVisit:null, lastVoteDay:null, device:GC.device, firstName:'', lastName:'', avatar:null }; }
 function loadProfile(){
   if(!SB || !currentUser) return Promise.resolve();
   return SB.from('gc_profiles').select('data').eq('user_id', currentUser.id).maybeSingle().then(function(res){
     if(res && !res.error && res.data && res.data.data){
       var d = res.data.data;
       GC = { calls:d.calls||{}, conf:d.conf||{}, dims:d.dims||{u:0,e:0,s:0,r:0}, decisions:d.decisions||0, audience:d.audience||null,
-             subscribed:d.subscribed||false, email:d.email||(currentUser.email), streak:d.streak||0, lastVisit:d.lastVisit||null, device:GC.device,
+             subscribed:d.subscribed||false, email:d.email||(currentUser.email), streak:d.streak||0, lastVisit:d.lastVisit||null, lastVoteDay:d.lastVoteDay||null, device:GC.device,
              firstName:d.firstName||'', lastName:d.lastName||'', avatar:(d.avatar!==undefined?d.avatar:null) };
       gcSave(GC);
     }
@@ -2069,7 +2162,7 @@ function saveProfile(){
   if(!SB || !currentUser) return;
   SB.from('gc_profiles').upsert({ user_id: currentUser.id, data: {
     calls:GC.calls, conf:GC.conf, dims:GC.dims, decisions:GC.decisions, audience:GC.audience,
-    subscribed:GC.subscribed, email:GC.email, streak:GC.streak, lastVisit:GC.lastVisit,
+    subscribed:GC.subscribed, email:GC.email, streak:GC.streak, lastVisit:GC.lastVisit, lastVoteDay:GC.lastVoteDay,
     firstName:GC.firstName||'', lastName:GC.lastName||'', avatar:(GC.avatar!==undefined?GC.avatar:null)
   }, updated_at: new Date().toISOString() }, { onConflict:'user_id' }).then(function(res){
     if(res && res.error) console.warn('[GutCheck] profile save failed:', res.error);
