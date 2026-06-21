@@ -552,7 +552,22 @@
       .call-card { padding: 1.2rem; }
       .dist-txt .dl { max-width: 60%; }
     }
-  </style>
+  .feed-list{margin-top:1.4rem}
+.feed-back{display:inline-flex;align-items:center;gap:.4rem;background:var(--card2);border:1px solid var(--border2);color:var(--accent2);font-size:.82rem;font-weight:600;padding:.5rem .9rem;border-radius:8px;cursor:pointer;margin-bottom:1rem}
+.feed-back:hover{border-color:var(--accent)}
+.feed-h{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.5px;margin:.4rem 0 .9rem;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.feed-h .feed-sub{font-family:inherit;font-size:.8rem;letter-spacing:0;color:var(--muted);font-weight:400}
+.feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.9rem}
+.feed-card{text-align:left;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;cursor:pointer;transition:border-color .15s,transform .15s;display:flex;flex-direction:column;gap:.55rem;font:inherit;color:inherit}
+.feed-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.feed-card-top{display:flex;justify-content:space-between;align-items:center;gap:.5rem}
+.feed-badge{font-size:.7rem;font-weight:700;letter-spacing:.4px;color:var(--accent2);background:var(--card2);border:1px solid var(--border2);border-radius:20px;padding:.18rem .5rem}
+.feed-left{font-size:.72rem;color:var(--muted);font-weight:600;white-space:nowrap}
+.feed-scn{font-size:.92rem;line-height:1.5;color:var(--white)}
+.feed-card-foot{font-size:.76rem;color:var(--muted);margin-top:auto}
+.feed-voted{color:var(--green);font-weight:600}
+.sm-err{background:rgba(229,90,43,.12);border:1px solid var(--accent);color:var(--accent2);font-size:.84rem;line-height:1.5;padding:.7rem .85rem;border-radius:8px;margin-bottom:.9rem}
+</style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
@@ -624,11 +639,12 @@
 
 <!-- TODAY'S CALL -->
 <section class="section" id="today">
-  <div class="sec-eyebrow">Today's Gut Check</div>
+  <div class="sec-eyebrow">Open Gut Checks</div>
   <div class="sec-title">Make <span>The</span> Call</div>
-  <p class="sec-sub">Read the situation, commit to a decision, and then — and only then — the crowd unlocks. No take-backs, just like the real thing. <strong>Come back tomorrow for a brand-new dilemma.</strong></p>
+  <p class="sec-sub">Read the situation, commit to a decision, and then — and only then — the crowd unlocks. No take-backs, just like the real thing. <strong>New community dilemmas go live every day &mdash; vote before they close.</strong></p>
   <div id="auth-bar" class="auth-bar" style="display:none"></div>
   <div id="call-mount"></div>
+  <div id="feed-list" class="feed-list"></div>
 </section>
 
 <!-- YOUR SUBMISSIONS -->
@@ -808,7 +824,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-20-10';
+var SITE_VERSION = '2026-06-21-1';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -846,7 +862,7 @@ function scheduleRowToDilemma(row){
     scenario: esc(row.scenario||''), q: esc(row.question||'What would you do?'), opts: opts,
     best: ((row.best||'').trim().toUpperCase()).replace(/[^A-D]/g,'')||null, dims:(function(){ try{ var x=(typeof row.dims==='string')?JSON.parse(row.dims):row.dims; return (x&&typeof x==='object')?x:null; }catch(e){ return null; } })(),
     breakdown: row.breakdown ? esc(row.breakdown) : 'This dilemma came straight from the community — there isn\u2019t an official \u201cright\u201d answer here. What matters is whether your reasoning holds together.',
-    real: row.outcome ? esc(row.outcome) : null, lesson: row.lesson ? esc(row.lesson) : null };
+    real: row.outcome ? esc(row.outcome) : null, lesson: row.lesson ? esc(row.lesson) : null, closesAt: row.closes_at || null };
 }
 function fetchTodaysScheduled(){
   if(!SB) return Promise.resolve(null);
@@ -857,12 +873,64 @@ function fetchTodaysScheduled(){
 }
 function fetchArchive(){
   if(!SB) return Promise.resolve(null);
-  return SB.rpc('gc_archive', { p_today: localDateStr(), p_limit: 60 }).then(function(res){
+  return SB.rpc('gc_archive_v2', { p_limit: 60, p_offset: 0, p_sort: 'recent', p_filter: 'all', p_uid: (currentUser?currentUser.id:null) }).then(function(res){
     if(res && res.error){ console.warn('[GutCheck] archive read error:', res.error); return null; }
     return (res && res.data) ? res.data : null;
   }).catch(function(e){ console.warn('[GutCheck] archive failed:', e); return null; });
 }
 
+/* ---- FEED MODEL: featured pick + open community feed (Phase B) ---- */
+var featuredDilemma = null, feedRowsById = {};
+function fetchFeatured(){
+  if(!SB) return Promise.resolve(null);
+  return SB.rpc('gc_featured').then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] featured read error:', res.error); return null; }
+    return scheduleRowToDilemma(res && res.data && res.data[0]);
+  }).catch(function(e){ console.warn('[GutCheck] featured failed:', e); return null; });
+}
+function feedTimeLeft(closesAt){
+  if(!closesAt) return '';
+  var ms = new Date(closesAt) - new Date(); if(isNaN(ms)) return '';
+  if(ms <= 0) return 'closing';
+  var h = Math.floor(ms/3600000);
+  if(h >= 24) return Math.floor(h/24)+'d left';
+  if(h >= 1) return h+'h left';
+  return Math.max(1, Math.floor(ms/60000))+'m left';
+}
+function wireFeedBack(){ var fb=document.getElementById('feed-back'); if(fb) fb.onclick=function(){ if(!featuredDilemma) return; todaysDilemma=featuredDilemma; renderToday(); var cm=document.getElementById('call-mount'); if(cm&&cm.scrollIntoView) cm.scrollIntoView({behavior:'smooth',block:'start'}); loadFeed(); }; }
+function renderFeedList(rows){
+  var list = document.getElementById('feed-list'); if(!list) return;
+  var items = (rows||[]).filter(function(r){ return r && r.dilemma_id && (!todaysDilemma || r.dilemma_id !== todaysDilemma.id); });
+  feedRowsById = {}; items.forEach(function(r){ feedRowsById[r.dilemma_id] = r; });
+  var back = (featuredDilemma && todaysDilemma && todaysDilemma.id !== featuredDilemma.id)
+    ? '<button type="button" class="feed-back" id="feed-back">\u2605 Back to today\u2019s featured call</button>' : '';
+  if(!items.length){ list.innerHTML = back; wireFeedBack(); return; }
+  var h = back + '<div class="feed-h">\uD83D\uDFE2 Open community calls <span class="feed-sub">vote before they close</span></div><div class="feed-grid">';
+  items.forEach(function(r){
+    var made = r.dilemma_id in GC.calls;
+    var scn = (r.scenario||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(); if(scn.length>150) scn = scn.slice(0,149)+'\u2026';
+    var oc = (r.options||'').split('\n').filter(function(x){ return x.trim(); }).length;
+    h += '<button type="button" class="feed-card" data-id="'+escHtml(r.dilemma_id)+'">'
+      + '<div class="feed-card-top"><span class="feed-badge">\uD83D\uDC65 Community</span><span class="feed-left">\u23F3 '+feedTimeLeft(r.closes_at)+'</span></div>'
+      + '<div class="feed-scn">'+escHtml(scn)+'</div>'
+      + '<div class="feed-card-foot">'+(oc?oc+' options':'')+(made?' \u00B7 <span class="feed-voted">\u2713 you called this</span>':' \u00B7 tap to weigh in')+'</div>'
+      + '</button>';
+  });
+  h += '</div>';
+  list.innerHTML = h;
+  wireFeedBack();
+  [].slice.call(list.querySelectorAll('.feed-card')).forEach(function(b){
+    b.onclick = function(){ var r = feedRowsById[b.getAttribute('data-id')]; if(!r) return; var d = scheduleRowToDilemma(r); if(!d) return; todaysDilemma = d; renderToday(); var cm = document.getElementById('call-mount'); if(cm && cm.scrollIntoView) cm.scrollIntoView({behavior:'smooth',block:'start'}); loadFeed(); };
+  });
+}
+function loadFeed(){
+  var list = document.getElementById('feed-list'); if(!list) return Promise.resolve();
+  if(!SB){ list.innerHTML=''; return Promise.resolve(); }
+  return SB.rpc('gc_feed_open', { p_limit:40, p_offset:0 }).then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] feed read error:', res.error); list.innerHTML=''; return; }
+    renderFeedList(res && res.data ? res.data : []);
+  }).catch(function(e){ console.warn('[GutCheck] feed failed:', e); list.innerHTML=''; });
+}
 function pctMap(d, map, total){ var out={}; if(total<1){ d.opts.forEach(function(o){ out[o.k]=0; }); return out; } var raw=d.opts.map(function(o){ return (map[o.k]||0)/total*100; }); var fl=raw.map(Math.floor); var rem=100-fl.reduce(function(a,b){return a+b;},0); var ord=raw.map(function(x,i){return [x-Math.floor(x),i];}).sort(function(a,b){return b[0]-a[0];}); for(var i=0;i<rem;i++) fl[ord[i][1]]++; var o={}; d.opts.forEach(function(op,i){ o[op.k]=fl[i]; }); return o; }
 function aggregate(d, rows){ var ov={},asp={},wrk={},tot=0,aT=0,wT=0; d.opts.forEach(function(o){ ov[o.k]=0; asp[o.k]=0; wrk[o.k]=0; }); rows.forEach(function(r){ var k=r.choice, n=Number(r.n)||0; if(!(k in ov)) return; ov[k]+=n; tot+=n; if(r.audience==='aspiring'){ asp[k]+=n; aT+=n; } else if(r.audience==='working'){ wrk[k]+=n; wT+=n; } }); return { total:tot, aspiringTotal:aT, workingTotal:wT, overall:pctMap(d,ov,tot), aspiring:pctMap(d,asp,aT), working:pctMap(d,wrk,wT) }; }
 function enhanceLive(scopeEl, d){ if(!SB || !scopeEl) return; fetchDist(d.id).then(function(rows){ if(!rows || !rows.length) return; var a=aggregate(d, rows); if(a.total<1) return; d.opts.forEach(function(o){ var row=scopeEl.querySelector('.dist-row[data-k="'+o.k+'"]'); if(row){ var bar=row.querySelector('.dist-bar i'); var dp=row.querySelector('.dp'); if(bar) bar.style.width=a.overall[o.k]+'%'; if(dp) dp.textContent=a.overall[o.k]+'%'; } }); ['aspiring','working'].forEach(function(ch){ var card=scopeEl.querySelector('.split-card[data-cohort="'+ch+'"]'); if(card){ d.opts.forEach(function(o){ var b=card.querySelector('.sc-row[data-k="'+o.k+'"] b'); if(b) b.textContent = a[ch+'Total']>0 ? a[ch][o.k]+'%' : '—'; }); } }); var tag=scopeEl.querySelector('.crowd-tag'); if(tag){ tag.textContent='Live · '+a.total+' PM'+(a.total===1?'':'s')+' have called this'; tag.style.color='var(--green)'; tag.style.borderColor='rgba(74,222,128,.4)'; } }); }
@@ -1335,11 +1403,11 @@ function renderToday(){
   var d = todaysDilemma || dilemmaForIndex(TODAY_INDEX);
   var answered = d.id in GC.calls;
   var html = '<div class="call-card">'
-    + '<div class="call-top"><div class="call-date">Day '+(TODAY_INDEX+1)+' · <b>'+fmtDate(new Date())+'</b></div><div class="call-badges">'+badgesHTML(d)+'</div></div>'
+    + '<div class="call-top"><div class="call-date">'+(d.closesAt ? ('\uD83D\uDC65 Community \u00B7 \u23F3 '+feedTimeLeft(d.closesAt)) : ('Day '+(TODAY_INDEX+1)+' \u00B7 <b>'+fmtDate(new Date())+'</b>'))+'</div><div class="call-badges">'+badgesHTML(d)+'</div></div>'
     + '<div class="call-scenario">'+d.scenario+'</div>'
     + '<div class="call-q">'+d.q+'</div>'
     + (answered ? '' : '<div class="call-howto">'+(d.tier===3 ? 'Make your call: pick an option, then add your reasoning, your confidence, and your read on the room — then lock it in.' : 'Make your call: pick an option, then add your reasoning and your confidence — then lock it in.')+'</div>')
-    + (answered ? '<div class="call-locked">✓ Your call is locked in for today. You can’t vote again until a new dilemma drops tomorrow.</div>' : '')
+    + (answered ? '<div class="call-locked">\u2713 Your call is locked in \u2014 no take-backs. Scroll down for more open calls.</div>' : '')
     + '<div id="today-opts"></div>';
   if (!answered) html += '<div class="call-reason"><label>Your reasoning <span class="req">required</span> — shared <b>anonymously</b> with other PMs after they make their call.</label><textarea id="today-reason" maxlength="280" placeholder="I chose this because…"></textarea><div class="call-conf"><span class="cc-q">How sure are you? <span class="req">required</span></span><div class="cc-opts"><button type="button" class="cc-btn" data-c="1">Hunch</button><button type="button" class="cc-btn" data-c="2">Fairly sure</button><button type="button" class="cc-btn" data-c="3">Confident</button></div></div><div class="call-hint">Reason + confidence are required. Once you commit, the crowd unlocks. No take-backs.</div></div>';
   if (!answered && d.tier===3) html += '<div class="call-predict"><span class="cp-q">Last one \u2014 which option do you think the room will pick <b>most</b>? <span class="req">required</span></span><div class="cp-opts">'+d.opts.map(function(o){ return '<button type="button" class="cp-btn" data-pk="'+o.k+'" title="'+o.t+'">'+o.k+'</button>'; }).join('')+'</div><div class="cp-why">Powers your <b>surprisingly-popular</b> score \u2014 options that beat what people expect are right more often than a plain vote count.</div></div>';
@@ -1441,7 +1509,7 @@ function reveal(d, instant){
   if (d.lesson) h += '<div class="rv-lesson"><span>The takeaway:</span> '+d.lesson+'</div>';
   h += '<div class="rv-reasons" id="reasons-feed"></div>';
   /* foot */
-  h += '<div class="rv-foot"><div class="rf-streak">🔥 <b>'+(GC.streak||1)+'</b> day streak · come back tomorrow for a brand-new call</div><div class="rv-foot-btns"><button class="btn-primary" data-share="call" style="padding:.6rem 1.2rem">Share my call ↗</button><a href="#archive" class="btn-ghost" style="padding:.6rem 1.2rem">Browse the Archive →</a></div></div>';
+  h += '<div class="rv-foot"><div class="rf-streak">🔥 <b>'+(GC.streak||1)+'</b> day streak · more open calls are waiting below</div><div class="rv-foot-btns"><button class="btn-primary" data-share="call" style="padding:.6rem 1.2rem">Share my call ↗</button><a href="#archive" class="btn-ghost" style="padding:.6rem 1.2rem">Browse the Archive →</a></div></div>';
   h += '</div>';
   mountR.innerHTML = h;
   if (d.tier===3) injectRoomVerdict(d, mountR.querySelector('.rvv-mount'), true);
@@ -1614,7 +1682,7 @@ function renderMyQueue(rows){
   myqRows.forEach(function(r){
     var st=(r.status||'pending');
     if(st==='pending'){ if(r.would_pass) queue.push(r); else fail.push(r); }
-    else if(st==='scheduled') live.push(r);
+    else if(st==='scheduled'||st==='published') live.push(r);
     else if(st==='rejected') rejected.push(r);
     else approved.push(r);
   });
@@ -1726,7 +1794,7 @@ function loadMyQueue(){
     else if(step===2) renderDecision();
     else renderOutcome();
     backB.textContent = step===0 ? 'Cancel' : '← Back';
-    nextB.textContent = step===TOTAL-1 ? 'Send for review' : 'Next →';
+    nextB.textContent = step===TOTAL-1 ? 'Post it live \u2192' : 'Next \u2192';
   }
 
   function renderCat(){
@@ -1819,7 +1887,7 @@ function loadMyQueue(){
     var creditRow = (SB && currentUser)
       ? '<div class="sm-hint" style="margin-bottom:.8rem">Submitting from your account — we’ll credit you unless you ask otherwise.</div>'
       : '<div class="sm-field"><label>Email (optional — so we can credit you)</label><input id="sm-credit" type="email" placeholder="you@work.com"></div>';
-    stepsEl.innerHTML='<div class="sm-h">Outcome & submit</div><div class="sm-sub">Optional — what actually happened, or your own take. Then send it for review.</div>'
+    stepsEl.innerHTML='<div class="sm-h">Outcome &amp; post</div><div class="sm-sub">Optional \u2014 what actually happened, or your own take. Then it goes live instantly for PMs to vote on. <b>You can post up to 5 dilemmas a day.</b></div>'
       +'<div class="sm-field"><label>What happened / your take (optional)</label><textarea id="sm-outcome" placeholder="How did it play out? What did you learn?"></textarea></div>'
       + creditRow
       +'<div class="sm-review" id="sm-review"></div><div class="sm-dims" id="sm-dims"></div>';
@@ -1850,10 +1918,23 @@ function loadMyQueue(){
   function submit(){
     if(SB && !currentUser){ close(); openSignIn('Sign in to submit a dilemma — it lets us credit you and keeps out spam.'); return; }
     var opts=S.options.filter(function(o){ return val(o.t); }).map(function(o){ var t=val(o.t), d=val(o.d); return d ? (t+' — '+d) : t; }).join('\n');
-    saveSubmission({ user_id: currentUser ? currentUser.id : null, scenario:val(S.scenario), question:val(S.question), options:opts, outcome:val(S.outcome), email:(currentUser&&currentUser.email)||val(S.credit), audience:GC.audience, dims:buildConfirmedDims() })
-      .then(function(){ subStats.total=(subStats.total||0)+1; subStats.week=(subStats.week||0)+1; applySubStatus(); loadSubStats(); loadMyQueue(); });
-    if(okEl) okEl.style.display='block'; nextB.disabled=true; nextB.textContent='Sent ✓';
-    setTimeout(function(){ close(); nextB.disabled=false; }, 1600);
+    if(!SB){ if(okEl) okEl.style.display='block'; nextB.disabled=true; setTimeout(function(){ close(); nextB.disabled=false; nextB.textContent='Post it live \u2192'; }, 1200); return; }
+    var rvEl=document.getElementById('sm-review'); var smErr=document.querySelector('#sm-steps .sm-err'); if(smErr&&smErr.parentNode) smErr.parentNode.removeChild(smErr);
+    nextB.disabled=true; nextB.textContent='Posting\u2026';
+    SB.rpc('gc_submit_dilemma', { p_scenario:val(S.scenario), p_question:val(S.question), p_options:opts, p_dims:buildConfirmedDims(), p_outcome:val(S.outcome)||null, p_device_id:DEVICE_ID }).then(function(res){
+      var r = res && res.data;
+      if(res && res.error){ say('Couldn\u2019t post right now \u2014 please try again.'); nextB.disabled=false; nextB.textContent='Post it live \u2192'; return; }
+      if(r && r.ok===false){
+        if(r.error==='auth'){ close(); openSignIn('Sign in to post a dilemma.'); nextB.disabled=false; nextB.textContent='Post it live \u2192'; return; }
+        if(rvEl) rvEl.insertAdjacentHTML('beforebegin','<div class="sm-err">'+esc(r.message||'This couldn\u2019t be posted.')+'</div>');
+        say(r.message||'This couldn\u2019t be posted.'); nextB.disabled=false; nextB.textContent='Post it live \u2192'; return;
+      }
+      if(okEl){ okEl.style.display='block'; okEl.textContent='\u2713 It\u2019s live \u2014 PMs can vote on it now'+((r&&r.remaining!=null)?(' \u00B7 '+r.remaining+' more today'):'')+'.'; }
+      nextB.textContent='Live \u2713';
+      subStats.total=(subStats.total||0)+1; subStats.week=(subStats.week||0)+1; applySubStatus(); loadSubStats();
+      if(typeof loadMyQueue==='function') loadMyQueue(); if(typeof loadFeed==='function') loadFeed();
+      setTimeout(function(){ close(); nextB.disabled=false; nextB.textContent='Post it live \u2192'; }, 1900);
+    }).catch(function(){ say('Couldn\u2019t post right now \u2014 please try again.'); nextB.disabled=false; nextB.textContent='Post it live \u2192'; });
   }
 })();
 
@@ -2202,9 +2283,14 @@ function closeEditProfile(){ var ov=document.getElementById('editprofile-overlay
 function showCallLoading(){ mount.innerHTML = '<div class="call-card"><div style="color:var(--muted);font-size:.92rem;padding:1.6rem .3rem">Loading today\u2019s call\u2026</div></div>'; }
 function initToday(){
   var fallback = dilemmaForIndex(TODAY_INDEX);
-  if (!SB){ todaysDilemma = fallback; renderToday(); return; }
+  if (!SB){ todaysDilemma = fallback; featuredDilemma = fallback; renderToday(); return; }
   showCallLoading();
-  fetchTodaysScheduled().then(function(comm){ todaysDilemma = comm || fallback; renderToday(); }).catch(function(){ todaysDilemma = fallback; renderToday(); });
+  fetchFeatured().then(function(feat){
+    featuredDilemma = feat || fallback;
+    todaysDilemma = featuredDilemma;
+    renderToday();
+    loadFeed();
+  }).catch(function(){ todaysDilemma = fallback; featuredDilemma = fallback; renderToday(); });
 }
 function boot(){
   updateAuthUI();
