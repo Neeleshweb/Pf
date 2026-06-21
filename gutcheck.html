@@ -678,10 +678,10 @@
 
 <!-- SUBMIT A DILEMMA (moved to top) -->
 <section class="section" id="submit">
+  <div class="sec-eyebrow b">Start here · Community</div>
+  <div class="sec-title">Put It To <span class="b">The Room</span></div>
+  <p class="sec-sub">The sharpest dilemmas come from real rooms. Post a product fork you actually faced and it goes <strong>live to the community in seconds</strong> — PMs start voting right away, and you watch the room respond over the next 48 hours (credited, if you like).</p>
   <div class="call-card" style="padding:1.6rem 1.8rem">
-    <div class="sec-eyebrow b" style="margin-bottom:.5rem">Start here · Community</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.5px;margin-bottom:.4rem">Faced a tough call? Put it to the room.</div>
-    <p style="font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem">The sharpest dilemmas come from real rooms. Post a product fork you actually faced and it goes <strong>live to the community in seconds</strong> — PMs start voting right away, and you watch the room respond over the next 48 hours (credited, if you like).</p>
     <div class="sub-status" id="sub-status"></div>
     <button class="btn-primary" id="open-submit">✍️ Post your dilemma</button>
   </div>
@@ -694,21 +694,29 @@
   <p class="sec-sub">Read the situation, commit to a decision, and then — and only then — the crowd unlocks. No take-backs, just like the real thing. <strong>New community dilemmas go live every day &mdash; vote before they close.</strong></p>
   <div id="auth-bar" class="auth-bar" style="display:none"></div>
   <div id="call-mount"></div>
+  <div class="feed-head">
+    <div class="sec-eyebrow" style="margin-top:2.8rem">More open calls</div>
+    <div class="sec-title" style="font-size:clamp(1.5rem,3.5vw,2rem);margin-bottom:.6rem">The Room Is <span>Live</span></div>
+    <p class="sec-sub" style="margin-bottom:1.2rem">Every community dilemma still inside its 48-hour window. Make your call before it closes — then watch how the room leans.</p>
+  </div>
   <div id="feed-controls" class="feed-controls"></div>
   <div id="feed-list" class="feed-list"></div>
 </section>
 
 <!-- YOUR SUBMISSIONS -->
 <section class="section" id="my-submissions" style="display:none">
+  <div class="sec-eyebrow">Your dilemmas</div>
+  <div class="sec-title">Calls You <span>Opened</span></div>
+  <p class="sec-sub">The dilemmas you've put to the room. Track how PMs are voting, watch each verdict form over its 48-hour window, and revisit the calls you started.</p>
   <div id="myq-wrap" class="myq-wrap"></div>
 </section>
 
 <!-- SUBSCRIBE -->
 <section class="section" id="subscribe">
+  <div class="sec-eyebrow y">Never miss a call</div>
+  <div class="sec-title">In Your <span class="y">Inbox</span></div>
+  <p class="sec-sub">One dilemma a day, plus the crowd's verdict from the day before. Protect your streak even when you forget to visit. No spam — just reps for your judgment.</p>
   <div class="call-card" style="padding:1.6rem 1.8rem">
-    <div class="sec-eyebrow y" style="margin-bottom:.5rem">Never miss a call</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.5px;margin-bottom:.4rem">Get tomorrow's Gut Check in your inbox</div>
-    <p style="font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem">One dilemma a day, plus the crowd's verdict from the day before. Protect your streak even when you forget to visit. No spam — just reps for your judgment.</p>
     <div class="sub-box">
       <input id="sub-email" type="email" placeholder="you@work.com" aria-label="Email" />
       <button id="sub-btn">Join the early list →</button>
@@ -865,7 +873,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-10';
+var SITE_VERSION = '2026-06-21-11';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -880,7 +888,7 @@ try { if (GC_LIVE && window.supabase && window.supabase.createClient) SB = windo
 var currentUser = null;
 
 function fetchDist(dilemmaId){ if(!SB) return Promise.resolve(null); return SB.rpc('gc_distribution',{ p_dilemma: dilemmaId }).then(function(res){ if(res && res.error){ console.warn('[GutCheck] distribution read error:', res.error); return null; } return (res && res.data) ? res.data : null; }).catch(function(e){ console.warn('[GutCheck] distribution failed:', e); return null; }); }
-function recordVote(d, key, reason, pred){ if(!SB) return Promise.resolve(); var rsn=(reason||'').trim().slice(0,280); return SB.from('gc_votes').insert({ user_id: currentUser ? currentUser.id : null, device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience, reason: rsn.length?rsn:null, prediction: pred?{win:pred}:null }).then(function(res){ if(res && res.error) console.warn('[GutCheck] vote not saved:', res.error); }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); }); }
+function recordVote(d, key, reason, pred, conf){ if(!SB) return Promise.resolve(); var rsn=(reason||'').trim().slice(0,280); var cval=(conf!=null?conf:((GC.conf&&GC.conf[d.id])||null)); var base={ user_id: currentUser ? currentUser.id : null, device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience, reason: rsn.length?rsn:null, prediction: pred?{win:pred}:null }; var row={}; for(var __k in base) row[__k]=base[__k]; row.confidence=cval; return SB.from('gc_votes').insert(row).then(function(res){ if(res && res.error){ return SB.from('gc_votes').insert(base).then(function(r2){ if(r2 && r2.error) console.warn('[GutCheck] vote not saved:', r2.error); }); } }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); }); }
 function saveSubscriber(email){ if(!SB) return Promise.resolve(); return SB.from('gc_subscribers').insert({ email: email, audience: GC.audience }).then(function(res){ if(res && res.error) console.warn('[GutCheck] subscribe error:', res.error); }).catch(function(e){ console.warn('[GutCheck] subscribe failed:', e); }); }
 function saveSubmission(p){ if(!SB) return Promise.resolve(); return SB.from('gc_submissions').insert(p).then(function(res){ if(res && res.error){ if(p && p.dims!==undefined){ var p2={}; for(var k in p){ if(k!=='dims') p2[k]=p[k]; } return SB.from('gc_submissions').insert(p2).then(function(r2){ if(r2 && r2.error) console.warn('[GutCheck] submission error:', r2.error); }); } console.warn('[GutCheck] submission error:', res.error); } }).catch(function(e){ console.warn('[GutCheck] submission failed:', e); }); }
 
@@ -1415,7 +1423,7 @@ function fingerprintHTML(entries, roomSP){
     if(d.best){ hit=(e.choice===d.best);
       if(d.dims&&d.dims[d.best]){ var fx=d.dims[d.best],pk=null,pv=0; for(var k in fx){ if(Math.abs(fx[k])>pv){pv=Math.abs(fx[k]);pk=k;} } if(pk&&pd[pk]){ pd[pk][1]++; if(hit) pd[pk][0]++; } }
     } else if(d.tier===3){ var rs=roomSP[d.id]; if(rs && rs.total>=MIN && rs.sp){ hit=(e.choice===rs.sp); } }
-    if(hit!==null){ var c=GC.conf&&GC.conf[d.id]; if(c&&cf[c]){ cf[c][1]++; if(hit) cf[c][0]++; } } });
+    if(hit!==null){ var c=(e.conf!=null?e.conf:(GC.conf&&GC.conf[d.id])); if(c&&cf[c]){ cf[c][1]++; if(hit) cf[c][0]++; } } });
   var rows=order.filter(function(k){ return (dims[k]||0)!==0 || pd[k][1]>0; }).map(function(k){ var v=dims[k]||0, pct=Math.round(Math.abs(v)/maxAbs*100); var cal=pd[k][1]?('matched '+pd[k][0]+'/'+pd[k][1]):'';
     return '<div class="fp-row"><span class="fp-dim">'+DIM[k]+'</span><div class="fp-track"><i class="'+(v>=0?'pos':'neg')+'" style="width:'+pct+'%"></i></div><span class="fp-val">'+(v>0?'+':'')+v+'</span><span class="fp-cal">'+cal+'</span></div>'; }).join('');
   function rate(b){ return b[1]?Math.round(b[0]/b[1]*100):null; }
@@ -1467,7 +1475,7 @@ function jrEntryHTML(e){
 }
 function fetchMyJournalVotes(){
   if(!SB||!currentUser) return Promise.resolve([]);
-  return SB.from('gc_votes').select('dilemma_id,choice,reason,created_at').eq('user_id',currentUser.id).order('created_at',{ascending:false}).then(function(res){
+  return SB.from('gc_votes').select('dilemma_id,choice,reason,created_at,confidence').eq('user_id',currentUser.id).order('created_at',{ascending:false}).then(function(res){
     if(res && res.error){ console.warn('[GutCheck] journal votes error:', res.error); return []; }
     return (res && res.data) ? res.data : [];
   }).catch(function(e){ console.warn('[GutCheck] journal votes failed:', e); return []; });
@@ -1497,7 +1505,7 @@ function renderJournal(){
     return SB.rpc('gc_dilemmas_by_ids',{p_ids:ids}).then(function(dres){
       if(token!==renderJournal._t) return;
       var amap={}; if(dres && dres.data){ dres.data.forEach(function(r){ if(r && r.dilemma_id){ var dd=scheduleRowToDilemma(r); if(dd) amap[r.dilemma_id]=dd; } }); }
-      var ents=votes.map(function(v){ var r=jrResolve(v.dilemma_id,amap); return { d:r.d, bank:r.bank, choice:v.choice, reason:v.reason, created_at:v.created_at }; });
+      var ents=votes.map(function(v){ var r=jrResolve(v.dilemma_id,amap); return { d:r.d, bank:r.bank, choice:v.choice, reason:v.reason, created_at:v.created_at, conf:v.confidence }; });
       var cids=ents.filter(function(e){ return e.d && e.d.tier===3 && e.d.id; }).map(function(e){ return e.d.id; });
       var spP = cids.length ? SB.rpc('gc_room_sp',{p_ids:cids}) : Promise.resolve({data:[]});
       return spP.then(function(spres){
@@ -1588,7 +1596,7 @@ function doCommit(d, key, conf, pred){
   /* highlight chosen */
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ if (b.querySelector('.opt-k') && b.querySelector('.opt-k').textContent===key){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } b.style.opacity=.96; });
   reveal(d, false);
-  if (SB) { recordVote(d, key, reasonText, pred).then(function(){ var rv=document.getElementById('today-reveal'); enhanceLive(rv, d); loadReasons(d, rv); if(d.tier===3 && rv){ var mb=rv.querySelector('.rvv-mount'); if(mb) injectRoomVerdict(d, mb, true); } }); }
+  if (SB) { recordVote(d, key, reasonText, pred, conf).then(function(){ var rv=document.getElementById('today-reveal'); enhanceLive(rv, d); loadReasons(d, rv); if(d.tier===3 && rv){ var mb=rv.querySelector('.rvv-mount'); if(mb) injectRoomVerdict(d, mb, true); } }); }
   bumpVoteStreak(); refreshRecord(); saveProfile();
 }
 
