@@ -584,6 +584,30 @@
 .arch-chip{background:var(--card2);border:1px solid var(--border2);color:var(--muted);font-size:.8rem;font-weight:600;padding:.35rem .8rem;border-radius:20px;cursor:pointer;transition:all .15s}
 .arch-chip:hover{border-color:var(--accent)}
 .arch-chip.on{background:var(--accent);border-color:var(--accent);color:#1a1106}
+.feed-controls{margin:1.2rem 0 0}
+.cat-badge{display:inline-flex;align-items:center;gap:.25rem;font-size:.7rem;font-weight:700;letter-spacing:.2px;color:var(--accent2);background:var(--card2);border:1px solid var(--border2);border-radius:20px;padding:.18rem .55rem;white-space:nowrap}
+.feed-votes{color:var(--muted);font-weight:600}
+.feed-dot{opacity:.45;margin:0 .1rem}
+.feed-empty{color:var(--muted);font-size:.9rem;padding:1rem 0}
+.myd-cat{margin:-.1rem 0 .1rem}
+.fbar{display:flex;align-items:center;gap:.6rem;margin:1rem 0 1.3rem;flex-wrap:nowrap;min-width:0}
+.fbar-dd{position:relative;flex:0 0 auto}
+.fbar-ddbtn{display:inline-flex;align-items:center;gap:.4rem;background:var(--card);border:1px solid var(--border2);color:var(--white);font-size:.82rem;font-weight:600;padding:.5rem .8rem;border-radius:11px;cursor:pointer;transition:border-color .15s;white-space:nowrap}
+.fbar-ddbtn:hover{border-color:var(--accent)}
+.fbar-ic{font-size:.95rem;opacity:.85}
+.fbar-chev{font-size:.62rem;opacity:.7}
+.fbar-menu{position:absolute;top:calc(100% + .4rem);left:0;z-index:50;min-width:190px;background:var(--card);border:1px solid var(--border2);border-radius:13px;box-shadow:0 18px 44px rgba(0,0,0,.5);padding:.35rem;opacity:0;transform:translateY(-6px) scale(.97);pointer-events:none;transition:opacity .14s ease,transform .14s ease}
+.fbar-menu.open{opacity:1;transform:none;pointer-events:auto}
+.fbar-mi{display:flex;align-items:center;justify-content:space-between;gap:.7rem;width:100%;text-align:left;background:none;border:none;color:var(--muted);font-size:.84rem;font-weight:500;padding:.55rem .7rem;border-radius:9px;cursor:pointer}
+.fbar-mi:hover{background:var(--card2);color:var(--white)}
+.fbar-mi.on{color:var(--white);font-weight:700}
+.fbar-ck{color:var(--accent);font-weight:800}
+.fbar-pills{display:flex;align-items:center;gap:.45rem;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:.2rem .1rem;flex:1 1 auto;min-width:0;-webkit-mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 18px),transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 14px,#000 calc(100% - 18px),transparent 100%)}
+.fbar-pills::-webkit-scrollbar{display:none}
+.fbar-pill{flex:0 0 auto;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:.8rem;font-weight:600;padding:.4rem .8rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.fbar-pill:hover{border-color:var(--accent);color:var(--white)}
+.fbar-pill.on{background:var(--accent);border-color:var(--accent);color:#1a1106}
+@media(max-width:560px){.fbar{flex-wrap:wrap}.fbar-pills{order:3;width:100%;flex-basis:100%}}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -661,6 +685,7 @@
   <p class="sec-sub">Read the situation, commit to a decision, and then — and only then — the crowd unlocks. No take-backs, just like the real thing. <strong>New community dilemmas go live every day &mdash; vote before they close.</strong></p>
   <div id="auth-bar" class="auth-bar" style="display:none"></div>
   <div id="call-mount"></div>
+  <div id="feed-controls" class="feed-controls"></div>
   <div id="feed-list" class="feed-list"></div>
 </section>
 
@@ -842,7 +867,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-2';
+var SITE_VERSION = '2026-06-21-3';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -891,14 +916,60 @@ function fetchTodaysScheduled(){
 }
 function fetchArchive(){
   if(!SB) return Promise.resolve(null);
-  return SB.rpc('gc_archive_v2', { p_limit: 60, p_offset: 0, p_sort: archSort, p_filter: archFilter, p_uid: (currentUser?currentUser.id:null) }).then(function(res){
+  return SB.rpc('gc_archive_v2', { p_limit: 60, p_offset: 0, p_sort: archSort, p_filter: archFilter, p_uid: (currentUser?currentUser.id:null), p_category: archCategory }).then(function(res){
     if(res && res.error){ console.warn('[GutCheck] archive read error:', res.error); return null; }
     return (res && res.data) ? res.data : null;
   }).catch(function(e){ console.warn('[GutCheck] archive failed:', e); return null; });
 }
 
-/* ---- FEED MODEL: featured pick + open community feed (Phase B) ---- */
+/* ---- CATEGORIES (shared with the submit wizard's CATS list) ---- */
+var CAT_META = {
+  prioritization:{i:'\uD83C\uDFAF',l:'Prioritization'},
+  validate:{i:'\uD83D\uDD0D',l:'Build vs. validate'},
+  data:{i:'\uD83D\uDCCA',l:'Data & metrics'},
+  stakeholder:{i:'\uD83E\uDD1D',l:'Stakeholders'},
+  pricing:{i:'\uD83D\uDCB3',l:'Pricing'},
+  sunset:{i:'\uD83C\uDF05',l:'Sunset'},
+  process:{i:'\u2699\uFE0F',l:'Process & team'},
+  ai:{i:'\uD83E\uDD16',l:'AI / new tech'},
+  other:{i:'\u2728',l:'Other'}
+};
+var CAT_ORDER = ['prioritization','validate','data','stakeholder','pricing','sunset','process','ai','other'];
+function catChip(k){ var m=CAT_META[k]; return m ? ('<span class="cat-badge">'+m.i+' '+escHtml(m.l)+'</span>') : ''; }
+function categoryPillOptions(){ var o=[{v:'all',label:'All'}]; CAT_ORDER.forEach(function(k){ o.push({v:k,label:CAT_META[k].i+' '+CAT_META[k].l}); }); return o; }
+
+/* ---- Reusable filter bar: sort dropdown(s) + scrollable category pills ---- */
+var _fbarDocWired = false;
+function closeAllFbarMenus(){ [].slice.call(document.querySelectorAll('.fbar-menu.open')).forEach(function(m){ m.classList.remove('open'); }); }
+function wireFbarDoc(){ if(_fbarDocWired) return; _fbarDocWired = true; document.addEventListener('click', function(){ closeAllFbarMenus(); }); }
+function mountFilterBar(host, cfg){
+  if(!host) return; wireFbarDoc(); cfg = cfg || {};
+  var h = '<div class="fbar">';
+  (cfg.menus||[]).forEach(function(mn){
+    var cur=''; (mn.options||[]).forEach(function(o){ if(o.v===mn.value) cur=o.label; });
+    h += '<div class="fbar-dd"><button type="button" class="fbar-ddbtn">'+(mn.icon?'<span class="fbar-ic">'+mn.icon+'</span>':'')+'<span class="fbar-ddlbl">'+escHtml(cur||mn.placeholder||'')+'</span><span class="fbar-chev">\u25BE</span></button><div class="fbar-menu">';
+    (mn.options||[]).forEach(function(o){ h += '<button type="button" class="fbar-mi'+(o.v===mn.value?' on':'')+'" data-mv="'+escHtml(o.v)+'">'+escHtml(o.label)+(o.v===mn.value?'<span class="fbar-ck">\u2713</span>':'')+'</button>'; });
+    h += '</div></div>';
+  });
+  if(cfg.pills){
+    h += '<div class="fbar-pills">';
+    (cfg.pills.options||[]).forEach(function(o){ h += '<button type="button" class="fbar-pill'+(o.v===cfg.pills.value?' on':'')+'" data-pv="'+escHtml(o.v)+'">'+escHtml(o.label)+'</button>'; });
+    h += '</div>';
+  }
+  h += '</div>'; host.innerHTML = h;
+  [].slice.call(host.querySelectorAll('.fbar-dd')).forEach(function(dd, idx){
+    var btn=dd.querySelector('.fbar-ddbtn'), menu=dd.querySelector('.fbar-menu'), mn=(cfg.menus||[])[idx];
+    if(btn&&menu){
+      btn.onclick=function(e){ e.stopPropagation(); var willOpen=!menu.classList.contains('open'); closeAllFbarMenus(); if(willOpen) menu.classList.add('open'); };
+      [].slice.call(menu.querySelectorAll('.fbar-mi')).forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); menu.classList.remove('open'); if(mn&&mn.onPick) mn.onPick(b.getAttribute('data-mv')); }; });
+    }
+  });
+  if(cfg.pills){ [].slice.call(host.querySelectorAll('.fbar-pill')).forEach(function(b){ b.onclick=function(){ if(cfg.pills.onPick) cfg.pills.onPick(b.getAttribute('data-pv')); }; }); }
+}
+
+/* ---- FEED MODEL: featured pick + open community feed (Phase B/C) ---- */
 var featuredDilemma = null, feedRowsById = {};
+var feedSort = 'recent', feedCategory = 'all';
 function fetchFeatured(){
   if(!SB) return Promise.resolve(null);
   return SB.rpc('gc_featured').then(function(res){
@@ -916,22 +987,36 @@ function feedTimeLeft(closesAt){
   return Math.max(1, Math.floor(ms/60000))+'m left';
 }
 function wireFeedBack(){ var fb=document.getElementById('feed-back'); if(fb) fb.onclick=function(){ if(!featuredDilemma) return; todaysDilemma=featuredDilemma; renderToday(); var cm=document.getElementById('call-mount'); if(cm&&cm.scrollIntoView) cm.scrollIntoView({behavior:'smooth',block:'start'}); loadFeed(); }; }
-function renderFeedList(rows){
-  var list = document.getElementById('feed-list'); if(!list) return;
+function renderFeedControls(){
+  var box=document.getElementById('feed-controls'); if(!box) return;
+  mountFilterBar(box, {
+    menus:[{ icon:'\u21C5', value:feedSort, options:[
+      {v:'recent',label:'Most recent'},{v:'popular',label:'Most popular'},
+      {v:'expiring',label:'About to expire'},{v:'category',label:'By category'}
+    ], onPick:function(v){ feedSort=v; loadFeed(); } }],
+    pills:{ value:feedCategory, options:categoryPillOptions(), onPick:function(v){ feedCategory=v; loadFeed(); } }
+  });
+}
+function renderFeed(rows){
+  var controls=document.getElementById('feed-controls'), list=document.getElementById('feed-list'); if(!list) return;
   var items = (rows||[]).filter(function(r){ return r && r.dilemma_id && (!todaysDilemma || r.dilemma_id !== todaysDilemma.id); });
+  var filtered = (feedCategory && feedCategory!=='all') || (feedSort!=='recent');
+  if(!items.length && !filtered){ if(controls) controls.innerHTML=''; list.innerHTML=''; return; }
+  if(controls) renderFeedControls();
   feedRowsById = {}; items.forEach(function(r){ feedRowsById[r.dilemma_id] = r; });
   var back = (featuredDilemma && todaysDilemma && todaysDilemma.id !== featuredDilemma.id)
     ? '<button type="button" class="feed-back" id="feed-back">\u2605 Back to today\u2019s featured call</button>' : '';
-  if(!items.length){ list.innerHTML = back; wireFeedBack(); return; }
-  var h = back + '<div class="feed-h">\uD83D\uDFE2 Open community calls <span class="feed-sub">vote before they close</span></div><div class="feed-grid">';
+  var head = '<div class="feed-h">\uD83D\uDFE2 Open community calls <span class="feed-sub">'+(items.length?'vote before they close':'')+'</span></div>';
+  if(!items.length){ list.innerHTML = back + head + '<div class="feed-empty">No open calls in this view yet \u2014 try a different category or sort.</div>'; wireFeedBack(); return; }
+  var h = back + head + '<div class="feed-grid">';
   items.forEach(function(r){
     var made = r.dilemma_id in GC.calls;
     var scn = (r.scenario||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(); if(scn.length>150) scn = scn.slice(0,149)+'\u2026';
     var oc = (r.options||'').split('\n').filter(function(x){ return x.trim(); }).length;
     h += '<button type="button" class="feed-card" data-id="'+escHtml(r.dilemma_id)+'">'
-      + '<div class="feed-card-top"><span class="feed-badge">\uD83D\uDC65 Community</span><span class="feed-left">\u23F3 '+feedTimeLeft(r.closes_at)+'</span></div>'
+      + '<div class="feed-card-top">'+(r.category && CAT_META[r.category] ? catChip(r.category) : '<span class="feed-badge">\uD83D\uDC65 Community</span>')+'<span class="feed-left">\u23F3 '+feedTimeLeft(r.closes_at)+'</span></div>'
       + '<div class="feed-scn">'+escHtml(scn)+'</div>'
-      + '<div class="feed-card-foot">'+(oc?oc+' options':'')+(made?' \u00B7 <span class="feed-voted">\u2713 you called this</span>':' \u00B7 tap to weigh in')+'</div>'
+      + '<div class="feed-card-foot"><span class="feed-votes" id="fv-'+escHtml(r.dilemma_id)+'">\u2026</span>'+(oc?' <span class="feed-dot">\u00B7</span> '+oc+' options':'')+(made?' <span class="feed-dot">\u00B7</span> <span class="feed-voted">\u2713 you called this</span>':' <span class="feed-dot">\u00B7</span> tap to weigh in')+'</div>'
       + '</button>';
   });
   h += '</div>';
@@ -940,13 +1025,18 @@ function renderFeedList(rows){
   [].slice.call(list.querySelectorAll('.feed-card')).forEach(function(b){
     b.onclick = function(){ var r = feedRowsById[b.getAttribute('data-id')]; if(!r) return; var d = scheduleRowToDilemma(r); if(!d) return; todaysDilemma = d; renderToday(); var cm = document.getElementById('call-mount'); if(cm && cm.scrollIntoView) cm.scrollIntoView({behavior:'smooth',block:'start'}); loadFeed(); };
   });
+  var ids = items.map(function(r){ return r.dilemma_id; });
+  if(SB && ids.length){ SB.rpc('gc_vote_counts',{p_ids:ids}).then(function(res){
+    if(res && res.data){ var m={}; res.data.forEach(function(x){ m[x.dilemma_id]=Number(x.n)||0; });
+      ids.forEach(function(id){ var el=document.getElementById('fv-'+id); if(el){ var n=m[id]||0; el.textContent=n+' vote'+(n===1?'':'s'); } }); }
+  }).catch(function(){}); }
 }
 function loadFeed(){
   var list = document.getElementById('feed-list'); if(!list) return Promise.resolve();
-  if(!SB){ list.innerHTML=''; return Promise.resolve(); }
-  return SB.rpc('gc_feed_open', { p_limit:40, p_offset:0 }).then(function(res){
+  if(!SB){ list.innerHTML=''; var fc=document.getElementById('feed-controls'); if(fc) fc.innerHTML=''; return Promise.resolve(); }
+  return SB.rpc('gc_feed_v2', { p_limit:40, p_offset:0, p_sort:feedSort, p_category:feedCategory }).then(function(res){
     if(res && res.error){ console.warn('[GutCheck] feed read error:', res.error); list.innerHTML=''; return; }
-    renderFeedList(res && res.data ? res.data : []);
+    renderFeed(res && res.data ? res.data : []);
   }).catch(function(e){ console.warn('[GutCheck] feed failed:', e); list.innerHTML=''; });
 }
 function pctMap(d, map, total){ var out={}; if(total<1){ d.opts.forEach(function(o){ out[o.k]=0; }); return out; } var raw=d.opts.map(function(o){ return (map[o.k]||0)/total*100; }); var fl=raw.map(Math.floor); var rem=100-fl.reduce(function(a,b){return a+b;},0); var ord=raw.map(function(x,i){return [x-Math.floor(x),i];}).sort(function(a,b){return b[0]-a[0];}); for(var i=0;i<rem;i++) fl[ord[i][1]]++; var o={}; d.opts.forEach(function(op,i){ o[op.k]=fl[i]; }); return o; }
@@ -1565,22 +1655,22 @@ function addArchItem(list, dateLabel, d){
   item.querySelector('.arch-top').parentNode.onclick = function(e){ item.classList.toggle('open'); if (item.classList.contains('open') && !item._built){ buildArchDetail(item, d); item._built = true; } };
   list.appendChild(item);
 }
-var archSort = 'recent', archFilter = 'all';
+var archSort = 'recent', archFilter = 'all', archCategory = 'all';
 function renderArchControls(){
   var box = document.getElementById('arch-controls'); if(!box) return;
   if(!SB){ box.innerHTML = ''; return; }
   if(archFilter === 'mine' && !currentUser) archFilter = 'all';
-  var sorts = [['recent','Most recent'],['votes','Most voted']];
-  var filters = [['all','All'],['community','Community'],['bank','Featured']];
-  if(currentUser) filters.push(['mine','Mine']);
-  var h = '<div class="arch-ctl-row"><span class="arch-ctl-lbl">Sort</span>';
-  sorts.forEach(function(s){ h += '<button type="button" class="arch-chip'+(archSort===s[0]?' on':'')+'" data-sort="'+s[0]+'">'+s[1]+'</button>'; });
-  h += '</div><div class="arch-ctl-row"><span class="arch-ctl-lbl">Show</span>';
-  filters.forEach(function(f){ h += '<button type="button" class="arch-chip'+(archFilter===f[0]?' on':'')+'" data-filter="'+f[0]+'">'+f[1]+'</button>'; });
-  h += '</div>';
-  box.innerHTML = h;
-  [].slice.call(box.querySelectorAll('[data-sort]')).forEach(function(b){ b.onclick = function(){ archSort = b.getAttribute('data-sort'); renderArchive(); }; });
-  [].slice.call(box.querySelectorAll('[data-filter]')).forEach(function(b){ b.onclick = function(){ archFilter = b.getAttribute('data-filter'); renderArchive(); }; });
+  var showOpts = [{v:'all',label:'Everything'},{v:'community',label:'Community'},{v:'bank',label:'Featured'}];
+  if(currentUser) showOpts.push({v:'mine',label:'Mine'});
+  mountFilterBar(box, {
+    menus:[
+      { icon:'\u21C5', value:archSort, options:[
+        {v:'recent',label:'Most recent'},{v:'votes',label:'Most voted'},{v:'category',label:'By category'}
+      ], onPick:function(v){ archSort=v; renderArchive(); } },
+      { icon:'\u25A6', value:archFilter, options:showOpts, onPick:function(v){ archFilter=v; renderArchive(); } }
+    ],
+    pills:{ value:archCategory, options:categoryPillOptions(), onPick:function(v){ archCategory=v; renderArchive(); } }
+  });
 }
 function renderArchive(){
   var list = document.getElementById('arch-list'); if(!list) return;
@@ -1776,6 +1866,7 @@ function renderMyDilemmas(rows){
     var status = closed ? '\uD83D\uDD12 Closed \u00B7 final verdict' : '\uD83D\uDFE2 Open \u00B7 '+feedTimeLeft(r.closes_at);
     h += '<div class="myd-card">'
       + '<div class="myd-top"><span class="myd-status '+(closed?'closed':'open')+'">'+status+'</span><span class="myd-votes" id="mydv-'+escHtml(r.dilemma_id)+'">\u2026</span></div>'
+      + (r.category && CAT_META[r.category] ? '<div class="myd-cat">'+catChip(r.category)+'</div>' : '')
       + '<div class="myd-scn">'+escHtml(scn)+'</div>'
       + (closed ? '<div class="myd-verdict rvv-mount" id="mydver-'+escHtml(r.dilemma_id)+'"><div class="rv-break">Reading the room\u2026</div></div>' : '')
       + '<button type="button" class="myd-open" data-open="'+escHtml(r.dilemma_id)+'">'+(closed?'Study it in the archive \u2193':'Open it \u2192')+'</button>'
@@ -2014,7 +2105,7 @@ function loadMyQueue(){
     if(!SB){ if(okEl) okEl.style.display='block'; nextB.disabled=true; setTimeout(function(){ close(); nextB.disabled=false; nextB.textContent='Post it live \u2192'; }, 1200); return; }
     var rvEl=document.getElementById('sm-review'); var smErr=document.querySelector('#sm-steps .sm-err'); if(smErr&&smErr.parentNode) smErr.parentNode.removeChild(smErr);
     nextB.disabled=true; nextB.textContent='Posting\u2026';
-    SB.rpc('gc_submit_dilemma', { p_scenario:val(S.scenario), p_question:val(S.question), p_options:opts, p_dims:buildConfirmedDims(), p_outcome:val(S.outcome)||null, p_device_id:DEVICE_ID }).then(function(res){
+    SB.rpc('gc_submit_dilemma', { p_scenario:val(S.scenario), p_question:val(S.question), p_options:opts, p_dims:buildConfirmedDims(), p_outcome:val(S.outcome)||null, p_device_id:DEVICE_ID, p_category:(S.category||null) }).then(function(res){
       var r = res && res.data;
       if(res && res.error){ say('Couldn\u2019t post right now \u2014 please try again.'); nextB.disabled=false; nextB.textContent='Post it live \u2192'; return; }
       if(r && r.ok===false){
