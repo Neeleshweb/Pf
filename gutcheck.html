@@ -511,6 +511,10 @@
     .rsn-help.on { border-color: var(--green); color: var(--green); }
     .rsn-help:disabled { cursor: default; opacity: .85; }
     .rsn-hl { color: var(--muted2); }
+    .dlike { background: none; border: 1px solid var(--border2); color: var(--muted); border-radius: 8px; padding: .6rem 1.1rem; font-size: .86rem; cursor: pointer; display: inline-flex; align-items: center; gap: .4rem; transition: border-color .15s, color .15s, background .15s; }
+    .dlike:hover:not(.on) { border-color: var(--accent); color: var(--white); }
+    .dlike.on { border-color: var(--accent); color: var(--accent); background: rgba(232,84,10,.08); cursor: default; }
+    .dlike .dlike-heart { font-size: 1rem; line-height: 1; }
 
     /* JUDGMENT JOURNAL */
     .jr-summary{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1.6rem;}
@@ -873,7 +877,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-11';
+var SITE_VERSION = '2026-06-21-12';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1642,11 +1646,12 @@ function reveal(d, instant){
   if (d.lesson) h += '<div class="rv-lesson"><span>The takeaway:</span> '+d.lesson+'</div>';
   h += '<div class="rv-reasons" id="reasons-feed"></div>';
   /* foot */
-  h += '<div class="rv-foot"><div class="rf-streak">🔥 <b>'+(GC.streak||1)+'</b> day streak · more open calls are waiting below</div><div class="rv-foot-btns"><button class="btn-primary" data-share="call" style="padding:.6rem 1.2rem">Share my call ↗</button><a href="#archive" class="btn-ghost" style="padding:.6rem 1.2rem">Browse the Archive →</a></div></div>';
+  h += '<div class="rv-foot"><div class="rf-streak">🔥 <b>'+(GC.streak||1)+'</b> day streak · more open calls are waiting below</div><div class="rv-foot-btns">'+dilemmaLikeHTML(d)+'<button class="btn-primary" data-share="call" style="padding:.6rem 1.2rem">Share my call ↗</button><a href="#archive" class="btn-ghost" style="padding:.6rem 1.2rem">Browse the Archive →</a></div></div>';
   h += '</div>';
   mountR.innerHTML = h;
   if (d.tier===3) injectRoomVerdict(d, mountR.querySelector('.rvv-mount'), true);
   if (typeof loadReasons==='function') loadReasons(d, mountR);
+  wireDilemmaLikes(mountR, d);
   var doFill = function(){ [].slice.call(mountR.querySelectorAll('.dist-bar i')).forEach(function(i){ i.style.width = i.getAttribute('data-w')+'%'; }); };
   if (instant) setTimeout(doFill, 60); else setTimeout(doFill, 120);
 }
@@ -1715,9 +1720,11 @@ function buildArchDetail(item, d){
   var bk = (d.tier===3) ? '<div class="rv-h y" style="margin-top:1.1rem">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>' : '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>';
   rev.innerHTML = bk+realHtml+(d.lesson?('<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'):'')
     + '<span class="preview-tag crowd-tag" style="margin-top:.8rem;display:inline-block">Crowd numbers are a preview · live community soon</span>'
+    + (dilemmaLikeHTML(d)?'<div class="rv-foot-btns" style="margin-top:1rem">'+dilemmaLikeHTML(d)+'</div>':'')
     + '<div class="rv-reasons"></div>';
   if (SB) { enhanceLive(item, d); loadReasons(d, item); }
   if (d.tier===3) injectRoomVerdict(d, rev.querySelector('.rvv-mount'), false);
+  wireDilemmaLikes(item, d);
 }
 
 /* ---------- SUBSCRIBE (Phase A: local; Phase B: Supabase) ---------- */
@@ -2351,6 +2358,31 @@ var REASON_BAN = ['fuck','shit','bitch','cunt','asshole','nigger','faggot','rape
 function reasonClean(t){ var l=(t||'').toLowerCase(); for(var i=0;i<REASON_BAN.length;i++){ if(l.indexOf(REASON_BAN[i])>=0) return false; } return true; }
 function rsnTimeAgo(ts){ try{ var s=(Date.now()-new Date(ts).getTime())/1000; if(s<60) return 'just now'; if(s<3600) return Math.floor(s/60)+'m ago'; if(s<86400) return Math.floor(s/3600)+'h ago'; return Math.floor(s/86400)+'d ago'; }catch(e){ return ''; } }
 function rsnOptTitle(d,k){ for(var i=0;i<d.opts.length;i++){ if(d.opts[i].k===k) return d.opts[i].t; } return ''; }
+/* ---------- DILEMMA LIKES (signed-in only; one permanent like; counts hidden when signed out) ---------- */
+function dilemmaLikeHTML(d){
+  if(!SB || !currentUser || !d) return '';
+  return '<button type="button" class="dlike" data-dlike="'+escHtml(d.id)+'" aria-pressed="false"><span class="dlike-heart">\u2661</span> Like <span class="dlike-n">·</span></button>';
+}
+function setDlike(btn, n, liked){
+  var h=btn.querySelector('.dlike-heart'); if(h) h.textContent = liked?'\u2665':'\u2661';
+  var s=btn.querySelector('.dlike-n'); if(s) s.textContent = (n==null?'':n);
+  btn.classList.toggle('on', !!liked); btn.setAttribute('aria-pressed', liked?'true':'false');
+}
+function wireDilemmaLikes(scopeEl, d){
+  if(!SB || !currentUser || !scopeEl || !d) return;
+  var btns=[].slice.call(scopeEl.querySelectorAll('.dlike')).filter(function(b){ return b.getAttribute('data-dlike')===d.id; });
+  if(!btns.length) return;
+  SB.rpc('gc_dilemma_like_state',{p_ids:[d.id]}).then(function(res){
+    var row=(res&&res.data&&res.data[0])?res.data[0]:null; var n=row?(row.n==null?0:+row.n):0; var liked=row?!!row.liked:false;
+    btns.forEach(function(b){ setDlike(b,n,liked); });
+  }).catch(function(){});
+  btns.forEach(function(b){ b.onclick=function(){
+    if(b._busy || b.classList.contains('on')) return;
+    if(!currentUser){ openSignIn('Sign in to like this dilemma — it also builds your judgment profile.'); return; }
+    b._busy=true;
+    SB.rpc('gc_like_dilemma',{p_dilemma_id:d.id}).then(function(res){ b._busy=false; var dd=res&&res.data; if(dd&&dd.ok){ setDlike(b, dd.count, true); } else if(dd&&dd.reason==='auth'){ openSignIn(); } }).catch(function(){ b._busy=false; });
+  }; });
+}
 function loadReasons(d, scopeEl){
   if(!d) return; var mount=(scopeEl||document).querySelector('.rv-reasons'); if(!mount) return;
   if(!SB){ mount.innerHTML=''; return; }
