@@ -602,7 +602,7 @@
 .fbar-mi:hover{background:var(--card2);color:var(--white)}
 .fbar-mi.on{color:var(--white);font-weight:700}
 .fbar-ck{color:var(--accent);font-weight:800}
-.fbar-pills{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;padding:.1rem 0;flex:1 1 240px;min-width:0}
+.fbar-pills{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem;padding:.1rem 0;flex:0 0 100%;width:100%;min-width:0;margin-top:.15rem}
 .fbar-pill{flex:0 0 auto;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:.8rem;font-weight:600;padding:.4rem .8rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:all .15s}
 .fbar-pill:hover{border-color:var(--accent);color:var(--white)}
 .fbar-pill.on{background:rgba(232,84,10,.16);border-color:var(--accent);color:var(--white);font-weight:700}
@@ -865,7 +865,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-6';
+var SITE_VERSION = '2026-06-21-7';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
