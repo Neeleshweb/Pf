@@ -865,7 +865,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-7';
+var SITE_VERSION = '2026-06-21-8';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1836,34 +1836,65 @@ function renderMyQueue(rows){
   [].slice.call(wrap.querySelectorAll('.myq-tab')).forEach(function(b){ b.onclick=function(){ myqTab=b.getAttribute('data-tab'); renderMyQueue(myqRows); }; });
   [].slice.call(wrap.querySelectorAll('[data-arch]')).forEach(function(b){ b.onclick=function(){ var a=document.getElementById('archive'); if(a&&a.scrollIntoView) a.scrollIntoView({behavior:'smooth',block:'start'}); }; });
 }
-var mydRowsById = {};
+var mydRowsById = {}, mydAllRows = [], mydCounts = {};
+var mydSort = 'recent', mydStatus = 'all', mydCategory = 'all';
 function mydIsClosed(r){ return r && r.closes_at ? (new Date(r.closes_at) <= new Date()) : false; }
-function renderMyDilemmas(rows){
+function mydVotes(r){ return (mydCounts && mydCounts[r.dilemma_id]) || 0; }
+function renderMyDControls(host){
+  if(!host) return;
+  mountFilterBar(host, {
+    menus:[
+      { icon:'\u21C5', value:mydSort, options:[
+        {v:'recent',label:'Most recent'},{v:'popular',label:'Most popular'}
+      ], onPick:function(v){ mydSort=v; renderMyDilemmas(); } },
+      { icon:'\u25A6', value:mydStatus, options:[
+        {v:'all',label:'All'},{v:'open',label:'Open'},{v:'closed',label:'Closed'}
+      ], onPick:function(v){ mydStatus=v; renderMyDilemmas(); } }
+    ],
+    pills:{ value:mydCategory, options:categoryPillOptions(), onPick:function(v){ mydCategory=v; renderMyDilemmas(); } }
+  });
+}
+function renderMyDilemmas(){
   var wrap = document.getElementById('myq-wrap'); if(!wrap) return;
-  rows = rows || [];
-  if(!rows.length){
+  var all = mydAllRows || [];
+  if(!all.length){
     wrap.innerHTML = '<div class="myq-h">\uD83D\uDCE4 Your dilemmas</div>'
       + '<div class="myq-empty"><p>You haven\u2019t posted a dilemma yet. Turn a real product fork you\u2019ve faced into a Gut Check \u2014 it goes live the moment you post it, and PMs can start voting right away.</p><button class="btn-primary" id="myq-submit" type="button">Post your first dilemma</button></div>';
-    var sb = document.getElementById('myq-submit'); if(sb) sb.onclick = function(){ var o = document.getElementById('open-submit'); if(o) o.click(); };
+    var sb0 = document.getElementById('myq-submit'); if(sb0) sb0.onclick = function(){ var o = document.getElementById('open-submit'); if(o) o.click(); };
     wrap.style.display = ''; return;
   }
-  rows = rows.slice().sort(function(a,b){
-    var ca = mydIsClosed(a), cb = mydIsClosed(b);
-    if(ca !== cb) return ca ? 1 : -1;
-    var ta = a.closes_at ? new Date(a.closes_at).getTime() : 0, tb = b.closes_at ? new Date(b.closes_at).getTime() : 0;
-    return ca ? (tb - ta) : (ta - tb);
+  var openN = all.filter(function(r){ return !mydIsClosed(r); }).length;
+  var rows = all.filter(function(r){
+    var closed = mydIsClosed(r);
+    if(mydStatus==='open' && closed) return false;
+    if(mydStatus==='closed' && !closed) return false;
+    if(mydCategory && mydCategory!=='all' && r.category!==mydCategory) return false;
+    return true;
   });
-  var openN = rows.filter(function(r){ return !mydIsClosed(r); }).length;
+  rows = rows.slice().sort(function(a,b){
+    if(mydSort==='popular'){ var dv = mydVotes(b) - mydVotes(a); if(dv) return dv; }
+    var ta = a.published_at ? new Date(a.published_at).getTime() : 0;
+    var tb = b.published_at ? new Date(b.published_at).getTime() : 0;
+    return tb - ta;
+  });
   var h = '<div class="myq-h">\uD83D\uDCE4 Your dilemmas</div>'
     + '<div class="myq-intro">Posted dilemmas go live instantly and collect votes for 48 hours, then lock with a final verdict.'
     + (openN ? ' <b>'+openN+'</b> of yours '+(openN===1?'is':'are')+' still open.' : ' All of yours have closed.') + '</div>'
-    + '<div class="myd-grid">';
+    + '<div id="myd-controls" class="myd-controls"></div>';
+  if(!rows.length){
+    wrap.innerHTML = h + '<div class="feed-empty">No dilemmas match this view \u2014 try a different status or category.</div>';
+    wrap.style.display = '';
+    renderMyDControls(document.getElementById('myd-controls'));
+    return;
+  }
+  h += '<div class="myd-grid">';
   rows.forEach(function(r){
     var closed = mydIsClosed(r);
     var scn = (r.scenario||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(); if(scn.length>170) scn = scn.slice(0,169)+'\u2026';
     var status = closed ? '\uD83D\uDD12 Closed \u00B7 final verdict' : '\uD83D\uDFE2 Open \u00B7 '+feedTimeLeft(r.closes_at);
+    var nv = mydVotes(r);
     h += '<div class="myd-card">'
-      + '<div class="myd-top"><span class="myd-status '+(closed?'closed':'open')+'">'+status+'</span><span class="myd-votes" id="mydv-'+escHtml(r.dilemma_id)+'">\u2026</span></div>'
+      + '<div class="myd-top"><span class="myd-status '+(closed?'closed':'open')+'">'+status+'</span><span class="myd-votes">'+nv+' vote'+(nv===1?'':'s')+'</span></div>'
       + (r.category && CAT_META[r.category] ? '<div class="myd-cat">'+catChip(r.category)+'</div>' : '')
       + '<div class="myd-scn">'+escHtml(scn)+'</div>'
       + (closed ? '<div class="myd-verdict rvv-mount" id="mydver-'+escHtml(r.dilemma_id)+'"><div class="rv-break">Reading the room\u2026</div></div>' : '')
@@ -1872,12 +1903,12 @@ function renderMyDilemmas(rows){
   });
   h += '</div>';
   wrap.innerHTML = h; wrap.style.display = '';
+  renderMyDControls(document.getElementById('myd-controls'));
   mydRowsById = {}; rows.forEach(function(r){ mydRowsById[r.dilemma_id] = r; });
   rows.forEach(function(r){
-    if(!SB) return;
+    if(!SB || !mydIsClosed(r)) return;
     var d = scheduleRowToDilemma(r); if(!d) return;
-    fetchDist(d.id).then(function(dd){ var n=0; if(dd && dd.length) dd.forEach(function(x){ n += Number(x.n)||0; }); var el = document.getElementById('mydv-'+r.dilemma_id); if(el) el.textContent = n+' vote'+(n===1?'':'s'); });
-    if(mydIsClosed(r)){ var box = document.getElementById('mydver-'+r.dilemma_id); if(box) injectRoomVerdict(d, box, false); }
+    var box = document.getElementById('mydver-'+r.dilemma_id); if(box) injectRoomVerdict(d, box, false);
   });
   [].slice.call(wrap.querySelectorAll('.myd-open')).forEach(function(b){
     b.onclick = function(){ var r = mydRowsById[b.getAttribute('data-open')]; if(!r) return;
@@ -1899,7 +1930,13 @@ function loadMyQueue(){
   showSec(true);
   return SB.rpc('gc_my_dilemmas', { p_uid: currentUser.id }).then(function(res){
     if(res && res.error){ console.warn('[GutCheck] my-dilemmas error:', res.error); showSec(false); return; }
-    renderMyDilemmas(res && res.data ? res.data : []);
+    mydAllRows = (res && res.data) ? res.data : [];
+    var ids = mydAllRows.map(function(r){ return r.dilemma_id; });
+    if(!ids.length){ mydCounts = {}; renderMyDilemmas(); return; }
+    return SB.rpc('gc_vote_counts', { p_ids: ids }).then(function(c){
+      mydCounts = {}; if(c && c.data) c.data.forEach(function(x){ mydCounts[x.dilemma_id] = Number(x.n)||0; });
+      renderMyDilemmas();
+    }).catch(function(){ mydCounts = {}; renderMyDilemmas(); });
   }).catch(function(e){ console.warn('[GutCheck] my-dilemmas failed:', e); showSec(false); });
 }
 
