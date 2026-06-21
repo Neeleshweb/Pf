@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="PM Gut Check by Neelesh Singh — one real product decision every day. Make the call, see how PMs around the world voted, then find out what actually happened. The daily judgment habit no AI can give you."/>
+  <meta name="description" content="PM Gut Check by Neelesh Singh — a live community network where product managers post real product calls and a room of peers votes. Make your call before you see the crowd. The product-judgment feedback loop no AI can give you."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://neeleshpmtoolkit.com/gutcheck.html"/>
   <meta property="og:title" content="PM Gut Check — make the call before you see the crowd"/>
-  <meta property="og:description" content="One real product decision every day. Commit your call, see how PMs worldwide voted, then find out what actually happened."/>
+  <meta property="og:description" content="A live network for product managers. Post a real dilemma and it's live in seconds; vote on others' and see how your judgment stacks up against PMs worldwide."/>
   <meta property="og:image" content="https://neeleshpmtoolkit.com/og-gutcheck.png"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="PM Gut Check — make the call before you see the crowd"/>
@@ -659,11 +659,11 @@
 <section class="hero">
   <div class="hero-grid"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow">● One real product call. Every day.</div>
+    <div class="hero-eyebrow">● A live network for product judgment</div>
     <h1>WHAT WOULD <span class="o">YOU</span> DO?<br>MAKE THE <span class="y">CALL.</span></h1>
-    <p class="hero-sub">Every day, one real product decision — from products used by millions, or my own work at <strong>FIIX, CoreLogic, and beyond</strong>. Make your call, then see <strong>how PMs around the world actually voted</strong> and what really happened. The one thing an AI prompt can't give you: <strong>a room full of other product minds.</strong></p>
+    <p class="hero-sub">This is where product managers bring their hardest calls and let a room of peers weigh in. <strong>Post a real dilemma and it's live in seconds</strong>; vote on others' and see how your instincts stack up against PMs worldwide. The one feedback loop an AI prompt can't give you: <strong>a room full of other product minds.</strong> Think your judgment holds up? <strong>Prove it.</strong></p>
     <div class="hero-ctas">
-      <a href="#today" class="btn-primary">▶ Make today's call</a>
+      <a href="#today" class="btn-primary">▶ Weigh in now</a>
       <a href="#profile" class="btn-ghost">Your Gut Check</a>
       <button type="button" class="btn-ghost gw-replay" id="gw-replay">How it works</button>
     </div>
@@ -673,6 +673,17 @@
       <div class="gym-stat green"><b id="gs-calib">—</b><small>matched the pros</small></div>
       <div class="gym-stat blue"><b id="gs-level">Associate</b><small>judgment level</small></div>
     </div>
+  </div>
+</section>
+
+<!-- SUBMIT A DILEMMA (moved to top) -->
+<section class="section" id="submit">
+  <div class="call-card" style="padding:1.6rem 1.8rem">
+    <div class="sec-eyebrow b" style="margin-bottom:.5rem">Start here · Community</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.5px;margin-bottom:.4rem">Faced a tough call? Put it to the room.</div>
+    <p style="font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem">The sharpest dilemmas come from real rooms. Post a product fork you actually faced and it goes <strong>live to the community in seconds</strong> — PMs start voting right away, and you watch the room respond over the next 48 hours (credited, if you like).</p>
+    <div class="sub-status" id="sub-status"></div>
+    <button class="btn-primary" id="open-submit">✍️ Post your dilemma</button>
   </div>
 </section>
 
@@ -748,17 +759,6 @@
 <!-- JUDGMENT JOURNAL -->
 
 
-<!-- SUBMIT A DILEMMA -->
-<section class="section" id="submit">
-  <div class="call-card" style="padding:1.6rem 1.8rem">
-    <div class="sec-eyebrow b" style="margin-bottom:.5rem">Community</div>
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.5px;margin-bottom:.4rem">Faced a tough call? Turn it into a Gut Check.</div>
-    <p style="font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:1.1rem">The best dilemmas come from real rooms. Share a product fork you faced — if it's picked, PMs everywhere will test themselves on your call (credited, if you like). Every submission is reviewed before it goes live.</p>
-    <div class="sub-status" id="sub-status"></div>
-    <button class="btn-primary" id="open-submit">✍️ Submit your dilemma</button>
-  </div>
-</section>
-
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-logo">NEELESH<span>.</span>PM</div>
@@ -769,7 +769,7 @@
     <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank">LinkedIn</a>
     <a href="mailto:Neelesh.singh@dal.ca">Contact</a>
   </div>
-  <div class="footer-copy">© 2026 Neelesh Singh · PM Gut Check · One real call a day.</div>
+  <div class="footer-copy">© 2026 Neelesh Singh · PM Gut Check · A network for product judgment.</div>
 </footer>
 
 <!-- AUDIENCE MODAL -->
@@ -865,7 +865,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-8';
+var SITE_VERSION = '2026-06-21-9';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -2164,7 +2164,7 @@ function loadMyQueue(){
       backB=document.getElementById('gw-back'), nextB=document.getElementById('gw-next'),
       skipB=document.getElementById('gw-skip'), replay=document.getElementById('gw-replay');
   if(!stage||!nextB||!backB) return;
-  var KEY='pmgc_tour_v1';
+  var KEY='pmgc_tour_v2';
 
   var SCENES=[
     // 1 — what it is
@@ -2210,29 +2210,29 @@ function loadMyQueue(){
   ];
 
   var COPY=[
-    { eye:'What it is', title:'One real call. <span>Every day.</span>',
-      body:'PM Gut Check is a daily judgment workout — one genuine product decision with no obvious right answer. Two minutes to sharpen how you think, not what you know.' },
-    { eye:'Today’s Call', title:'Read it. <span>Make the call.</span>',
-      body:'You get the real situation and the options. Commit to one — and only then does the rest unlock. No take-backs, just like the real thing.' },
-    { eye:'The Crowd', title:'See how the <span>world</span> called it.',
-      body:'The instant you commit, the crowd unlocks — overall, and split by working vs breaking-in PMs — plus how other PMs reasoned. The one thing an AI prompt can’t give you: a room full of product minds.' },
-    { eye:'Your Profile · Journal', title:'Your judgment, <span>compounding.</span>',
-      body:'Every call feeds your streak, your profile, and a private journal — a mirror of how your instincts and decisions evolve over time.' },
-    { eye:'Submit · Archive', title:'Bring your <span>own</span> dilemmas.',
-      body:'Hit a tricky call at work? Submit it. Once reviewed it goes live for everyone — and every past call is saved in the Archive to revisit anytime.' }
+    { eye:'1 · Create', title:'Start with a <span>real</span> fork.',
+      body:'Bring an actual product decision you faced — the options, the tension, the part with no clean answer. Turning your own messy call into a sharp dilemma is, by itself, the fastest way to see how you really think.' },
+    { eye:'2 · Post it live', title:'No queue. <span>Live in seconds.</span>',
+      body:'Hit post and your dilemma is instantly live to the whole community, open for 48 hours. No gatekeeper, no waiting — your real question is in front of working PMs the moment you ask it.' },
+    { eye:'3 · The room responds', title:'A room of PMs <span>weighs in.</span>',
+      body:'Product managers worldwide commit their own call and leave their reasoning. You watch the room split — aspiring vs working PMs — an honest, live read on your decision that no AI prompt and no single mentor can give you.' },
+    { eye:'4 · The verdict', title:'It closes with a <span>verdict.</span>',
+      body:'After 48 hours it locks. The crowd’s answer crystallizes — including the surprisingly-popular pick the majority underrates but that’s right more often than the obvious favorite. Signal, not noise.' },
+    { eye:'5 · The archive', title:'Every call <span>compounds.</span>',
+      body:'Closed calls live forever in the Archive to revisit anytime, and every call you make sharpens your track record. The judgment you build here is portable, compounding, and impossible to copy from a prompt.' }
   ];
 
-  var step=0;
+  var step=0; var SCENE_ORDER=[1,4,2,0,3];
   function seen(){ try{ return localStorage.getItem(KEY)==='1'; }catch(e){ return false; } }
   function markSeen(){ try{ localStorage.setItem(KEY,'1'); }catch(e){} }
 
   function renderDots(){ var h=''; for(var i=0;i<SCENES.length;i++){ h+='<span class="gw-dot'+(i===step?' on':(i<step?' done':''))+'"></span>'; } dotsEl.innerHTML=h; }
   function render(){
     var c=COPY[step];
-    stage.innerHTML='<div class="gw-scene">'+SCENES[step]+'</div><div class="gw-eyebrow">Step '+(step+1)+' · '+c.eye+'</div><div class="gw-title">'+c.title+'</div><div class="gw-copy">'+c.body+'</div>';
+    stage.innerHTML='<div class="gw-scene">'+SCENES[SCENE_ORDER[step]]+'</div><div class="gw-eyebrow">Step '+(step+1)+' · '+c.eye+'</div><div class="gw-title">'+c.title+'</div><div class="gw-copy">'+c.body+'</div>';
     renderDots();
     backB.style.visibility = step===0 ? 'hidden' : 'visible';
-    nextB.textContent = step===SCENES.length-1 ? 'Make today’s call →' : 'Next →';
+    nextB.textContent = step===SCENES.length-1 ? 'Jump in →' : 'Next →';
   }
   function open(){ step=0; ov.classList.add('open'); document.body.style.overflow='hidden'; render(); }
   function close(){ ov.classList.remove('open'); document.body.style.overflow=''; markSeen(); }
