@@ -865,7 +865,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-9';
+var SITE_VERSION = '2026-06-21-7';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1577,7 +1577,7 @@ function doCommit(d, key, conf, pred){
   /* highlight chosen */
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ if (b.querySelector('.opt-k') && b.querySelector('.opt-k').textContent===key){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } b.style.opacity=.96; });
   reveal(d, false);
-  if (SB) { recordVote(d, key, reasonText, pred).then(function(){ enhanceLive(document.getElementById('today-reveal'), d); loadReasons(d, document.getElementById('today-reveal')); }); }
+  if (SB) { recordVote(d, key, reasonText, pred).then(function(){ var rv=document.getElementById('today-reveal'); enhanceLive(rv, d); loadReasons(d, rv); if(d.tier===3 && rv){ var mb=rv.querySelector('.rvv-mount'); if(mb) injectRoomVerdict(d, mb, true); } }); }
   bumpVoteStreak(); refreshRecord(); saveProfile();
 }
 
@@ -2235,6 +2235,7 @@ function loadMyQueue(){
     nextB.textContent = step===SCENES.length-1 ? 'Jump in →' : 'Next →';
   }
   function open(){ step=0; ov.classList.add('open'); document.body.style.overflow='hidden'; render(); }
+  try{ window.__gcOpenTour = open; }catch(e){}
   function close(){ ov.classList.remove('open'); document.body.style.overflow=''; markSeen(); }
   function finish(){ close(); var t=document.getElementById('today'); if(t&&t.scrollIntoView){ t.scrollIntoView({behavior:'smooth',block:'start'}); } }
 
@@ -2245,7 +2246,7 @@ function loadMyQueue(){
   document.addEventListener('keydown', function(e){ if(!ov.classList.contains('open')) return; if(e.key==='Escape') close(); else if(e.key==='ArrowRight') nextB.click(); else if(e.key==='ArrowLeft' && step>0) backB.click(); });
   if(replay) replay.onclick=function(e){ e.preventDefault(); open(); };
 
-  setTimeout(function(){ if(!ov.classList.contains('open')) open(); }, 650);
+  /* The walkthrough now opens only right after a sign-in (see openTourAfterSignin), not on every load. */
 })();
 
 /* ---------- RESET ---------- */
@@ -2297,7 +2298,7 @@ function saveProfile(){
 function toast(msg){ var t=document.getElementById('gc-toast'); if(!t){ t=document.createElement('div'); t.id='gc-toast'; t.className='gc-toast'; document.body.appendChild(t); } t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(function(){ t.classList.remove('show'); }, 3800); }
 function openSignIn(msg){ var m=document.getElementById('signin-msg'); if(m && msg) m.textContent=msg; var ok=document.getElementById('signin-ok'); if(ok) ok.style.display='none'; document.getElementById('signin-overlay').classList.add('open'); }
 function closeSignIn(){ document.getElementById('signin-overlay').classList.remove('open'); }
-function signOutUser(){ if(!SB) return; SB.auth.signOut().then(function(){ currentUser=null; GC=freshGC(); gcSave(GC); updateAuthUI(); renderToday(); renderArchive(); refreshRecord(); toast('You’ve been signed out. Your progress is saved to your account — sign back in anytime.'); }); }
+function signOutUser(){ if(!SB) return; SB.auth.signOut().then(function(){ currentUser=null; GC=freshGC(); gcSave(GC); updateAuthUI(); renderToday(); loadFeed(); renderArchive(); refreshRecord(); loadMyQueue(); toast('You’ve been signed out. Your progress is saved to your account — sign back in anytime.'); }); }
 function updateAuthUI(){
   var bar=document.getElementById('auth-bar'); if(!bar){ renderNavAccount(); return; }
   if(!SB){ bar.style.display='none'; renderNavAccount(); return; }
@@ -2511,6 +2512,12 @@ function initToday(){
     loadFeed();
   }).catch(function(){ todaysDilemma = fallback; featuredDilemma = fallback; renderToday(); });
 }
+function openTourAfterSignin(){
+  if(!wasRedirect || !currentUser) return;   // only on a genuine sign-in redirect, not a session restore / reload
+  wasRedirect = false;
+  toast('Signed in — you’re all set. Make your call.');
+  if(window.__gcOpenTour) setTimeout(window.__gcOpenTour, 600);
+}
 function boot(){
   updateAuthUI();
   if(!SB){ applyStreak(); initToday(); renderArchive(); refreshRecord(); return; }
@@ -2519,15 +2526,15 @@ function boot(){
     if(!currentUser){ GC = freshGC(); gcSave(GC); }   // signed out elsewhere -> clear this device's cached profile
     return currentUser ? loadProfile().then(loadMyVotes) : Promise.resolve();
   }).then(function(){
-    applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord(); loadSubStats(); loadMyQueue();
+    applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord(); loadSubStats(); loadMyQueue(); openTourAfterSignin();
   }).catch(function(){ applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord(); });
   if(SB.auth.onAuthStateChange) SB.auth.onAuthStateChange(function(evt, sess){
     var was = currentUser ? currentUser.id : null;
     currentUser = sess ? sess.user : null;
     var now = currentUser ? currentUser.id : null;
     if(now === was){ updateAuthUI(); return; }
-    if(currentUser){ loadProfile().then(loadMyVotes).then(function(){ applyStreak(); updateAuthUI(); renderToday(); renderArchive(); refreshRecord(); loadMyQueue(); if(wasRedirect){ wasRedirect=false; toast('Signed in — you’re all set. Make your call.'); } }); }
-    else { GC = freshGC(); gcSave(GC); applyStreak(); updateAuthUI(); renderToday(); renderArchive(); refreshRecord(); loadSubStats(); loadMyQueue(); }
+    if(currentUser){ loadProfile().then(loadMyVotes).then(function(){ applyStreak(); updateAuthUI(); renderToday(); loadFeed(); renderArchive(); refreshRecord(); loadMyQueue(); openTourAfterSignin(); }); }
+    else { GC = freshGC(); gcSave(GC); applyStreak(); updateAuthUI(); renderToday(); loadFeed(); renderArchive(); refreshRecord(); loadSubStats(); loadMyQueue(); }
   });
 }
 boot();
