@@ -919,7 +919,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-15';
+var SITE_VERSION = '2026-06-21-17';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -2369,7 +2369,7 @@ function closeSignIn(){ document.getElementById('signin-overlay').classList.remo
 function signOutUser(){ if(!SB) return; SB.auth.signOut().then(function(){ currentUser=null; GC=freshGC(); gcSave(GC); updateAuthUI(); renderToday(); loadFeed(); renderArchive(); refreshRecord(); loadMyQueue(); toast('You’ve been signed out. Your progress is saved to your account — sign back in anytime.'); }); }
 /* ===================== NOTIFICATIONS (Phase 1b, in-app) ===================== */
 var NOTIF = { items:[], unread:0, open:false, poll:null };
-function notifIcon(t){ return ({live:'\uD83D\uDE80', vote:'\uD83D\uDDF3\uFE0F', milestone:'\uD83C\uDF89', like_dilemma:'\u2764\uFE0F', like_reason:'\uD83D\uDC4D', verdict:'\u2696\uFE0F', closing_soon:'\u23F3', closed:'\uD83D\uDCCA', voted_closed:'\uD83D\uDCCA', voted_verdict:'\u2696\uFE0F'})[t] || '\uD83D\uDD14'; }
+function notifIcon(t){ return ({live:'\uD83D\uDE80', vote:'\uD83D\uDDF3\uFE0F', milestone:'\uD83C\uDF89', like_dilemma:'\u2764\uFE0F', like_reason:'\uD83D\uDC4D', verdict:'\u2696\uFE0F', closing_soon:'\u23F3', closed:'\uD83D\uDCCA', voted_closed:'\uD83D\uDCCA', voted_verdict:'\u2696\uFE0F', voted_reasons:'\uD83D\uDCDD'})[t] || '\uD83D\uDD14'; }
 function notifText(n){
   var d=n.data||{}; var ttl='<span class="notif-hl">'+escHtml(d.title||'your dilemma')+'</span>'; var c=n.cnt||1; var t=n.type;
   if(t==='live') return 'Your dilemma is <b>live</b> \u2014 open for votes for 48 hours. '+ttl;
@@ -2380,8 +2380,9 @@ function notifText(n){
   if(t==='verdict') return 'The room reached a verdict on '+ttl;
   if(t==='closing_soon') return '\u23F3 '+ttl+' closes soon \u2014 last push for votes';
   if(t==='closed') return 'Your dilemma closed \u2014 <b>'+escHtml(String(d.total||0))+'</b> votes in. See the full summary on '+ttl;
-  if(t==='voted_closed') return 'A dilemma you called has closed \u2014 see how the room landed on '+ttl;
+  if(t==='voted_closed'){ if(d.sp){ return d.matched ? ('A dilemma you called closed \u2014 <b>you matched the room</b> \u2705 '+ttl) : ('A dilemma you called closed \u2014 the room went a different way \uD83E\uDD14 '+ttl); } return 'A dilemma you called has closed \u2014 '+ttl; }
   if(t==='voted_verdict') return 'The room reached a verdict on a dilemma you called \u2014 '+ttl;
+  if(t==='voted_reasons') return '<b>'+c+'</b> new '+(c===1?'take':'takes')+' on a dilemma you called '+ttl;
   return 'Activity on '+ttl;
 }
 function setNotifBadge(n){ var b=document.getElementById('notif-badge'); if(!b) return; if(n>0){ b.textContent=(n>99?'99+':String(n)); b.classList.add('show'); } else { b.classList.remove('show'); } }
@@ -2410,21 +2411,23 @@ function toggleNotifPanel(force){ var panel=document.getElementById('notif-panel
 function resolveDilemmaForModal(did){ for(var i=0;i<BANK.length;i++){ if(BANK[i].id===did) return Promise.resolve(BANK[i]); } if(!SB) return Promise.resolve(null); return SB.rpc('gc_dilemmas_by_ids',{p_ids:[did]}).then(function(res){ var row=(res&&res.data&&res.data[0])?res.data[0]:null; return row?scheduleRowToDilemma(row):null; }).catch(function(){ return null; }); }
 function closeNotifModal(){ var ov=document.getElementById('notif-modal'); if(ov) ov.classList.remove('open'); document.body.style.overflow=''; }
 function notifModalBanner(n){
-  var d=n.data||{}, c=n.cnt||1, t=n.type;
-  var map={
-    live:{ico:'\uD83D\uDE80', txt:'Your dilemma went live \u2014 open for votes for 48 hours.'},
-    vote:{ico:'\uD83D\uDDF3\uFE0F', txt:c+' new '+(c===1?'vote':'votes')+' came in since you last checked.'},
-    milestone:{ico:'\uD83C\uDF89', txt:(d.total||c)+' votes \u2014 your dilemma is gaining traction.'},
-    like_dilemma:{ico:'\u2764\uFE0F', txt:c+' '+(c===1?'PM':'PMs')+' liked this dilemma.'},
-    like_reason:{ico:'\uD83D\uDC4D', txt:c+' '+(c===1?'PM':'PMs')+' found your take sharp \u2014 it\u2019s highlighted below.'},
-    verdict:{ico:'\u2696\uFE0F', txt:'The room reached a verdict on this dilemma \u2014 see it below.'},
-    closing_soon:{ico:'\u23F3', txt:'This dilemma is closing soon \u2014 last push for votes.'},
-    closed:{ico:'\uD83D\uDCCA', txt:'This dilemma closed with '+(d.total||0)+' '+((d.total||0)===1?'vote':'votes')+'. Here\u2019s the room\u2019s verdict.'},
-    voted_closed:{ico:'\uD83D\uDCCA', txt:'A dilemma you called has closed \u2014 here\u2019s how the room landed.'},
-    voted_verdict:{ico:'\u2696\uFE0F', txt:'The room reached a verdict on a dilemma you called.'}
-  };
-  var m=map[t]||{ico:'\uD83D\uDD14', txt:'New activity on this dilemma.'};
-  return '<div class="nmodal-banner"><span class="nmb-ico">'+m.ico+'</span><span>'+escHtml(m.txt)+'</span></div>';
+  var d=n.data||{}, c=n.cnt||1, t=n.type, ico='\uD83D\uDD14', txt='New activity on this dilemma.';
+  if(t==='live'){ ico='\uD83D\uDE80'; txt='Your dilemma went live \u2014 open for votes for 48 hours.'; }
+  else if(t==='vote'){ ico='\uD83D\uDDF3\uFE0F'; txt=c+' new '+(c===1?'vote':'votes')+' came in since you last checked.'; }
+  else if(t==='milestone'){ ico='\uD83C\uDF89'; txt=(d.total||c)+' votes \u2014 your dilemma is gaining traction.'; }
+  else if(t==='like_dilemma'){ ico='\u2764\uFE0F'; txt=c+' '+(c===1?'PM':'PMs')+' liked this dilemma.'; }
+  else if(t==='like_reason'){ ico='\uD83D\uDC4D'; txt=c+' '+(c===1?'PM':'PMs')+' found your take sharp \u2014 it\u2019s highlighted below.'; }
+  else if(t==='verdict'){ ico='\u2696\uFE0F'; txt='The room reached a verdict on this dilemma \u2014 see it below.'; }
+  else if(t==='closing_soon'){ ico='\u23F3'; txt='This dilemma is closing soon \u2014 last push for votes.'; }
+  else if(t==='closed'){ ico='\uD83D\uDCCA'; txt='This dilemma closed with '+(d.total||0)+' '+((d.total||0)===1?'vote':'votes')+'. Here\u2019s the room\u2019s verdict.'; }
+  else if(t==='voted_verdict'){ ico='\u2696\uFE0F'; txt='The room reached a verdict on a dilemma you called \u2014 see how you compare.'; }
+  else if(t==='voted_reasons'){ ico='\uD83D\uDCDD'; txt=c+' new '+(c===1?'take':'takes')+' from the room on a dilemma you called \u2014 see the reasoning below.'; }
+  else if(t==='voted_closed'){ ico='\uD83D\uDCCA';
+    if(d.sp){ txt=(d.matched?'\u2705 You matched the room':'\uD83E\uDD14 The room went a different way')+' \u2014 you called '+(d.your_choice||'?')+', the room landed on '+d.sp+'.';
+      if(d.predicted){ txt += ' You predicted '+d.predicted+(d.pred_right?' \u2014 nailed it \uD83C\uDFAF.':' \u2014 the room surprised you.'); } }
+    else { txt='This dilemma closed \u2014 not enough votes yet for a clear room verdict.'; }
+  }
+  return '<div class="nmodal-banner"><span class="nmb-ico">'+escHtml(ico)+'</span><span>'+escHtml(txt)+'</span></div>';
 }
 function openNotifModal(n){
   var did=n&&n.dilemma_id; if(!did) return;
@@ -2448,7 +2451,7 @@ function openNotifModal(n){
     document.getElementById('nmodal-close').onclick=closeNotifModal;
     var go=document.getElementById('nmodal-go'); if(go) go.onclick=function(){ closeNotifModal(); todaysDilemma=d; renderToday(); var el=document.getElementById('today'); if(el){ var y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); } };
     try{ buildArchDetail(card, d); }catch(e){ console.warn('[GutCheck] notif modal render:', e); }
-    var hlSel={verdict:'.rvv-mount', voted_verdict:'.rvv-mount', closed:'.rvv-mount', voted_closed:'.rvv-mount', vote:'.arch-opts', milestone:'.arch-opts', like_dilemma:'.dlike', like_reason:'.rv-reasons'}[n.type];
+    var hlSel={verdict:'.rvv-mount', voted_verdict:'.rvv-mount', closed:'.rvv-mount', voted_closed:'.rvv-mount', vote:'.arch-opts', milestone:'.arch-opts', like_dilemma:'.dlike', like_reason:'.rv-reasons', voted_reasons:'.rv-reasons'}[n.type];
     if(hlSel){ setTimeout(function(){ var tgt=card.querySelector(hlSel); if(tgt){ tgt.classList.add('nmb-highlight'); try{ tgt.scrollIntoView({block:'nearest',behavior:'smooth'}); }catch(e){} } }, 420); }
   });
 }
