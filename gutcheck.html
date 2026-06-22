@@ -515,6 +515,35 @@
     .dlike:hover:not(.on) { border-color: var(--accent); color: var(--white); }
     .dlike.on { border-color: var(--accent); color: var(--accent); background: rgba(232,84,10,.08); cursor: default; }
     .dlike .dlike-heart { font-size: 1rem; line-height: 1; }
+    .notif-bell { position: relative; background: none; border: none; color: var(--white); cursor: pointer; padding: .4rem; display: flex; align-items: center; border-radius: 8px; }
+    .notif-bell:hover { background: var(--card2); }
+    .notif-bell svg { width: 21px; height: 21px; }
+    .notif-badge { position: absolute; top: 1px; right: 1px; min-width: 16px; height: 16px; padding: 0 4px; background: #e8540a; color: #fff; border-radius: 9px; font-size: .6rem; font-weight: 700; display: flex; align-items: center; justify-content: center; line-height: 1; box-shadow: 0 0 0 2px var(--bg, #0a0a0a); }
+    .notif-panel { position: fixed; background: var(--card); border: 1px solid var(--border2); border-radius: 14px; width: 360px; max-width: calc(100vw - 24px); max-height: 70vh; overflow-y: auto; box-shadow: 0 18px 50px rgba(0,0,0,.55); z-index: 4000; display: none; }
+    .notif-panel.open { display: block; }
+    .notif-phead { display: flex; align-items: center; justify-content: space-between; padding: .85rem 1.1rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--card); z-index: 1; }
+    .notif-phead b { font-size: .95rem; }
+    .notif-markall { background: none; border: none; color: var(--accent2); font-size: .78rem; cursor: pointer; padding: 0; }
+    .notif-markall:hover { text-decoration: underline; }
+    .notif-item { display: flex; gap: .7rem; padding: .8rem 1.1rem; border-bottom: 1px solid var(--border); cursor: pointer; transition: background .12s; align-items: flex-start; }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-item:hover { background: var(--card2); }
+    .notif-item.unread { background: rgba(232,84,10,.06); }
+    .notif-ico { font-size: 1.05rem; flex: 0 0 auto; width: 22px; text-align: center; line-height: 1.4; }
+    .notif-body { flex: 1; min-width: 0; }
+    .notif-txt { font-size: .84rem; color: #d8d3ca; line-height: 1.45; }
+    .notif-txt b { color: var(--white); }
+    .notif-txt .notif-hl { color: var(--accent2); }
+    .notif-time { font-size: .72rem; color: var(--muted2); margin-top: .25rem; }
+    .notif-empty { padding: 1.8rem 1.2rem; color: var(--muted); font-size: .86rem; text-align: center; line-height: 1.5; }
+    .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex: 0 0 auto; align-self: center; }
+    .nmodal-ov { position: fixed; inset: 0; background: rgba(0,0,0,.72); z-index: 4500; display: none; align-items: flex-start; justify-content: center; padding: 5vh 16px; overflow-y: auto; }
+    .nmodal-ov.open { display: flex; }
+    .nmodal { background: var(--card); border: 1px solid var(--border2); border-radius: 18px; width: 680px; max-width: 100%; padding: 1.5rem 1.6rem; position: relative; }
+    .nmodal-close { position: absolute; top: .7rem; right: .9rem; background: none; border: none; color: var(--muted); font-size: 1.4rem; line-height: 1; cursor: pointer; }
+    .nmodal-close:hover { color: var(--white); }
+    .nmodal-head { font-family: 'Bebas Neue', sans-serif; font-size: 1.45rem; letter-spacing: .5px; margin-bottom: .25rem; padding-right: 1.6rem; }
+    .nmodal-ctx { font-size: .82rem; color: var(--accent2); margin-bottom: 1rem; font-weight: 600; }
 
     /* JUDGMENT JOURNAL */
     .jr-summary{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:1.6rem;}
@@ -638,6 +667,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
       Home
     </a>
+    <button class="notif-bell" id="notif-bell" aria-label="Notifications" style="display:none">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-badge" id="notif-badge" hidden>0</span>
+    </button>
     <div class="nav-account" id="nav-account"></div>
     <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
@@ -784,6 +817,10 @@
   <div class="footer-copy">© 2026 Neelesh Singh · PM Gut Check · A network for product judgment.</div>
 </footer>
 
+<!-- NOTIFICATIONS -->
+<div class="notif-panel" id="notif-panel"></div>
+<div class="nmodal-ov" id="notif-modal"><div class="nmodal" id="notif-modal-card"></div></div>
+
 <!-- AUDIENCE MODAL -->
 <div class="aud-overlay" id="aud-overlay">
   <div class="aud-modal" role="dialog" aria-modal="true">
@@ -877,7 +914,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-12';
+var SITE_VERSION = '2026-06-21-13';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -2325,6 +2362,90 @@ function toast(msg){ var t=document.getElementById('gc-toast'); if(!t){ t=docume
 function openSignIn(msg){ var m=document.getElementById('signin-msg'); if(m && msg) m.textContent=msg; var ok=document.getElementById('signin-ok'); if(ok) ok.style.display='none'; document.getElementById('signin-overlay').classList.add('open'); }
 function closeSignIn(){ document.getElementById('signin-overlay').classList.remove('open'); }
 function signOutUser(){ if(!SB) return; SB.auth.signOut().then(function(){ currentUser=null; GC=freshGC(); gcSave(GC); updateAuthUI(); renderToday(); loadFeed(); renderArchive(); refreshRecord(); loadMyQueue(); toast('You’ve been signed out. Your progress is saved to your account — sign back in anytime.'); }); }
+/* ===================== NOTIFICATIONS (Phase 1b, in-app) ===================== */
+var NOTIF = { items:[], unread:0, open:false, poll:null };
+function notifIcon(t){ return ({live:'\uD83D\uDE80', vote:'\uD83D\uDDF3\uFE0F', milestone:'\uD83C\uDF89', like_dilemma:'\u2764\uFE0F', like_reason:'\uD83D\uDC4D', verdict:'\u2696\uFE0F', closing_soon:'\u23F3', closed:'\uD83D\uDCCA', voted_closed:'\uD83D\uDCCA', voted_verdict:'\u2696\uFE0F'})[t] || '\uD83D\uDD14'; }
+function notifText(n){
+  var d=n.data||{}; var ttl='<span class="notif-hl">'+escHtml(d.title||'your dilemma')+'</span>'; var c=n.cnt||1; var t=n.type;
+  if(t==='live') return 'Your dilemma is <b>live</b> \u2014 open for votes for 48 hours. '+ttl;
+  if(t==='vote') return '<b>'+c+'</b> new '+(c===1?'vote':'votes')+' on '+ttl;
+  if(t==='milestone') return '\uD83C\uDF89 <b>'+escHtml(String(d.total||c))+' votes</b> on '+ttl;
+  if(t==='like_dilemma') return '<b>'+c+'</b> '+(c===1?'PM':'PMs')+' liked your dilemma '+ttl;
+  if(t==='like_reason') return '<b>'+c+'</b> '+(c===1?'PM':'PMs')+' found your take sharp on '+ttl;
+  if(t==='verdict') return 'The room reached a verdict on '+ttl;
+  if(t==='closing_soon') return '\u23F3 '+ttl+' closes soon \u2014 last push for votes';
+  if(t==='closed') return 'Your dilemma closed \u2014 <b>'+escHtml(String(d.total||0))+'</b> votes in. See the full summary on '+ttl;
+  if(t==='voted_closed') return 'A dilemma you called has closed \u2014 see how the room landed on '+ttl;
+  if(t==='voted_verdict') return 'The room reached a verdict on a dilemma you called \u2014 '+ttl;
+  return 'Activity on '+ttl;
+}
+function setNotifBadge(n){ var b=document.getElementById('notif-badge'); if(!b) return; if(n>0){ b.textContent=(n>99?'99+':String(n)); b.hidden=false; } else { b.hidden=true; } }
+function refreshNotifCount(){ if(!SB||!currentUser){ setNotifBadge(0); return; } SB.rpc('gc_notif_unread_count').then(function(res){ var n=(res&&res.data!=null)?(+res.data||0):0; NOTIF.unread=n; setNotifBadge(n); }).catch(function(){}); }
+function loadNotifList(){ if(!SB||!currentUser) return; SB.rpc('gc_notif_list',{p_limit:40}).then(function(res){ NOTIF.items=(res&&res.data)?res.data:[]; renderNotifPanel(); }).catch(function(){ renderNotifPanel(); }); }
+function renderNotifPanel(){
+  var panel=document.getElementById('notif-panel'); if(!panel) return;
+  var items=NOTIF.items||[]; var anyUnread=items.some(function(x){ return !x.read_at; });
+  var h='<div class="notif-phead"><b>Notifications</b>'+(anyUnread?'<button class="notif-markall" id="notif-markall">Mark all read</button>':'')+'</div>';
+  if(!items.length){ h+='<div class="notif-empty">No notifications yet.<br>Post a dilemma and watch the room respond.</div>'; }
+  else { items.forEach(function(n){
+    h+='<div class="notif-item'+(n.read_at?'':' unread')+'" data-nid="'+n.id+'" data-ndid="'+escHtml(n.dilemma_id||'')+'">'
+      +'<div class="notif-ico">'+notifIcon(n.type)+'</div>'
+      +'<div class="notif-body"><div class="notif-txt">'+notifText(n)+'</div><div class="notif-time">'+rsnTimeAgo(n.updated_at)+'</div></div>'
+      +(n.read_at?'':'<div class="notif-dot"></div>')+'</div>';
+  }); }
+  panel.innerHTML=h;
+  var ma=document.getElementById('notif-markall'); if(ma) ma.onclick=function(e){ e.stopPropagation(); markAllNotifRead(); };
+  [].slice.call(panel.querySelectorAll('.notif-item')).forEach(function(el){ el.onclick=function(){ onNotifClick(+el.getAttribute('data-nid'), el.getAttribute('data-ndid')); }; });
+}
+function markAllNotifRead(){ if(!SB||!currentUser) return; SB.rpc('gc_notif_mark_all').then(function(){ (NOTIF.items||[]).forEach(function(n){ if(!n.read_at) n.read_at=new Date().toISOString(); }); NOTIF.unread=0; setNotifBadge(0); renderNotifPanel(); }).catch(function(){}); }
+function markNotifRead(id){ if(!SB||!currentUser||!id) return; var it=(NOTIF.items||[]).filter(function(n){ return n.id===id; })[0]; if(it && !it.read_at){ it.read_at=new Date().toISOString(); NOTIF.unread=Math.max(0,NOTIF.unread-1); setNotifBadge(NOTIF.unread); renderNotifPanel(); } SB.rpc('gc_notif_mark_read',{p_ids:[id]}).catch(function(){}); }
+function onNotifClick(id, did){ markNotifRead(id); toggleNotifPanel(false); if(did) openNotifModal(did); }
+function positionNotifPanel(){ var panel=document.getElementById('notif-panel'), bell=document.getElementById('notif-bell'); if(!panel||!bell) return; var r=bell.getBoundingClientRect(); var w=Math.min(360, window.innerWidth-24); panel.style.width=w+'px'; var left=Math.min(r.right-w, window.innerWidth-w-12); panel.style.left=Math.max(12,left)+'px'; panel.style.top=(r.bottom+8)+'px'; }
+function toggleNotifPanel(force){ var panel=document.getElementById('notif-panel'); if(!panel) return; var open=(force===undefined)?!panel.classList.contains('open'):!!force; if(open){ positionNotifPanel(); panel.classList.add('open'); NOTIF.open=true; loadNotifList(); } else { panel.classList.remove('open'); NOTIF.open=false; } }
+function resolveDilemmaForModal(did){ for(var i=0;i<BANK.length;i++){ if(BANK[i].id===did) return Promise.resolve(BANK[i]); } if(!SB) return Promise.resolve(null); return SB.rpc('gc_dilemmas_by_ids',{p_ids:[did]}).then(function(res){ var row=(res&&res.data&&res.data[0])?res.data[0]:null; return row?scheduleRowToDilemma(row):null; }).catch(function(){ return null; }); }
+function closeNotifModal(){ var ov=document.getElementById('notif-modal'); if(ov) ov.classList.remove('open'); document.body.style.overflow=''; }
+function openNotifModal(did){
+  var ov=document.getElementById('notif-modal'), card=document.getElementById('notif-modal-card'); if(!ov||!card) return;
+  card.innerHTML='<button class="nmodal-close" id="nmodal-close" aria-label="Close">\u2715</button><div class="notif-empty">Loading\u2026</div>';
+  ov.classList.add('open'); document.body.style.overflow='hidden';
+  var c0=document.getElementById('nmodal-close'); if(c0) c0.onclick=closeNotifModal;
+  resolveDilemmaForModal(did).then(function(d){
+    if(!d){ card.innerHTML='<button class="nmodal-close" id="nmodal-close">\u2715</button><div class="notif-empty">This dilemma isn\u2019t available right now.</div>'; var cz=document.getElementById('nmodal-close'); if(cz) cz.onclick=closeNotifModal; return; }
+    var open = d.closesAt ? (new Date(d.closesAt).getTime() > Date.now()) : false;
+    var voted = (d.id in (GC.calls||{}));
+    var title=escHtml((d.scenario||'').replace(/<[^>]+>/g,'').trim().slice(0,160));
+    var head='<button class="nmodal-close" id="nmodal-close" aria-label="Close">\u2715</button>'
+      +'<div class="nmodal-head">'+(d.tier===3?'\uD83D\uDC65 Community dilemma':(d.tier===1?'\u2605 Real call':'Industry / public'))+'</div>'
+      +'<div class="nmodal-ctx">'+(open?'Open \u00B7 still collecting votes':'Closed \u00B7 final verdict')+'</div>'
+      +'<div class="jr-q" style="margin-bottom:.7rem">'+title+'</div>';
+    if(open && !voted){
+      head+='<div class="rv-break" style="margin-bottom:1rem">You haven\u2019t made this call yet \u2014 open it in \u201CMake the Call\u201D to vote before it closes.</div>'
+          +'<div class="rv-foot-btns"><button class="btn-primary" id="nmodal-go" style="padding:.6rem 1.2rem">Make your call \u2192</button></div>';
+      card.innerHTML=head;
+      document.getElementById('nmodal-close').onclick=closeNotifModal;
+      var go=document.getElementById('nmodal-go'); if(go) go.onclick=function(){ closeNotifModal(); todaysDilemma=d; renderToday(); var el=document.getElementById('today'); if(el){ var y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); } };
+      return;
+    }
+    head+='<div class="arch-detail" style="display:block"><div class="arch-opts"></div><div class="arch-rev"></div></div>';
+    card.innerHTML=head;
+    document.getElementById('nmodal-close').onclick=closeNotifModal;
+    try{ buildArchDetail(card, d); }catch(e){ console.warn('[GutCheck] notif modal render:', e); }
+  });
+}
+function startNotifPolling(){ stopNotifPolling(); if(!SB||!currentUser) return; refreshNotifCount(); NOTIF.poll=setInterval(function(){ if(document.visibilityState==='visible' && currentUser){ refreshNotifCount(); if(NOTIF.open) loadNotifList(); } }, 20000); }
+function stopNotifPolling(){ if(NOTIF.poll){ clearInterval(NOTIF.poll); NOTIF.poll=null; } }
+function updateNotifUI(){ var bell=document.getElementById('notif-bell'); if(!bell) return; if(SB && currentUser){ bell.style.display=''; startNotifPolling(); } else { bell.style.display='none'; setNotifBadge(0); toggleNotifPanel(false); stopNotifPolling(); } }
+(function(){
+  var bell=document.getElementById('notif-bell'); if(!bell) return;
+  bell.onclick=function(e){ e.stopPropagation(); toggleNotifPanel(); };
+  document.addEventListener('click', function(e){ var panel=document.getElementById('notif-panel'); if(NOTIF.open && panel && !panel.contains(e.target) && e.target!==bell && !bell.contains(e.target)) toggleNotifPanel(false); });
+  window.addEventListener('resize', function(){ if(NOTIF.open) positionNotifPanel(); });
+  document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible' && currentUser){ refreshNotifCount(); if(NOTIF.open) loadNotifList(); } });
+  window.addEventListener('focus', function(){ if(currentUser) refreshNotifCount(); });
+  var ov=document.getElementById('notif-modal'); if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) closeNotifModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var m=document.getElementById('notif-modal'); if(m&&m.classList.contains('open')) closeNotifModal(); } });
+})();
+
 function updateAuthUI(){
   var bar=document.getElementById('auth-bar'); if(!bar){ renderNavAccount(); return; }
   if(!SB){ bar.style.display='none'; renderNavAccount(); return; }
@@ -2338,6 +2459,7 @@ function updateAuthUI(){
     bar.innerHTML='<span class="ab-hint">🔒 Sign in to make today’s call and build your judgment profile over time.</span>';
   }
   renderNavAccount();
+  updateNotifUI();
 }
 (function(){
   var ov=document.getElementById('signin-overlay'); if(!ov) return;
