@@ -291,9 +291,9 @@
       <input id="site-search" class="site-search" type="text" placeholder="Search…" autocomplete="off" aria-label="Search" />
       <div class="search-drop" id="search-drop"></div>
     </div>
-    <a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio</a>
-    <a href="https://neeleshpmtoolkit.com/toolkit.html">Toolkit</a>
-    <a href="https://neeleshpmtoolkit.com/gutcheck.html">Gut Check</a>
+    <a href="/portfolio.html">Portfolio</a>
+    <a href="/toolkit.html">Toolkit</a>
+    <a href="/gutcheck.html">Gut Check</a>
     <div id="gc-auth-slot" class="gc-auth-slot" style="display:none"></div>
     <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
@@ -319,7 +319,7 @@
     <!-- PATHS -->
     <div class="paths">
       <!-- PORTFOLIO -->
-      <a class="path portfolio" href="https://neeleshpmtoolkit.com/portfolio.html">
+      <a class="path portfolio" href="/portfolio.html">
         <div class="path-top">
           <div class="path-icon">📊</div>
           <div class="path-for">Recruiters &amp; Hiring Managers</div>
@@ -338,7 +338,7 @@
       </a>
 
       <!-- TOOLKIT -->
-      <a class="path toolkit" href="https://neeleshpmtoolkit.com/toolkit.html">
+      <a class="path toolkit" href="/toolkit.html">
         <div class="path-top">
           <div class="path-icon">🧰</div>
           <div class="path-for">Product Managers &amp; Future PMs</div>
@@ -357,7 +357,7 @@
       </a>
 
       <!-- GUT CHECK -->
-      <a class="path gutcheck" href="https://neeleshpmtoolkit.com/gutcheck.html">
+      <a class="path gutcheck" href="/gutcheck.html">
         <span class="path-badge">New · Community</span>
         <div class="path-top">
           <div class="path-icon">🧭</div>
@@ -419,8 +419,8 @@
 <footer class="footer">
   <div class="footer-logo">NEELESH <span>SINGH</span></div>
   <div class="footer-links">
-    <a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio</a>
-    <a href="https://neeleshpmtoolkit.com/toolkit.html">PM Toolkit</a>
+    <a href="/portfolio.html">Portfolio</a>
+    <a href="/toolkit.html">PM Toolkit</a>
     <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank" rel="noopener">LinkedIn</a>
     <a href="mailto:Neelesh.Singh@dal.ca">Contact</a>
   </div>
@@ -514,12 +514,12 @@
     bd.addEventListener('click', closeMenu);
     closeBtn.addEventListener('click', closeMenu);
     function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn, 80); }; return a; }
-    body.appendChild(link('Portfolio', function(){ window.location.href='https://neeleshpmtoolkit.com/portfolio.html'; }));
-    body.appendChild(link('PM Toolkit', function(){ window.location.href='https://neeleshpmtoolkit.com/toolkit.html'; }));
-    body.appendChild(link('🧭  Gut Check', function(){ window.location.href='https://neeleshpmtoolkit.com/gutcheck.html'; }));
+    body.appendChild(link('Portfolio', function(){ window.location.href='/portfolio.html'; }));
+    body.appendChild(link('PM Toolkit', function(){ window.location.href='/toolkit.html'; }));
+    body.appendChild(link('🧭  Gut Check', function(){ window.location.href='/gutcheck.html'; }));
   })();
 </script>
-<script src="https://neeleshpmtoolkit.com/gc-auth.js"></script>
+<script src="/gc-auth.js"></script>
 <!-- WALKTHROUGH MODAL -->
 <div class="tw-overlay" id="tw-overlay" aria-hidden="true">
   <div class="tw-modal" role="dialog" aria-modal="true" aria-labelledby="tw-title">
@@ -536,7 +536,7 @@
 </div>
 <script>
 (function(){
-  var B='https://neeleshpmtoolkit.com/';
+  var B='/';
   var IMG=B+'img/';
   var TOURS = {
     portfolio: { name:'The Portfolio', accent:'o', url:B+'portfolio.html', cta:'Open the Portfolio', steps:[
