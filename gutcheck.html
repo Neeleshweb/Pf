@@ -914,7 +914,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-13';
+var SITE_VERSION = '2026-06-21-14';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -2398,8 +2398,8 @@ function renderNotifPanel(){
   [].slice.call(panel.querySelectorAll('.notif-item')).forEach(function(el){ el.onclick=function(){ onNotifClick(+el.getAttribute('data-nid'), el.getAttribute('data-ndid')); }; });
 }
 function markAllNotifRead(){ if(!SB||!currentUser) return; SB.rpc('gc_notif_mark_all').then(function(){ (NOTIF.items||[]).forEach(function(n){ if(!n.read_at) n.read_at=new Date().toISOString(); }); NOTIF.unread=0; setNotifBadge(0); renderNotifPanel(); }).catch(function(){}); }
-function markNotifRead(id){ if(!SB||!currentUser||!id) return; var it=(NOTIF.items||[]).filter(function(n){ return n.id===id; })[0]; if(it && !it.read_at){ it.read_at=new Date().toISOString(); NOTIF.unread=Math.max(0,NOTIF.unread-1); setNotifBadge(NOTIF.unread); renderNotifPanel(); } SB.rpc('gc_notif_mark_read',{p_ids:[id]}).catch(function(){}); }
-function onNotifClick(id, did){ markNotifRead(id); toggleNotifPanel(false); if(did) openNotifModal(did); }
+function markNotifRead(id){ if(!SB||!currentUser||!id) return; var it=(NOTIF.items||[]).filter(function(n){ return n.id===id; })[0]; if(it && !it.read_at){ it.read_at=new Date().toISOString(); NOTIF.unread=Math.max(0,NOTIF.unread-1); setNotifBadge(NOTIF.unread); renderNotifPanel(); } SB.rpc('gc_notif_mark_read',{p_ids:[id]}).then(function(){ refreshNotifCount(); }, function(){ refreshNotifCount(); }); }
+function onNotifClick(id, did){ toggleNotifPanel(false); if(did) openNotifModal(did); markNotifRead(id); }
 function positionNotifPanel(){ var panel=document.getElementById('notif-panel'), bell=document.getElementById('notif-bell'); if(!panel||!bell) return; var r=bell.getBoundingClientRect(); var w=Math.min(360, window.innerWidth-24); panel.style.width=w+'px'; var left=Math.min(r.right-w, window.innerWidth-w-12); panel.style.left=Math.max(12,left)+'px'; panel.style.top=(r.bottom+8)+'px'; }
 function toggleNotifPanel(force){ var panel=document.getElementById('notif-panel'); if(!panel) return; var open=(force===undefined)?!panel.classList.contains('open'):!!force; if(open){ positionNotifPanel(); panel.classList.add('open'); NOTIF.open=true; loadNotifList(); } else { panel.classList.remove('open'); NOTIF.open=false; } }
 function resolveDilemmaForModal(did){ for(var i=0;i<BANK.length;i++){ if(BANK[i].id===did) return Promise.resolve(BANK[i]); } if(!SB) return Promise.resolve(null); return SB.rpc('gc_dilemmas_by_ids',{p_ids:[did]}).then(function(res){ var row=(res&&res.data&&res.data[0])?res.data[0]:null; return row?scheduleRowToDilemma(row):null; }).catch(function(){ return null; }); }
