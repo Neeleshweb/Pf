@@ -469,7 +469,7 @@
     <li><a href="#skills">Skills</a></li>
     <li><a href="#writing">Writing</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="https://neeleshpmtoolkit.com/gutcheck.html">Gut Check</a></li>
+    <li><a href="/gutcheck.html">Gut Check</a></li>
   </ul>
   <div class="nav-actions">
     <div class="search-wrap">
@@ -477,8 +477,8 @@
       <input id="site-search" class="site-search" type="text" placeholder="Search…" autocomplete="off" aria-label="Search" />
       <div class="search-drop" id="search-drop"></div>
     </div>
-    <a href="https://neeleshpmtoolkit.com/toolkit.html" class="nav-toolkit">PM Toolkit ↗</a>
-    <a href="https://neeleshpmtoolkit.com/index.html" class="nav-home">
+    <a href="/toolkit.html" class="nav-toolkit">PM Toolkit ↗</a>
+    <a href="/index.html" class="nav-home">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
       Home
     </a>
@@ -510,7 +510,7 @@
     </div>
     <div class="hero-photo-wrap">
       <div class="hero-photo-frame"></div>
-      <img class="hero-photo" src="https://neeleshpmtoolkit.com/img/aboutmephoto.jpeg" alt="Neelesh Singh" />
+      <img class="hero-photo" src="/img/aboutmephoto.jpeg" alt="Neelesh Singh" />
       <div class="hero-photo-badge">
         <div class="b-num">1M+</div>
         <div class="b-lbl">Users Reached</div>
@@ -588,7 +588,7 @@
   <!-- Fiix by Rockwell -->
   <div class="exp-item">
     <div class="exp-side">
-      <img class="exp-logo" src="https://neeleshpmtoolkit.com/img/fiix.png" alt="Fiix by Rockwell Automation" />
+      <img class="exp-logo" src="/img/fiix.png" alt="Fiix by Rockwell Automation" />
       <div class="exp-company">Fiix &middot; Rockwell</div>
       <div class="exp-role">Product Manager</div>
       <div class="exp-dates">Apr 2025 – Present</div>
@@ -615,7 +615,7 @@
   <!-- CoreLogic -->
   <div class="exp-item">
     <div class="exp-side">
-      <img class="exp-logo" src="https://neeleshpmtoolkit.com/img/technical.png" alt="CoreLogic" />
+      <img class="exp-logo" src="/img/technical.png" alt="CoreLogic" />
       <div class="exp-company">CoreLogic</div>
       <div class="exp-role">Technical Product Manager</div>
       <div class="exp-dates">Aug 2023 – Mar 2025</div>
@@ -642,7 +642,7 @@
   <!-- CGI -->
   <div class="exp-item">
     <div class="exp-side">
-      <img class="exp-logo" src="https://neeleshpmtoolkit.com/img/product_consultant.png" alt="CGI" />
+      <img class="exp-logo" src="/img/product_consultant.png" alt="CGI" />
       <div class="exp-company">CGI</div>
       <div class="exp-role">Product Consultant</div>
       <div class="exp-dates">May 2021 – Jul 2023</div>
@@ -664,7 +664,7 @@
   <!-- TCS -->
   <div class="exp-item">
     <div class="exp-side">
-      <img class="exp-logo" src="https://neeleshpmtoolkit.com/img/software_engineer.png" alt="Tata Consultancy Services" />
+      <img class="exp-logo" src="/img/software_engineer.png" alt="Tata Consultancy Services" />
       <div class="exp-company">TCS</div>
       <div class="exp-role">Software Engineer</div>
       <div class="exp-dates">Mar 2018 – Nov 2019</div>
@@ -802,7 +802,7 @@
   </p>
   <div class="books-grid">
     <div class="book-feature">
-      <img class="book-cover" src="https://neeleshpmtoolkit.com/img/volume1.jpg" alt="Idea to Launch Journey" />
+      <img class="book-cover" src="/img/volume1.jpg" alt="Idea to Launch Journey" />
       <div class="book-info">
         <div class="book-tag">📘 Jan 2023</div>
         <h4>Idea to Launch Journey</h4>
@@ -811,7 +811,7 @@
       </div>
     </div>
     <div class="book-feature">
-      <img class="book-cover" src="https://neeleshpmtoolkit.com/img/volume2.jpg" alt="The Ultimate Guide for Product Managers" />
+      <img class="book-cover" src="/img/volume2.jpg" alt="The Ultimate Guide for Product Managers" />
       <div class="book-info">
         <div class="book-tag y">📗 Aug 2023</div>
         <h4>The Ultimate Guide for PMs</h4>
@@ -852,8 +852,8 @@
 <footer class="footer">
   <div class="footer-logo">NEELESH <span>SINGH</span></div>
   <div class="footer-links">
-    <a href="https://neeleshpmtoolkit.com/index.html">Home</a>
-    <a href="https://neeleshpmtoolkit.com/toolkit.html">PM Toolkit</a>
+    <a href="/index.html">Home</a>
+    <a href="/toolkit.html">PM Toolkit</a>
     <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank" rel="noopener">LinkedIn</a>
     <a href="https://github.com/Neeleshweb" target="_blank" rel="noopener">GitHub</a>
     <a href="https://www.kaggle.com/warmachinezz" target="_blank" rel="noopener">Kaggle</a>
@@ -978,9 +978,9 @@
     function smoothTo(id){ var el=document.getElementById(id); if(!el) return; var y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y, behavior:'smooth'}); }
     function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn, 80); }; return a; }
     [['About','about'],['Experience','experience'],['Case Study','case'],['Skills','skills'],['Philosophy','philosophy'],['Education','education'],['Writing','writing'],['Contact','contact']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
-    body.appendChild(link('PM Toolkit ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/toolkit.html'; }));
-    body.appendChild(link('🧭  Gut Check ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/gutcheck.html'; }));
-    body.appendChild(link('🏠  Home', function(){ window.location.href='https://neeleshpmtoolkit.com/index.html'; }));
+    body.appendChild(link('PM Toolkit ↗', function(){ window.location.href='/toolkit.html'; }));
+    body.appendChild(link('🧭  Gut Check ↗', function(){ window.location.href='/gutcheck.html'; }));
+    body.appendChild(link('🏠  Home', function(){ window.location.href='/index.html'; }));
   })();
   /* ════════ EXPERIENCE STORY TEARDOWNS ════════ */
   (function(){
@@ -1420,6 +1420,6 @@ makeStepper('td-ai',[
 ]);
 })();
 </script>
-<script src="https://neeleshpmtoolkit.com/gc-auth.js"></script>
+<script src="/gc-auth.js"></script>
 </body>
 </html>

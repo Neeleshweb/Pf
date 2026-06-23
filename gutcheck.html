@@ -659,8 +659,8 @@
     <li><a href="#today" class="active">Today's Call</a></li>
     <li><a href="#archive">The Archive</a></li>
     <li><a href="#profile">Your Gut Check</a></li>
-        <li><a href="https://neeleshpmtoolkit.com/toolkit.html">Toolkit ↗</a></li>
-    <li><a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio ↗</a></li>
+        <li><a href="/toolkit.html">Toolkit ↗</a></li>
+    <li><a href="/portfolio.html">Portfolio ↗</a></li>
   </ul>
   <div class="nav-right">
     <div class="search-wrap">
@@ -668,7 +668,7 @@
       <input id="site-search" class="site-search" type="text" placeholder="Search…" autocomplete="off" aria-label="Search" />
       <div class="search-drop" id="search-drop"></div>
     </div>
-    <a href="https://neeleshpmtoolkit.com/index.html" class="nav-home">
+    <a href="/index.html" class="nav-home">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
       Home
     </a>
@@ -813,9 +813,9 @@
 <footer class="footer">
   <div class="footer-logo">NEELESH<span>.</span>PM</div>
   <div class="footer-links">
-    <a href="https://neeleshpmtoolkit.com/index.html">Home</a>
-    <a href="https://neeleshpmtoolkit.com/toolkit.html">PM Toolkit</a>
-    <a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio</a>
+    <a href="/index.html">Home</a>
+    <a href="/toolkit.html">PM Toolkit</a>
+    <a href="/portfolio.html">Portfolio</a>
     <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank">LinkedIn</a>
     <a href="mailto:Neelesh.singh@dal.ca">Contact</a>
   </div>
@@ -2746,9 +2746,9 @@ boot();
   function smoothTo(id){ var el=document.getElementById(id); if(!el) return; var y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); }
   function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn,80); }; return a; }
   [["Today's Call",'today'],['The Archive','archive'],['Your Gut Check','profile'],['Submit a dilemma','submit'],['Get it by email','subscribe']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
-  body.appendChild(link('PM Toolkit ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/toolkit.html'; }));
-  body.appendChild(link('Portfolio ↗', function(){ window.location.href='https://neeleshpmtoolkit.com/portfolio.html'; }));
-  body.appendChild(link('🏠  Home', function(){ window.location.href='https://neeleshpmtoolkit.com/index.html'; }));
+  body.appendChild(link('PM Toolkit ↗', function(){ window.location.href='/toolkit.html'; }));
+  body.appendChild(link('Portfolio ↗', function(){ window.location.href='/portfolio.html'; }));
+  body.appendChild(link('🏠  Home', function(){ window.location.href='/index.html'; }));
 })();
 
 /* ════════ SITE SEARCH (full-text) ════════ */
