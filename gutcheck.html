@@ -911,9 +911,14 @@
 /* ---------- SUPABASE (Phase B) ----------
    Paste your Project URL + anon public key below. Until you do, the page
    stays in the labelled "preview" mode and works exactly like Phase A. */
-var GC_CONFIG = {
+var GC_PROD_HOSTS = ['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','pm-gut-check.pages.dev'];
+var GC_IS_PROD = GC_PROD_HOSTS.indexOf(location.hostname) !== -1;
+var GC_CONFIG = GC_IS_PROD ? {
   url:  'https://oxxzygbfgmlnvavjmhct.supabase.co/rest/v1/',
   anon: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc'
+} : {
+  url:  'https://wdfttdakwygkdgfakavc.supabase.co/rest/v1/',
+  anon: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkZnR0ZGFrd3lna2RnZmFrYXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNjI2NTYsImV4cCI6MjA5NzczODY1Nn0.1D85vTzCoi7nUYH9YllsdV47AEDhFliT3zsjUfYXJss'
 };
 var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1$/,'').replace(/\/+$/,'');
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
