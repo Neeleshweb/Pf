@@ -911,9 +911,14 @@
 /* ---------- SUPABASE (Phase B) ----------
    Paste your Project URL + anon public key below. Until you do, the page
    stays in the labelled "preview" mode and works exactly like Phase A. */
-var GC_CONFIG = {
+var GC_PROD_HOSTS = ['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','pm-gut-check.pages.dev'];
+var GC_IS_PROD = GC_PROD_HOSTS.indexOf(location.hostname) !== -1;
+var GC_CONFIG = GC_IS_PROD ? {
   url:  'https://oxxzygbfgmlnvavjmhct.supabase.co/rest/v1/',
   anon: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc'
+} : {
+  url:  'https://wdfttdakwygkdgfakavc.supabase.co/rest/v1/',
+  anon: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkZnR0ZGFrd3lna2RnZmFrYXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNjI2NTYsImV4cCI6MjA5NzczODY1Nn0.1D85vTzCoi7nUYH9YllsdV47AEDhFliT3zsjUfYXJss'
 };
 var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1$/,'').replace(/\/+$/,'');
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
@@ -934,7 +939,22 @@ try { if (GC_LIVE && window.supabase && window.supabase.createClient) SB = windo
 var currentUser = null;
 
 function fetchDist(dilemmaId){ if(!SB) return Promise.resolve(null); return SB.rpc('gc_distribution',{ p_dilemma: dilemmaId }).then(function(res){ if(res && res.error){ console.warn('[GutCheck] distribution read error:', res.error); return null; } return (res && res.data) ? res.data : null; }).catch(function(e){ console.warn('[GutCheck] distribution failed:', e); return null; }); }
-function recordVote(d, key, reason, pred, conf){ if(!SB) return Promise.resolve(); var rsn=(reason||'').trim().slice(0,280); var cval=(conf!=null?conf:((GC.conf&&GC.conf[d.id])||null)); var base={ user_id: currentUser ? currentUser.id : null, device_id: DEVICE_ID, dilemma_id: d.id, choice: key, audience: GC.audience, reason: rsn.length?rsn:null, prediction: pred?{win:pred}:null }; var row={}; for(var __k in base) row[__k]=base[__k]; row.confidence=cval; return SB.from('gc_votes').insert(row).then(function(res){ if(res && res.error){ return SB.from('gc_votes').insert(base).then(function(r2){ if(r2 && r2.error) console.warn('[GutCheck] vote not saved:', r2.error); }); } }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); }); }
+function recordVote(d, key, reason, pred, conf){
+  if(!SB) return Promise.resolve();
+  var rsn=(reason||'').trim().slice(0,280);
+  var cval=(conf!=null?conf:((GC.conf&&GC.conf[d.id])||null));
+  return SB.rpc('gc_cast_vote', {
+    p_dilemma_id: d.id,
+    p_choice: key,
+    p_audience: GC.audience,
+    p_reason: rsn.length?rsn:null,
+    p_prediction: pred?{win:pred}:null,
+    p_confidence: cval,
+    p_device_id: DEVICE_ID
+  }).then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] vote not saved:', res.error); }
+  }).catch(function(e){ console.warn('[GutCheck] vote failed:', e); });
+}
 function saveSubscriber(email){ if(!SB) return Promise.resolve(); return SB.from('gc_subscribers').insert({ email: email, audience: GC.audience }).then(function(res){ if(res && res.error) console.warn('[GutCheck] subscribe error:', res.error); }).catch(function(e){ console.warn('[GutCheck] subscribe failed:', e); }); }
 function saveSubmission(p){ if(!SB) return Promise.resolve(); return SB.from('gc_submissions').insert(p).then(function(res){ if(res && res.error){ if(p && p.dims!==undefined){ var p2={}; for(var k in p){ if(k!=='dims') p2[k]=p[k]; } return SB.from('gc_submissions').insert(p2).then(function(r2){ if(r2 && r2.error) console.warn('[GutCheck] submission error:', r2.error); }); } console.warn('[GutCheck] submission error:', res.error); } }).catch(function(e){ console.warn('[GutCheck] submission failed:', e); }); }
 

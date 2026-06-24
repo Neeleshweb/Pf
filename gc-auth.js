@@ -8,8 +8,14 @@
    PASTE the same Supabase URL + anon key you use in gutcheck.html:
    ============================================================ */
 (function () {
-  var SUPA_URL  = 'https://oxxzygbfgmlnvavjmhct.supabase.co/rest/v1/';
-  var SUPA_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc';
+  var GC_PROD_HOSTS = ['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','pm-gut-check.pages.dev'];
+  var GC_IS_PROD = GC_PROD_HOSTS.indexOf(location.hostname) !== -1;
+  var SUPA_URL  = GC_IS_PROD
+    ? 'https://oxxzygbfgmlnvavjmhct.supabase.co/rest/v1/'
+    : 'https://wdfttdakwygkdgfakavc.supabase.co/rest/v1/';
+  var SUPA_ANON = GC_IS_PROD
+    ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc'
+    : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkZnR0ZGFrd3lna2RnZmFrYXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNjI2NTYsImV4cCI6MjA5NzczODY1Nn0.1D85vTzCoi7nUYH9YllsdV47AEDhFliT3zsjUfYXJss';
 
   function cleanURL(u){ u=(u||'').trim().replace(/\/+$/,''); u=u.replace(/\/rest\/v1$/,'').replace(/\/+$/,''); return u; }
   SUPA_URL = cleanURL(SUPA_URL);
