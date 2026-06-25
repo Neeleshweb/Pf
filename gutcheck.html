@@ -1662,7 +1662,7 @@ function doCommit(d, key, conf, pred){
   /* highlight chosen */
   [].slice.call(document.querySelectorAll('#today-opts .call-opt')).forEach(function(b){ if (b.querySelector('.opt-k') && b.querySelector('.opt-k').textContent===key){ b.style.borderColor='var(--accent)'; b.style.background='var(--card)'; } b.style.opacity=.96; });
   reveal(d, false);
-  if (SB) { recordVote(d, key, reasonText, pred, conf).then(function(){ var rv=document.getElementById('today-reveal'); enhanceLive(rv, d); loadReasons(d, rv); if(d.tier===3 && rv){ var mb=rv.querySelector('.rvv-mount'); if(mb) injectRoomVerdict(d, mb, true); } }); }
+  if (SB) { recordVote(d, key, reasonText, pred, conf).then(function(){ var rv=document.getElementById('today-reveal'); enhanceLive(rv, d); loadReasons(d, rv); if(d.tier===3 && rv){ var mb=rv.querySelector('.rvv-mount'); if(mb) injectRoomVerdict(d, mb, true); } if(typeof loadMyQueue==='function') loadMyQueue(); }); }
   bumpVoteStreak(); refreshRecord(); saveProfile();
 }
 
