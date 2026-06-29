@@ -813,6 +813,18 @@
 .chip-add-in::placeholder{color:var(--accent2);opacity:.75}
 .examples-more-wrap{text-align:center}
 #examples-more{margin-top:1.1rem}
+/* option cap note */
+.opt-note{color:var(--muted2)}
+.opt-note.warn{color:var(--accent2);font-weight:600}
+/* inline (Outlook-style) autocomplete ghost overlay */
+.ac-tip{color:var(--muted2)}
+.ac-wrap{position:relative;background:var(--card2);border:1px solid var(--border2);border-radius:9px;overflow:hidden}
+.ac-wrap:focus-within{border-color:var(--accent2);box-shadow:0 0 0 3px rgba(240,165,0,.12);background:#1a1613}
+.ac-field{background:transparent!important;border:1px solid transparent!important;box-shadow:none!important;resize:none!important;width:100%;box-sizing:border-box;position:relative;z-index:2}
+.ac-ghost{position:absolute;top:0;left:0;z-index:1;pointer-events:none;overflow:hidden;color:transparent;border:1px solid transparent;box-sizing:border-box;margin:0}
+.ac-ghost .ac-sug{color:#6b655c}
+/* long titles must wrap inside cards / detail */
+.fc-title,.cd-title,.fc-dec,.ex-q,.cd-val{overflow-wrap:anywhere}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1182,7 +1194,7 @@ boot();
     var el=document.getElementById(id); if(!el) return; var list=taxList(kind);
     el.setAttribute('data-kind', kind);
     el.innerHTML=list.map(function(v){ return '<button type="button" class="chip" data-v="'+escHtml(v)+'">'+escHtml(v)+'</button>'; }).join('')
-      +'<span class="chip-add"><input type="text" class="chip-add-in" id="'+id+'-add" placeholder="+ Add your own\u2026" maxlength="40" list="'+id+'-dl" autocomplete="off"><datalist id="'+id+'-dl">'+list.map(function(v){return '<option value="'+escHtml(v)+'"></option>';}).join('')+'</datalist></span>';
+      +'<span class="chip-add"><input type="text" class="chip-add-in" id="'+id+'-add" placeholder="+ Type your own, then Enter" maxlength="40" autocomplete="off"></span>';
   }
   function addCustomChip(inp){
     var group=inp.closest('.chips'); if(!group) return; var kind=group.getAttribute('data-kind'); var val=inp.value.trim(); inp.value='';
@@ -1255,26 +1267,69 @@ boot();
     }).catch(function(){});
   }
 
+  /* Outlook-style inline autocomplete: ghost completion, Tab to accept */
+  var TITLE_AC=['Build it, hold, or find a smaller version?','Push back, compromise, or protect the roadmap?','Cut scope, delay, or escalate?','Which story do I defend to leadership?','Do I challenge the strategy now or gather more proof?','Should we go upmarket or double down on self-serve?','Sunset it, keep it, or migrate customers?','Change the metric or kill the growth hack?','Take on tech debt to hit the date, or slip the date?','Ship the MVP now or wait for the full version?'];
+  var LONG_AC=['I\u2019m trying to decide whether to ','We need to decide between ','Our team is split on ','Leadership wants ','The tradeoff is between ','I\u2019m worried that ','If we do this, ','The risk is that ','Stakeholders disagree about ','We have limited ','The data suggests ','Customers are asking for ','My recommendation right now is to ','The constraint is that ','I\u2019ve already tried '];
+  function attachAutocomplete(field, phrases){
+    if(!field || field._ac) return;
+    try{
+      field._ac=true;
+      var wrap=document.createElement('div'); wrap.className='ac-wrap';
+      field.parentNode.insertBefore(wrap, field); wrap.appendChild(field); field.classList.add('ac-field');
+      var ghost=document.createElement('div'); ghost.className='ac-ghost'; ghost.setAttribute('aria-hidden','true');
+      wrap.insertBefore(ghost, field);
+      var curSug='';
+      function sync(){ var cs=getComputedStyle(field);
+        ['fontFamily','fontSize','fontWeight','lineHeight','letterSpacing','paddingTop','paddingRight','paddingBottom','paddingLeft','textAlign'].forEach(function(p){ ghost.style[p]=cs[p]; });
+        ghost.style.width=field.offsetWidth+'px'; ghost.style.height=field.offsetHeight+'px';
+        ghost.style.whiteSpace='pre-wrap'; ghost.style.wordWrap='break-word'; ghost.scrollTop=field.scrollTop; }
+      function render(){ var val=field.value; curSug='';
+        if(field.selectionStart===val.length && field.selectionEnd===val.length){
+          var frag=val.split(/[\n.!?]/).pop().replace(/^\s+/,'');
+          if(frag.length>=2){ var lf=frag.toLowerCase();
+            for(var i=0;i<phrases.length;i++){ var p=phrases[i]; if(p.toLowerCase().indexOf(lf)===0 && p.length>frag.length){ curSug=p.slice(frag.length); break; } } }
+        }
+        sync(); ghost.innerHTML='<span class="ac-typed">'+escHtml(val)+'</span><span class="ac-sug">'+escHtml(curSug)+'</span>'; }
+      field.addEventListener('input', render);
+      field.addEventListener('keyup', function(e){ if(e.key!=='Tab') render(); });
+      field.addEventListener('click', render);
+      field.addEventListener('scroll', function(){ ghost.scrollTop=field.scrollTop; });
+      field.addEventListener('blur', function(){ curSug=''; ghost.innerHTML='<span class="ac-typed">'+escHtml(field.value)+'</span>'; });
+      field.addEventListener('keydown', function(e){
+        if(e.key==='Tab' && curSug){ e.preventDefault(); var v=field.value+curSug; field.value=v; field.setSelectionRange(v.length,v.length); curSug=''; ghost.innerHTML='<span class="ac-typed">'+escHtml(v)+'</span>'; }
+        else if(e.key==='Escape' && curSug){ curSug=''; ghost.innerHTML='<span class="ac-typed">'+escHtml(field.value)+'</span>'; }
+      });
+      window.addEventListener('resize', sync);
+      render();
+    }catch(err){ /* autocomplete is decorative; typing must never break */ }
+  }
+  function updateOptNote(){
+    var n=document.querySelectorAll('#f-options .optrow').length;
+    var note=document.getElementById('f-opt-note'), btn=document.getElementById('f-addopt');
+    if(note){ note.textContent = n>=6 ? 'Maximum of 6 options reached.' : (n===5 ? '1 more option allowed.' : 'You can add up to 6.'); note.classList.toggle('warn', n>=5); }
+    if(btn){ btn.style.display = n>=6 ? 'none' : ''; }
+  }
+
   var ov=document.getElementById('submit-overlay');
   var form=document.getElementById('submit-form');
 
-  function addOpt(){ var wrap=document.getElementById('f-options'); if(!wrap) return; var n=wrap.querySelectorAll('.optrow').length; var L='ABCDE'.charAt(n)||'?'; var row=document.createElement('div'); row.className='optrow'; row.innerHTML='<span class="optlbl">'+L+'</span><input class="optinput" maxlength="160" placeholder="Option '+L+'">'; wrap.appendChild(row); }
+  function addOpt(){ var wrap=document.getElementById('f-options'); if(!wrap) return; var n=wrap.querySelectorAll('.optrow').length; var L='ABCDEF'.charAt(n)||'?'; var row=document.createElement('div'); row.className='optrow'; row.innerHTML='<span class="optlbl">'+L+'</span><input class="optinput" maxlength="160" placeholder="Option '+L+'">'; wrap.appendChild(row); }
 
   function buildForm(){
     if(!form) return;
     form.innerHTML=
       '<div class="form-sec">The essentials</div>'
-     +'<div class="fld"><label>Title <span class="req">*</span></label><div class="hint">Summarize the decision in one sentence.</div><input id="f-title" maxlength="140" list="f-title-dl" autocomplete="off" placeholder="e.g. Build the custom feature to save the renewal, or protect the roadmap?"><datalist id="f-title-dl"><option value="Build it, hold, or find a smaller version?"></option><option value="Push back, compromise, or escalate?"></option><option value="Cut scope, delay, or ship as-is?"></option><option value="Which path do I defend to leadership?"></option><option value="Do I challenge the strategy now or gather more proof?"></option></datalist></div>'
+     +'<div class="fld"><label>Title <span class="req">*</span></label><div class="hint">Summarize the decision in one sentence. <span class="ac-tip">Press Tab to accept a suggestion.</span></div><input id="f-title" maxlength="140" autocomplete="off" placeholder="e.g. Build the custom feature to save the renewal, or protect the roadmap?"></div>'
      +'<div class="fld"><label>Situation summary <span class="req">*</span></label><div class="hint">What\u2019s happening? Give enough context \u2014 without naming your company.</div><textarea id="f-situation" rows="4"></textarea></div>'
      +'<div class="fld"><label>Decision needed <span class="req">*</span></label><div class="hint">What exactly are you trying to decide?</div><textarea id="f-decision" rows="2"></textarea></div>'
-     +'<div class="fld"><label>Options being considered <span class="req">*</span></label><div class="hint">At least two.</div><div id="f-options"></div><button type="button" class="addopt" id="f-addopt">+ Add option</button></div>'
+     +'<div class="fld"><label>Options being considered <span class="req">*</span></label><div class="hint">At least two. <span id="f-opt-note" class="opt-note">You can add up to 6.</span></div><div id="f-options"></div><button type="button" class="addopt" id="f-addopt">+ Add option</button></div>'
      +'<div class="fld"><label>Biggest risk / fear <span class="req">*</span></label><div class="hint">What are you afraid will go wrong?</div><textarea id="f-risk" rows="2"></textarea></div>'
-     +'<div class="fld"><label>Type of help needed <span class="req">*</span></label><div class="hint">Pick what you want from reviewers \u2014 or add your own.</div><div class="chips" id="f-help"></div></div>'
+     +'<div class="fld"><label>Type of help needed <span class="req">*</span></label><div class="hint">Pick what you want from reviewers \u2014 or type your own and press Enter.</div><div class="chips" id="f-help"></div></div>'
+     +'<div class="fld"><label>Problem category <span class="req">*</span></label><div class="hint">The subject area \u2014 or type your own and press Enter.</div><div class="chips" id="f-cat"></div></div>'
      +'<button type="button" class="opt-toggle" id="f-opt-toggle">+ Add optional details (recommended)</button>'
      +'<div id="f-optional" class="optional-wrap">'
        +'<div class="form-sec">Optional context</div>'
        +'<div class="fld"><label>Product context</label><select id="f-product"><option value="">\u2014</option>'+PRODUCT.map(function(p){return '<option>'+escHtml(p)+'</option>';}).join('')+'</select></div>'
-       +'<div class="fld"><label>Problem category</label><div class="hint">The subject area \u2014 or add your own.</div><div class="chips" id="f-cat"></div></div>'
        +'<div class="fld"><label>Stakeholders involved</label>'+chips('f-stk',STK_OPTS)+'</div>'
        +'<div class="fld"><label>Constraints</label>'+chips('f-cons',CONS_OPTS)+'<textarea id="f-cons-note" rows="2" placeholder="Anything else constraining this?" style="margin-top:.5rem"></textarea></div>'
        +'<div class="fld"><label>Current recommendation</label><input id="f-rec" placeholder="What are you leaning toward right now?"></div>'
@@ -1287,13 +1342,17 @@ boot();
      +'<div class="form-actions"><button type="button" class="btn-ghost" id="f-cancel">Cancel</button><button type="button" class="btn-primary" id="f-submit">Post case</button></div>'
      +'<div class="form-err" id="f-err"></div>';
     renderTaxInto('f-help','help'); renderTaxInto('f-cat','category');
-    addOpt(); addOpt();
-    document.getElementById('f-addopt').onclick=function(){ if(document.querySelectorAll('#f-options .optrow').length<5) addOpt(); };
+    addOpt(); addOpt(); updateOptNote();
+    document.getElementById('f-addopt').onclick=function(){ if(document.querySelectorAll('#f-options .optrow').length<6){ addOpt(); updateOptNote(); } };
     document.getElementById('f-opt-toggle').onclick=function(){ var w=document.getElementById('f-optional'); var open=w.classList.toggle('open'); this.textContent=open?'\u2013 Hide optional details':'+ Add optional details (recommended)'; };
     [].slice.call(form.querySelectorAll('.chip')).forEach(function(c){ c.onclick=function(){ c.classList.toggle('sel'); }; });
     [].slice.call(form.querySelectorAll('.chip-add-in')).forEach(function(inp){ inp.onkeydown=function(e){ if(e.key==='Enter'){ e.preventDefault(); addCustomChip(inp); } }; });
     document.getElementById('f-cancel').onclick=closeSubmit;
     document.getElementById('f-submit').onclick=doSubmit;
+    attachAutocomplete(document.getElementById('f-title'), TITLE_AC);
+    attachAutocomplete(document.getElementById('f-situation'), LONG_AC);
+    attachAutocomplete(document.getElementById('f-decision'), LONG_AC);
+    attachAutocomplete(document.getElementById('f-risk'), LONG_AC);
   }
 
   function drOpenSubmit(){ if(!ov||!form) return; if(!form.innerHTML) buildForm(); ov.classList.add('open'); document.body.style.overflow='hidden'; }
@@ -1309,6 +1368,7 @@ boot();
     if(!currentUser){ closeSubmit(); openSignIn('Sign in to post your case.'); return; }
     var opts=[].slice.call(document.querySelectorAll('#f-options .optinput')).map(function(i){return i.value.trim();}).filter(Boolean);
     var help=selChips('f-help');
+    var cats=selChips('f-cat');
     var get=function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
     var miss=[];
     if(get('f-title').length<6) miss.push('a title (6+ chars)');
@@ -1317,6 +1377,7 @@ boot();
     if(opts.length<2) miss.push('at least two options');
     if(get('f-risk').length<10) miss.push('the biggest risk');
     if(!help.length) miss.push('a type of help');
+    if(!cats.length) miss.push('a problem category');
     if(!document.getElementById('f-conf').checked) miss.push('the confidentiality confirmation');
     if(miss.length){ err.textContent='Please complete: '+miss.join(', ')+'.'; return; }
     var payload={
@@ -1324,7 +1385,7 @@ boot();
       p_options:opts, p_biggest_risk:get('f-risk'), p_help_types:help,
       p_confidential:true,
       p_product_context:get('f-product')||null,
-      p_categories:selChips('f-cat'), p_stakeholders:selChips('f-stk'),
+      p_categories:cats, p_stakeholders:selChips('f-stk'),
       p_current_rec:get('f-rec')||null, p_constraints:selChips('f-cons'),
       p_constraints_note:get('f-cons-note')||null, p_evidence:get('f-evidence')||null,
       p_tried:get('f-tried')||null, p_urgency:get('f-urgency'), p_anonymity:get('f-anon')
