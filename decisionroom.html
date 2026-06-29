@@ -800,6 +800,19 @@
 .cd-soon{font-size:.82rem;color:var(--muted2)}
 .cd-miss{color:var(--muted);text-align:center;padding:2rem}
 @media(max-width:560px){.fld.half{width:100%;margin-right:0}}
+/* phase1a.2: form overhaul + custom-add + examples pagination */
+.dr-modal{background:linear-gradient(180deg,#161210,var(--surface));box-shadow:0 24px 70px rgba(0,0,0,.55)}
+.dr-modal .modal-t{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.form-sec{font-size:.64rem;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent2);font-weight:700;margin:.4rem 0 .9rem;display:flex;align-items:center;gap:.6rem}
+.form-sec::after{content:'';flex:1;height:1px;background:var(--border2)}
+.fld input:focus,.fld textarea:focus,.fld select:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(240,165,0,.12);background:#1a1613}
+.fld input::placeholder,.fld textarea::placeholder{color:#6b655c}
+.chip-add{display:inline-flex;align-items:center}
+.chip-add-in{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .75rem;font:inherit;font-size:.78rem;width:150px;transition:width .2s,border-style .2s}
+.chip-add-in:focus{outline:none;width:190px;border-style:solid;box-shadow:0 0 0 3px rgba(240,165,0,.12)}
+.chip-add-in::placeholder{color:var(--accent2);opacity:.75}
+.examples-more-wrap{text-align:center}
+#examples-more{margin-top:1.1rem}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -847,14 +860,8 @@
   <div class="sec-eyebrow y">Real forks, real stakes</div>
   <div class="sec-title">The Kind Of Call You <span class="y">Bring Here</span></div>
   <p class="sec-sub">Not &ldquo;what&rsquo;s the best roadmap framework.&rdquo; The messy, specific, high-stakes decisions where smart PMs genuinely disagree.</p>
-  <div class="ex-grid">
-    <div class="ex-card"><span class="ex-tag">Stakeholders</span><div class="ex-q">&ldquo;Sales promised a feature we never committed to. The deal is huge. Do I push back, compromise, or protect the roadmap?&rdquo;</div></div>
-    <div class="ex-card"><span class="ex-tag">Prioritization</span><div class="ex-q">&ldquo;Our biggest customer wants a one-off feature. It could save renewal, but distracts the team for 6 weeks. Build or hold?&rdquo;</div></div>
-    <div class="ex-card"><span class="ex-tag">Roadmap</span><div class="ex-q">&ldquo;Leadership wants more AI on the roadmap. Customers keep asking for reliability fixes. Which story do I defend?&rdquo;</div></div>
-    <div class="ex-card"><span class="ex-tag">Discovery</span><div class="ex-q">&ldquo;Customer interviews contradict what executives believe. Do I challenge the strategy now or quietly gather more proof?&rdquo;</div></div>
-    <div class="ex-card"><span class="ex-tag">Metrics</span><div class="ex-q">&ldquo;Engagement is up, but retention is flat. The team thinks we won. I&rsquo;m not convinced. What should I do next?&rdquo;</div></div>
-    <div class="ex-card"><span class="ex-tag">Execution</span><div class="ex-q">&ldquo;Engineering says the feature needs a rewrite first. Leadership wants launch this quarter. Do I cut scope, delay, or escalate?&rdquo;</div></div>
-  </div>
+  <div class="ex-grid" id="examples-grid"></div>
+  <div class="examples-more-wrap"><button type="button" id="examples-more" class="btn-ghost" style="display:none">Show more</button></div>
 </section>
 
 <section class="section wide" id="room">
@@ -864,9 +871,6 @@
   <div class="fbar">
     <select id="feed-cat" aria-label="Filter by category">
       <option value="all">All categories</option>
-      <option>Roadmap</option><option>Prioritization</option><option>Discovery</option>
-      <option>Stakeholder Conflict</option><option>Metrics</option><option>Launch</option>
-      <option>Strategy</option><option>UX</option><option>Career</option><option>Execution</option>
     </select>
     <button type="button" class="btn-primary" data-cta="submit">+ Submit a case</button>
   </div>
@@ -1157,18 +1161,99 @@ boot();
 
 /* ===== DecisionRoom Phase 1a — submit + feed + my cases + detail (read) ===== */
 (function(){
-  var HELP_OPTS=[['critique','Decision critique'],['stakeholder','Stakeholder script'],['prioritization','Prioritization advice'],['discovery','Discovery plan'],['roadmap','Roadmap feedback'],['comms','Communication strategy']];
-  var CAT_OPTS=['Roadmap','Prioritization','Discovery','Stakeholder Conflict','Metrics','Launch','Strategy','UX','Career','Execution'];
-  var STK_OPTS=['CEO','Sales','Engineering','Design','Customer','Support','Data','Legal','Manager','Exec Team'];
+  /* expanded static lists */
+  var PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product','Fintech','Healthtech','DevTools','E-commerce','Mobile Consumer App','Hardware / IoT','Data / Analytics Platform','Infrastructure / Cloud','EdTech','Gaming','Other'];
+  var STK_OPTS=['CEO','Founder','Exec Team','Product Leadership','Manager','Engineering','Design','Data','Sales','Marketing','Customer Success','Support','Customer','Finance','Legal','Security','Compliance','Operations','Partnerships / BD','Other PMs'];
   var CONS_OPTS=['Time','Engineering capacity','Revenue pressure','Customer escalation','Leadership pressure','Technical debt','Unclear data'];
   var URG=[['today','Today'],['this_week','This week'],['this_month','This month'],['not_urgent','Not urgent']];
   var ANON=[['context','Show role/context only'],['anon','Fully anonymous'],['dm_ok','Allow verified reviewers to DM']];
-  function helpLabel(h){ for(var i=0;i<HELP_OPTS.length;i++){ if(HELP_OPTS[i][0]===h) return HELP_OPTS[i][1]; } return h; }
+  /* dynamic taxonomy (seed fallback mirrors the DB seed; DB load adds customs) */
+  var DR_CATS=['Roadmap','Prioritization','Discovery','Stakeholder Conflict','Metrics & Measurement','Launch & GTM','Strategy','UX & Design','Career & Growth','Execution & Delivery','Technical Tradeoffs','Pricing & Packaging','Customer Escalation','Team & Org','Experimentation & A/B','Data & Analytics','Sunset & Deprecation','Vision & Positioning','Resourcing & Capacity','Compliance & Risk'];
+  var DR_HELP=['Decision critique','Stakeholder script','Prioritization advice','Discovery plan','Roadmap feedback','Communication strategy','Framing the tradeoffs','Risk assessment','Metric selection','Experiment design','Estimation sanity-check','Scope cutting','Escalation guidance','Negotiation approach','Data interpretation','Alternative options','Sequencing advice','Stakeholder alignment','Pushback tactics','Gut-check / sounding board'];
+  var LEGACY_HELP={critique:'Decision critique',stakeholder:'Stakeholder script',prioritization:'Prioritization advice',discovery:'Discovery plan',roadmap:'Roadmap feedback',comms:'Communication strategy'};
+  function taxList(kind){ return kind==='category'?DR_CATS:DR_HELP; }
+  function helpLabel(h){ return LEGACY_HELP[h]||h; }
   function statusBadge(s){ return ({live:'Open',closed:'Closed',outcome:'Outcome added',submitted:'Submitted',review:'In review',draft:'Draft'})[s]||s; }
   function urgLabel(u){ return ({today:'Today',this_week:'This week',this_month:'This month',not_urgent:'Not urgent'})[u]||u; }
 
   function chips(id, opts){ return '<div class="chips" id="'+id+'">'+opts.map(function(o){ var v=Array.isArray(o)?o[0]:o, l=Array.isArray(o)?o[1]:o; return '<button type="button" class="chip" data-v="'+escHtml(v)+'">'+escHtml(l)+'</button>'; }).join('')+'</div>'; }
   function selChips(id){ return [].slice.call(document.querySelectorAll('#'+id+' .chip.sel')).map(function(c){ return c.getAttribute('data-v'); }); }
+  function renderTaxInto(id, kind){
+    var el=document.getElementById(id); if(!el) return; var list=taxList(kind);
+    el.setAttribute('data-kind', kind);
+    el.innerHTML=list.map(function(v){ return '<button type="button" class="chip" data-v="'+escHtml(v)+'">'+escHtml(v)+'</button>'; }).join('')
+      +'<span class="chip-add"><input type="text" class="chip-add-in" id="'+id+'-add" placeholder="+ Add your own\u2026" maxlength="40" list="'+id+'-dl" autocomplete="off"><datalist id="'+id+'-dl">'+list.map(function(v){return '<option value="'+escHtml(v)+'"></option>';}).join('')+'</datalist></span>';
+  }
+  function addCustomChip(inp){
+    var group=inp.closest('.chips'); if(!group) return; var kind=group.getAttribute('data-kind'); var val=inp.value.trim(); inp.value='';
+    if(val.length<2) return;
+    var existing=null; [].slice.call(group.querySelectorAll('.chip')).forEach(function(c){ if(c.getAttribute('data-v').toLowerCase()===val.toLowerCase()) existing=c; });
+    if(existing){ existing.classList.add('sel'); return; }
+    if(!SB||!currentUser){ openSignIn('Sign in to add a new option.'); return; }
+    SB.rpc('dr_add_taxonomy',{p_kind:kind,p_value:val}).then(function(res){
+      if(res&&res.data&&res.data.ok){
+        var v=res.data.value, dup=null;
+        [].slice.call(group.querySelectorAll('.chip')).forEach(function(c){ if(c.getAttribute('data-v').toLowerCase()===v.toLowerCase()) dup=c; });
+        if(dup){ dup.classList.add('sel'); return; }
+        var arr=taxList(kind); if(arr.indexOf(v)===-1) arr.push(v);
+        var btn=document.createElement('button'); btn.type='button'; btn.className='chip sel'; btn.setAttribute('data-v',v); btn.textContent=v; btn.onclick=function(){ btn.classList.toggle('sel'); };
+        group.insertBefore(btn, inp.parentNode);
+        if(kind==='category'){ renderExamples(true); populateFilter(); }
+        toast('Added \u201C'+v+'\u201D \u2014 now available to everyone.');
+      } else { toast('Could not add that option.'); }
+    }).catch(function(){ toast('Could not add that option.'); });
+  }
+
+  /* curated example cards (category-aligned); custom categories append automatically */
+  var CURATED_EXAMPLES=[
+    {tag:'Roadmap',q:'Leadership wants more AI on the roadmap. Customers keep asking for reliability fixes. Which story do I defend?'},
+    {tag:'Prioritization',q:'Our biggest customer wants a one-off feature. It could save renewal, but distracts the team for 6 weeks. Build or hold?'},
+    {tag:'Discovery',q:'Customer interviews contradict what executives believe. Do I challenge the strategy now or quietly gather more proof?'},
+    {tag:'Stakeholder Conflict',q:'Sales promised a feature we never committed to. The deal is huge. Do I push back, compromise, or protect the roadmap?'},
+    {tag:'Metrics & Measurement',q:'Engagement is up, but retention is flat. The team thinks we won. I\u2019m not convinced. What should I do next?'},
+    {tag:'Launch & GTM',q:'Marketing wants a big-bang launch; I want a quiet beta to de-risk. How do I decide the launch shape?'},
+    {tag:'Strategy',q:'We can go upmarket to enterprise or double down on self-serve SMB. Both are viable. How do I choose?'},
+    {tag:'UX & Design',q:'Design wants a bold redesign; data says incremental changes convert better. Bet on the redesign or iterate?'},
+    {tag:'Career & Growth',q:'I\u2019m offered bigger scope on a struggling product, or to stay on a winning one. Which move grows me more?'},
+    {tag:'Execution & Delivery',q:'Engineering says the feature needs a rewrite first. Leadership wants launch this quarter. Cut scope, delay, or escalate?'},
+    {tag:'Technical Tradeoffs',q:'Take on tech debt to hit the date, or slip two weeks to do it right? Leadership is watching.'},
+    {tag:'Pricing & Packaging',q:'Gate this feature behind the top tier to drive upsell, or include it to boost adoption?'},
+    {tag:'Customer Escalation',q:'A churning enterprise account demands a roadmap commitment we can\u2019t keep. Do I overpromise to save them?'},
+    {tag:'Team & Org',q:'Two squads both claim ownership of the same surface. How do I draw the line without a turf war?'},
+    {tag:'Experimentation & A/B',q:'The A/B test is flat after two weeks. Call it, run longer, or redesign the variant?'},
+    {tag:'Data & Analytics',q:'Our north-star metric is being gamed by a growth hack. Do I change the metric or kill the hack?'},
+    {tag:'Sunset & Deprecation',q:'A legacy feature 5% of customers love blocks a platform upgrade. Sunset it, keep it, or migrate them?'},
+    {tag:'Vision & Positioning',q:'Are we a \u201Cworkflow tool\u201D or a \u201Csystem of record\u201D? The team can\u2019t align and it\u2019s shaping the roadmap.'},
+    {tag:'Resourcing & Capacity',q:'One engineer is freeing up. Pay down debt, fix the top complaint, or start the next bet?'},
+    {tag:'Compliance & Risk',q:'Legal wants a feature delayed for a privacy review; sales has it in three signed deals. How do I navigate it?'}
+  ];
+  var exShown=6;
+  function examplesData(){
+    var out=CURATED_EXAMPLES.slice(); var seen={}; CURATED_EXAMPLES.forEach(function(e){ seen[e.tag.toLowerCase()]=1; });
+    DR_CATS.forEach(function(v){ if(!seen[v.toLowerCase()]){ out.push({tag:v, q:'A real '+v+' call a PM brought to the room \u2014 the kind without an obvious answer.'}); } });
+    return out;
+  }
+  function renderExamples(reset){
+    var grid=document.getElementById('examples-grid'); if(!grid) return; if(reset) exShown=6;
+    var items=examplesData();
+    grid.innerHTML=items.slice(0,exShown).map(function(e){ return '<div class="ex-card"><span class="ex-tag">'+escHtml(e.tag)+'</span><div class="ex-q">\u201C'+escHtml(e.q)+'\u201D</div></div>'; }).join('');
+    var more=document.getElementById('examples-more');
+    if(more){ if(exShown>=items.length){ more.style.display='none'; } else { more.style.display=''; more.textContent='Show more ('+(items.length-exShown)+' more)'; } }
+  }
+  function populateFilter(){
+    var sel=document.getElementById('feed-cat'); if(!sel) return; var cur=sel.value;
+    sel.innerHTML='<option value="all">All categories</option>'+DR_CATS.map(function(v){return '<option value="'+escHtml(v)+'">'+escHtml(v)+'</option>';}).join('');
+    if(cur){ sel.value=cur; }
+  }
+  function loadTaxonomy(){
+    if(!SB) return Promise.resolve();
+    return Promise.all([SB.rpc('dr_taxonomy',{p_kind:'category'}), SB.rpc('dr_taxonomy',{p_kind:'help'})]).then(function(r){
+      var c=(r[0]&&r[0].data)||[], h=(r[1]&&r[1].data)||[];
+      if(c.length) DR_CATS=c.map(function(x){return x.value;});
+      if(h.length) DR_HELP=h.map(function(x){return x.value;});
+      renderExamples(true); populateFilter();
+    }).catch(function(){});
+  }
 
   var ov=document.getElementById('submit-overlay');
   var form=document.getElementById('submit-form');
@@ -1178,16 +1263,18 @@ boot();
   function buildForm(){
     if(!form) return;
     form.innerHTML=
-      '<div class="fld"><label>Title <span class="req">*</span></label><div class="hint">Summarize the decision in one sentence.</div><input id="f-title" maxlength="140" placeholder="e.g. Build the custom feature to save the renewal, or protect the roadmap?"></div>'
+      '<div class="form-sec">The essentials</div>'
+     +'<div class="fld"><label>Title <span class="req">*</span></label><div class="hint">Summarize the decision in one sentence.</div><input id="f-title" maxlength="140" list="f-title-dl" autocomplete="off" placeholder="e.g. Build the custom feature to save the renewal, or protect the roadmap?"><datalist id="f-title-dl"><option value="Build it, hold, or find a smaller version?"></option><option value="Push back, compromise, or escalate?"></option><option value="Cut scope, delay, or ship as-is?"></option><option value="Which path do I defend to leadership?"></option><option value="Do I challenge the strategy now or gather more proof?"></option></datalist></div>'
      +'<div class="fld"><label>Situation summary <span class="req">*</span></label><div class="hint">What\u2019s happening? Give enough context \u2014 without naming your company.</div><textarea id="f-situation" rows="4"></textarea></div>'
      +'<div class="fld"><label>Decision needed <span class="req">*</span></label><div class="hint">What exactly are you trying to decide?</div><textarea id="f-decision" rows="2"></textarea></div>'
      +'<div class="fld"><label>Options being considered <span class="req">*</span></label><div class="hint">At least two.</div><div id="f-options"></div><button type="button" class="addopt" id="f-addopt">+ Add option</button></div>'
      +'<div class="fld"><label>Biggest risk / fear <span class="req">*</span></label><div class="hint">What are you afraid will go wrong?</div><textarea id="f-risk" rows="2"></textarea></div>'
-     +'<div class="fld"><label>Type of help needed <span class="req">*</span></label>'+chips('f-help',HELP_OPTS)+'</div>'
+     +'<div class="fld"><label>Type of help needed <span class="req">*</span></label><div class="hint">Pick what you want from reviewers \u2014 or add your own.</div><div class="chips" id="f-help"></div></div>'
      +'<button type="button" class="opt-toggle" id="f-opt-toggle">+ Add optional details (recommended)</button>'
      +'<div id="f-optional" class="optional-wrap">'
-       +'<div class="fld"><label>Product context</label><select id="f-product"><option value="">\u2014</option><option>B2B SaaS</option><option>B2C</option><option>Marketplace</option><option>Platform</option><option>Internal Tool</option><option>AI Product</option><option>Other</option></select></div>'
-       +'<div class="fld"><label>Problem category</label>'+chips('f-cat',CAT_OPTS)+'</div>'
+       +'<div class="form-sec">Optional context</div>'
+       +'<div class="fld"><label>Product context</label><select id="f-product"><option value="">\u2014</option>'+PRODUCT.map(function(p){return '<option>'+escHtml(p)+'</option>';}).join('')+'</select></div>'
+       +'<div class="fld"><label>Problem category</label><div class="hint">The subject area \u2014 or add your own.</div><div class="chips" id="f-cat"></div></div>'
        +'<div class="fld"><label>Stakeholders involved</label>'+chips('f-stk',STK_OPTS)+'</div>'
        +'<div class="fld"><label>Constraints</label>'+chips('f-cons',CONS_OPTS)+'<textarea id="f-cons-note" rows="2" placeholder="Anything else constraining this?" style="margin-top:.5rem"></textarea></div>'
        +'<div class="fld"><label>Current recommendation</label><input id="f-rec" placeholder="What are you leaning toward right now?"></div>'
@@ -1199,10 +1286,12 @@ boot();
      +'<label class="conf"><input type="checkbox" id="f-conf"> <span>I\u2019ve removed company / customer confidential information. <span class="req">*</span></span></label>'
      +'<div class="form-actions"><button type="button" class="btn-ghost" id="f-cancel">Cancel</button><button type="button" class="btn-primary" id="f-submit">Post case</button></div>'
      +'<div class="form-err" id="f-err"></div>';
+    renderTaxInto('f-help','help'); renderTaxInto('f-cat','category');
     addOpt(); addOpt();
     document.getElementById('f-addopt').onclick=function(){ if(document.querySelectorAll('#f-options .optrow').length<5) addOpt(); };
     document.getElementById('f-opt-toggle').onclick=function(){ var w=document.getElementById('f-optional'); var open=w.classList.toggle('open'); this.textContent=open?'\u2013 Hide optional details':'+ Add optional details (recommended)'; };
     [].slice.call(form.querySelectorAll('.chip')).forEach(function(c){ c.onclick=function(){ c.classList.toggle('sel'); }; });
+    [].slice.call(form.querySelectorAll('.chip-add-in')).forEach(function(inp){ inp.onkeydown=function(e){ if(e.key==='Enter'){ e.preventDefault(); addCustomChip(inp); } }; });
     document.getElementById('f-cancel').onclick=closeSubmit;
     document.getElementById('f-submit').onclick=doSubmit;
   }
@@ -1331,7 +1420,12 @@ boot();
   var fmore=document.getElementById('feed-more'); if(fmore) fmore.onclick=function(){ loadFeed(false); };
   var fcat=document.getElementById('feed-cat'); if(fcat) fcat.onchange=function(){ loadFeed(true); };
 
+  var exMore=document.getElementById('examples-more'); if(exMore) exMore.onclick=function(){ exShown+=10; renderExamples(false); };
+
   window.drAfterAuth=function(){ loadMyCases(); };
+  renderExamples(true);   /* immediate render from seed list */
+  populateFilter();
+  loadTaxonomy();         /* then refresh from DB (adds any custom values) */
   loadFeed(true);
   loadMyCases();
 })();
