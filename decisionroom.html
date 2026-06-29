@@ -667,6 +667,69 @@
 .cta-final p{font-size:.92rem;color:var(--muted);max-width:560px;margin:0 auto 1.4rem;line-height:1.65}
 .cta-row{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}
 .dr-soon{font-size:.72rem;color:var(--muted2);margin-top:1rem}
+/* journey map */
+.jmap{position:relative;margin-top:1.6rem;padding:.4rem 0}
+.jmap::before{content:'';position:absolute;top:.3rem;bottom:.3rem;left:50%;width:2px;background:linear-gradient(var(--accent),var(--border));transform:translateX(-50%)}
+.jnode{position:relative;width:50%;padding:0 2.4rem 1.5rem;box-sizing:border-box}
+.jnode.left{left:0}
+.jnode.right{left:50%}
+.jnode-dot{position:absolute;top:.25rem;width:18px;height:18px;border-radius:50%;background:var(--surface);border:2px solid var(--border2);z-index:2}
+.jnode.left .jnode-dot{right:-9px}
+.jnode.right .jnode-dot{left:-9px}
+.jnode.done .jnode-dot{background:var(--accent);border-color:var(--accent)}
+.jnode.current .jnode-dot{background:var(--accent2);border-color:var(--accent2);animation:jpulse 1.4s infinite}
+.jnode.finish.done .jnode-dot{background:var(--green);border-color:var(--green)}
+@keyframes jpulse{0%{box-shadow:0 0 0 0 rgba(240,165,0,.55)}70%{box-shadow:0 0 0 12px rgba(240,165,0,0)}100%{box-shadow:0 0 0 0 rgba(240,165,0,0)}}
+.jnode-card{display:inline-block;text-align:left;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:.9rem 1.05rem;width:100%;cursor:pointer;transition:border-color .2s,opacity .35s,transform .15s}
+.jnode.current .jnode-card{border-color:var(--accent2)}
+.jnode.current .jnode-card:hover{transform:translateY(-2px)}
+.jnode.done .jnode-card{border-color:var(--border2)}
+.jnode.locked{opacity:.4}
+.jnode.locked .jnode-card{cursor:default}
+.jnode-label{font-size:.62rem;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent);font-weight:700;display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.jnode.finish .jnode-label{color:var(--green)}
+.jnode-here{font-size:.56rem;letter-spacing:.4px;text-transform:uppercase;color:#140d07;background:var(--accent2);border-radius:100px;padding:.1rem .45rem;font-weight:800;animation:jblink 1.2s infinite}
+@keyframes jblink{0%,100%{opacity:1}50%{opacity:.3}}
+.jnode-title{font-size:.98rem;color:var(--white);font-weight:600;margin:.25rem 0}
+.jnode-body{max-height:0;overflow:hidden;transition:max-height .5s ease;font-size:.85rem;line-height:1.6;color:var(--muted)}
+.jnode.done .jnode-body{max-height:420px}
+.jnode-body em{color:#c9c4bb}
+.jnode-hint{font-size:.72rem;color:var(--accent2);margin-top:.45rem;font-weight:600}
+.jnode.done .jnode-hint,.jnode.locked .jnode-hint{display:none}
+.jcta{display:none;text-align:center;margin-top:.2rem;animation:gw-fade-up .5s both}
+.jcta.show{display:block}
+.jcta-done{font-size:.85rem;color:var(--green);font-weight:600;margin-bottom:.7rem}
+@media(max-width:720px){.jmap::before{left:9px}.jnode{width:100%;left:0!important;padding-left:2.5rem;padding-right:0}.jnode .jnode-dot{left:0!important;right:auto!important}}
+/* vs compare */
+.vs-wrap{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:stretch;margin-top:.5rem}
+.vs-panel{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:1.3rem 1.4rem;transition:border-color .2s,transform .15s}
+.vs-panel:hover{transform:translateY(-3px)}
+.vs-panel.gut{border-top:3px solid var(--accent)}
+.vs-panel.room{border-top:3px solid var(--accent3)}
+.vs-h{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.5px;display:flex;align-items:center;gap:.5rem}
+.vs-tag{font-size:.72rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;margin:.15rem 0 .9rem}
+.vs-panel.gut .vs-tag{color:var(--accent)}
+.vs-panel.room .vs-tag{color:var(--accent3)}
+.vs-row{margin-bottom:.7rem}
+.vs-row b{display:block;font-size:.64rem;letter-spacing:.8px;text-transform:uppercase;color:var(--muted2);margin-bottom:.2rem}
+.vs-row span{font-size:.86rem;color:#d8d3ca;line-height:1.5}
+.vs-mid{display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--muted2);background:var(--card2);border:1px solid var(--border2);border-radius:50%;width:46px;height:46px;align-self:center}
+.vs-summary{margin-top:1.1rem;background:var(--card2);border:1px solid var(--border);border-left:3px solid var(--accent2);border-radius:10px;padding:.85rem 1.1rem;font-size:.88rem;color:#d8d3ca;line-height:1.6}
+.vs-summary b{color:var(--white)}
+@media(max-width:720px){.vs-wrap{grid-template-columns:1fr}.vs-mid{width:40px;height:40px;margin:0 auto;transform:rotate(90deg)}}
+/* is-not flip cards */
+.not-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem;margin-top:.5rem}
+.not-card{background:none;border:none;padding:0;perspective:1100px;height:158px;cursor:pointer;font:inherit;text-align:left}
+.not-inner{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.not-card:hover .not-inner,.not-card.flipped .not-inner{transform:rotateY(180deg)}
+.not-face{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:14px;padding:1.1rem 1.2rem;display:flex;flex-direction:column;justify-content:center}
+.not-front{background:var(--card);border:1px solid var(--border2)}
+.not-front .nf-x{font-size:1.3rem;margin-bottom:.45rem}
+.not-front .nf-t{font-size:.95rem;color:var(--white);font-weight:600;line-height:1.4}
+.not-back{background:linear-gradient(160deg,var(--accent-dim),var(--card2));border:1px solid var(--accent);transform:rotateY(180deg)}
+.not-back .nb-t{font-size:.85rem;color:#e8e3da;line-height:1.55}
+.not-back .nb-t b{color:var(--accent2)}
+.not-hint{font-size:.74rem;color:var(--muted2);margin-top:.9rem;text-align:center}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -714,25 +777,45 @@
   <div class="sec-title">The Kind Of Call You <span class="y">Bring Here</span></div>
   <p class="sec-sub">Not &ldquo;what&rsquo;s the best roadmap framework.&rdquo; The messy, specific, high-stakes decisions where smart PMs genuinely disagree.</p>
   <div class="ex-grid">
-    <div class="ex-card"><span class="ex-tag">Stakeholders</span><div class="ex-q">&ldquo;Sales keeps selling features we haven&rsquo;t built. Do I formalize a &lsquo;sell-what-exists&rsquo; rule and risk a deal, or stay flexible?&rdquo;</div></div>
-    <div class="ex-card"><span class="ex-tag">Prioritization</span><div class="ex-q">&ldquo;My biggest customer wants a bespoke feature worth a 7-figure renewal &mdash; but it fits almost no one else. Build it, decline it, or find the general version?&rdquo;</div></div>
-    <div class="ex-card"><span class="ex-tag">Roadmap conflict</span><div class="ex-q">&ldquo;Two senior stakeholders want opposite roadmaps and both expect a decision Friday. How do I resolve it without burning either?&rdquo;</div></div>
-    <div class="ex-card"><span class="ex-tag">Metrics</span><div class="ex-q">&ldquo;Engagement is flat. Leadership wants more notifications. I think that&rsquo;s a trust-killer. How do I push back with evidence?&rdquo;</div></div>
-    <div class="ex-card"><span class="ex-tag">Sunset</span><div class="ex-q">&ldquo;A legacy feature is used by 5% of customers who love it, but it blocks a platform upgrade. Sunset it, keep it, or migrate?&rdquo;</div></div>
-    <div class="ex-card"><span class="ex-tag">AI / new tech</span><div class="ex-q">&ldquo;Leadership is asking &lsquo;what&rsquo;s our AI play?&rsquo; I don&rsquo;t want a gimmick. Where do I even start?&rdquo;</div></div>
+    <div class="ex-card"><span class="ex-tag">Stakeholders</span><div class="ex-q">&ldquo;Sales promised a feature we never committed to. The deal is huge. Do I push back, compromise, or protect the roadmap?&rdquo;</div></div>
+    <div class="ex-card"><span class="ex-tag">Prioritization</span><div class="ex-q">&ldquo;Our biggest customer wants a one-off feature. It could save renewal, but distracts the team for 6 weeks. Build or hold?&rdquo;</div></div>
+    <div class="ex-card"><span class="ex-tag">Roadmap</span><div class="ex-q">&ldquo;Leadership wants more AI on the roadmap. Customers keep asking for reliability fixes. Which story do I defend?&rdquo;</div></div>
+    <div class="ex-card"><span class="ex-tag">Discovery</span><div class="ex-q">&ldquo;Customer interviews contradict what executives believe. Do I challenge the strategy now or quietly gather more proof?&rdquo;</div></div>
+    <div class="ex-card"><span class="ex-tag">Metrics</span><div class="ex-q">&ldquo;Engagement is up, but retention is flat. The team thinks we won. I&rsquo;m not convinced. What should I do next?&rdquo;</div></div>
+    <div class="ex-card"><span class="ex-tag">Execution</span><div class="ex-q">&ldquo;Engineering says the feature needs a rewrite first. Leadership wants launch this quarter. Do I cut scope, delay, or escalate?&rdquo;</div></div>
   </div>
 </section>
 
 <section class="section wide" id="how">
   <div class="sec-eyebrow">The loop</div>
   <div class="sec-title">How <span>DecisionRoom</span> Works</div>
-  <p class="sec-sub">Structured on both sides &mdash; so cases are clear and feedback is useful, not &ldquo;I agree.&rdquo;</p>
-  <div class="steps">
-    <div class="step"><div class="step-n">01</div><h4>Submit your case</h4><p>A short, structured form &mdash; the situation, the decision, your options, and your biggest fear. Anonymous; confidential details stay out by design.</p></div>
-    <div class="step"><div class="step-n">02</div><h4>Get PM feedback</h4><p>Credible PMs commit a recommendation with reasoning, the risks they&rsquo;d watch, and a concrete next step. Structure is required &mdash; no one-liners.</p></div>
-    <div class="step"><div class="step-n">03</div><h4>See recommended paths</h4><p>Read where the room converges and where it splits &mdash; the strongest reasoning rises, and you decide with more than one head in the game.</p></div>
-    <div class="step"><div class="step-n">04</div><h4>Track the outcome</h4><p>Come back and log what you actually decided and what happened. Your case becomes a playbook the next PM can learn from.</p></div>
+  <p class="sec-sub">A guided map &mdash; tap each stop to move along the journey from a messy call to a defensible decision.</p>
+  <div id="journey-map"></div>
+  <div class="jcta" id="journey-cta"><div class="jcta-done">🏁 You&rsquo;ve walked the whole journey. Ready for the real thing?</div><button type="button" class="btn-primary" data-cta="submit">Start your first case &rarr;</button></div>
+</section>
+
+<section class="section wide" id="compare">
+  <div class="sec-eyebrow b">Two tools, one PM</div>
+  <div class="sec-title">GutCheck or <span class="b">DecisionRoom?</span></div>
+  <p class="sec-sub">They solve different problems &mdash; one builds the instinct over many reps, the other helps you with the one real call in front of you. Most PMs use both.</p>
+  <div class="vs-wrap">
+    <div class="vs-panel gut">
+      <div class="vs-h">🎯 GutCheck</div>
+      <div class="vs-tag">Build the instinct</div>
+      <div class="vs-row"><b>Best for</b><span>Aspiring PMs prepping for interviews &mdash; and any PM who wants to sharpen judgment with quick daily reps.</span></div>
+      <div class="vs-row"><b>Use it when</b><span>You want fast, low-stakes practice: commit your call on a fresh dilemma before you see what the crowd did.</span></div>
+      <div class="vs-row"><b>You walk away with</b><span>A calibration score, a judgment level, and a track record you can actually point to.</span></div>
+    </div>
+    <div class="vs-mid">vs</div>
+    <div class="vs-panel room">
+      <div class="vs-h">🧭 DecisionRoom</div>
+      <div class="vs-tag">Pressure-test the real call</div>
+      <div class="vs-row"><b>Best for</b><span>Working PMs facing a real, high-stakes decision right now &mdash; with aspiring PMs learning as reviewers.</span></div>
+      <div class="vs-row"><b>Use it when</b><span>The answer isn&rsquo;t obvious, the stakes are real, and smart people on your team disagree.</span></div>
+      <div class="vs-row"><b>You walk away with</b><span>Structured feedback from credible PMs, the tradeoffs compared, and a defensible next move.</span></div>
+    </div>
   </div>
+  <div class="vs-summary"><b>The short version:</b> GutCheck sharpens <em>how you think</em> across many small reps. DecisionRoom helps you make <em>the one big decision</em> in front of you &mdash; and turns it into a playbook for the next PM.</div>
 </section>
 
 <section class="section wide" id="trust">
@@ -745,6 +828,21 @@
     <div class="trust-card"><h4>🧱 Structure over noise</h4><p>Every response needs a recommendation, reasoning, risks, and a next step. No &ldquo;+1&rdquo;, no vague takes, no sponsored advice.</p></div>
     <div class="trust-card"><h4>🔒 Safe by design</h4><p>A confidentiality check before every post, and reporting on anything unsafe. Built for real decisions, handled with care.</p></div>
   </div>
+</section>
+
+<section class="section wide" id="isnot">
+  <div class="sec-eyebrow">Clear expectations</div>
+  <div class="sec-title">What DecisionRoom <span>Is Not</span></div>
+  <p class="sec-sub">We&rsquo;re deliberate about what this is &mdash; and what it isn&rsquo;t. Tap a card to flip it and see what it is instead.</p>
+  <div class="not-grid">
+    <button type="button" class="not-card"><div class="not-inner"><div class="not-face not-front"><div class="nf-x">🚫</div><div class="nf-t">Not another PM community or forum</div></div><div class="not-face not-back"><div class="nb-t">It&rsquo;s a <b>structured room</b> &mdash; one real call per post, and every reply carries a recommendation, reasoning, risks, and a next step.</div></div></div></button>
+    <button type="button" class="not-card"><div class="not-inner"><div class="not-face not-front"><div class="nf-x">🤖</div><div class="nf-t">Not an AI assistant guessing</div></div><div class="not-face not-back"><div class="nb-t">It&rsquo;s <b>real judgment</b> from PMs who&rsquo;ve actually faced the same situation &mdash; not a model predicting an answer.</div></div></div></button>
+    <button type="button" class="not-card"><div class="not-inner"><div class="not-face not-front"><div class="nf-x">📄</div><div class="nf-t">Not a PRD or template generator</div></div><div class="not-face not-back"><div class="nb-t">It&rsquo;s a place to <b>pressure-test a decision</b> &mdash; not to produce a document.</div></div></div></button>
+    <button type="button" class="not-card"><div class="not-inner"><div class="not-face not-front"><div class="nf-x">🗣️</div><div class="nf-t">Not an anonymous venting board</div></div><div class="not-face not-back"><div class="nb-t"><b>Anonymous in public, credible underneath</b> &mdash; verified PM context sits behind every voice.</div></div></div></button>
+    <button type="button" class="not-card"><div class="not-inner"><div class="not-face not-front"><div class="nf-x">📚</div><div class="nf-t">Not generic framework advice</div></div><div class="not-face not-back"><div class="nb-t"><b>Lived experience</b>: what they&rsquo;d actually do, and what they&rsquo;ve seen go wrong before.</div></div></div></button>
+    <button type="button" class="not-card"><div class="not-inner"><div class="not-face not-front"><div class="nf-x">✨</div><div class="nf-t">Not sanitized case studies</div></div><div class="not-face not-back"><div class="nb-t">Your <b>actual, messy, in-the-moment call</b> &mdash; no perfect framing required.</div></div></div></button>
+  </div>
+  <p class="not-hint">☝️ Tap any card to flip it.</p>
 </section>
 
 <section class="section" id="join">
@@ -903,6 +1001,52 @@ function boot(){
   });
 }
 boot();
+
+/* ===== interactive journey map ===== */
+(function(){
+  var mount=document.getElementById('journey-map'); if(!mount) return;
+  var steps=[
+    {kind:'origin',label:'Origin',title:'The Messy PM Call',body:'You\u2019re facing a decision where the answer is not obvious, the stakes are real, and smart people on your team disagree. <em>Example: \u201CDo we protect the roadmap or build the customer-specific feature to save the renewal?\u201D</em>'},
+    {kind:'stop',label:'Stop 1',title:'Share the Real Situation',body:'Bring the actual context: the pressure, the tradeoffs, the stakeholders, and the option you\u2019re leaning toward. No sanitized case studies. No perfect framing required. You start by saying what is really happening.'},
+    {kind:'stop',label:'Stop 2',title:'Turn Chaos into a Clear Decision',body:'Your situation gets broken down into the core decision, available options, constraints, risks, and what kind of help you need. Now PMs can respond to the real call, not guess what you\u2019re asking.'},
+    {kind:'stop',label:'Stop 3',title:'Get Perspectives from PMs Who\u2019ve Been There',body:'Experienced PMs weigh in with what they would do, what they\u2019ve seen go wrong, and what they\u2019d watch out for before making the decision. You get judgment from real product experience, not generic framework advice.'},
+    {kind:'stop',label:'Stop 4',title:'Compare the Tradeoffs Before You Commit',body:'See where people agree, where they disagree, and which path carries the biggest product, customer, technical, or political risk. You stop thinking in \u201Cright vs wrong\u201D and start seeing the decision clearly.'},
+    {kind:'stop',label:'Stop 5',title:'Leave with a Defensible Next Move',body:'Walk away with a sharper recommendation, a stakeholder conversation plan, or a discovery step that helps you move forward with confidence. <em>Example: \u201CDecline the custom build, but offer a smaller reusable version tied to renewal risk.\u201D</em>'},
+    {kind:'finish',label:'Finish Line',title:'Better Product Judgment',body:'You make the call with more confidence \u2014 and when you share what happened, your decision becomes useful for the next PM facing the same kind of mess.'}
+  ];
+  var hereTag='<span class="jnode-here">\u25CF You are here</span>';
+  var html='<div class="jmap" id="jmap">';
+  steps.forEach(function(s,i){
+    var side=(i%2===0)?'left':'right';
+    var cls='jnode '+side+(s.kind==='finish'?' finish':'')+(i===0?' current':' locked');
+    var hint=(s.kind==='finish')?'Tap to finish \uD83C\uDFC1':'Tap to continue \u2192';
+    html+='<div class="'+cls+'" data-i="'+i+'"><span class="jnode-dot"></span>'
+      +'<div class="jnode-card"><div class="jnode-label">'+s.label+(i===0?hereTag:'')+'</div>'
+      +'<div class="jnode-title">'+s.title+'</div>'
+      +'<div class="jnode-body">'+s.body+'</div>'
+      +'<div class="jnode-hint">'+hint+'</div></div></div>';
+  });
+  html+='</div>';
+  mount.innerHTML=html;
+  var nodes=[].slice.call(mount.querySelectorAll('.jnode'));
+  function advance(i){
+    var node=nodes[i]; if(!node||!node.classList.contains('current')) return;
+    node.classList.remove('current'); node.classList.add('done');
+    var here=node.querySelector('.jnode-here'); if(here) here.parentNode.removeChild(here);
+    if(i+1<nodes.length){
+      var nx=nodes[i+1]; nx.classList.remove('locked'); nx.classList.add('current');
+      var lab=nx.querySelector('.jnode-label'); if(lab&&!lab.querySelector('.jnode-here')) lab.insertAdjacentHTML('beforeend', hereTag);
+    } else {
+      var cta=document.getElementById('journey-cta'); if(cta) cta.classList.add('show');
+    }
+  }
+  nodes.forEach(function(node,i){ var card=node.querySelector('.jnode-card'); if(card) card.onclick=function(){ if(node.classList.contains('current')) advance(i); }; });
+})();
+
+/* ===== is-not flip cards (tap toggles; hover handles desktop via CSS) ===== */
+(function(){
+  [].slice.call(document.querySelectorAll('.not-card')).forEach(function(c){ c.addEventListener('click', function(){ c.classList.toggle('flipped'); }); });
+})();
 
 </script>
 </body>
