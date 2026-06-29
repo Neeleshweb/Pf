@@ -730,6 +730,76 @@
 .not-back .nb-t{font-size:.85rem;color:#e8e3da;line-height:1.55}
 .not-back .nb-t b{color:var(--accent2)}
 .not-hint{font-size:.74rem;color:var(--muted2);margin-top:.9rem;text-align:center}
+/* phase1: feed + forms + detail */
+.fbar{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;margin:.3rem 0 1.1rem}
+.fbar select{background:var(--card2);border:1px solid var(--border2);color:var(--white);border-radius:8px;padding:.5rem .7rem;font:inherit;font-size:.85rem}
+.fbar .btn-primary{margin-left:auto}
+.feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:.9rem}
+.feed-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.05rem 1.15rem;cursor:pointer;display:flex;flex-direction:column;gap:.5rem;transition:border-color .15s,transform .15s}
+.feed-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.fc-top{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}
+.fc-tag{font-size:.6rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--accent2);background:var(--accent2-dim);border:1px solid rgba(240,165,0,.3);border-radius:100px;padding:.15rem .5rem}
+.fc-urg{margin-left:auto;font-size:.66rem;color:var(--muted2)}
+.fc-title{font-size:.98rem;font-weight:600;color:var(--white);line-height:1.4}
+.fc-dec{font-size:.84rem;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fc-foot{display:flex;justify-content:space-between;align-items:center;margin-top:.2rem;gap:.5rem}
+.fc-ctx{font-size:.72rem;color:var(--muted2)}
+.fc-rc{font-size:.7rem;font-weight:600;color:var(--accent3)}
+.fc-rc.need{color:var(--accent)}
+.fc-status{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.3px;border-radius:100px;padding:.15rem .5rem;background:var(--card2);border:1px solid var(--border2);color:var(--muted)}
+.fc-status.s-live{color:var(--green);border-color:rgba(74,222,128,.3)}
+.fc-status.s-closed{color:var(--muted2)}
+.fc-status.s-outcome{color:var(--accent2)}
+.feed-empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:2rem;border:1px dashed var(--border2);border-radius:14px}
+#feed-more{margin:1rem auto 0;display:block}
+.myc-h{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:.5px;margin:1.8rem 0 .8rem;color:var(--white)}
+.dr-ov{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(3px);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:3vh 1rem;overflow-y:auto}
+.dr-ov.open{display:flex}
+.dr-modal{background:var(--surface);border:1px solid var(--border2);border-radius:18px;max-width:640px;width:100%;padding:1.6rem;position:relative;margin:auto}
+.dr-modal .modal-t{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:.5px;margin-bottom:.2rem}
+.dr-modal .modal-sub{font-size:.83rem;color:var(--muted);margin-bottom:1.1rem}
+.dr-x{position:absolute;top:1rem;right:1rem;background:var(--card2);border:1px solid var(--border2);color:var(--muted);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:1rem;line-height:1}
+.fld{margin-bottom:1rem}
+.fld.half{display:inline-block;width:calc(50% - .4rem);vertical-align:top}
+.fld.half:first-of-type{margin-right:.7rem}
+.fld label{display:block;font-size:.8rem;font-weight:600;color:var(--white);margin-bottom:.15rem}
+.fld .hint{font-size:.72rem;color:var(--muted2);margin-bottom:.35rem}
+.fld input,.fld textarea,.fld select{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--white);border-radius:9px;padding:.6rem .7rem;font:inherit;font-size:.88rem;box-sizing:border-box}
+.fld textarea{resize:vertical;line-height:1.5}
+.req{color:var(--accent)}
+.optrow{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.optlbl{width:22px;height:22px;flex:none;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--accent);background:var(--accent-dim);border-radius:5px}
+.optinput{flex:1}
+.addopt,.opt-toggle{background:none;border:1px dashed var(--border2);color:var(--accent2);border-radius:8px;padding:.4rem .8rem;font:inherit;font-size:.78rem;cursor:pointer;margin-top:.2rem}
+.opt-toggle{display:block;width:100%}
+.optional-wrap{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.optional-wrap.open{max-height:2000px;margin-top:1rem}
+.chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.15rem}
+.chip{background:var(--card2);border:1px solid var(--border2);color:var(--muted);border-radius:100px;padding:.32rem .7rem;font:inherit;font-size:.78rem;cursor:pointer;transition:all .12s}
+.chip:hover{border-color:var(--accent2)}
+.chip.sel{background:var(--accent2-dim);border-color:var(--accent2);color:var(--accent2);font-weight:600}
+.conf{display:flex;align-items:flex-start;gap:.5rem;font-size:.82rem;color:#d8d3ca;margin:.4rem 0 1rem;cursor:pointer}
+.conf input{margin-top:.2rem}
+.form-actions{display:flex;gap:.7rem;justify-content:flex-end}
+.form-err{color:var(--red);font-size:.8rem;margin-top:.6rem;text-align:right}
+.cd-head{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin-bottom:.4rem;padding-right:2rem}
+.cd-ctx{font-size:.78rem;color:var(--accent3);font-weight:600}
+.cd-status{font-size:.6rem;font-weight:700;text-transform:uppercase;border-radius:100px;padding:.15rem .55rem;border:1px solid var(--border2);color:var(--muted)}
+.cd-status.s-live{color:var(--green);border-color:rgba(74,222,128,.3)}
+.cd-title{font-size:1.35rem;line-height:1.3;color:var(--white);margin-bottom:1rem}
+.cd-row{margin-bottom:.9rem}
+.cd-label{font-size:.64rem;letter-spacing:.8px;text-transform:uppercase;color:var(--muted2);margin-bottom:.25rem}
+.cd-val{font-size:.9rem;color:#d8d3ca;line-height:1.6}
+.cd-val strong{color:var(--white)}
+.cd-opt{display:flex;gap:.5rem;align-items:flex-start;background:var(--card2);border:1px solid var(--border);border-radius:9px;padding:.5rem .7rem;margin-bottom:.35rem;font-size:.88rem;color:#d8d3ca}
+.cd-opt span{font-weight:700;color:var(--accent)}
+.cd-chip{display:inline-block;font-size:.72rem;color:var(--muted);background:var(--card2);border:1px solid var(--border2);border-radius:100px;padding:.18rem .55rem;margin:0 .3rem .3rem 0}
+.cd-chip.y{color:var(--accent2);border-color:rgba(240,165,0,.3)}
+.cd-resp{margin-top:1.2rem;border-top:1px solid var(--border);padding-top:1rem}
+.cd-resp-h{font-weight:600;color:var(--white);margin-bottom:.3rem}
+.cd-soon{font-size:.82rem;color:var(--muted2)}
+.cd-miss{color:var(--muted);text-align:center;padding:2rem}
+@media(max-width:560px){.fld.half{width:100%;margin-right:0}}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -740,6 +810,7 @@
     <span class="logo-word">Decision <span class="ac">Room</span></span>
   </div>
   <ul class="nav-links">
+    <li><a href="#room">Open cases</a></li>
     <li><a href="#how">How it works</a></li>
     <li><a href="#examples">Example cases</a></li>
     <li><a href="#trust">For reviewers</a></li>
@@ -784,6 +855,24 @@
     <div class="ex-card"><span class="ex-tag">Metrics</span><div class="ex-q">&ldquo;Engagement is up, but retention is flat. The team thinks we won. I&rsquo;m not convinced. What should I do next?&rdquo;</div></div>
     <div class="ex-card"><span class="ex-tag">Execution</span><div class="ex-q">&ldquo;Engineering says the feature needs a rewrite first. Leadership wants launch this quarter. Do I cut scope, delay, or escalate?&rdquo;</div></div>
   </div>
+</section>
+
+<section class="section wide" id="room">
+  <div class="sec-eyebrow y">The room</div>
+  <div class="sec-title">Open <span class="y">Cases</span></div>
+  <p class="sec-sub">Real decisions PMs are working through right now. Browse them &mdash; or bring your own.</p>
+  <div class="fbar">
+    <select id="feed-cat" aria-label="Filter by category">
+      <option value="all">All categories</option>
+      <option>Roadmap</option><option>Prioritization</option><option>Discovery</option>
+      <option>Stakeholder Conflict</option><option>Metrics</option><option>Launch</option>
+      <option>Strategy</option><option>UX</option><option>Career</option><option>Execution</option>
+    </select>
+    <button type="button" class="btn-primary" data-cta="submit">+ Submit a case</button>
+  </div>
+  <div id="feed-list" class="feed-grid"></div>
+  <button type="button" id="feed-more" class="btn-ghost" style="display:none">Load more</button>
+  <div id="mycases-wrap" style="display:none"><h3 class="myc-h">Your cases</h3><div id="mycases-list" class="feed-grid"></div></div>
 </section>
 
 <section class="section wide" id="how">
@@ -869,6 +958,22 @@
   </div>
   <div class="footer-copy">© 2026 Neelesh Singh · DecisionRoom · Part of PM Gut Check · A network for product judgment.</div>
 </footer>
+
+<div class="dr-ov" id="submit-overlay">
+  <div class="dr-modal" role="dialog" aria-modal="true">
+    <button class="dr-x" id="submit-close" aria-label="Close">✕</button>
+    <div class="modal-t">BRING A DECISION</div>
+    <div class="modal-sub">Structured and anonymous (alias + PM context only). Six quick required fields &mdash; the rest is optional.</div>
+    <div id="submit-form"></div>
+  </div>
+</div>
+
+<div class="dr-ov" id="case-overlay">
+  <div class="dr-modal" role="dialog" aria-modal="true">
+    <button class="dr-x" id="case-close" aria-label="Close">✕</button>
+    <div id="case-detail"></div>
+  </div>
+</div>
 
 <div class="aud-overlay" id="signin-overlay">
   <div class="aud-modal" role="dialog" aria-modal="true">
@@ -956,6 +1061,7 @@ function signOutUser(){ if(!SB) return; SB.auth.signOut().then(function(){ curre
 function wireCTAs(){
   [].slice.call(document.querySelectorAll('[data-cta="submit"]')).forEach(function(b){ b.onclick=function(){
     if(SB&&!currentUser){ openSignIn('Sign in to start your first case \u2014 your posts are anonymous (alias + PM context only).'); return; }
+    if(typeof drOpenSubmit==='function'){ drOpenSubmit(); return; }
     toast('Case submission opens next \u2014 you\u2019re set as a founding member. We\u2019ll open it to you first.');
   }; });
   [].slice.call(document.querySelectorAll('[data-cta="review"]')).forEach(function(b){ b.onclick=function(){
@@ -979,14 +1085,14 @@ function wireCTAs(){
   function smoothTo(id){ var el=document.getElementById(id); if(!el) return; var y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); }
   function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn,80); }; return a; }
   if(body){
-    [['How it works','how'],['Example cases','examples'],['For reviewers','trust']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
+    [['Open cases','room'],['How it works','how'],['Example cases','examples'],['For reviewers','trust']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
     body.appendChild(link('GutCheck \u2197', function(){ window.location.href='/gutcheck.html'; }));
     body.appendChild(link('\uD83C\uDFE0  Home', function(){ window.location.href='/index.html'; }));
   }
 })();
 
 /* boot */
-function updateAuthUI(){ renderNavAccount(); }
+function updateAuthUI(){ renderNavAccount(); if(typeof drAfterAuth==='function'){ try{ drAfterAuth(); }catch(e){} } }
 function boot(){
   updateAuthUI(); wireCTAs();
   if(!SB) return;
@@ -1046,6 +1152,188 @@ boot();
 /* ===== is-not flip cards (tap toggles; hover handles desktop via CSS) ===== */
 (function(){
   [].slice.call(document.querySelectorAll('.not-card')).forEach(function(c){ c.addEventListener('click', function(){ c.classList.toggle('flipped'); }); });
+})();
+
+
+/* ===== DecisionRoom Phase 1a — submit + feed + my cases + detail (read) ===== */
+(function(){
+  var HELP_OPTS=[['critique','Decision critique'],['stakeholder','Stakeholder script'],['prioritization','Prioritization advice'],['discovery','Discovery plan'],['roadmap','Roadmap feedback'],['comms','Communication strategy']];
+  var CAT_OPTS=['Roadmap','Prioritization','Discovery','Stakeholder Conflict','Metrics','Launch','Strategy','UX','Career','Execution'];
+  var STK_OPTS=['CEO','Sales','Engineering','Design','Customer','Support','Data','Legal','Manager','Exec Team'];
+  var CONS_OPTS=['Time','Engineering capacity','Revenue pressure','Customer escalation','Leadership pressure','Technical debt','Unclear data'];
+  var URG=[['today','Today'],['this_week','This week'],['this_month','This month'],['not_urgent','Not urgent']];
+  var ANON=[['context','Show role/context only'],['anon','Fully anonymous'],['dm_ok','Allow verified reviewers to DM']];
+  function helpLabel(h){ for(var i=0;i<HELP_OPTS.length;i++){ if(HELP_OPTS[i][0]===h) return HELP_OPTS[i][1]; } return h; }
+  function statusBadge(s){ return ({live:'Open',closed:'Closed',outcome:'Outcome added',submitted:'Submitted',review:'In review',draft:'Draft'})[s]||s; }
+  function urgLabel(u){ return ({today:'Today',this_week:'This week',this_month:'This month',not_urgent:'Not urgent'})[u]||u; }
+
+  function chips(id, opts){ return '<div class="chips" id="'+id+'">'+opts.map(function(o){ var v=Array.isArray(o)?o[0]:o, l=Array.isArray(o)?o[1]:o; return '<button type="button" class="chip" data-v="'+escHtml(v)+'">'+escHtml(l)+'</button>'; }).join('')+'</div>'; }
+  function selChips(id){ return [].slice.call(document.querySelectorAll('#'+id+' .chip.sel')).map(function(c){ return c.getAttribute('data-v'); }); }
+
+  var ov=document.getElementById('submit-overlay');
+  var form=document.getElementById('submit-form');
+
+  function addOpt(){ var wrap=document.getElementById('f-options'); if(!wrap) return; var n=wrap.querySelectorAll('.optrow').length; var L='ABCDE'.charAt(n)||'?'; var row=document.createElement('div'); row.className='optrow'; row.innerHTML='<span class="optlbl">'+L+'</span><input class="optinput" maxlength="160" placeholder="Option '+L+'">'; wrap.appendChild(row); }
+
+  function buildForm(){
+    if(!form) return;
+    form.innerHTML=
+      '<div class="fld"><label>Title <span class="req">*</span></label><div class="hint">Summarize the decision in one sentence.</div><input id="f-title" maxlength="140" placeholder="e.g. Build the custom feature to save the renewal, or protect the roadmap?"></div>'
+     +'<div class="fld"><label>Situation summary <span class="req">*</span></label><div class="hint">What\u2019s happening? Give enough context \u2014 without naming your company.</div><textarea id="f-situation" rows="4"></textarea></div>'
+     +'<div class="fld"><label>Decision needed <span class="req">*</span></label><div class="hint">What exactly are you trying to decide?</div><textarea id="f-decision" rows="2"></textarea></div>'
+     +'<div class="fld"><label>Options being considered <span class="req">*</span></label><div class="hint">At least two.</div><div id="f-options"></div><button type="button" class="addopt" id="f-addopt">+ Add option</button></div>'
+     +'<div class="fld"><label>Biggest risk / fear <span class="req">*</span></label><div class="hint">What are you afraid will go wrong?</div><textarea id="f-risk" rows="2"></textarea></div>'
+     +'<div class="fld"><label>Type of help needed <span class="req">*</span></label>'+chips('f-help',HELP_OPTS)+'</div>'
+     +'<button type="button" class="opt-toggle" id="f-opt-toggle">+ Add optional details (recommended)</button>'
+     +'<div id="f-optional" class="optional-wrap">'
+       +'<div class="fld"><label>Product context</label><select id="f-product"><option value="">\u2014</option><option>B2B SaaS</option><option>B2C</option><option>Marketplace</option><option>Platform</option><option>Internal Tool</option><option>AI Product</option><option>Other</option></select></div>'
+       +'<div class="fld"><label>Problem category</label>'+chips('f-cat',CAT_OPTS)+'</div>'
+       +'<div class="fld"><label>Stakeholders involved</label>'+chips('f-stk',STK_OPTS)+'</div>'
+       +'<div class="fld"><label>Constraints</label>'+chips('f-cons',CONS_OPTS)+'<textarea id="f-cons-note" rows="2" placeholder="Anything else constraining this?" style="margin-top:.5rem"></textarea></div>'
+       +'<div class="fld"><label>Current recommendation</label><input id="f-rec" placeholder="What are you leaning toward right now?"></div>'
+       +'<div class="fld"><label>Evidence available</label><textarea id="f-evidence" rows="2"></textarea></div>'
+       +'<div class="fld"><label>What have you tried already?</label><textarea id="f-tried" rows="2"></textarea></div>'
+       +'<div class="fld half"><label>Urgency</label><select id="f-urgency">'+URG.map(function(u){return '<option value="'+u[0]+'"'+(u[0]==='this_week'?' selected':'')+'>'+u[1]+'</option>';}).join('')+'</select></div>'
+       +'<div class="fld half"><label>Anonymity</label><select id="f-anon">'+ANON.map(function(a){return '<option value="'+a[0]+'">'+a[1]+'</option>';}).join('')+'</select></div>'
+     +'</div>'
+     +'<label class="conf"><input type="checkbox" id="f-conf"> <span>I\u2019ve removed company / customer confidential information. <span class="req">*</span></span></label>'
+     +'<div class="form-actions"><button type="button" class="btn-ghost" id="f-cancel">Cancel</button><button type="button" class="btn-primary" id="f-submit">Post case</button></div>'
+     +'<div class="form-err" id="f-err"></div>';
+    addOpt(); addOpt();
+    document.getElementById('f-addopt').onclick=function(){ if(document.querySelectorAll('#f-options .optrow').length<5) addOpt(); };
+    document.getElementById('f-opt-toggle').onclick=function(){ var w=document.getElementById('f-optional'); var open=w.classList.toggle('open'); this.textContent=open?'\u2013 Hide optional details':'+ Add optional details (recommended)'; };
+    [].slice.call(form.querySelectorAll('.chip')).forEach(function(c){ c.onclick=function(){ c.classList.toggle('sel'); }; });
+    document.getElementById('f-cancel').onclick=closeSubmit;
+    document.getElementById('f-submit').onclick=doSubmit;
+  }
+
+  function drOpenSubmit(){ if(!ov||!form) return; if(!form.innerHTML) buildForm(); ov.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeSubmit(){ if(!ov) return; ov.classList.remove('open'); document.body.style.overflow=''; }
+  window.drOpenSubmit=drOpenSubmit;
+  if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) closeSubmit(); });
+
+  function reasonMsg(r){ return ({auth:'Please sign in again.',confidential:'Please confirm you\u2019ve removed confidential info.',title:'Title needs at least 6 characters.',situation:'Add a bit more situation context.',decision:'Describe the decision a little more.',options:'Add at least two options.',risk:'Describe the biggest risk a little more.',help:'Pick at least one type of help.',rate:'You\u2019ve posted several cases today \u2014 try again later.'})[r]||'Could not post right now.'; }
+
+  function doSubmit(){
+    var err=document.getElementById('f-err'); err.textContent='';
+    if(!SB){ err.textContent='Not connected.'; return; }
+    if(!currentUser){ closeSubmit(); openSignIn('Sign in to post your case.'); return; }
+    var opts=[].slice.call(document.querySelectorAll('#f-options .optinput')).map(function(i){return i.value.trim();}).filter(Boolean);
+    var help=selChips('f-help');
+    var get=function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
+    var miss=[];
+    if(get('f-title').length<6) miss.push('a title (6+ chars)');
+    if(get('f-situation').length<20) miss.push('the situation (a bit more)');
+    if(get('f-decision').length<10) miss.push('the decision');
+    if(opts.length<2) miss.push('at least two options');
+    if(get('f-risk').length<10) miss.push('the biggest risk');
+    if(!help.length) miss.push('a type of help');
+    if(!document.getElementById('f-conf').checked) miss.push('the confidentiality confirmation');
+    if(miss.length){ err.textContent='Please complete: '+miss.join(', ')+'.'; return; }
+    var payload={
+      p_title:get('f-title'), p_situation:get('f-situation'), p_decision:get('f-decision'),
+      p_options:opts, p_biggest_risk:get('f-risk'), p_help_types:help,
+      p_confidential:true,
+      p_product_context:get('f-product')||null,
+      p_categories:selChips('f-cat'), p_stakeholders:selChips('f-stk'),
+      p_current_rec:get('f-rec')||null, p_constraints:selChips('f-cons'),
+      p_constraints_note:get('f-cons-note')||null, p_evidence:get('f-evidence')||null,
+      p_tried:get('f-tried')||null, p_urgency:get('f-urgency'), p_anonymity:get('f-anon')
+    };
+    var btn=document.getElementById('f-submit'); btn.disabled=true; btn.textContent='Posting\u2026';
+    SB.rpc('dr_submit_case', payload).then(function(res){
+      btn.disabled=false; btn.textContent='Post case';
+      if(res&&res.data&&res.data.ok){ closeSubmit(); if(form) form.innerHTML=''; toast('Your case is live in the room.'); loadFeed(true); loadMyCases(); }
+      else { err.textContent=reasonMsg((res&&res.data&&res.data.reason)||'error'); }
+    }).catch(function(){ btn.disabled=false; btn.textContent='Post case'; err.textContent='Could not post right now \u2014 please try again.'; });
+  }
+
+  /* ---- feed (keyset) ---- */
+  var feedCursor=null, feedDone=false, feedLoading=false;
+  function feedCardHtml(r){
+    var tags=(r.categories||[]).slice(0,3).map(function(c){return '<span class="fc-tag">'+escHtml(c)+'</span>';}).join('');
+    var rc=Number(r.response_count)||0;
+    return '<div class="feed-card" data-id="'+escHtml(r.id)+'"><div class="fc-top">'+tags+'<span class="fc-urg">'+escHtml(urgLabel(r.urgency))+'</span></div>'
+      +'<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
+      +'<div class="fc-foot"><span class="fc-ctx">'+escHtml(r.author_context||r.alias||'PM')+'</span><span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Needs responses':(rc+(rc===1?' response':' responses')))+'</span></div></div>';
+  }
+  function loadFeed(reset){
+    if(!SB||feedLoading) return; feedLoading=true;
+    if(reset){ feedCursor=null; feedDone=false; }
+    var catEl=document.getElementById('feed-cat'); var cat=catEl?catEl.value:null;
+    SB.rpc('dr_feed',{p_limit:12,p_before:feedCursor,p_category:cat,p_status:'live'}).then(function(res){
+      feedLoading=false; var list=document.getElementById('feed-list'); if(!list) return;
+      var rows=(res&&res.data)||[];
+      if(reset) list.innerHTML='';
+      if(reset && !rows.length){ list.innerHTML='<div class="feed-empty">No open cases yet. Be the first to bring one.</div>'; }
+      rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', feedCardHtml(r)); });
+      if(rows.length) feedCursor=rows[rows.length-1].created_at;
+      if(rows.length<12) feedDone=true;
+      var more=document.getElementById('feed-more'); if(more) more.style.display=feedDone?'none':'';
+      wireCards(list);
+    }).catch(function(){ feedLoading=false; });
+  }
+  function loadMyCases(){
+    var w=document.getElementById('mycases-wrap'); if(!w) return;
+    if(!SB||!currentUser){ w.style.display='none'; return; }
+    SB.rpc('dr_my_cases').then(function(res){
+      var rows=(res&&res.data)||[]; var list=document.getElementById('mycases-list'); if(!list) return;
+      if(!rows.length){ w.style.display='none'; return; }
+      w.style.display=''; list.innerHTML='';
+      rows.forEach(function(r){ var rc=Number(r.response_count)||0; list.insertAdjacentHTML('beforeend',
+        '<div class="feed-card mine" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-status s-'+escHtml(r.status)+'">'+escHtml(statusBadge(r.status))+'</span><span class="fc-urg">'+escHtml(urgLabel(r.urgency))+'</span></div>'
+        +'<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
+        +'<div class="fc-foot"><span class="fc-ctx">You</span><span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Awaiting responses':(rc+(rc===1?' response':' responses')))+'</span></div></div>'); });
+      wireCards(list);
+    }).catch(function(){});
+  }
+  function wireCards(scope){ [].slice.call(scope.querySelectorAll('.feed-card')).forEach(function(c){ if(c._w) return; c._w=1; c.onclick=function(){ openCase(c.getAttribute('data-id')); }; }); }
+
+  /* ---- detail (read-only in 1a) ---- */
+  var cov=document.getElementById('case-overlay');
+  function closeCase(){ if(cov){ cov.classList.remove('open'); document.body.style.overflow=''; } }
+  if(cov) cov.addEventListener('click', function(e){ if(e.target===cov) closeCase(); });
+  function row(label, val){ return val?('<div class="cd-row"><div class="cd-label">'+label+'</div><div class="cd-val">'+val+'</div></div>'):''; }
+  function listRow(label, arr){ return (arr&&arr.length)?row(label, arr.map(function(x){return '<span class="cd-chip">'+escHtml(x)+'</span>';}).join('')):''; }
+  function nl(t){ return escHtml(t).replace(/\n/g,'<br>'); }
+  function openCase(id){
+    if(!SB||!id) return;
+    SB.rpc('dr_get_case',{p_id:id}).then(function(res){
+      var m=document.getElementById('case-detail'); if(!m) return;
+      var d=(res&&res.data&&res.data.ok)?res.data['case']:null;
+      if(!d){ m.innerHTML='<p class="cd-miss">This case isn\u2019t available.</p>'; }
+      else {
+        var opts=(d.options||[]).map(function(o,i){ return '<div class="cd-opt"><span>'+('ABCDE'.charAt(i)||'\u2022')+'</span>'+escHtml(o)+'</div>'; }).join('');
+        var help=(d.help_types||[]).map(function(h){ return '<span class="cd-chip y">'+escHtml(helpLabel(h))+'</span>'; }).join('');
+        m.innerHTML='<div class="cd-head"><span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span><span class="cd-status s-'+escHtml(d.status)+'">'+escHtml(statusBadge(d.status))+'</span></div>'
+          +'<h2 class="cd-title">'+escHtml(d.title)+'</h2>'
+          +row('The decision','<strong>'+escHtml(d.decision)+'</strong>')
+          +row('Situation', nl(d.situation))
+          +(opts?('<div class="cd-row"><div class="cd-label">Options</div><div class="cd-val">'+opts+'</div></div>'):'')
+          +row('Biggest risk', nl(d.biggest_risk))
+          +(help?row('Help needed', help):'')
+          +listRow('Categories', d.categories)
+          +listRow('Stakeholders', d.stakeholders)
+          +(d.product_context?row('Product', escHtml(d.product_context)):'')
+          +listRow('Constraints', d.constraints_list)
+          +(d.constraints_note?row('Constraints note', nl(d.constraints_note)):'')
+          +(d.current_recommendation?row('Leaning toward', escHtml(d.current_recommendation)):'')
+          +(d.evidence?row('Evidence', nl(d.evidence)):'')
+          +(d.tried?row('Already tried', nl(d.tried)):'')
+          +'<div class="cd-resp"><div class="cd-resp-h">'+(Number(d.response_count)||0)+' responses</div><p class="cd-soon">Structured responses open in the next update \u2014 the room is being seeded now.</p></div>';
+      }
+      cov.classList.add('open'); document.body.style.overflow='hidden';
+    }).catch(function(){});
+  }
+
+  var sc=document.getElementById('submit-close'); if(sc) sc.onclick=closeSubmit;
+  var cc=document.getElementById('case-close'); if(cc) cc.onclick=closeCase;
+  var fmore=document.getElementById('feed-more'); if(fmore) fmore.onclick=function(){ loadFeed(false); };
+  var fcat=document.getElementById('feed-cat'); if(fcat) fcat.onchange=function(){ loadFeed(true); };
+
+  window.drAfterAuth=function(){ loadMyCases(); };
+  loadFeed(true);
+  loadMyCases();
 })();
 
 </script>
