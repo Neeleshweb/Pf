@@ -826,8 +826,46 @@
 .cd-chip{display:inline-block;font-size:.72rem;color:var(--muted);background:var(--card2);border:1px solid var(--border2);border-radius:100px;padding:.18rem .55rem;margin:0 .3rem .3rem 0}
 .cd-chip.y{color:var(--accent2);border-color:rgba(240,165,0,.3)}
 .cd-resp{margin-top:1.2rem;border-top:1px solid var(--border);padding-top:1rem}
-.cd-resp-h{font-weight:600;color:var(--white);margin-bottom:.3rem}
+.cd-resp-h{font-weight:600;color:var(--white);margin-bottom:.8rem;font-size:.95rem}
 .cd-soon{font-size:.82rem;color:var(--muted2)}
+.cd-resp-load,.cd-resp-empty{font-size:.84rem;color:var(--muted2);padding:.4rem 0}
+/* response list */
+.cd-resp-list{display:flex;flex-direction:column;gap:.8rem;margin-top:.4rem}
+.rsp-card{background:var(--card2);border:1px solid var(--border2);border-radius:13px;padding:1rem 1.1rem}
+.rsp-top{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin-bottom:.5rem;flex-wrap:wrap}
+.rsp-who{font-size:.74rem;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--accent3)}
+.rsp-hc{font-size:.7rem;font-weight:600;color:var(--green)}
+.rsp-opt{font-size:.8rem;color:var(--muted);margin-bottom:.45rem}
+.rsp-opt b{color:var(--accent2);font-weight:600}
+.rsp-body{font-size:.9rem;line-height:1.6;color:var(--white);opacity:.92;overflow-wrap:anywhere}
+.rsp-wo{margin-top:.6rem;font-size:.84rem;line-height:1.55;color:var(--muted);background:rgba(255,107,107,.07);border-left:2px solid rgba(255,107,107,.5);border-radius:0 8px 8px 0;padding:.5rem .7rem}
+.rsp-wo-l{display:block;font-size:.58rem;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:#ff8f8f;margin-bottom:.2rem}
+.rsp-foot{margin-top:.7rem}
+.rsp-help{font:inherit;font-size:.74rem;font-weight:600;color:var(--muted);background:transparent;border:1px solid var(--border2);border-radius:100px;padding:.28rem .8rem;cursor:pointer;transition:all .12s}
+.rsp-help:hover{border-color:var(--green);color:var(--green)}
+.rsp-help.on{background:rgba(74,222,128,.14);border-color:var(--green);color:var(--green)}
+.rsp-yours{font-size:.7rem;font-weight:600;color:var(--muted2);font-style:italic}
+/* respond / close form */
+.cd-form{background:var(--surface);border:1px solid var(--border2);border-radius:13px;padding:1.1rem 1.15rem;margin:.4rem 0 1rem}
+.cd-form-h{font-weight:600;color:var(--white);margin-bottom:.7rem}
+.cd-f-l{display:block;font-size:.78rem;color:var(--muted);margin:.7rem 0 .35rem}
+.cd-f-l:first-of-type{margin-top:0}
+.cd-f-opt{font-size:.68rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.4px;margin-left:.2rem}
+.cd-form select,.cd-form textarea{width:100%;box-sizing:border-box;background:var(--card2);border:1px solid var(--border2);color:var(--white);border-radius:9px;padding:.55rem .65rem;font:inherit;font-size:.88rem}
+.cd-form textarea{resize:vertical;line-height:1.5}
+.cd-form select:focus,.cd-form textarea:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(240,165,0,.12)}
+.cd-form-act{display:flex;align-items:center;gap:.6rem;margin-top:.9rem;flex-wrap:wrap}
+.cd-form-err{font-size:.78rem;color:var(--red)}
+.cd-owner{background:var(--surface);border:1px dashed var(--border2);border-radius:13px;padding:1rem 1.1rem;margin:.4rem 0 1rem}
+.cd-owner-n{font-size:.84rem;color:var(--muted);line-height:1.55;margin-bottom:.8rem}
+.cd-signin{background:var(--surface);border:1px solid var(--border2);border-radius:13px;padding:1.1rem;margin:.4rem 0 1rem;text-align:center}
+.cd-signin p{font-size:.86rem;color:var(--muted);margin-bottom:.8rem}
+/* outcome */
+.cd-outcome{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.3);border-radius:13px;padding:1rem 1.1rem;margin:.2rem 0 1rem}
+.cd-outcome-h{font-size:.7rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--green);margin-bottom:.5rem}
+.cd-outcome-opt{font-size:.85rem;color:var(--muted);margin-bottom:.35rem}
+.cd-outcome-opt b{color:var(--white);font-weight:600}
+.cd-outcome-body{font-size:.88rem;line-height:1.6;color:var(--white);opacity:.9;overflow-wrap:anywhere}
 .cd-miss{color:var(--muted);text-align:center;padding:2rem}
 @media(max-width:560px){.fld.half{width:100%;margin-right:0}}
 /* phase1a.2: form overhaul + custom-add + examples pagination */
@@ -1550,10 +1588,115 @@ boot();
           +(d.current_recommendation?row('Leaning toward', escHtml(d.current_recommendation)):'')
           +(d.evidence?row('Evidence', nl(d.evidence)):'')
           +(d.tried?row('Already tried', nl(d.tried)):'')
-          +'<div class="cd-resp"><div class="cd-resp-h">'+(Number(d.response_count)||0)+' responses</div><p class="cd-soon">Structured responses open in the next update \u2014 the room is being seeded now.</p></div>';
+          +'<div class="cd-resp" id="cd-resp"><div class="cd-resp-h"><span id="cd-resp-count">'+respCountLabel(Number(d.response_count)||0)+'</span></div>'
+          +outcomeHtml(d)
+          +'<div id="cd-respond"></div>'
+          +'<div id="cd-responses" class="cd-resp-list"></div></div>';
+        loadResponses(d);
       }
       cov.classList.add('open'); document.body.style.overflow='hidden';
     }).catch(function(){});
+  }
+
+  /* ---- responses (Phase 1b) ---- */
+  function respCountLabel(n){ n=Number(n)||0; return n+(n===1?' response':' responses'); }
+  function respErr(reason){ return ({auth:'Please sign in first.',body:'Add a bit more \u2014 at least a sentence or two.',missing:'This case is no longer available.',own:'You can\u2019t respond to your own case.',closed:'This case is closed to new responses.',rate:'You\u2019ve posted a lot today \u2014 try again later.'})[reason]||'Couldn\u2019t post your response.'; }
+  function outcomeHtml(d){
+    if(!d||d.status!=='closed') return '';
+    if(!d.resolution && !d.resolved_option) return '<div class="cd-outcome"><div class="cd-outcome-h">\u2713 Case closed</div></div>';
+    return '<div class="cd-outcome"><div class="cd-outcome-h">\u2713 What they decided</div>'
+      +(d.resolved_option?'<div class="cd-outcome-opt">Went with: <b>'+escHtml(d.resolved_option)+'</b></div>':'')
+      +(d.resolution?'<div class="cd-outcome-body">'+nl(d.resolution)+'</div>':'')+'</div>';
+  }
+  function loadResponses(d){
+    var listEl=document.getElementById('cd-responses'), actEl=document.getElementById('cd-respond');
+    if(!listEl||!SB) return;
+    listEl.innerHTML='<p class="cd-resp-load">Loading responses\u2026</p>';
+    SB.rpc('dr_case_responses',{p_case_id:d.id}).then(function(res){
+      var data=(res&&res.data)||{}, rs=data.responses||[];
+      var mine=null; for(var i=0;i<rs.length;i++){ if(rs[i].is_mine){ mine=rs[i]; break; } }
+      renderResponseList(listEl, rs, d);
+      renderRespondArea(actEl, d, mine);
+      var cEl=document.getElementById('cd-resp-count'); if(cEl) cEl.textContent=respCountLabel(rs.length);
+    }).catch(function(){ listEl.innerHTML='<p class="cd-resp-load">Couldn\u2019t load responses.</p>'; });
+  }
+  function renderResponseList(listEl, rs, d){
+    if(!rs.length){ listEl.innerHTML='<p class="cd-resp-empty">'+(d.is_mine?'No responses yet \u2014 share your case to get the first one.':(d.status==='live'?'No responses yet. Be the first to weigh in.':'No responses were posted.'))+'</p>'; return; }
+    listEl.innerHTML=rs.map(function(r){
+      var opt=r.chosen_option?'<div class="rsp-opt">Leans toward: <b>'+escHtml(r.chosen_option)+'</b></div>':'';
+      var wo=r.watch_out?'<div class="rsp-wo"><span class="rsp-wo-l">Watch out</span>'+nl(r.watch_out)+'</div>':'';
+      var hc=(Number(r.helpful_count)||0)>0?'<span class="rsp-hc">'+r.helpful_count+' found helpful</span>':'';
+      var act = r.is_mine ? '<span class="rsp-yours">Your response</span>'
+        : (currentUser ? '<button type="button" class="rsp-help'+(r.marked?' on':'')+'" data-r="'+escHtml(r.id)+'">'+(r.marked?'\u2713 Marked helpful':'Mark helpful')+'</button>' : '');
+      return '<div class="rsp-card"><div class="rsp-top"><span class="rsp-who">'+escHtml(r.responder_context||r.alias||'PM')+'</span>'+hc+'</div>'
+        +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo
+        +'<div class="rsp-foot">'+act+'</div></div>';
+    }).join('');
+    [].slice.call(listEl.querySelectorAll('.rsp-help')).forEach(function(b){ b.onclick=function(){ markHelpful(b.getAttribute('data-r'), b); }; });
+  }
+  function renderRespondArea(el, d, mine){
+    if(!el) return;
+    if(d.is_mine){
+      if(d.status==='live'){
+        el.innerHTML='<div class="cd-owner"><p class="cd-owner-n">This is your case. Once you\u2019ve made the call, close it and (optionally) share what you decided \u2014 it closes the loop for everyone who weighed in.</p><button type="button" class="btn-ghost" id="cd-close-btn">Close case &amp; add outcome</button></div>';
+        var cb=document.getElementById('cd-close-btn'); if(cb) cb.onclick=function(){ openCloseForm(d); };
+      } else { el.innerHTML=''; }
+      return;
+    }
+    if(d.status!=='live'){ el.innerHTML='<p class="cd-resp-empty">This case is closed to new responses.</p>'; return; }
+    if(!currentUser){ el.innerHTML='<div class="cd-signin"><p>Sign in to add your structured response \u2014 you post under your alias, not your name.</p><button type="button" class="btn-primary" id="cd-signin-btn">Sign in to respond</button></div>'; var sb=document.getElementById('cd-signin-btn'); if(sb) sb.onclick=function(){ openSignIn(); }; return; }
+    var optionsHtml=(d.options||[]).map(function(o){ return '<option value="'+escHtml(o)+'"'+(mine&&mine.chosen_option===o?' selected':'')+'>'+escHtml(o)+'</option>'; }).join('');
+    var daSel=(mine&&mine.chosen_option==='A different approach')?' selected':'';
+    el.innerHTML='<div class="cd-form"><div class="cd-form-h">'+(mine?'Update your response':'Add your response')+'</div>'
+      +'<label class="cd-f-l">Which option would you lean toward? <span class="cd-f-opt">optional</span></label>'
+      +'<select id="rf-opt"><option value="">\u2014 No strong lean \u2014</option>'+optionsHtml+'<option value="A different approach"'+daSel+'>A different approach</option></select>'
+      +'<label class="cd-f-l">Your take <span class="req">*</span></label><textarea id="rf-body" rows="4" maxlength="2500" placeholder="What would you do, and why? Draw on what you\u2019ve actually seen \u2014 not generic advice.">'+(mine?escHtml(mine.body):'')+'</textarea>'
+      +'<label class="cd-f-l">One thing to watch out for <span class="cd-f-opt">optional</span></label><textarea id="rf-wo" rows="2" maxlength="600" placeholder="The risk or blind spot you\u2019d flag.">'+(mine?escHtml(mine.watch_out||''):'')+'</textarea>'
+      +'<div class="cd-form-act"><button type="button" class="btn-primary" id="rf-submit">'+(mine?'Update response':'Post response')+'</button><span class="cd-form-err" id="rf-err"></span></div></div>';
+    var rs=document.getElementById('rf-submit'); if(rs) rs.onclick=function(){ submitResponse(d, !!mine); };
+  }
+  function submitResponse(d, isUpdate){
+    var body=((document.getElementById('rf-body')||{}).value||'').trim();
+    var opt=((document.getElementById('rf-opt')||{}).value||'').trim();
+    var wo=((document.getElementById('rf-wo')||{}).value||'').trim();
+    var err=document.getElementById('rf-err'), btn=document.getElementById('rf-submit');
+    if(body.length<20){ if(err) err.textContent='Add a bit more \u2014 at least a sentence or two.'; return; }
+    if(btn){ btn.disabled=true; btn.textContent=isUpdate?'Updating\u2026':'Posting\u2026'; }
+    SB.rpc('dr_post_response',{p_case_id:d.id,p_body:body,p_chosen_option:opt,p_watch_out:wo}).then(function(res){
+      var r=(res&&res.data)||{};
+      if(!r.ok){ if(err) err.textContent=respErr(r.reason); if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } return; }
+      if(typeof toast==='function') toast(isUpdate?'Response updated':'Response posted'); loadResponses(d); loadFeed(true); loadMyCases();
+    }).catch(function(){ if(err) err.textContent='Something went wrong. Try again.'; if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } });
+  }
+  function markHelpful(rid, btn){
+    if(!currentUser){ openSignIn(); return; }
+    btn.disabled=true;
+    SB.rpc('dr_mark_helpful',{p_response_id:rid}).then(function(res){
+      var r=(res&&res.data)||{}; btn.disabled=false;
+      if(!r.ok) return;
+      btn.classList.toggle('on', !!r.marked); btn.textContent=(r.marked?'\u2713 Marked helpful':'Mark helpful');
+      var card=btn.closest&&btn.closest('.rsp-card'); if(card){ var top=card.querySelector('.rsp-top'), hc=card.querySelector('.rsp-hc'), n=Number(r.helpful_count)||0;
+        if(n>0){ if(!hc){ hc=document.createElement('span'); hc.className='rsp-hc'; top.appendChild(hc); } hc.textContent=n+' found helpful'; }
+        else if(hc&&hc.parentNode){ hc.parentNode.removeChild(hc); } }
+    }).catch(function(){ btn.disabled=false; });
+  }
+  function openCloseForm(d){
+    var el=document.getElementById('cd-respond'); if(!el) return;
+    var optionsHtml=(d.options||[]).map(function(o){ return '<option value="'+escHtml(o)+'">'+escHtml(o)+'</option>'; }).join('');
+    el.innerHTML='<div class="cd-form"><div class="cd-form-h">Close this case</div>'
+      +'<label class="cd-f-l">What did you go with? <span class="cd-f-opt">optional</span></label>'
+      +'<select id="cf-opt"><option value="">\u2014 Not sure / something else \u2014</option>'+optionsHtml+'<option value="A different approach">A different approach</option></select>'
+      +'<label class="cd-f-l">What you decided &amp; why <span class="cd-f-opt">optional, but valuable</span></label><textarea id="cf-res" rows="3" maxlength="1200" placeholder="A line on what you chose and how it\u2019s playing out. This is what turns the case into a useful record."></textarea>'
+      +'<div class="cd-form-act"><button type="button" class="btn-primary" id="cf-submit">Close case</button><button type="button" class="btn-ghost" id="cf-cancel">Cancel</button><span class="cd-form-err" id="cf-err"></span></div></div>';
+    document.getElementById('cf-cancel').onclick=function(){ renderRespondArea(el, d, null); };
+    document.getElementById('cf-submit').onclick=function(){
+      var res=((document.getElementById('cf-res')||{}).value||'').trim(), opt=((document.getElementById('cf-opt')||{}).value||'').trim();
+      var btn=document.getElementById('cf-submit'), err=document.getElementById('cf-err'); if(btn){ btn.disabled=true; btn.textContent='Closing\u2026'; }
+      SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt}).then(function(r){
+        var o=(r&&r.data)||{}; if(!o.ok){ if(err) err.textContent='Couldn\u2019t close the case.'; if(btn){ btn.disabled=false; btn.textContent='Close case'; } return; }
+        if(typeof toast==='function') toast('Case closed'); openCase(d.id); loadFeed(true); loadMyCases();
+      }).catch(function(){ if(err) err.textContent='Something went wrong.'; if(btn){ btn.disabled=false; btn.textContent='Close case'; } });
+    };
   }
 
   var sc=document.getElementById('submit-close'); if(sc) sc.onclick=closeSubmit;
