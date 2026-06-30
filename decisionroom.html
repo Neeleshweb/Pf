@@ -752,16 +752,17 @@
 .fc-tags{display:flex;gap:.35rem;flex-wrap:wrap;align-items:center}
 .fc-tag{font-size:.6rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--accent2);background:var(--accent2-dim);border:1px solid rgba(240,165,0,.3);border-radius:100px;padding:.18rem .55rem}
 .fc-urg{margin-left:auto;font-size:.66rem;color:var(--muted2)}
-.fc-date{font-size:.72rem;color:var(--muted2);white-space:nowrap;flex-shrink:0;padding-top:.1rem}
+.fc-date{font-size:.62rem;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted2);white-space:nowrap;flex-shrink:0;font-weight:700;padding-top:.2rem}
+.fc-date b{color:var(--accent2);font-weight:700}
 .fc-title{font-size:1.04rem;font-weight:600;color:var(--white);line-height:1.4}
 .fc-dec{font-size:.85rem;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.fc-meta{display:flex;flex-direction:column;gap:.45rem;border-top:1px solid var(--border);padding-top:.7rem;margin-top:.1rem}
+.fc-meta{display:flex;flex-direction:column;gap:.6rem;border-top:1px solid var(--border);padding-top:.7rem;margin-top:.1rem}
 .fc-meta:empty{display:none}
-.fc-row{display:flex;align-items:flex-start;gap:.55rem;flex-wrap:wrap}
-.fc-rowlab{font-size:.56rem;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--muted2);padding-top:.24rem;width:84px;flex-shrink:0}
-.fc-chips{display:flex;flex-wrap:wrap;gap:.32rem;flex:1;min-width:0}
+.fc-row{display:flex;flex-direction:column;gap:.34rem}
+.fc-rowlab{font-size:.56rem;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--muted2)}
+.fc-chips{display:flex;flex-wrap:wrap;gap:.34rem}
 .fc-help{font-size:.68rem;font-weight:600;color:var(--accent3);background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.32);border-radius:100px;padding:.16rem .55rem}
-.fc-stk{font-size:.68rem;font-weight:600;color:var(--muted);background:var(--card2);border:1px solid var(--border2);border-radius:100px;padding:.16rem .55rem}
+.fc-stk{font-size:.68rem;font-weight:600;color:#c4b5fd;background:rgba(167,139,250,.13);border:1px solid rgba(167,139,250,.34);border-radius:100px;padding:.16rem .55rem}
 .fc-more{font-size:.68rem;font-weight:600;color:var(--muted2);align-self:center}
 .fc-foot{display:flex;justify-content:space-between;align-items:center;margin-top:.1rem;gap:.5rem}
 .fc-foot-r{display:flex;align-items:center;gap:.5rem}
@@ -799,8 +800,14 @@
 .optional-wrap.open{max-height:2000px;margin-top:1rem}
 .chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.15rem}
 .chip{background:var(--card2);border:1px solid var(--border2);color:var(--muted);border-radius:100px;padding:.32rem .7rem;font:inherit;font-size:.78rem;cursor:pointer;transition:all .12s}
-.chip:hover{border-color:var(--accent2)}
-.chip.sel{background:var(--accent2-dim);border-color:var(--accent2);color:var(--accent2);font-weight:600}
+.chip:hover{filter:brightness(1.18)}
+/* per-group resting colors (match the cards) */
+#f-help .chip{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.32);color:#7fb0ff}
+#f-cat .chip{background:var(--accent2-dim);border-color:rgba(240,165,0,.32);color:var(--accent2)}
+#f-stk .chip{background:rgba(167,139,250,.12);border-color:rgba(167,139,250,.34);color:#c4b5fd}
+#f-cons .chip{background:rgba(251,113,133,.1);border-color:rgba(251,113,133,.34);color:#fda4b4}
+/* selected -> green, for every group */
+.chip.sel,#f-help .chip.sel,#f-cat .chip.sel,#f-stk .chip.sel,#f-cons .chip.sel{background:rgba(74,222,128,.15);border-color:var(--green);color:var(--green);font-weight:600}
 .conf{display:flex;align-items:flex-start;gap:.5rem;font-size:.82rem;color:#d8d3ca;margin:.4rem 0 1rem;cursor:pointer}
 .conf input{margin-top:.2rem}
 .form-actions{display:flex;gap:.7rem;justify-content:flex-end}
@@ -891,27 +898,16 @@
   </div>
 </section>
 
-<section class="section wide" id="examples">
-  <div class="sec-eyebrow y">Real forks, real stakes</div>
-  <div class="sec-title">The Kind Of Call You <span class="y">Bring Here</span></div>
-  <p class="sec-sub">Not &ldquo;what&rsquo;s the best roadmap framework.&rdquo; The messy, specific, high-stakes decisions where smart PMs genuinely disagree.</p>
-  <div class="ex-grid" id="examples-grid"></div>
-  <div class="examples-more-wrap"><button type="button" id="examples-more" class="btn-ghost" style="display:none">Show more</button></div>
-</section>
-
-<section class="section wide" id="room">
-  <div class="sec-eyebrow y">The room</div>
-  <div class="sec-title">Open <span class="y">Cases</span></div>
-  <p class="sec-sub">Real decisions PMs are working through right now. Browse them &mdash; or bring your own.</p>
-  <div class="fbar">
-    <select id="feed-cat" aria-label="Filter by category">
-      <option value="all">All categories</option>
-    </select>
-    <button type="button" class="btn-primary" data-cta="submit">+ Submit a case</button>
+<section class="section wide" id="trust">
+  <div class="sec-eyebrow g">Why it&rsquo;s not a forum</div>
+  <div class="sec-title">Anonymous In Public. <span class="g">Credible Underneath.</span></div>
+  <p class="sec-sub" style="margin-bottom:1rem">DecisionRoom is a private room for pressure-testing the hard product calls &mdash; the ones with no clean answer &mdash; before you commit to them. You post a real decision under an alias, so the room reacts to the substance of the call, not your company or your title.</p><p class="sec-sub">And underneath every alias sits visible, earned credibility &mdash; the structured second opinion Reddit, Slack, or a LinkedIn post can&rsquo;t give you, because here you can actually see whose judgment to trust.</p>
+  <div class="trust-grid">
+    <div class="trust-card"><h4>🛡️ Anonymous by default</h4><p>Posts show an alias and PM context only &mdash; e.g. &ldquo;Senior PM &middot; B2B SaaS &middot; 7y.&rdquo; Your name and company are never shown unless you choose to, per case.</p></div>
+    <div class="trust-card"><h4>✅ Credible reviewers</h4><p>Reviewers carry verified PM context, and some carry a <strong>judgment score earned in GutCheck</strong> &mdash; demonstrated product judgment, not just a job title.</p></div>
+    <div class="trust-card"><h4>🧱 Structure over noise</h4><p>Every response needs a recommendation, reasoning, risks, and a next step. No &ldquo;+1&rdquo;, no vague takes, no sponsored advice.</p></div>
+    <div class="trust-card"><h4>🔒 Safe by design</h4><p>A confidentiality check before every post, and reporting on anything unsafe. Built for real decisions, handled with care.</p></div>
   </div>
-  <div id="feed-list" class="feed-grid"></div>
-  <button type="button" id="feed-more" class="btn-ghost" style="display:none">Load more</button>
-  <div id="mycases-wrap" style="display:none"><h3 class="myc-h">Your cases</h3><div id="mycases-list" class="feed-grid"></div></div>
 </section>
 
 <section class="section wide" id="how">
@@ -946,18 +942,6 @@
   <div class="vs-summary"><b>The short version:</b> GutCheck sharpens <em>how you think</em> across many small reps. DecisionRoom helps you make <em>the one big decision</em> in front of you &mdash; and turns it into a playbook for the next PM.</div>
 </section>
 
-<section class="section wide" id="trust">
-  <div class="sec-eyebrow g">Why it&rsquo;s not a forum</div>
-  <div class="sec-title">Anonymous In Public. <span class="g">Credible Underneath.</span></div>
-  <p class="sec-sub">The thing Reddit, Slack, and a LinkedIn post can&rsquo;t give you: structured advice from PMs whose credibility you can actually see.</p>
-  <div class="trust-grid">
-    <div class="trust-card"><h4>🛡️ Anonymous by default</h4><p>Posts show an alias and PM context only &mdash; e.g. &ldquo;Senior PM &middot; B2B SaaS &middot; 7y.&rdquo; Your name and company are never shown unless you choose to, per case.</p></div>
-    <div class="trust-card"><h4>✅ Credible reviewers</h4><p>Reviewers carry verified PM context, and some carry a <strong>judgment score earned in GutCheck</strong> &mdash; demonstrated product judgment, not just a job title.</p></div>
-    <div class="trust-card"><h4>🧱 Structure over noise</h4><p>Every response needs a recommendation, reasoning, risks, and a next step. No &ldquo;+1&rdquo;, no vague takes, no sponsored advice.</p></div>
-    <div class="trust-card"><h4>🔒 Safe by design</h4><p>A confidentiality check before every post, and reporting on anything unsafe. Built for real decisions, handled with care.</p></div>
-  </div>
-</section>
-
 <section class="section wide" id="isnot">
   <div class="sec-eyebrow">Clear expectations</div>
   <div class="sec-title">What DecisionRoom <span>Is Not</span></div>
@@ -971,6 +955,29 @@
     <button type="button" class="not-card"><div class="not-inner"><div class="not-face not-front"><div class="nf-x">✨</div><div class="nf-t">Not sanitized case studies</div></div><div class="not-face not-back"><div class="nb-t">Your <b>actual, messy, in-the-moment call</b> &mdash; no perfect framing required.</div></div></div></button>
   </div>
   <p class="not-hint">☝️ Tap any card to flip it.</p>
+</section>
+
+<section class="section wide" id="examples">
+  <div class="sec-eyebrow y">Real forks, real stakes</div>
+  <div class="sec-title">The Kind Of Call You <span class="y">Bring Here</span></div>
+  <p class="sec-sub">Not &ldquo;what&rsquo;s the best roadmap framework.&rdquo; The messy, specific, high-stakes decisions where smart PMs genuinely disagree.</p>
+  <div class="ex-grid" id="examples-grid"></div>
+  <div class="examples-more-wrap"><button type="button" id="examples-more" class="btn-ghost" style="display:none">Show more</button></div>
+</section>
+
+<section class="section wide" id="room">
+  <div class="sec-eyebrow y">The room</div>
+  <div class="sec-title">Open <span class="y">Cases</span></div>
+  <p class="sec-sub">Real decisions PMs are working through right now. Browse them &mdash; or bring your own.</p>
+  <div class="fbar">
+    <select id="feed-cat" aria-label="Filter by category">
+      <option value="all">All categories</option>
+    </select>
+    <button type="button" class="btn-primary" data-cta="submit">+ Submit a case</button>
+  </div>
+  <div id="feed-list" class="feed-grid"></div>
+  <button type="button" id="feed-more" class="btn-ghost" style="display:none">Load more</button>
+  <div id="mycases-wrap" style="display:none"><h3 class="myc-h">Your cases</h3><div id="mycases-list" class="feed-grid"></div></div>
 </section>
 
 <section class="section" id="join">
@@ -1231,7 +1238,6 @@ boot();
   [].slice.call(document.querySelectorAll('.not-card')).forEach(function(c){ c.addEventListener('click', function(){ c.classList.toggle('flipped'); }); });
 })();
 
-
 /* ===== DecisionRoom Phase 1a — submit + feed + my cases + detail (read) ===== */
 (function(){
   /* expanded static lists */
@@ -1248,7 +1254,8 @@ boot();
   function helpLabel(h){ return LEGACY_HELP[h]||h; }
   function statusBadge(s){ return ({live:'Open',closed:'Closed',outcome:'Outcome added',submitted:'Submitted',review:'In review',draft:'Draft'})[s]||s; }
   function urgLabel(u){ return ({today:'Today',this_week:'This week',this_month:'This month',not_urgent:'Not urgent'})[u]||u; }
-  function fmtDate(ts){ try{ var d=new Date(ts); if(isNaN(d.getTime())) return ''; var now=new Date(); var opt=(d.getFullYear()===now.getFullYear())?{month:'short',day:'numeric'}:{month:'short',day:'numeric',year:'numeric'}; return 'Posted '+d.toLocaleDateString(undefined,opt); }catch(e){ return ''; } }
+  function fmtDate(ts){ try{ var d=new Date(ts); if(isNaN(d.getTime())) return ''; var now=new Date(); var opt=(d.getFullYear()===now.getFullYear())?{month:'short',day:'numeric'}:{month:'short',day:'numeric',year:'numeric'}; return d.toLocaleDateString(undefined,opt); }catch(e){ return ''; } }
+  function fcDate(ts){ var t=fmtDate(ts); return t?('<span class="fc-date">Posted <b>'+escHtml(t)+'</b></span>'):''; }
   function fcChipRow(label, items, cls){ if(!items||!items.length) return ''; var pills=items.slice(0,4).map(function(v){ return '<span class="'+cls+'">'+escHtml(v)+'</span>'; }).join(''); var extra=items.length>4?'<span class="fc-more">+'+(items.length-4)+'</span>':''; return '<div class="fc-row"><span class="fc-rowlab">'+label+'</span><span class="fc-chips">'+pills+extra+'</span></div>'; }
 
   function chips(id, opts){ return '<div class="chips" id="'+id+'">'+opts.map(function(o){ var v=Array.isArray(o)?o[0]:o, l=Array.isArray(o)?o[1]:o; return '<button type="button" class="chip" data-v="'+escHtml(v)+'">'+escHtml(l)+'</button>'; }).join('')+'</div>'; }
@@ -1470,7 +1477,7 @@ boot();
     var rc=Number(r.response_count)||0;
     var urgent=(r.urgency==='today')?'<span class="fc-urgent">\u23F1 Needs input today</span>':'';
     return '<div class="feed-card" data-id="'+escHtml(r.id)+'">'
-      +'<div class="fc-top"><span class="fc-tags">'+cats+'</span><span class="fc-date">'+escHtml(fmtDate(r.created_at))+'</span></div>'
+      +'<div class="fc-top"><span class="fc-tags">'+cats+'</span>'+fcDate(r.created_at)+'</div>'
       +'<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
       +'<div class="fc-meta">'+fcChipRow('Wants', helps, 'fc-help')+fcChipRow('Who\u2019s involved', stks, 'fc-stk')+'</div>'
       +'<div class="fc-foot"><span class="fc-ctx">'+escHtml(r.author_context||r.alias||'PM')+'</span><span class="fc-foot-r">'+urgent+'<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Needs responses':(rc+(rc===1?' response':' responses')))+'</span></span></div></div>';
@@ -1503,7 +1510,7 @@ boot();
         var helps=(r.help_types||[]).map(function(h){return helpLabel(h);});
         var stks=(r.stakeholders||[]);
         list.insertAdjacentHTML('beforeend',
-        '<div class="feed-card mine" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-'+escHtml(r.status)+'">'+escHtml(statusBadge(r.status))+'</span>'+cats+'</span><span class="fc-date">'+escHtml(fmtDate(r.created_at))+'</span></div>'
+        '<div class="feed-card mine" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-'+escHtml(r.status)+'">'+escHtml(statusBadge(r.status))+'</span>'+cats+'</span>'+fcDate(r.created_at)+'</div>'
         +'<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
         +'<div class="fc-meta">'+fcChipRow('Wants', helps, 'fc-help')+fcChipRow('Who\u2019s involved', stks, 'fc-stk')+'</div>'
         +'<div class="fc-foot"><span class="fc-ctx">You</span><span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Awaiting responses':(rc+(rc===1?' response':' responses')))+'</span></div></div>'); });
