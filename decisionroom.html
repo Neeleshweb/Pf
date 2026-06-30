@@ -866,6 +866,49 @@
 .cd-outcome-opt{font-size:.85rem;color:var(--muted);margin-bottom:.35rem}
 .cd-outcome-opt b{color:var(--white);font-weight:600}
 .cd-outcome-body{font-size:.88rem;line-height:1.6;color:var(--white);opacity:.9;overflow-wrap:anywhere}
+.cd-outcome-count{float:right;font-size:.66rem;font-weight:700;letter-spacing:.4px;color:var(--green);background:rgba(74,222,128,.14);border-radius:100px;padding:.12rem .55rem}
+/* per-ask (wants) form block */
+.cd-wants{margin-top:1rem;border-top:1px dashed var(--border2);padding-top:.9rem}
+.cd-want-h{font-size:.86rem;font-weight:600;color:var(--white)}
+.cd-met-live{float:right;font-size:.66rem;font-weight:700;color:var(--accent2);background:var(--accent2-dim);border-radius:100px;padding:.12rem .55rem}
+.cd-want-n{font-size:.78rem;color:var(--muted2);line-height:1.5;margin:.35rem 0 .7rem}
+.cd-want-n b{color:var(--muted)}
+.cd-want-l{display:block;font-size:.74rem;font-weight:600;color:var(--accent3);margin:.6rem 0 .3rem}
+.cd-want-in{width:100%;box-sizing:border-box;background:var(--card2);border:1px solid var(--border2);color:var(--white);border-radius:9px;padding:.5rem .6rem;font:inherit;font-size:.86rem;resize:vertical;line-height:1.45}
+.cd-want-in:focus{outline:none;border-color:var(--accent3);box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+/* wants-vs-got grid (in responses + outcome) */
+.wg{margin-top:.8rem;border:1px solid var(--border2);border-radius:11px;overflow:hidden}
+.wg-h{font-size:.6rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted2);background:var(--surface);padding:.5rem .75rem;border-bottom:1px solid var(--border2)}
+.wg-grid{display:flex;flex-direction:column}
+.wg-row{display:grid;grid-template-columns:38% 62%;gap:0;border-bottom:1px solid var(--border)}
+.wg-row:last-child{border-bottom:none}
+.wg-want{font-size:.76rem;font-weight:600;color:var(--accent3);padding:.55rem .75rem;background:rgba(59,130,246,.05);border-right:1px solid var(--border2);overflow-wrap:anywhere}
+.wg-got{font-size:.82rem;color:var(--white);opacity:.9;padding:.55rem .75rem;line-height:1.5;overflow-wrap:anywhere}
+.wg-row.na .wg-want{color:var(--muted2);background:transparent}
+.wg-row.na .wg-got{color:var(--muted2);opacity:.8}
+.wg-na{color:var(--muted2);font-style:italic;font-size:.78rem}
+.wg-out .wg-want{color:var(--green);background:rgba(74,222,128,.06)}
+.wg-out .wg-row.na .wg-want{color:var(--muted2);background:transparent}
+/* acted-on (outcome loop) */
+.rsp-top-r{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+.rsp-acted{font-size:.66rem;font-weight:700;color:var(--accent2);background:var(--accent2-dim);border:1px solid rgba(240,165,0,.34);border-radius:100px;padding:.12rem .55rem;white-space:nowrap}
+.rsp-card.is-acted{border-color:rgba(240,165,0,.4);box-shadow:0 0 0 1px rgba(240,165,0,.12)}
+.rsp-acted-btn{font:inherit;font-size:.74rem;font-weight:600;color:var(--accent2);background:transparent;border:1px solid rgba(240,165,0,.4);border-radius:100px;padding:.28rem .8rem;cursor:pointer;transition:all .12s}
+.rsp-acted-btn:hover{background:var(--accent2-dim)}
+.rsp-acted-btn.on{background:var(--accent2-dim);color:var(--accent2)}
+/* your-cases filter */
+.myc-filter{display:flex;gap:.5rem;margin:0 0 1rem;flex-wrap:wrap}
+.myc-fbtn{font:inherit;font-size:.76rem;font-weight:600;color:var(--muted);background:var(--card2);border:1px solid var(--border2);border-radius:100px;padding:.34rem .85rem;cursor:pointer;transition:all .12s}
+.myc-fbtn:hover{border-color:var(--accent2)}
+.myc-fbtn.on{background:var(--accent2-dim);border-color:var(--accent2);color:var(--accent2)}
+/* closed/library card extras */
+.fc-status.s-closed{color:#93c5fd;background:rgba(96,165,250,.14);border-color:rgba(96,165,250,.4)}
+.fc-met{font-size:.72rem;font-weight:700;color:var(--green);white-space:nowrap}
+.fc-decided{font-size:.8rem;color:var(--muted)}
+.fc-decided b{color:var(--accent2);font-weight:600}
+.feed-card.lib:hover{border-color:#60a5fa}
+/* reviewer joined */
+[data-cta="review"].joined{color:var(--green);border-color:rgba(74,222,128,.4);cursor:default;opacity:.95}
 .cd-miss{color:var(--muted);text-align:center;padding:2rem}
 @media(max-width:560px){.fld.half{width:100%;margin-right:0}}
 /* phase1a.2: form overhaul + custom-add + examples pagination */
@@ -904,6 +947,7 @@
   </div>
   <ul class="nav-links">
     <li><a href="#room">Open cases</a></li>
+    <li><a href="#library">Library</a></li>
     <li><a href="#how">How it works</a></li>
     <li><a href="#examples">Example cases</a></li>
     <li><a href="#trust">For reviewers</a></li>
@@ -1015,7 +1059,16 @@
   </div>
   <div id="feed-list" class="feed-grid"></div>
   <button type="button" id="feed-more" class="btn-ghost" style="display:none">Load more</button>
-  <div id="mycases-wrap" style="display:none"><h3 class="myc-h">Your cases</h3><div id="mycases-list" class="feed-grid"></div></div>
+  <div id="mycases-wrap" style="display:none"><h3 class="myc-h">Your cases</h3><div class="myc-filter" id="myc-filter"><button type="button" class="myc-fbtn on" data-f="all">All</button><button type="button" class="myc-fbtn" data-f="live">Open</button><button type="button" class="myc-fbtn" data-f="closed">Closed</button></div><div id="mycases-list" class="feed-grid"></div></div>
+</section>
+
+<section class="section wide" id="library">
+  <div class="sec-eyebrow g">The library</div>
+  <div class="sec-title">Resolved <span class="g">Decisions</span></div>
+  <p class="sec-sub">Closed cases \u2014 with what the PM actually decided and how each ask was met. The record a forum thread never keeps.</p>
+  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select></div>
+  <div id="lib-list" class="feed-grid"></div>
+  <button type="button" id="lib-more" class="btn-ghost" style="display:none">Load more</button>
 </section>
 
 <section class="section" id="join">
@@ -1115,6 +1168,7 @@ function renderNavAccount(){
     var ns=document.getElementById('nav-signin'); if(ns) ns.onclick=function(){ openSignIn(); };
   }
   renderMobileAccount();
+  if(typeof syncReviewerBtns==='function') syncReviewerBtns();
 }
 function renderMobileAccount(){
   var el=document.getElementById('mm-account'); if(!el) return;
@@ -1167,10 +1221,18 @@ function wireCTAs(){
     if(SB&&!currentUser){ openSignIn('Sign in to join as a founding reviewer \u2014 your judgment, not your job title, does the talking.'); return; }
     if(!SB){ toast('Connect the backend to join.'); return; }
     SB.rpc('dr_save_profile', { p_willing: true }).then(function(res){
-      if(res&&res.data&&res.data.ok){ if(DRP) DRP.willing_to_answer=true; renderNavAccount(); toast('You\u2019re in as a founding reviewer'+((DRP&&DRP.alias)?(' \u2014 '+DRP.alias):'')+'. We\u2019ll notify you when the first cases go live.'); }
+      if(res&&res.data&&res.data.ok){ if(DRP) DRP.willing_to_answer=true; renderNavAccount(); syncReviewerBtns(); toast('You\u2019re in as a founding reviewer'+((DRP&&DRP.alias)?(' \u2014 '+DRP.alias):'')+'. Open cases are waiting in the room.'); }
       else { toast('Could not save right now \u2014 please try again.'); }
     }).catch(function(){ toast('Could not save right now \u2014 please try again.'); });
   }; });
+  syncReviewerBtns();
+}
+function syncReviewerBtns(){
+  var on=!!(DRP&&DRP.willing_to_answer);
+  [].slice.call(document.querySelectorAll('[data-cta="review"]')).forEach(function(b){
+    if(on){ b.textContent='\u2713 You\u2019re a founding reviewer'; b.classList.add('joined'); b.disabled=true; }
+    else { b.textContent='Join as a reviewer'; b.classList.remove('joined'); b.disabled=false; }
+  });
 }
 
 /* mobile menu */
@@ -1184,7 +1246,7 @@ function wireCTAs(){
   function smoothTo(id){ var el=document.getElementById(id); if(!el) return; var y=el.getBoundingClientRect().top+window.pageYOffset-70; window.scrollTo({top:y,behavior:'smooth'}); }
   function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn,80); }; return a; }
   if(body){
-    [['Open cases','room'],['How it works','how'],['Example cases','examples'],['For reviewers','trust']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
+    [['Open cases','room'],['Library','library'],['How it works','how'],['Example cases','examples'],['For reviewers','trust']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
     body.appendChild(link('GutCheck \u2197', function(){ window.location.href='/gutcheck.html'; }));
     body.appendChild(link('\uD83C\uDFE0  Home', function(){ window.location.href='/index.html'; }));
   }
@@ -1293,7 +1355,7 @@ boot();
   function statusBadge(s){ return ({live:'Open',closed:'Closed',outcome:'Outcome added',submitted:'Submitted',review:'In review',draft:'Draft'})[s]||s; }
   function urgLabel(u){ return ({today:'Today',this_week:'This week',this_month:'This month',not_urgent:'Not urgent'})[u]||u; }
   function fmtDate(ts){ try{ var d=new Date(ts); if(isNaN(d.getTime())) return ''; var now=new Date(); var opt=(d.getFullYear()===now.getFullYear())?{month:'short',day:'numeric'}:{month:'short',day:'numeric',year:'numeric'}; return d.toLocaleDateString(undefined,opt); }catch(e){ return ''; } }
-  function fcDate(ts){ var t=fmtDate(ts); return t?('<span class="fc-date">Posted <b>'+escHtml(t)+'</b></span>'):''; }
+  function fcDate(ts, label){ var t=fmtDate(ts); label=label||'Posted'; return t?('<span class="fc-date">'+label+' <b>'+escHtml(t)+'</b></span>'):''; }
   function fcChipRow(label, items, cls){ if(!items||!items.length) return ''; var pills=items.slice(0,4).map(function(v){ return '<span class="'+cls+'">'+escHtml(v)+'</span>'; }).join(''); var extra=items.length>4?'<span class="fc-more">+'+(items.length-4)+'</span>':''; return '<div class="fc-row"><span class="fc-rowlab">'+label+'</span><span class="fc-chips">'+pills+extra+'</span></div>'; }
 
   function chips(id, opts){ return '<div class="chips" id="'+id+'">'+opts.map(function(o){ var v=Array.isArray(o)?o[0]:o, l=Array.isArray(o)?o[1]:o; return '<button type="button" class="chip" data-v="'+escHtml(v)+'">'+escHtml(l)+'</button>'; }).join('')+'</div>'; }
@@ -1361,9 +1423,8 @@ boot();
     if(more){ if(exShown>=items.length){ more.style.display='none'; } else { more.style.display=''; more.textContent='Show more ('+(items.length-exShown)+' more)'; } }
   }
   function populateFilter(){
-    var sel=document.getElementById('feed-cat'); if(!sel) return; var cur=sel.value;
-    sel.innerHTML='<option value="all">All categories</option>'+DR_CATS.map(function(v){return '<option value="'+escHtml(v)+'">'+escHtml(v)+'</option>';}).join('');
-    if(cur){ sel.value=cur; }
+    var opts='<option value="all">All categories</option>'+DR_CATS.map(function(v){return '<option value="'+escHtml(v)+'">'+escHtml(v)+'</option>';}).join('');
+    ['feed-cat','lib-cat'].forEach(function(id){ var sel=document.getElementById(id); if(!sel) return; var cur=sel.value; sel.innerHTML=opts; if(cur){ sel.value=cur; } });
   }
   function loadTaxonomy(){
     if(!SB) return Promise.resolve();
@@ -1536,24 +1597,64 @@ boot();
       wireCards(list);
     }).catch(function(){ feedLoading=false; });
   }
+  var libCursor=null, libDone=false, libLoading=false;
+  function libCardHtml(r){
+    var cats=(r.categories||[]).slice(0,3).map(function(c){return '<span class="fc-tag">'+escHtml(c)+'</span>';}).join('');
+    var helps=(r.help_types||[]).map(function(h){return helpLabel(h);});
+    var met=(r.wants_total!=null)?('<span class="fc-met">'+(Number(r.wants_satisfied)||0)+' of '+(Number(r.wants_total)||0)+' asks met</span>'):'<span class="fc-rc">Closed</span>';
+    var decided=r.resolved_option?('<div class="fc-decided">Decided: <b>'+escHtml(r.resolved_option)+'</b></div>'):'';
+    return '<div class="feed-card lib" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-closed">Resolved</span>'+cats+'</span>'+fcDate(r.closed_at||r.created_at,'Closed')+'</div>'
+      +'<div class="fc-title">'+escHtml(r.title)+'</div>'+decided+'<div class="fc-dec">'+escHtml(r.decision)+'</div>'
+      +'<div class="fc-meta">'+fcChipRow('Was asked', helps, 'fc-help')+'</div>'
+      +'<div class="fc-foot"><span class="fc-ctx">'+escHtml(r.author_context||r.alias||'PM')+'</span>'+met+'</div></div>';
+  }
+  function loadLibrary(reset){
+    if(!SB||libLoading) return; libLoading=true;
+    if(reset){ libCursor=null; libDone=false; }
+    var catEl=document.getElementById('lib-cat'); var cat=catEl?catEl.value:null;
+    SB.rpc('dr_feed',{p_limit:12,p_before:libCursor,p_category:cat,p_status:'closed'}).then(function(res){
+      libLoading=false; var list=document.getElementById('lib-list'); if(!list) return;
+      var rows=(res&&res.data)||[];
+      if(reset) list.innerHTML='';
+      if(reset && !rows.length){ list.innerHTML='<div class="feed-empty">No resolved cases yet \u2014 they appear here once PMs close cases with outcomes.</div>'; }
+      rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', libCardHtml(r)); });
+      if(rows.length){ libCursor=rows[rows.length-1].closed_at||rows[rows.length-1].created_at; }
+      if(rows.length<12) libDone=true;
+      var more=document.getElementById('lib-more'); if(more) more.style.display=libDone?'none':'';
+      wireCards(list);
+    }).catch(function(){ libLoading=false; });
+  }
+  var myCasesData=[], myCasesFilter='all';
+  function wantsMetBadge(r){ if(r.wants_total==null) return '<span class="fc-rc">Closed</span>'; return '<span class="fc-met">'+(Number(r.wants_satisfied)||0)+' of '+(Number(r.wants_total)||0)+' asks met</span>'; }
+  function myCaseCardHtml(r){ var rc=Number(r.response_count)||0;
+    var cats=(r.categories||[]).slice(0,3).map(function(c){return '<span class="fc-tag">'+escHtml(c)+'</span>';}).join('');
+    var helps=(r.help_types||[]).map(function(h){return helpLabel(h);});
+    var stks=(r.stakeholders||[]);
+    var foot=(r.status==='closed')?wantsMetBadge(r):('<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Awaiting responses':(rc+(rc===1?' response':' responses')))+'</span>');
+    return '<div class="feed-card mine" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-'+escHtml(r.status)+'">'+escHtml(statusBadge(r.status))+'</span>'+cats+'</span>'+fcDate(r.status==='closed'?(r.closed_at||r.created_at):r.created_at, r.status==='closed'?'Closed':'Posted')+'</div>'
+      +'<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
+      +'<div class="fc-meta">'+fcChipRow('Wants', helps, 'fc-help')+fcChipRow('Who\u2019s involved', stks, 'fc-stk')+'</div>'
+      +'<div class="fc-foot"><span class="fc-ctx">You</span>'+foot+'</div></div>';
+  }
+  function renderMyCases(){
+    var w=document.getElementById('mycases-wrap'), list=document.getElementById('mycases-list'); if(!w||!list) return;
+    var rows=myCasesData||[];
+    if(!rows.length){ w.style.display='none'; return; }
+    w.style.display='';
+    var nLive=rows.filter(function(r){return r.status!=='closed';}).length, nClosed=rows.filter(function(r){return r.status==='closed';}).length;
+    var fb=document.getElementById('myc-filter');
+    if(fb){ var set=function(f,n){ var b=fb.querySelector('[data-f="'+f+'"]'); if(b){ b.textContent=({all:'All',live:'Open',closed:'Closed'})[f]+' '+n; b.classList.toggle('on', myCasesFilter===f); } }; set('all',rows.length); set('live',nLive); set('closed',nClosed); }
+    var f=myCasesFilter;
+    var shown=rows.filter(function(r){ return f==='all'?true:(f==='closed'?r.status==='closed':r.status!=='closed'); });
+    list.innerHTML='';
+    if(!shown.length){ list.innerHTML='<div class="feed-empty">No '+(f==='closed'?'closed':'open')+' cases right now.</div>'; return; }
+    shown.forEach(function(r){ list.insertAdjacentHTML('beforeend', myCaseCardHtml(r)); });
+    wireCards(list);
+  }
   function loadMyCases(){
     var w=document.getElementById('mycases-wrap'); if(!w) return;
     if(!SB||!currentUser){ w.style.display='none'; return; }
-    SB.rpc('dr_my_cases').then(function(res){
-      var rows=(res&&res.data)||[]; var list=document.getElementById('mycases-list'); if(!list) return;
-      if(!rows.length){ w.style.display='none'; return; }
-      w.style.display=''; list.innerHTML='';
-      rows.forEach(function(r){ var rc=Number(r.response_count)||0;
-        var cats=(r.categories||[]).slice(0,3).map(function(c){return '<span class="fc-tag">'+escHtml(c)+'</span>';}).join('');
-        var helps=(r.help_types||[]).map(function(h){return helpLabel(h);});
-        var stks=(r.stakeholders||[]);
-        list.insertAdjacentHTML('beforeend',
-        '<div class="feed-card mine" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-'+escHtml(r.status)+'">'+escHtml(statusBadge(r.status))+'</span>'+cats+'</span>'+fcDate(r.created_at)+'</div>'
-        +'<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
-        +'<div class="fc-meta">'+fcChipRow('Wants', helps, 'fc-help')+fcChipRow('Who\u2019s involved', stks, 'fc-stk')+'</div>'
-        +'<div class="fc-foot"><span class="fc-ctx">You</span><span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Awaiting responses':(rc+(rc===1?' response':' responses')))+'</span></div></div>'); });
-      wireCards(list);
-    }).catch(function(){});
+    SB.rpc('dr_my_cases').then(function(res){ myCasesData=(res&&res.data)||[]; renderMyCases(); }).catch(function(){});
   }
   function wireCards(scope){ [].slice.call(scope.querySelectorAll('.feed-card')).forEach(function(c){ if(c._w) return; c._w=1; c.onclick=function(){ openCase(c.getAttribute('data-id')); }; }); }
 
@@ -1600,13 +1701,36 @@ boot();
 
   /* ---- responses (Phase 1b) ---- */
   function respCountLabel(n){ n=Number(n)||0; return n+(n===1?' response':' responses'); }
-  function respErr(reason){ return ({auth:'Please sign in first.',body:'Add a bit more \u2014 at least a sentence or two.',missing:'This case is no longer available.',own:'You can\u2019t respond to your own case.',closed:'This case is closed to new responses.',rate:'You\u2019ve posted a lot today \u2014 try again later.'})[reason]||'Couldn\u2019t post your response.'; }
+  function wantPrefill(mine, w){ if(!mine||!mine.want_answers) return ''; for(var i=0;i<mine.want_answers.length;i++){ if(mine.want_answers[i].want===w) return mine.want_answers[i].answer||''; } return ''; }
+  function wantsInputsHtml(d, mine){ var ws=d.help_types||[]; if(!ws.length) return '';
+    return '<div class="cd-wants"><div class="cd-want-h">Address each ask <span class="req">*</span></div>'
+      +'<p class="cd-want-n">This is what makes a DecisionRoom response different from a forum comment: speak to each thing the PM actually asked for. Write <b>N/A</b> if you can\u2019t help with one.</p>'
+      + ws.map(function(w){ return '<label class="cd-want-l">'+escHtml(helpLabel(w))+'</label><textarea class="cd-want-in" data-want="'+escHtml(w)+'" rows="2" maxlength="600" placeholder="How you\u2019d help with this \u2014 or N/A">'+escHtml(wantPrefill(mine,w))+'</textarea>'; }).join('')
+      +'</div>'; }
+  function gatherWants(scopeSel, key){ var out=[], miss=0; [].slice.call(document.querySelectorAll(scopeSel+' .cd-want-in')).forEach(function(t){ var w=t.getAttribute('data-want'), v=(t.value||'').trim(); if(!v) miss++; var o={want:w}; o[key]=v; out.push(o); }); return {list:out, missing:miss}; }
+  function isNA(v){ return !v || String(v).trim().toLowerCase()==='n/a' || String(v).trim().toLowerCase()==='na'; }
+  function wantsGridHtml(d, r){ var ws=d.help_types||[]; if(!ws.length || !(r.want_answers&&r.want_answers.length)) return '';
+    var map={}; (r.want_answers||[]).forEach(function(x){ map[x.want]=x.answer; });
+    var rows=ws.map(function(w){ var a=map[w]; var na=isNA(a); return '<div class="wg-row'+(na?' na':'')+'"><div class="wg-want">'+escHtml(helpLabel(w))+'</div><div class="wg-got">'+(a?(na?'<span class="wg-na">N/A</span>':nl(a)):'<span class="wg-na">\u2014</span>')+'</div></div>'; }).join('');
+    return '<div class="wg"><div class="wg-h">What they asked for \u2192 what this response gives</div><div class="wg-grid">'+rows+'</div></div>'; }
+  function respErr(reason){ return ({auth:'Please sign in first.',body:'Add a bit more \u2014 at least a sentence or two.',wants:'Please answer every ask \u2014 write \u201CN/A\u201D for any you can\u2019t help with.',missing:'This case is no longer available.',own:'You can\u2019t respond to your own case.',closed:'This case is closed to new responses.',rate:'You\u2019ve posted a lot today \u2014 try again later.'})[reason]||'Couldn\u2019t post your response.'; }
   function outcomeHtml(d){
     if(!d||d.status!=='closed') return '';
-    if(!d.resolution && !d.resolved_option) return '<div class="cd-outcome"><div class="cd-outcome-h">\u2713 Case closed</div></div>';
-    return '<div class="cd-outcome"><div class="cd-outcome-h">\u2713 What they decided</div>'
+    var hasWants=(d.want_outcomes&&d.want_outcomes.length);
+    var head, count='';
+    if(d.wants_total!=null){ count='<span class="cd-outcome-count">'+(Number(d.wants_satisfied)||0)+' of '+(Number(d.wants_total)||0)+' asks met</span>'; }
+    head='<div class="cd-outcome-h">\u2713 Resolved'+count+'</div>';
+    var grid='';
+    if(hasWants){ var ws=d.help_types||[]; var map={}; d.want_outcomes.forEach(function(x){ map[x.want]=x.outcome; });
+      var src=ws.length?ws:d.want_outcomes.map(function(x){return x.want;});
+      grid='<div class="wg wg-out"><div class="wg-h">How each ask was met</div><div class="wg-grid">'
+        +src.map(function(w){ var o=map[w]; var na=isNA(o); return '<div class="wg-row'+(na?' na':'')+'"><div class="wg-want">'+escHtml(helpLabel(w))+'</div><div class="wg-got">'+(o?(na?'<span class="wg-na">Not met</span>':nl(o)):'<span class="wg-na">\u2014</span>')+'</div></div>'; }).join('')
+        +'</div></div>';
+    }
+    return '<div class="cd-outcome">'+head
       +(d.resolved_option?'<div class="cd-outcome-opt">Went with: <b>'+escHtml(d.resolved_option)+'</b></div>':'')
-      +(d.resolution?'<div class="cd-outcome-body">'+nl(d.resolution)+'</div>':'')+'</div>';
+      +(d.resolution?'<div class="cd-outcome-body">'+nl(d.resolution)+'</div>':'')
+      +grid+'</div>';
   }
   function loadResponses(d){
     var listEl=document.getElementById('cd-responses'), actEl=document.getElementById('cd-respond');
@@ -1626,14 +1750,21 @@ boot();
       var opt=r.chosen_option?'<div class="rsp-opt">Leans toward: <b>'+escHtml(r.chosen_option)+'</b></div>':'';
       var wo=r.watch_out?'<div class="rsp-wo"><span class="rsp-wo-l">Watch out</span>'+nl(r.watch_out)+'</div>':'';
       var hc=(Number(r.helpful_count)||0)>0?'<span class="rsp-hc">'+r.helpful_count+' found helpful</span>':'';
-      var act = r.is_mine ? '<span class="rsp-yours">Your response</span>'
-        : (currentUser ? '<button type="button" class="rsp-help'+(r.marked?' on':'')+'" data-r="'+escHtml(r.id)+'">'+(r.marked?'\u2713 Marked helpful':'Mark helpful')+'</button>' : '');
-      return '<div class="rsp-card"><div class="rsp-top"><span class="rsp-who">'+escHtml(r.responder_context||r.alias||'PM')+'</span>'+hc+'</div>'
+      var acted=r.acted_on?'<span class="rsp-acted">\u2713 Submitter acted on this</span>':'';
+      var act;
+      if(r.is_mine){ act='<span class="rsp-yours">Your response</span>'; }
+      else if(d.is_mine){ act='<button type="button" class="rsp-acted-btn'+(r.acted_on?' on':'')+'" data-r="'+escHtml(r.id)+'" data-on="'+(r.acted_on?'1':'0')+'">'+(r.acted_on?'\u2713 Acting on this':'I\u2019m acting on this')+'</button>'; }
+      else if(currentUser){ act='<button type="button" class="rsp-help'+(r.marked?' on':'')+'" data-r="'+escHtml(r.id)+'">'+(r.marked?'\u2713 Marked helpful':'Mark helpful')+'</button>'; }
+      else { act=''; }
+      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(r.responder_context||r.alias||'PM')+'</span><span class="rsp-top-r">'+acted+hc+'</span></div>'
         +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo
+        +wantsGridHtml(d, r)
         +'<div class="rsp-foot">'+act+'</div></div>';
     }).join('');
     [].slice.call(listEl.querySelectorAll('.rsp-help')).forEach(function(b){ b.onclick=function(){ markHelpful(b.getAttribute('data-r'), b); }; });
+    [].slice.call(listEl.querySelectorAll('.rsp-acted-btn')).forEach(function(b){ b.onclick=function(){ markActed(b.getAttribute('data-r'), b.getAttribute('data-on')!=='1', d); }; });
   }
+  function markActed(rid, val, d){ if(!SB) return; SB.rpc('dr_mark_acted',{p_response_id:rid,p_acted:val}).then(function(res){ var r=(res&&res.data)||{}; if(r.ok){ if(typeof toast==='function') toast(val?'Marked \u2014 the reviewer will see you acted on it':'Unmarked'); loadResponses(d); } }).catch(function(){}); }
   function renderRespondArea(el, d, mine){
     if(!el) return;
     if(d.is_mine){
@@ -1652,6 +1783,7 @@ boot();
       +'<select id="rf-opt"><option value="">\u2014 No strong lean \u2014</option>'+optionsHtml+'<option value="A different approach"'+daSel+'>A different approach</option></select>'
       +'<label class="cd-f-l">Your take <span class="req">*</span></label><textarea id="rf-body" rows="4" maxlength="2500" placeholder="What would you do, and why? Draw on what you\u2019ve actually seen \u2014 not generic advice.">'+(mine?escHtml(mine.body):'')+'</textarea>'
       +'<label class="cd-f-l">One thing to watch out for <span class="cd-f-opt">optional</span></label><textarea id="rf-wo" rows="2" maxlength="600" placeholder="The risk or blind spot you\u2019d flag.">'+(mine?escHtml(mine.watch_out||''):'')+'</textarea>'
+      +wantsInputsHtml(d, mine)
       +'<div class="cd-form-act"><button type="button" class="btn-primary" id="rf-submit">'+(mine?'Update response':'Post response')+'</button><span class="cd-form-err" id="rf-err"></span></div></div>';
     var rs=document.getElementById('rf-submit'); if(rs) rs.onclick=function(){ submitResponse(d, !!mine); };
   }
@@ -1661,8 +1793,10 @@ boot();
     var wo=((document.getElementById('rf-wo')||{}).value||'').trim();
     var err=document.getElementById('rf-err'), btn=document.getElementById('rf-submit');
     if(body.length<20){ if(err) err.textContent='Add a bit more \u2014 at least a sentence or two.'; return; }
+    var wg=gatherWants('#cd-respond','answer');
+    if(wg.missing){ if(err) err.textContent='Please answer every ask \u2014 write \u201CN/A\u201D for any you can\u2019t help with.'; return; }
     if(btn){ btn.disabled=true; btn.textContent=isUpdate?'Updating\u2026':'Posting\u2026'; }
-    SB.rpc('dr_post_response',{p_case_id:d.id,p_body:body,p_chosen_option:opt,p_watch_out:wo}).then(function(res){
+    SB.rpc('dr_post_response',{p_case_id:d.id,p_body:body,p_chosen_option:opt,p_watch_out:wo,p_want_answers:wg.list}).then(function(res){
       var r=(res&&res.data)||{};
       if(!r.ok){ if(err) err.textContent=respErr(r.reason); if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } return; }
       if(typeof toast==='function') toast(isUpdate?'Response updated':'Response posted'); loadResponses(d); loadFeed(true); loadMyCases();
@@ -1683,18 +1817,29 @@ boot();
   function openCloseForm(d){
     var el=document.getElementById('cd-respond'); if(!el) return;
     var optionsHtml=(d.options||[]).map(function(o){ return '<option value="'+escHtml(o)+'">'+escHtml(o)+'</option>'; }).join('');
+    var ws=d.help_types||[];
+    var wantsBlock = ws.length ? ('<div class="cd-wants"><div class="cd-want-h">How did the room help with each ask? <span class="req">*</span> <span class="cd-met-live" id="cf-met">0 of '+ws.length+' met</span></div>'
+        +'<p class="cd-want-n">Close the loop on what you asked for. Write <b>N/A</b> for any ask the room couldn\u2019t help with \u2014 that\u2019s useful signal too.</p>'
+        + ws.map(function(w){ return '<label class="cd-want-l">'+escHtml(helpLabel(w))+'</label><textarea class="cd-want-in" data-want="'+escHtml(w)+'" rows="2" maxlength="600" placeholder="What you got on this \u2014 or N/A"></textarea>'; }).join('')
+        +'</div>') : '';
     el.innerHTML='<div class="cd-form"><div class="cd-form-h">Close this case</div>'
       +'<label class="cd-f-l">What did you go with? <span class="cd-f-opt">optional</span></label>'
       +'<select id="cf-opt"><option value="">\u2014 Not sure / something else \u2014</option>'+optionsHtml+'<option value="A different approach">A different approach</option></select>'
       +'<label class="cd-f-l">What you decided &amp; why <span class="cd-f-opt">optional, but valuable</span></label><textarea id="cf-res" rows="3" maxlength="1200" placeholder="A line on what you chose and how it\u2019s playing out. This is what turns the case into a useful record."></textarea>'
+      +wantsBlock
       +'<div class="cd-form-act"><button type="button" class="btn-primary" id="cf-submit">Close case</button><button type="button" class="btn-ghost" id="cf-cancel">Cancel</button><span class="cd-form-err" id="cf-err"></span></div></div>';
+    function updMet(){ var sat=0,tot=ws.length; [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ var v=(t.value||'').trim(); if(v&&!isNA(v)) sat++; }); var m=document.getElementById('cf-met'); if(m) m.textContent=sat+' of '+tot+' met'; }
+    [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ t.addEventListener('input', updMet); });
     document.getElementById('cf-cancel').onclick=function(){ renderRespondArea(el, d, null); };
     document.getElementById('cf-submit').onclick=function(){
       var res=((document.getElementById('cf-res')||{}).value||'').trim(), opt=((document.getElementById('cf-opt')||{}).value||'').trim();
-      var btn=document.getElementById('cf-submit'), err=document.getElementById('cf-err'); if(btn){ btn.disabled=true; btn.textContent='Closing\u2026'; }
-      SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt}).then(function(r){
-        var o=(r&&r.data)||{}; if(!o.ok){ if(err) err.textContent='Couldn\u2019t close the case.'; if(btn){ btn.disabled=false; btn.textContent='Close case'; } return; }
-        if(typeof toast==='function') toast('Case closed'); openCase(d.id); loadFeed(true); loadMyCases();
+      var err=document.getElementById('cf-err'), btn=document.getElementById('cf-submit');
+      var wg=gatherWants('#cd-respond','outcome');
+      if(wg.missing){ if(err) err.textContent='Please note how each ask went \u2014 write \u201CN/A\u201D for any the room couldn\u2019t help with.'; return; }
+      if(btn){ btn.disabled=true; btn.textContent='Closing\u2026'; }
+      SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt,p_want_outcomes:wg.list}).then(function(r){
+        var o=(r&&r.data)||{}; if(!o.ok){ if(err) err.textContent=(o.reason==='wants'?'Please note how each ask went (N/A is fine).':'Couldn\u2019t close the case.'); if(btn){ btn.disabled=false; btn.textContent='Close case'; } return; }
+        if(typeof toast==='function') toast('Case closed'); openCase(d.id); loadFeed(true); loadMyCases(); if(typeof loadLibrary==='function') loadLibrary(true);
       }).catch(function(){ if(err) err.textContent='Something went wrong.'; if(btn){ btn.disabled=false; btn.textContent='Close case'; } });
     };
   }
@@ -1703,6 +1848,9 @@ boot();
   var cc=document.getElementById('case-close'); if(cc) cc.onclick=closeCase;
   var fmore=document.getElementById('feed-more'); if(fmore) fmore.onclick=function(){ loadFeed(false); };
   var fcat=document.getElementById('feed-cat'); if(fcat) fcat.onchange=function(){ loadFeed(true); };
+  var mycf=document.getElementById('myc-filter'); if(mycf) mycf.onclick=function(e){ var b=e.target.closest&&e.target.closest('.myc-fbtn'); if(!b) return; myCasesFilter=b.getAttribute('data-f')||'all'; renderMyCases(); };
+  var lmore=document.getElementById('lib-more'); if(lmore) lmore.onclick=function(){ loadLibrary(false); };
+  var lcat=document.getElementById('lib-cat'); if(lcat) lcat.onchange=function(){ loadLibrary(true); };
 
   var exMore=document.getElementById('examples-more'); if(exMore) exMore.onclick=function(){ exShown+=10; renderExamples(false); };
 
@@ -1711,6 +1859,7 @@ boot();
   populateFilter();
   loadTaxonomy();         /* then refresh from DB (adds any custom values) */
   loadFeed(true);
+  loadLibrary(true);
   loadMyCases();
 })();
 
