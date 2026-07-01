@@ -955,6 +955,15 @@
 .dr-confirm-ov.open{opacity:1}
 .dr-confirm{background:var(--card);border:1px solid var(--border2);border-radius:16px;max-width:440px;width:100%;padding:1.4rem 1.4rem 1.2rem;box-shadow:0 24px 60px rgba(0,0,0,.5);transform:translateY(8px);transition:transform .15s}
 .dr-confirm-ov.open .dr-confirm{transform:none}
+.prof-modal{background:var(--card);border:1px solid var(--border2);border-radius:16px;max-width:460px;width:100%;max-height:88vh;overflow-y:auto;padding:1.5rem 1.5rem 1.3rem;box-shadow:0 24px 60px rgba(0,0,0,.5);transform:translateY(8px);transition:transform .15s}
+.dr-confirm-ov.open .prof-modal{transform:none}
+.prof-h{font-family:'Bebas Neue',sans-serif;font-size:1.55rem;letter-spacing:.5px;color:var(--white);margin-bottom:.35rem}
+.prof-sub{font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:1.1rem}
+.prof-l{display:block;font-size:.72rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin:.85rem 0 .35rem}
+.prof-opt{text-transform:none;letter-spacing:0;font-weight:500;color:var(--muted2)}
+.prof-modal select,.prof-modal input{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--white);border-radius:9px;padding:.6rem .7rem;font:inherit;font-size:.9rem}
+.prof-act{display:flex;align-items:center;gap:.6rem;margin-top:1.3rem;flex-wrap:wrap}
+.prof-err{font-size:.8rem;color:var(--red)}
 .dr-confirm-h{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.5px;color:var(--white);margin-bottom:.5rem}
 .dr-confirm-b{font-size:.88rem;line-height:1.6;color:var(--muted)}
 .dr-confirm-b b{color:var(--white);font-weight:600}
@@ -1003,6 +1012,17 @@
 .notif-time{font-size:.68rem;color:var(--muted2)}
 .notif-empty{padding:1.2rem .9rem;font-size:.8rem;color:var(--muted2);line-height:1.5;text-align:center}
 @media (max-width:860px){ .notif-panel{position:fixed;top:64px;right:8px;left:auto} }
+/* ---- Phase 2d (feedback) ---- */
+textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-shadow:0 0 0 2px rgba(255,107,107,.16)}
+.notif-hl{color:var(--white);font-weight:700}
+.fc-reopen{font:inherit;font-size:.72rem;font-weight:700;color:var(--accent);background:transparent;border:1px solid rgba(232,84,10,.4);border-radius:7px;padding:.2rem .55rem;cursor:pointer;margin-left:.5rem;white-space:nowrap}
+.fc-reopen:hover{background:var(--accent);color:#fff}
+.fc-status.s-resolved{color:var(--green);background:rgba(74,222,128,.14);border-color:rgba(74,222,128,.4)}
+.fc-status.s-partial{color:var(--accent2);background:var(--accent2-dim);border-color:rgba(240,165,0,.4)}
+.cd-status.s-resolved{color:var(--green);border-color:rgba(74,222,128,.3)}
+.cd-status.s-partial{color:var(--accent2);border-color:rgba(240,165,0,.3)}
+.cd-res-h{display:block;font-size:.66rem;font-weight:800;letter-spacing:.5px;color:var(--accent2);margin-top:.7rem}
+.cd-res-h:first-child{margin-top:0}
 .cd-miss{color:var(--muted);text-align:center;padding:2rem}
 @media(max-width:560px){.fld.half{width:100%;margin-right:0}}
 /* phase1a.2: form overhaul + custom-add + examples pagination */
@@ -1152,8 +1172,8 @@
     </select>
     <select id="feed-status" aria-label="Filter by status">
       <option value="live">Open</option>
-      <option value="closed">Resolved</option>
-      <option value="outcome">Outcome added</option>
+      <option value="resolved">Resolved</option>
+      <option value="partial">Partially resolved</option>
     </select>
     <select id="feed-urg" aria-label="Filter by urgency">
       <option value="all">Any urgency</option>
@@ -1274,9 +1294,11 @@ function renderNavAccount(){
     d.innerHTML='<button class="acct-btn" id="acct-btn" aria-label="Account">'+avatarMarkup(30)+'<svg class="acct-caret" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>'
       +'<div class="acct-menu" id="acct-menu"><div class="acct-head">'+avatarMarkup(40)+'<div class="acct-meta"><div class="acct-name">'+escHtml((DRP&&DRP.alias)||'You')+'</div><div class="acct-email">'+escHtml(currentUser.email||'')+'</div></div></div>'
       +(credibilityLine()?'<div class="acct-item" style="cursor:default">'+escHtml(credibilityLine())+(DRP&&DRP.willing_to_answer?' \u00B7 reviewer':'')+'</div>':'')
+      +'<button class="acct-item" id="acct-editprof">\u270E&nbsp; Edit profile</button>'
       +'<button class="acct-item" id="acct-signout">\u21A9&nbsp; Sign out</button></div>';
     var b=document.getElementById('acct-btn'), menu=document.getElementById('acct-menu');
     if(b&&menu) b.onclick=function(e){ e.stopPropagation(); menu.classList.toggle('open'); };
+    var ep=document.getElementById('acct-editprof'); if(ep) ep.onclick=function(){ if(menu) menu.classList.remove('open'); if(window.drOpenProfile) window.drOpenProfile(false); };
     var so=document.getElementById('acct-signout'); if(so) so.onclick=function(){ signOutUser(); };
   } else {
     d.innerHTML='<button class="nav-signin" id="nav-signin">Sign in</button>';
@@ -1292,7 +1314,8 @@ function renderMobileAccount(){
   function closeMM(){ var m=document.getElementById('mobile-menu'); if(m) m.classList.remove('open'); var bd=document.getElementById('mobile-backdrop'); if(bd) bd.classList.remove('open'); var ham=document.getElementById('hamburger'); if(ham) ham.classList.remove('open'); document.body.style.overflow=''; }
   if(currentUser){
     var sub=credibilityLine()||currentUser.email||'';
-    el.innerHTML='<div class="mma-id">'+avatarMarkup(38)+'<div><div class="mma-name">'+escHtml((DRP&&DRP.alias)||'You')+'</div><div class="mma-sub">'+escHtml(sub)+(DRP&&DRP.willing_to_answer?' \u00B7 reviewer':'')+'</div></div></div><button class="btn-ghost mma-btn" id="mm-signout">Sign out</button>';
+    el.innerHTML='<div class="mma-id">'+avatarMarkup(38)+'<div><div class="mma-name">'+escHtml((DRP&&DRP.alias)||'You')+'</div><div class="mma-sub">'+escHtml(sub)+(DRP&&DRP.willing_to_answer?' \u00B7 reviewer':'')+'</div></div></div><button class="btn-ghost mma-btn" id="mm-editprof">Edit profile</button><button class="btn-ghost mma-btn" id="mm-signout">Sign out</button>';
+    var mep=document.getElementById('mm-editprof'); if(mep) mep.onclick=function(){ closeMM(); if(window.drOpenProfile) window.drOpenProfile(false); };
     var so=document.getElementById('mm-signout'); if(so) so.onclick=function(){ closeMM(); signOutUser(); };
   } else {
     el.innerHTML='<button class="btn-primary mma-btn" id="mm-signin">Sign in</button><div class="mma-hint">Post anonymously \u2014 alias + PM context only.</div>';
@@ -1468,9 +1491,11 @@ boot();
   function taxList(kind){ return kind==='category'?DR_CATS:DR_HELP; }
   function helpLabel(h){ return LEGACY_HELP[h]||h; }
   function statusBadge(s){ return ({live:'Open',closed:'Closed',outcome:'Outcome added',submitted:'Submitted',review:'In review',draft:'Draft'})[s]||s; }
-  function caseHasOutcome(r){ return !!(r.resolved_option || r.resolution || (r.want_outcomes && r.want_outcomes.length)); }
-  function caseStatusLabel(r){ return (r.status==='closed' && caseHasOutcome(r)) ? 'Outcome added' : statusBadge(r.status); }
-  function caseStatusClass(r){ return (r.status==='closed' && caseHasOutcome(r)) ? 'outcome' : r.status; }
+  function caseResolvedPct(r){ if(r&&r.resolution_pct!=null) return Number(r.resolution_pct); var g=caseWantsPct(r); return g?g.pct:100; }
+  function caseIsResolved(r){ return r.status==='closed' && caseResolvedPct(r)>=70; }
+  function caseIsPartial(r){ return r.status==='closed' && caseResolvedPct(r)<70; }
+  function caseStatusLabel(r){ if(r.status!=='closed') return statusBadge(r.status); return caseIsResolved(r)?'Resolved':'Partially resolved'; }
+  function caseStatusClass(r){ if(r.status!=='closed') return r.status; return caseIsResolved(r)?'resolved':'partial'; }
   function urgLabel(u){ return ({today:'Today',this_week:'This week',this_month:'This month',not_urgent:'Not urgent'})[u]||u; }
   function fmtDate(ts){ try{ var d=new Date(ts); if(isNaN(d.getTime())) return ''; var now=new Date(); var opt=(d.getFullYear()===now.getFullYear())?{month:'short',day:'numeric'}:{month:'short',day:'numeric',year:'numeric'}; return d.toLocaleDateString(undefined,opt); }catch(e){ return ''; } }
   function fcDate(ts, label){ var t=fmtDate(ts); label=label||'Posted'; return t?('<span class="fc-date">'+label+' <b>'+escHtml(t)+'</b></span>'):''; }
@@ -1713,7 +1738,7 @@ boot();
       var rows=(res&&res.data)||[];
       if(reset) list.innerHTML='';
       if(reset && !rows.length){ list.innerHTML='<div class="feed-empty">'+(status==='live'?'No open cases match these filters yet.':'No resolved cases match these filters yet.')+'</div>'; }
-      var closedish=(status==='closed'||status==='outcome');
+      var closedish=(status==='closed'||status==='outcome'||status==='resolved'||status==='partial');
       rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', closedish?libCardHtml(r):feedCardHtml(r)); });
       if(rows.length) feedCursor=closedish?(rows[rows.length-1].closed_at||rows[rows.length-1].created_at):rows[rows.length-1].created_at;
       if(rows.length<12) feedDone=true;
@@ -1727,7 +1752,7 @@ boot();
     var helps=(r.help_types||[]).map(function(h){return helpLabel(h);});
     var met=(function(){ var g=caseWantsPct(r); return g?('<span class="fc-met '+(pctGood(g.pct)?'g':'r')+'">'+g.sat+' of '+g.total+' met \u00b7 '+g.pct+'%</span>'):'<span class="fc-rc">Closed</span>'; })();
     var decided=r.resolved_option?('<div class="fc-decided">Decided: <b>'+escHtml(r.resolved_option)+'</b></div>'):'';
-    return '<div class="feed-card lib" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-closed">Resolved</span>'+cats+'</span>'+fcDate(r.closed_at||r.created_at,'Closed')+'</div>'
+    return '<div class="feed-card lib" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-'+escHtml(caseStatusClass(r))+'">'+escHtml(caseStatusLabel(r))+'</span>'+cats+'</span>'+fcDate(r.closed_at||r.created_at,'Closed')+'</div>'
       +'<div class="fc-title">'+escHtml(r.title)+'</div>'+decided+'<div class="fc-dec">'+escHtml(r.decision)+'</div>'
       +'<div class="fc-meta">'+fcChipRow('Was asked', helps, 'fc-help')+'</div>'
       +'<div class="fc-foot"><span class="fc-ctx">'+escHtml(r.author_context||r.alias||'PM')+'</span>'+met+'</div></div>';
@@ -1755,10 +1780,11 @@ boot();
     var helps=(r.help_types||[]).map(function(h){return helpLabel(h);});
     var stks=(r.stakeholders||[]);
     var foot=(r.status==='closed')?wantsMetBadge(r):('<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Awaiting responses':(rc+(rc===1?' response':' responses')))+'</span>');
+    var reopen=caseIsPartial(r)?'<button type="button" class="fc-reopen" data-reopen="'+escHtml(r.id)+'">Reopen</button>':'';
     return '<div class="feed-card mine" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-'+escHtml(caseStatusClass(r))+'">'+escHtml(caseStatusLabel(r))+'</span>'+cats+'</span>'+fcDate(r.status==='closed'?(r.closed_at||r.created_at):r.created_at, r.status==='closed'?'Closed':'Posted')+'</div>'
       +'<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
       +'<div class="fc-meta">'+fcChipRow('Wants', helps, 'fc-help')+fcChipRow('Who\u2019s involved', stks, 'fc-stk')+'</div>'
-      +'<div class="fc-foot"><span class="fc-ctx">You</span>'+foot+'</div></div>';
+      +'<div class="fc-foot"><span class="fc-ctx">You</span><span class="fc-foot-r">'+foot+reopen+'</span></div></div>';
   }
   function renderMyCases(){
     var w=document.getElementById('mycases-wrap'), list=document.getElementById('mycases-list'); if(!w||!list) return;
@@ -1774,6 +1800,7 @@ boot();
     if(!shown.length){ list.innerHTML='<div class="feed-empty">No '+(f==='closed'?'closed':'open')+' cases right now.</div>'; return; }
     shown.forEach(function(r){ list.insertAdjacentHTML('beforeend', myCaseCardHtml(r)); });
     wireCards(list);
+    [].slice.call(list.querySelectorAll('.fc-reopen')).forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); reopenCase(b.getAttribute('data-reopen')); }; });
   }
   function loadMyCases(){
     var w=document.getElementById('mycases-wrap'); if(!w) return;
@@ -1789,6 +1816,7 @@ boot();
   function row(label, val){ return val?('<div class="cd-row"><div class="cd-label">'+label+'</div><div class="cd-val">'+val+'</div></div>'):''; }
   function listRow(label, arr){ return (arr&&arr.length)?row(label, arr.map(function(x){return '<span class="cd-chip">'+escHtml(x)+'</span>';}).join('')):''; }
   function nl(t){ return escHtml(t).replace(/\n/g,'<br>'); }
+  function fmtResolution(t){ return escHtml(t||'').split('\n').map(function(ln){ var s=ln.trim(); if(s && /^[A-Z\u2019' ]{3,32}$/.test(s)) return '<span class="cd-res-h">'+ln+'</span>'; return ln; }).join('<br>'); }
   function openCase(id){
     if(!SB||!id) return;
     SB.rpc('dr_get_case',{p_id:id}).then(function(res){
@@ -1814,7 +1842,7 @@ boot();
           +(d.evidence?row('Evidence', nl(d.evidence)):'')
           +(d.tried?row('Already tried', nl(d.tried)):'')
           +'<div class="cd-resp" id="cd-resp"><div class="cd-resp-h"><span id="cd-resp-count">'+respCountLabel(Number(d.response_count)||0)+'</span></div>'
-          +'<details class="cd-help"><summary>How ratings &amp; the 70% bar work</summary><p><b>Coverage %</b> = how many of your asks a response meaningfully addresses (blank, N/A, or too-thin answers don\u2019t count). <b>70%</b> is the quality bar \u2014 green above, red below. <b>Stars (1\u20135)</b> blend that coverage with how many readers found the response helpful. <b>Flagged</b> responses (5+ reports) have their rating reduced. It\u2019s rule-based today; smarter checks arrive with AI in a later phase.</p></details>'
+          +'<details class="cd-help"><summary>How ratings &amp; the 70% bar work</summary><p><b>Coverage %</b> = how many of your asks a response meaningfully addresses (blank, N/A, or too-thin answers don\u2019t count). <b>70%</b> is the quality bar \u2014 green above, red below. <b>Stars (1&ndash;5)</b> weight coverage 70% and helpful votes 30% \u2014 so a thorough response scores well even before it collects votes, and 5 stars means it covered everything <i>and</i> is the most-upvoted answer on the case. <b>Flagged</b> responses (5+ reports) have their rating reduced. It\u2019s rule-based today; smarter checks arrive with AI in a later phase.</p></details>'
           +outcomeHtml(d)
           +'<div id="cd-respond"></div>'
           +'<div id="cd-responses" class="cd-resp-list"></div></div>';
@@ -1860,7 +1888,7 @@ boot();
   }
   function pctGood(p){ return p>=70; }
   function starsFor(wantsPct, helpfulPct, reportCount){
-    var base=0.5*(wantsPct/100)+0.5*(helpfulPct/100); var s=1+base*4;
+    var base=0.7*(wantsPct/100)+0.3*(helpfulPct/100); var s=1+base*4;
     if((Number(reportCount)||0)>=5) s=s*0.6;
     return Math.max(1.0, Math.round(s*10)/10);
   }
@@ -1889,10 +1917,11 @@ boot();
   function outcomeHtml(d){
     if(!d||d.status!=='closed') return '';
     var g=caseWantsPct(d);
-    var good=g?pctGood(g.pct):true;
+    var good=caseIsResolved(d);
     var count=g?('<span class="cd-outcome-count '+(good?'g':'r')+'">'+g.sat+' of '+g.total+' asks met \u00b7 '+g.pct+'%</span>'):'';
-    var head='<div class="cd-outcome-h">\u2713 Resolved'+count+'</div>';
-    var warn=(g&&!good)?'<div class="cd-outcome-warn">\u26A0 Under the 70% bar \u2014 only '+g.pct+'% ('+g.sat+' of '+g.total+') of the asks were met.</div>':'';
+    var resolved=good;
+    var head='<div class="cd-outcome-h">'+(resolved?'\u2713 Resolved':'\u25CB Partially resolved')+count+'</div>';
+    var warn=(!resolved)?'<div class="cd-outcome-warn">\u26A0 Fewer than 70% of the asks were met'+(g?(' ('+g.pct+'%, '+g.sat+' of '+g.total+')'):'')+'. '+(d.is_mine?'You can reopen this case to gather more input.':'The submitter may reopen it for more input.')+'</div>':'';
     var grid='';
     if(g){ var ws=d.help_types||[]; var map={}; d.want_outcomes.forEach(function(x){ map[x.want]=x.outcome; });
       var src=ws.length?ws:d.want_outcomes.map(function(x){return x.want;});
@@ -1904,9 +1933,9 @@ boot();
           return '<div class="wg-row'+(s!=='ok'?' na':'')+'"><div class="wg-want">'+escHtml(helpLabel(w))+'</div><div class="wg-got">'+val+'</div></div>'; }).join('')
         +'</div></div>';
     }
-    return '<div class="cd-outcome'+(g&&!good?' bad':'')+'">'+head+warn
+    return '<div class="cd-outcome'+(resolved?'':' bad')+'">'+head+warn
       +(d.resolved_option?'<div class="cd-outcome-opt">Went with: <b>'+escHtml(d.resolved_option)+'</b></div>':'')
-      +(d.resolution?'<div class="cd-outcome-body">'+nl(d.resolution)+'</div>':'')
+      +(d.resolution?'<div class="cd-outcome-body">'+fmtResolution(d.resolution)+'</div>':'')
       +grid+'</div>';
   }
   var curCaseResponses=[];
@@ -1962,6 +1991,15 @@ boot();
       SB.rpc('dr_report_response',{p_response_id:rid}).then(function(res){ var r=(res&&res.data)||{}; if(r.ok){ if(typeof toast==='function') toast('Reported \u2014 thanks for flagging'); loadResponses(d); } else { btn.disabled=false; } }).catch(function(){ btn.disabled=false; });
     }});
   }
+  function reopenCase(id){
+    drConfirm({title:'Reopen this case?', body:'This puts it back in the open feed so PMs can respond again. Your outcome notes will be cleared (the responses stay). Only available because fewer than 70% of your asks were met.', confirm:'Reopen', cancel:'Cancel', onConfirm:function(){
+      if(!SB) return;
+      SB.rpc('dr_reopen_case',{p_case_id:id}).then(function(res){ var r=(res&&res.data)||{};
+        if(r.ok){ if(typeof toast==='function') toast('Case reopened \u2014 back in the open feed'); loadMyCases(); loadFeed(true); if(typeof loadLibrary==='function') loadLibrary(true); if(cov&&cov.classList.contains('open')) openCase(id); }
+        else { if(typeof toast==='function') toast(r.reason==='resolved'?'Fully-resolved cases can\u2019t be reopened':'Couldn\u2019t reopen this case'); }
+      }).catch(function(){});
+    }});
+  }
   function markActed(rid, val, d){ if(!SB) return; SB.rpc('dr_mark_acted',{p_response_id:rid,p_acted:val}).then(function(res){ var r=(res&&res.data)||{}; if(r.ok){ if(typeof toast==='function') toast(val?'Marked \u2014 the reviewer will see you acted on it':'Unmarked'); loadResponses(d); } }).catch(function(){}); }
   function renderRespondArea(el, d, mine){
     if(!el) return;
@@ -1969,6 +2007,9 @@ boot();
       if(d.status==='live'){
         el.innerHTML='<div class="cd-owner"><p class="cd-owner-n">This is your case. Once you\u2019ve made the call, close it and (optionally) share what you decided \u2014 it closes the loop for everyone who weighed in.</p><button type="button" class="btn-ghost" id="cd-close-btn">Close case &amp; add outcome</button></div>';
         var cb=document.getElementById('cd-close-btn'); if(cb) cb.onclick=function(){ openCloseForm(d); };
+      } else if(caseIsPartial(d)){
+        el.innerHTML='<div class="cd-owner"><p class="cd-owner-n">Fewer than 70% of your asks were met, so this is <b>partially resolved</b>. You can reopen it to gather more input \u2014 your outcome notes clear and it returns to the open feed. The responses stay.</p><button type="button" class="btn-ghost" id="cd-reopen-btn">Reopen this case</button></div>';
+        var rb=document.getElementById('cd-reopen-btn'); if(rb) rb.onclick=function(){ reopenCase(d.id); };
       } else { el.innerHTML=''; }
       return;
     }
@@ -1990,7 +2031,8 @@ boot();
       +'<div class="cd-form-act"><button type="button" class="btn-primary" id="rf-submit">'+(mine?'Update response':'Post response')+'</button><span class="cd-form-err" id="rf-err"></span></div></div>';
     var rsb=document.getElementById('rf-submit'); if(rsb) rsb.onclick=function(){ submitResponse(d, !!mine); };
     var upd=function(){ updWantsMeter('#cd-respond', d, 'answer', 'rf-wmeter'); };
-    [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ t.addEventListener('input', upd); }); upd();
+    [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ t.addEventListener('input', function(){ t.classList.remove('field-err'); upd(); }); }); upd();
+    var bodyEl=document.getElementById('rf-body'); if(bodyEl) bodyEl.addEventListener('input', function(){ bodyEl.classList.remove('field-err'); });
   }
   function updWantsMeter(scopeSel, d, key, meterId){
     var el=document.getElementById(meterId); if(!el) return;
@@ -2007,9 +2049,17 @@ boot();
     var conf=((document.getElementById('rf-conf')||{}).value||'').trim();
     var vis=((document.getElementById('rf-vis')||{}).value||'').trim();
     var err=document.getElementById('rf-err'), btn=document.getElementById('rf-submit');
-    if(body.length<20){ if(err) err.textContent='Add a bit more \u2014 at least a sentence or two.'; return; }
+    var bodyEl=document.getElementById('rf-body');
+    [].slice.call(document.querySelectorAll('#cd-respond .field-err')).forEach(function(e){ e.classList.remove('field-err'); });
+    if(body.length<20){ if(err) err.textContent='Your take needs at least a sentence or two \u2014 the highlighted box is too short.'; if(bodyEl){ bodyEl.classList.add('field-err'); bodyEl.focus(); bodyEl.scrollIntoView({block:'center',behavior:'smooth'}); } return; }
     var wg=gatherWants('#cd-respond','answer');
-    if(wg.missing){ if(err) err.textContent='Please answer every ask \u2014 write \u201CN/A\u201D for any you can\u2019t help with.'; return; }
+    if(wg.missing){
+      var boxes=[].slice.call(document.querySelectorAll('#cd-respond .cd-want-in')); var first=null;
+      boxes.forEach(function(t){ if(!(t.value||'').trim()){ t.classList.add('field-err'); if(!first) first=t; } });
+      if(err) err.textContent='Fill every ask (the highlighted ones are empty) \u2014 write \u201CN/A\u201D for any you can\u2019t help with.';
+      if(first){ first.focus(); first.scrollIntoView({block:'center',behavior:'smooth'}); }
+      return;
+    }
     var g=gateEntries(wg.list, (d.help_types||[]).length||wg.list.length, 'answer');
     function doPost(){
       if(btn){ btn.disabled=true; btn.textContent=isUpdate?'Updating\u2026':'Posting\u2026'; }
@@ -2050,13 +2100,20 @@ boot();
     var cover=ws.map(function(w){ var c=0; rs.forEach(function(r){ var m={}; (r.want_answers||[]).forEach(function(x){m[x.want]=x.answer;}); if(qualityOk(m[w], []).ok) c++; }); return {w:w, c:c}; });
     var thin=cover.slice().sort(function(a,b){return a.c-b.c;})[0];
     var coverHtml=cover.map(function(x){ return '<div class="cd-aid-row"><span>'+escHtml(helpLabel(x.w))+'</span><b class="'+(x.c/rs.length>=0.7?'g':'r')+'">'+x.c+'/'+rs.length+'</b></div>'; }).join('');
-    var parts=[];
-    parts.push(rs.length+' response'+(rs.length===1?'':'s')+', average coverage '+avg+'%.');
-    if(leanArr.length){ parts.push('Most reviewers lean '+leanArr[0].k+' ('+leanArr[0].n+' of '+rs.length+').'); }
-    if(top){ parts.push('Highest-rated take: '+((top.r.visibility==='anon')?'an anonymous PM':(top.r.responder_context||top.r.alias||'a PM'))+' at '+top.stars.toFixed(1)+'\u2605.'); }
-    if(thin&&thin.c/rs.length<0.7){ parts.push('Thinnest ask: \u201C'+helpLabel(thin.w)+'\u201D ('+thin.c+'/'+rs.length+' covered) \u2014 consider waiting for more input or accepting the gap.'); }
-    parts.push('Suggested next step: '+(avg>=70?'coverage is solid \u2014 make your call and record what you decided.':'coverage is thin \u2014 either wait for stronger responses or close and note which asks went unmet.'));
-    var summary=parts.join(' ');
+    var topWho=top?((top.r.visibility==='anon')?'an anonymous PM':(top.r.responder_context||top.r.alias||'a PM')):'';
+    var L=[];
+    L.push('WHAT I DECIDED');
+    L.push(leanArr.length ? ('Leaning ' + leanArr[0].k + ' \u2014 ' + leanArr[0].n + ' of ' + rs.length + ' reviewers favored it.' + (leanArr.length>1 ? ' Also raised: ' + leanArr.slice(1).map(function(x){return x.k+' \u00d7'+x.n;}).join(', ') + '.' : '') + ' [confirm or change to the option you\u2019re going with]') : '[state the option you\u2019re going with]');
+    L.push('');
+    L.push('WHY');
+    L.push(top ? ('Strongest input came from ' + topWho + ' (' + top.stars.toFixed(1) + '\u2605). [pull its core reasoning into your rationale]') : '[summarize the reasoning that convinced you]');
+    L.push('');
+    L.push('WHAT\u2019S STILL OPEN');
+    L.push((thin && thin.c/rs.length < 0.7) ? ('\u201C' + helpLabel(thin.w) + '\u201D was thinly covered (' + thin.c + '/' + rs.length + '). [note how you\u2019ll handle it \u2014 or reopen for more input]') : ('All asks were reasonably covered (' + avg + '% average). [note any residual risk you\u2019re accepting]'));
+    L.push('');
+    L.push('NEXT STEP');
+    L.push(avg>=70 ? 'Coverage is solid \u2014 record the decision, then mark the responses you act on as it plays out.' : ('Coverage is thin (' + avg + '%) \u2014 either wait for stronger responses, or close now noting which asks went unmet (you can reopen later).'));
+    var summary=L.join('\n');
     var html='<div class="cd-aid"><div class="cd-aid-h">Before you close \u2014 what the room gave you</div>'
       +'<div class="cd-aid-avg '+(pctGood(avg)?'g':'r')+'"><span class="cd-aid-big">'+avg+'%</span><span>average coverage across '+rs.length+' response'+(rs.length===1?'':'s')+'</span></div>'
       +'<div class="cd-aid-grid">'+coverHtml+'</div>'
@@ -2091,7 +2148,7 @@ boot();
       var g=gateEntries(wg.list, ws.length||wg.list.length, 'outcome');
       function doClose(){
         if(btn){ btn.disabled=true; btn.textContent='Closing\u2026'; }
-        SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt,p_want_outcomes:wg.list}).then(function(r){
+        SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt,p_want_outcomes:wg.list,p_wants_satisfied:g.sat,p_resolved_pct:g.pct}).then(function(r){
           var o=(r&&r.data)||{}; if(!o.ok){ if(err) err.textContent=(o.reason==='wants'?'Please note how each ask went (N/A is fine).':'Couldn\u2019t close the case.'); if(btn){ btn.disabled=false; btn.textContent='Close case'; } return; }
           if(typeof toast==='function') toast('Case closed'); openCase(d.id); loadFeed(true); loadMyCases(); if(typeof loadLibrary==='function') loadLibrary(true);
         }).catch(function(){ if(err) err.textContent='Something went wrong.'; if(btn){ btn.disabled=false; btn.textContent='Close case'; } });
@@ -2120,11 +2177,17 @@ boot();
   function bellAgo(iso){ var t=new Date(iso).getTime(); if(!t) return ''; var s=Math.floor((Date.now()-t)/1000); if(s<60) return 'just now'; var m=Math.floor(s/60); if(m<60) return m+'m ago'; var h=Math.floor(m/60); if(h<24) return h+'h ago'; var dy=Math.floor(h/24); if(dy<7) return dy+'d ago'; return new Date(iso).toLocaleDateString(); }
   function refreshBell(){ var host=document.getElementById('nav-bell'); if(!host) return; if(!currentUser){ host.innerHTML=''; if(notifTimer){ clearInterval(notifTimer); notifTimer=null; } return; } loadNotifs(); if(!notifTimer){ notifTimer=setInterval(function(){ if(currentUser) loadNotifs(); }, 60000); } }
   function loadNotifs(){ if(!SB||!currentUser) return; SB.rpc('dr_notifications',{p_limit:30}).then(function(res){ var d=(res&&res.data)||{}; renderBell(Number(d.unread)||0, d.items||[]); }).catch(function(){}); }
+  function notifBody(n){
+    var b=escHtml(n.body||'');
+    if(n.subject){ var subj=escHtml(n.subject); if(subj) b=b.split(subj).join('<b class="notif-hl">'+subj+'</b>'); }
+    if(n.actor_alias){ var a=escHtml(n.actor_alias); if(a) b=b.split(a).join('<b class="notif-hl">'+a+'</b>'); }
+    return b;
+  }
   function renderBell(unread, items){
     var host=document.getElementById('nav-bell'); if(!host) return;
     var cur=host.querySelector('.notif-panel'); var wasOpen=!!(cur&&cur.classList.contains('open'));
     var badge=unread>0?'<span class="bell-badge">'+(unread>9?'9+':unread)+'</span>':'';
-    var list=items.length?items.map(function(n){ return '<button type="button" class="notif-item'+(n.read?'':' unread')+'" data-id="'+escHtml(n.id)+'" data-case="'+escHtml(n.case_id||'')+'"><span class="notif-dot"></span><span class="notif-txt"><span class="notif-body">'+escHtml(n.body)+'</span><span class="notif-time">'+bellAgo(n.created_at)+'</span></span></button>'; }).join(''):'<div class="notif-empty">No notifications yet. You\u2019ll hear here when your case gets a response, is marked helpful, or is closed.</div>';
+    var list=items.length?items.map(function(n){ return '<button type="button" class="notif-item'+(n.read?'':' unread')+'" data-id="'+escHtml(n.id)+'" data-case="'+escHtml(n.case_id||'')+'"><span class="notif-dot"></span><span class="notif-txt"><span class="notif-body">'+notifBody(n)+'</span><span class="notif-time">'+bellAgo(n.created_at)+'</span></span></button>'; }).join(''):'<div class="notif-empty">No notifications yet. You\u2019ll hear here when your case gets a response, is marked helpful, or is closed.</div>';
     host.innerHTML='<button type="button" class="bell-btn" id="bell-btn" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>'+badge+'</button>'
       +'<div class="notif-panel'+(wasOpen?' open':'')+'" id="notif-panel"><div class="notif-h"><span>Notifications</span>'+(unread>0?'<button type="button" class="notif-readall" id="notif-readall">Mark all read</button>':'')+'</div><div class="notif-list">'+list+'</div></div>';
     var btn=document.getElementById('bell-btn'); if(btn) btn.onclick=function(e){ e.stopPropagation(); var p=document.getElementById('notif-panel'); if(p) p.classList.toggle('open'); };
@@ -2134,7 +2197,59 @@ boot();
   document.addEventListener('click', function(e){ var p=document.getElementById('notif-panel'); if(p&&p.classList.contains('open')&&!e.target.closest('#nav-bell')) p.classList.remove('open'); });
   window.drRefreshBell=refreshBell;
 
-  window.drAfterAuth=function(){ loadMyCases(); refreshBell(); };
+  /* ---- Slice 4: self-attested profile onboarding ---- */
+  var ROLES=['APM / Associate PM','Product Manager','Senior PM','Lead / Staff PM','Group PM','Director of Product','VP Product','Founder / CPO','Other'];
+  var profilePrompted=false;
+  function profileIncomplete(){ return !!(currentUser && DRP && (!DRP.role || !DRP.product_type || !DRP.years_experience)); }
+  function profOpts(list, cur){ return list.map(function(v){ return '<option'+(String(cur||'')===v?' selected':'')+'>'+escHtml(v)+'</option>'; }).join(''); }
+  function openProfileForm(isOnboarding){
+    if(!currentUser){ if(typeof openSignIn==='function') openSignIn(); return; }
+    var d=DRP||{};
+    var ex=document.getElementById('profile-ov'); if(ex&&ex.parentNode) ex.parentNode.removeChild(ex);
+    var ov=document.createElement('div'); ov.id='profile-ov'; ov.className='dr-confirm-ov';
+    var ind=(d.industries&&d.industries.length)?d.industries[0]:'';
+    ov.innerHTML='<div class="prof-modal" role="dialog" aria-modal="true">'
+      +'<div class="prof-h">'+(isOnboarding?'Complete your PM profile':'Edit your profile')+'</div>'
+      +'<p class="prof-sub">Self-attested \u2014 this shows as context on your cases and responses (e.g. \u201CSenior PM \u00b7 B2B SaaS \u00b7 7y\u201D). Your real name and company are never shown.</p>'
+      +'<label class="prof-l">Your role</label><select id="pf-role"><option value="">\u2014 select \u2014</option>'+profOpts(ROLES, d.role)+'</select>'
+      +'<label class="prof-l">Working as a PM now?</label><select id="pf-track"><option value="working"'+(d.track==='working'?' selected':'')+'>Yes, currently a PM</option><option value="aspiring"'+(d.track==='aspiring'?' selected':'')+'>Aspiring / transitioning</option></select>'
+      +'<label class="prof-l">Primary product type</label><select id="pf-prod"><option value="">\u2014 select \u2014</option>'+profOpts(PRODUCT, d.product_type)+'</select>'
+      +'<label class="prof-l">Years of PM experience</label><input id="pf-years" type="number" min="0" max="50" inputmode="numeric" value="'+escHtml(d.years_experience||'')+'" placeholder="e.g. 7"/>'
+      +'<label class="prof-l">Industry <span class="prof-opt">optional</span></label><input id="pf-ind" type="text" maxlength="40" value="'+escHtml(ind)+'" placeholder="e.g. Fintech, Healthcare"/>'
+      +'<label class="prof-l">LinkedIn URL <span class="prof-opt">optional</span></label><input id="pf-li" type="url" maxlength="200" value="'+escHtml(d.linkedin_url||'')+'" placeholder="https://linkedin.com/in/\u2026"/>'
+      +'<div class="prof-act"><button type="button" class="btn-primary" id="pf-save">Save profile</button><button type="button" class="btn-ghost" id="pf-later">'+(isOnboarding?'Maybe later':'Cancel')+'</button><span class="prof-err" id="pf-err"></span></div>'
+      +'</div>';
+    document.body.appendChild(ov);
+    requestAnimationFrame(function(){ ov.classList.add('open'); });
+    function close(){ ov.classList.remove('open'); setTimeout(function(){ if(ov.parentNode) ov.parentNode.removeChild(ov); }, 200); }
+    ov.addEventListener('click', function(e){ if(e.target===ov){ profilePrompted=true; close(); } });
+    document.getElementById('pf-later').onclick=function(){ profilePrompted=true; close(); };
+    document.getElementById('pf-save').onclick=function(){ saveProfileForm(close); };
+  }
+  function saveProfileForm(done){
+    var err=document.getElementById('pf-err');
+    var role=((document.getElementById('pf-role')||{}).value||'');
+    var track=((document.getElementById('pf-track')||{}).value||'working');
+    var prod=((document.getElementById('pf-prod')||{}).value||'');
+    var years=((document.getElementById('pf-years')||{}).value||'').trim();
+    var ind=((document.getElementById('pf-ind')||{}).value||'').trim();
+    var li=((document.getElementById('pf-li')||{}).value||'').trim();
+    if(!role||!prod||!years){ if(err) err.textContent='Add your role, product type, and years to finish.'; return; }
+    var btn=document.getElementById('pf-save'); if(btn){ btn.disabled=true; btn.textContent='Saving\u2026'; }
+    SB.rpc('dr_save_profile',{ p_role:role, p_track:track, p_product_type:prod, p_years:years, p_industries: ind?[ind]:null, p_linkedin: li||null }).then(function(res){
+      var r=(res&&res.data)||{};
+      if(r.ok){
+        if(DRP){ DRP.role=role; DRP.track=track; DRP.product_type=prod; DRP.years_experience=years; if(ind) DRP.industries=[ind]; if(li) DRP.linkedin_url=li; }
+        profilePrompted=true;
+        if(typeof renderNavAccount==='function') renderNavAccount();
+        if(typeof toast==='function') toast('Profile saved \u2014 that adds real context to your input.');
+        done&&done();
+      } else { if(err) err.textContent='Couldn\u2019t save right now \u2014 try again.'; if(btn){ btn.disabled=false; btn.textContent='Save profile'; } }
+    }).catch(function(){ if(err) err.textContent='Something went wrong \u2014 try again.'; if(btn){ btn.disabled=false; btn.textContent='Save profile'; } });
+  }
+  window.drOpenProfile=function(isOnboarding){ openProfileForm(isOnboarding); };
+
+  window.drAfterAuth=function(){ loadMyCases(); refreshBell(); if(profileIncomplete() && !profilePrompted){ profilePrompted=true; setTimeout(function(){ if(profileIncomplete()) openProfileForm(true); }, 1000); } };
   renderExamples(true);   /* immediate render from seed list */
   populateFilter();
   loadTaxonomy();         /* then refresh from DB (adds any custom values) */
