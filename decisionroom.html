@@ -909,6 +909,100 @@
 .feed-card.lib:hover{border-color:#60a5fa}
 /* reviewer joined */
 [data-cta="review"].joined{color:var(--green);border-color:rgba(74,222,128,.4);cursor:default;opacity:.95}
+/* ---- Phase 2a ---- */
+.cd-help{margin:-.2rem 0 .9rem;font-size:.78rem}
+.cd-help summary{cursor:pointer;color:var(--accent3);font-weight:600;list-style:none}
+.cd-help summary::-webkit-details-marker{display:none}
+.cd-help summary:before{content:'\24D8 ';opacity:.9}
+.cd-help p{margin:.5rem 0 0;color:var(--muted);line-height:1.6}
+.cd-help b{color:var(--white);font-weight:600}
+.cd-f-row{display:flex;gap:.7rem;flex-wrap:wrap}
+.cd-f-col{flex:1 1 45%;min-width:130px}
+/* stars */
+.stars{position:relative;display:inline-block;font-size:.82rem;line-height:1;letter-spacing:1px;vertical-align:middle}
+.stars-bg{color:var(--border2)}
+.stars-fg{position:absolute;left:0;top:0;overflow:hidden;white-space:nowrap;color:var(--accent2)}
+.stars-num{font-size:.74rem;font-weight:700;color:var(--accent2);margin-left:.35rem;vertical-align:middle}
+.stars-sub{font-size:.66rem;color:var(--muted2);margin-left:.3rem}
+.rsp-stars{display:inline-flex;align-items:center}
+/* response badges / confidence / flag / report */
+.rsp-badges{display:flex;gap:.45rem;flex-wrap:wrap;margin:.15rem 0 .5rem}
+.rsp-conf{font-size:.64rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;border-radius:100px;padding:.12rem .5rem;border:1px solid var(--border2);color:var(--muted)}
+.rsp-conf.c-high{color:var(--green);border-color:rgba(74,222,128,.35);background:rgba(74,222,128,.08)}
+.rsp-conf.c-med{color:var(--accent2);border-color:rgba(240,165,0,.35);background:var(--accent2-dim)}
+.rsp-conf.c-low{color:var(--muted2)}
+.rsp-flag{font-size:.76rem;color:#ffb4b4;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.34);border-radius:9px;padding:.45rem .65rem;margin:.1rem 0 .6rem;line-height:1.45}
+.rsp-card.is-flagged{border-color:rgba(255,107,107,.4)}
+.rsp-foot{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap}
+.rsp-report{font:inherit;font-size:.7rem;font-weight:600;color:var(--muted2);background:transparent;border:none;cursor:pointer;opacity:.75}
+.rsp-report:hover{color:var(--red);opacity:1}
+.rsp-report.done{color:var(--muted2);cursor:default;opacity:.6}
+/* gated grid tint + flag */
+.wg.wg-good .wg-h{color:var(--green)}
+.wg.wg-bad{border-color:rgba(255,107,107,.35)}
+.wg.wg-bad .wg-h{color:#ffb4b4}
+.wg-flag{display:block;font-size:.62rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:#ffb4b4;margin-top:.25rem}
+/* live meter */
+.cd-wmeter{margin:.7rem 0 .2rem}
+.cd-wmeter-bar{height:7px;border-radius:100px;background:var(--card2);overflow:hidden;border:1px solid var(--border2)}
+.cd-wmeter-bar span{display:block;height:100%;border-radius:100px;transition:width .18s ease,background .18s ease}
+.cd-wmeter.good .cd-wmeter-bar span{background:var(--green)}
+.cd-wmeter.bad .cd-wmeter-bar span{background:var(--red)}
+.cd-wmeter-t{font-size:.76rem;margin-top:.35rem;color:var(--muted)}
+.cd-wmeter.good .cd-wmeter-t b{color:var(--green)} .cd-wmeter.bad .cd-wmeter-t b{color:#ffb4b4}
+/* confirm modal */
+.dr-confirm-ov{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:1.2rem;opacity:0;transition:opacity .15s}
+.dr-confirm-ov.open{opacity:1}
+.dr-confirm{background:var(--card);border:1px solid var(--border2);border-radius:16px;max-width:440px;width:100%;padding:1.4rem 1.4rem 1.2rem;box-shadow:0 24px 60px rgba(0,0,0,.5);transform:translateY(8px);transition:transform .15s}
+.dr-confirm-ov.open .dr-confirm{transform:none}
+.dr-confirm-h{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.5px;color:var(--white);margin-bottom:.5rem}
+.dr-confirm-b{font-size:.88rem;line-height:1.6;color:var(--muted)}
+.dr-confirm-b b{color:var(--white);font-weight:600}
+.dr-confirm-act{display:flex;gap:.6rem;justify-content:flex-end;margin-top:1.2rem;flex-wrap:wrap}
+/* closer decision aid */
+.cd-aid{background:var(--surface);border:1px solid var(--border2);border-radius:13px;padding:1rem 1.1rem;margin:.2rem 0 1rem}
+.cd-aid-none{color:var(--muted);font-size:.85rem}
+.cd-aid-h{font-size:.66rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--accent2);margin-bottom:.6rem}
+.cd-aid-avg{display:flex;align-items:baseline;gap:.5rem;font-size:.82rem;color:var(--muted);margin-bottom:.7rem}
+.cd-aid-big{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:.5px;line-height:1}
+.cd-aid-avg.g .cd-aid-big{color:var(--green)} .cd-aid-avg.r .cd-aid-big{color:#ffb4b4}
+.cd-aid-grid{display:flex;flex-direction:column;gap:.28rem;margin-bottom:.6rem}
+.cd-aid-row{display:flex;justify-content:space-between;gap:.6rem;font-size:.8rem;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:.28rem}
+.cd-aid-row b.g{color:var(--green)} .cd-aid-row b.r{color:#ffb4b4}
+.cd-aid-note{font-size:.74rem;color:var(--muted2);line-height:1.5;margin:0}
+/* outcome states */
+.cd-outcome-count.g{color:var(--green);background:rgba(74,222,128,.14)} .cd-outcome-count.r{color:#ffb4b4;background:rgba(255,107,107,.14)}
+.cd-outcome.bad{background:rgba(255,107,107,.06);border-color:rgba(255,107,107,.3)}
+.cd-outcome.bad .cd-outcome-h{color:#ffb4b4}
+.cd-outcome-warn{font-size:.8rem;color:#ffb4b4;margin:.1rem 0 .6rem;font-weight:600}
+.wg.wg-out.wg-bad .wg-want{color:#ffb4b4;background:rgba(255,107,107,.05)}
+/* card met + outcome status */
+.fc-met.g{color:var(--green)} .fc-met.r{color:#ffb4b4}
+.fc-status.s-outcome{color:var(--green);background:rgba(74,222,128,.14);border-color:rgba(74,222,128,.4)}
+.cd-status.s-outcome{color:var(--green);border-color:rgba(74,222,128,.3)}
+/* ---- Phase 2c: notification bell ---- */
+.nav-bell{position:relative;display:flex;align-items:center}
+.nav-bell:empty{display:none}
+.bell-btn{position:relative;display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;background:transparent;border:1px solid var(--border2);color:var(--muted);cursor:pointer;transition:color .15s,border-color .15s,background .15s}
+.bell-btn:hover{color:var(--white);border-color:var(--border2);background:var(--card2)}
+.bell-btn svg{width:19px;height:19px}
+.bell-badge{position:absolute;top:-5px;right:-5px;min-width:17px;height:17px;padding:0 4px;border-radius:100px;background:var(--accent);color:#fff;font-size:.62rem;font-weight:800;line-height:17px;text-align:center;border:2px solid var(--surface)}
+.notif-panel{position:absolute;top:calc(100% + 10px);right:0;width:min(340px,86vw);max-height:min(70vh,460px);display:flex;flex-direction:column;background:var(--card);border:1px solid var(--border2);border-radius:12px;box-shadow:0 22px 60px rgba(0,0,0,.55);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s,transform .18s;z-index:430;overflow:hidden}
+.notif-panel.open{opacity:1;visibility:visible;transform:translateY(0)}
+.notif-h{display:flex;justify-content:space-between;align-items:center;padding:.7rem .9rem;border-bottom:1px solid var(--border);font-size:.7rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted)}
+.notif-readall{background:none;border:none;color:var(--accent3);font:inherit;font-size:.72rem;font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0}
+.notif-list{overflow-y:auto;padding:.3rem}
+.notif-item{display:flex;gap:.55rem;width:100%;text-align:left;background:transparent;border:none;border-radius:9px;padding:.6rem .55rem;cursor:pointer;transition:background .12s}
+.notif-item:hover{background:var(--card2)}
+.notif-dot{flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:transparent;margin-top:.4rem}
+.notif-item.unread{background:rgba(232,84,10,.06)}
+.notif-item.unread .notif-dot{background:var(--accent)}
+.notif-txt{display:flex;flex-direction:column;gap:.15rem;min-width:0}
+.notif-body{font-size:.82rem;color:var(--white);line-height:1.4}
+.notif-item:not(.unread) .notif-body{color:var(--muted)}
+.notif-time{font-size:.68rem;color:var(--muted2)}
+.notif-empty{padding:1.2rem .9rem;font-size:.8rem;color:var(--muted2);line-height:1.5;text-align:center}
+@media (max-width:860px){ .notif-panel{position:fixed;top:64px;right:8px;left:auto} }
 .cd-miss{color:var(--muted);text-align:center;padding:2rem}
 @media(max-width:560px){.fld.half{width:100%;margin-right:0}}
 /* phase1a.2: form overhaul + custom-add + examples pagination */
@@ -958,6 +1052,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
       Home
     </a>
+    <div class="nav-bell" id="nav-bell"></div>
     <div class="nav-account" id="nav-account"></div>
     <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
@@ -1054,6 +1149,26 @@
   <div class="fbar">
     <select id="feed-cat" aria-label="Filter by category">
       <option value="all">All categories</option>
+    </select>
+    <select id="feed-status" aria-label="Filter by status">
+      <option value="live">Open</option>
+      <option value="closed">Resolved</option>
+      <option value="outcome">Outcome added</option>
+    </select>
+    <select id="feed-urg" aria-label="Filter by urgency">
+      <option value="all">Any urgency</option>
+      <option value="today">Today</option>
+      <option value="this_week">This week</option>
+      <option value="this_month">This month</option>
+      <option value="not_urgent">Not urgent</option>
+    </select>
+    <select id="feed-prod" aria-label="Filter by product type"><option value="all">Any product</option></select>
+    <select id="feed-exp" aria-label="Filter by experience level">
+      <option value="all">Any experience</option>
+      <option value="junior">0&ndash;2 yrs</option>
+      <option value="mid">3&ndash;5 yrs</option>
+      <option value="senior">6&ndash;10 yrs</option>
+      <option value="lead">10+ yrs</option>
     </select>
     <button type="button" class="btn-primary" data-cta="submit">+ Submit a case</button>
   </div>
@@ -1353,6 +1468,9 @@ boot();
   function taxList(kind){ return kind==='category'?DR_CATS:DR_HELP; }
   function helpLabel(h){ return LEGACY_HELP[h]||h; }
   function statusBadge(s){ return ({live:'Open',closed:'Closed',outcome:'Outcome added',submitted:'Submitted',review:'In review',draft:'Draft'})[s]||s; }
+  function caseHasOutcome(r){ return !!(r.resolved_option || r.resolution || (r.want_outcomes && r.want_outcomes.length)); }
+  function caseStatusLabel(r){ return (r.status==='closed' && caseHasOutcome(r)) ? 'Outcome added' : statusBadge(r.status); }
+  function caseStatusClass(r){ return (r.status==='closed' && caseHasOutcome(r)) ? 'outcome' : r.status; }
   function urgLabel(u){ return ({today:'Today',this_week:'This week',this_month:'This month',not_urgent:'Not urgent'})[u]||u; }
   function fmtDate(ts){ try{ var d=new Date(ts); if(isNaN(d.getTime())) return ''; var now=new Date(); var opt=(d.getFullYear()===now.getFullYear())?{month:'short',day:'numeric'}:{month:'short',day:'numeric',year:'numeric'}; return d.toLocaleDateString(undefined,opt); }catch(e){ return ''; } }
   function fcDate(ts, label){ var t=fmtDate(ts); label=label||'Posted'; return t?('<span class="fc-date">'+label+' <b>'+escHtml(t)+'</b></span>'):''; }
@@ -1425,6 +1543,8 @@ boot();
   function populateFilter(){
     var opts='<option value="all">All categories</option>'+DR_CATS.map(function(v){return '<option value="'+escHtml(v)+'">'+escHtml(v)+'</option>';}).join('');
     ['feed-cat','lib-cat'].forEach(function(id){ var sel=document.getElementById(id); if(!sel) return; var cur=sel.value; sel.innerHTML=opts; if(cur){ sel.value=cur; } });
+    var ps=document.getElementById('feed-prod');
+    if(ps && ps.options.length<=1){ ps.innerHTML='<option value="all">Any product</option>'+PRODUCT.map(function(v){return '<option value="'+escHtml(v)+'">'+escHtml(v)+'</option>';}).join(''); }
   }
   function loadTaxonomy(){
     if(!SB) return Promise.resolve();
@@ -1584,14 +1704,18 @@ boot();
   function loadFeed(reset){
     if(!SB||feedLoading) return; feedLoading=true;
     if(reset){ feedCursor=null; feedDone=false; }
-    var catEl=document.getElementById('feed-cat'); var cat=catEl?catEl.value:null;
-    SB.rpc('dr_feed',{p_limit:12,p_before:feedCursor,p_category:cat,p_status:'live'}).then(function(res){
+    function fv(id,dflt){ var e=document.getElementById(id); return e?e.value:dflt; }
+    var status=fv('feed-status','live');
+    var args={p_limit:12,p_before:feedCursor,p_category:fv('feed-cat',null),p_status:status,
+              p_urgency:fv('feed-urg',null),p_product:fv('feed-prod',null),p_experience:fv('feed-exp',null)};
+    SB.rpc('dr_feed',args).then(function(res){
       feedLoading=false; var list=document.getElementById('feed-list'); if(!list) return;
       var rows=(res&&res.data)||[];
       if(reset) list.innerHTML='';
-      if(reset && !rows.length){ list.innerHTML='<div class="feed-empty">No open cases yet. Be the first to bring one.</div>'; }
-      rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', feedCardHtml(r)); });
-      if(rows.length) feedCursor=rows[rows.length-1].created_at;
+      if(reset && !rows.length){ list.innerHTML='<div class="feed-empty">'+(status==='live'?'No open cases match these filters yet.':'No resolved cases match these filters yet.')+'</div>'; }
+      var closedish=(status==='closed'||status==='outcome');
+      rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', closedish?libCardHtml(r):feedCardHtml(r)); });
+      if(rows.length) feedCursor=closedish?(rows[rows.length-1].closed_at||rows[rows.length-1].created_at):rows[rows.length-1].created_at;
       if(rows.length<12) feedDone=true;
       var more=document.getElementById('feed-more'); if(more) more.style.display=feedDone?'none':'';
       wireCards(list);
@@ -1601,7 +1725,7 @@ boot();
   function libCardHtml(r){
     var cats=(r.categories||[]).slice(0,3).map(function(c){return '<span class="fc-tag">'+escHtml(c)+'</span>';}).join('');
     var helps=(r.help_types||[]).map(function(h){return helpLabel(h);});
-    var met=(r.wants_total!=null)?('<span class="fc-met">'+(Number(r.wants_satisfied)||0)+' of '+(Number(r.wants_total)||0)+' asks met</span>'):'<span class="fc-rc">Closed</span>';
+    var met=(function(){ var g=caseWantsPct(r); return g?('<span class="fc-met '+(pctGood(g.pct)?'g':'r')+'">'+g.sat+' of '+g.total+' met \u00b7 '+g.pct+'%</span>'):'<span class="fc-rc">Closed</span>'; })();
     var decided=r.resolved_option?('<div class="fc-decided">Decided: <b>'+escHtml(r.resolved_option)+'</b></div>'):'';
     return '<div class="feed-card lib" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-closed">Resolved</span>'+cats+'</span>'+fcDate(r.closed_at||r.created_at,'Closed')+'</div>'
       +'<div class="fc-title">'+escHtml(r.title)+'</div>'+decided+'<div class="fc-dec">'+escHtml(r.decision)+'</div>'
@@ -1625,13 +1749,13 @@ boot();
     }).catch(function(){ libLoading=false; });
   }
   var myCasesData=[], myCasesFilter='all';
-  function wantsMetBadge(r){ if(r.wants_total==null) return '<span class="fc-rc">Closed</span>'; return '<span class="fc-met">'+(Number(r.wants_satisfied)||0)+' of '+(Number(r.wants_total)||0)+' asks met</span>'; }
+  function wantsMetBadge(r){ var g=caseWantsPct(r); if(!g) return '<span class="fc-rc">Closed</span>'; return '<span class="fc-met '+(pctGood(g.pct)?'g':'r')+'">'+g.sat+' of '+g.total+' met \u00b7 '+g.pct+'%</span>'; }
   function myCaseCardHtml(r){ var rc=Number(r.response_count)||0;
     var cats=(r.categories||[]).slice(0,3).map(function(c){return '<span class="fc-tag">'+escHtml(c)+'</span>';}).join('');
     var helps=(r.help_types||[]).map(function(h){return helpLabel(h);});
     var stks=(r.stakeholders||[]);
     var foot=(r.status==='closed')?wantsMetBadge(r):('<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Awaiting responses':(rc+(rc===1?' response':' responses')))+'</span>');
-    return '<div class="feed-card mine" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-'+escHtml(r.status)+'">'+escHtml(statusBadge(r.status))+'</span>'+cats+'</span>'+fcDate(r.status==='closed'?(r.closed_at||r.created_at):r.created_at, r.status==='closed'?'Closed':'Posted')+'</div>'
+    return '<div class="feed-card mine" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-'+escHtml(caseStatusClass(r))+'">'+escHtml(caseStatusLabel(r))+'</span>'+cats+'</span>'+fcDate(r.status==='closed'?(r.closed_at||r.created_at):r.created_at, r.status==='closed'?'Closed':'Posted')+'</div>'
       +'<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
       +'<div class="fc-meta">'+fcChipRow('Wants', helps, 'fc-help')+fcChipRow('Who\u2019s involved', stks, 'fc-stk')+'</div>'
       +'<div class="fc-foot"><span class="fc-ctx">You</span>'+foot+'</div></div>';
@@ -1674,7 +1798,7 @@ boot();
       else {
         var opts=(d.options||[]).map(function(o,i){ return '<div class="cd-opt"><span>'+('ABCDE'.charAt(i)||'\u2022')+'</span>'+escHtml(o)+'</div>'; }).join('');
         var help=(d.help_types||[]).map(function(h){ return '<span class="cd-chip y">'+escHtml(helpLabel(h))+'</span>'; }).join('');
-        m.innerHTML='<div class="cd-head"><span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span><span class="cd-status s-'+escHtml(d.status)+'">'+escHtml(statusBadge(d.status))+'</span></div>'
+        m.innerHTML='<div class="cd-head"><span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span><span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span></div>'
           +'<h2 class="cd-title">'+escHtml(d.title)+'</h2>'
           +row('The decision','<strong>'+escHtml(d.decision)+'</strong>')
           +row('Situation', nl(d.situation))
@@ -1690,6 +1814,7 @@ boot();
           +(d.evidence?row('Evidence', nl(d.evidence)):'')
           +(d.tried?row('Already tried', nl(d.tried)):'')
           +'<div class="cd-resp" id="cd-resp"><div class="cd-resp-h"><span id="cd-resp-count">'+respCountLabel(Number(d.response_count)||0)+'</span></div>'
+          +'<details class="cd-help"><summary>How ratings &amp; the 70% bar work</summary><p><b>Coverage %</b> = how many of your asks a response meaningfully addresses (blank, N/A, or too-thin answers don\u2019t count). <b>70%</b> is the quality bar \u2014 green above, red below. <b>Stars (1\u20135)</b> blend that coverage with how many readers found the response helpful. <b>Flagged</b> responses (5+ reports) have their rating reduced. It\u2019s rule-based today; smarter checks arrive with AI in a later phase.</p></details>'
           +outcomeHtml(d)
           +'<div id="cd-respond"></div>'
           +'<div id="cd-responses" class="cd-resp-list"></div></div>';
@@ -1709,60 +1834,133 @@ boot();
       +'</div>'; }
   function gatherWants(scopeSel, key){ var out=[], miss=0; [].slice.call(document.querySelectorAll(scopeSel+' .cd-want-in')).forEach(function(t){ var w=t.getAttribute('data-want'), v=(t.value||'').trim(); if(!v) miss++; var o={want:w}; o[key]=v; out.push(o); }); return {list:out, missing:miss}; }
   function isNA(v){ return !v || String(v).trim().toLowerCase()==='n/a' || String(v).trim().toLowerCase()==='na'; }
+  /* ---- Phase 2a: deterministic quality gate (rules-only; topical relevance is Phase 3 AI) ---- */
+  var GATE={MINC:40,MINW:8,REAL:0.6,DIST:0.5,DUP:0.85};
+  function normTxt(t){ return String(t||'').toLowerCase().replace(/\s+/g,' ').trim(); }
+  function tokens(t){ return normTxt(t).split(' ').filter(Boolean); }
+  function realWord(tok){ var c=tok.replace(/[^a-z]/gi,''); return c.length>=2 && /[aeiou]/i.test(c) && !/^(.)\1+$/i.test(c); }
+  function simRatio(a,b){ a=normTxt(a); b=normTxt(b); if(!a||!b) return 0; if(a===b) return 1; var A=tokens(a),B=tokens(b),setB={}; B.forEach(function(w){setB[w]=1;}); var inter=0,seen={}; A.forEach(function(w){ if(setB[w]&&!seen[w]){inter++;seen[w]=1;} }); var uni={}; A.concat(B).forEach(function(w){uni[w]=1;}); var u=Object.keys(uni).length; return u?inter/u:0; }
+  function qualityOk(text, siblings){
+    if(isNA(text)) return {ok:false, na:true, reason:'na'};
+    var t=String(text||'').trim(); var toks=tokens(t);
+    if(t.length<GATE.MINC || toks.length<GATE.MINW) return {ok:false, na:false, reason:'short'};
+    if(/(.)\1{3,}/.test(t)) return {ok:false, na:false, reason:'gibberish'};
+    var letters=(t.match(/[a-z]/gi)||[]).length; if(letters/t.length < 0.6) return {ok:false, na:false, reason:'gibberish'};
+    var real=toks.filter(realWord).length; if(real/toks.length < GATE.REAL || real<5) return {ok:false, na:false, reason:'gibberish'};
+    var uniq={}; toks.forEach(function(w){uniq[w]=1;}); if(Object.keys(uniq).length/toks.length < GATE.DIST) return {ok:false, na:false, reason:'repeat'};
+    if(siblings){ for(var i=0;i<siblings.length;i++){ if(simRatio(text,siblings[i])>=GATE.DUP) return {ok:false, na:false, reason:'dup'}; } }
+    return {ok:true, na:false, reason:'ok'};
+  }
+  function gateEntries(entries, total, key){
+    var texts=(entries||[]).map(function(e){ return e[key]||''; });
+    var statuses=(entries||[]).map(function(e,i){ var priors=texts.slice(0,i); var q=qualityOk(e[key], priors); return {want:e.want, status:q.na?'na':(q.ok?'ok':'low')}; });
+    var sat=statuses.filter(function(s){return s.status==='ok';}).length;
+    var tot=total||(entries||[]).length||0;
+    return {sat:sat, total:tot, pct:tot?Math.round(sat/tot*100):0, statuses:statuses};
+  }
+  function pctGood(p){ return p>=70; }
+  function starsFor(wantsPct, helpfulPct, reportCount){
+    var base=0.5*(wantsPct/100)+0.5*(helpfulPct/100); var s=1+base*4;
+    if((Number(reportCount)||0)>=5) s=s*0.6;
+    return Math.max(1.0, Math.round(s*10)/10);
+  }
+  function starsMarkup(n, sub){ var pct=Math.max(0,Math.min(100, n/5*100));
+    return '<span class="stars" title="'+n.toFixed(1)+' of 5">'+'<span class="stars-bg">\u2605\u2605\u2605\u2605\u2605</span><span class="stars-fg" style="width:'+pct+'%">\u2605\u2605\u2605\u2605\u2605</span></span><span class="stars-num">'+n.toFixed(1)+'</span>'+(sub?'<span class="stars-sub">'+sub+'</span>':''); }
+  function drConfirm(opts){
+    var ov=document.createElement('div'); ov.className='dr-confirm-ov';
+    ov.innerHTML='<div class="dr-confirm"><div class="dr-confirm-h">'+escHtml(opts.title||'Are you sure?')+'</div><div class="dr-confirm-b">'+(opts.body||'')+'</div><div class="dr-confirm-act"><button type="button" class="btn-ghost" data-x>'+escHtml(opts.cancel||'Cancel')+'</button><button type="button" class="btn-primary" data-ok>'+escHtml(opts.confirm||'Confirm')+'</button></div></div>';
+    document.body.appendChild(ov);
+    function close(){ if(ov.parentNode) ov.parentNode.removeChild(ov); }
+    ov.addEventListener('click',function(e){ if(e.target===ov) close(); });
+    ov.querySelector('[data-x]').onclick=close; ov.querySelector('[data-ok]').onclick=function(){ close(); if(opts.onConfirm) opts.onConfirm(); };
+    requestAnimationFrame(function(){ ov.classList.add('open'); });
+  }
   function wantsGridHtml(d, r){ var ws=d.help_types||[]; if(!ws.length || !(r.want_answers&&r.want_answers.length)) return '';
     var map={}; (r.want_answers||[]).forEach(function(x){ map[x.want]=x.answer; });
-    var rows=ws.map(function(w){ var a=map[w]; var na=isNA(a); return '<div class="wg-row'+(na?' na':'')+'"><div class="wg-want">'+escHtml(helpLabel(w))+'</div><div class="wg-got">'+(a?(na?'<span class="wg-na">N/A</span>':nl(a)):'<span class="wg-na">\u2014</span>')+'</div></div>'; }).join('');
-    return '<div class="wg"><div class="wg-h">What they asked for \u2192 what this response gives</div><div class="wg-grid">'+rows+'</div></div>'; }
+    var g=gateEntries(ws.map(function(w){return {want:w, answer:map[w]||''};}), ws.length, 'answer');
+    var st={}; g.statuses.forEach(function(s){ st[s.want]=s.status; });
+    var rows=ws.map(function(w){ var a=map[w]; var s=st[w]||'na';
+      var val = s==='na' ? '<span class="wg-na">N/A</span>' : (s==='low' ? (nl(a)+'<span class="wg-flag">low detail \u00b7 not counted</span>') : nl(a));
+      if(!a) val='<span class="wg-na">\u2014</span>';
+      return '<div class="wg-row'+(s!=='ok'?' na':'')+'"><div class="wg-want">'+escHtml(helpLabel(w))+'</div><div class="wg-got">'+val+'</div></div>'; }).join('');
+    return '<div class="wg '+(pctGood(g.pct)?'wg-good':'wg-bad')+'"><div class="wg-h">Addresses <b>'+g.sat+' of '+g.total+'</b> asks \u00b7 <b>'+g.pct+'%</b></div><div class="wg-grid">'+rows+'</div></div>'; }
   function respErr(reason){ return ({auth:'Please sign in first.',body:'Add a bit more \u2014 at least a sentence or two.',wants:'Please answer every ask \u2014 write \u201CN/A\u201D for any you can\u2019t help with.',missing:'This case is no longer available.',own:'You can\u2019t respond to your own case.',closed:'This case is closed to new responses.',rate:'You\u2019ve posted a lot today \u2014 try again later.'})[reason]||'Couldn\u2019t post your response.'; }
+  function caseWantsPct(d){ var ws=d.help_types||[]; var wo=d.want_outcomes||[]; if(!wo.length) return null; var src=ws.length?ws:wo.map(function(x){return x.want;}); var map={}; wo.forEach(function(x){ map[x.want]=x.outcome; }); return gateEntries(src.map(function(w){return {want:w, outcome:map[w]||''};}), src.length, 'outcome'); }
   function outcomeHtml(d){
     if(!d||d.status!=='closed') return '';
-    var hasWants=(d.want_outcomes&&d.want_outcomes.length);
-    var head, count='';
-    if(d.wants_total!=null){ count='<span class="cd-outcome-count">'+(Number(d.wants_satisfied)||0)+' of '+(Number(d.wants_total)||0)+' asks met</span>'; }
-    head='<div class="cd-outcome-h">\u2713 Resolved'+count+'</div>';
+    var g=caseWantsPct(d);
+    var good=g?pctGood(g.pct):true;
+    var count=g?('<span class="cd-outcome-count '+(good?'g':'r')+'">'+g.sat+' of '+g.total+' asks met \u00b7 '+g.pct+'%</span>'):'';
+    var head='<div class="cd-outcome-h">\u2713 Resolved'+count+'</div>';
+    var warn=(g&&!good)?'<div class="cd-outcome-warn">\u26A0 Under the 70% bar \u2014 only '+g.pct+'% ('+g.sat+' of '+g.total+') of the asks were met.</div>':'';
     var grid='';
-    if(hasWants){ var ws=d.help_types||[]; var map={}; d.want_outcomes.forEach(function(x){ map[x.want]=x.outcome; });
+    if(g){ var ws=d.help_types||[]; var map={}; d.want_outcomes.forEach(function(x){ map[x.want]=x.outcome; });
       var src=ws.length?ws:d.want_outcomes.map(function(x){return x.want;});
-      grid='<div class="wg wg-out"><div class="wg-h">How each ask was met</div><div class="wg-grid">'
-        +src.map(function(w){ var o=map[w]; var na=isNA(o); return '<div class="wg-row'+(na?' na':'')+'"><div class="wg-want">'+escHtml(helpLabel(w))+'</div><div class="wg-got">'+(o?(na?'<span class="wg-na">Not met</span>':nl(o)):'<span class="wg-na">\u2014</span>')+'</div></div>'; }).join('')
+      var st={}; g.statuses.forEach(function(s){ st[s.want]=s.status; });
+      grid='<div class="wg wg-out '+(good?'wg-good':'wg-bad')+'"><div class="wg-h">How each ask was met \u00b7 <b>'+g.pct+'%</b></div><div class="wg-grid">'
+        +src.map(function(w){ var o=map[w]; var s=st[w]||'na';
+          var val = s==='na' ? '<span class="wg-na">Not met</span>' : (s==='low' ? (nl(o)+'<span class="wg-flag">low detail \u00b7 not counted</span>') : nl(o));
+          if(!o) val='<span class="wg-na">\u2014</span>';
+          return '<div class="wg-row'+(s!=='ok'?' na':'')+'"><div class="wg-want">'+escHtml(helpLabel(w))+'</div><div class="wg-got">'+val+'</div></div>'; }).join('')
         +'</div></div>';
     }
-    return '<div class="cd-outcome">'+head
+    return '<div class="cd-outcome'+(g&&!good?' bad':'')+'">'+head+warn
       +(d.resolved_option?'<div class="cd-outcome-opt">Went with: <b>'+escHtml(d.resolved_option)+'</b></div>':'')
       +(d.resolution?'<div class="cd-outcome-body">'+nl(d.resolution)+'</div>':'')
       +grid+'</div>';
   }
+  var curCaseResponses=[];
   function loadResponses(d){
     var listEl=document.getElementById('cd-responses'), actEl=document.getElementById('cd-respond');
     if(!listEl||!SB) return;
     listEl.innerHTML='<p class="cd-resp-load">Loading responses\u2026</p>';
     SB.rpc('dr_case_responses',{p_case_id:d.id}).then(function(res){
       var data=(res&&res.data)||{}, rs=data.responses||[];
+      curCaseResponses=rs;
       var mine=null; for(var i=0;i<rs.length;i++){ if(rs[i].is_mine){ mine=rs[i]; break; } }
       renderResponseList(listEl, rs, d);
       renderRespondArea(actEl, d, mine);
       var cEl=document.getElementById('cd-resp-count'); if(cEl) cEl.textContent=respCountLabel(rs.length);
     }).catch(function(){ listEl.innerHTML='<p class="cd-resp-load">Couldn\u2019t load responses.</p>'; });
   }
+  function respWantsPct(d, r){ var ws=d.help_types||[]; if(!ws.length) return 0; var map={}; (r.want_answers||[]).forEach(function(x){ map[x.want]=x.answer; }); return gateEntries(ws.map(function(w){return {want:w, answer:map[w]||''};}), ws.length, 'answer').pct; }
   function renderResponseList(listEl, rs, d){
     if(!rs.length){ listEl.innerHTML='<p class="cd-resp-empty">'+(d.is_mine?'No responses yet \u2014 share your case to get the first one.':(d.status==='live'?'No responses yet. Be the first to weigh in.':'No responses were posted.'))+'</p>'; return; }
+    var maxHelp=0; rs.forEach(function(x){ if((Number(x.helpful_count)||0)>maxHelp) maxHelp=Number(x.helpful_count)||0; });
+    var CONF={low:'Low confidence',med:'Medium confidence',high:'High confidence'};
     listEl.innerHTML=rs.map(function(r){
+      var flagged=(Number(r.report_count)||0)>=5;
+      var wpct=respWantsPct(d, r); var hpct=maxHelp>0?((Number(r.helpful_count)||0)/maxHelp*100):0;
+      var stars=starsFor(wpct, hpct, r.report_count);
+      var who=(r.visibility==='anon')?'Anonymous PM':(r.responder_context||r.alias||'PM');
       var opt=r.chosen_option?'<div class="rsp-opt">Leans toward: <b>'+escHtml(r.chosen_option)+'</b></div>':'';
       var wo=r.watch_out?'<div class="rsp-wo"><span class="rsp-wo-l">Watch out</span>'+nl(r.watch_out)+'</div>':'';
       var hc=(Number(r.helpful_count)||0)>0?'<span class="rsp-hc">'+r.helpful_count+' found helpful</span>':'';
       var acted=r.acted_on?'<span class="rsp-acted">\u2713 Submitter acted on this</span>':'';
+      var conf=r.confidence&&CONF[r.confidence]?'<span class="rsp-conf c-'+escHtml(r.confidence)+'">'+CONF[r.confidence]+'</span>':'';
+      var flag=flagged?'<div class="rsp-flag">\u26A0 '+(Number(r.report_count)||0)+' readers flagged this as biased or low-quality \u2014 its credibility and rating are reduced.</div>':'';
       var act;
       if(r.is_mine){ act='<span class="rsp-yours">Your response</span>'; }
       else if(d.is_mine){ act='<button type="button" class="rsp-acted-btn'+(r.acted_on?' on':'')+'" data-r="'+escHtml(r.id)+'" data-on="'+(r.acted_on?'1':'0')+'">'+(r.acted_on?'\u2713 Acting on this':'I\u2019m acting on this')+'</button>'; }
       else if(currentUser){ act='<button type="button" class="rsp-help'+(r.marked?' on':'')+'" data-r="'+escHtml(r.id)+'">'+(r.marked?'\u2713 Marked helpful':'Mark helpful')+'</button>'; }
       else { act=''; }
-      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(r.responder_context||r.alias||'PM')+'</span><span class="rsp-top-r">'+acted+hc+'</span></div>'
+      var rep = (currentUser && !r.is_mine) ? '<button type="button" class="rsp-report'+(r.i_reported?' done':'')+'" data-r="'+escHtml(r.id)+'"'+(r.i_reported?' disabled':'')+'>'+(r.i_reported?'Reported':'\u2691 Report')+'</button>' : '';
+      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r"><span class="rsp-stars">'+starsMarkup(stars)+'</span></span></div>'
+        +'<div class="rsp-badges">'+conf+acted+hc+'</div>'+flag
         +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo
         +wantsGridHtml(d, r)
-        +'<div class="rsp-foot">'+act+'</div></div>';
+        +'<div class="rsp-foot"><span class="rsp-foot-l">'+act+'</span><span class="rsp-foot-r">'+rep+'</span></div></div>';
     }).join('');
     [].slice.call(listEl.querySelectorAll('.rsp-help')).forEach(function(b){ b.onclick=function(){ markHelpful(b.getAttribute('data-r'), b); }; });
     [].slice.call(listEl.querySelectorAll('.rsp-acted-btn')).forEach(function(b){ b.onclick=function(){ markActed(b.getAttribute('data-r'), b.getAttribute('data-on')!=='1', d); }; });
+    [].slice.call(listEl.querySelectorAll('.rsp-report')).forEach(function(b){ b.onclick=function(){ reportResponse(b.getAttribute('data-r'), b, d); }; });
+  }
+  function reportResponse(rid, btn, d){
+    if(!currentUser){ openSignIn(); return; }
+    drConfirm({title:'Report this response?', body:'Report if it looks biased, low-quality, or unsafe. Reports are anonymous. Once <b>5</b> readers report a response, it\u2019s flagged and its rating is reduced.', confirm:'Report', cancel:'Cancel', onConfirm:function(){
+      btn.disabled=true;
+      SB.rpc('dr_report_response',{p_response_id:rid}).then(function(res){ var r=(res&&res.data)||{}; if(r.ok){ if(typeof toast==='function') toast('Reported \u2014 thanks for flagging'); loadResponses(d); } else { btn.disabled=false; } }).catch(function(){ btn.disabled=false; });
+    }});
   }
   function markActed(rid, val, d){ if(!SB) return; SB.rpc('dr_mark_acted',{p_response_id:rid,p_acted:val}).then(function(res){ var r=(res&&res.data)||{}; if(r.ok){ if(typeof toast==='function') toast(val?'Marked \u2014 the reviewer will see you acted on it':'Unmarked'); loadResponses(d); } }).catch(function(){}); }
   function renderRespondArea(el, d, mine){
@@ -1778,29 +1976,54 @@ boot();
     if(!currentUser){ el.innerHTML='<div class="cd-signin"><p>Sign in to add your structured response \u2014 you post under your alias, not your name.</p><button type="button" class="btn-primary" id="cd-signin-btn">Sign in to respond</button></div>'; var sb=document.getElementById('cd-signin-btn'); if(sb) sb.onclick=function(){ openSignIn(); }; return; }
     var optionsHtml=(d.options||[]).map(function(o){ return '<option value="'+escHtml(o)+'"'+(mine&&mine.chosen_option===o?' selected':'')+'>'+escHtml(o)+'</option>'; }).join('');
     var daSel=(mine&&mine.chosen_option==='A different approach')?' selected':'';
+    var mc=(mine&&mine.confidence)||'med', mv=(mine&&mine.visibility)||'cred';
+    function csel(v){ return mc===v?' selected':''; } function vsel(v){ return mv===v?' selected':''; }
     el.innerHTML='<div class="cd-form"><div class="cd-form-h">'+(mine?'Update your response':'Add your response')+'</div>'
       +'<label class="cd-f-l">Which option would you lean toward? <span class="cd-f-opt">optional</span></label>'
       +'<select id="rf-opt"><option value="">\u2014 No strong lean \u2014</option>'+optionsHtml+'<option value="A different approach"'+daSel+'>A different approach</option></select>'
+      +'<div class="cd-f-row"><div class="cd-f-col"><label class="cd-f-l">Your confidence</label><select id="rf-conf"><option value="low"'+csel('low')+'>Low</option><option value="med"'+csel('med')+'>Medium</option><option value="high"'+csel('high')+'>High</option></select></div>'
+      +'<div class="cd-f-col"><label class="cd-f-l">Show me as</label><select id="rf-vis"><option value="cred"'+vsel('cred')+'>My PM context</option><option value="anon"'+vsel('anon')+'>Anonymous PM</option></select></div></div>'
       +'<label class="cd-f-l">Your take <span class="req">*</span></label><textarea id="rf-body" rows="4" maxlength="2500" placeholder="What would you do, and why? Draw on what you\u2019ve actually seen \u2014 not generic advice.">'+(mine?escHtml(mine.body):'')+'</textarea>'
       +'<label class="cd-f-l">One thing to watch out for <span class="cd-f-opt">optional</span></label><textarea id="rf-wo" rows="2" maxlength="600" placeholder="The risk or blind spot you\u2019d flag.">'+(mine?escHtml(mine.watch_out||''):'')+'</textarea>'
       +wantsInputsHtml(d, mine)
+      +'<div class="cd-wmeter" id="rf-wmeter"></div>'
       +'<div class="cd-form-act"><button type="button" class="btn-primary" id="rf-submit">'+(mine?'Update response':'Post response')+'</button><span class="cd-form-err" id="rf-err"></span></div></div>';
-    var rs=document.getElementById('rf-submit'); if(rs) rs.onclick=function(){ submitResponse(d, !!mine); };
+    var rsb=document.getElementById('rf-submit'); if(rsb) rsb.onclick=function(){ submitResponse(d, !!mine); };
+    var upd=function(){ updWantsMeter('#cd-respond', d, 'answer', 'rf-wmeter'); };
+    [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ t.addEventListener('input', upd); }); upd();
+  }
+  function updWantsMeter(scopeSel, d, key, meterId){
+    var el=document.getElementById(meterId); if(!el) return;
+    var ws=d.help_types||[]; var entries=[];
+    [].slice.call(document.querySelectorAll(scopeSel+' .cd-want-in')).forEach(function(t){ var o={want:t.getAttribute('data-want')}; o[key]=t.value||''; entries.push(o); });
+    var g=gateEntries(entries, ws.length||entries.length, key);
+    el.className='cd-wmeter '+(pctGood(g.pct)?'good':'bad');
+    el.innerHTML='<div class="cd-wmeter-bar"><span style="width:'+g.pct+'%"></span></div><div class="cd-wmeter-t"><b>'+g.sat+' of '+g.total+'</b> asks meaningfully met \u00b7 <b>'+g.pct+'%</b>'+(pctGood(g.pct)?' \u2014 above the 70% bar':' \u2014 below the 70% bar')+'</div>';
   }
   function submitResponse(d, isUpdate){
     var body=((document.getElementById('rf-body')||{}).value||'').trim();
     var opt=((document.getElementById('rf-opt')||{}).value||'').trim();
     var wo=((document.getElementById('rf-wo')||{}).value||'').trim();
+    var conf=((document.getElementById('rf-conf')||{}).value||'').trim();
+    var vis=((document.getElementById('rf-vis')||{}).value||'').trim();
     var err=document.getElementById('rf-err'), btn=document.getElementById('rf-submit');
     if(body.length<20){ if(err) err.textContent='Add a bit more \u2014 at least a sentence or two.'; return; }
     var wg=gatherWants('#cd-respond','answer');
     if(wg.missing){ if(err) err.textContent='Please answer every ask \u2014 write \u201CN/A\u201D for any you can\u2019t help with.'; return; }
-    if(btn){ btn.disabled=true; btn.textContent=isUpdate?'Updating\u2026':'Posting\u2026'; }
-    SB.rpc('dr_post_response',{p_case_id:d.id,p_body:body,p_chosen_option:opt,p_watch_out:wo,p_want_answers:wg.list}).then(function(res){
-      var r=(res&&res.data)||{};
-      if(!r.ok){ if(err) err.textContent=respErr(r.reason); if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } return; }
-      if(typeof toast==='function') toast(isUpdate?'Response updated':'Response posted'); loadResponses(d); loadFeed(true); loadMyCases();
-    }).catch(function(){ if(err) err.textContent='Something went wrong. Try again.'; if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } });
+    var g=gateEntries(wg.list, (d.help_types||[]).length||wg.list.length, 'answer');
+    function doPost(){
+      if(btn){ btn.disabled=true; btn.textContent=isUpdate?'Updating\u2026':'Posting\u2026'; }
+      SB.rpc('dr_post_response',{p_case_id:d.id,p_body:body,p_chosen_option:opt,p_watch_out:wo,p_want_answers:wg.list,p_confidence:conf,p_visibility:vis}).then(function(res){
+        var r=(res&&res.data)||{};
+        if(!r.ok){ if(err) err.textContent=respErr(r.reason); if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } return; }
+        if(typeof toast==='function') toast(isUpdate?'Response updated':'Response posted'); loadResponses(d); loadFeed(true); loadMyCases();
+      }).catch(function(){ if(err) err.textContent='Something went wrong. Try again.'; if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } });
+    }
+    if(!pctGood(g.pct)){
+      drConfirm({title:'Below the 70% bar', body:'Your response meaningfully addresses <b>'+g.sat+' of '+g.total+'</b> asks (<b>'+g.pct+'%</b>). Answers that are blank, N/A, or too thin don\u2019t count. You can still post \u2014 covering more of what the PM asked for earns a higher rating and helps more.', confirm:(isUpdate?'Update anyway':'Post anyway'), cancel:'Keep editing', onConfirm:doPost });
+      return;
+    }
+    doPost();
   }
   function markHelpful(rid, btn){
     if(!currentUser){ openSignIn(); return; }
@@ -1814,33 +2037,70 @@ boot();
         else if(hc&&hc.parentNode){ hc.parentNode.removeChild(hc); } }
     }).catch(function(){ btn.disabled=false; });
   }
+  function closerDecisionAid(d){
+    var rs=curCaseResponses||[]; var ws=d.help_types||[];
+    if(!rs.length) return {html:'<div class="cd-aid cd-aid-none">No responses yet \u2014 you can still close, but waiting for input usually pays off.</div>', summary:''};
+    var pcts=rs.map(function(r){ return respWantsPct(d, r); });
+    var avg=Math.round(pcts.reduce(function(a,b){return a+b;},0)/rs.length);
+    var maxHelp=0; rs.forEach(function(x){ if((Number(x.helpful_count)||0)>maxHelp) maxHelp=Number(x.helpful_count)||0; });
+    var rated=rs.map(function(r){ var wp=respWantsPct(d,r); var hp=maxHelp>0?((Number(r.helpful_count)||0)/maxHelp*100):0; return {r:r, stars:starsFor(wp,hp,r.report_count)}; }).sort(function(a,b){return b.stars-a.stars;});
+    var top=rated[0];
+    var lean={}; rs.forEach(function(r){ if(r.chosen_option){ lean[r.chosen_option]=(lean[r.chosen_option]||0)+1; } });
+    var leanArr=Object.keys(lean).map(function(k){return {k:k,n:lean[k]};}).sort(function(a,b){return b.n-a.n;});
+    var cover=ws.map(function(w){ var c=0; rs.forEach(function(r){ var m={}; (r.want_answers||[]).forEach(function(x){m[x.want]=x.answer;}); if(qualityOk(m[w], []).ok) c++; }); return {w:w, c:c}; });
+    var thin=cover.slice().sort(function(a,b){return a.c-b.c;})[0];
+    var coverHtml=cover.map(function(x){ return '<div class="cd-aid-row"><span>'+escHtml(helpLabel(x.w))+'</span><b class="'+(x.c/rs.length>=0.7?'g':'r')+'">'+x.c+'/'+rs.length+'</b></div>'; }).join('');
+    var parts=[];
+    parts.push(rs.length+' response'+(rs.length===1?'':'s')+', average coverage '+avg+'%.');
+    if(leanArr.length){ parts.push('Most reviewers lean '+leanArr[0].k+' ('+leanArr[0].n+' of '+rs.length+').'); }
+    if(top){ parts.push('Highest-rated take: '+((top.r.visibility==='anon')?'an anonymous PM':(top.r.responder_context||top.r.alias||'a PM'))+' at '+top.stars.toFixed(1)+'\u2605.'); }
+    if(thin&&thin.c/rs.length<0.7){ parts.push('Thinnest ask: \u201C'+helpLabel(thin.w)+'\u201D ('+thin.c+'/'+rs.length+' covered) \u2014 consider waiting for more input or accepting the gap.'); }
+    parts.push('Suggested next step: '+(avg>=70?'coverage is solid \u2014 make your call and record what you decided.':'coverage is thin \u2014 either wait for stronger responses or close and note which asks went unmet.'));
+    var summary=parts.join(' ');
+    var html='<div class="cd-aid"><div class="cd-aid-h">Before you close \u2014 what the room gave you</div>'
+      +'<div class="cd-aid-avg '+(pctGood(avg)?'g':'r')+'"><span class="cd-aid-big">'+avg+'%</span><span>average coverage across '+rs.length+' response'+(rs.length===1?'':'s')+'</span></div>'
+      +'<div class="cd-aid-grid">'+coverHtml+'</div>'
+      +'<p class="cd-aid-note">This is a rules-based read of the responses (an AI-written summary comes in a later phase). Edit the draft below before it becomes your record.</p></div>';
+    return {html:html, summary:summary};
+  }
   function openCloseForm(d){
     var el=document.getElementById('cd-respond'); if(!el) return;
     var optionsHtml=(d.options||[]).map(function(o){ return '<option value="'+escHtml(o)+'">'+escHtml(o)+'</option>'; }).join('');
     var ws=d.help_types||[];
-    var wantsBlock = ws.length ? ('<div class="cd-wants"><div class="cd-want-h">How did the room help with each ask? <span class="req">*</span> <span class="cd-met-live" id="cf-met">0 of '+ws.length+' met</span></div>'
-        +'<p class="cd-want-n">Close the loop on what you asked for. Write <b>N/A</b> for any ask the room couldn\u2019t help with \u2014 that\u2019s useful signal too.</p>'
+    var aid=closerDecisionAid(d);
+    var wantsBlock = ws.length ? ('<div class="cd-wants"><div class="cd-want-h">How did the room help with each ask? <span class="req">*</span></div>'
+        +'<p class="cd-want-n">Your own read \u2014 not the average. Write <b>N/A</b> for any ask the room couldn\u2019t help with. Blank, N/A, or too-thin lines don\u2019t count toward the % met.</p>'
         + ws.map(function(w){ return '<label class="cd-want-l">'+escHtml(helpLabel(w))+'</label><textarea class="cd-want-in" data-want="'+escHtml(w)+'" rows="2" maxlength="600" placeholder="What you got on this \u2014 or N/A"></textarea>'; }).join('')
-        +'</div>') : '';
+        +'<div class="cd-wmeter" id="cf-wmeter"></div></div>') : '';
     el.innerHTML='<div class="cd-form"><div class="cd-form-h">Close this case</div>'
+      +aid.html
       +'<label class="cd-f-l">What did you go with? <span class="cd-f-opt">optional</span></label>'
       +'<select id="cf-opt"><option value="">\u2014 Not sure / something else \u2014</option>'+optionsHtml+'<option value="A different approach">A different approach</option></select>'
-      +'<label class="cd-f-l">What you decided &amp; why <span class="cd-f-opt">optional, but valuable</span></label><textarea id="cf-res" rows="3" maxlength="1200" placeholder="A line on what you chose and how it\u2019s playing out. This is what turns the case into a useful record."></textarea>'
+      +'<label class="cd-f-l">What you decided &amp; why <span class="cd-f-opt">editable \u2014 pre-filled from the responses</span></label><textarea id="cf-res" rows="4" maxlength="1500" placeholder="A line on what you chose and how it\u2019s playing out."></textarea>'
       +wantsBlock
       +'<div class="cd-form-act"><button type="button" class="btn-primary" id="cf-submit">Close case</button><button type="button" class="btn-ghost" id="cf-cancel">Cancel</button><span class="cd-form-err" id="cf-err"></span></div></div>';
-    function updMet(){ var sat=0,tot=ws.length; [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ var v=(t.value||'').trim(); if(v&&!isNA(v)) sat++; }); var m=document.getElementById('cf-met'); if(m) m.textContent=sat+' of '+tot+' met'; }
-    [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ t.addEventListener('input', updMet); });
+    var resEl=document.getElementById('cf-res'); if(resEl && aid.summary) resEl.value=aid.summary;
+    var upd=function(){ updWantsMeter('#cd-respond', d, 'outcome', 'cf-wmeter'); };
+    [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ t.addEventListener('input', upd); }); upd();
     document.getElementById('cf-cancel').onclick=function(){ renderRespondArea(el, d, null); };
     document.getElementById('cf-submit').onclick=function(){
       var res=((document.getElementById('cf-res')||{}).value||'').trim(), opt=((document.getElementById('cf-opt')||{}).value||'').trim();
       var err=document.getElementById('cf-err'), btn=document.getElementById('cf-submit');
       var wg=gatherWants('#cd-respond','outcome');
       if(wg.missing){ if(err) err.textContent='Please note how each ask went \u2014 write \u201CN/A\u201D for any the room couldn\u2019t help with.'; return; }
-      if(btn){ btn.disabled=true; btn.textContent='Closing\u2026'; }
-      SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt,p_want_outcomes:wg.list}).then(function(r){
-        var o=(r&&r.data)||{}; if(!o.ok){ if(err) err.textContent=(o.reason==='wants'?'Please note how each ask went (N/A is fine).':'Couldn\u2019t close the case.'); if(btn){ btn.disabled=false; btn.textContent='Close case'; } return; }
-        if(typeof toast==='function') toast('Case closed'); openCase(d.id); loadFeed(true); loadMyCases(); if(typeof loadLibrary==='function') loadLibrary(true);
-      }).catch(function(){ if(err) err.textContent='Something went wrong.'; if(btn){ btn.disabled=false; btn.textContent='Close case'; } });
+      var g=gateEntries(wg.list, ws.length||wg.list.length, 'outcome');
+      function doClose(){
+        if(btn){ btn.disabled=true; btn.textContent='Closing\u2026'; }
+        SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt,p_want_outcomes:wg.list}).then(function(r){
+          var o=(r&&r.data)||{}; if(!o.ok){ if(err) err.textContent=(o.reason==='wants'?'Please note how each ask went (N/A is fine).':'Couldn\u2019t close the case.'); if(btn){ btn.disabled=false; btn.textContent='Close case'; } return; }
+          if(typeof toast==='function') toast('Case closed'); openCase(d.id); loadFeed(true); loadMyCases(); if(typeof loadLibrary==='function') loadLibrary(true);
+        }).catch(function(){ if(err) err.textContent='Something went wrong.'; if(btn){ btn.disabled=false; btn.textContent='Close case'; } });
+      }
+      if(ws.length && !pctGood(g.pct)){
+        drConfirm({title:'Only '+g.pct+'% of your asks were met', body:'By your own read, <b>'+g.sat+' of '+g.total+'</b> asks (<b>'+g.pct+'%</b>) were meaningfully met \u2014 below the 70% bar. You can close now, or wait for more responses to cover the gaps.', confirm:'Close anyway', cancel:'Wait for more', onConfirm:doClose });
+        return;
+      }
+      doClose();
     };
   }
 
@@ -1848,13 +2108,33 @@ boot();
   var cc=document.getElementById('case-close'); if(cc) cc.onclick=closeCase;
   var fmore=document.getElementById('feed-more'); if(fmore) fmore.onclick=function(){ loadFeed(false); };
   var fcat=document.getElementById('feed-cat'); if(fcat) fcat.onchange=function(){ loadFeed(true); };
+  ['feed-status','feed-urg','feed-prod','feed-exp'].forEach(function(id){ var e=document.getElementById(id); if(e) e.onchange=function(){ loadFeed(true); }; });
   var mycf=document.getElementById('myc-filter'); if(mycf) mycf.onclick=function(e){ var b=e.target.closest&&e.target.closest('.myc-fbtn'); if(!b) return; myCasesFilter=b.getAttribute('data-f')||'all'; renderMyCases(); };
   var lmore=document.getElementById('lib-more'); if(lmore) lmore.onclick=function(){ loadLibrary(false); };
   var lcat=document.getElementById('lib-cat'); if(lcat) lcat.onchange=function(){ loadLibrary(true); };
 
   var exMore=document.getElementById('examples-more'); if(exMore) exMore.onclick=function(){ exShown+=10; renderExamples(false); };
 
-  window.drAfterAuth=function(){ loadMyCases(); };
+  /* ---- Phase 2c: in-app notifications ---- */
+  var notifTimer=null;
+  function bellAgo(iso){ var t=new Date(iso).getTime(); if(!t) return ''; var s=Math.floor((Date.now()-t)/1000); if(s<60) return 'just now'; var m=Math.floor(s/60); if(m<60) return m+'m ago'; var h=Math.floor(m/60); if(h<24) return h+'h ago'; var dy=Math.floor(h/24); if(dy<7) return dy+'d ago'; return new Date(iso).toLocaleDateString(); }
+  function refreshBell(){ var host=document.getElementById('nav-bell'); if(!host) return; if(!currentUser){ host.innerHTML=''; if(notifTimer){ clearInterval(notifTimer); notifTimer=null; } return; } loadNotifs(); if(!notifTimer){ notifTimer=setInterval(function(){ if(currentUser) loadNotifs(); }, 60000); } }
+  function loadNotifs(){ if(!SB||!currentUser) return; SB.rpc('dr_notifications',{p_limit:30}).then(function(res){ var d=(res&&res.data)||{}; renderBell(Number(d.unread)||0, d.items||[]); }).catch(function(){}); }
+  function renderBell(unread, items){
+    var host=document.getElementById('nav-bell'); if(!host) return;
+    var cur=host.querySelector('.notif-panel'); var wasOpen=!!(cur&&cur.classList.contains('open'));
+    var badge=unread>0?'<span class="bell-badge">'+(unread>9?'9+':unread)+'</span>':'';
+    var list=items.length?items.map(function(n){ return '<button type="button" class="notif-item'+(n.read?'':' unread')+'" data-id="'+escHtml(n.id)+'" data-case="'+escHtml(n.case_id||'')+'"><span class="notif-dot"></span><span class="notif-txt"><span class="notif-body">'+escHtml(n.body)+'</span><span class="notif-time">'+bellAgo(n.created_at)+'</span></span></button>'; }).join(''):'<div class="notif-empty">No notifications yet. You\u2019ll hear here when your case gets a response, is marked helpful, or is closed.</div>';
+    host.innerHTML='<button type="button" class="bell-btn" id="bell-btn" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>'+badge+'</button>'
+      +'<div class="notif-panel'+(wasOpen?' open':'')+'" id="notif-panel"><div class="notif-h"><span>Notifications</span>'+(unread>0?'<button type="button" class="notif-readall" id="notif-readall">Mark all read</button>':'')+'</div><div class="notif-list">'+list+'</div></div>';
+    var btn=document.getElementById('bell-btn'); if(btn) btn.onclick=function(e){ e.stopPropagation(); var p=document.getElementById('notif-panel'); if(p) p.classList.toggle('open'); };
+    var ra=document.getElementById('notif-readall'); if(ra) ra.onclick=function(e){ e.stopPropagation(); if(SB) SB.rpc('dr_notif_mark_read',{p_id:null}).then(function(){ loadNotifs(); }).catch(function(){}); };
+    [].slice.call(host.querySelectorAll('.notif-item')).forEach(function(b){ b.onclick=function(){ var id=b.getAttribute('data-id'), cid=b.getAttribute('data-case'); if(SB) SB.rpc('dr_notif_mark_read',{p_id:id}).then(function(){ loadNotifs(); }).catch(function(){}); var p=document.getElementById('notif-panel'); if(p) p.classList.remove('open'); if(cid) openCase(cid); }; });
+  }
+  document.addEventListener('click', function(e){ var p=document.getElementById('notif-panel'); if(p&&p.classList.contains('open')&&!e.target.closest('#nav-bell')) p.classList.remove('open'); });
+  window.drRefreshBell=refreshBell;
+
+  window.drAfterAuth=function(){ loadMyCases(); refreshBell(); };
   renderExamples(true);   /* immediate render from seed list */
   populateFilter();
   loadTaxonomy();         /* then refresh from DB (adds any custom values) */
