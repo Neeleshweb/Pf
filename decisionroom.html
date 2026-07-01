@@ -1023,6 +1023,46 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .cd-status.s-partial{color:var(--accent2);border-color:rgba(240,165,0,.3)}
 .cd-res-h{display:block;font-size:.66rem;font-weight:800;letter-spacing:.5px;color:var(--accent2);margin-top:.7rem}
 .cd-res-h:first-child{margin-top:0}
+/* ---- Phase 2f: card redesign + labeled capsules + share ---- */
+.feed-grid{grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.2rem}
+.feed-card{padding:1.4rem 1.5rem;gap:.7rem}
+.fc-attrs{display:flex;flex-wrap:wrap;gap:.55rem .9rem;align-items:flex-end}
+.fc-cap{display:inline-flex;flex-direction:column;gap:.24rem}
+.fc-caplab{font-size:.54rem;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--muted2)}
+.fc-date-r{margin-left:auto;align-self:flex-end}
+.fc-urg{font-size:.66rem;font-weight:700;letter-spacing:.2px;color:var(--muted);background:var(--card2);border:1px solid var(--border2);border-radius:100px;padding:.16rem .55rem}
+.fc-urg.u-today{color:var(--red);background:rgba(255,107,107,.1);border-color:rgba(255,107,107,.34)}
+.fc-urg.u-this_week{color:var(--accent2);border-color:rgba(240,165,0,.32)}
+.fc-prod{font-size:.66rem;font-weight:700;color:#7dd3fc;background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.32);border-radius:100px;padding:.16rem .55rem}
+.fc-ctx{font-size:.72rem;color:var(--white);background:var(--card2);border:1px solid var(--border2);border-radius:100px;padding:.22rem .62rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62%}
+.fc-ctx.mine{color:var(--accent);border-color:rgba(232,84,10,.45);background:rgba(232,84,10,.09)}
+.fc-share{font:inherit;font-size:.7rem;font-weight:700;color:#7dd3fc;background:transparent;border:1px solid rgba(56,189,248,.36);border-radius:7px;padding:.2rem .55rem;cursor:pointer;white-space:nowrap}
+.fc-share:hover{background:rgba(56,189,248,.14);color:#bae6fd}
+.cd-head-r{display:flex;gap:.55rem;align-items:center}
+.cd-share{font:inherit;font-size:.74rem;font-weight:700;color:#7dd3fc;background:transparent;border:1px solid rgba(56,189,248,.36);border-radius:8px;padding:.28rem .7rem;cursor:pointer}
+.cd-share:hover{background:rgba(56,189,248,.14);color:#bae6fd}
+.cd-ctx.mine{color:var(--accent);font-weight:700}
+.cd-chip.cat{color:var(--accent);border-color:rgba(232,84,10,.4);background:rgba(232,84,10,.08)}
+.cd-chip.stk{color:#c4b5fd;border-color:rgba(167,139,250,.36);background:rgba(167,139,250,.1)}
+.cd-chip.con{color:#f6a5a5;border-color:rgba(255,107,107,.34);background:rgba(255,107,107,.08)}
+/* share modal */
+.share-modal{background:var(--card);border:1px solid var(--border2);border-radius:16px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto;padding:1.5rem 1.5rem 1.3rem;box-shadow:0 24px 60px rgba(0,0,0,.5);transform:translateY(8px);transition:transform .15s}
+.dr-confirm-ov.open .share-modal{transform:none}
+.share-h{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.5px;color:var(--white);margin-bottom:.35rem}
+.share-sub{font-size:.82rem;color:var(--muted);line-height:1.5;margin-bottom:1rem}
+.share-prev-lab{font-size:.6rem;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--muted2);margin-bottom:.4rem}
+.share-card{border:1px solid var(--border2);border-radius:12px;overflow:hidden;background:var(--surface);padding:.9rem 1rem;display:flex;flex-direction:column;gap:.35rem}
+.share-card-tag{font-size:.58rem;font-weight:800;letter-spacing:.8px;color:var(--accent)}
+.share-card-t{font-size:1rem;font-weight:700;color:var(--white);line-height:1.35}
+.share-card-d{font-size:.82rem;color:var(--muted);line-height:1.45}
+.share-card-m{font-size:.72rem;color:var(--accent3);font-weight:600}
+.share-card-u{font-size:.7rem;color:var(--muted2);text-transform:lowercase}
+.share-l{display:block;font-size:.72rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);margin:1rem 0 .35rem}
+.share-opt{text-transform:none;letter-spacing:0;font-weight:500;color:var(--muted2)}
+.share-cap{width:100%;background:var(--card2);border:1px solid var(--border2);color:var(--white);border-radius:9px;padding:.7rem;font:inherit;font-size:.86rem;line-height:1.5;resize:vertical}
+.share-note{font-size:.72rem;color:var(--muted2);line-height:1.5;margin:.6rem 0 0}
+.share-act{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.1rem}
+.share-act .btn-primary,.share-act .btn-ghost{font-size:.82rem;padding:.5rem .9rem}
 .cd-miss{color:var(--muted);text-align:center;padding:2rem}
 @media(max-width:560px){.fld.half{width:100%;margin-right:0}}
 /* phase1a.2: form overhaul + custom-add + examples pagination */
@@ -1200,8 +1240,8 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 <section class="section wide" id="library">
   <div class="sec-eyebrow g">The library</div>
   <div class="sec-title">Resolved <span class="g">Decisions</span></div>
-  <p class="sec-sub">Closed cases \u2014 with what the PM actually decided and how each ask was met. The record a forum thread never keeps.</p>
-  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select></div>
+  <p class="sec-sub">Closed cases &mdash; <b>Resolved</b> (70%+ of asks met) and <b>Partially resolved</b>. See what the PM decided and how each ask was met. The record a forum thread never keeps.</p>
+  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All closed</option><option value="resolved">Resolved only</option><option value="partial">Partially resolved</option></select></div>
   <div id="lib-list" class="feed-grid"></div>
   <button type="button" id="lib-more" class="btn-ghost" style="display:none">Load more</button>
 </section>
@@ -1500,6 +1540,9 @@ boot();
   function fmtDate(ts){ try{ var d=new Date(ts); if(isNaN(d.getTime())) return ''; var now=new Date(); var opt=(d.getFullYear()===now.getFullYear())?{month:'short',day:'numeric'}:{month:'short',day:'numeric',year:'numeric'}; return d.toLocaleDateString(undefined,opt); }catch(e){ return ''; } }
   function fcDate(ts, label){ var t=fmtDate(ts); label=label||'Posted'; return t?('<span class="fc-date">'+label+' <b>'+escHtml(t)+'</b></span>'):''; }
   function fcChipRow(label, items, cls){ if(!items||!items.length) return ''; var pills=items.slice(0,4).map(function(v){ return '<span class="'+cls+'">'+escHtml(v)+'</span>'; }).join(''); var extra=items.length>4?'<span class="fc-more">+'+(items.length-4)+'</span>':''; return '<div class="fc-row"><span class="fc-rowlab">'+label+'</span><span class="fc-chips">'+pills+extra+'</span></div>'; }
+  function capOne(label, inner){ return inner?('<span class="fc-cap"><span class="fc-caplab">'+label+'</span>'+inner+'</span>'):''; }
+  function shareBtnHtml(id){ return '<button type="button" class="fc-share" data-share="'+escHtml(id)+'" aria-label="Share this case">\u2197 Share</button>'; }
+  function ctxHtml(r){ return r.is_mine?'<span class="fc-ctx mine">Your case</span>':'<span class="fc-ctx">'+escHtml(r.author_context||r.alias||'PM')+'</span>'; }
 
   function chips(id, opts){ return '<div class="chips" id="'+id+'">'+opts.map(function(o){ var v=Array.isArray(o)?o[0]:o, l=Array.isArray(o)?o[1]:o; return '<button type="button" class="chip" data-v="'+escHtml(v)+'">'+escHtml(l)+'</button>'; }).join('')+'</div>'; }
   function selChips(id){ return [].slice.call(document.querySelectorAll('#'+id+' .chip.sel')).map(function(c){ return c.getAttribute('data-v'); }); }
@@ -1715,16 +1758,19 @@ boot();
   /* ---- feed (keyset) ---- */
   var feedCursor=null, feedDone=false, feedLoading=false;
   function feedCardHtml(r){
-    var cats=(r.categories||[]).slice(0,3).map(function(c){return '<span class="fc-tag">'+escHtml(c)+'</span>';}).join('');
-    var helps=(r.help_types||[]).map(function(h){return helpLabel(h);});
-    var stks=(r.stakeholders||[]);
     var rc=Number(r.response_count)||0;
     var urgent=(r.urgency==='today')?'<span class="fc-urgent">\u23F1 Needs input today</span>':'';
+    var attrs='<div class="fc-attrs">'
+      + capOne('Status','<span class="fc-status s-'+escHtml(caseStatusClass(r))+'">'+escHtml(caseStatusLabel(r))+'</span>')
+      + capOne('Urgency','<span class="fc-urg u-'+escHtml(r.urgency||'')+'">'+escHtml(urgLabel(r.urgency))+'</span>')
+      + (r.product_context?capOne('Product','<span class="fc-prod">'+escHtml(r.product_context)+'</span>'):'')
+      + '<span class="fc-date-r">'+fcDate(r.created_at)+'</span></div>';
     return '<div class="feed-card" data-id="'+escHtml(r.id)+'">'
-      +'<div class="fc-top"><span class="fc-tags">'+cats+'</span>'+fcDate(r.created_at)+'</div>'
-      +'<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
-      +'<div class="fc-meta">'+fcChipRow('Wants', helps, 'fc-help')+fcChipRow('Who\u2019s involved', stks, 'fc-stk')+'</div>'
-      +'<div class="fc-foot"><span class="fc-ctx">'+escHtml(r.author_context||r.alias||'PM')+'</span><span class="fc-foot-r">'+urgent+'<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Needs responses':(rc+(rc===1?' response':' responses')))+'</span></span></div></div>';
+      + attrs
+      + '<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
+      + '<div class="fc-meta">'+fcChipRow('Category', r.categories||[], 'fc-tag')+fcChipRow('Wants', (r.help_types||[]).map(helpLabel), 'fc-help')+fcChipRow('Who\u2019s involved', r.stakeholders||[], 'fc-stk')+'</div>'
+      + '<div class="fc-foot">'+ctxHtml(r)+'<span class="fc-foot-r">'+urgent+(r.is_mine?shareBtnHtml(r.id):'')+'<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Needs responses':(rc+(rc===1?' response':' responses')))+'</span></span></div>'
+      + '</div>';
   }
   function loadFeed(reset){
     if(!SB||feedLoading) return; feedLoading=true;
@@ -1748,20 +1794,26 @@ boot();
   }
   var libCursor=null, libDone=false, libLoading=false;
   function libCardHtml(r){
-    var cats=(r.categories||[]).slice(0,3).map(function(c){return '<span class="fc-tag">'+escHtml(c)+'</span>';}).join('');
-    var helps=(r.help_types||[]).map(function(h){return helpLabel(h);});
-    var met=(function(){ var g=caseWantsPct(r); return g?('<span class="fc-met '+(pctGood(g.pct)?'g':'r')+'">'+g.sat+' of '+g.total+' met \u00b7 '+g.pct+'%</span>'):'<span class="fc-rc">Closed</span>'; })();
+    var met=(function(){ var g=caseWantsPct(r); return g?('<span class="fc-met '+(pctGood(g.pct)?'g':'r')+'">'+g.sat+' of '+g.total+' met \u00b7 '+g.pct+'%</span>'):''; })();
     var decided=r.resolved_option?('<div class="fc-decided">Decided: <b>'+escHtml(r.resolved_option)+'</b></div>'):'';
-    return '<div class="feed-card lib" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-'+escHtml(caseStatusClass(r))+'">'+escHtml(caseStatusLabel(r))+'</span>'+cats+'</span>'+fcDate(r.closed_at||r.created_at,'Closed')+'</div>'
-      +'<div class="fc-title">'+escHtml(r.title)+'</div>'+decided+'<div class="fc-dec">'+escHtml(r.decision)+'</div>'
-      +'<div class="fc-meta">'+fcChipRow('Was asked', helps, 'fc-help')+'</div>'
-      +'<div class="fc-foot"><span class="fc-ctx">'+escHtml(r.author_context||r.alias||'PM')+'</span>'+met+'</div></div>';
+    var attrs='<div class="fc-attrs">'
+      + capOne('Status','<span class="fc-status s-'+escHtml(caseStatusClass(r))+'">'+escHtml(caseStatusLabel(r))+'</span>')
+      + (r.product_context?capOne('Product','<span class="fc-prod">'+escHtml(r.product_context)+'</span>'):'')
+      + '<span class="fc-date-r">'+fcDate(r.closed_at||r.created_at,'Closed')+'</span></div>';
+    var reopen=(r.is_mine&&caseIsPartial(r))?'<button type="button" class="fc-reopen" data-reopen="'+escHtml(r.id)+'">Reopen</button>':'';
+    return '<div class="feed-card lib" data-id="'+escHtml(r.id)+'">'
+      + attrs + decided
+      + '<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
+      + '<div class="fc-meta">'+fcChipRow('Category', r.categories||[], 'fc-tag')+fcChipRow('Was asked', (r.help_types||[]).map(helpLabel), 'fc-help')+'</div>'
+      + '<div class="fc-foot">'+ctxHtml(r)+'<span class="fc-foot-r">'+(r.is_mine?shareBtnHtml(r.id):'')+reopen+met+'</span></div>'
+      + '</div>';
   }
   function loadLibrary(reset){
     if(!SB||libLoading) return; libLoading=true;
     if(reset){ libCursor=null; libDone=false; }
     var catEl=document.getElementById('lib-cat'); var cat=catEl?catEl.value:null;
-    SB.rpc('dr_feed',{p_limit:12,p_before:libCursor,p_category:cat,p_status:'closed'}).then(function(res){
+    var stEl=document.getElementById('lib-status'); var lst=stEl?stEl.value:'closed';
+    SB.rpc('dr_feed',{p_limit:12,p_before:libCursor,p_category:cat,p_status:lst}).then(function(res){
       libLoading=false; var list=document.getElementById('lib-list'); if(!list) return;
       var rows=(res&&res.data)||[];
       if(reset) list.innerHTML='';
@@ -1776,15 +1828,18 @@ boot();
   var myCasesData=[], myCasesFilter='all';
   function wantsMetBadge(r){ var g=caseWantsPct(r); if(!g) return '<span class="fc-rc">Closed</span>'; return '<span class="fc-met '+(pctGood(g.pct)?'g':'r')+'">'+g.sat+' of '+g.total+' met \u00b7 '+g.pct+'%</span>'; }
   function myCaseCardHtml(r){ var rc=Number(r.response_count)||0;
-    var cats=(r.categories||[]).slice(0,3).map(function(c){return '<span class="fc-tag">'+escHtml(c)+'</span>';}).join('');
-    var helps=(r.help_types||[]).map(function(h){return helpLabel(h);});
-    var stks=(r.stakeholders||[]);
+    var attrs='<div class="fc-attrs">'
+      + capOne('Status','<span class="fc-status s-'+escHtml(caseStatusClass(r))+'">'+escHtml(caseStatusLabel(r))+'</span>')
+      + (r.status!=='closed'?capOne('Urgency','<span class="fc-urg u-'+escHtml(r.urgency||'')+'">'+escHtml(urgLabel(r.urgency))+'</span>'):'')
+      + '<span class="fc-date-r">'+fcDate(r.status==='closed'?(r.closed_at||r.created_at):r.created_at, r.status==='closed'?'Closed':'Posted')+'</span></div>';
     var foot=(r.status==='closed')?wantsMetBadge(r):('<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Awaiting responses':(rc+(rc===1?' response':' responses')))+'</span>');
     var reopen=caseIsPartial(r)?'<button type="button" class="fc-reopen" data-reopen="'+escHtml(r.id)+'">Reopen</button>':'';
-    return '<div class="feed-card mine" data-id="'+escHtml(r.id)+'"><div class="fc-top"><span class="fc-tags"><span class="fc-status s-'+escHtml(caseStatusClass(r))+'">'+escHtml(caseStatusLabel(r))+'</span>'+cats+'</span>'+fcDate(r.status==='closed'?(r.closed_at||r.created_at):r.created_at, r.status==='closed'?'Closed':'Posted')+'</div>'
-      +'<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
-      +'<div class="fc-meta">'+fcChipRow('Wants', helps, 'fc-help')+fcChipRow('Who\u2019s involved', stks, 'fc-stk')+'</div>'
-      +'<div class="fc-foot"><span class="fc-ctx">You</span><span class="fc-foot-r">'+foot+reopen+'</span></div></div>';
+    return '<div class="feed-card mine" data-id="'+escHtml(r.id)+'">'
+      + attrs
+      + '<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
+      + '<div class="fc-meta">'+fcChipRow('Category', r.categories||[], 'fc-tag')+fcChipRow('Wants', (r.help_types||[]).map(helpLabel), 'fc-help')+fcChipRow('Who\u2019s involved', r.stakeholders||[], 'fc-stk')+'</div>'
+      + '<div class="fc-foot"><span class="fc-ctx mine">Your case</span><span class="fc-foot-r">'+shareBtnHtml(r.id)+reopen+foot+'</span></div>'
+      + '</div>';
   }
   function renderMyCases(){
     var w=document.getElementById('mycases-wrap'), list=document.getElementById('mycases-list'); if(!w||!list) return;
@@ -1800,21 +1855,24 @@ boot();
     if(!shown.length){ list.innerHTML='<div class="feed-empty">No '+(f==='closed'?'closed':'open')+' cases right now.</div>'; return; }
     shown.forEach(function(r){ list.insertAdjacentHTML('beforeend', myCaseCardHtml(r)); });
     wireCards(list);
-    [].slice.call(list.querySelectorAll('.fc-reopen')).forEach(function(b){ b.onclick=function(e){ e.stopPropagation(); reopenCase(b.getAttribute('data-reopen')); }; });
   }
   function loadMyCases(){
     var w=document.getElementById('mycases-wrap'); if(!w) return;
     if(!SB||!currentUser){ w.style.display='none'; return; }
     SB.rpc('dr_my_cases').then(function(res){ myCasesData=(res&&res.data)||[]; renderMyCases(); }).catch(function(){});
   }
-  function wireCards(scope){ [].slice.call(scope.querySelectorAll('.feed-card')).forEach(function(c){ if(c._w) return; c._w=1; c.onclick=function(){ openCase(c.getAttribute('data-id')); }; }); }
+  function wireCards(scope){
+    [].slice.call(scope.querySelectorAll('.feed-card')).forEach(function(c){ if(c._w) return; c._w=1; c.onclick=function(){ openCase(c.getAttribute('data-id')); }; });
+    [].slice.call(scope.querySelectorAll('.fc-share')).forEach(function(b){ if(b._w) return; b._w=1; b.onclick=function(e){ e.stopPropagation(); openShare(b.getAttribute('data-share')); }; });
+    [].slice.call(scope.querySelectorAll('.fc-reopen')).forEach(function(b){ if(b._w) return; b._w=1; b.onclick=function(e){ e.stopPropagation(); reopenCase(b.getAttribute('data-reopen')); }; });
+  }
 
   /* ---- detail (read-only in 1a) ---- */
   var cov=document.getElementById('case-overlay');
   function closeCase(){ if(cov){ cov.classList.remove('open'); document.body.style.overflow=''; } }
   if(cov) cov.addEventListener('click', function(e){ if(e.target===cov) closeCase(); });
   function row(label, val){ return val?('<div class="cd-row"><div class="cd-label">'+label+'</div><div class="cd-val">'+val+'</div></div>'):''; }
-  function listRow(label, arr){ return (arr&&arr.length)?row(label, arr.map(function(x){return '<span class="cd-chip">'+escHtml(x)+'</span>';}).join('')):''; }
+  function listRow(label, arr, cls){ return (arr&&arr.length)?row(label, arr.map(function(x){return '<span class="cd-chip'+(cls?' '+cls:'')+'">'+escHtml(x)+'</span>';}).join('')):''; }
   function nl(t){ return escHtml(t).replace(/\n/g,'<br>'); }
   function fmtResolution(t){ return escHtml(t||'').split('\n').map(function(ln){ var s=ln.trim(); if(s && /^[A-Z\u2019' ]{3,32}$/.test(s)) return '<span class="cd-res-h">'+ln+'</span>'; return ln; }).join('<br>'); }
   function openCase(id){
@@ -1826,17 +1884,17 @@ boot();
       else {
         var opts=(d.options||[]).map(function(o,i){ return '<div class="cd-opt"><span>'+('ABCDE'.charAt(i)||'\u2022')+'</span>'+escHtml(o)+'</div>'; }).join('');
         var help=(d.help_types||[]).map(function(h){ return '<span class="cd-chip y">'+escHtml(helpLabel(h))+'</span>'; }).join('');
-        m.innerHTML='<div class="cd-head"><span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span><span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span></div>'
+        m.innerHTML='<div class="cd-head">'+(d.is_mine?'<span class="cd-ctx mine">Your case</span>':'<span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span>')+'<span class="cd-head-r">'+(d.is_mine?'<button type="button" class="cd-share" id="cd-share-btn">\u2197 Share</button>':'')+'<span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span></span></div>'
           +'<h2 class="cd-title">'+escHtml(d.title)+'</h2>'
           +row('The decision','<strong>'+escHtml(d.decision)+'</strong>')
           +row('Situation', nl(d.situation))
           +(opts?('<div class="cd-row"><div class="cd-label">Options</div><div class="cd-val">'+opts+'</div></div>'):'')
           +row('Biggest risk', nl(d.biggest_risk))
           +(help?row('Help needed', help):'')
-          +listRow('Categories', d.categories)
-          +listRow('Stakeholders', d.stakeholders)
+          +listRow('Categories', d.categories, 'cat')
+          +listRow('Stakeholders', d.stakeholders, 'stk')
           +(d.product_context?row('Product', escHtml(d.product_context)):'')
-          +listRow('Constraints', d.constraints_list)
+          +listRow('Constraints', d.constraints_list, 'con')
           +(d.constraints_note?row('Constraints note', nl(d.constraints_note)):'')
           +(d.current_recommendation?row('Leaning toward', escHtml(d.current_recommendation)):'')
           +(d.evidence?row('Evidence', nl(d.evidence)):'')
@@ -1847,6 +1905,7 @@ boot();
           +'<div id="cd-respond"></div>'
           +'<div id="cd-responses" class="cd-resp-list"></div></div>';
         loadResponses(d);
+        var csb=document.getElementById('cd-share-btn'); if(csb) csb.onclick=function(){ openShare(d.id); };
       }
       cov.classList.add('open'); document.body.style.overflow='hidden';
     }).catch(function(){});
@@ -1990,6 +2049,50 @@ boot();
       btn.disabled=true;
       SB.rpc('dr_report_response',{p_response_id:rid}).then(function(res){ var r=(res&&res.data)||{}; if(r.ok){ if(typeof toast==='function') toast('Reported \u2014 thanks for flagging'); loadResponses(d); } else { btn.disabled=false; } }).catch(function(){ btn.disabled=false; });
     }});
+  }
+  function caseShareUrl(id){ return location.origin + '/decisionroom.html?case=' + encodeURIComponent(id); }
+  function shareCaption(c){
+    var n=Number(c.response_count)||0; var L=[];
+    L.push('I put a real product decision in front of experienced PMs on DecisionRoom \u2014 structured second opinions, not hot takes.');
+    L.push('');
+    L.push('\u201C'+(c.title||'A PM decision')+'\u201D');
+    L.push('');
+    L.push(n>0 ? (n+' PM'+(n===1?' has':'s have')+' weighed in so far. If you\u2019ve faced something similar, I\u2019d value your read \u2014 sign in and respond \uD83D\uDC47')
+               : 'Be one of the first to weigh in \u2014 sign in and add your structured take \uD83D\uDC47');
+    return L.join('\n');
+  }
+  function shareCopy(txt){ try{ if(navigator.clipboard&&navigator.clipboard.writeText) return navigator.clipboard.writeText(txt); }catch(e){} return new Promise(function(res){ var ta=document.createElement('textarea'); ta.value=txt; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); res(); }); }
+  function openShare(id){
+    if(!SB||!id) return;
+    SB.rpc('dr_get_case',{p_id:id}).then(function(res){
+      var d=(res&&res.data&&res.data.ok)?res.data['case']:null; if(!d){ if(typeof toast==='function') toast('Couldn\u2019t load that case.'); return; }
+      d.id=d.id||id; var url=caseShareUrl(d.id); var cap=shareCaption(d); var n=Number(d.response_count)||0;
+      var ex=document.getElementById('share-ov'); if(ex&&ex.parentNode) ex.parentNode.removeChild(ex);
+      var ov=document.createElement('div'); ov.id='share-ov'; ov.className='dr-confirm-ov';
+      ov.innerHTML='<div class="share-modal" role="dialog" aria-modal="true">'
+        +'<div class="share-h">Share your case</div>'
+        +'<p class="share-sub">Bring PMs from LinkedIn or Reddit straight into this case. Anyone who clicks lands on the case with a \u201Csign in to respond\u201D prompt.</p>'
+        +'<div class="share-prev-lab">Link preview</div>'
+        +'<div class="share-card"><div class="share-card-tag">DECISIONROOM \u00b7 PM PEER REVIEW</div>'
+          +'<div class="share-card-t">'+escHtml(d.title||'A PM decision')+'</div>'
+          +'<div class="share-card-d">'+escHtml((d.decision||'').slice(0,120))+((d.decision||'').length>120?'\u2026':'')+'</div>'
+          +'<div class="share-card-m">'+escHtml(caseStatusLabel(d))+' \u00b7 '+n+' response'+(n===1?'':'s')+'</div>'
+          +'<div class="share-card-u">neeleshpmtoolkit.com</div></div>'
+        +'<label class="share-l">Suggested caption <span class="share-opt">edit freely</span></label>'
+        +'<textarea id="share-cap" class="share-cap" rows="6">'+escHtml(cap)+'</textarea>'
+        +'<div class="share-note">LinkedIn doesn\u2019t let apps pre-fill post text, so we copy your caption to the clipboard \u2014 just paste when LinkedIn opens. Reddit gets the title filled in automatically.</div>'
+        +'<div class="share-act"><button type="button" class="btn-primary" id="share-li">Copy caption &amp; open LinkedIn</button><button type="button" class="btn-ghost" id="share-rd">Open Reddit</button><button type="button" class="btn-ghost" id="share-cp">Copy link</button><button type="button" class="btn-ghost" id="share-x">Close</button></div>'
+        +'</div>';
+      document.body.appendChild(ov);
+      requestAnimationFrame(function(){ ov.classList.add('open'); });
+      function close(){ ov.classList.remove('open'); setTimeout(function(){ if(ov.parentNode) ov.parentNode.removeChild(ov); },200); }
+      ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+      document.getElementById('share-x').onclick=close;
+      function capNow(){ return ((document.getElementById('share-cap')||{}).value)||cap; }
+      document.getElementById('share-li').onclick=function(){ shareCopy(capNow()+'\n\n'+url).then(function(){ if(typeof toast==='function') toast('Caption copied \u2014 paste it into your LinkedIn post'); window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(url),'_blank','noopener'); }); };
+      document.getElementById('share-rd').onclick=function(){ window.open('https://www.reddit.com/submit?url='+encodeURIComponent(url)+'&title='+encodeURIComponent(d.title||'A PM decision on DecisionRoom'),'_blank','noopener'); };
+      document.getElementById('share-cp').onclick=function(){ shareCopy(url).then(function(){ if(typeof toast==='function') toast('Link copied'); }); };
+    }).catch(function(){});
   }
   function reopenCase(id){
     drConfirm({title:'Reopen this case?', body:'This puts it back in the open feed so PMs can respond again. Your outcome notes will be cleared (the responses stay). Only available because fewer than 70% of your asks were met.', confirm:'Reopen', cancel:'Cancel', onConfirm:function(){
@@ -2169,6 +2272,7 @@ boot();
   var mycf=document.getElementById('myc-filter'); if(mycf) mycf.onclick=function(e){ var b=e.target.closest&&e.target.closest('.myc-fbtn'); if(!b) return; myCasesFilter=b.getAttribute('data-f')||'all'; renderMyCases(); };
   var lmore=document.getElementById('lib-more'); if(lmore) lmore.onclick=function(){ loadLibrary(false); };
   var lcat=document.getElementById('lib-cat'); if(lcat) lcat.onchange=function(){ loadLibrary(true); };
+  var lst=document.getElementById('lib-status'); if(lst) lst.onchange=function(){ loadLibrary(true); };
 
   var exMore=document.getElementById('examples-more'); if(exMore) exMore.onclick=function(){ exShown+=10; renderExamples(false); };
 
@@ -2256,6 +2360,7 @@ boot();
   loadFeed(true);
   loadLibrary(true);
   loadMyCases();
+  try{ var _dl=new URLSearchParams(location.search).get('case'); if(_dl){ setTimeout(function(){ openCase(_dl); }, 350); } }catch(e){}
 })();
 
 </script>
