@@ -14,7 +14,7 @@
   <meta name="twitter:description" content="Bring a real product decision into a room of experienced PMs. Structured feedback, not a forum."/>
   <title>DecisionRoom — Neelesh Singh</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet"/>
-  <script>(function(){try{var t=localStorage.getItem('dr-theme');var ok={indigo:1,editorial:1,warm:1,classic:1};if(!ok[t])t='classic';document.documentElement.setAttribute('data-dr-theme',t);}catch(e){document.documentElement.setAttribute('data-dr-theme','classic');}})();</script>
+  <script>(function(){try{var t=localStorage.getItem('dr-theme');var ok={signal:1,editorial:1,warm:1,classic:1};if(t==='indigo')t='signal';if(!ok[t])t='signal';document.documentElement.setAttribute('data-dr-theme',t);}catch(e){document.documentElement.setAttribute('data-dr-theme','signal');}})();</script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -30,7 +30,7 @@
       --font-display:'Inter',sans-serif; --font-body:'Inter',sans-serif;
       --radius:3px;
     }
-    html[data-dr-theme="indigo"]{
+    html[data-dr-theme="signal"]{
       --black:#eef2fc; --surface:#f4f7ff; --card:#ffffff; --card2:#eef2fb;
       --border:#e4e8f4; --border2:#d3d9ec; --white:#101424; --muted:#41495e; --muted2:#616a80;
       --accent-rgb:79,67,216; --accent2-rgb:0,168,140; --accent3-rgb:37,99,235; --green-rgb:22,140,100; --red-rgb:200,60,60;
@@ -107,7 +107,7 @@
     .theme-nm { flex: 1; }
     .theme-def { font-size: .62rem; color: var(--muted2); }
     .theme-sw { width: 18px; height: 18px; border-radius: 6px; flex-shrink: 0; border: 1px solid rgba(140,134,124,.4); }
-    .sw-indigo { background: linear-gradient(135deg,#4f43d8 55%,#00b496 55%); }
+    .sw-signal { background: linear-gradient(135deg,#4f43d8 55%,#00b496 55%); }
     .sw-editorial { background: linear-gradient(135deg,#faf7f2 55%,#7c2d2d 55%); }
     .sw-warm { background: linear-gradient(135deg,#17130f 55%,#d89b4a 55%); }
     .sw-classic { background: linear-gradient(135deg,#0f0f0f 55%,#e8540a 55%); }
@@ -117,27 +117,20 @@
     .mm-theme { border-top: 1px solid var(--border); margin-top: .4rem; padding: .55rem; }
     .mm-theme-h { font-size: .58rem; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted2); padding: .3rem .4rem .45rem; }
     .mm-theme .theme-opt { font-size: .95rem; padding: .7rem .5rem; }
-    .dr-net { position: relative; width: 100%; max-width: 900px; margin: 3rem auto 0; min-height: 520px; border-radius: 28px; overflow: hidden; background: linear-gradient(150deg,#101424,#242b67 58%,#0c8d7b); box-shadow: 0 36px 90px rgba(33,40,88,.28); padding: 28px; color: #fff; }
-    .dr-net:before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,.23) 0 2px, transparent 2.4px); background-size: 42px 42px; opacity: .45; pointer-events: none; }
-    .dr-net-orbit { position: absolute; inset: 56px; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; transform: rotate(-10deg); }
-    .dr-net-orbit.two { inset: 108px; opacity: .55; transform: rotate(22deg); }
-    .dr-net-hub { position: absolute; left: 50%; top: 47%; transform: translate(-50%,-50%); width: 168px; height: 168px; border-radius: 44px; background: #fff; color: #101424; display: grid; place-items: center; text-align: center; padding: 18px; box-shadow: 0 32px 90px rgba(0,0,0,.35); font-weight: 800; line-height: 1.25; font-size: .92rem; }
-    .dr-net-node { position: absolute; width: 214px; max-width: 45%; padding: 13px 15px; border-radius: 22px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18); backdrop-filter: blur(14px); font-size: .78rem; line-height: 1.4; }
-    .dr-net-node b { display: block; color: #fff; font-weight: 700; }
-    .dr-net-node small { color: #b9fff1; }
-    .dr-net-node.n1 { left: 30px; top: 58px; }
-    .dr-net-node.n2 { right: 30px; top: 104px; }
-    .dr-net-node.n3 { left: 56px; bottom: 104px; }
-    .dr-net-node.n4 { right: 52px; bottom: 84px; }
-    .dr-net-meter { position: absolute; left: 28px; right: 28px; bottom: 24px; display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
-    .dr-net-metric { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.16); border-radius: 18px; padding: 12px; text-align: center; }
-    .dr-net-metric strong { font-size: 24px; font-weight: 800; }
-    .dr-net-metric small { color: #b9fff1; font-size: .68rem; }
-    @media (max-width: 760px) {
-      .dr-net { min-height: 0; padding: 20px; margin-top: 2rem; }
-      .dr-net-orbit, .dr-net-orbit.two, .dr-net-hub, .dr-net-meter { display: none; }
-      .dr-net-node { position: relative; inset: auto !important; left: auto !important; right: auto !important; top: auto !important; bottom: auto !important; width: auto; max-width: none; margin-bottom: 10px; }
-    }
+    .dr-net { position: relative; width: 100%; max-width: 720px; margin: 3rem auto 0; border-radius: 28px; overflow: hidden; background: linear-gradient(150deg,#101424,#242b67 58%,#0c8d7b); box-shadow: 0 36px 90px rgba(33,40,88,.28); padding: 20px; }
+    .dr-net:before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,.18) 0 1.6px, transparent 2px); background-size: 40px 40px; opacity: .4; pointer-events: none; }
+    .dr-net-svg { position: relative; width: 100%; height: auto; display: block; }
+    .dr-net-nodes rect { fill: rgba(255,255,255,.10); stroke: rgba(255,255,255,.20); stroke-width: 1; }
+    .dr-net-nodes text { fill: #eaf2ff; }
+    .dr-net-nodes .d1 { fill: #7dd3fc; } .dr-net-nodes .d2 { fill: #00d3b4; } .dr-net-nodes .d3 { fill: #a5b4ff; }
+    .dr-net-nodes .d4 { fill: #6ee7b7; } .dr-net-nodes .d5 { fill: #fca5a5; } .dr-net-nodes .d6 { fill: #fcd34d; }
+    .dr-net-nodes .d7 { fill: #c4b5fd; } .dr-net-nodes .d8 { fill: #93c5fd; }
+    .dr-net-hub rect { fill: #fff; }
+    .dr-net-hub .hub-k { fill: #4f43d8; }
+    .dr-net-hub .hub-t { fill: #101424; }
+    .dr-net-rings { transform-origin: 300px 285px; animation: drNetSpin 60s linear infinite; }
+    @keyframes drNetSpin { to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce) { .dr-net-rings { animation: none; } }
     .hamburger { display: none; width: 42px; height: 42px; border: 1px solid var(--border2); background: var(--card); border-radius: 10px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
     .hamburger span { width: 18px; height: 2px; background: var(--white); border-radius: 2px; transition: transform .25s, opacity .2s; }
     .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
@@ -722,6 +715,77 @@
 .fbar-pill{flex:0 0 auto;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:.8rem;font-weight:600;padding:.4rem .8rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:all .15s}
 .fbar-pill:hover{border-color:var(--accent);color:var(--white)}
 .fbar-pill.on{background:rgba(var(--accent-rgb),.16);border-color:var(--accent);color:var(--white);font-weight:700}
+    /* ============================================================
+       SIGNAL THEME — flagship layout (scoped; other themes untouched)
+       ============================================================ */
+    html[data-dr-theme="signal"] { scroll-behavior: smooth; }
+    html[data-dr-theme="signal"] body {
+      background-color: var(--surface);
+      background-image:
+        radial-gradient(circle at 0% 0%, rgba(79,67,216,.13), transparent 34%),
+        radial-gradient(circle at 100% 6%, rgba(0,196,167,.13), transparent 32%),
+        linear-gradient(transparent 23px, rgba(22,29,55,.038) 24px),
+        linear-gradient(90deg, transparent 23px, rgba(22,29,55,.038) 24px);
+      background-size: auto, auto, 24px 24px, 24px 24px;
+      background-attachment: fixed;
+    }
+    html[data-dr-theme="signal"] .nav {
+      position: sticky; top: 14px; margin: 14px auto 0; width: calc(100% - 30px); max-width: 1200px;
+      height: 64px; padding: 0 1.4rem; border-radius: 22px;
+      background: rgba(255,255,255,.72); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(16,20,36,.10); box-shadow: 0 20px 55px rgba(71,86,150,.16);
+    }
+    html[data-dr-theme="signal"] .logo-word { font-weight: 800; letter-spacing: -.02em; }
+    html[data-dr-theme="signal"] .nav-links a { font-weight: 600; }
+    html[data-dr-theme="signal"] .hero {
+      display: grid; grid-template-columns: 1.02fr .98fr; gap: 26px; align-items: center;
+      max-width: 1200px; margin: 0 auto; padding: 3.2rem 1.5rem 3rem; overflow: visible;
+    }
+    html[data-dr-theme="signal"] .hero-grid { display: none; }
+    html[data-dr-theme="signal"] .hero-inner {
+      max-width: none; text-align: left; background: #fff; border: 1px solid rgba(16,20,36,.10);
+      border-radius: 36px; padding: 3rem 2.6rem; box-shadow: 0 34px 90px rgba(71,86,150,.16);
+      position: relative; overflow: hidden;
+    }
+    html[data-dr-theme="signal"] .hero-inner::after {
+      content: ""; position: absolute; right: -90px; bottom: -90px; width: 240px; height: 240px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(107,92,255,.5) 0 26%, transparent 27%); opacity: .16; pointer-events: none;
+    }
+    html[data-dr-theme="signal"] .hero h1 { font-size: clamp(2.9rem, 6vw, 4.7rem); line-height: .92; letter-spacing: -.045em; font-weight: 800; margin: .3rem 0 1rem; }
+    html[data-dr-theme="signal"] .hero-eyebrow { justify-content: flex-start; }
+    html[data-dr-theme="signal"] .hero-ctas { justify-content: flex-start; }
+    html[data-dr-theme="signal"] .dr-net { margin: 0; max-width: none; }
+    html[data-dr-theme="signal"] .sec-title { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -.03em; font-weight: 800; }
+    html[data-dr-theme="signal"] .feed-card {
+      border-radius: 24px; border: 1px solid rgba(16,20,36,.10); background: #fff;
+      box-shadow: 0 18px 48px rgba(71,86,150,.10); padding: 1.55rem 1.6rem 1.4rem;
+      position: relative; overflow: hidden; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    html[data-dr-theme="signal"] .feed-card::before {
+      content: ""; position: absolute; left: 0; top: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2)); opacity: .95;
+    }
+    html[data-dr-theme="signal"] .feed-card:hover {
+      transform: translateY(-4px); box-shadow: 0 28px 64px rgba(71,86,150,.20); border-color: rgba(79,67,216,.30);
+    }
+    html[data-dr-theme="signal"] .fc-caplab { font-weight: 800; }
+    html[data-dr-theme="signal"] .fc-status, html[data-dr-theme="signal"] .fc-urg,
+    html[data-dr-theme="signal"] .fc-prod, html[data-dr-theme="signal"] .fc-tag,
+    html[data-dr-theme="signal"] .fc-help, html[data-dr-theme="signal"] .fc-stk { font-weight: 700; }
+    html[data-dr-theme="signal"] .fbar select, html[data-dr-theme="signal"] .site-search {
+      background: rgba(79,67,216,.06); border: 1px solid rgba(79,67,216,.20); border-radius: 999px;
+      box-shadow: 0 8px 22px rgba(71,86,150,.08);
+    }
+    html[data-dr-theme="signal"] .fbar select { padding: .55rem 1rem; }
+    html[data-dr-theme="signal"] .fbar .btn-primary { border-radius: 999px; box-shadow: 0 14px 30px rgba(79,67,216,.26); }
+    html[data-dr-theme="signal"] .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    html[data-dr-theme="signal"] .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) { html[data-dr-theme="signal"] .reveal { opacity: 1 !important; transform: none !important; transition: none; } }
+    @media (max-width: 900px) {
+      html[data-dr-theme="signal"] .hero { grid-template-columns: 1fr; padding: 2.4rem 1.1rem 2rem; }
+      html[data-dr-theme="signal"] .hero-inner { padding: 2.2rem 1.5rem; border-radius: 28px; }
+      html[data-dr-theme="signal"] .nav { top: 8px; margin-top: 8px; width: calc(100% - 18px); border-radius: 18px; }
+    }
 </style>
 <style>
 .dr-bridge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.6rem;font-size:.82rem;color:var(--muted);border:1px solid var(--border2);background:var(--card2);padding:.5rem 1rem;border-radius:100px}
@@ -1196,10 +1260,10 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
       </button>
       <div class="theme-pop" id="theme-pop" role="menu" aria-label="Theme">
         <div class="theme-pop-h">Appearance</div>
-        <button class="theme-opt" data-theme="indigo" role="menuitem"><span class="theme-sw sw-indigo"></span><span class="theme-nm">Indigo</span><span class="theme-chk">\u2713</span></button>
-        <button class="theme-opt" data-theme="editorial" role="menuitem"><span class="theme-sw sw-editorial"></span><span class="theme-nm">Editorial</span><span class="theme-chk">\u2713</span></button>
-        <button class="theme-opt" data-theme="warm" role="menuitem"><span class="theme-sw sw-warm"></span><span class="theme-nm">Warm dark</span><span class="theme-chk">\u2713</span></button>
-        <button class="theme-opt" data-theme="classic" role="menuitem"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic <span class="theme-def">default</span></span><span class="theme-chk">\u2713</span></button>
+        <button class="theme-opt" data-theme="signal" role="menuitem"><span class="theme-sw sw-signal"></span><span class="theme-nm">Signal <span class="theme-def">default</span></span><span class="theme-chk">✓</span></button>
+        <button class="theme-opt" data-theme="editorial" role="menuitem"><span class="theme-sw sw-editorial"></span><span class="theme-nm">Editorial</span><span class="theme-chk">✓</span></button>
+        <button class="theme-opt" data-theme="warm" role="menuitem"><span class="theme-sw sw-warm"></span><span class="theme-nm">Warm dark</span><span class="theme-chk">✓</span></button>
+        <button class="theme-opt" data-theme="classic" role="menuitem"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic</span><span class="theme-chk">✓</span></button>
       </div>
     </div>
     <div class="nav-bell" id="nav-bell"></div>
@@ -1209,7 +1273,7 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 </nav>
 
 <div class="mobile-backdrop" id="mobile-backdrop"></div>
-<aside class="mobile-menu" id="mobile-menu"><div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div><div id="mm-account" class="mm-account" style="display:none"></div><nav class="mm-body" id="mm-body"></nav><div class="mm-theme"><div class="mm-theme-h">Appearance</div><button class="theme-opt" data-theme="indigo"><span class="theme-sw sw-indigo"></span><span class="theme-nm">Indigo</span><span class="theme-chk">\u2713</span></button><button class="theme-opt" data-theme="editorial"><span class="theme-sw sw-editorial"></span><span class="theme-nm">Editorial</span><span class="theme-chk">\u2713</span></button><button class="theme-opt" data-theme="warm"><span class="theme-sw sw-warm"></span><span class="theme-nm">Warm dark</span><span class="theme-chk">\u2713</span></button><button class="theme-opt" data-theme="classic"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic <span class="theme-def">default</span></span><span class="theme-chk">\u2713</span></button></div></aside>
+<aside class="mobile-menu" id="mobile-menu"><div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div><div id="mm-account" class="mm-account" style="display:none"></div><nav class="mm-body" id="mm-body"></nav><div class="mm-theme"><div class="mm-theme-h">Appearance</div><button class="theme-opt" data-theme="signal"><span class="theme-sw sw-signal"></span><span class="theme-nm">Signal <span class="theme-def">default</span></span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="editorial"><span class="theme-sw sw-editorial"></span><span class="theme-nm">Editorial</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="warm"><span class="theme-sw sw-warm"></span><span class="theme-nm">Warm dark</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="classic"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic</span><span class="theme-chk">✓</span></button></div></aside>
 
 <section class="hero">
   <div class="hero-grid"></div>
@@ -1224,14 +1288,34 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
     <a class="dr-bridge" href="/gutcheck.html">Trust your gut first &rarr; <span>play GutCheck</span>, then bring the hard ones here.</a>
   </div>
   <aside class="dr-net" data-nosearch aria-hidden="true">
-    <div class="dr-net-orbit"></div>
-    <div class="dr-net-orbit two"></div>
-    <div class="dr-net-hub">Your decision,<br>matched to<br>credible PMs</div>
-    <div class="dr-net-node n1"><b>Senior PM &middot; B2B SaaS</b><small>Platform debt &middot; enterprise workflows</small></div>
-    <div class="dr-net-node n2"><b>Group PM &middot; Marketplace</b><small>Customer pressure &middot; packaging</small></div>
-    <div class="dr-net-node n3"><b>Mobile PM &middot; Growth</b><small>Activation &middot; quality bar</small></div>
-    <div class="dr-net-node n4"><b>Principal PM &middot; AI</b><small>Safety &middot; release strategy</small></div>
-    <div class="dr-net-meter"><div class="dr-net-metric"><strong>92</strong><br><small>credibility</small></div><div class="dr-net-metric"><strong>8h</strong><br><small>first signal</small></div><div class="dr-net-metric"><strong>4.8</strong><br><small>answer quality</small></div></div>
+    <svg class="dr-net-svg" viewBox="0 0 600 570" role="img" aria-label="How a decision flows through DecisionRoom">
+      <g class="dr-net-rings">
+        <circle cx="300" cy="285" r="150" fill="none" stroke="rgba(255,255,255,.14)" stroke-dasharray="3 7"/>
+        <circle cx="300" cy="285" r="212" fill="none" stroke="rgba(255,255,255,.10)" stroke-dasharray="3 9"/>
+      </g>
+      <g stroke="rgba(255,255,255,.16)" stroke-width="1.5">
+        <line x1="300" y1="285" x2="300" y2="55"/><line x1="300" y1="285" x2="480" y2="120"/>
+        <line x1="300" y1="285" x2="520" y2="285"/><line x1="300" y1="285" x2="480" y2="450"/>
+        <line x1="300" y1="285" x2="300" y2="515"/><line x1="300" y1="285" x2="120" y2="450"/>
+        <line x1="300" y1="285" x2="80" y2="285"/><line x1="300" y1="285" x2="120" y2="120"/>
+      </g>
+      <g class="dr-net-nodes" font-family="Inter, sans-serif" font-size="15" font-weight="600" text-anchor="middle">
+        <g><rect x="223" y="32" width="154" height="46" rx="16"/><circle cx="245" cy="55" r="3.5" class="d1"/><text x="304" y="60">Responses</text></g>
+        <g><rect x="403" y="97" width="154" height="46" rx="16"/><circle cx="425" cy="120" r="3.5" class="d2"/><text x="484" y="125">Per-want scores</text></g>
+        <g><rect x="443" y="262" width="154" height="46" rx="16"/><circle cx="465" cy="285" r="3.5" class="d3"/><text x="524" y="290">Auto summary</text></g>
+        <g><rect x="403" y="427" width="154" height="46" rx="16"/><circle cx="425" cy="450" r="3.5" class="d4"/><text x="484" y="455">Resolved outcome</text></g>
+        <g><rect x="223" y="492" width="154" height="46" rx="16"/><circle cx="245" cy="515" r="3.5" class="d5"/><text x="304" y="520">Reopen &lt; 70%</text></g>
+        <g><rect x="43" y="427" width="154" height="46" rx="16"/><circle cx="65" cy="450" r="3.5" class="d6"/><text x="124" y="455">Reports &amp; safety</text></g>
+        <g><rect x="3" y="262" width="154" height="46" rx="16"/><circle cx="25" cy="285" r="3.5" class="d7"/><text x="84" y="290">Reviewer profiles</text></g>
+        <g><rect x="43" y="97" width="154" height="46" rx="16"/><circle cx="65" cy="120" r="3.5" class="d8"/><text x="124" y="125">Anonymous alias</text></g>
+      </g>
+      <g class="dr-net-hub">
+        <rect x="222" y="207" width="156" height="156" rx="34"/>
+        <text x="300" y="270" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="800" letter-spacing="1.5" class="hub-k">THE ROOM</text>
+        <text x="300" y="299" text-anchor="middle" font-family="Inter, sans-serif" font-size="21" font-weight="800" class="hub-t">Your PM</text>
+        <text x="300" y="325" text-anchor="middle" font-family="Inter, sans-serif" font-size="21" font-weight="800" class="hub-t">decision</text>
+      </g>
+    </svg>
   </aside>
 </section>
 
@@ -2487,10 +2571,10 @@ boot();
 <script>
 /* ==== THEME SWITCHER (localStorage; per-account is next on the roadmap) ==== */
 (function(){
-  var VALID={indigo:1,editorial:1,warm:1,classic:1};
-  function cur(){ try{ var t=localStorage.getItem('dr-theme'); return VALID[t]?t:'classic'; }catch(e){ return 'classic'; } }
+  var VALID={signal:1,editorial:1,warm:1,classic:1};
+  function cur(){ try{ var t=localStorage.getItem('dr-theme'); if(t==='indigo')t='signal'; return VALID[t]?t:'signal'; }catch(e){ return 'signal'; } }
   function mark(t){ [].slice.call(document.querySelectorAll('.theme-opt')).forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-theme')===t); }); }
-  function setTheme(t){ if(!VALID[t]) t='indigo'; document.documentElement.setAttribute('data-dr-theme',t); try{ localStorage.setItem('dr-theme',t); }catch(e){} mark(t); }
+  function setTheme(t){ if(!VALID[t]) t='signal'; document.documentElement.setAttribute('data-dr-theme',t); try{ localStorage.setItem('dr-theme',t); }catch(e){} mark(t); if(t==='signal' && window.drWireReveal) window.drWireReveal(); }
   window.drSetTheme=setTheme;
   document.addEventListener('click', function(e){
     var opt=e.target.closest('.theme-opt');
@@ -2500,6 +2584,21 @@ boot();
     if(pop && !e.target.closest('.theme-wrap')) pop.classList.remove('open');
   });
   mark(cur());
+})();
+</script>
+<script>
+/* ==== SIGNAL scroll-reveal (only active when Signal; class added by JS so content never hides on failure) ==== */
+(function(){
+  function isSignal(){ return document.documentElement.getAttribute('data-dr-theme')==='signal'; }
+  function wire(){
+    if(!isSignal() || !('IntersectionObserver' in window)) return;
+    var els=[].slice.call(document.querySelectorAll('section:not(.hero)')).filter(function(el){ return !el._rv; });
+    if(!els.length) return;
+    var io=new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold:.1, rootMargin:'0px 0px -6% 0px' });
+    els.forEach(function(el){ el._rv=1; el.classList.add('reveal'); var r=el.getBoundingClientRect(); if(r.top < window.innerHeight*0.92){ el.classList.add('in'); } else { io.observe(el); } });
+  }
+  window.drWireReveal=wire;
+  if(document.readyState!=='loading') wire(); else document.addEventListener('DOMContentLoaded', wire);
 })();
 </script>
 </body>
