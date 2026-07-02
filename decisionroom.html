@@ -1241,7 +1241,7 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
   <div class="sec-eyebrow g">The library</div>
   <div class="sec-title">Resolved <span class="g">Decisions</span></div>
   <p class="sec-sub">Closed cases &mdash; <b>Resolved</b> (70%+ of asks met) and <b>Partially resolved</b>. See what the PM decided and how each ask was met. The record a forum thread never keeps.</p>
-  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All closed</option><option value="resolved">Resolved only</option><option value="partial">Partially resolved</option></select></div>
+  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All decisions</option><option value="resolved">Resolved only</option><option value="partial">Partially resolved</option></select></div>
   <div id="lib-list" class="feed-grid"></div>
   <button type="button" id="lib-more" class="btn-ghost" style="display:none">Load more</button>
 </section>
@@ -2050,7 +2050,7 @@ boot();
       SB.rpc('dr_report_response',{p_response_id:rid}).then(function(res){ var r=(res&&res.data)||{}; if(r.ok){ if(typeof toast==='function') toast('Reported \u2014 thanks for flagging'); loadResponses(d); } else { btn.disabled=false; } }).catch(function(){ btn.disabled=false; });
     }});
   }
-  function caseShareUrl(id){ return location.origin + '/decisionroom.html?case=' + encodeURIComponent(id); }
+  function caseShareUrl(id){ return location.origin + '/c/' + encodeURIComponent(id); }
   function shareCaption(c){
     var n=Number(c.response_count)||0; var L=[];
     L.push('I put a real product decision in front of experienced PMs on DecisionRoom \u2014 structured second opinions, not hot takes.');
