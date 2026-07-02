@@ -11,8 +11,8 @@
     :root {
       --black:#080808; --surface:#0f0f0f; --card:#141414; --card2:#191919;
       --border:#242424; --border2:#2e2e2e; --white:#f0ece4; --muted:#9d968c; --muted2:#8c867c;
-      --accent:#e8540a; --accent2:#f0a500; --accent3:#3b82f6;
-      --accent-dim:rgba(232,84,10,0.12); --accent2-dim:rgba(240,165,0,0.10); --accent3-dim:rgba(59,130,246,0.10);
+      --accent:#e8540a; --accent2:#f0a500; --accent3:#3b82f6; --accent4:#0d9488;
+      --accent-dim:rgba(232,84,10,0.12); --accent2-dim:rgba(240,165,0,0.10); --accent3-dim:rgba(59,130,246,0.10); --accent4-dim:rgba(13,148,136,0.10);
       --green:#4ade80; --radius:3px;
     }
     html { scroll-behavior: smooth; }
@@ -117,6 +117,14 @@
     .path.gutcheck .path-list li svg { stroke: var(--accent2); }
     .path.gutcheck .path-hook { background: var(--accent2-dim); color: #f3c87a; }
     .path.gutcheck .path-cta { background: var(--accent2); color: #111; }
+    .path.decisionroom:hover { border-color: var(--accent4); }
+    .path.decisionroom::before { background: var(--accent4); }
+    .path.decisionroom .path-icon { background: var(--accent4-dim); }
+    .path.decisionroom .path-for { color: var(--accent4); background: var(--accent4-dim); }
+    .path.decisionroom .path-list li svg { stroke: var(--accent4); }
+    .path.decisionroom .path-hook { background: var(--accent4-dim); color: #5eead4; }
+    .path.decisionroom .path-cta { background: var(--accent4); color: #fff; }
+    .path.decisionroom .path-badge { color: var(--accent4); background: var(--accent4-dim); border-color: var(--accent4); }
     .path-badge { position: absolute; top: 1.1rem; right: 1.1rem; z-index: 2; font-size: .6rem; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent2); background: var(--accent2-dim); border: 1px solid var(--accent2); border-radius: 100px; padding: .25rem .65rem; }
     .path:hover .path-cta { gap: .9rem; }
 
@@ -318,6 +326,25 @@
 
     <!-- PATHS -->
     <div class="paths">
+      <!-- DECISION ROOM -->
+      <a class="path decisionroom" href="/decisionroom.html">
+        <span class="path-badge">New · World's first</span>
+        <div class="path-top">
+          <div class="path-icon">🏛️</div>
+          <div class="path-for">Real calls · Credible peers</div>
+        </div>
+        <h2>DecisionRoom</h2>
+        <p class="path-tagline">World's first peer-review network for product decisions.</p>
+        <ul class="path-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Post a real product decision — anonymously</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Get structured feedback from PMs who've shipped the same call</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Every response answers what you actually asked — no hot takes</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Close the loop: record what you decided and why</li>
+        </ul>
+        <div class="path-hook">"The second opinion you wish you'd gotten before you shipped."</div>
+        <span class="path-cta">Enter DecisionRoom →</span>
+      </a>
+
       <!-- PORTFOLIO -->
       <a class="path portfolio" href="/portfolio.html">
         <div class="path-top">
@@ -325,14 +352,14 @@
           <div class="path-for">Recruiters &amp; Hiring Managers</div>
         </div>
         <h2>The Portfolio</h2>
-        <p class="path-tagline">Proof, not promises. See exactly how real products got built — 0→1 enterprise product at Rockwell Automation, and a platform used by 1M+ people — down to the problem, the decision, and the number that moved.</p>
+        <p class="path-tagline">Shipped work, not slideware.</p>
         <ul class="path-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Impact-driven case studies (Problem → Action → Result)</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>A featured 0→1 build teardown</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Product philosophy &amp; technical depth</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Résumé, recognition &amp; published books</li>
         </ul>
-        <div class="path-hook">"The rare PM who came up as an engineer — fluent in both business and code."</div>
+        <div class="path-hook">"Messy problem → measurable outcome, with the tradeoffs I actually made."</div>
         <span class="tw-preview" data-tour="portfolio" role="button" tabindex="0">▶ &nbsp;60-second preview</span>
         <span class="path-cta">View the Portfolio →</span>
       </a>
@@ -344,14 +371,14 @@
           <div class="path-for">Product Managers &amp; Future PMs</div>
         </div>
         <h2>The PM Toolkit</h2>
-        <p class="path-tagline">Not another PDF dump. A living toolkit with templates you'll actually use — plus interactive tools most PM coaches simply don't have.</p>
+        <p class="path-tagline">The frameworks I reach for under pressure.</p>
         <ul class="path-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>18+ battle-tested templates &amp; frameworks</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>A live RICE prioritization calculator</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>A personalized PM readiness self-assessment</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Interactive product teardowns &amp; coaching</li>
         </ul>
-        <div class="path-hook">"Practice the actual work of a PM — not just read about it."</div>
+        <div class="path-hook">"Battle-tested templates for discovery, prioritization, and stakeholder calls — free to steal."</div>
         <span class="tw-preview" data-tour="toolkit" role="button" tabindex="0">▶ &nbsp;60-second preview</span>
         <span class="path-cta">Open the Toolkit →</span>
       </a>
@@ -364,14 +391,14 @@
           <div class="path-for">Every PM · Every Call</div>
         </div>
         <h2>PM Gut Check</h2>
-        <p class="path-tagline">A living network where PMs post their toughest product calls and a room of peers weighs in. Commit your decision before you see the crowd — then watch how product managers worldwide actually voted, and why.</p>
+        <p class="path-tagline">Trust your gut, then test it.</p>
         <ul class="path-list">
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Post a real dilemma — live to the community in seconds</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Vote on real calls and see the crowd split — aspiring vs working PMs</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Every dilemma closes with the room's verdict &amp; reasoning</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Build a judgment track record no AI can hand you</li>
         </ul>
-        <div class="path-hook">"The product-judgment feedback loop no prompt can give you."</div>
+        <div class="path-hook">"A commit-before-reveal game that scores your instincts against other PMs."</div>
         <span class="tw-preview" data-tour="gutcheck" role="button" tabindex="0">▶ &nbsp;60-second preview</span>
         <span class="path-cta">Step into the room →</span>
       </a>
