@@ -840,10 +840,28 @@
     html[data-dr-theme="signal"] .not-front .nf-t { font-weight: 800; letter-spacing: -.01em; color: var(--white); }
     /* kind of call — icon cards (dynamic categories preserved) */
     html[data-dr-theme="signal"] .ex-card { border-radius: 26px; border: 1px solid rgba(16,20,36,.1); background: #fff; box-shadow: 0 18px 48px rgba(71,86,150,.08); padding: 1.5rem; transition: transform .18s ease, box-shadow .18s ease; }
-    html[data-dr-theme="signal"] .ex-card::before { content: ""; display: block; width: 44px; height: 44px; border-radius: 15px; background: linear-gradient(135deg,#4f43d8,#00bba5); margin-bottom: 1rem; }
+    .ex-ico { display: none; }
+    html[data-dr-theme="signal"] .ex-ico { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 15px; background: linear-gradient(135deg,#4f43d8,#00bba5); margin-bottom: 1rem; }
+    html[data-dr-theme="signal"] .ex-ico svg { width: 23px; height: 23px; fill: none; stroke: #fff; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
     html[data-dr-theme="signal"] .ex-card:hover { transform: translateY(-4px); box-shadow: 0 26px 60px rgba(71,86,150,.16); }
     html[data-dr-theme="signal"] .ex-tag { color: #4f43d8; background: rgba(79,67,216,.09); border: 1px solid rgba(79,67,216,.22); font-weight: 800; }
     html[data-dr-theme="signal"] .ex-q { color: var(--text2); font-weight: 500; }
+    /* item 4: response-count / wants-met as distinct state capsules */
+    html[data-dr-theme="signal"] .fc-rc { border-radius: 999px; padding: .28rem .72rem; font-weight: 800; font-size: .66rem; letter-spacing: .2px; color: #059669; background: rgba(5,150,105,.1); border: 1px solid rgba(5,150,105,.26); white-space: nowrap; }
+    html[data-dr-theme="signal"] .fc-rc.need { color: #e11d48; background: rgba(225,29,72,.1); border-color: rgba(225,29,72,.28); }
+    html[data-dr-theme="signal"] .fc-met { border-radius: 999px; padding: .28rem .72rem; font-weight: 800; font-size: .66rem; border: 1px solid; }
+    html[data-dr-theme="signal"] .fc-met.g { color: #059669; background: rgba(5,150,105,.1); border-color: rgba(5,150,105,.26); }
+    html[data-dr-theme="signal"] .fc-met.r { color: #e11d48; background: rgba(225,29,72,.1); border-color: rgba(225,29,72,.28); }
+    /* item 2: bento example callout + platform comparison */
+    html[data-dr-theme="signal"] .sig-eg { margin-top: 1.2rem; padding: 1.1rem 1.2rem; border-radius: 18px; background: rgba(79,67,216,.06); border: 1px solid rgba(79,67,216,.16); }
+    html[data-dr-theme="signal"] .sig-eg-l { display: inline-block; font-size: .6rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #4f43d8; background: rgba(79,67,216,.12); padding: .18rem .6rem; border-radius: 999px; margin-bottom: .6rem; }
+    html[data-dr-theme="signal"] .sig-eg p { font-size: .88rem; line-height: 1.6; color: var(--text2); margin-top: .5rem; }
+    html[data-dr-theme="signal"] .sig-eg p b { color: var(--white); }
+    html[data-dr-theme="signal"] .sig-diff { margin-top: 1.1rem; display: grid; gap: .55rem; }
+    html[data-dr-theme="signal"] .sig-diff div { position: relative; padding-left: 1.1rem; font-size: .88rem; line-height: 1.55; color: var(--text2); }
+    html[data-dr-theme="signal"] .sig-diff div::before { content: ""; position: absolute; left: 0; top: .5rem; width: 7px; height: 7px; border-radius: 50%; background: var(--muted2); }
+    html[data-dr-theme="signal"] .sig-diff div:last-child::before { background: linear-gradient(135deg,#4f43d8,#00bba5); }
+    html[data-dr-theme="signal"] .sig-diff b { color: var(--white); }
     /* how it works — winding road stops in card style */
     html[data-dr-theme="signal"] .jr-panel { border-radius: 26px; border: 1px solid rgba(16,20,36,.1); background: #fff; box-shadow: 0 20px 54px rgba(71,86,150,.12); }
     html[data-dr-theme="signal"] .jr-p-title { font-weight: 800; letter-spacing: -.02em; }
@@ -1389,7 +1407,7 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 <section class="section wide" id="trust">
   <div class="sec-eyebrow g">Why it&rsquo;s not a forum</div>
   <div class="sec-title">Anonymous In Public. <span class="g">Credible Underneath.</span></div>
-  <p class="sec-sub" style="margin-bottom:1rem">DecisionRoom is a private room for pressure-testing the hard product calls &mdash; the ones with no clean answer &mdash; before you commit to them. You post a real decision under an alias, so the room reacts to the substance of the call, not your company or your title.</p><p class="sec-sub">And underneath every alias sits visible, earned credibility &mdash; the structured second opinion Reddit, Slack, or a LinkedIn post can&rsquo;t give you, because here you can actually see whose judgment to trust.</p>
+  <p class="sec-sub" style="margin-bottom:1rem">DecisionRoom is a private room for pressure-testing the hard product calls &mdash; the ones with no clean answer &mdash; before you commit to them. You post a real decision under an alias, so the room reacts to the substance of the call, not your company or your title.</p><p class="sec-sub">And underneath every alias sits visible, earned credibility. Unlike a Reddit thread or a LinkedIn post &mdash; where people can only <em>comment</em> &mdash; every reply here is structured, tied to exactly what you asked, and scored, so you can see whose judgment to trust and which answer actually addressed your call.</p>
   <div class="trust-grid">
     <div class="trust-card"><h4>🛡️ Anonymous by default</h4><p>Posts show an alias and PM context only &mdash; e.g. &ldquo;Senior PM &middot; B2B SaaS &middot; 7y.&rdquo; Your name and company are never shown unless you choose to, per case.</p></div>
     <div class="trust-card"><h4>✅ Credible reviewers</h4><p>Reviewers carry verified PM context, and some carry a <strong>judgment score earned in GutCheck</strong> &mdash; demonstrated product judgment, not just a job title.</p></div>
@@ -1408,6 +1426,16 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
         <li>When you decide, you <b>close the case</b> with what you chose and why &mdash; it becomes a playbook for the next PM.</li>
         <li>If under <b>70%</b> of your wants were met, you &mdash; and only you &mdash; can <b>reopen</b> it to pull in more input.</li>
       </ol>
+      <div class="sig-eg">
+        <span class="sig-eg-l">Example</span>
+        <p>You post: <b>&ldquo;Gate our new export feature behind the top tier to drive upsell, or include it to lift adoption &mdash; and how do I message the change to existing users?&rdquo;</b> That&rsquo;s two wants: the <b>gating call</b> and the <b>messaging plan</b>.</p>
+        <p><b>On Reddit you can only leave a comment.</b> You&rsquo;d get a few hot takes on gating, and almost certainly nobody would touch the messaging &mdash; and nothing is tied back to what you asked. Here, every response has to address <em>each</em> want and gets a per-want score, so you instantly see which answer actually covered <b>both</b> the gating decision and the messaging.</p>
+      </div>
+      <div class="sig-diff">
+        <div><b>Reddit</b> &mdash; anonymous strangers, no verified PM context, comments only. No way to tie answers to your wants, score them, or record the outcome.</div>
+        <div><b>LinkedIn</b> &mdash; helpful people, but your dilemma is now <b>public under your real name</b>, and replies are opinions, not structured answers you can compare.</div>
+        <div><b>DecisionRoom</b> &mdash; anonymous in public, credible underneath, every want addressed and <b>scored</b>, and the decision closed and kept as a record.</div>
+      </div>
     </article>
     <article class="sig-cell">
       <div class="sig-ico"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
@@ -1881,10 +1909,29 @@ boot();
     DR_CATS.forEach(function(v){ if(!seen[v.toLowerCase()]){ out.push({tag:v, q:'A real '+v+' call a PM brought to the room \u2014 the kind without an obvious answer.'}); } });
     return out;
   }
+  function catIcon(tag){
+    var t=(tag||'').toLowerCase(); var p;
+    if(/roadmap|priorit|sequenc|backlog/.test(t)) p='<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/>';
+    else if(/pric|packag|monet|tier|revenue/.test(t)) p='<path d="M20 12l-8 8-8-8V4h8z"/><circle cx="8.5" cy="8.5" r="1.4"/>';
+    else if(/launch|gtm|go.to.market|release/.test(t)) p='<path d="M12 2c3 2 5 6 5 10l-5 3-5-3c0-4 2-8 5-10z"/><path d="M9 14l-2 5M15 14l2 5"/>';
+    else if(/career|growth|promo|scope/.test(t)) p='<path d="M4 16l5-5 3 3 7-8"/><path d="M15 6h5v5"/>';
+    else if(/execut|deliver|ship|scope.cut/.test(t)) p='<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1.4 1.4L7.5 4M4 12l1.4 1.4L7.5 10M4 18l1.4 1.4L7.5 16"/>';
+    else if(/technic|tech.debt|architect|engineer|rewrite/.test(t)) p='<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13 5l-2 14"/>';
+    else if(/custom|escalat|churn|account/.test(t)) p='<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-4 3.5-6 7.5-6s7.5 2 7.5 6"/>';
+    else if(/team|org|squad|people|hir/.test(t)) p='<circle cx="9" cy="8" r="3.2"/><path d="M2.5 20c0-3.6 3-5.5 6.5-5.5"/><circle cx="17" cy="9" r="2.8"/><path d="M13.5 20c0-3 3-4.6 7-4.6"/>';
+    else if(/experim|a\/b|test|hypoth/.test(t)) p='<path d="M9 3v6l-5 9a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-5-9V3"/><path d="M8 3h8M7.5 15h9"/>';
+    else if(/data|analyt|metric|north.star/.test(t)) p='<path d="M4 20V10M10 20V4M16 20v-8"/><path d="M2 20h20"/>';
+    else if(/sunset|deprecat|legacy|kill|retire/.test(t)) p='<path d="M21 12.5A8.5 8.5 0 1 1 11.5 3a6.5 6.5 0 0 0 9.5 9.5z"/>';
+    else if(/vision|position|strateg|narrativ/.test(t)) p='<circle cx="12" cy="12" r="9"/><path d="M15 9l-2 6-4 2 2-6z"/>';
+    else if(/resourc|capacit|staff|headcount|bandwidth/.test(t)) p='<path d="M4 18a8 8 0 1 1 16 0"/><path d="M12 18l4-5"/>';
+    else if(/complian|risk|legal|privac|secur/.test(t)) p='<path d="M12 3l7 3v5c0 5-3.3 8.6-7 10-3.7-1.4-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/>';
+    else p='<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M6.2 6.2l2.1 2.1M15.7 15.7l2.1 2.1M17.8 6.2l-2.1 2.1M8.3 15.7l-2.1 2.1"/>';
+    return '<svg viewBox="0 0 24 24">'+p+'</svg>';
+  }
   function renderExamples(reset){
     var grid=document.getElementById('examples-grid'); if(!grid) return; if(reset) exShown=6;
     var items=examplesData();
-    grid.innerHTML=items.slice(0,exShown).map(function(e){ return '<div class="ex-card"><span class="ex-tag">'+escHtml(e.tag)+'</span><div class="ex-q">\u201C'+escHtml(e.q)+'\u201D</div></div>'; }).join('');
+    grid.innerHTML=items.slice(0,exShown).map(function(e){ return '<div class="ex-card"><span class="ex-ico" aria-hidden="true">'+catIcon(e.tag)+'</span><span class="ex-tag">'+escHtml(e.tag)+'</span><div class="ex-q">\u201C'+escHtml(e.q)+'\u201D</div></div>'; }).join('');
     var more=document.getElementById('examples-more');
     if(more){ if(exShown>=items.length){ more.style.display='none'; } else { more.style.display=''; more.textContent='Show more ('+(items.length-exShown)+' more)'; } }
   }
