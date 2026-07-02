@@ -757,21 +757,41 @@
     html[data-dr-theme="signal"] .dr-net { margin: 0; max-width: none; }
     html[data-dr-theme="signal"] .sec-title { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -.03em; font-weight: 800; }
     html[data-dr-theme="signal"] .feed-card {
-      border-radius: 24px; border: 1px solid rgba(16,20,36,.10); background: #fff;
-      box-shadow: 0 18px 48px rgba(71,86,150,.10); padding: 1.55rem 1.6rem 1.4rem;
-      position: relative; overflow: hidden; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      border-radius: 26px; border: 1px solid rgba(16,20,36,.09); background: #fff;
+      box-shadow: 0 20px 54px rgba(71,86,150,.12); padding: 1.7rem 1.75rem 1.5rem;
+      position: relative; overflow: hidden; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
     }
     html[data-dr-theme="signal"] .feed-card::before {
-      content: ""; position: absolute; left: 0; top: 0; right: 0; height: 4px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2)); opacity: .95;
+      content: ""; position: absolute; left: 0; top: 0; right: 0; height: 5px;
+      background: linear-gradient(90deg, #4f43d8, #00bba5);
     }
+    html[data-dr-theme="signal"] .feed-card::after {
+      content: ""; position: absolute; right: -46px; bottom: -46px; width: 148px; height: 148px; border-radius: 40px;
+      background: rgba(79,67,216,.06); transform: rotate(24deg); pointer-events: none;
+    }
+    html[data-dr-theme="signal"] .feed-card > * { position: relative; z-index: 1; }
     html[data-dr-theme="signal"] .feed-card:hover {
-      transform: translateY(-4px); box-shadow: 0 28px 64px rgba(71,86,150,.20); border-color: rgba(79,67,216,.30);
+      transform: translateY(-5px); box-shadow: 0 32px 72px rgba(71,86,150,.22); border-color: rgba(79,67,216,.32);
     }
-    html[data-dr-theme="signal"] .fc-caplab { font-weight: 800; }
+    html[data-dr-theme="signal"] .fc-title { font-size: 1.12rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.3; }
+    html[data-dr-theme="signal"] .fc-attrs { gap: .7rem 1rem; margin-bottom: .2rem; }
+    html[data-dr-theme="signal"] .fc-caplab { font-weight: 800; letter-spacing: .8px; color: var(--muted2); }
+    html[data-dr-theme="signal"] .fc-rowlab { font-weight: 800; letter-spacing: .8px; }
+    /* premium, distinct capsule pills */
     html[data-dr-theme="signal"] .fc-status, html[data-dr-theme="signal"] .fc-urg,
     html[data-dr-theme="signal"] .fc-prod, html[data-dr-theme="signal"] .fc-tag,
-    html[data-dr-theme="signal"] .fc-help, html[data-dr-theme="signal"] .fc-stk { font-weight: 700; }
+    html[data-dr-theme="signal"] .fc-help, html[data-dr-theme="signal"] .fc-stk {
+      font-weight: 800; border-radius: 999px; padding: .28rem .72rem; font-size: .68rem; letter-spacing: .2px; border-width: 1px;
+    }
+    html[data-dr-theme="signal"] .fc-tag { color: #4f43d8; background: rgba(79,67,216,.09); border: 1px solid rgba(79,67,216,.22); }
+    html[data-dr-theme="signal"] .fc-help { color: #1d4ed8; background: rgba(37,99,235,.09); border: 1px solid rgba(37,99,235,.22); }
+    html[data-dr-theme="signal"] .fc-stk { color: #6d28d9; background: rgba(124,58,237,.09); border: 1px solid rgba(124,58,237,.22); }
+    html[data-dr-theme="signal"] .fc-prod { color: #0e7490; background: rgba(14,116,144,.09); border: 1px solid rgba(14,116,144,.24); }
+    html[data-dr-theme="signal"] .fc-ctx { background: rgba(16,20,36,.05); border: 1px solid rgba(16,20,36,.1); color: #2a3350; font-weight: 700; }
+    html[data-dr-theme="signal"] .fc-ctx.mine { background: rgba(79,67,216,.1); border-color: rgba(79,67,216,.3); color: #4f43d8; }
+    html[data-dr-theme="signal"] .fc-share { color: #0e7490; border-color: rgba(14,116,144,.35); border-radius: 999px; font-weight: 800; }
+    html[data-dr-theme="signal"] .fc-reopen { border-radius: 999px; font-weight: 800; }
+    html[data-dr-theme="signal"] .fc-rc { font-weight: 700; color: var(--muted); }
     html[data-dr-theme="signal"] .fbar select, html[data-dr-theme="signal"] .site-search {
       background: rgba(79,67,216,.06); border: 1px solid rgba(79,67,216,.20); border-radius: 999px;
       box-shadow: 0 8px 22px rgba(71,86,150,.08);
@@ -781,6 +801,53 @@
     html[data-dr-theme="signal"] .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
     html[data-dr-theme="signal"] .reveal.in { opacity: 1; transform: none; }
     @media (prefers-reduced-motion: reduce) { html[data-dr-theme="signal"] .reveal { opacity: 1 !important; transform: none !important; transition: none; } }
+    /* ---- Pass 1b: marketing sections ---- */
+    /* bento (why it's not a forum) */
+    html[data-dr-theme="signal"] .trust-grid { display: none; }
+    .sig-bento { display: none; }
+    html[data-dr-theme="signal"] .sig-bento { display: grid; grid-template-columns: 1.32fr .84fr .84fr; grid-auto-rows: 1fr; gap: 18px; margin-top: 1rem; }
+    html[data-dr-theme="signal"] .sig-cell { position: relative; background: #fff; border: 1px solid rgba(16,20,36,.10); border-radius: 30px; padding: 1.8rem; box-shadow: 0 20px 54px rgba(71,86,150,.10); overflow: hidden; }
+    html[data-dr-theme="signal"] .sig-cell.big { grid-row: span 2; }
+    html[data-dr-theme="signal"] .sig-cell::after { content: ""; position: absolute; right: -44px; bottom: -44px; width: 140px; height: 140px; border-radius: 36px; background: rgba(79,67,216,.06); transform: rotate(24deg); }
+    html[data-dr-theme="signal"] .sig-cell > * { position: relative; z-index: 1; }
+    html[data-dr-theme="signal"] .sig-ico { width: 46px; height: 46px; border-radius: 15px; background: linear-gradient(135deg,#4f43d8,#00bba5); display: grid; place-items: center; margin-bottom: 1rem; color: #fff; }
+    html[data-dr-theme="signal"] .sig-ico svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+    html[data-dr-theme="signal"] .sig-cell h3 { font-size: 1.25rem; font-weight: 800; letter-spacing: -.02em; margin-bottom: .5rem; color: var(--white); }
+    html[data-dr-theme="signal"] .sig-cell.big h3 { font-size: 1.6rem; }
+    html[data-dr-theme="signal"] .sig-cell p { color: var(--text2); line-height: 1.6; font-size: .92rem; }
+    html[data-dr-theme="signal"] .sig-loop { list-style: none; margin: 1.1rem 0 0; display: grid; gap: .7rem; }
+    html[data-dr-theme="signal"] .sig-loop li { position: relative; padding-left: 2.1rem; color: var(--text2); line-height: 1.55; font-size: .92rem; }
+    html[data-dr-theme="signal"] .sig-loop li b { color: var(--white); }
+    html[data-dr-theme="signal"] .sig-loop li::before { content: counter(sigstep); counter-increment: sigstep; position: absolute; left: 0; top: 0; width: 1.5rem; height: 1.5rem; border-radius: 8px; background: rgba(79,67,216,.1); color: #4f43d8; font-size: .72rem; font-weight: 800; display: grid; place-items: center; }
+    html[data-dr-theme="signal"] .sig-loop { counter-reset: sigstep; }
+    /* compare — dark DecisionRoom card */
+    html[data-dr-theme="signal"] .vs-wrap { gap: 18px; }
+    html[data-dr-theme="signal"] .vs-panel { border-radius: 28px; padding: 2rem; border: 1px solid rgba(16,20,36,.10); background: #fff; box-shadow: 0 20px 54px rgba(71,86,150,.1); }
+    html[data-dr-theme="signal"] .vs-panel.room { background: #101424; border-color: #101424; color: #fff; position: relative; overflow: hidden; }
+    html[data-dr-theme="signal"] .vs-panel.room::after { content: ""; position: absolute; right: -66px; top: -66px; width: 210px; height: 210px; border-radius: 50%; background: rgba(0,196,167,.22); }
+    html[data-dr-theme="signal"] .vs-panel.room .vs-row span, html[data-dr-theme="signal"] .vs-panel.room .vs-h { color: #fff; }
+    html[data-dr-theme="signal"] .vs-panel.room .vs-row b { color: #a5b4ff; }
+    html[data-dr-theme="signal"] .vs-panel.room .vs-tag { background: rgba(255,255,255,.12); color: #d8def6; }
+    html[data-dr-theme="signal"] .vs-mid { background: #fff; border: 1px solid rgba(16,20,36,.1); box-shadow: 0 10px 24px rgba(71,86,150,.12); color: #4f43d8; font-weight: 800; }
+    html[data-dr-theme="signal"] .vs-summary { border-radius: 20px; background: rgba(79,67,216,.06); border: 1px solid rgba(79,67,216,.16); }
+    /* what it's not — minis with icon boxes (no blue square) */
+    html[data-dr-theme="signal"] .not-card { height: 168px; }
+    html[data-dr-theme="signal"] .not-face { border-radius: 26px; border: 1px solid rgba(16,20,36,.1); background: #fff; box-shadow: 0 18px 48px rgba(71,86,150,.08); padding: 1.4rem; }
+    html[data-dr-theme="signal"] .not-back { background: #101424; border-color: #101424; }
+    html[data-dr-theme="signal"] .not-back .nb-t { color: #e8ecfb; }
+    html[data-dr-theme="signal"] .not-back .nb-t b { color: #fff; }
+    html[data-dr-theme="signal"] .not-front .nf-x { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 15px; background: rgba(79,67,216,.1); border: 1px solid rgba(79,67,216,.2); font-size: 1.35rem; margin-bottom: .7rem; }
+    html[data-dr-theme="signal"] .not-front .nf-t { font-weight: 800; letter-spacing: -.01em; color: var(--white); }
+    /* kind of call — icon cards (dynamic categories preserved) */
+    html[data-dr-theme="signal"] .ex-card { border-radius: 26px; border: 1px solid rgba(16,20,36,.1); background: #fff; box-shadow: 0 18px 48px rgba(71,86,150,.08); padding: 1.5rem; transition: transform .18s ease, box-shadow .18s ease; }
+    html[data-dr-theme="signal"] .ex-card::before { content: ""; display: block; width: 44px; height: 44px; border-radius: 15px; background: linear-gradient(135deg,#4f43d8,#00bba5); margin-bottom: 1rem; }
+    html[data-dr-theme="signal"] .ex-card:hover { transform: translateY(-4px); box-shadow: 0 26px 60px rgba(71,86,150,.16); }
+    html[data-dr-theme="signal"] .ex-tag { color: #4f43d8; background: rgba(79,67,216,.09); border: 1px solid rgba(79,67,216,.22); font-weight: 800; }
+    html[data-dr-theme="signal"] .ex-q { color: var(--text2); font-weight: 500; }
+    /* how it works — winding road stops in card style */
+    html[data-dr-theme="signal"] .jr-panel { border-radius: 26px; border: 1px solid rgba(16,20,36,.1); background: #fff; box-shadow: 0 20px 54px rgba(71,86,150,.12); }
+    html[data-dr-theme="signal"] .jr-p-title { font-weight: 800; letter-spacing: -.02em; }
+    html[data-dr-theme="signal"] .jnode { border-radius: 999px; }
     @media (max-width: 900px) {
       html[data-dr-theme="signal"] .hero { grid-template-columns: 1fr; padding: 2.4rem 1.1rem 2rem; }
       html[data-dr-theme="signal"] .hero-inner { padding: 2.2rem 1.5rem; border-radius: 28px; }
@@ -1328,6 +1395,35 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
     <div class="trust-card"><h4>✅ Credible reviewers</h4><p>Reviewers carry verified PM context, and some carry a <strong>judgment score earned in GutCheck</strong> &mdash; demonstrated product judgment, not just a job title.</p></div>
     <div class="trust-card"><h4>🧱 Structure over noise</h4><p>Every response needs a recommendation, reasoning, risks, and a next step. No &ldquo;+1&rdquo;, no vague takes, no sponsored advice.</p></div>
     <div class="trust-card"><h4>🔒 Safe by design</h4><p>A confidentiality check before every post, and reporting on anything unsafe. Built for real decisions, handled with care.</p></div>
+  </div>
+  <div class="sig-bento" aria-hidden="false">
+    <article class="sig-cell big">
+      <div class="sig-ico"><svg viewBox="0 0 24 24"><path d="M4 6h11M4 12h16M4 18h9"/><circle cx="19" cy="6" r="2"/><circle cx="15" cy="18" r="2"/></svg></div>
+      <h3>How a response actually works</h3>
+      <p>The room doesn&rsquo;t just react &mdash; it works through your call in a set structure, and hands you scored feedback you can act on.</p>
+      <ol class="sig-loop">
+        <li>Every reviewer answers in the same shape: a clear <b>recommendation</b>, the <b>reasoning</b>, the <b>risks</b>, and a concrete <b>next step</b> &mdash; no vague &ldquo;+1&rdquo;s.</li>
+        <li>Each response is matched against every <b>want</b> you listed, so people address what you actually asked for.</li>
+        <li>You get an <b>automatic summary</b> that scores how well each response satisfied each want &mdash; the strongest answers rise to the top.</li>
+        <li>When you decide, you <b>close the case</b> with what you chose and why &mdash; it becomes a playbook for the next PM.</li>
+        <li>If under <b>70%</b> of your wants were met, you &mdash; and only you &mdash; can <b>reopen</b> it to pull in more input.</li>
+      </ol>
+    </article>
+    <article class="sig-cell">
+      <div class="sig-ico"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+      <h3>Anonymous by default</h3>
+      <p>Posts show an alias and PM context only &mdash; &ldquo;Senior PM &middot; B2B SaaS &middot; 7y.&rdquo; Your name and company stay private unless you choose otherwise.</p>
+    </article>
+    <article class="sig-cell">
+      <div class="sig-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div>
+      <h3>Structure over noise</h3>
+      <p>Every response needs a recommendation, reasoning, risks, and a next step. No &ldquo;+1&rdquo;, no vague takes, no sponsored advice.</p>
+    </article>
+    <article class="sig-cell">
+      <div class="sig-ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.3 8.6-7 10-3.7-1.4-7-5-7-10V6l7-3z"/><path d="M8.5 12.2l2.1 2.1 4.9-5"/></svg></div>
+      <h3>Safe by design</h3>
+      <p>A confidentiality check before every post, and reporting on anything unsafe. Built for real decisions, handled with care.</p>
+    </article>
   </div>
 </section>
 
@@ -2556,7 +2652,7 @@ boot();
   function getSection(el){ var s=el.closest('section[id]'); if(s&&SECTIONS[s.id]) return SECTIONS[s.id]; if(el.closest('.hero')) return 'Home'; var a=el.closest('section,header,footer'); if(a){ if(a.tagName==='FOOTER') return 'Footer'; var t=a.querySelector('.sec-title,h1,h2'); if(t) return t.textContent.replace(/\s+/g,' ').trim().slice(0,28);} return 'Page'; }
   var INLINE={STRONG:1,EM:1,SPAN:1,A:1,MARK:1,B:1,I:1,SMALL:1,CODE:1,U:1,SUP:1,SUB:1,LABEL:1};
   function container(node){ var el=node.parentElement; while(el&&INLINE[el.tagName]&&el.parentElement){ el=el.parentElement; } return el; }
-  function buildEntries(){ var out=[],seen=[],w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){ return (n.nodeValue&&n.nodeValue.trim())?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT; }}),n; while(n=w.nextNode()){ var c=container(n); if(!c||seen.indexOf(c)!==-1) continue; if(c.closest('nav, .search-drop, script, style, noscript, .dr-ov, .dr-confirm-ov, .mobile-menu, [data-nosearch]')) continue; var text=c.textContent.replace(/\s+/g,' ').trim(); if(text.length<2) continue; seen.push(c); out.push({el:c,text:text,low:text.toLowerCase(),section:getSection(c)}); } return out; }
+  function buildEntries(){ var out=[],seen=[],w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){ return (n.nodeValue&&n.nodeValue.trim())?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT; }}),n; while(n=w.nextNode()){ var c=container(n); if(!c||seen.indexOf(c)!==-1) continue; if(c.closest('nav, .search-drop, script, style, noscript, .dr-ov, .dr-confirm-ov, .mobile-menu, [data-nosearch]')) continue; if(c.offsetParent===null && c!==document.body) continue; var text=c.textContent.replace(/\s+/g,' ').trim(); if(text.length<2) continue; seen.push(c); out.push({el:c,text:text,low:text.toLowerCase(),section:getSection(c)}); } return out; }
   function snippet(text,pos,qlen){ var start=Math.max(0,pos-38),end=Math.min(text.length,pos+qlen+54); var pre=(start>0?'\u2026':'')+text.slice(start,pos),mid=text.slice(pos,pos+qlen),suf=text.slice(pos+qlen,end)+(end<text.length?'\u2026':''); return esc(pre)+'<mark class="snip">'+esc(mid)+'</mark>'+esc(suf); }
   function clearHL(){ var ms=document.querySelectorAll('mark.search-hl'); for(var i=0;i<ms.length;i++){ var m=ms[i],p=m.parentNode; if(p){ p.replaceChild(document.createTextNode(m.textContent),m); p.normalize(); } } }
   function highlight(el,q){ clearHL(); var lc=q.toLowerCase(); var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null),nodes=[],n; while(n=w.nextNode()){ if(n.nodeValue.toLowerCase().indexOf(lc)!==-1) nodes.push(n); } var first=null; nodes.forEach(function(tn){ var text=tn.nodeValue,low=text.toLowerCase(),frag=document.createDocumentFragment(),i=0,idx; while((idx=low.indexOf(lc,i))!==-1){ if(idx>i) frag.appendChild(document.createTextNode(text.slice(i,idx))); var mk=document.createElement('mark'); mk.className='search-hl'; mk.textContent=text.slice(idx,idx+q.length); frag.appendChild(mk); if(!first) first=mk; i=idx+q.length; } if(i<text.length) frag.appendChild(document.createTextNode(text.slice(i))); if(tn.parentNode) tn.parentNode.replaceChild(frag,tn); }); return first; }
