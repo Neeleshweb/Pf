@@ -13,7 +13,7 @@
   <meta name="twitter:title" content="DecisionRoom — get a second opinion from credible PMs"/>
   <meta name="twitter:description" content="Bring a real product decision into a room of experienced PMs. Structured feedback, not a forum."/>
   <title>DecisionRoom — Neelesh Singh</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet"/>
   <script>(function(){try{var t=localStorage.getItem('dr-theme');var ok={signal:1,editorial:1,warm:1,classic:1};if(t==='indigo')t='signal';if(!ok[t])t='signal';document.documentElement.setAttribute('data-dr-theme',t);}catch(e){document.documentElement.setAttribute('data-dr-theme','signal');}})();</script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -166,7 +166,7 @@
     .hero-grid { position: absolute; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 30%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 50%, #000 30%, transparent 80%); }
     .hero-inner { position: relative; z-index: 1; max-width: 880px; }
     .hero-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-size: .72rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent2); border: 1px solid rgba(var(--accent2-rgb),.3); background: var(--accent2-dim); padding: .45rem 1rem; border-radius: 100px; margin-bottom: 1.5rem; }
-    .hero h1 { font-family: var(--font-display); font-size: clamp(2.8rem, 8vw, 5.8rem); letter-spacing: 2px; line-height: .98; }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 8vw, 5.8rem); letter-spacing: 2px; line-height: .98; }
     .hero h1 .o { color: var(--accent); } .hero h1 .y { color: var(--accent2); }
     .hero-sub { margin: 1.3rem auto 0; max-width: 660px; color: var(--text2); font-size: 1.02rem; line-height: 1.75; }
     .hero-sub strong { color: var(--white); }
@@ -737,24 +737,8 @@
     }
     html[data-dr-theme="signal"] .logo-word { font-weight: 800; letter-spacing: -.02em; }
     html[data-dr-theme="signal"] .nav-links a { font-weight: 600; }
-    html[data-dr-theme="signal"] .hero {
-      display: grid; grid-template-columns: 1.02fr .98fr; gap: 26px; align-items: center;
-      max-width: 1200px; margin: 0 auto; padding: 3.2rem 1.5rem 3rem; overflow: visible;
-    }
-    html[data-dr-theme="signal"] .hero-grid { display: none; }
-    html[data-dr-theme="signal"] .hero-inner {
-      max-width: none; text-align: left; background: #fff; border: 1px solid rgba(16,20,36,.10);
-      border-radius: 36px; padding: 3rem 2.6rem; box-shadow: 0 34px 90px rgba(71,86,150,.16);
-      position: relative; overflow: hidden;
-    }
-    html[data-dr-theme="signal"] .hero-inner::after {
-      content: ""; position: absolute; right: -90px; bottom: -90px; width: 240px; height: 240px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(107,92,255,.5) 0 26%, transparent 27%); opacity: .16; pointer-events: none;
-    }
-    html[data-dr-theme="signal"] .hero h1 { font-size: clamp(2.9rem, 6vw, 4.7rem); line-height: .92; letter-spacing: -.045em; font-weight: 800; margin: .3rem 0 1rem; }
-    html[data-dr-theme="signal"] .hero-eyebrow { justify-content: flex-start; }
-    html[data-dr-theme="signal"] .hero-ctas { justify-content: flex-start; }
-    html[data-dr-theme="signal"] .dr-net { margin: 0; max-width: none; }
+    /* hero: centered like GutCheck across all themes; orbit removed */
+    .dr-net { display: none; }
     html[data-dr-theme="signal"] .sec-title { font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -.03em; font-weight: 800; }
     html[data-dr-theme="signal"] .feed-card {
       border-radius: 26px; border: 1px solid rgba(16,20,36,.09); background: #fff;
@@ -866,13 +850,9 @@
     html[data-dr-theme="signal"] .jr-p-title { font-weight: 800; letter-spacing: -.02em; }
     html[data-dr-theme="signal"] .jnode { border-radius: 999px; }
     @media (max-width: 900px) {
-      html[data-dr-theme="signal"] .hero { grid-template-columns: 1fr; padding: 2.4rem 1.1rem 2rem; }
-      html[data-dr-theme="signal"] .hero-inner { padding: 2.2rem 1.5rem; border-radius: 28px; }
       html[data-dr-theme="signal"] .nav { top: 8px; margin-top: 8px; width: calc(100% - 18px); border-radius: 18px; }
     }
     @media (max-width: 820px) { .sig-bento { grid-template-columns: 1fr; grid-auto-rows: auto; } .sig-cell.big { grid-row: auto; } }
-    @media (max-width: 760px) { .jroad-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: .4rem; } .jroad { min-width: 640px; } .jroad-hint { display: block; font-size: .72rem; color: var(--muted2); text-align: center; margin-top: .4rem; } }
-    .jroad-hint { display: none; }
     /* ===== Pass 2: modals / forms / panels — glass premium (Signal only) ===== */
     @keyframes drModalIn { from { opacity: 0; transform: translateY(12px) scale(.985); } to { opacity: 1; transform: none; } }
     html[data-dr-theme="signal"] .dr-ov { background: rgba(16,20,36,.5); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); }
@@ -913,6 +893,24 @@
     html[data-dr-theme="signal"] .notif-item:hover, html[data-dr-theme="signal"] .search-item:hover, html[data-dr-theme="signal"] .search-item.kbd { background: rgba(var(--accent-rgb),.07); }
     html[data-dr-theme="signal"] .search-item-type { background: rgba(var(--accent-rgb),.1); color: var(--accent); border-radius: 999px; font-weight: 700; }
     html[data-dr-theme="signal"] .search-count { color: var(--muted); font-weight: 700; }
+    /* ===== multi-step form (all themes) ===== */
+    .fstep { display: none; }
+    .fstep.active { display: block; animation: fstepIn .2s ease; }
+    @keyframes fstepIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .optional-wrap { max-height: none !important; overflow: visible; }
+    .fsteps { margin: 0 0 1.5rem; }
+    .fsteps-track { height: 6px; border-radius: 999px; background: var(--card2); overflow: hidden; }
+    .fsteps-fill { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .3s ease; }
+    .fsteps-pips { display: flex; gap: .5rem; margin-top: .75rem; }
+    .fstep-pip { flex: 1; display: flex; align-items: center; gap: .45rem; justify-content: center; background: transparent; border: none; color: var(--muted2); font: inherit; font-size: .78rem; font-weight: 700; cursor: pointer; padding: .35rem; border-radius: 9px; transition: color .15s; }
+    .fstep-pip b { display: inline-grid; place-items: center; width: 21px; height: 21px; border-radius: 50%; background: var(--card2); color: var(--muted); font-size: .72rem; transition: background .15s, color .15s, box-shadow .15s; }
+    .fstep-pip.on { color: var(--white); }
+    .fstep-pip.on b { background: var(--accent); color: var(--btn-ink); }
+    .fstep-pip.cur b { box-shadow: 0 0 0 3px rgba(var(--accent-rgb),.22); }
+    .fstep-review { font-size: .9rem; color: var(--text2); line-height: 1.6; margin: .2rem 0 1rem; padding: 1rem 1.1rem; border-radius: 14px; background: rgba(var(--accent-rgb),.05); border: 1px solid rgba(var(--accent-rgb),.15); }
+    .form-actions { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
+    .fa-spacer { flex: 1; }
+    @media (max-width: 560px) { .fstep-pip { font-size: 0; gap: 0; padding: .25rem; } .fstep-pip b { font-size: .72rem; } }
 </style>
 <style>
 .dr-bridge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.6rem;font-size:.82rem;color:var(--muted);border:1px solid var(--border2);background:var(--card2);padding:.5rem 1rem;border-radius:100px}
@@ -928,7 +926,7 @@
 .step-n{font-family:var(--font-display);font-size:1.6rem;color:var(--accent);line-height:1;margin-bottom:.5rem}
 .step h4{font-size:1rem;color:var(--white);margin-bottom:.4rem}
 .step p{font-size:.86rem;color:var(--muted);line-height:1.6}
-.trust-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;margin-top:.6rem}
+.trust-grid{display:none}
 .trust-card{background:var(--card2);border:1px solid var(--border2);border-radius:14px;padding:1.2rem}
 .trust-card h4{font-size:.95rem;color:var(--white);margin-bottom:.45rem;display:flex;align-items:center;gap:.45rem}
 .trust-card p{font-size:.85rem;color:var(--muted);line-height:1.6}
@@ -1502,7 +1500,6 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
   <div class="sec-title">How <span>DecisionRoom</span> Works</div>
   <p class="sec-sub">A guided map &mdash; tap each stop to move along the journey from a messy call to a defensible decision.</p>
   <div id="journey-map"></div>
-  <div class="jroad-hint">&larr; swipe to explore the road &rarr;</div>
   <div class="jcta" id="journey-cta"><div class="jcta-done">🏁 You&rsquo;ve walked the whole journey. Ready for the real thing?</div><button type="button" class="btn-primary" data-cta="submit">Start your first case &rarr;</button></div>
 </section>
 
@@ -1821,10 +1818,18 @@ boot();
   };
   var iconKey=['origin','share','clear','persp','scale','move','finish'];
   function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
-  var N=steps.length, W=1000, H=330, padX=72, topY=104, botY=224;
-  var xs=[], ys=[];
-  for(var k=0;k<N;k++){ xs.push(Math.round(padX + k*((W-2*padX)/(N-1)))); ys.push(k%2===0?topY:botY); }
-  function seg(k){ var x1=xs[k],y1=ys[k],x2=xs[k+1],y2=ys[k+1],mx=(x1+x2)/2; return 'M'+x1+' '+y1+' C '+mx+' '+y1+', '+mx+' '+y2+', '+x2+' '+y2; }
+  var vertical = !!(window.matchMedia && window.matchMedia('(max-width:700px)').matches);
+  var N=steps.length, W, H, xs=[], ys=[];
+  if(vertical){
+    W=330; var vgap=116, vtop=64; H=vtop + (N-1)*vgap + 78;
+    for(var k=0;k<N;k++){ xs.push(k%2===0?98:232); ys.push(vtop + k*vgap); }
+  } else {
+    W=1000; H=330; var padX=72, topY=104, botY=224;
+    for(var k=0;k<N;k++){ xs.push(Math.round(padX + k*((W-2*padX)/(N-1)))); ys.push(k%2===0?topY:botY); }
+  }
+  function seg(k){ var x1=xs[k],y1=ys[k],x2=xs[k+1],y2=ys[k+1];
+    if(vertical){ var my=(y1+y2)/2; return 'M'+x1+' '+y1+' C '+x1+' '+my+', '+x2+' '+my+', '+x2+' '+y2; }
+    var mx=(x1+x2)/2; return 'M'+x1+' '+y1+' C '+mx+' '+y1+', '+mx+' '+y2+', '+x2+' '+y2; }
   var hereTag='<span class="jnode-here">\u25CF You are here</span>';
   var svg='<div class="jroad-wrap"><svg class="jroad" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The DecisionRoom journey, from a messy call to a defensible decision">';
   for(var k=0;k<N-1;k++){ svg+='<path class="jr-seg" data-seg="'+k+'" d="'+seg(k)+'"></path>'; }
@@ -1834,7 +1839,8 @@ boot();
     svg+='<g class="'+cls+'" data-i="'+i+'" transform="translate('+xs[i]+','+ys[i]+')">';
     if(i===0) svg+='<circle class="jr-pulse" r="27"></circle>';
     svg+='<circle class="jr-circ" r="27"></circle><g class="jr-ic" transform="translate(-12,-12)">'+icons[iconKey[i]]+'</g>';
-    svg+='<text class="jr-lbl" y="48">'+esc(s.label)+'</text></g>';
+    if(vertical){ var rgt = xs[i] < W/2; svg+='<text class="jr-lbl" x="'+(rgt?42:-42)+'" y="5" text-anchor="'+(rgt?'start':'end')+'">'+esc(s.label)+'</text></g>'; }
+    else { svg+='<text class="jr-lbl" y="48">'+esc(s.label)+'</text></g>'; }
   });
   svg+='<g class="jr-here" id="jr-here"><rect class="jr-here-bg" x="-57" y="-68" width="114" height="22" rx="11"></rect><text class="jr-here-tx" y="-53">\u25CF YOU ARE HERE</text></g>';
   svg+='</svg><div class="jr-panel current" id="jr-panel"></div></div>';
@@ -2042,10 +2048,34 @@ boot();
 
   function addOpt(){ var wrap=document.getElementById('f-options'); if(!wrap) return; var n=wrap.querySelectorAll('.optrow').length; var L='ABCDEF'.charAt(n)||'?'; var row=document.createElement('div'); row.className='optrow'; row.innerHTML='<span class="optlbl">'+L+'</span><input class="optinput" maxlength="160" placeholder="Option '+L+'">'; wrap.appendChild(row); }
 
+  var fcur=1, FSTEPS=3;
+  function showStep(n){ if(!form) return; n=Math.max(1,Math.min(FSTEPS,n)); fcur=n;
+    [].slice.call(form.querySelectorAll('.fstep')).forEach(function(st){ st.classList.toggle('active', (+st.getAttribute('data-fstep'))===n); });
+    [].slice.call(form.querySelectorAll('.fstep-pip')).forEach(function(p){ var pn=+p.getAttribute('data-goto'); p.classList.toggle('on', pn<=n); p.classList.toggle('cur', pn===n); });
+    var fill=document.getElementById('fsteps-fill'); if(fill) fill.style.width=Math.round((n-1)/(FSTEPS-1)*100)+'%';
+    var b=document.getElementById('f-back'), nx=document.getElementById('f-next'), sb=document.getElementById('f-submit');
+    if(b) b.style.display = n>1?'':'none';
+    if(nx) nx.style.display = n<FSTEPS?'':'none';
+    if(sb) sb.style.display = n===FSTEPS?'':'none';
+    var modal=form.closest('.dr-modal'); if(modal&&modal.scrollTo){ try{ modal.scrollTo({top:0,behavior:'smooth'}); }catch(e){ modal.scrollTop=0; } }
+  }
+  function essentialsMissing(){ var m=[]; var g=function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
+    var opts=[].slice.call(document.querySelectorAll('#f-options .optinput')).map(function(i){return i.value.trim();}).filter(Boolean);
+    if(g('f-title').length<6) m.push('a title (6+ chars)');
+    if(g('f-situation').length<20) m.push('the situation (a bit more)');
+    if(g('f-decision').length<10) m.push('the decision');
+    if(opts.length<2) m.push('at least two options');
+    if(g('f-risk').length<10) m.push('the biggest risk');
+    if(!selChips('f-help').length) m.push('a type of help');
+    if(!selChips('f-cat').length) m.push('a problem category');
+    return m;
+  }
   function buildForm(){
     if(!form) return;
     form.innerHTML=
-      '<div class="form-sec"><span class="fs-ic"><svg viewBox="0 0 24 24"><path d="M5 3h9l5 5v13H5z"/><path d="M14 3v5h5M8.5 13h7M8.5 17h4.5"/></svg></span>The essentials</div>'
+      '<div class="fsteps"><div class="fsteps-track"><div class="fsteps-fill" id="fsteps-fill"></div></div><div class="fsteps-pips"><button type="button" class="fstep-pip on cur" data-goto="1"><b>1</b> Essentials</button><button type="button" class="fstep-pip" data-goto="2"><b>2</b> Context</button><button type="button" class="fstep-pip" data-goto="3"><b>3</b> Review</button></div></div>'
+     +'<div class="fstep active" data-fstep="1">'
+     +'<div class="form-sec"><span class="fs-ic"><svg viewBox="0 0 24 24"><path d="M5 3h9l5 5v13H5z"/><path d="M14 3v5h5M8.5 13h7M8.5 17h4.5"/></svg></span>The essentials</div>'
      +'<div class="fld"><label>Title <span class="req">*</span></label><div class="hint">Summarize the decision in one sentence. <span class="ac-tip">Press Tab to accept a suggestion.</span></div><input id="f-title" maxlength="140" autocomplete="off" placeholder="e.g. Build the custom feature to save the renewal, or protect the roadmap?"></div>'
      +'<div class="fld"><label>Situation summary <span class="req">*</span></label><div class="hint">What\u2019s happening? Give enough context \u2014 without naming your company.</div><textarea id="f-situation" rows="4"></textarea></div>'
      +'<div class="fld"><label>Decision needed <span class="req">*</span></label><div class="hint">What exactly are you trying to decide?</div><textarea id="f-decision" rows="2"></textarea></div>'
@@ -2053,8 +2083,9 @@ boot();
      +'<div class="fld"><label>Biggest risk / fear <span class="req">*</span></label><div class="hint">What are you afraid will go wrong?</div><textarea id="f-risk" rows="2"></textarea></div>'
      +'<div class="fld"><label>Type of help needed <span class="req">*</span></label><div class="hint">Pick what you want from reviewers \u2014 or type your own and press Enter.</div><div class="chips" id="f-help"></div></div>'
      +'<div class="fld"><label>Problem category <span class="req">*</span></label><div class="hint">The subject area \u2014 or type your own and press Enter.</div><div class="chips" id="f-cat"></div></div>'
-     +'<button type="button" class="opt-toggle" id="f-opt-toggle">+ Add optional details (recommended)</button>'
-     +'<div id="f-optional" class="optional-wrap">'
+     +'</div>'
+     +'<div class="fstep" data-fstep="2">'
+     +'<div id="f-optional" class="optional-wrap open">'
        +'<div class="form-sec"><span class="fs-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></span>Optional context</div>'
        +'<div class="fld"><label>Product context</label><select id="f-product"><option value="">\u2014</option>'+PRODUCT.map(function(p){return '<option>'+escHtml(p)+'</option>';}).join('')+'</select></div>'
        +'<div class="fld"><label>Stakeholders involved</label>'+chips('f-stk',STK_OPTS)+'</div>'
@@ -2065,13 +2096,20 @@ boot();
        +'<div class="fld half"><label>Urgency</label><select id="f-urgency">'+URG.map(function(u){return '<option value="'+u[0]+'"'+(u[0]==='this_week'?' selected':'')+'>'+u[1]+'</option>';}).join('')+'</select></div>'
        +'<div class="fld half"><label>Anonymity</label><select id="f-anon">'+ANON.map(function(a){return '<option value="'+a[0]+'">'+a[1]+'</option>';}).join('')+'</select></div>'
      +'</div>'
+     +'</div>'
+     +'<div class="fstep" data-fstep="3">'
+     +'<div class="form-sec"><span class="fs-ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.3 8.6-7 10-3.7-1.4-7-5-7-10V6z"/><path d="M8.5 12.2l2.1 2.1 4.9-5"/></svg></span>Review &amp; post</div>'
+     +'<p class="fstep-review">You\u2019re about to post this case anonymously. Reviewers will see your alias and PM context only \u2014 never your name or company. You can close it (or reopen it if under 70% of your wants are met) at any time.</p>'
      +'<label class="conf"><input type="checkbox" id="f-conf"> <span>I\u2019ve removed company / customer confidential information. <span class="req">*</span></span></label>'
-     +'<div class="form-actions"><button type="button" class="btn-ghost" id="f-cancel">Cancel</button><button type="button" class="btn-primary" id="f-submit">Post case</button></div>'
+     +'</div>'
+     +'<div class="form-actions"><button type="button" class="btn-ghost" id="f-cancel">Cancel</button><span class="fa-spacer"></span><button type="button" class="btn-ghost" id="f-back" style="display:none">\u2190 Back</button><button type="button" class="btn-primary" id="f-next">Next \u2192</button><button type="button" class="btn-primary" id="f-submit" style="display:none">Post case</button></div>'
      +'<div class="form-err" id="f-err"></div>';
     renderTaxInto('f-help','help'); renderTaxInto('f-cat','category');
     addOpt(); addOpt(); updateOptNote();
     document.getElementById('f-addopt').onclick=function(){ if(document.querySelectorAll('#f-options .optrow').length<6){ addOpt(); updateOptNote(); } };
-    document.getElementById('f-opt-toggle').onclick=function(){ var w=document.getElementById('f-optional'); var open=w.classList.toggle('open'); this.textContent=open?'\u2013 Hide optional details':'+ Add optional details (recommended)'; };
+    document.getElementById('f-next').onclick=function(){ var err=document.getElementById('f-err'); if(fcur===1){ var m=essentialsMissing(); if(m.length){ err.textContent='Please complete: '+m.join(', ')+'.'; return; } } err.textContent=''; showStep(fcur+1); };
+    document.getElementById('f-back').onclick=function(){ document.getElementById('f-err').textContent=''; showStep(fcur-1); };
+    [].slice.call(form.querySelectorAll('.fstep-pip')).forEach(function(pip){ pip.onclick=function(){ var t=+pip.getAttribute('data-goto'); if(t>fcur && fcur===1){ var m=essentialsMissing(); if(m.length){ document.getElementById('f-err').textContent='Please complete: '+m.join(', ')+'.'; return; } } document.getElementById('f-err').textContent=''; showStep(t); }; });
     [].slice.call(form.querySelectorAll('.chip')).forEach(function(c){ c.onclick=function(){ c.classList.toggle('sel'); }; });
     [].slice.call(form.querySelectorAll('.chip-add-in')).forEach(function(inp){ inp.onkeydown=function(e){ if(e.key==='Enter'){ e.preventDefault(); addCustomChip(inp); } }; });
     document.getElementById('f-cancel').onclick=closeSubmit;
@@ -2080,9 +2118,10 @@ boot();
     attachAutocomplete(document.getElementById('f-situation'), LONG_AC);
     attachAutocomplete(document.getElementById('f-decision'), LONG_AC);
     attachAutocomplete(document.getElementById('f-risk'), LONG_AC);
+    showStep(1);
   }
 
-  function drOpenSubmit(){ if(!ov||!form) return; if(!form.innerHTML) buildForm(); ov.classList.add('open'); document.body.style.overflow='hidden'; }
+  function drOpenSubmit(){ if(!ov||!form) return; if(!form.innerHTML) buildForm(); showStep(1); ov.classList.add('open'); document.body.style.overflow='hidden'; }
   function closeSubmit(){ if(!ov) return; ov.classList.remove('open'); document.body.style.overflow=''; }
   window.drOpenSubmit=drOpenSubmit;
   if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) closeSubmit(); });
@@ -2106,7 +2145,7 @@ boot();
     if(!help.length) miss.push('a type of help');
     if(!cats.length) miss.push('a problem category');
     if(!document.getElementById('f-conf').checked) miss.push('the confidentiality confirmation');
-    if(miss.length){ err.textContent='Please complete: '+miss.join(', ')+'.'; return; }
+    if(miss.length){ err.textContent='Please complete: '+miss.join(', ')+'.'; if(miss.some(function(x){return x.indexOf('confidentiality')<0;})) showStep(1); return; }
     var payload={
       p_title:get('f-title'), p_situation:get('f-situation'), p_decision:get('f-decision'),
       p_options:opts, p_biggest_risk:get('f-risk'), p_help_types:help,
