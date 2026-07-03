@@ -911,6 +911,130 @@
     .form-actions { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; }
     .fa-spacer { flex: 1; }
     @media (max-width: 560px) { .fstep-pip { font-size: 0; gap: 0; padding: .25rem; } .fstep-pip b { font-size: .72rem; } }
+
+    /* ===== Forum vs DecisionRoom compare + wants checklist (all themes) ===== */
+    .fcmp{max-width:820px;margin:1.7rem auto 0;border:1px solid var(--border2);border-radius:20px;overflow:hidden;background:var(--card);box-shadow:var(--card-shadow)}
+    .fcmp-row{display:grid;grid-template-columns:1fr 120px 150px;align-items:center;border-top:1px solid var(--border)}
+    .fcmp-row:first-child{border-top:none}
+    .fcmp-head{background:var(--card2)}
+    .fcmp-head .fcmp-c{font-size:.68rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted)}
+    .fcmp-feat{padding:.85rem 1.1rem;font-size:.88rem;color:var(--white);line-height:1.4}
+    .fcmp-feat b{color:var(--accent)}
+    .fcmp-c{padding:.8rem;text-align:center}
+    .fcmp-c.dr{background:rgba(var(--accent-rgb),.05)}
+    .fcmp-drtag{display:inline-block;font-weight:800;color:var(--accent);background:rgba(var(--accent-rgb),.12);padding:.22rem .6rem;border-radius:999px;font-size:.64rem;letter-spacing:.4px}
+    .fcmp-yes{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(5,150,105,.15);color:#059669;font-weight:900;font-size:.85rem}
+    .fcmp-no{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(225,29,72,.12);color:#e11d48;font-weight:900;font-size:.8rem}
+    @media (max-width:560px){ .fcmp-row{grid-template-columns:1fr 60px 72px} .fcmp-feat{font-size:.8rem;padding:.7rem .8rem} .fcmp-head .fcmp-c{font-size:.5rem;padding:.6rem .2rem} .fcmp-c{padding:.6rem .2rem} .fcmp-drtag{padding:.18rem .4rem} }
+    .wtick{max-width:620px;margin:1.7rem auto 0}
+    .wtick-h{font-size:.92rem;color:var(--text2);margin-bottom:.9rem;text-align:center;line-height:1.5}
+    .wtick-list{list-style:none;display:grid;gap:.55rem;margin:0;padding:0}
+    .wtick-list li{display:flex;align-items:center;gap:.7rem;padding:.7rem .9rem;border:1px solid var(--border2);border-radius:14px;background:var(--card);opacity:.45;transform:translateY(7px);transition:opacity .4s ease,transform .4s ease}
+    .wtick.go .wtick-list li{opacity:1;transform:none;transition-delay:calc(var(--wi)*.35s)}
+    .wtick-x{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--card2);flex-shrink:0}
+    .wtick-x svg{width:15px;height:15px;fill:none;stroke:var(--muted2);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:26;stroke-dashoffset:26;transition:stroke-dashoffset .4s ease,stroke .3s}
+    .wtick.go .wtick-list li .wtick-x{background:rgba(5,150,105,.14)}
+    .wtick.go .wtick-list li .wtick-x svg{stroke:#059669;stroke-dashoffset:0;transition-delay:calc(var(--wi)*.35s + .2s)}
+    .wtick-t{flex:1;font-weight:600;color:var(--white)}
+    .wtick-b{font-size:.68rem;font-weight:800;color:#059669;background:rgba(5,150,105,.12);padding:.2rem .55rem;border-radius:999px;opacity:0;transition:opacity .3s;white-space:nowrap}
+    .wtick.go .wtick-list li .wtick-b{opacity:1;transition-delay:calc(var(--wi)*.35s + .3s)}
+    @media (prefers-reduced-motion:reduce){ .wtick-list li,.wtick-x svg,.wtick-b{opacity:1 !important;transform:none !important;stroke-dashoffset:0 !important;transition:none !important} }
+    /* ===== How-it-works simulator (all themes) ===== */
+    .sim-wrap{max-width:760px;margin:1.9rem auto 0}
+    .sim-frame{border-radius:18px;overflow:hidden;border:1px solid var(--border2);background:var(--card);box-shadow:0 30px 80px rgba(20,26,60,.18)}
+    .sim-chrome{display:flex;align-items:center;gap:.5rem;padding:.6rem .9rem;background:var(--card2);border-bottom:1px solid var(--border)}
+    .sim-cdot{width:11px;height:11px;border-radius:50%}
+    .sim-cdot.r{background:#ff5f57}.sim-cdot.y{background:#febc2e}.sim-cdot.g{background:#28c840}
+    .sim-addr{flex:1;margin-left:.5rem;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:.32rem .8rem;font-size:.76rem;color:var(--muted);text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+    .sim-view{position:relative;min-height:340px;padding:1.5rem;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 0%,rgba(var(--accent-rgb),.05),transparent 60%)}
+    .sim-view.in{animation:simIn .42s ease}
+    @keyframes simIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+    .sim-view > *{width:100%}
+    .sim-capw{display:flex;align-items:center;gap:.7rem;justify-content:center;margin-top:1.1rem;flex-wrap:wrap}
+    .sim-num{font-weight:800;color:var(--muted2);font-size:.8rem}
+    .sim-num b{color:var(--accent)}
+    .sim-cap{color:var(--text2);font-size:.95rem;text-align:center;max-width:560px}
+    .sim-rail{display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin-top:1.1rem}
+    .sim-rdot{display:flex;flex-direction:column;align-items:center;gap:.3rem;background:transparent;border:none;cursor:pointer;padding:.2rem;color:var(--muted2);font:inherit}
+    .sim-rdot > span{width:9px;height:9px;border-radius:50%;background:var(--border2);transition:background .2s,transform .2s}
+    .sim-rdot em{font-style:normal;font-size:.58rem;font-weight:700;max-width:72px;text-align:center;line-height:1.15}
+    .sim-rdot.on > span{background:var(--accent);transform:scale(1.35)}
+    .sim-rdot.done > span{background:rgba(var(--accent-rgb),.5)}
+    .sim-rdot.on{color:var(--white)}
+    .sim-ctrls{display:flex;gap:.5rem;justify-content:center;margin-top:1.1rem}
+    .sim-ctrl{background:var(--card2);border:1px solid var(--border2);color:var(--white);border-radius:999px;padding:.45rem 1rem;font:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .15s}
+    .sim-ctrl:hover{border-color:var(--accent);color:var(--accent)}
+    .sim-ctrl.playing{background:rgba(var(--accent-rgb),.1);border-color:var(--accent);color:var(--accent)}
+    .sim-swipe{display:none;text-align:center;font-size:.74rem;color:var(--muted2);margin-top:.8rem}
+    .sim-cta{text-align:center;margin-top:1.4rem}
+    @media (max-width:640px){ .sim-rdot em{display:none} .sim-swipe{display:block} .sim-view{min-height:300px;padding:1.1rem} }
+    .sim-blank{text-align:center}
+    .sim-url-big{font-size:1.3rem;font-weight:700;color:var(--white);letter-spacing:-.01em}
+    .sim-caret{display:inline-block;width:2px;height:1.1em;background:var(--accent);margin-left:2px;vertical-align:-2px;animation:simBlink 1s step-end infinite}
+    @keyframes simBlink{50%{opacity:0}}
+    .sim-blank-t{margin-top:.7rem;color:var(--muted);font-size:.85rem}
+    .sim-index{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;width:100%;max-width:420px;margin:0 auto}
+    .sim-icard{border:1px solid var(--border2);border-radius:14px;padding:1rem;font-weight:700;color:var(--white);background:var(--card2)}
+    .sim-icard.glow{border-color:var(--accent);background:rgba(var(--accent-rgb),.08);animation:simPulse 1.7s ease-in-out infinite}
+    .sim-ibadge{display:block;margin-top:.3rem;font-size:.58rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.5px}
+    @keyframes simPulse{0%,100%{box-shadow:0 0 0 3px rgba(var(--accent-rgb),.16)}50%{box-shadow:0 0 0 7px rgba(var(--accent-rgb),.04)}}
+    .sim-hero{text-align:center}
+    .sim-eyebrow{font-size:.66rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent2)}
+    .sim-h1{font-family:'Bebas Neue',sans-serif;font-size:1.95rem;letter-spacing:1px;line-height:1.05;color:var(--white);margin:.6rem 0 1.1rem}
+    .sim-btn{background:var(--accent);color:var(--btn-ink);border:none;border-radius:10px;padding:.6rem 1.3rem;font:inherit;font-weight:700;font-size:.9rem;cursor:default}
+    .sim-btn.glow{animation:simPulse 1.7s ease-in-out infinite}
+    .sim-gwrap{display:flex;justify-content:center}
+    .sim-gcard{background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:1.4rem;max-width:320px;width:100%;box-shadow:0 20px 50px rgba(0,0,0,.2)}
+    .sim-glogo{font-weight:700;color:var(--white);text-align:center;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:.5rem}
+    .sim-gG{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#fff;color:#4285f4;font-weight:900;font-size:.82rem}
+    .sim-gacct{display:flex;align-items:center;gap:.7rem;border:1px solid var(--border2);border-radius:12px;padding:.7rem}
+    .sim-gav{width:34px;height:34px;border-radius:50%;background:var(--accent);color:var(--btn-ink);display:grid;place-items:center;font-weight:800}
+    .sim-gname{font-weight:700;color:var(--white);font-size:.88rem}
+    .sim-gmail{color:var(--muted);font-size:.76rem}
+    .sim-gnote{margin-top:.9rem;font-size:.76rem;color:var(--muted);line-height:1.5;text-align:center}
+    .sim-modal{max-width:440px;margin:0 auto;width:100%}
+    .sim-mh{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:.5px;color:var(--white);margin-bottom:.9rem}
+    .sim-steps{display:flex;align-items:center;gap:.4rem;margin-bottom:1rem}
+    .sim-pip{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:.72rem;font-weight:800;background:var(--card2);color:var(--muted)}
+    .sim-pip.on{background:var(--accent);color:var(--btn-ink)}
+    .sim-line{flex:1;height:2px;background:var(--border2)}
+    .sim-field{margin-bottom:.8rem}
+    .sim-flab{display:block;font-size:.74rem;font-weight:700;color:var(--white);margin-bottom:.35rem}
+    .sim-hl{font-size:.62rem;font-weight:700;color:var(--accent);background:rgba(var(--accent-rgb),.12);padding:.1rem .45rem;border-radius:999px;margin-left:.3rem}
+    .sim-inp{background:var(--field-bg);border:1px solid var(--border2);border-radius:10px;padding:.6rem .7rem;font-size:.82rem;color:var(--white);line-height:1.4}
+    .sim-chips{display:flex;flex-wrap:wrap;gap:.4rem}
+    .sim-chip{font-size:.72rem;font-weight:700;padding:.3rem .65rem;border-radius:999px;background:var(--card2);border:1px solid var(--border2);color:var(--muted)}
+    .sim-chip.w{color:var(--accent3);background:rgba(var(--accent3-rgb),.12);border-color:rgba(var(--accent3-rgb),.3)}
+    .sim-chip.c{color:var(--accent);background:rgba(var(--accent-rgb),.1);border-color:rgba(var(--accent-rgb),.28)}
+    .sim-field.pulse{border-radius:12px;padding:.6rem;margin:0 -.6rem .8rem;animation:simFieldPulse 1.9s ease-in-out infinite}
+    @keyframes simFieldPulse{0%,100%{background:transparent}50%{background:rgba(var(--accent-rgb),.07)}}
+    .sim-fcard{max-width:420px;margin:0 auto;width:100%;position:relative;background:var(--card);border:1px solid var(--border2);border-radius:18px;padding:1.2rem;overflow:hidden}
+    .sim-fbar{position:absolute;left:0;top:0;right:0;height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+    .sim-fattrs{display:flex;gap:1.2rem;margin:.4rem 0 .7rem}
+    .sim-fcap{display:flex;flex-direction:column;gap:.25rem}
+    .sim-fcap b{font-size:.52rem;letter-spacing:.6px;text-transform:uppercase;color:var(--muted2);font-weight:800}
+    .sim-st{font-size:.66rem;font-weight:800;padding:.2rem .6rem;border-radius:999px;align-self:flex-start}
+    .sim-st.open{color:#059669;background:rgba(5,150,105,.12)}
+    .sim-st.urg{color:var(--accent2);background:var(--accent2-dim)}
+    .sim-st.res{color:#059669;background:rgba(5,150,105,.15)}
+    .sim-ftitle{font-weight:800;color:var(--white);line-height:1.35;margin-bottom:.6rem;font-size:.95rem}
+    .sim-frow{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem}
+    .sim-frow b{font-size:.52rem;letter-spacing:.6px;text-transform:uppercase;color:var(--muted2);font-weight:800;margin-right:.2rem}
+    .sim-more{font-size:.68rem;color:var(--muted2);font-weight:700}
+    .sim-ffoot{display:flex;align-items:center;justify-content:space-between;margin-top:.7rem;gap:.5rem}
+    .sim-ctx{font-size:.7rem;font-weight:600;color:var(--white);background:var(--card2);border:1px solid var(--border2);border-radius:999px;padding:.22rem .6rem;white-space:nowrap}
+    .sim-rc{font-size:.64rem;font-weight:800;padding:.24rem .6rem;border-radius:999px;white-space:nowrap}
+    .sim-rc.need{color:#e11d48;background:rgba(225,29,72,.1)}
+    .sim-rc.met{color:#059669;background:rgba(5,150,105,.12)}
+    .sim-decided{font-size:.82rem;color:var(--text2);margin-bottom:.4rem}
+    .sim-decided b{color:var(--white)}
+    .sim-resp{max-width:430px;margin:0 auto;width:100%;background:var(--card);border:1px solid var(--border2);border-radius:16px;padding:1.1rem}
+    .sim-resp-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem}
+    .sim-stars{color:var(--accent2);letter-spacing:1px;font-size:.82rem}
+    .sim-resp-body{font-size:.86rem;color:var(--text2);line-height:1.55;margin-bottom:.8rem}
+    .sim-wans{display:grid;gap:.4rem}
+    .sim-wa{display:flex;align-items:center;justify-content:space-between;font-size:.78rem;color:var(--white);background:var(--card2);border-radius:9px;padding:.42rem .7rem}
+    .sim-wa-ok{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:rgba(5,150,105,.15);color:#059669;font-weight:900;font-size:.72rem}
 </style>
 <style>
 .dr-bridge{display:inline-flex;align-items:center;gap:.5rem;margin-top:1.6rem;font-size:.82rem;color:var(--muted);border:1px solid var(--border2);background:var(--card2);padding:.5rem 1rem;border-radius:100px}
@@ -1446,61 +1570,24 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 
 <section class="section wide" id="trust">
   <div class="sec-eyebrow g">Why it&rsquo;s not a forum</div>
-  <div class="sec-title">Anonymous In Public. <span class="g">Credible Underneath.</span></div>
-  <p class="sec-sub" style="margin-bottom:1rem">DecisionRoom is a private room for pressure-testing the hard product calls &mdash; the ones with no clean answer &mdash; before you commit to them. You post a real decision under an alias, so the room reacts to the substance of the call, not your company or your title.</p><p class="sec-sub">And underneath every alias sits visible, earned credibility. Unlike a Reddit thread or a LinkedIn post &mdash; where people can only <em>comment</em> &mdash; every reply here is structured, tied to exactly what you asked, and scored, so you can see whose judgment to trust and which answer actually addressed your call.</p>
-  <div class="trust-grid">
-    <div class="trust-card"><h4>🛡️ Anonymous by default</h4><p>Posts show an alias and PM context only &mdash; e.g. &ldquo;Senior PM &middot; B2B SaaS &middot; 7y.&rdquo; Your name and company are never shown unless you choose to, per case.</p></div>
-    <div class="trust-card"><h4>✅ Credible reviewers</h4><p>Reviewers carry verified PM context, and some carry a <strong>judgment score earned in GutCheck</strong> &mdash; demonstrated product judgment, not just a job title.</p></div>
-    <div class="trust-card"><h4>🧱 Structure over noise</h4><p>Every response needs a recommendation, reasoning, risks, and a next step. No &ldquo;+1&rdquo;, no vague takes, no sponsored advice.</p></div>
-    <div class="trust-card"><h4>🔒 Safe by design</h4><p>A confidentiality check before every post, and reporting on anything unsafe. Built for real decisions, handled with care.</p></div>
+  <div class="sec-title">It Doesn&rsquo;t Just Reply. <span class="g">It Answers You.</span></div>
+  <p class="sec-sub">A forum gives you scattered opinions from strangers. DecisionRoom gives you structured answers to the exact things you asked &mdash; from PMs whose context you can see.</p>
+  <div class="fcmp" role="table" aria-label="Forum versus DecisionRoom">
+    <div class="fcmp-row fcmp-head"><div class="fcmp-feat"></div><div class="fcmp-c forum">A forum / Reddit / LinkedIn</div><div class="fcmp-c dr"><span class="fcmp-drtag">DecisionRoom</span></div></div>
+    <div class="fcmp-row"><div class="fcmp-feat">Post a question and get replies</div><div class="fcmp-c forum"><span class="fcmp-yes">✓</span></div><div class="fcmp-c dr"><span class="fcmp-yes">✓</span></div></div><div class="fcmp-row"><div class="fcmp-feat">Post anonymously, without your name attached</div><div class="fcmp-c forum"><span class="fcmp-yes">✓</span></div><div class="fcmp-c dr"><span class="fcmp-yes">✓</span></div></div><div class="fcmp-row"><div class="fcmp-feat">A searchable archive you can look back on</div><div class="fcmp-c forum"><span class="fcmp-yes">✓</span></div><div class="fcmp-c dr"><span class="fcmp-yes">✓</span></div></div><div class="fcmp-row"><div class="fcmp-feat">Verified PM context behind every reply</div><div class="fcmp-c forum"><span class="fcmp-no">✕</span></div><div class="fcmp-c dr"><span class="fcmp-yes">✓</span></div></div><div class="fcmp-row"><div class="fcmp-feat">Structured answers — recommendation, reasoning, risks, next step</div><div class="fcmp-c forum"><span class="fcmp-no">✕</span></div><div class="fcmp-c dr"><span class="fcmp-yes">✓</span></div></div><div class="fcmp-row"><div class="fcmp-feat">Every reply addresses <b>your specific asks</b></div><div class="fcmp-c forum"><span class="fcmp-no">✕</span></div><div class="fcmp-c dr"><span class="fcmp-yes">✓</span></div></div><div class="fcmp-row"><div class="fcmp-feat">Per-ask scoring and an automatic summary</div><div class="fcmp-c forum"><span class="fcmp-no">✕</span></div><div class="fcmp-c dr"><span class="fcmp-yes">✓</span></div></div><div class="fcmp-row"><div class="fcmp-feat">Close the loop — the decision and outcome recorded</div><div class="fcmp-c forum"><span class="fcmp-no">✕</span></div><div class="fcmp-c dr"><span class="fcmp-yes">✓</span></div></div><div class="fcmp-row"><div class="fcmp-feat">Reopen it if under 70% of your asks are met</div><div class="fcmp-c forum"><span class="fcmp-no">✕</span></div><div class="fcmp-c dr"><span class="fcmp-yes">✓</span></div></div><div class="fcmp-row"><div class="fcmp-feat">A confidentiality check before every post</div><div class="fcmp-c forum"><span class="fcmp-no">✕</span></div><div class="fcmp-c dr"><span class="fcmp-yes">✓</span></div></div>
   </div>
-  <div class="sig-bento" aria-hidden="false">
-    <article class="sig-cell big">
-      <div class="sig-ico"><svg viewBox="0 0 24 24"><path d="M4 6h11M4 12h16M4 18h9"/><circle cx="19" cy="6" r="2"/><circle cx="15" cy="18" r="2"/></svg></div>
-      <h3>How a response actually works</h3>
-      <p>The room doesn&rsquo;t just react &mdash; it works through your call in a set structure, and hands you scored feedback you can act on.</p>
-      <ol class="sig-loop">
-        <li>Every reviewer answers in the same shape: a clear <b>recommendation</b>, the <b>reasoning</b>, the <b>risks</b>, and a concrete <b>next step</b> &mdash; no vague &ldquo;+1&rdquo;s.</li>
-        <li>Each response is matched against every <b>want</b> you listed, so people address what you actually asked for.</li>
-        <li>You get an <b>automatic summary</b> that scores how well each response satisfied each want &mdash; the strongest answers rise to the top.</li>
-        <li>When you decide, you <b>close the case</b> with what you chose and why &mdash; it becomes a playbook for the next PM.</li>
-        <li>If under <b>70%</b> of your wants were met, you &mdash; and only you &mdash; can <b>reopen</b> it to pull in more input.</li>
-      </ol>
-      <div class="sig-eg">
-        <span class="sig-eg-l">Example</span>
-        <p>You post: <b>&ldquo;Gate our new export feature behind the top tier to drive upsell, or include it to lift adoption &mdash; and how do I message the change to existing users?&rdquo;</b> That&rsquo;s two wants: the <b>gating call</b> and the <b>messaging plan</b>.</p>
-        <p><b>On Reddit you can only leave a comment.</b> You&rsquo;d get a few hot takes on gating, and almost certainly nobody would touch the messaging &mdash; and nothing is tied back to what you asked. Here, every response has to address <em>each</em> want and gets a per-want score, so you instantly see which answer actually covered <b>both</b> the gating decision and the messaging.</p>
-      </div>
-      <div class="sig-diff">
-        <div><b>Reddit</b> &mdash; anonymous strangers, no verified PM context, comments only. No way to tie answers to your wants, score them, or record the outcome.</div>
-        <div><b>LinkedIn</b> &mdash; helpful people, but your dilemma is now <b>public under your real name</b>, and replies are opinions, not structured answers you can compare.</div>
-        <div><b>DecisionRoom</b> &mdash; anonymous in public, credible underneath, every want addressed and <b>scored</b>, and the decision closed and kept as a record.</div>
-      </div>
-    </article>
-    <article class="sig-cell">
-      <div class="sig-ico"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
-      <h3>Anonymous by default</h3>
-      <p>Posts show an alias and PM context only &mdash; &ldquo;Senior PM &middot; B2B SaaS &middot; 7y.&rdquo; Your name and company stay private unless you choose otherwise.</p>
-    </article>
-    <article class="sig-cell">
-      <div class="sig-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></div>
-      <h3>Structure over noise</h3>
-      <p>Every response needs a recommendation, reasoning, risks, and a next step. No &ldquo;+1&rdquo;, no vague takes, no sponsored advice.</p>
-    </article>
-    <article class="sig-cell">
-      <div class="sig-ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.3 8.6-7 10-3.7-1.4-7-5-7-10V6l7-3z"/><path d="M8.5 12.2l2.1 2.1 4.9-5"/></svg></div>
-      <h3>Safe by design</h3>
-      <p>A confidentiality check before every post, and reporting on anything unsafe. Built for real decisions, handled with care.</p>
-    </article>
+  <div class="wtick" data-nosearch>
+    <div class="wtick-h">And it doesn&rsquo;t stop at &ldquo;good thread.&rdquo; It ticks off every ask, one by one:</div>
+    <ul class="wtick-list"><li style="--wi:0"><span class="wtick-x"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><span class="wtick-t">&ldquo;Frame the tradeoffs&rdquo;</span><span class="wtick-b">answered &amp; scored</span></li><li style="--wi:1"><span class="wtick-x"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><span class="wtick-t">&ldquo;Critique my decision&rdquo;</span><span class="wtick-b">answered &amp; scored</span></li><li style="--wi:2"><span class="wtick-x"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><span class="wtick-t">&ldquo;Give me a stakeholder plan&rdquo;</span><span class="wtick-b">answered &amp; scored</span></li><li style="--wi:3"><span class="wtick-x"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span><span class="wtick-t">&ldquo;Name the risk I'm missing&rdquo;</span><span class="wtick-b">answered &amp; scored</span></li></ul>
   </div>
 </section>
 
 <section class="section wide" id="how">
   <div class="sec-eyebrow">The loop</div>
   <div class="sec-title">How <span>DecisionRoom</span> Works</div>
-  <p class="sec-sub">A guided map &mdash; tap each stop to move along the journey from a messy call to a defensible decision.</p>
-  <div id="journey-map"></div>
-  <div class="jcta" id="journey-cta"><div class="jcta-done">🏁 You&rsquo;ve walked the whole journey. Ready for the real thing?</div><button type="button" class="btn-primary" data-cta="submit">Start your first case &rarr;</button></div>
+  <p class="sec-sub">Watch the whole thing end to end &mdash; real screens, one PM&rsquo;s real call, from first click to a closed decision.</p>
+  <div id="dr-sim" data-nosearch></div>
+  <div class="sim-cta"><button type="button" class="btn-primary" data-cta="submit">Start your first case &rarr;</button></div>
 </section>
 
 <section class="section wide" id="compare">
@@ -1797,75 +1884,62 @@ boot();
 
 /* ===== interactive journey map ===== */
 (function(){
-  var mount=document.getElementById('journey-map'); if(!mount) return;
-  var steps=[
-    {kind:'origin',label:'Origin',title:'The Messy PM Call',body:'You\u2019re facing a decision where the answer is not obvious, the stakes are real, and smart people on your team disagree. <em>Example: \u201CDo we protect the roadmap or build the customer-specific feature to save the renewal?\u201D</em>'},
-    {kind:'stop',label:'Stop 1',title:'Share the Real Situation',body:'Bring the actual context: the pressure, the tradeoffs, the stakeholders, and the option you\u2019re leaning toward. No sanitized case studies. No perfect framing required. You start by saying what is really happening.'},
-    {kind:'stop',label:'Stop 2',title:'Turn Chaos into a Clear Decision',body:'Your situation gets broken down into the core decision, available options, constraints, risks, and what kind of help you need. Now PMs can respond to the real call, not guess what you\u2019re asking.'},
-    {kind:'stop',label:'Stop 3',title:'Get Perspectives from PMs Who\u2019ve Been There',body:'Experienced PMs weigh in with what they would do, what they\u2019ve seen go wrong, and what they\u2019d watch out for before making the decision. You get judgment from real product experience, not generic framework advice.'},
-    {kind:'stop',label:'Stop 4',title:'Compare the Tradeoffs Before You Commit',body:'See where people agree, where they disagree, and which path carries the biggest product, customer, technical, or political risk. You stop thinking in \u201Cright vs wrong\u201D and start seeing the decision clearly.'},
-    {kind:'stop',label:'Stop 5',title:'Leave with a Defensible Next Move',body:'Walk away with a sharper recommendation, a stakeholder conversation plan, or a discovery step that helps you move forward with confidence. <em>Example: \u201CDecline the custom build, but offer a smaller reusable version tied to renewal risk.\u201D</em>'},
-    {kind:'finish',label:'Finish Line',title:'Better Product Judgment',body:'You make the call with more confidence \u2014 and when you share what happened, your decision becomes useful for the next PM facing the same kind of mess.'}
+  var mount=document.getElementById('dr-sim'); if(!mount) return;
+  var SITE='neeleshpmtoolkit.com', DR='neeleshpmtoolkit.com/decisionroom.html';
+  var scenes=[
+    {label:'Open the site', addr:SITE, cap:'It starts in your browser \u2014 head to your DecisionRoom site.',
+     html:'<div class="sim-blank"><div class="sim-url-big">'+SITE+'<span class="sim-caret"></span></div><div class="sim-blank-t">Portfolio &middot; PM Toolkit &middot; GutCheck &middot; DecisionRoom</div></div>'},
+    {label:'Pick DecisionRoom', addr:SITE, cap:'Land on the homepage and open DecisionRoom \u2014 the world\u2019s first peer-review network for product decisions.',
+     html:'<div class="sim-index"><div class="sim-icard">Portfolio</div><div class="sim-icard">PM Toolkit</div><div class="sim-icard">GutCheck</div><div class="sim-icard glow">DecisionRoom<span class="sim-ibadge">World\u2019s first</span></div></div>'},
+    {label:'See the room', addr:DR, cap:'See what it\u2019s about \u2014 then start your own call.',
+     html:'<div class="sim-hero"><div class="sim-eyebrow">Trust your gut. Then get a second opinion.</div><div class="sim-h1">Bring your hardest product call into the room.</div><button class="sim-btn glow">Submit a case</button></div>'},
+    {label:'Sign in', addr:DR, cap:'Sign in with Google \u2014 you\u2019re anonymous in the room, always.',
+     html:'<div class="sim-gwrap"><div class="sim-gcard"><div class="sim-glogo"><span class="sim-gG">G</span> Sign in with Google</div><div class="sim-gacct"><div class="sim-gav">N</div><div><div class="sim-gname">Neelesh Singh</div><div class="sim-gmail">you@company.com</div></div></div><div class="sim-gnote">In the room you\u2019ll appear only as an <b>alias</b> \u2014 never your name or company.</div></div></div>'},
+    {label:'Set your context', addr:DR, cap:'Set your PM context once \u2014 it\u2019s the credibility others see under your alias.',
+     html:'<div class="sim-modal"><div class="sim-mh">Your PM profile</div><div class="sim-field"><span class="sim-flab">Alias</span><div class="sim-inp">PM-CandidBadger</div></div><div class="sim-field"><span class="sim-flab">Role &amp; context</span><div class="sim-chips"><span class="sim-chip">Senior PM</span><span class="sim-chip">B2B SaaS</span><span class="sim-chip">7 years</span></div></div></div>'},
+    {label:'Post the call', addr:DR, cap:'Post the real decision. Your \u201Cwants\u201D and categories are what drive every answer.',
+     html:'<div class="sim-modal"><div class="sim-steps"><span class="sim-pip on">1</span><span class="sim-line"></span><span class="sim-pip">2</span><span class="sim-line"></span><span class="sim-pip">3</span></div><div class="sim-mh">Post your decision</div><div class="sim-field"><span class="sim-flab">Title</span><div class="sim-inp">Build the custom feature to save the renewal, or protect the roadmap?</div></div><div class="sim-field pulse"><span class="sim-flab">Your wants <span class="sim-hl">answers must satisfy these</span></span><div class="sim-chips"><span class="sim-chip w">Frame the tradeoffs</span><span class="sim-chip w">Critique my decision</span><span class="sim-chip w">Stakeholder strategy</span></div></div><div class="sim-field pulse"><span class="sim-flab">Categories</span><div class="sim-chips"><span class="sim-chip c">Roadmap / Prioritization</span><span class="sim-chip c">Customer escalation</span></div></div></div>'},
+    {label:'It\u2019s live', addr:DR, cap:'Your case is live in the room \u2014 anonymous, structured, waiting for input.',
+     html:'<div class="sim-fcard"><div class="sim-fbar"></div><div class="sim-fattrs"><span class="sim-fcap"><b>Status</b><span class="sim-st open">Open</span></span><span class="sim-fcap"><b>Urgency</b><span class="sim-st urg">This week</span></span></div><div class="sim-ftitle">Build the custom feature to save the renewal, or protect the roadmap?</div><div class="sim-frow"><b>Category</b><span class="sim-chip c">Roadmap</span><span class="sim-chip c">Escalation</span></div><div class="sim-frow"><b>Wants</b><span class="sim-chip w">Frame tradeoffs</span><span class="sim-chip w">Critique</span><span class="sim-more">+1</span></div><div class="sim-ffoot"><span class="sim-ctx">Senior PM &middot; B2B SaaS &middot; 7y</span><span class="sim-rc need">Needs responses</span></div></div>'},
+    {label:'PMs answer', addr:DR, cap:'Experienced PMs respond \u2014 and each one answers every ask you listed.',
+     html:'<div class="sim-resp"><div class="sim-resp-top"><span class="sim-ctx">Group PM &middot; Marketplace &middot; 9y</span><span class="sim-stars">\u2605\u2605\u2605\u2605\u2606</span></div><div class="sim-resp-body">\u201CShip the smaller reusable version. It de-risks the renewal without mortgaging the roadmap\u2026\u201D</div><div class="sim-wans"><div class="sim-wa"><span>Frame the tradeoffs</span><span class="sim-wa-ok">\u2713</span></div><div class="sim-wa"><span>Critique my decision</span><span class="sim-wa-ok">\u2713</span></div><div class="sim-wa"><span>Stakeholder strategy</span><span class="sim-wa-ok">\u2713</span></div></div></div>'},
+    {label:'Close the loop', addr:DR, cap:'You see each response scored against your asks, pick your path, and close the case.',
+     html:'<div class="sim-fcard"><div class="sim-fbar"></div><div class="sim-fattrs"><span class="sim-fcap"><b>Status</b><span class="sim-st res">Resolved</span></span></div><div class="sim-ftitle">Build the custom feature to save the renewal\u2026</div><div class="sim-decided">Decided: <b>Ship a smaller reusable version</b></div><div class="sim-ffoot"><span class="sim-ctx">Senior PM &middot; B2B SaaS &middot; 7y</span><span class="sim-rc met">4 of 5 met &middot; 80%</span></div></div>'}
   ];
-  var icons={
-    origin:'<path d="M12 2C8.7 2 6 4.7 6 8c0 4.5 6 12 6 12s6-7.5 6-12c0-3.3-2.7-6-6-6z"/><circle cx="12" cy="8" r="2.3"/>',
-    share:'<path d="M4 5h16v9H9l-4 4z"/><path d="M8 9h8M8 12h5"/>',
-    clear:'<rect x="6" y="4" width="12" height="16" rx="2"/><path d="M9.5 4h5v2.4h-5z"/><path d="M9 11h6M9 14.5h4"/>',
-    persp:'<circle cx="9" cy="9.5" r="2.8"/><path d="M3.5 18.5c0-3 2.6-4.8 5.5-4.8s5.5 1.8 5.5 4.8"/><circle cx="17" cy="8.5" r="2"/><path d="M16 13.4c2.3.2 4 1.9 4 4.1"/>',
-    scale:'<path d="M12 4v15M6.5 8h11M6.5 8l-3 5.5h6zM17.5 8l-3 5.5h6zM8.5 19h7"/>',
-    move:'<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5l-2.2 4.8-4.8 2.2 2.2-4.8z"/>',
-    finish:'<path d="M6.5 3v18"/><path d="M6.5 4h11l-2.2 3.2L17.5 10.5h-11z"/>'
-  };
-  var iconKey=['origin','share','clear','persp','scale','move','finish'];
-  function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
-  var vertical = !!(window.matchMedia && window.matchMedia('(max-width:700px)').matches);
-  var N=steps.length, W, H, xs=[], ys=[];
-  if(vertical){
-    W=330; var vgap=116, vtop=64; H=vtop + (N-1)*vgap + 78;
-    for(var k=0;k<N;k++){ xs.push(k%2===0?98:232); ys.push(vtop + k*vgap); }
-  } else {
-    W=1000; H=330; var padX=72, topY=104, botY=224;
-    for(var k=0;k<N;k++){ xs.push(Math.round(padX + k*((W-2*padX)/(N-1)))); ys.push(k%2===0?topY:botY); }
+  var N=scenes.length, i=0, timer=null;
+  var reduce=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var playing=!reduce;
+  var rail='';
+  for(var k=0;k<N;k++){ rail+='<button type="button" class="sim-rdot" data-i="'+k+'" title="'+scenes[k].label+'"><span></span><em>'+scenes[k].label+'</em></button>'; }
+  mount.innerHTML='<div class="sim-wrap">'
+    +'<div class="sim-frame"><div class="sim-chrome"><span class="sim-cdot r"></span><span class="sim-cdot y"></span><span class="sim-cdot g"></span><div class="sim-addr" id="sim-addr"></div></div><div class="sim-view" id="sim-view"></div></div>'
+    +'<div class="sim-capw"><span class="sim-num"><b id="sim-num">1</b> / '+N+'</span><span class="sim-cap" id="sim-cap"></span></div>'
+    +'<div class="sim-rail">'+rail+'</div>'
+    +'<div class="sim-ctrls"><button type="button" class="sim-ctrl" id="sim-prev">\u2039 Prev</button><button type="button" class="sim-ctrl" id="sim-play"></button><button type="button" class="sim-ctrl" id="sim-next">Next \u203A</button></div>'
+    +'<div class="sim-swipe" id="sim-swipe">\u2039 swipe, or use the arrows, to move through \u203A</div>'
+    +'</div>';
+  var view=document.getElementById('sim-view');
+  function show(n){ i=(n+N)%N; var sc=scenes[i];
+    view.classList.remove('in'); void view.offsetWidth;
+    view.innerHTML=sc.html; view.classList.add('in');
+    document.getElementById('sim-addr').textContent=sc.addr;
+    document.getElementById('sim-cap').innerHTML=sc.cap;
+    document.getElementById('sim-num').textContent=(i+1);
+    [].slice.call(mount.querySelectorAll('.sim-rdot')).forEach(function(d){ var di=+d.getAttribute('data-i'); d.classList.toggle('on', di===i); d.classList.toggle('done', di<i); });
   }
-  function seg(k){ var x1=xs[k],y1=ys[k],x2=xs[k+1],y2=ys[k+1];
-    if(vertical){ var my=(y1+y2)/2; return 'M'+x1+' '+y1+' C '+x1+' '+my+', '+x2+' '+my+', '+x2+' '+y2; }
-    var mx=(x1+x2)/2; return 'M'+x1+' '+y1+' C '+mx+' '+y1+', '+mx+' '+y2+', '+x2+' '+y2; }
-  var hereTag='<span class="jnode-here">\u25CF You are here</span>';
-  var svg='<div class="jroad-wrap"><svg class="jroad" viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The DecisionRoom journey, from a messy call to a defensible decision">';
-  for(var k=0;k<N-1;k++){ svg+='<path class="jr-seg" data-seg="'+k+'" d="'+seg(k)+'"></path>'; }
-  for(var k=0;k<N-1;k++){ svg+='<path class="jr-dash" d="'+seg(k)+'"></path>'; }
-  steps.forEach(function(s,i){
-    var cls='jr-node'+(s.kind==='finish'?' finish':'')+(i===0?' current':' locked');
-    svg+='<g class="'+cls+'" data-i="'+i+'" transform="translate('+xs[i]+','+ys[i]+')">';
-    if(i===0) svg+='<circle class="jr-pulse" r="27"></circle>';
-    svg+='<circle class="jr-circ" r="27"></circle><g class="jr-ic" transform="translate(-12,-12)">'+icons[iconKey[i]]+'</g>';
-    if(vertical){ var rgt = xs[i] < W/2; svg+='<text class="jr-lbl" x="'+(rgt?42:-42)+'" y="5" text-anchor="'+(rgt?'start':'end')+'">'+esc(s.label)+'</text></g>'; }
-    else { svg+='<text class="jr-lbl" y="48">'+esc(s.label)+'</text></g>'; }
-  });
-  svg+='<g class="jr-here" id="jr-here"><rect class="jr-here-bg" x="-57" y="-68" width="114" height="22" rx="11"></rect><text class="jr-here-tx" y="-53">\u25CF YOU ARE HERE</text></g>';
-  svg+='</svg><div class="jr-panel current" id="jr-panel"></div></div>';
-  mount.innerHTML=svg;
-  var nodes=[].slice.call(mount.querySelectorAll('.jr-node'));
-  function markSegments(){ var segs=mount.querySelectorAll('.jr-seg'); for(var k=0;k<segs.length;k++){ if(nodes[k].classList.contains('done')) segs[k].classList.add('done'); else segs[k].classList.remove('done'); } }
-  function moveHere(i){ var h=document.getElementById('jr-here'); if(!h) return; h.style.display=''; h.setAttribute('transform','translate('+xs[i]+','+ys[i]+')'); }
-  function showPanel(i){ var s=steps[i], p=document.getElementById('jr-panel'); if(!p) return;
-    var isCur=nodes[i].classList.contains('current'), done=nodes[i].classList.contains('done');
-    p.className='jr-panel'+(s.kind==='finish'&&done?' finish':(isCur?' current':''));
-    var here=isCur?hereTag:'';
-    var hint=isCur?(s.kind==='finish'?'Tap the flag to finish \uD83C\uDFC1':'Tap the glowing stop to continue \u2192'):(done?'\u2713 Visited \u00B7 tap stops to revisit':'');
-    p.innerHTML='<div class="jr-p-label">'+esc(s.label)+here+'</div><div class="jr-p-title">'+s.title+'</div><div class="jr-p-body">'+s.body+'</div>'+(hint?'<div class="jr-p-hint">'+hint+'</div>':'');
-  }
-  function advance(i){ var node=nodes[i]; if(!node||!node.classList.contains('current')) return;
-    node.classList.remove('current'); node.classList.add('done');
-    var pulse=node.querySelector('.jr-pulse'); if(pulse&&pulse.parentNode) pulse.parentNode.removeChild(pulse);
-    markSegments();
-    if(i+1<N){ var nx=nodes[i+1]; nx.classList.remove('locked'); nx.classList.add('current');
-      var c=document.createElementNS('http://www.w3.org/2000/svg','circle'); c.setAttribute('class','jr-pulse'); c.setAttribute('r','27'); nx.insertBefore(c, nx.firstChild);
-      moveHere(i+1); showPanel(i+1);
-    } else { var h=document.getElementById('jr-here'); if(h) h.style.display='none'; var cta=document.getElementById('journey-cta'); if(cta) cta.classList.add('show'); showPanel(i); }
-  }
-  markSegments(); moveHere(0); showPanel(0);
-  nodes.forEach(function(node,i){ node.addEventListener('click', function(){ if(node.classList.contains('current')) advance(i); else if(node.classList.contains('done')) showPanel(i); }); });
+  function setPlay(){ var b=document.getElementById('sim-play'); b.innerHTML=playing?'\u25AE\u25AE Pause':'\u25B6 Play'; b.classList.toggle('playing', playing); }
+  function stop(){ if(timer){ clearInterval(timer); timer=null; } }
+  function start(){ stop(); if(playing) timer=setInterval(function(){ show(i+1); }, 5000); }
+  function go(n){ show(n); start(); }
+  document.getElementById('sim-prev').onclick=function(){ go(i-1); };
+  document.getElementById('sim-next').onclick=function(){ go(i+1); };
+  document.getElementById('sim-play').onclick=function(){ playing=!playing; setPlay(); start(); };
+  [].slice.call(mount.querySelectorAll('.sim-rdot')).forEach(function(d){ d.onclick=function(){ go(+d.getAttribute('data-i')); }; });
+  var tx=0; var frame=mount.querySelector('.sim-frame');
+  frame.addEventListener('touchstart', function(e){ tx=e.changedTouches[0].clientX; }, {passive:true});
+  frame.addEventListener('touchend', function(e){ var dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>40){ go(dx<0?i+1:i-1); } }, {passive:true});
+  setPlay(); show(0); start();
+  document.addEventListener('visibilitychange', function(){ if(document.hidden) stop(); else start(); });
 })();
 
 /* ===== is-not flip cards (tap toggles; hover handles desktop via CSS) ===== */
@@ -2845,6 +2919,12 @@ boot();
   }
   window.drWireReveal=wire;
   if(document.readyState!=='loading') wire(); else document.addEventListener('DOMContentLoaded', wire);
+})();
+</script>
+<script>
+(function(){ var w=document.querySelector('.wtick'); if(!w) return; if(!('IntersectionObserver' in window)){ w.classList.add('go'); return; }
+  var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ w.classList.add('go'); io.disconnect(); } }); }, {threshold:.35});
+  io.observe(w);
 })();
 </script>
 </body>
