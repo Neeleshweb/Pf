@@ -2513,6 +2513,7 @@ boot();
     }});
   }
   function markActed(rid, val, d){ if(!SB) return; SB.rpc('dr_mark_acted',{p_response_id:rid,p_acted:val}).then(function(res){ var r=(res&&res.data)||{}; if(r.ok){ if(typeof toast==='function') toast(val?'Marked \u2014 the reviewer will see you acted on it':'Unmarked'); loadResponses(d); } }).catch(function(){}); }
+  var _respShow=null;
   function renderRespondArea(el, d, mine){
     if(!el) return;
     if(d.is_mine){
@@ -2532,19 +2533,39 @@ boot();
     var mc=(mine&&mine.confidence)||'med', mv=(mine&&mine.visibility)||'cred';
     function csel(v){ return mc===v?' selected':''; } function vsel(v){ return mv===v?' selected':''; }
     el.innerHTML='<div class="cd-form"><div class="cd-form-h">'+(mine?'Update your response':'Add your response')+'</div>'
+      +'<div class="fsteps"><div class="fsteps-track"><div class="fsteps-fill" id="rf-fill"></div></div><div class="fsteps-pips"><button type="button" class="fstep-pip on cur" data-rgoto="1"><b>1</b> Your response</button><button type="button" class="fstep-pip" data-rgoto="2"><b>2</b> Their asks</button></div></div>'
+      +'<div class="fstep active" data-rstep="1">'
       +'<label class="cd-f-l">Which option would you lean toward? <span class="cd-f-opt">optional</span></label>'
       +'<select id="rf-opt"><option value="">\u2014 No strong lean \u2014</option>'+optionsHtml+'<option value="A different approach"'+daSel+'>A different approach</option></select>'
       +'<div class="cd-f-row"><div class="cd-f-col"><label class="cd-f-l">Your confidence</label><select id="rf-conf"><option value="low"'+csel('low')+'>Low</option><option value="med"'+csel('med')+'>Medium</option><option value="high"'+csel('high')+'>High</option></select></div>'
       +'<div class="cd-f-col"><label class="cd-f-l">Show me as</label><select id="rf-vis"><option value="cred"'+vsel('cred')+'>My PM context</option><option value="anon"'+vsel('anon')+'>Anonymous PM</option></select></div></div>'
       +'<label class="cd-f-l">Your take <span class="req">*</span></label><textarea id="rf-body" rows="4" maxlength="2500" placeholder="What would you do, and why? Draw on what you\u2019ve actually seen \u2014 not generic advice.">'+(mine?escHtml(mine.body):'')+'</textarea>'
       +'<label class="cd-f-l">One thing to watch out for <span class="cd-f-opt">optional</span></label><textarea id="rf-wo" rows="2" maxlength="600" placeholder="The risk or blind spot you\u2019d flag.">'+(mine?escHtml(mine.watch_out||''):'')+'</textarea>'
+      +'</div>'
+      +'<div class="fstep" data-rstep="2">'
+      +(wantsInputsHtml(d, mine)?'<label class="cd-f-l">Answer each ask <span class="req">*</span> <span class="cd-f-opt">this is what earns your rating</span></label>':'')
       +wantsInputsHtml(d, mine)
       +'<div class="cd-wmeter" id="rf-wmeter"></div>'
-      +'<div class="cd-form-act"><button type="button" class="btn-primary" id="rf-submit">'+(mine?'Update response':'Post response')+'</button><span class="cd-form-err" id="rf-err"></span></div></div>';
+      +'</div>'
+      +'<div class="cd-form-act"><button type="button" class="btn-ghost" id="rf-back" style="display:none">\u2190 Back</button><button type="button" class="btn-primary" id="rf-next">Next \u2192</button><button type="button" class="btn-primary" id="rf-submit" style="display:none">'+(mine?'Update response':'Post response')+'</button><span class="cd-form-err" id="rf-err"></span></div></div>';
     var rsb=document.getElementById('rf-submit'); if(rsb) rsb.onclick=function(){ submitResponse(d, !!mine); };
     var upd=function(){ updWantsMeter('#cd-respond', d, 'answer', 'rf-wmeter'); };
     [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ t.addEventListener('input', function(){ t.classList.remove('field-err'); upd(); }); }); upd();
     var bodyEl=document.getElementById('rf-body'); if(bodyEl) bodyEl.addEventListener('input', function(){ bodyEl.classList.remove('field-err'); });
+    var RSTEPS=2, rcur=1;
+    function rShow(n){ n=Math.max(1,Math.min(RSTEPS,n)); rcur=n;
+      [].slice.call(el.querySelectorAll('.fstep')).forEach(function(st){ st.classList.toggle('active',(+st.getAttribute('data-rstep'))===n); });
+      [].slice.call(el.querySelectorAll('.fstep-pip')).forEach(function(p){ var pn=+p.getAttribute('data-rgoto'); p.classList.toggle('on',pn<=n); p.classList.toggle('cur',pn===n); });
+      var fill=document.getElementById('rf-fill'); if(fill) fill.style.width=(n===RSTEPS?100:50)+'%';
+      var b=document.getElementById('rf-back'), nx=document.getElementById('rf-next'), sb=document.getElementById('rf-submit');
+      if(b) b.style.display=n>1?'':'none'; if(nx) nx.style.display=n<RSTEPS?'':'none'; if(sb) sb.style.display=n===RSTEPS?'':'none';
+    }
+    _respShow=rShow;
+    function rbodyShort(){ return (((document.getElementById('rf-body')||{}).value||'').trim()).length<20; }
+    var rnx=document.getElementById('rf-next'); if(rnx) rnx.onclick=function(){ var err=document.getElementById('rf-err'); if(rbodyShort()){ if(err) err.textContent='Your take needs at least a sentence or two first.'; if(bodyEl){ bodyEl.classList.add('field-err'); bodyEl.focus(); } return; } if(err) err.textContent=''; rShow(2); };
+    var rbk=document.getElementById('rf-back'); if(rbk) rbk.onclick=function(){ var err=document.getElementById('rf-err'); if(err) err.textContent=''; rShow(1); };
+    [].slice.call(el.querySelectorAll('.fstep-pip')).forEach(function(p){ p.onclick=function(){ var t=+p.getAttribute('data-rgoto'); if(t>rcur && rbodyShort()){ var err=document.getElementById('rf-err'); if(err) err.textContent='Your take needs at least a sentence or two first.'; return; } rShow(t); }; });
+    rShow(1);
   }
   function updWantsMeter(scopeSel, d, key, meterId){
     var el=document.getElementById(meterId); if(!el) return;
@@ -2563,7 +2584,7 @@ boot();
     var err=document.getElementById('rf-err'), btn=document.getElementById('rf-submit');
     var bodyEl=document.getElementById('rf-body');
     [].slice.call(document.querySelectorAll('#cd-respond .field-err')).forEach(function(e){ e.classList.remove('field-err'); });
-    if(body.length<20){ if(err) err.textContent='Your take needs at least a sentence or two \u2014 the highlighted box is too short.'; if(bodyEl){ bodyEl.classList.add('field-err'); bodyEl.focus(); bodyEl.scrollIntoView({block:'center',behavior:'smooth'}); } return; }
+    if(body.length<20){ if(err) err.textContent='Your take needs at least a sentence or two \u2014 the highlighted box is too short.'; if(_respShow) _respShow(1); if(bodyEl){ bodyEl.classList.add('field-err'); bodyEl.focus(); bodyEl.scrollIntoView({block:'center',behavior:'smooth'}); } return; }
     var wg=gatherWants('#cd-respond','answer');
     if(wg.missing){
       var boxes=[].slice.call(document.querySelectorAll('#cd-respond .cd-want-in')); var first=null;
