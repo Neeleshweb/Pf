@@ -967,6 +967,9 @@
     .sim-ctrl{background:var(--card2);border:1px solid var(--border2);color:var(--white);border-radius:999px;padding:.45rem 1rem;font:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .15s}
     .sim-ctrl:hover{border-color:var(--accent);color:var(--accent)}
     .sim-ctrl.playing{background:rgba(var(--accent-rgb),.1);border-color:var(--accent);color:var(--accent)}
+    .sim-ctrl.blink{background:var(--accent);border-color:var(--accent);color:var(--btn-ink);animation:simBlinkBtn 1.15s ease-in-out infinite}
+    @keyframes simBlinkBtn{0%,100%{box-shadow:0 0 0 0 rgba(var(--accent-rgb),.5)}50%{box-shadow:0 0 0 7px rgba(var(--accent-rgb),0)}}
+    @media (prefers-reduced-motion:reduce){ .sim-ctrl.blink{animation:none} }
     .sim-swipe{display:none;text-align:center;font-size:.74rem;color:var(--muted2);margin-top:.8rem}
     .sim-cta{text-align:center;margin-top:1.4rem}
     @media (max-width:640px){ .sim-rdot em{display:none} .sim-swipe{display:block} .sim-view{min-height:300px;padding:1.1rem} }
@@ -1956,7 +1959,7 @@ boot();
   ];
   var N=scenes.length, i=0, timer=null;
   var reduce=!!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  var playing=!reduce;
+  var playing=false;
   var rail='';
   for(var k=0;k<N;k++){ rail+='<button type="button" class="sim-rdot" data-i="'+k+'" title="'+scenes[k].label+'"><span></span><em>'+scenes[k].label+'</em></button>'; }
   mount.innerHTML='<div class="sim-wrap">'
@@ -1975,7 +1978,7 @@ boot();
     document.getElementById('sim-num').textContent=(i+1);
     [].slice.call(mount.querySelectorAll('.sim-rdot')).forEach(function(d){ var di=+d.getAttribute('data-i'); d.classList.toggle('on', di===i); d.classList.toggle('done', di<i); });
   }
-  function setPlay(){ var b=document.getElementById('sim-play'); b.innerHTML=playing?'\u25AE\u25AE Pause':'\u25B6 Play'; b.classList.toggle('playing', playing); }
+  function setPlay(){ var b=document.getElementById('sim-play'); b.innerHTML=playing?'\u25AE\u25AE Pause':'\u25B6 Play'; b.classList.toggle('playing', playing); b.classList.toggle('blink', !playing); }
   function stop(){ if(timer){ clearInterval(timer); timer=null; } }
   function start(){ stop(); if(playing) timer=setInterval(function(){ show(i+1); }, 5000); }
   function go(n){ show(n); start(); }
@@ -1986,7 +1989,7 @@ boot();
   var tx=0; var frame=mount.querySelector('.sim-frame');
   frame.addEventListener('touchstart', function(e){ tx=e.changedTouches[0].clientX; }, {passive:true});
   frame.addEventListener('touchend', function(e){ var dx=e.changedTouches[0].clientX-tx; if(Math.abs(dx)>40){ go(dx<0?i+1:i-1); } }, {passive:true});
-  setPlay(); show(0); start();
+  setPlay(); show(0);
   document.addEventListener('visibilitychange', function(){ if(document.hidden) stop(); else start(); });
 })();
 
