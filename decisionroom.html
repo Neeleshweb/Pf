@@ -117,6 +117,35 @@
     .mm-theme { border-top: 1px solid var(--border); margin-top: .4rem; padding: .55rem; }
     .mm-theme-h { font-size: .58rem; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted2); padding: .3rem .4rem .45rem; }
     .mm-theme .theme-opt { font-size: .95rem; padding: .7rem .5rem; }
+    /* ===== Judgment Lab nav (Phase 0) ===== */
+    .nav-dd { position: relative; display: flex; align-items: center; }
+    .nav-dd-trigger { display: inline-flex; align-items: center; gap: .3rem; height: 60px; padding: 0 .6rem; background: none; border: none; color: var(--muted); font-family: inherit; font-size: .78rem; letter-spacing: .3px; text-transform: uppercase; cursor: pointer; transition: color .2s; }
+    .nav-dd:hover .nav-dd-trigger, .nav-dd-trigger[aria-expanded="true"] { color: var(--white); }
+    .nav-dd-caret { width: 12px; height: 12px; transition: transform .2s; }
+    .nav-dd:hover .nav-dd-caret, .nav-dd-trigger[aria-expanded="true"] .nav-dd-caret { transform: rotate(180deg); }
+    .nav-dd-menu { position: absolute; top: calc(100% - 6px); left: 0; min-width: 264px; background: var(--popover); backdrop-filter: blur(16px); border: 1px solid var(--border2); border-radius: 14px; padding: .4rem; box-shadow: 0 24px 60px rgba(0,0,0,.4); display: none; z-index: 320; }
+    .nav-dd:hover .nav-dd-menu, .nav-dd-menu.open { display: block; }
+    .nav-dd-item { display: flex; align-items: flex-start; gap: .65rem; padding: .65rem .7rem; border-radius: 10px; color: var(--white); transition: background .15s; text-transform: none; letter-spacing: normal; }
+    .nav-dd-item:hover { background: var(--card2); }
+    .nav-dd-item.active { background: var(--accent-dim); }
+    .nav-dd-ic { width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); color: var(--accent); }
+    .nav-dd-ic svg { width: 16px; height: 16px; }
+    .nav-dd-ic.dr { background: var(--accent3-dim); color: var(--accent3); }
+    .nav-dd-tx b { display: block; font-size: .9rem; font-weight: 600; color: var(--white); }
+    .nav-dd-tx small { display: block; font-size: .72rem; color: var(--muted); margin-top: .12rem; }
+    .jl-crumb { display: flex; align-items: center; gap: .4rem; padding: .5rem 1.5rem; font-size: .72rem; border-bottom: 1px solid var(--border); background: var(--surface); }
+    .jl-crumb-root { text-transform: uppercase; letter-spacing: 1px; font-weight: 600; color: var(--muted2); }
+    .jl-crumb-sep { width: 13px; height: 13px; color: var(--muted2); }
+    .jl-crumb-cur { color: var(--accent); font-weight: 600; letter-spacing: .3px; }
+    .mm-jl { border-bottom: 1px solid var(--border); }
+    .mm-jl-sum { list-style: none; display: flex; align-items: center; justify-content: space-between; padding: .9rem 1rem; font-size: .95rem; font-weight: 600; color: var(--white); cursor: pointer; border-radius: 11px; }
+    .mm-jl-sum::-webkit-details-marker { display: none; }
+    .mm-jl-caret { width: 15px; height: 15px; color: var(--muted); transition: transform .2s; }
+    .mm-jl[open] .mm-jl-caret { transform: rotate(180deg); }
+    .mm-jl-item { display: block; padding: .6rem 1rem .6rem 1.2rem; border-radius: 11px; color: var(--white); }
+    .mm-jl-item:hover, .mm-jl-item.active { background: var(--card); }
+    .mm-jl-item b { display: block; font-size: .9rem; font-weight: 600; }
+    .mm-jl-item small { display: block; font-size: .74rem; color: var(--muted); margin-top: .1rem; }
     .dr-net { position: relative; width: 100%; max-width: 720px; margin: 3rem auto 0; border-radius: 28px; overflow: hidden; background: linear-gradient(150deg,#101424,#242b67 58%,#0c8d7b); box-shadow: 0 36px 90px rgba(33,40,88,.28); padding: 20px; }
     .dr-net:before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,.18) 0 1.6px, transparent 2px); background-size: 40px 40px; opacity: .4; pointer-events: none; }
     .dr-net-svg { position: relative; width: 100%; height: auto; display: block; }
@@ -1532,7 +1561,13 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
     <li><a href="#how">How it works</a></li>
     <li><a href="#examples">Example cases</a></li>
     <li><a href="#trust">For reviewers</a></li>
-    <li><a href="/gutcheck.html">GutCheck ↗</a></li>
+    <li class="nav-dd">
+      <button class="nav-dd-trigger" id="jl-trigger" aria-haspopup="true" aria-expanded="false">Judgment Lab<svg class="nav-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="nav-dd-menu" id="jl-menu" role="menu" aria-label="Judgment Lab">
+        <a href="/gutcheck.html" class="nav-dd-item" role="menuitem"><span class="nav-dd-ic gc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a8 8 0 0 1 16 0"/><line x1="12" y1="13" x2="16" y2="9"/></svg></span><span class="nav-dd-tx"><b>GutCheck</b><small>Practice product judgment</small></span></a>
+        <a href="/decisionroom.html" class="nav-dd-item active" role="menuitem"><span class="nav-dd-ic dr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="13" y2="14"/></svg></span><span class="nav-dd-tx"><b>DecisionRoom</b><small>Pressure-test real decisions</small></span></a>
+      </div>
+    </li>
   </ul>
   <div class="nav-right">
     <div class="search-wrap">
@@ -1561,9 +1596,10 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
     <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
+<div class="jl-crumb" aria-label="Breadcrumb"><span class="jl-crumb-root">Judgment Lab</span><svg class="jl-crumb-sep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg><span class="jl-crumb-cur">DecisionRoom</span></div>
 
 <div class="mobile-backdrop" id="mobile-backdrop"></div>
-<aside class="mobile-menu" id="mobile-menu"><div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div><div id="mm-account" class="mm-account" style="display:none"></div><nav class="mm-body" id="mm-body"></nav><div class="mm-theme"><div class="mm-theme-h">Appearance</div><button class="theme-opt" data-theme="signal"><span class="theme-sw sw-signal"></span><span class="theme-nm">Signal <span class="theme-def">default</span></span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="editorial"><span class="theme-sw sw-editorial"></span><span class="theme-nm">Editorial</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="warm"><span class="theme-sw sw-warm"></span><span class="theme-nm">Warm dark</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="classic"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic</span><span class="theme-chk">✓</span></button></div></aside>
+<aside class="mobile-menu" id="mobile-menu"><div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div><div id="mm-account" class="mm-account" style="display:none"></div><details class="mm-jl"><summary class="mm-jl-sum">Judgment Lab<svg class="mm-jl-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary><a class="mm-jl-item" href="/gutcheck.html"><b>GutCheck</b><small>Practice product judgment</small></a><a class="mm-jl-item active" href="/decisionroom.html"><b>DecisionRoom</b><small>Pressure-test real decisions</small></a></details><nav class="mm-body" id="mm-body"></nav><div class="mm-theme"><div class="mm-theme-h">Appearance</div><button class="theme-opt" data-theme="signal"><span class="theme-sw sw-signal"></span><span class="theme-nm">Signal <span class="theme-def">default</span></span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="editorial"><span class="theme-sw sw-editorial"></span><span class="theme-nm">Editorial</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="warm"><span class="theme-sw sw-warm"></span><span class="theme-nm">Warm dark</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="classic"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic</span><span class="theme-chk">✓</span></button></div></aside>
 
 <section class="hero">
   <div class="hero-grid"></div>
@@ -1901,7 +1937,6 @@ function syncReviewerBtns(){
   function link(label, fn){ var a=document.createElement('div'); a.className='mm-link'; a.textContent=label; a.onclick=function(){ closeMenu(); setTimeout(fn,80); }; return a; }
   if(body){
     [['Open cases','room'],['Library','library'],['How it works','how'],['Example cases','examples'],['For reviewers','trust']].forEach(function(s){ body.appendChild(link(s[0], function(){ smoothTo(s[1]); })); });
-    body.appendChild(link('GutCheck \u2197', function(){ window.location.href='/gutcheck.html'; }));
     body.appendChild(link('\uD83C\uDFE0  Home', function(){ window.location.href='/index.html'; }));
   }
 })();
@@ -2976,6 +3011,17 @@ boot();
 (function(){ var w=document.querySelector('.wtick'); if(!w) return; if(!('IntersectionObserver' in window)){ w.classList.add('go'); return; }
   var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ w.classList.add('go'); io.disconnect(); } }); }, {threshold:.2, rootMargin:'0px 0px -12% 0px'}); var r=w.getBoundingClientRect(); if(r.top < (window.innerHeight||800)*0.85){ w.classList.add('go'); }
   io.observe(w);
+})();
+</script>
+<script>
+/* Judgment Lab nav dropdown — hover via CSS; click/keyboard here */
+(function(){
+  var t=document.getElementById('jl-trigger'), m=document.getElementById('jl-menu');
+  if(!t||!m) return;
+  function close(){ m.classList.remove('open'); t.setAttribute('aria-expanded','false'); }
+  t.addEventListener('click', function(e){ e.stopPropagation(); var o=m.classList.toggle('open'); t.setAttribute('aria-expanded', o?'true':'false'); });
+  document.addEventListener('click', function(e){ if(!e.target.closest('.nav-dd')) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
 })();
 </script>
 </body>
