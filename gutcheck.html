@@ -710,7 +710,8 @@
 .feed-card{text-align:left;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;cursor:pointer;transition:border-color .15s,transform .15s;display:flex;flex-direction:column;gap:.55rem;font:inherit;color:inherit}
 .feed-card:hover{border-color:var(--accent);transform:translateY(-2px)}
 .feed-card-top{display:flex;justify-content:space-between;align-items:center;gap:.5rem}
-.feed-badge{font-size:.7rem;font-weight:700;letter-spacing:.4px;color:var(--accent2);background:var(--card2);border:1px solid var(--border2);border-radius:20px;padding:.18rem .5rem}
+.feed-badge{font-size:.7rem;font-weight:700;letter-spacing:.4px;color:var(--accent2);background:var(--card2);border:1px solid var(--border2);border-radius:20px;padding:.18rem .5rem;white-space:nowrap;display:inline-flex;align-items:center;gap:.25rem}
+.fct-badges{display:inline-flex;align-items:center;gap:.4rem;flex-wrap:wrap;min-width:0}
 .feed-left{font-size:.72rem;color:var(--muted);font-weight:600;white-space:nowrap}
 .feed-scn{font-size:.92rem;line-height:1.5;color:var(--white)}
 .feed-card-foot{font-size:.76rem;color:var(--muted);margin-top:auto}
@@ -1240,7 +1241,7 @@ function renderFeed(rows){
     var scn = (r.scenario||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(); if(scn.length>150) scn = scn.slice(0,149)+'\u2026';
     var oc = (r.options||'').split('\n').filter(function(x){ return x.trim(); }).length;
     h += '<button type="button" class="feed-card" data-id="'+escHtml(r.dilemma_id)+'">'
-      + '<div class="feed-card-top">'+(r.category && CAT_META[r.category] ? catChip(r.category) : '<span class="feed-badge">\uD83D\uDC65 Community</span>')+(GC.skips&&GC.skips[r.dilemma_id]?'<span class="feed-badge skipped">\u23ED\uFE0F Skipped by you</span>':'')+'<span class="feed-left">\u23F3 '+feedTimeLeft(r.closes_at)+'</span></div>'
+      + '<div class="feed-card-top"><span class="fct-badges">'+(r.category && CAT_META[r.category] ? catChip(r.category) : '<span class="feed-badge">\uD83D\uDC65 Community</span>')+(GC.skips&&GC.skips[r.dilemma_id]?'<span class="feed-badge skipped">\u23ED\uFE0F Skipped</span>':'')+'</span><span class="feed-left">\u23F3 '+feedTimeLeft(r.closes_at)+'</span></div>'
       + '<div class="feed-scn">'+escHtml(scn)+'</div>'
       + '<div class="feed-card-foot"><span class="feed-votes" id="fv-'+escHtml(r.dilemma_id)+'">\u2026</span>'+(oc?' <span class="feed-dot">\u00B7</span> '+oc+' options':'')+(made?' <span class="feed-dot">\u00B7</span> <span class="feed-voted">\u2713 you called this</span>':' <span class="feed-dot">\u00B7</span> tap to weigh in')+'</div>'
       + '</button>';
