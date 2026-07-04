@@ -2050,7 +2050,8 @@ boot();
 /* ===== DecisionRoom Phase 1a — submit + feed + my cases + detail (read) ===== */
 (function(){
   /* expanded static lists */
-  var PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product','Fintech','Healthtech','DevTools','E-commerce','Mobile Consumer App','Hardware / IoT','Data / Analytics Platform','Infrastructure / Cloud','EdTech','Gaming','Other'];
+  var PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product','Fintech','Healthtech','DevTools','E-commerce','Mobile Consumer App','Hardware / IoT','Data / Analytics Platform','Infrastructure / Cloud','EdTech','Gaming','Other']
+  var DR_ROLES=null;;
   var STK_OPTS=['CEO','Founder','Exec Team','Product Leadership','Manager','Engineering','Design','Data','Sales','Marketing','Customer Success','Support','Customer','Finance','Legal','Security','Compliance','Operations','Partnerships / BD','Other PMs'];
   var CONS_OPTS=['Time','Engineering capacity','Revenue pressure','Customer escalation','Leadership pressure','Technical debt','Unclear data'];
   var URG=[['today','Today'],['this_week','This week'],['this_month','This month'],['not_urgent','Not urgent']];
@@ -2167,10 +2168,12 @@ boot();
   }
   function loadTaxonomy(){
     if(!SB) return Promise.resolve();
-    return Promise.all([SB.rpc('pjl_taxonomy',{p_kind:'category'}), SB.rpc('dr_taxonomy',{p_kind:'help'})]).then(function(r){
-      var c=(r[0]&&r[0].data)||[], h=(r[1]&&r[1].data)||[];
+    return Promise.all([SB.rpc('pjl_taxonomy',{p_kind:'category'}), SB.rpc('dr_taxonomy',{p_kind:'help'}), SB.rpc('pjl_taxonomy',{p_kind:'domain'}), SB.rpc('pjl_taxonomy',{p_kind:'role'})]).then(function(r){
+      var c=(r[0]&&r[0].data)||[], h=(r[1]&&r[1].data)||[], dm=(r[2]&&r[2].data)||[], rl=(r[3]&&r[3].data)||[];
       if(c.length) DR_CATS=c.map(function(x){return x.value;});
       if(h.length) DR_HELP=h.map(function(x){return x.value;});
+      if(dm.length) PRODUCT=dm.map(function(x){return x.value;});
+      if(rl.length) DR_ROLES=rl.map(function(x){return x.value;});
       renderExamples(true); populateFilter();
     }).catch(function(){});
   }
@@ -2920,7 +2923,7 @@ boot();
     ov.innerHTML='<div class="prof-modal" role="dialog" aria-modal="true">'
       +'<div class="prof-h">'+(isOnboarding?'Complete your PM profile':'Edit your profile')+'</div>'
       +'<p class="prof-sub">Self-attested \u2014 this shows as context on your cases and responses (e.g. \u201CSenior PM \u00b7 B2B SaaS \u00b7 7y\u201D). Your real name and company are never shown.</p>'
-      +'<label class="prof-l">Your role</label><select id="pf-role"><option value="">\u2014 select \u2014</option>'+profOpts(ROLES, d.role)+'</select>'
+      +'<label class="prof-l">Your role</label><select id="pf-role"><option value="">\u2014 select \u2014</option>'+profOpts(DR_ROLES||ROLES, d.role)+'</select>'
       +'<label class="prof-l">Working as a PM now?</label><select id="pf-track"><option value="working"'+(d.track==='working'?' selected':'')+'>Yes, currently a PM</option><option value="aspiring"'+(d.track==='aspiring'?' selected':'')+'>Aspiring / transitioning</option></select>'
       +'<label class="prof-l">Primary product type</label><select id="pf-prod"><option value="">\u2014 select \u2014</option>'+profOpts(PRODUCT, d.product_type)+'</select>'
       +'<label class="prof-l">Years of PM experience</label><input id="pf-years" type="number" min="0" max="50" inputmode="numeric" value="'+escHtml(d.years_experience||'')+'" placeholder="e.g. 7"/>'
