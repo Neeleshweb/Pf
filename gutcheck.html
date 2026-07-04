@@ -154,6 +154,13 @@
     .mm-jl-ov b { color: var(--accent) !important; }
     .mm-jl-item b { display: block; font-size: .9rem; font-weight: 600; }
     .mm-jl-item small { display: block; font-size: .74rem; color: var(--muted); margin-top: .1rem; }
+    .sm-cat-add { border-style: dashed !important; opacity: .92; }
+    .sm-addbox { margin-top: .2rem; }
+    .sm-addcat { display: flex; gap: .5rem; margin-top: .5rem; }
+    .sm-addcat input { background: var(--field-bg); border: 1px solid var(--border2); border-radius: 8px; padding: .55rem .6rem; color: var(--white); font-size: .9rem; font-family: inherit; }
+    .sm-nc-emoji { width: 54px; text-align: center; }
+    .sm-nc-name { flex: 1; min-width: 0; }
+    .sm-nc-save { background: var(--accent); color: var(--btn-ink, #fff); border: none; border-radius: 8px; padding: 0 1.1rem; font-weight: 600; cursor: pointer; }
     .hamburger { display: none; width: 42px; height: 42px; border: 1px solid var(--border2); background: var(--card); border-radius: 10px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
     .hamburger span { width: 18px; height: 2px; background: var(--white); border-radius: 2px; transition: transform .25s, opacity .2s; }
     .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
@@ -1120,6 +1127,25 @@ var CAT_META = {
 var CAT_ORDER = ['prioritization','validate','data','stakeholder','pricing','sunset','process','ai','other'];
 function catChip(k){ var m=CAT_META[k]; return m ? ('<span class="cat-badge">'+m.i+' '+escHtml(m.l)+'</span>') : ''; }
 function categoryPillOptions(){ var o=[{v:'all',label:'All'}]; CAT_ORDER.forEach(function(k){ o.push({v:k,label:CAT_META[k].i+' '+CAT_META[k].l}); }); return o; }
+/* ---- Phase 2: shared Product Judgment Lab taxonomy (23 seeds, growable via pjl_taxonomy) ---- */
+CAT_META = {
+  'prioritization':{i:'🎯',l:'Prioritization'},'roadmap':{i:'🗺️',l:'Roadmap'},'discovery':{i:'🔎',l:'Discovery'},
+  'build-vs-validate':{i:'🔬',l:'Build vs. validate'},'data-analytics':{i:'📊',l:'Data & Analytics'},
+  'metrics-measurement':{i:'📐',l:'Metrics & Measurement'},'experimentation-ab':{i:'🧪',l:'Experimentation & A/B'},
+  'stakeholder-conflict':{i:'🤝',l:'Stakeholder Conflict'},'customer-escalation':{i:'🚨',l:'Customer Escalation'},
+  'launch-gtm':{i:'🚀',l:'Launch & GTM'},'strategy':{i:'♟️',l:'Strategy'},'vision-positioning':{i:'🧭',l:'Vision & Positioning'},
+  'ux-design':{i:'🎨',l:'UX & Design'},'pricing-packaging':{i:'💳',l:'Pricing & Packaging'},
+  'technical-tradeoffs':{i:'⚙️',l:'Technical Tradeoffs'},'execution-delivery':{i:'📦',l:'Execution & Delivery'},
+  'team-org':{i:'👥',l:'Team & Org'},'resourcing-capacity':{i:'⏳',l:'Resourcing & Capacity'},
+  'career-growth':{i:'📈',l:'Career & Growth'},'sunset-deprecation':{i:'🌅',l:'Sunset & Deprecation'},
+  'compliance-risk':{i:'🛡️',l:'Compliance & Risk'},'ai-new-tech':{i:'🤖',l:'AI / New Tech'},'something-else':{i:'✨',l:'Something else'}
+};
+CAT_ORDER = ['prioritization','roadmap','discovery','build-vs-validate','data-analytics','metrics-measurement','experimentation-ab','stakeholder-conflict','customer-escalation','launch-gtm','strategy','vision-positioning','ux-design','pricing-packaging','technical-tradeoffs','execution-delivery','team-org','resourcing-capacity','career-growth','sunset-deprecation','compliance-risk','ai-new-tech','something-else'];
+var LEGACY_CAT = { validate:'build-vs-validate', data:'data-analytics', stakeholder:'stakeholder-conflict', pricing:'pricing-packaging', sunset:'sunset-deprecation', process:'team-org', ai:'ai-new-tech', other:'something-else' };
+function addLegacyAliases(){ for(var lk in LEGACY_CAT){ if(CAT_META[LEGACY_CAT[lk]]) CAT_META[lk]=CAT_META[LEGACY_CAT[lk]]; } }
+addLegacyAliases();
+function loadSharedTaxonomy(){ if(!SB) return; try{ SB.rpc('pjl_taxonomy',{p_kind:'category'}).then(function(res){ if(res&&!res.error&&res.data&&res.data.length){ var meta={},order=[]; res.data.forEach(function(r){ if(!r.slug) return; meta[r.slug]={i:r.icon||'🏷️',l:r.value||r.slug}; order.push(r.slug); }); if(order.length){ CAT_META=meta; CAT_ORDER=order; addLegacyAliases(); } } }).catch(function(){}); }catch(e){} }
+loadSharedTaxonomy();
 
 /* ---- Reusable filter bar: sort dropdown(s) + scrollable category pills ---- */
 var _fbarDocWired = false;
@@ -2217,17 +2243,39 @@ function loadMyQueue(){
 
   function renderCat(){
     var h='<div class="sm-h">What kind of call was it?</div><div class="sm-sub">Pick the closest fit — it pre-fills a starting point you can fully edit. Nothing is locked.</div><div class="sm-cats">';
-    CATS.forEach(function(c){ h+='<button type="button" class="sm-cat'+(S.category===c.k?' sel':'')+'" data-k="'+c.k+'"><span class="sm-cat-ic">'+c.icon+'</span>'+esc(c.label)+'</button>'; });
-    h+='</div>';
+    CAT_ORDER.forEach(function(k){ var m=CAT_META[k]; if(!m) return; h+='<button type="button" class="sm-cat'+(S.category===k?' sel':'')+'" data-k="'+k+'"><span class="sm-cat-ic">'+m.i+'</span>'+esc(m.l)+'</button>'; });
+    h+='<button type="button" class="sm-cat sm-cat-add" id="sm-cat-add"><span class="sm-cat-ic">➕</span>Add a category</button>';
+    h+='</div><div id="sm-cat-addbox" class="sm-addbox" style="display:none"></div>';
     stepsEl.innerHTML=h;
-    [].slice.call(stepsEl.querySelectorAll('.sm-cat')).forEach(function(b){ b.onclick=function(){ chooseCat(b.getAttribute('data-k')); }; });
+    [].slice.call(stepsEl.querySelectorAll('.sm-cat[data-k]')).forEach(function(b){ b.onclick=function(){ chooseCat(b.getAttribute('data-k')); }; });
+    var ab=document.getElementById('sm-cat-add'); if(ab) ab.onclick=showAddCat;
+  }
+  function showAddCat(){
+    var box=document.getElementById('sm-cat-addbox'); if(!box) return;
+    box.style.display='block';
+    box.innerHTML='<div class="sm-addcat"><input id="sm-nc-emoji" class="sm-nc-emoji" maxlength="4" placeholder="🏷️" aria-label="Emoji"><input id="sm-nc-name" class="sm-nc-name" maxlength="40" placeholder="New category name" aria-label="Category name"><button type="button" class="sm-nc-save" id="sm-nc-save">Add</button></div><div class="sm-hint">Pick an emoji that fits — it shows up everywhere this category appears.</div>';
+    var sv=document.getElementById('sm-nc-save'); if(!sv) return;
+    sv.onclick=function(){
+      var nm=(document.getElementById('sm-nc-name').value||'').trim();
+      var em=(document.getElementById('sm-nc-emoji').value||'').trim();
+      if(nm.length<2){ say('Give the category a name.'); return; }
+      if(!SB||!currentUser){ say('Sign in to add a category.'); return; }
+      SB.rpc('pjl_add_taxonomy',{p_kind:'category',p_value:nm,p_icon:em||null}).then(function(res){
+        var d=res&&res.data; if(!d||!d.ok){ say('Could not add that category.'); return; }
+        CAT_META[d.slug]={i:d.icon||'🏷️',l:d.value||nm}; if(CAT_ORDER.indexOf(d.slug)<0) CAT_ORDER.push(d.slug);
+        chooseCat(d.slug);
+      }).catch(function(){ say('Could not add that category.'); });
+    };
   }
   function isDefaultQ(){ for(var i=0;i<CATS.length;i++){ if(S.question===CATS[i].q) return true; } return !S.question; }
   function chooseCat(k){
     S.category=k; var c=catBy(k);
-    if(!S.scenarioTouched) S.scenario=c.scenario;
-    if(isDefaultQ()) S.question=c.q;
-    if(!S.options.length || S.optsFromCat){ S.options=c.opts.map(function(o){ return {t:o.t,d:o.d}; }); S.optsFromCat=true; }
+    if(!c && typeof LEGACY_CAT!=='undefined'){ for(var lk in LEGACY_CAT){ if(LEGACY_CAT[lk]===k){ c=catBy(lk); break; } } }
+    if(c){
+      if(!S.scenarioTouched) S.scenario=c.scenario;
+      if(isDefaultQ()) S.question=c.q;
+      if(!S.options.length || S.optsFromCat){ S.options=c.opts.map(function(o){ return {t:o.t,d:o.d}; }); S.optsFromCat=true; }
+    } else if(!S.options.length){ S.options=[{t:'',d:''},{t:'',d:''}]; S.optsFromCat=true; }
     step=1; render();
   }
 
