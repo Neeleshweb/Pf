@@ -232,7 +232,7 @@
     .cb.cat { background: var(--accent-dim); color: var(--accent); }
     .cb.dom { background: var(--accent3-dim); color: var(--accent3); }
     .cb.diff { background: var(--accent2-dim); color: var(--accent2); }
-    .call-skip { background: transparent; border: 1px solid var(--border2); color: var(--muted); border-radius: 10px; padding: .55rem 1.1rem; font-size: .85rem; cursor: pointer; margin-left: .6rem; transition: color .2s, border-color .2s; }
+    .call-skip { background: transparent; border: 1px solid var(--border2); color: var(--muted); border-radius: 10px; padding: .55rem 1.1rem; font-size: .85rem; cursor: pointer; white-space: nowrap; transition: color .2s, border-color .2s; }
     .call-skip:hover { color: var(--white); border-color: var(--muted); }
     .call-skipped { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; color: var(--text2); font-size: .92rem; margin-top: 1rem; }
     .rv-profup { display: flex; flex-direction: column; gap: .15rem; border-radius: 10px; padding: .75rem 1rem; margin-top: 1rem; border: 1px solid var(--border2); }
@@ -271,6 +271,9 @@
     .call-howto { font-size: .8rem; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: .5rem .7rem; margin: 0 0 .8rem; }
     .call-opt.sel { border-color: var(--accent) !important; background: var(--card) !important; box-shadow: 0 0 0 1px var(--accent) inset; }
     .call-go { margin-top: .8rem; }
+    .call-btnrow { display: flex; gap: .6rem; align-items: stretch; }
+    .call-btnrow .call-submit { flex: 1; }
+    .feed-badge.skipped { background: var(--accent2-dim); color: var(--accent2); }
     .call-submit { width: 100%; background: var(--accent); color: #fff; border: none; font-family: inherit; font-weight: 700; font-size: .95rem; padding: .7rem 1rem; border-radius: 10px; cursor: pointer; transition: .15s; }
     .call-submit:not(:disabled):hover { filter: brightness(1.08); }
     .call-submit:disabled { background: var(--surface); color: var(--muted2); cursor: not-allowed; border: 1px solid var(--border2); }
@@ -1103,7 +1106,8 @@ function scheduleRowToDilemma(row){
   /* community content is user-supplied — escape every field so it can never inject HTML */
   var esc = (typeof escHtml==='function') ? escHtml : function(x){ return String(x==null?'':x); };
   opts = opts.map(function(o){ return { k:o.k, t:esc(o.t), d:esc(o.d) }; });
-  return { id: row.dilemma_id || 'sub-x', tier:3, level:esc(row.level||'Senior'),
+  return { id: row.dilemma_id || 'sub-x', tier:3, level:esc(row.level||''),
+    category: row.category||null, source_type: row.source_type||null, domain: row.domain?esc(row.domain):null, difficulty: row.difficulty?esc(row.difficulty):null,
     source: row.credit ? ('Community · '+esc(row.credit)) : 'Community submission',
     scenario: esc(row.scenario||''), q: esc(row.question||'What would you do?'), opts: opts,
     best: ((row.best||'').trim().toUpperCase()).replace(/[^A-D]/g,'')||null, dims:(function(){ try{ var x=(typeof row.dims==='string')?JSON.parse(row.dims):row.dims; return (x&&typeof x==='object')?x:null; }catch(e){ return null; } })(),
@@ -1236,7 +1240,7 @@ function renderFeed(rows){
     var scn = (r.scenario||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(); if(scn.length>150) scn = scn.slice(0,149)+'\u2026';
     var oc = (r.options||'').split('\n').filter(function(x){ return x.trim(); }).length;
     h += '<button type="button" class="feed-card" data-id="'+escHtml(r.dilemma_id)+'">'
-      + '<div class="feed-card-top">'+(r.category && CAT_META[r.category] ? catChip(r.category) : '<span class="feed-badge">\uD83D\uDC65 Community</span>')+'<span class="feed-left">\u23F3 '+feedTimeLeft(r.closes_at)+'</span></div>'
+      + '<div class="feed-card-top">'+(r.category && CAT_META[r.category] ? catChip(r.category) : '<span class="feed-badge">\uD83D\uDC65 Community</span>')+(GC.skips&&GC.skips[r.dilemma_id]?'<span class="feed-badge skipped">\u23ED\uFE0F Skipped by you</span>':'')+'<span class="feed-left">\u23F3 '+feedTimeLeft(r.closes_at)+'</span></div>'
       + '<div class="feed-scn">'+escHtml(scn)+'</div>'
       + '<div class="feed-card-foot"><span class="feed-votes" id="fv-'+escHtml(r.dilemma_id)+'">\u2026</span>'+(oc?' <span class="feed-dot">\u00B7</span> '+oc+' options':'')+(made?' <span class="feed-dot">\u00B7</span> <span class="feed-voted">\u2713 you called this</span>':' <span class="feed-dot">\u00B7</span> tap to weigh in')+'</div>'
       + '</button>';
@@ -1253,10 +1257,11 @@ function renderFeed(rows){
       ids.forEach(function(id){ var el=document.getElementById('fv-'+id); if(el){ var n=m[id]||0; el.textContent=n+' vote'+(n===1?'':'s'); } }); }
   }).catch(function(){}); }
 }
+function loadSkips(){ if(!SB || !currentUser) return Promise.resolve(); return SB.rpc('gc_my_skips').then(function(res){ if(res&&res.data&&res.data.length){ if(!GC.skips) GC.skips={}; res.data.forEach(function(id){ GC.skips[id]=1; }); } }).catch(function(){}); }
 function loadFeed(){
   var list = document.getElementById('feed-list'); if(!list) return Promise.resolve();
   if(!SB){ list.innerHTML=''; var fc=document.getElementById('feed-controls'); if(fc) fc.innerHTML=''; return Promise.resolve(); }
-  return SB.rpc('gc_feed_v2', { p_limit:40, p_offset:0, p_sort:feedSort, p_category:feedCategory }).then(function(res){
+  return loadSkips().then(function(){ return SB.rpc('gc_feed_v2', { p_limit:40, p_offset:0, p_sort:feedSort, p_category:feedCategory }); }).then(function(res){
     if(res && res.error){ console.warn('[GutCheck] feed read error:', res.error); list.innerHTML=''; return; }
     renderFeed(res && res.data ? res.data : []);
   }).catch(function(e){ console.warn('[GutCheck] feed failed:', e); list.innerHTML=''; });
@@ -1769,7 +1774,7 @@ function renderToday(){
     + '<div class="call-sec-t">The fork</div><div id="today-opts"></div>';
   if (!answered) html += '<div class="call-reason"><label>Your reasoning <span class="req">required</span> — shared <b>anonymously</b> with other PMs after they make their call.</label><textarea id="today-reason" maxlength="280" placeholder="I chose this because…"></textarea><div class="call-conf"><span class="cc-q">How sure are you? <span class="req">required</span></span><div class="cc-opts"><button type="button" class="cc-btn" data-c="1">Hunch</button><button type="button" class="cc-btn" data-c="2">Fairly sure</button><button type="button" class="cc-btn" data-c="3">Confident</button></div></div><div class="call-hint">Reason + confidence are required. Once you commit, the crowd unlocks. No take-backs.</div></div>';
   if (!answered && d.tier===3) html += '<div class="call-predict"><span class="cp-q">Last one \u2014 which option do you think the room will pick <b>most</b>? <span class="req">required</span></span><div class="cp-opts">'+d.opts.map(function(o){ return '<button type="button" class="cp-btn" data-pk="'+o.k+'" title="'+o.t+'">'+o.k+'</button>'; }).join('')+'</div><div class="cp-why">Powers your <b>surprisingly-popular</b> score \u2014 options that beat what people expect are right more often than a plain vote count.</div></div>';
-  if (!answered) html += '<div class="call-go"><button type="button" class="call-submit" id="call-submit" disabled>Lock my call →</button><button type="button" class="call-skip" id="call-skip">Skip today</button><div class="call-missing" id="call-missing"></div></div>';
+  if (!answered) html += '<div class="call-go"><div class="call-btnrow"><button type="button" class="call-submit" id="call-submit" disabled>Lock my call →</button><button type="button" class="call-skip" id="call-skip">Skip today</button></div><div class="call-missing" id="call-missing"></div></div>';
   html += '<div id="today-reveal"></div></div>';
   mount.innerHTML = html;
   var optWrap = document.getElementById('today-opts');
@@ -1855,7 +1860,7 @@ function reveal(d, instant){
   var __cm = d.category && CAT_META[d.category];
   if(__cm){ var __mt = d.best && youKey===d.best; h += '<div class="rv-profup '+(d.best?(__mt?'up':'down'):'')+'"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(d.best?(__mt?'You matched the verdict \u2014 this strengthens your <b>'+escHtml(__cm.l)+'</b> signal.':'A different read from the verdict \u2014 noted in your <b>'+escHtml(__cm.l)+'</b> signal.'):'This call feeds your <b>'+escHtml(__cm.l)+'</b> signal.')+'</span></div>'; }
   /* breakdown */
-  if (d.tier===3){ h += '<div class="rv-h y">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'; }
+  if (d.tier===3){ h += '<div class="rv-h y">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'; if(d.breakdown) h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
   else { h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
   /* real / outcome */
   if (d.tier===1 && d.real){
@@ -1947,7 +1952,7 @@ function buildArchDetail(item, d){
   var rev = item.querySelector('.arch-rev');
   var realLabel = d.tier===1 ? '✅ What I actually did' : (d.tier===3 ? '👥 What the submitter shared' : '🌍 What actually happened');
   var realHtml = d.real ? ('<div class="rv-h '+(d.tier===1?'g':'b')+'" style="margin-top:1.1rem">'+realLabel+'</div><div class="rv-real '+(d.tier===1?'':'public')+'"><p>'+d.real+'</p></div>') : '';
-  var bk = (d.tier===3) ? '<div class="rv-h y" style="margin-top:1.1rem">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>' : '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>';
+  var bk = (d.tier===3) ? ('<div class="rv-h y" style="margin-top:1.1rem">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'+(d.breakdown?'<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>':'')) : '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>';
   rev.innerHTML = bk+realHtml+(d.lesson?('<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'):'')
     + '<span class="preview-tag crowd-tag" style="margin-top:.8rem;display:inline-block">Crowd numbers are a preview · live community soon</span>'
     + (dilemmaLikeHTML(d)?'<div class="rv-foot-btns" style="margin-top:1rem">'+dilemmaLikeHTML(d)+'</div>':'')
