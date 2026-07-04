@@ -2253,16 +2253,15 @@ function loadMyQueue(){
   function showAddCat(){
     var box=document.getElementById('sm-cat-addbox'); if(!box) return;
     box.style.display='block';
-    box.innerHTML='<div class="sm-addcat"><input id="sm-nc-emoji" class="sm-nc-emoji" maxlength="4" placeholder="🏷️" aria-label="Emoji"><input id="sm-nc-name" class="sm-nc-name" maxlength="40" placeholder="New category name" aria-label="Category name"><button type="button" class="sm-nc-save" id="sm-nc-save">Add</button></div><div class="sm-hint">Pick an emoji that fits — it shows up everywhere this category appears.</div>';
+    box.innerHTML='<div class="sm-addcat"><input id="sm-nc-name" class="sm-nc-name" maxlength="40" placeholder="New category name" aria-label="Category name"><button type="button" class="sm-nc-save" id="sm-nc-save">Add</button></div><div class="sm-hint">We\u2019ll pick a fitting icon and a short description automatically.</div>';
     var sv=document.getElementById('sm-nc-save'); if(!sv) return;
     sv.onclick=function(){
       var nm=(document.getElementById('sm-nc-name').value||'').trim();
-      var em=(document.getElementById('sm-nc-emoji').value||'').trim();
       if(nm.length<2){ say('Give the category a name.'); return; }
       if(!SB||!currentUser){ say('Sign in to add a category.'); return; }
-      SB.rpc('pjl_add_taxonomy',{p_kind:'category',p_value:nm,p_icon:em||null}).then(function(res){
+      SB.rpc('pjl_add_taxonomy',{p_kind:'category',p_value:nm}).then(function(res){
         var d=res&&res.data; if(!d||!d.ok){ say('Could not add that category.'); return; }
-        CAT_META[d.slug]={i:d.icon||'🏷️',l:d.value||nm}; if(CAT_ORDER.indexOf(d.slug)<0) CAT_ORDER.push(d.slug);
+        CAT_META[d.slug]={i:d.icon||'🧩',l:d.value||nm}; if(CAT_ORDER.indexOf(d.slug)<0) CAT_ORDER.push(d.slug);
         chooseCat(d.slug);
       }).catch(function(){ say('Could not add that category.'); });
     };

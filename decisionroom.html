@@ -2081,7 +2081,7 @@ boot();
     var el=document.getElementById(id); if(!el) return; var list=taxList(kind);
     el.setAttribute('data-kind', kind);
     el.innerHTML=list.map(function(v){ return '<button type="button" class="chip" data-v="'+escHtml(v)+'">'+escHtml(v)+'</button>'; }).join('')
-      +'<span class="chip-add">'+(kind==='category'?'<input type="text" class="chip-add-emoji" placeholder="\uD83C\uDFF7\uFE0F" maxlength="4" aria-label="Emoji for new category" autocomplete="off">':'')+'<input type="text" class="chip-add-in" id="'+id+'-add" placeholder="'+(kind==='category'?'+ New category, then Enter':'+ Type your own, then Enter')+'" maxlength="40" autocomplete="off"></span>';
+      +'<span class="chip-add"><input type="text" class="chip-add-in" id="'+id+'-add" placeholder="'+(kind==='category'?'+ New category, then Enter':'+ Type your own, then Enter')+'" maxlength="40" autocomplete="off"></span>';
   }
   function addCustomChip(inp){
     var group=inp.closest('.chips'); if(!group) return; var kind=group.getAttribute('data-kind'); var val=inp.value.trim(); inp.value='';
@@ -2089,10 +2089,8 @@ boot();
     var existing=null; [].slice.call(group.querySelectorAll('.chip')).forEach(function(c){ if(c.getAttribute('data-v').toLowerCase()===val.toLowerCase()) existing=c; });
     if(existing){ existing.classList.add('sel'); return; }
     if(!SB||!currentUser){ openSignIn('Sign in to add a new option.'); return; }
-    var emojiInp=group.querySelector('.chip-add-emoji'); var emo=emojiInp?emojiInp.value.trim():''; if(emojiInp) emojiInp.value='';
     var rpcName=(kind==='category')?'pjl_add_taxonomy':'dr_add_taxonomy';
-    var rpcArgs=(kind==='category')?{p_kind:kind,p_value:val,p_icon:emo||null}:{p_kind:kind,p_value:val};
-    SB.rpc(rpcName,rpcArgs).then(function(res){
+    SB.rpc(rpcName,{p_kind:kind,p_value:val}).then(function(res){
       if(res&&res.data&&res.data.ok){
         var v=res.data.value, dup=null;
         [].slice.call(group.querySelectorAll('.chip')).forEach(function(c){ if(c.getAttribute('data-v').toLowerCase()===v.toLowerCase()) dup=c; });
