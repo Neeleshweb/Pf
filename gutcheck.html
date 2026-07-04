@@ -228,6 +228,19 @@
     .cb.lvl { color: var(--accent2); background: var(--accent2-dim); border-color: rgba(var(--accent2-rgb),.3); }
     .call-scenario { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent2); border-radius: 8px; padding: 1.05rem 1.2rem; font-size: .94rem; line-height: 1.75; color: var(--text2); margin-bottom: 1.2rem; }
     .call-scenario strong { color: var(--white); }
+    .call-sec-t { font-size: .7rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; color: var(--muted2); margin: 1.2rem 0 .5rem; }
+    .cb.cat { background: var(--accent-dim); color: var(--accent); }
+    .cb.dom { background: var(--accent3-dim); color: var(--accent3); }
+    .cb.diff { background: var(--accent2-dim); color: var(--accent2); }
+    .call-skip { background: transparent; border: 1px solid var(--border2); color: var(--muted); border-radius: 10px; padding: .55rem 1.1rem; font-size: .85rem; cursor: pointer; margin-left: .6rem; transition: color .2s, border-color .2s; }
+    .call-skip:hover { color: var(--white); border-color: var(--muted); }
+    .call-skipped { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; color: var(--text2); font-size: .92rem; margin-top: 1rem; }
+    .rv-profup { display: flex; flex-direction: column; gap: .15rem; border-radius: 10px; padding: .75rem 1rem; margin-top: 1rem; border: 1px solid var(--border2); }
+    .rv-profup.up { background: rgba(var(--green-rgb),.08); border-color: rgba(var(--green-rgb),.3); }
+    .rv-profup.down { background: var(--surface); }
+    .rv-profup-h { font-size: .72rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; color: var(--muted2); }
+    .rv-profup-b { font-size: .92rem; color: var(--text2); }
+    .rv-profup-b b { color: var(--white); }
     .call-q { font-size: 1.15rem; font-weight: 600; color: var(--white); margin-bottom: 1rem; line-height: 1.4; }
     .call-opt { display: block; width: 100%; text-align: left; background: var(--card2); border: 1px solid var(--border2); border-radius: 12px; padding: .95rem 1.1rem; margin-bottom: .7rem; color: var(--text2); font-size: .88rem; line-height: 1.55; transition: border-color .2s, transform .15s, background .2s; }
     .call-opt:hover { border-color: var(--accent); transform: translateX(3px); color: var(--white); }
@@ -1728,26 +1741,35 @@ function renderJournal(){
 /* ---------- RENDER TODAY ---------- */
 var mount = document.getElementById('call-mount');
 var todaysDilemma = null;
+function srcLabel(d){
+  var m={community_submission:'Community-submitted',editorial_case:'Today\u2019s curated',anonymized_field_case:'Anonymized field case',practice_scenario:'Practice scenario',expert_case:'Expert-created'};
+  if(d.source_type && m[d.source_type]) return m[d.source_type];
+  if(d.tier===1) return 'Real call';
+  if(d.tier===3) return 'Community-suggested';
+  return (d.source ? d.source.split('·').slice(-1)[0].trim() : 'Curated');
+}
+function cbPill(cls,txt){ return txt ? '<span class="cb '+cls+'">'+escHtml(txt)+'</span>' : ''; }
 function badgesHTML(d){
-  var tl = d.tier===1 ? '★ Real call I made' : (d.tier===3 ? '👥 From the community' : 'Industry / public');
-  var tc = d.tier===1 ? 't1' : 't2';
-  return '<span class="cb '+tc+'">'+tl+'</span>'
-    + '<span class="cb lvl">'+d.level+'</span>'
-    + '<span class="cb">'+d.source.split('·').slice(-1)[0].trim()+'</span>';
+  var cm = d.category && CAT_META[d.category];
+  return cbPill('src', srcLabel(d))
+    + (cm ? '<span class="cb cat">'+cm.i+' '+escHtml(cm.l)+'</span>' : '')
+    + cbPill('dom', d.domain||'')
+    + cbPill('lvl', d.level||'')
+    + cbPill('diff', d.difficulty||'');
 }
 function renderToday(){
   var d = todaysDilemma || dilemmaForIndex(TODAY_INDEX);
   var answered = d.id in GC.calls;
   var html = '<div class="call-card">'
     + '<div class="call-top"><div class="call-date">'+(d.closesAt ? ('\uD83D\uDC65 Community \u00B7 \u23F3 '+feedTimeLeft(d.closesAt)) : ('Day '+(TODAY_INDEX+1)+' \u00B7 <b>'+fmtDate(new Date())+'</b>'))+'</div><div class="call-badges">'+badgesHTML(d)+'</div></div>'
-    + '<div class="call-scenario">'+d.scenario+'</div>'
+    + '<div class="call-sec-t">The situation</div><div class="call-scenario">'+d.scenario+'</div>'
     + '<div class="call-q">'+d.q+'</div>'
     + (answered ? '' : '<div class="call-howto">'+(d.tier===3 ? 'Make your call: pick an option, then add your reasoning, your confidence, and your read on the room — then lock it in.' : 'Make your call: pick an option, then add your reasoning and your confidence — then lock it in.')+'</div>')
     + (answered ? '<div class="call-locked">\u2713 Your call is locked in \u2014 no take-backs. Scroll down for more open calls.</div>' : '')
-    + '<div id="today-opts"></div>';
+    + '<div class="call-sec-t">The fork</div><div id="today-opts"></div>';
   if (!answered) html += '<div class="call-reason"><label>Your reasoning <span class="req">required</span> — shared <b>anonymously</b> with other PMs after they make their call.</label><textarea id="today-reason" maxlength="280" placeholder="I chose this because…"></textarea><div class="call-conf"><span class="cc-q">How sure are you? <span class="req">required</span></span><div class="cc-opts"><button type="button" class="cc-btn" data-c="1">Hunch</button><button type="button" class="cc-btn" data-c="2">Fairly sure</button><button type="button" class="cc-btn" data-c="3">Confident</button></div></div><div class="call-hint">Reason + confidence are required. Once you commit, the crowd unlocks. No take-backs.</div></div>';
   if (!answered && d.tier===3) html += '<div class="call-predict"><span class="cp-q">Last one \u2014 which option do you think the room will pick <b>most</b>? <span class="req">required</span></span><div class="cp-opts">'+d.opts.map(function(o){ return '<button type="button" class="cp-btn" data-pk="'+o.k+'" title="'+o.t+'">'+o.k+'</button>'; }).join('')+'</div><div class="cp-why">Powers your <b>surprisingly-popular</b> score \u2014 options that beat what people expect are right more often than a plain vote count.</div></div>';
-  if (!answered) html += '<div class="call-go"><button type="button" class="call-submit" id="call-submit" disabled>Lock in my call →</button><div class="call-missing" id="call-missing"></div></div>';
+  if (!answered) html += '<div class="call-go"><button type="button" class="call-submit" id="call-submit" disabled>Lock my call →</button><button type="button" class="call-skip" id="call-skip">Skip today</button><div class="call-missing" id="call-missing"></div></div>';
   html += '<div id="today-reveal"></div></div>';
   mount.innerHTML = html;
   var optWrap = document.getElementById('today-opts');
@@ -1760,7 +1782,7 @@ function renderToday(){
   });
   if(!answered){ var __ccb=[].slice.call(document.querySelectorAll('.cc-btn')); __ccb.forEach(function(cb){ cb.onclick=function(){ __ccb.forEach(function(x){x.classList.remove('sel');}); cb.classList.add('sel'); var __cc=document.querySelector('.call-conf'); if(__cc) __cc.classList.remove('cc-err'); checkReady(d); }; }); }
   if(!answered){ var __cpb=[].slice.call(document.querySelectorAll('.cp-btn')); __cpb.forEach(function(pb){ pb.onclick=function(){ __cpb.forEach(function(x){x.classList.remove('sel');}); pb.classList.add('sel'); var __cp=document.querySelector('.call-predict'); if(__cp) __cp.classList.remove('cp-err'); checkReady(d); }; }); }
-  if(!answered){ pendingChoice=null; var __rt2=document.getElementById('today-reason'); if(__rt2) __rt2.oninput=function(){ checkReady(d); }; var __sb=document.getElementById('call-submit'); if(__sb) __sb.onclick=function(){ if(pendingChoice) commit(d, pendingChoice); }; checkReady(d); }
+  if(!answered){ pendingChoice=null; var __rt2=document.getElementById('today-reason'); if(__rt2) __rt2.oninput=function(){ checkReady(d); }; var __sb=document.getElementById('call-submit'); if(__sb) __sb.onclick=function(){ if(pendingChoice) commit(d, pendingChoice); }; var __sk=document.getElementById('call-skip'); if(__sk) __sk.onclick=function(){ skipToday(d); }; checkReady(d); }
   if (answered) reveal(d, true);
 }
 
@@ -1803,6 +1825,13 @@ function doCommit(d, key, conf, pred){
   bumpVoteStreak(); refreshRecord(); saveProfile();
 }
 
+function skipToday(d){
+  if(SB && currentUser){ try{ SB.rpc('gc_skip',{p_dilemma_id:d.id}).then(function(){}).catch(function(){}); }catch(e){} }
+  if(!GC.skips) GC.skips={}; GC.skips[d.id]=1; gcSave(GC);
+  ['.call-reason','.call-predict','.call-go','.call-howto'].forEach(function(sel){ var el=document.querySelector(sel); if(el) el.style.display='none'; });
+  var opts=document.getElementById('today-opts'); if(opts) opts.style.display='none';
+  var mr=document.getElementById('today-reveal'); if(mr) mr.innerHTML='<div class="call-skipped">\u23ED\uFE0F You skipped this one \u2014 nothing recorded. It stays open in the feed below, tagged <b>Skipped by you</b>. Scroll down for more open calls.</div>';
+}
 function reveal(d, instant){
   var mountR = document.getElementById('today-reveal');
   var dist = distFor(d, 'all');
@@ -1823,6 +1852,8 @@ function reveal(d, instant){
   /* your dims */
   var fx = d.dims && d.dims[youKey];
   if (fx){ var chips=''; for (var k in fx){ var v=fx[k]; chips += '<span class="rv-dim '+(v>0?'up':(v<0?'down':''))+'">'+DIM[k]+' '+(v>0?'+':'')+v+'</span>'; } if(chips) h += '<div class="rv-dims" style="margin-top:1rem">'+chips+'</div>'; }
+  var __cm = d.category && CAT_META[d.category];
+  if(__cm){ var __mt = d.best && youKey===d.best; h += '<div class="rv-profup '+(d.best?(__mt?'up':'down'):'')+'"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(d.best?(__mt?'You matched the verdict \u2014 this strengthens your <b>'+escHtml(__cm.l)+'</b> signal.':'A different read from the verdict \u2014 noted in your <b>'+escHtml(__cm.l)+'</b> signal.'):'This call feeds your <b>'+escHtml(__cm.l)+'</b> signal.')+'</span></div>'; }
   /* breakdown */
   if (d.tier===3){ h += '<div class="rv-h y">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'; }
   else { h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
