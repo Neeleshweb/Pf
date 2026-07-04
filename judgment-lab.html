@@ -479,10 +479,26 @@ var LAB_CATS = [
 (function(){
   var g=document.getElementById('cat-grid'); if(!g) return;
   function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
-  g.innerHTML = LAB_CATS.map(function(c){
-    var custom = c.n==='Something else' ? ' custom' : '';
-    return '<div class="cat-card'+custom+'" data-analytics="category_card_clicked" data-analytics-label="'+esc(c.n)+'"><span class="cat-ic">'+c.i+'</span><div class="cat-tx"><b>'+esc(c.n)+'</b><small>'+esc(c.d)+'</small></div></div>';
-  }).join('');
+  function renderCats(){
+    g.innerHTML = LAB_CATS.map(function(c){
+      var custom = c.n==='Something else' ? ' custom' : '';
+      return '<div class="cat-card'+custom+'" data-analytics="category_card_clicked" data-analytics-label="'+esc(c.n)+'"><span class="cat-ic">'+(c.i||'\uD83C\uDFF7\uFE0F')+'</span><div class="cat-tx"><b>'+esc(c.n)+'</b><small>'+esc(c.d||'')+'</small></div></div>';
+    }).join('');
+  }
+  renderCats();
+  /* live sync: pull the shared, growable taxonomy so custom categories appear here too */
+  (function(){
+    var HOSTS=['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','pm-gut-check.pages.dev'];
+    var PROD=HOSTS.indexOf(location.hostname)!==-1;
+    var URL=PROD?'https://oxxzygbfgmlnvavjmhct.supabase.co':'https://wdfttdakwygkdgfakavc.supabase.co';
+    var ANON=PROD?'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkZnR0ZGFrd3lna2RnZmFrYXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNjI2NTYsImV4cCI6MjA5NzczODY1Nn0.1D85vTzCoi7nUYH9YllsdV47AEDhFliT3zsjUfYXJss';
+    try{
+      fetch(URL+'/rest/v1/rpc/pjl_taxonomy',{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json'},body:JSON.stringify({p_kind:'category'})})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(rows){ if(rows&&rows.length){ LAB_CATS=rows.map(function(x){ return {i:x.icon||'\uD83C\uDFF7\uFE0F',n:x.value,d:x.blurb||''}; }); renderCats(); } })
+      .catch(function(){});
+    }catch(e){}
+  })();
 })();
 document.getElementById('foot-yr').textContent = new Date().getFullYear();
 </script>
