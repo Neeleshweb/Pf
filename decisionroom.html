@@ -1542,6 +1542,8 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .chip-add-in{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .75rem;font:inherit;font-size:.78rem;width:150px;transition:width .2s,border-style .2s}
 .chip-add-in:focus{outline:none;width:190px;border-style:solid;box-shadow:0 0 0 3px rgba(var(--accent2-rgb),.12)}
 .chip-add-in::placeholder{color:var(--accent2);opacity:.75}
+.chip-add-emoji{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .4rem;font:inherit;font-size:.9rem;width:46px;text-align:center;margin-right:.35rem}
+.chip-add-emoji:focus{outline:none;border-style:solid}
 .examples-more-wrap{text-align:center}
 #examples-more{margin-top:1.1rem}
 /* option cap note */
@@ -2079,7 +2081,7 @@ boot();
     var el=document.getElementById(id); if(!el) return; var list=taxList(kind);
     el.setAttribute('data-kind', kind);
     el.innerHTML=list.map(function(v){ return '<button type="button" class="chip" data-v="'+escHtml(v)+'">'+escHtml(v)+'</button>'; }).join('')
-      +'<span class="chip-add"><input type="text" class="chip-add-in" id="'+id+'-add" placeholder="+ Type your own, then Enter" maxlength="40" autocomplete="off"></span>';
+      +'<span class="chip-add">'+(kind==='category'?'<input type="text" class="chip-add-emoji" placeholder="\uD83C\uDFF7\uFE0F" maxlength="4" aria-label="Emoji for new category" autocomplete="off">':'')+'<input type="text" class="chip-add-in" id="'+id+'-add" placeholder="'+(kind==='category'?'+ New category, then Enter':'+ Type your own, then Enter')+'" maxlength="40" autocomplete="off"></span>';
   }
   function addCustomChip(inp){
     var group=inp.closest('.chips'); if(!group) return; var kind=group.getAttribute('data-kind'); var val=inp.value.trim(); inp.value='';
@@ -2087,7 +2089,10 @@ boot();
     var existing=null; [].slice.call(group.querySelectorAll('.chip')).forEach(function(c){ if(c.getAttribute('data-v').toLowerCase()===val.toLowerCase()) existing=c; });
     if(existing){ existing.classList.add('sel'); return; }
     if(!SB||!currentUser){ openSignIn('Sign in to add a new option.'); return; }
-    SB.rpc('dr_add_taxonomy',{p_kind:kind,p_value:val}).then(function(res){
+    var emojiInp=group.querySelector('.chip-add-emoji'); var emo=emojiInp?emojiInp.value.trim():''; if(emojiInp) emojiInp.value='';
+    var rpcName=(kind==='category')?'pjl_add_taxonomy':'dr_add_taxonomy';
+    var rpcArgs=(kind==='category')?{p_kind:kind,p_value:val,p_icon:emo||null}:{p_kind:kind,p_value:val};
+    SB.rpc(rpcName,rpcArgs).then(function(res){
       if(res&&res.data&&res.data.ok){
         var v=res.data.value, dup=null;
         [].slice.call(group.querySelectorAll('.chip')).forEach(function(c){ if(c.getAttribute('data-v').toLowerCase()===v.toLowerCase()) dup=c; });
@@ -2164,7 +2169,7 @@ boot();
   }
   function loadTaxonomy(){
     if(!SB) return Promise.resolve();
-    return Promise.all([SB.rpc('dr_taxonomy',{p_kind:'category'}), SB.rpc('dr_taxonomy',{p_kind:'help'})]).then(function(r){
+    return Promise.all([SB.rpc('pjl_taxonomy',{p_kind:'category'}), SB.rpc('dr_taxonomy',{p_kind:'help'})]).then(function(r){
       var c=(r[0]&&r[0].data)||[], h=(r[1]&&r[1].data)||[];
       if(c.length) DR_CATS=c.map(function(x){return x.value;});
       if(h.length) DR_HELP=h.map(function(x){return x.value;});
