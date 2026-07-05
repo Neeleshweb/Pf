@@ -161,6 +161,14 @@
     .sm-nc-emoji { width: 54px; text-align: center; }
     .sm-nc-name { flex: 1; min-width: 0; }
     .sm-nc-save { background: var(--accent); color: var(--btn-ink, #fff); border: none; border-radius: 8px; padding: 0 1.1rem; font-weight: 600; cursor: pointer; }
+    .sm-domrow { display: flex; gap: .5rem; align-items: stretch; }
+    .sm-select { flex: 1; background: var(--field-bg); border: 1px solid var(--border2); border-radius: 8px; padding: .55rem .6rem; color: var(--white); font-size: .9rem; font-family: inherit; }
+    .sm-domadd { width: 42px; flex-shrink: 0; background: transparent; border: 1px dashed var(--border2); color: var(--muted); border-radius: 8px; cursor: pointer; font-size: 1.15rem; line-height: 1; }
+    .sm-domadd:hover { color: var(--white); border-color: var(--accent); }
+    .sm-diffs { display: flex; gap: .5rem; }
+    .sm-diff { flex: 1; background: var(--field-bg); border: 1px solid var(--border2); color: var(--text2); border-radius: 8px; padding: .55rem; font-size: .88rem; cursor: pointer; transition: color .15s, border-color .15s, background .15s; }
+    .sm-diff:hover { border-color: var(--accent); }
+    .sm-diff.sel { background: var(--accent); color: var(--btn-ink, #fff); border-color: var(--accent); font-weight: 600; }
     .hamburger { display: none; width: 42px; height: 42px; border: 1px solid var(--border2); background: var(--card); border-radius: 10px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
     .hamburger span { width: 18px; height: 2px; background: var(--white); border-radius: 2px; transition: transform .25s, opacity .2s; }
     .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
@@ -1164,6 +1172,9 @@ function addLegacyAliases(){ for(var lk in LEGACY_CAT){ if(CAT_META[LEGACY_CAT[l
 addLegacyAliases();
 function loadSharedTaxonomy(){ if(!SB) return; try{ SB.rpc('pjl_taxonomy',{p_kind:'category'}).then(function(res){ if(res&&!res.error&&res.data&&res.data.length){ var meta={},order=[]; res.data.forEach(function(r){ if(!r.slug) return; meta[r.slug]={i:r.icon||'🏷️',l:r.value||r.slug}; order.push(r.slug); }); if(order.length){ CAT_META=meta; CAT_ORDER=order; addLegacyAliases(); } } }).catch(function(){}); }catch(e){} }
 loadSharedTaxonomy();
+var DOMAINS=[]; var DIFFS=['Intro','Intermediate','Advanced'];
+function loadDomains(){ if(!SB) return; try{ SB.rpc('pjl_taxonomy',{p_kind:'domain'}).then(function(res){ if(res&&!res.error&&res.data&&res.data.length){ DOMAINS=res.data.map(function(r){return r.value;}); } }).catch(function(){}); }catch(e){} }
+loadDomains();
 
 /* ---- Reusable filter bar: sort dropdown(s) + scrollable category pills ---- */
 var _fbarDocWired = false;
@@ -2385,6 +2396,17 @@ function loadMyQueue(){
       if(Object.keys(m).length) out[ok]=m; });
     return Object.keys(out).length ? out : null;
   }
+  function showAddDomain(){
+    var box=document.getElementById('sm-domaddbox'); if(!box) return; box.style.display='block';
+    box.innerHTML='<div class="sm-addcat"><input id="sm-nd-name" class="sm-nc-name" maxlength="40" placeholder="New domain (e.g. B2B SaaS)"><button type="button" class="sm-nc-save" id="sm-nd-save">Add</button></div>';
+    var sv=document.getElementById('sm-nd-save'); if(!sv) return;
+    sv.onclick=function(){
+      var nm=(document.getElementById('sm-nd-name').value||'').trim();
+      if(nm.length<2){ say('Give the domain a name.'); return; }
+      if(!SB||!currentUser){ say('Sign in to add a domain.'); return; }
+      SB.rpc('pjl_add_taxonomy',{p_kind:'domain',p_value:nm}).then(function(res){ var d=res&&res.data; if(!d||!d.ok){ say('Could not add that domain.'); return; } var v=d.value||nm; if(DOMAINS.indexOf(v)<0) DOMAINS.push(v); S.domain=v; renderOutcome(); }).catch(function(){ say('Could not add that domain.'); });
+    };
+  }
   function renderOutcome(){
     var creditRow = (SB && currentUser)
       ? '<div class="sm-hint" style="margin-bottom:.8rem">Submitting from your account — we’ll credit you unless you ask otherwise.</div>'
@@ -2392,8 +2414,13 @@ function loadMyQueue(){
     stepsEl.innerHTML='<div class="sm-h">Outcome &amp; post</div><div class="sm-sub">Optional \u2014 what actually happened, or your own take. Then it goes live instantly for PMs to vote on. <b>You can post up to 5 dilemmas a day.</b></div>'
       +'<div class="sm-field"><label>What happened / your take (optional)</label><textarea id="sm-outcome" placeholder="How did it play out? What did you learn?"></textarea></div>'
       + creditRow
+      +'<div class="sm-field"><label>Domain (optional)</label><div class="sm-domrow"><select id="sm-domain" class="sm-select"><option value="">— Product context —</option>'+DOMAINS.map(function(v){ return '<option value="'+esc(v)+'"'+((S.domain||'')===v?' selected':'')+'>'+esc(v)+'</option>'; }).join('')+'</select><button type="button" class="sm-domadd" id="sm-domadd" title="Add a domain">+</button></div><div id="sm-domaddbox" style="display:none;margin-top:.5rem"></div></div>'
+      +'<div class="sm-field"><label>Difficulty (optional)</label><div class="sm-diffs">'+DIFFS.map(function(v){ return '<button type="button" class="sm-diff'+((S.difficulty||'')===v?' sel':'')+'" data-v="'+v+'">'+v+'</button>'; }).join('')+'</div></div>'
       +'<div class="sm-review" id="sm-review"></div><div class="sm-dims" id="sm-dims"></div>';
     var oc=document.getElementById('sm-outcome'); oc.value=S.outcome; oc.oninput=function(){ S.outcome=oc.value; };
+    var dom=document.getElementById('sm-domain'); if(dom) dom.onchange=function(){ S.domain=dom.value; };
+    [].slice.call(stepsEl.querySelectorAll('.sm-diff')).forEach(function(b){ b.onclick=function(){ S.difficulty=((S.difficulty||'')===b.getAttribute('data-v'))?'':b.getAttribute('data-v'); renderOutcome(); }; });
+    var da=document.getElementById('sm-domadd'); if(da) da.onclick=showAddDomain;
     var cr=document.getElementById('sm-credit'); if(cr){ cr.value=S.credit; cr.oninput=function(){ S.credit=cr.value; }; }
     var c=catBy(S.category);
     var optList=S.options.filter(function(o){ return val(o.t); }).map(function(o,i){ return keys[i]+'. '+esc(val(o.t)); }).join('<br>');
@@ -2434,6 +2461,7 @@ function loadMyQueue(){
       if(okEl){ okEl.style.display='block'; okEl.textContent='\u2713 It\u2019s live \u2014 PMs can vote on it now'+((r&&r.remaining!=null)?(' \u00B7 '+r.remaining+' more today'):'')+'.'; }
       nextB.textContent='Live \u2713';
       subStats.total=(subStats.total||0)+1; subStats.week=(subStats.week||0)+1; applySubStatus(); loadSubStats();
+      if((S.domain||S.difficulty) && SB && currentUser){ try{ SB.rpc('gc_set_last_submission_meta',{p_domain:S.domain||null,p_difficulty:S.difficulty||null}).then(function(){ if(typeof loadFeed==='function') loadFeed(); }).catch(function(){}); }catch(e){} }
       if(typeof loadMyQueue==='function') loadMyQueue(); if(typeof loadFeed==='function') loadFeed();
       setTimeout(function(){ close(); nextB.disabled=false; nextB.textContent='Post it live \u2192'; }, 1900);
     }).catch(function(){ say('Couldn\u2019t post right now \u2014 please try again.'); nextB.disabled=false; nextB.textContent='Post it live \u2192'; });
