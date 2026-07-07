@@ -240,6 +240,7 @@
     .cb.cat { background: var(--accent-dim); color: var(--accent); }
     .cb.dom { background: var(--accent3-dim); color: var(--accent3); }
     .cb.diff { background: var(--accent2-dim); color: var(--accent2); }
+    .cb-k { font-size: .58rem; letter-spacing: .5px; text-transform: uppercase; font-weight: 700; opacity: .55; margin-right: .35rem; font-style: normal; }
     .call-skip { background: transparent; border: 1px solid var(--border2); color: var(--muted); border-radius: 10px; padding: .55rem 1.1rem; font-size: .85rem; cursor: pointer; white-space: nowrap; transition: color .2s, border-color .2s; }
     .call-skip:hover { color: var(--white); border-color: var(--muted); }
     .call-skipped { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; color: var(--text2); font-size: .92rem; margin-top: 1rem; }
@@ -322,6 +323,14 @@
     .fp-cc b { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--green); line-height: 1; }
     .fp-cc small { font-size: .68rem; color: var(--muted); }
     .fp-note { font-size: .78rem; color: var(--text3); margin-top: .6rem; font-style: italic; }
+    .pf-gate { background: linear-gradient(135deg, var(--accent-dim), var(--accent2-dim)); border: 1px solid var(--border2); border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1rem; }
+    .pf-gate-h { font-family: 'Bebas Neue', sans-serif; letter-spacing: .5px; font-size: 1.1rem; color: var(--white); }
+    .pf-gate-b { font-size: .85rem; color: var(--text2); margin: .3rem 0 .7rem; }
+    .pf-gate-b b { color: var(--accent); }
+    .pf-gate-bar { height: 7px; background: var(--surface); border: 1px solid var(--border2); border-radius: 5px; overflow: hidden; margin-bottom: .85rem; }
+    .pf-gate-bar i { display: block; height: 100%; background: var(--accent); border-radius: 5px; transition: width .4s ease; }
+    .pf-gate-cta { display: inline-block; font-size: .82rem; font-weight: 600; color: var(--btn-ink, #fff); background: var(--accent); padding: .5rem 1.1rem; border-radius: 9px; }
+    .pf-locked { filter: blur(5px); opacity: .5; pointer-events: none; user-select: none; }
     @media (max-width:520px){ .fp-dim{flex-basis:84px;} .fp-cal{display:none;} }
 
     /* REVEAL */
@@ -1642,6 +1651,15 @@ function jrResolve(id, amap){
   if(amap && amap[id]) return { d:amap[id], bank:false };
   return { d:null, bank:false };
 }
+function unlockGateHTML(){
+  var n = GC.decisions||0;
+  if(n >= 3) return '';
+  var left = 3 - n, pct = Math.round(n/3*100);
+  return '<div class="pf-gate"><div class="pf-gate-h">\uD83D\uDD12 Your judgment profile unlocks at 3 calls</div>'
+    + '<div class="pf-gate-b">'+(n===0 ? 'Make your first call to start building it \u2014 <b>3 to go</b>.' : ('<b>'+left+(left===1?' more to go':' more to go')+'</b> \u00B7 '+n+' of 3 done'))+'</div>'
+    + '<div class="pf-gate-bar"><i style="width:'+pct+'%"></i></div>'
+    + '<a href="#today" class="pf-gate-cta">Take '+(n===0?'today\u2019s':'another')+' GutCheck \u2192</a></div>';
+}
 function fingerprintHTML(entries, roomSP){
   entries=entries||[]; roomSP=roomSP||{}; var order=Object.keys(DIM); var MIN=3;
   /* dims derived from the actual resolved calls when available (DB-sourced), else the cumulative profile value */
@@ -1720,7 +1738,7 @@ function renderJournal(){
     var ids=Object.keys(GC.calls||{});
     if(!ids.length){ mountEl.innerHTML='<div class="jr-empty">Make your first call and it\u2019ll appear here \u2014 your private record of how you decide.</div>'; return; }
     var le=ids.map(function(id){ var r=jrResolve(id,null); return { d:r.d, bank:r.bank, choice:GC.calls[id], reason:null, created_at:null }; });
-    mountEl.innerHTML=fingerprintHTML(le)+'<div class="jr-list">'+le.map(jrEntryHTML).join('')+'</div><div class="jr-note">Showing calls saved on this device. Sign in on the live site to sync your full journal with reasoning and dates.</div>';
+    mountEl.innerHTML=unlockGateHTML()+'<div class="pf-fp'+((GC.decisions||0)<3?' pf-locked':'')+'">'+fingerprintHTML(le)+'</div>'+'<div class="jr-list">'+le.map(jrEntryHTML).join('')+'</div><div class="jr-note">Showing calls saved on this device. Sign in on the live site to sync your full journal with reasoning and dates.</div>';
     return;
   }
   if(!currentUser){
@@ -1744,7 +1762,7 @@ function renderJournal(){
       return spP.then(function(spres){
         if(token!==renderJournal._t) return;
         var roomSP={}; if(spres && spres.data){ spres.data.forEach(function(r){ roomSP[r.dilemma_id]={sp:r.sp_opt,total:(+r.total_votes||0)}; }); }
-        mountEl.innerHTML=fingerprintHTML(ents, roomSP)+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
+        mountEl.innerHTML=unlockGateHTML()+'<div class="pf-fp'+((GC.decisions||0)<3?' pf-locked':'')+'">'+fingerprintHTML(ents, roomSP)+'</div>'+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
         var rEl=document.getElementById('rec-room');
         if(rEl){ var MIN=3,tot=0,mat=0; ents.forEach(function(e){ if(e.d && e.d.tier===3){ var rr=roomSP[e.d.id]; if(rr && rr.total>=MIN){ tot++; if(e.choice && e.choice===rr.sp) mat++; } } });
           if(tot>0){ rEl.textContent=Math.round(mat/tot*100)+'%'; rEl.title='You matched the room on '+mat+' of '+tot+' community dilemmas (with \u2265'+MIN+' votes).'; }
@@ -1765,14 +1783,14 @@ function srcLabel(d){
   if(d.tier===3) return 'Community-suggested';
   return (d.source ? d.source.split('·').slice(-1)[0].trim() : 'Curated');
 }
-function cbPill(cls,txt){ return txt ? '<span class="cb '+cls+'">'+escHtml(txt)+'</span>' : ''; }
+function cbPill(cls,label,txt){ return txt ? '<span class="cb '+cls+'"><em class="cb-k">'+label+'</em>'+escHtml(txt)+'</span>' : ''; }
 function badgesHTML(d){
   var cm = d.category && CAT_META[d.category];
-  return cbPill('src', srcLabel(d))
-    + (cm ? '<span class="cb cat">'+cm.i+' '+escHtml(cm.l)+'</span>' : '')
-    + cbPill('dom', d.domain||'')
-    + cbPill('lvl', d.level||'')
-    + cbPill('diff', d.difficulty||'');
+  return cbPill('src','Source', srcLabel(d))
+    + (cm ? '<span class="cb cat"><em class="cb-k">Category</em>'+cm.i+' '+escHtml(cm.l)+'</span>' : '')
+    + cbPill('dom','Domain', d.domain||'')
+    + cbPill('lvl','Level', d.level||'')
+    + cbPill('diff','Difficulty', d.difficulty||'');
 }
 function renderToday(){
   var d = todaysDilemma || dilemmaForIndex(TODAY_INDEX);
