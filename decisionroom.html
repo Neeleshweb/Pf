@@ -1542,6 +1542,18 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .chip-add-in{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .75rem;font:inherit;font-size:.78rem;width:150px;transition:width .2s,border-style .2s}
 .chip-add-in:focus{outline:none;width:190px;border-style:solid;box-shadow:0 0 0 3px rgba(var(--accent2-rgb),.12)}
 .chip-add-in::placeholder{color:var(--accent2);opacity:.75}
+.conf-block{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1rem 1.1rem;margin:.6rem 0}
+.conf-h{font-size:.7rem;letter-spacing:1.4px;text-transform:uppercase;font-weight:700;color:var(--accent2);margin-bottom:.5rem}
+.conf-disclaimer{font-size:.82rem;line-height:1.6;color:var(--text2);margin-bottom:.8rem}
+.conf-disclaimer b{color:var(--white)}
+.rsp-q{font-size:.6rem;letter-spacing:.5px;text-transform:uppercase;font-weight:700;padding:.2rem .5rem;border-radius:100px;margin-right:.5rem;white-space:nowrap}
+.rsp-q.high{background:rgba(var(--green-rgb),.14);color:var(--green)}
+.rsp-q.mid{background:var(--accent2-dim);color:var(--accent2)}
+.rsp-q.low{background:rgba(var(--red-rgb),.12);color:var(--red)}
+.rsp-chk{display:flex;flex-wrap:wrap;gap:.55rem .9rem;margin:.7rem 0 .1rem;padding-top:.7rem;border-top:1px solid var(--border)}
+.rsp-chk-i{font-size:.72rem;display:inline-flex;align-items:center;gap:.25rem}
+.rsp-chk-i.y{color:var(--green)}
+.rsp-chk-i.n{color:var(--muted2);opacity:.75}
 .chip-add-emoji{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .4rem;font:inherit;font-size:.9rem;width:46px;text-align:center;margin-right:.35rem}
 .chip-add-emoji:focus{outline:none;border-style:solid}
 .examples-more-wrap{text-align:center}
@@ -1622,8 +1634,8 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
     <h1>STUCK ON A PRODUCT <span class="o">DECISION?</span></h1>
     <p class="hero-sub">Bring a real product call into a room of credible PMs and get <strong>structured feedback</strong> from people who&rsquo;ve handled the same situation &mdash; not hot takes, not a forum, not an AI guessing. Post <strong>anonymously</strong>: your judgment, not your job title, does the talking.</p>
     <div class="hero-ctas">
-      <button type="button" class="btn-primary" data-cta="submit">Submit your first case</button>
-      <button type="button" class="btn-ghost" data-cta="review">Join as a reviewer</button>
+      <button type="button" class="btn-primary" data-cta="submit">Submit a decision</button>
+      <button type="button" class="btn-ghost" data-cta="review">Join as a reviewer</button><button type="button" class="btn-ghost" data-cta="library">Browse resolved cases</button>
     </div>
     <a class="dr-bridge" href="/gutcheck.html">Trust your gut first &rarr; <span>play GutCheck</span>, then bring the hard ones here.</a>
   </div>
@@ -1777,8 +1789,8 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
     <h3>Bring your hardest call into the room</h3>
     <p>Founding members get in first &mdash; submit the decision you&rsquo;re stuck on, or lend your judgment as a founding reviewer and help shape the room.</p>
     <div class="cta-row">
-      <button type="button" class="btn-primary" data-cta="submit">Submit your first case</button>
-      <button type="button" class="btn-ghost" data-cta="review">Join as a reviewer</button>
+      <button type="button" class="btn-primary" data-cta="submit">Submit a decision</button>
+      <button type="button" class="btn-ghost" data-cta="review">Join as a reviewer</button><button type="button" class="btn-ghost" data-cta="library">Browse resolved cases</button>
     </div>
     <div class="dr-soon">Early access &middot; case submission opens to founding members first.</div>
   </div>
@@ -1916,6 +1928,7 @@ function signOutUser(){ if(!SB) return; SB.auth.signOut().then(function(){ curre
 
 /* CTAs: submit (founding member) + review (founding reviewer -> willing_to_answer) */
 function wireCTAs(){
+  [].slice.call(document.querySelectorAll('[data-cta="library"]')).forEach(function(b){ b.onclick=function(){ if(typeof smoothTo==='function') smoothTo('library'); else { location.hash='#library'; } }; });
   [].slice.call(document.querySelectorAll('[data-cta="submit"]')).forEach(function(b){ b.onclick=function(){
     if(SB&&!currentUser){ openSignIn('Sign in to start your first case \u2014 your posts are anonymous (alias + PM context only).'); return; }
     if(typeof drOpenSubmit==='function'){ drOpenSubmit(); return; }
@@ -2054,7 +2067,7 @@ boot();
   var DR_ROLES=null;;
   var STK_OPTS=['CEO','Founder','Exec Team','Product Leadership','Manager','Engineering','Design','Data','Sales','Marketing','Customer Success','Support','Customer','Finance','Legal','Security','Compliance','Operations','Partnerships / BD','Other PMs'];
   var CONS_OPTS=['Time','Engineering capacity','Revenue pressure','Customer escalation','Leadership pressure','Technical debt','Unclear data'];
-  var URG=[['today','Today'],['this_week','This week'],['this_month','This month'],['not_urgent','Not urgent']];
+  var URG=[['today','Today'],['this_week','This week'],['this_sprint','This sprint'],['this_month','This month'],['not_urgent','No hard deadline']];
   var ANON=[['context','Show role/context only'],['anon','Fully anonymous'],['dm_ok','Allow verified reviewers to DM']];
   /* dynamic taxonomy (seed fallback mirrors the DB seed; DB load adds customs) */
   var DR_CATS=['Roadmap','Prioritization','Discovery','Stakeholder Conflict','Metrics & Measurement','Launch & GTM','Strategy','UX & Design','Career & Growth','Execution & Delivery','Technical Tradeoffs','Pricing & Packaging','Customer Escalation','Team & Org','Experimentation & A/B','Data & Analytics','Sunset & Deprecation','Vision & Positioning','Resourcing & Capacity','Compliance & Risk'];
@@ -2244,7 +2257,7 @@ boot();
     if(g('f-decision').length<10) m.push('the decision');
     if(opts.length<2) m.push('at least two options');
     if(g('f-risk').length<10) m.push('the biggest risk');
-    if(!selChips('f-help').length) m.push('a type of help');
+    if(!selChips('f-help').length) m.push('at least one ask');
     if(!selChips('f-cat').length) m.push('a problem category');
     return m;
   }
@@ -2255,11 +2268,11 @@ boot();
      +'<div class="fstep active" data-fstep="1">'
      +'<div class="form-sec"><span class="fs-ic"><svg viewBox="0 0 24 24"><path d="M5 3h9l5 5v13H5z"/><path d="M14 3v5h5M8.5 13h7M8.5 17h4.5"/></svg></span>The essentials</div>'
      +'<div class="fld"><label>Title <span class="req">*</span></label><div class="hint">Summarize the decision in one sentence. <span class="ac-tip">Press Tab to accept a suggestion.</span></div><input id="f-title" maxlength="140" autocomplete="off" placeholder="e.g. Build the custom feature to save the renewal, or protect the roadmap?"></div>'
-     +'<div class="fld"><label>Situation summary <span class="req">*</span></label><div class="hint">What\u2019s happening? Give enough context \u2014 without naming your company.</div><textarea id="f-situation" rows="4"></textarea></div>'
+     +'<div class="fld"><label>The situation <span class="req">*</span></label><div class="hint">What\u2019s happening? Give enough context \u2014 without naming your company.</div><textarea id="f-situation" rows="4"></textarea></div>'
      +'<div class="fld"><label>Decision needed <span class="req">*</span></label><div class="hint">What exactly are you trying to decide?</div><textarea id="f-decision" rows="2"></textarea></div>'
-     +'<div class="fld"><label>Options being considered <span class="req">*</span></label><div class="hint">At least two. <span id="f-opt-note" class="opt-note">You can add up to 6.</span></div><div id="f-options"></div><button type="button" class="addopt" id="f-addopt">+ Add option</button></div>'
+     +'<div class="fld"><label>The fork <span class="req">*</span></label><div class="hint">At least two. <span id="f-opt-note" class="opt-note">You can add up to 6.</span></div><div id="f-options"></div><button type="button" class="addopt" id="f-addopt">+ Add option</button></div>'
      +'<div class="fld"><label>Biggest risk / fear <span class="req">*</span></label><div class="hint">What are you afraid will go wrong?</div><textarea id="f-risk" rows="2"></textarea></div>'
-     +'<div class="fld"><label>Type of help needed <span class="req">*</span></label><div class="hint">Pick what you want from reviewers \u2014 or type your own and press Enter.</div><div class="chips" id="f-help"></div></div>'
+     +'<div class="fld"><label>Your asks <span class="req">*</span></label><div class="hint">Pick the specific things you want reviewers to answer \u2014 or type your own and press Enter.</div><div class="chips" id="f-help"></div></div>'
      +'<div class="fld"><label>Problem category <span class="req">*</span></label><div class="hint">The subject area \u2014 or type your own and press Enter.</div><div class="chips" id="f-cat"></div></div>'
      +'</div>'
      +'<div class="fstep" data-fstep="2">'
@@ -2268,17 +2281,22 @@ boot();
        +'<div class="fld"><label>Product context</label><select id="f-product"><option value="">\u2014</option>'+PRODUCT.map(function(p){return '<option>'+escHtml(p)+'</option>';}).join('')+'</select></div>'
        +'<div class="fld"><label>Stakeholders involved</label>'+chips('f-stk',STK_OPTS)+'</div>'
        +'<div class="fld"><label>Constraints</label>'+chips('f-cons',CONS_OPTS)+'<textarea id="f-cons-note" rows="2" placeholder="Anything else constraining this?" style="margin-top:.5rem"></textarea></div>'
-       +'<div class="fld"><label>Current recommendation</label><input id="f-rec" placeholder="What are you leaning toward right now?"></div>'
+       +'<div class="fld"><label>Current leaning</label><input id="f-rec" placeholder="What are you leaning toward right now?"></div>'
        +'<div class="fld"><label>Evidence available</label><textarea id="f-evidence" rows="2"></textarea></div>'
        +'<div class="fld"><label>What have you tried already?</label><textarea id="f-tried" rows="2"></textarea></div>'
-       +'<div class="fld half"><label>Urgency</label><select id="f-urgency">'+URG.map(function(u){return '<option value="'+u[0]+'"'+(u[0]==='this_week'?' selected':'')+'>'+u[1]+'</option>';}).join('')+'</select></div>'
+       +'<div class="fld half"><label>Decision deadline</label><select id="f-urgency">'+URG.map(function(u){return '<option value="'+u[0]+'"'+(u[0]==='this_week'?' selected':'')+'>'+u[1]+'</option>';}).join('')+'</select></div>'
        +'<div class="fld half"><label>Anonymity</label><select id="f-anon">'+ANON.map(function(a){return '<option value="'+a[0]+'">'+a[1]+'</option>';}).join('')+'</select></div>'
      +'</div>'
      +'</div>'
      +'<div class="fstep" data-fstep="3">'
      +'<div class="form-sec"><span class="fs-ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3.3 8.6-7 10-3.7-1.4-7-5-7-10V6z"/><path d="M8.5 12.2l2.1 2.1 4.9-5"/></svg></span>Review &amp; post</div>'
      +'<p class="fstep-review">You\u2019re about to post this case anonymously. Reviewers will see your alias and PM context only \u2014 never your name or company. You can close it (or reopen it if under 70% of your wants are met) at any time.</p>'
-     +'<label class="conf"><input type="checkbox" id="f-conf"> <span>I\u2019ve removed company / customer confidential information. <span class="req">*</span></span></label>'
+     +'<div class="conf-block"><div class="conf-h">Before you post \u2014 confidentiality</div>'
+     +'<p class="conf-disclaimer">Everything you post is <b>public to other PMs</b>. Scrub anything that could identify your company, customers, or specific people. <b>DecisionRoom can\u2019t verify what you share</b> \u2014 you alone are responsible for the accuracy and confidentiality of what you post, and neither the platform nor any reviewer is liable for confidential, sensitive, or false information you include. Tick each box only if it is genuinely true.</p>'
+     +'<label class="conf"><input type="checkbox" id="f-conf1"> <span>I removed customer and employee names. <span class="req">*</span></span></label>'
+     +'<label class="conf"><input type="checkbox" id="f-conf2"> <span>I removed confidential roadmap or financial details. <span class="req">*</span></span></label>'
+     +'<label class="conf"><input type="checkbox" id="f-conf3"> <span>I removed security-sensitive details. <span class="req">*</span></span></label>'
+     +'<label class="conf"><input type="checkbox" id="f-conf4"> <span>I understand this will be visible to other users, and that I am responsible for its accuracy. <span class="req">*</span></span></label></div>'
      +'</div>'
      +'<div class="form-actions"><button type="button" class="btn-ghost" id="f-cancel">Cancel</button><span class="fa-spacer"></span><button type="button" class="btn-ghost" id="f-back" style="display:none">\u2190 Back</button><button type="button" class="btn-primary" id="f-next">Next \u2192</button><button type="button" class="btn-primary" id="f-submit" style="display:none">Post case</button></div>'
      +'<div class="form-err" id="f-err"></div>';
@@ -2304,7 +2322,7 @@ boot();
   window.drOpenSubmit=drOpenSubmit;
   if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) closeSubmit(); });
 
-  function reasonMsg(r){ return ({auth:'Please sign in again.',confidential:'Please confirm you\u2019ve removed confidential info.',title:'Title needs at least 6 characters.',situation:'Add a bit more situation context.',decision:'Describe the decision a little more.',options:'Add at least two options.',risk:'Describe the biggest risk a little more.',help:'Pick at least one type of help.',rate:'You\u2019ve posted several cases today \u2014 try again later.'})[r]||'Could not post right now.'; }
+  function reasonMsg(r){ return ({auth:'Please sign in again.',confidential:'Please confirm you\u2019ve removed confidential info.',title:'Title needs at least 6 characters.',situation:'Add a bit more situation context.',decision:'Describe the decision a little more.',options:'Add at least two options.',risk:'Describe the biggest risk a little more.',help:'Pick at least one ask.',rate:'You\u2019ve posted several cases today \u2014 try again later.'})[r]||'Could not post right now.'; }
 
   function doSubmit(){
     var err=document.getElementById('f-err'); err.textContent='';
@@ -2322,7 +2340,7 @@ boot();
     if(get('f-risk').length<10) miss.push('the biggest risk');
     if(!help.length) miss.push('a type of help');
     if(!cats.length) miss.push('a problem category');
-    if(!document.getElementById('f-conf').checked) miss.push('the confidentiality confirmation');
+    if(!['f-conf1','f-conf2','f-conf3','f-conf4'].every(function(id){ var el=document.getElementById(id); return el&&el.checked; })) miss.push('all four confidentiality checks');
     if(miss.length){ err.textContent='Please complete: '+miss.join(', ')+'.'; if(miss.some(function(x){return x.indexOf('confidentiality')<0;})) showStep(1); return; }
     var payload={
       p_title:get('f-title'), p_situation:get('f-situation'), p_decision:get('f-decision'),
@@ -2599,6 +2617,18 @@ boot();
     }).catch(function(){ listEl.innerHTML='<p class="cd-resp-load">Couldn\u2019t load responses.</p>'; });
   }
   function respWantsPct(d, r){ var ws=d.help_types||[]; if(!ws.length) return 0; var map={}; (r.want_answers||[]).forEach(function(x){ map[x.want]=x.answer; }); return gateEntries(ws.map(function(w){return {want:w, answer:map[w]||''};}), ws.length, 'answer').pct; }
+  function respChecklist(d, r){
+    var ws=d.help_types||[]; var map={}; (r.want_answers||[]).forEach(function(x){ map[x.want]=x.answer; });
+    function meaningful(a){ a=(a||'').trim(); return a.length>3 && !/^n\/?a\.?$/i.test(a); }
+    var covered=0; ws.forEach(function(w){ if(meaningful(map[w])) covered++; });
+    var items=[
+      {ok: ws.length>0 && covered>0, t:'Answered '+covered+'/'+ws.length+' asks'},
+      {ok: !!(r.body && r.body.trim().length>20), t:'Gave a recommendation'},
+      {ok: !!(r.watch_out && (''+r.watch_out).trim()), t:'Named the risks'},
+      {ok: !!(r.suggested_next_step && (''+r.suggested_next_step).trim()), t:'Suggested a next step'}
+    ];
+    return '<div class="rsp-chk">'+items.map(function(it){ return '<span class="rsp-chk-i '+(it.ok?'y':'n')+'">'+(it.ok?'\u2713':'\u2013')+' '+escHtml(it.t)+'</span>'; }).join('')+'</div>';
+  }
   function renderResponseList(listEl, rs, d){
     if(!rs.length){ listEl.innerHTML='<p class="cd-resp-empty">'+(d.is_mine?'No responses yet \u2014 share your case to get the first one.':(d.status==='live'?'No responses yet. Be the first to weigh in.':'No responses were posted.'))+'</p>'; return; }
     var maxHelp=0; rs.forEach(function(x){ if((Number(x.helpful_count)||0)>maxHelp) maxHelp=Number(x.helpful_count)||0; });
@@ -2620,10 +2650,12 @@ boot();
       else if(currentUser){ act='<button type="button" class="rsp-help'+(r.marked?' on':'')+'" data-r="'+escHtml(r.id)+'">'+(r.marked?'\u2713 Marked helpful':'Mark helpful')+'</button>'; }
       else { act=''; }
       var rep = (currentUser && !r.is_mine) ? '<button type="button" class="rsp-report'+(r.i_reported?' done':'')+'" data-r="'+escHtml(r.id)+'"'+(r.i_reported?' disabled':'')+'>'+(r.i_reported?'Reported':'\u2691 Report')+'</button>' : '';
-      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r"><span class="rsp-stars">'+starsMarkup(stars)+'</span></span></div>'
+      var qlabel = flagged ? '<span class="rsp-q low">Not actionable</span>' : (wpct>=75 ? '<span class="rsp-q high">High ask coverage</span>' : (wpct>=40 ? '<span class="rsp-q mid">Useful perspective</span>' : '<span class="rsp-q low">Low coverage</span>'));
+      var chk = respChecklist(d, r);
+      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r">'+qlabel+'<span class="rsp-stars">'+starsMarkup(stars)+'</span></span></div>'
         +'<div class="rsp-badges">'+conf+acted+hc+'</div>'+flag
         +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo
-        +wantsGridHtml(d, r)
+        +wantsGridHtml(d, r)+chk
         +'<div class="rsp-foot"><span class="rsp-foot-l">'+act+'</span><span class="rsp-foot-r">'+rep+'</span></div></div>';
     }).join('');
     [].slice.call(listEl.querySelectorAll('.rsp-help')).forEach(function(b){ b.onclick=function(){ markHelpful(b.getAttribute('data-r'), b); }; });
