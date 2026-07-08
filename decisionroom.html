@@ -1571,7 +1571,11 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .cd-nc-btn:hover{color:var(--white);border-color:var(--accent2)}
 .cd-fa{margin:.3rem 0 0;padding-left:1.1rem}
 .cd-fa li{margin:.25rem 0;color:var(--text2);font-size:.9rem}
-.fc-nc{font-size:.68rem;font-weight:600;color:var(--accent2);margin-left:.5rem;white-space:nowrap}
+.fc-nc{font-size:.64rem;font-weight:700;letter-spacing:.3px;color:var(--accent2);background:var(--accent2-dim);border:1px solid var(--border2);padding:.2rem .55rem;border-radius:100px;margin-left:.5rem;white-space:nowrap}
+.cd-fa-r{margin:.7rem 0 .2rem}
+.cd-fa-in{width:100%;background:var(--field-bg);border:1px solid var(--border2);border-radius:8px;padding:.5rem .6rem;color:var(--white);font-size:.9rem;font-family:inherit;margin-bottom:.6rem;resize:vertical}
+.cd-fa-out li{display:flex;flex-direction:column;gap:.15rem;margin:.4rem 0}
+.cd-fa-out li span{color:var(--text2)}
 .chip-add-emoji{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .4rem;font:inherit;font-size:.9rem;width:46px;text-align:center;margin-right:.35rem}
 .chip-add-emoji:focus{outline:none;border-style:solid}
 .examples-more-wrap{text-align:center}
@@ -1775,8 +1779,9 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
       <option value="all">Any urgency</option>
       <option value="today">Today</option>
       <option value="this_week">This week</option>
+      <option value="this_sprint">This sprint</option>
       <option value="this_month">This month</option>
-      <option value="not_urgent">Not urgent</option>
+      <option value="not_urgent">No hard deadline</option>
     </select>
     <select id="feed-prod" aria-label="Filter by product type"><option value="all">Any product</option></select>
     <select id="feed-exp" aria-label="Filter by experience level">
@@ -2099,7 +2104,7 @@ boot();
   function caseIsPartial(r){ return r.status==='closed' && caseResolvedPct(r)<70; }
   function caseStatusLabel(r){ if(r.status!=='closed') return statusBadge(r.status); return caseIsResolved(r)?'Resolved':'Partially resolved'; }
   function caseStatusClass(r){ if(r.status!=='closed') return r.status; return caseIsResolved(r)?'resolved':'partial'; }
-  function urgLabel(u){ return ({today:'Today',this_week:'This week',this_month:'This month',not_urgent:'Not urgent'})[u]||u; }
+  function urgLabel(u){ return ({today:'Today',this_week:'This week',this_sprint:'This sprint',this_month:'This month',not_urgent:'No hard deadline'})[u]||u; }
   function fmtDate(ts){ try{ var d=new Date(ts); if(isNaN(d.getTime())) return ''; var now=new Date(); var opt=(d.getFullYear()===now.getFullYear())?{month:'short',day:'numeric'}:{month:'short',day:'numeric',year:'numeric'}; return d.toLocaleDateString(undefined,opt); }catch(e){ return ''; } }
   function fcDate(ts, label){ var t=fmtDate(ts); label=label||'Posted'; return t?('<span class="fc-date">'+label+' <b>'+escHtml(t)+'</b></span>'):''; }
   function fcChipRow(label, items, cls){ if(!items||!items.length) return ''; var pills=items.slice(0,4).map(function(v){ return '<span class="'+cls+'">'+escHtml(v)+'</span>'; }).join(''); var extra=items.length>4?'<span class="fc-more">+'+(items.length-4)+'</span>':''; return '<div class="fc-row"><span class="fc-rowlab">'+label+'</span><span class="fc-chips">'+pills+extra+'</span></div>'; }
@@ -2280,14 +2285,16 @@ boot();
     return m;
   }
   var FA_SUGG=['Is this the right scope trade-off?','What assumption should be validated first?','What risks am I missing?','How would you handle the stakeholder disagreement?','What would you recommend, and why?','What would you de-scope, if anything?','What data would you check before deciding?'];
+  var ASK_POOL=FA_SUGG.slice();
+  function loadAskPool(){ if(!SB) return; try{ SB.rpc('dr_ask_suggestions').then(function(res){ if(res&&!res.error&&res.data&&res.data.length){ ASK_POOL=res.data.slice(); } }).catch(function(){}); }catch(e){} }
   var FREE_ASKS=[];
   function renderFreeAsks(){
     var sugg=document.getElementById('fa-sugg'), list=document.getElementById('fa-list'), inp=document.getElementById('fa-in'); if(!sugg||!list) return;
-    sugg.innerHTML=FA_SUGG.filter(function(q){ return FREE_ASKS.indexOf(q)<0; }).map(function(q){ return '<button type="button" class="fa-s" data-q="'+escHtml(q)+'">+ '+escHtml(q)+'</button>'; }).join('');
+    sugg.innerHTML=ASK_POOL.filter(function(q){ return FREE_ASKS.indexOf(q)<0; }).map(function(q){ return '<button type="button" class="fa-s" data-q="'+escHtml(q)+'">+ '+escHtml(q)+'</button>'; }).join('');
     list.innerHTML=FREE_ASKS.map(function(q,i){ return '<div class="fa-item"><span>'+escHtml(q)+'</span><button type="button" class="fa-x" data-i="'+i+'" aria-label="Remove">\u00d7</button></div>'; }).join('');
     [].slice.call(sugg.querySelectorAll('.fa-s')).forEach(function(b){ b.onclick=function(){ var q=b.getAttribute('data-q'); if(FREE_ASKS.indexOf(q)<0) FREE_ASKS.push(q); renderFreeAsks(); }; });
     [].slice.call(list.querySelectorAll('.fa-x')).forEach(function(b){ b.onclick=function(){ FREE_ASKS.splice(Number(b.getAttribute('data-i')),1); renderFreeAsks(); }; });
-    if(inp) inp.onkeydown=function(e){ if(e.key==='Enter'){ e.preventDefault(); var v=(inp.value||'').trim(); if(v.length>3 && FREE_ASKS.indexOf(v)<0){ FREE_ASKS.push(v); inp.value=''; renderFreeAsks(); } } };
+    if(inp) inp.onkeydown=function(e){ if(e.key==='Enter'){ e.preventDefault(); var v=(inp.value||'').trim(); if(v.length>4 && FREE_ASKS.indexOf(v)<0){ FREE_ASKS.push(v); if(ASK_POOL.indexOf(v)<0) ASK_POOL.push(v); inp.value=''; renderFreeAsks(); if(SB&&currentUser){ try{ SB.rpc('dr_add_ask',{p_value:v}).catch(function(){}); }catch(e2){} } } } };
   }
   function buildForm(){
     if(!form) return;
@@ -2521,7 +2528,7 @@ boot();
       else {
         var opts=(d.options||[]).map(function(o,i){ return '<div class="cd-opt"><span>'+('ABCDE'.charAt(i)||'\u2022')+'</span>'+escHtml(o)+'</div>'; }).join('');
         var help=(d.help_types||[]).map(function(h){ return '<span class="cd-chip y">'+escHtml(helpLabel(h))+'</span>'; }).join('');
-        m.innerHTML='<div class="cd-head">'+(d.is_mine?'<span class="cd-ctx mine">Your case</span>':'<span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span>')+'<span class="cd-head-r">'+(d.is_mine?'<button type="button" class="cd-share" id="cd-share-btn">\u2197 Share</button>':'')+(d.needs_context?'<span class="cd-nc">\u2753 Needs more context</span>':'')+'<span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span>'+((!d.is_mine&&currentUser)?'<button type="button" class="cd-nc-btn" id="cd-nc-btn">Ask for more context</button>':'')+'</span></div>'
+        m.innerHTML='<div class="cd-head">'+(d.is_mine?'<span class="cd-ctx mine">Your case</span>':'<span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span>')+'<span class="cd-head-r">'+(d.is_mine?'<button type="button" class="cd-share" id="cd-share-btn">\u2197 Share</button>':'')+(d.needs_context?'<span class="cd-nc">\u2753 Needs more context</span>':'')+'<span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span>'+((!d.is_mine&&currentUser)?'<button type="button" class="cd-nc-btn" id="cd-nc-btn"'+(d.i_flagged?' disabled':'')+'>'+(d.i_flagged?'\u2713 Flagged':'Ask for more context')+'</button>':'')+'</span></div>'
           +'<h2 class="cd-title">'+escHtml(d.title)+'</h2>'
           +row('The decision','<strong>'+escHtml(d.decision)+'</strong>')
           +row('Situation', nl(d.situation))
@@ -2529,6 +2536,7 @@ boot();
           +row('Biggest risk', nl(d.biggest_risk))
           +(help?row('Help needed', help):'')
           +((d.free_asks&&d.free_asks.length)?row('Specific questions','<ul class="cd-fa">'+d.free_asks.map(function(q){ return '<li>'+escHtml(q)+'</li>'; }).join('')+'</ul>'):'')
+          +((d.free_ask_outcomes&&d.free_ask_outcomes.length)?row('Answers to your questions','<ul class="cd-fa cd-fa-out">'+d.free_ask_outcomes.map(function(x){ return '<li><b>'+escHtml(x.q)+'</b><span>'+escHtml(x.answer||'\u2014')+'</span></li>'; }).join('')+'</ul>'):'')
           +listRow('Categories', d.categories, 'cat')
           +listRow('Stakeholders', d.stakeholders, 'stk')
           +(d.product_context?row('Product', escHtml(d.product_context)):'')
@@ -2544,7 +2552,7 @@ boot();
           +'<div id="cd-responses" class="cd-resp-list"></div></div>';
         loadResponses(d);
         var csb=document.getElementById('cd-share-btn'); if(csb) csb.onclick=function(){ openShare(d.id); };
-        var ncb=document.getElementById('cd-nc-btn'); if(ncb) ncb.onclick=function(){ ncb.disabled=true; SB.rpc('dr_request_context',{p_case_id:d.id}).then(function(r){ if(r&&r.data&&r.data.ok){ if(typeof toast==='function') toast('Flagged \u2014 the asker will be nudged for more context'); ncb.textContent='\u2713 Flagged'; } else { ncb.disabled=false; } }).catch(function(){ ncb.disabled=false; }); };
+        var ncb=document.getElementById('cd-nc-btn'); if(ncb && !d.i_flagged) ncb.onclick=function(){ ncb.disabled=true; SB.rpc('dr_request_context',{p_case_id:d.id}).then(function(r){ if(r&&r.data&&r.data.ok){ if(typeof toast==='function') toast('Flagged \u2014 the asker will be nudged for more context'); ncb.textContent='\u2713 Flagged'; } else { ncb.disabled=false; } }).catch(function(){ ncb.disabled=false; }); };
       }
       cov.classList.add('open'); document.body.style.overflow='hidden';
     }).catch(function(){});
@@ -2793,6 +2801,7 @@ boot();
       +'<div class="fstep" data-rstep="2">'
       +(wantsInputsHtml(d, mine)?'<label class="cd-f-l">Answer each ask <span class="req">*</span> <span class="cd-f-opt">this is what earns your rating</span></label>':'')
       +wantsInputsHtml(d, mine)
+      +((d.free_asks&&d.free_asks.length)?'<div class="cd-fa-r"><div class="cd-f-l">Specific questions from the asker</div><ul class="cd-fa">'+d.free_asks.map(function(q){ return '<li>'+escHtml(q)+'</li>'; }).join('')+'</ul></div>':'')
       +'<div class="cd-wmeter" id="rf-wmeter"></div>'
       +'</div>'
       +'<div class="cd-form-act"><button type="button" class="btn-ghost" id="rf-back" style="display:none">\u2190 Back</button><button type="button" class="btn-primary" id="rf-next">Next \u2192</button><button type="button" class="btn-primary" id="rf-submit" style="display:none">'+(mine?'Update response':'Post response')+'</button><span class="cd-form-err" id="rf-err"></span></div></div>';
@@ -2914,27 +2923,38 @@ boot();
         +'<p class="cd-want-n">Your own read \u2014 not the average. Write <b>N/A</b> for any ask the room couldn\u2019t help with. Blank, N/A, or too-thin lines don\u2019t count toward the % met.</p>'
         + ws.map(function(w){ return '<label class="cd-want-l">'+escHtml(helpLabel(w))+'</label><textarea class="cd-want-in" data-want="'+escHtml(w)+'" rows="2" maxlength="600" placeholder="What you got on this \u2014 or N/A"></textarea>'; }).join('')
         +'<div class="cd-wmeter" id="cf-wmeter"></div></div>') : '';
+    var fas=(d.free_asks||[]);
+    var faBlock = fas.length ? ('<div class="cd-wants"><div class="cd-want-h">What did the room give you on your specific questions?</div>'
+        +'<p class="cd-want-n">Your own read on each question you asked \u2014 write <b>N/A</b> for any that went unanswered.</p>'
+        + fas.map(function(q){ return '<label class="cd-want-l">'+escHtml(q)+'</label><textarea class="cd-fa-in" data-fa="'+escHtml(q)+'" rows="2" maxlength="600" placeholder="The answer you got \u2014 or N/A"></textarea>'; }).join('')
+        +'<div class="cd-wmeter" id="cf-fameter"></div></div>') : '';
     el.innerHTML='<div class="cd-form"><div class="cd-form-h">Close this case</div>'
       +aid.html
       +'<label class="cd-f-l">What did you go with? <span class="cd-f-opt">optional</span></label>'
       +'<select id="cf-opt"><option value="">\u2014 Not sure / something else \u2014</option>'+optionsHtml+'<option value="A different approach">A different approach</option></select>'
       +'<label class="cd-f-l">What you decided &amp; why <span class="cd-f-opt">editable \u2014 pre-filled from the responses</span></label><textarea id="cf-res" rows="4" maxlength="1500" placeholder="A line on what you chose and how it\u2019s playing out."></textarea>'
       +wantsBlock
+      +faBlock
       +'<div class="cd-form-act"><button type="button" class="btn-primary" id="cf-submit">Close case</button><button type="button" class="btn-ghost" id="cf-cancel">Cancel</button><span class="cd-form-err" id="cf-err"></span></div></div>';
     var resEl=document.getElementById('cf-res'); if(resEl && aid.summary) resEl.value=aid.summary;
     var upd=function(){ updWantsMeter('#cd-respond', d, 'outcome', 'cf-wmeter'); };
     [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ t.addEventListener('input', upd); }); upd();
+    function gatherFAOut(){ var out=[]; [].slice.call(el.querySelectorAll('.cd-fa-in')).forEach(function(t){ out.push({q:t.getAttribute('data-fa'), answer:(t.value||'').trim()}); }); return out; }
+    function faMeter(){ var mel=document.getElementById('cf-fameter'); if(!mel) return; var list=gatherFAOut(); var tot=list.length; var sat=list.filter(function(x){ var a=(x.answer||'').trim(); return a.length>3 && !/^n\/?a\.?$/i.test(a); }).length; var pct=tot?Math.round(100*sat/tot):0; mel.innerHTML='<div class="cd-aid-avg '+(pct>=70?'g':'r')+'" style="margin:.5rem 0 0"><span class="cd-aid-big">'+pct+'%</span><span>of your specific questions answered ('+sat+'/'+tot+')</span></div>'; }
+    [].slice.call(el.querySelectorAll('.cd-fa-in')).forEach(function(t){ t.addEventListener('input', faMeter); }); faMeter();
     document.getElementById('cf-cancel').onclick=function(){ renderRespondArea(el, d, null); };
     document.getElementById('cf-submit').onclick=function(){
       var res=((document.getElementById('cf-res')||{}).value||'').trim(), opt=((document.getElementById('cf-opt')||{}).value||'').trim();
       var err=document.getElementById('cf-err'), btn=document.getElementById('cf-submit');
       var wg=gatherWants('#cd-respond','outcome');
+      var faOutcomes=(fas.length?gatherFAOut():[]);
       if(wg.missing){ if(err) err.textContent='Please note how each ask went \u2014 write \u201CN/A\u201D for any the room couldn\u2019t help with.'; return; }
       var g=gateEntries(wg.list, ws.length||wg.list.length, 'outcome');
       function doClose(){
         if(btn){ btn.disabled=true; btn.textContent='Closing\u2026'; }
         SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt,p_want_outcomes:wg.list,p_wants_satisfied:g.sat,p_resolved_pct:g.pct}).then(function(r){
           var o=(r&&r.data)||{}; if(!o.ok){ if(err) err.textContent=(o.reason==='wants'?'Please note how each ask went (N/A is fine).':'Couldn\u2019t close the case.'); if(btn){ btn.disabled=false; btn.textContent='Close case'; } return; }
+          if(fas.length && SB){ try{ SB.rpc('dr_set_free_ask_outcomes',{p_case_id:d.id,p_outcomes:faOutcomes}).catch(function(){}); }catch(e){} }
           if(typeof toast==='function') toast('Case closed'); openCase(d.id); loadFeed(true); loadMyCases(); if(typeof loadLibrary==='function') loadLibrary(true);
         }).catch(function(){ if(err) err.textContent='Something went wrong.'; if(btn){ btn.disabled=false; btn.textContent='Close case'; } });
       }
@@ -3039,6 +3059,7 @@ boot();
   renderExamples(true);   /* immediate render from seed list */
   populateFilter();
   loadTaxonomy();         /* then refresh from DB (adds any custom values) */
+  loadAskPool();
   loadFeed(true);
   loadLibrary(true);
   loadMyCases();
