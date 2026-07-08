@@ -2893,7 +2893,7 @@ boot();
         var r=(res&&res.data)||{};
         if(!r.ok){ if(err) err.textContent=respErr(r.reason); if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } return; }
         var done=function(){ if(typeof toast==='function') toast(isUpdate?'Response updated':'Response posted'); loadResponses(d); loadFeed(true); loadMyCases(); };
-        Promise.all([SB.rpc('dr_set_response_meta',{p_case_id:d.id,p_ask_next:asknext,p_next_step:nextstep}).catch(function(){}), (faAns.length?SB.rpc('dr_set_response_free_asks',{p_case_id:d.id,p_answers:faAns}).catch(function(){}):Promise.resolve())]).then(done).catch(done);
+        Promise.all([SB.rpc('dr_set_response_meta',{p_case_id:d.id,p_ask_next:asknext,p_next_step:nextstep}).then(function(){},function(){}), (faAns.length?SB.rpc('dr_set_response_free_asks',{p_case_id:d.id,p_answers:faAns}).then(function(){},function(){}):Promise.resolve())]).then(done,done);
       }).catch(function(){ if(err) err.textContent='Something went wrong. Try again.'; if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } });
     }
     if(!pctGood(g.pct)){
@@ -2993,7 +2993,7 @@ boot();
         if(btn){ btn.disabled=true; btn.textContent='Closing\u2026'; }
         SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt,p_want_outcomes:wg.list,p_wants_satisfied:combSat,p_resolved_pct:combPct}).then(function(r){
           var o=(r&&r.data)||{}; if(!o.ok){ if(err) err.textContent=(o.reason==='wants'?'Please note how each ask went (N/A is fine).':'Couldn\u2019t close the case.'); if(btn){ btn.disabled=false; btn.textContent='Close case'; } return; }
-          if(fas.length && SB){ try{ SB.rpc('dr_set_free_ask_outcomes',{p_case_id:d.id,p_outcomes:faOutcomes}).catch(function(){}); }catch(e){} }
+          if(fas.length && SB){ try{ SB.rpc('dr_set_free_ask_outcomes',{p_case_id:d.id,p_outcomes:faOutcomes}).then(function(){},function(){}); }catch(e){} }
           if(typeof toast==='function') toast('Case closed'); openCase(d.id); loadFeed(true); loadMyCases(); if(typeof loadLibrary==='function') loadLibrary(true);
         }).catch(function(){ if(err) err.textContent='Something went wrong.'; if(btn){ btn.disabled=false; btn.textContent='Close case'; } });
       }
