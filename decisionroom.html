@@ -1557,6 +1557,15 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .fc-src-r{margin:.15rem 0 .35rem}
 .fc-src{font-size:.72rem;color:var(--muted)}
 .fc-hs{font-size:.72rem;color:var(--accent2);font-weight:600;margin-left:.5rem;white-space:nowrap}
+.fopt{font-size:.68rem;font-weight:500;color:var(--muted);text-transform:none;letter-spacing:0}
+.fa-sugg{display:flex;flex-wrap:wrap;gap:.4rem;margin:.4rem 0}
+.fa-s{background:var(--surface);border:1px dashed var(--border2);color:var(--text2);border-radius:100px;padding:.3rem .7rem;font:inherit;font-size:.78rem;cursor:pointer;text-align:left}
+.fa-s:hover{border-color:var(--accent2);color:var(--white)}
+.fa-list{display:flex;flex-direction:column;gap:.4rem;margin:.4rem 0}
+.fa-item{display:flex;align-items:center;justify-content:space-between;gap:.6rem;background:var(--accent2-dim);border:1px solid var(--border2);border-radius:10px;padding:.5rem .7rem;font-size:.85rem;color:var(--white)}
+.fa-x{background:none;border:none;color:var(--muted);font-size:1.1rem;line-height:1;cursor:pointer;flex-shrink:0}
+.fa-x:hover{color:var(--red)}
+.fa-in{width:100%;background:var(--field-bg);border:1px solid var(--border2);border-radius:8px;padding:.55rem .6rem;color:var(--white);font-size:.88rem;font-family:inherit}
 .chip-add-emoji{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .4rem;font:inherit;font-size:.9rem;width:46px;text-align:center;margin-right:.35rem}
 .chip-add-emoji:focus{outline:none;border-style:solid}
 .examples-more-wrap{text-align:center}
@@ -2264,6 +2273,16 @@ boot();
     if(!selChips('f-cat').length) m.push('a problem category');
     return m;
   }
+  var FA_SUGG=['Is this the right scope trade-off?','What assumption should be validated first?','What risks am I missing?','How would you handle the stakeholder disagreement?','What would you recommend, and why?','What would you de-scope, if anything?','What data would you check before deciding?'];
+  var FREE_ASKS=[];
+  function renderFreeAsks(){
+    var sugg=document.getElementById('fa-sugg'), list=document.getElementById('fa-list'), inp=document.getElementById('fa-in'); if(!sugg||!list) return;
+    sugg.innerHTML=FA_SUGG.filter(function(q){ return FREE_ASKS.indexOf(q)<0; }).map(function(q){ return '<button type="button" class="fa-s" data-q="'+escHtml(q)+'">+ '+escHtml(q)+'</button>'; }).join('');
+    list.innerHTML=FREE_ASKS.map(function(q,i){ return '<div class="fa-item"><span>'+escHtml(q)+'</span><button type="button" class="fa-x" data-i="'+i+'" aria-label="Remove">\u00d7</button></div>'; }).join('');
+    [].slice.call(sugg.querySelectorAll('.fa-s')).forEach(function(b){ b.onclick=function(){ var q=b.getAttribute('data-q'); if(FREE_ASKS.indexOf(q)<0) FREE_ASKS.push(q); renderFreeAsks(); }; });
+    [].slice.call(list.querySelectorAll('.fa-x')).forEach(function(b){ b.onclick=function(){ FREE_ASKS.splice(Number(b.getAttribute('data-i')),1); renderFreeAsks(); }; });
+    if(inp) inp.onkeydown=function(e){ if(e.key==='Enter'){ e.preventDefault(); var v=(inp.value||'').trim(); if(v.length>3 && FREE_ASKS.indexOf(v)<0){ FREE_ASKS.push(v); inp.value=''; renderFreeAsks(); } } };
+  }
   function buildForm(){
     if(!form) return;
     form.innerHTML=
@@ -2276,6 +2295,7 @@ boot();
      +'<div class="fld"><label>The fork <span class="req">*</span></label><div class="hint">At least two. <span id="f-opt-note" class="opt-note">You can add up to 6.</span></div><div id="f-options"></div><button type="button" class="addopt" id="f-addopt">+ Add option</button></div>'
      +'<div class="fld"><label>Biggest risk / fear <span class="req">*</span></label><div class="hint">What are you afraid will go wrong?</div><textarea id="f-risk" rows="2"></textarea></div>'
      +'<div class="fld"><label>Your asks <span class="req">*</span></label><div class="hint">Pick the specific things you want reviewers to answer \u2014 or type your own and press Enter.</div><div class="chips" id="f-help"></div></div>'
+     +'<div class="fld"><label>Specific questions <small class="fopt">optional</small></label><div class="hint">Your ask tags tell reviewers <b>what kind</b> of help you need. These optional questions get <b>precise</b> answers to exactly what you\u2019re unsure about.</div><div class="fa-sugg" id="fa-sugg"></div><div class="fa-list" id="fa-list"></div><input type="text" class="fa-in" id="fa-in" placeholder="+ Add a question, then Enter" maxlength="140" autocomplete="off"></div>'
      +'<div class="fld"><label>Problem category <span class="req">*</span></label><div class="hint">The subject area \u2014 or type your own and press Enter.</div><div class="chips" id="f-cat"></div></div>'
      +'</div>'
      +'<div class="fstep" data-fstep="2">'
@@ -2304,6 +2324,7 @@ boot();
      +'<div class="form-actions"><button type="button" class="btn-ghost" id="f-cancel">Cancel</button><span class="fa-spacer"></span><button type="button" class="btn-ghost" id="f-back" style="display:none">\u2190 Back</button><button type="button" class="btn-primary" id="f-next">Next \u2192</button><button type="button" class="btn-primary" id="f-submit" style="display:none">Post case</button></div>'
      +'<div class="form-err" id="f-err"></div>';
     renderTaxInto('f-help','help'); renderTaxInto('f-cat','category');
+    FREE_ASKS=[]; renderFreeAsks();
     addOpt(); addOpt(); updateOptNote();
     document.getElementById('f-addopt').onclick=function(){ if(document.querySelectorAll('#f-options .optrow').length<6){ addOpt(); updateOptNote(); } };
     document.getElementById('f-next').onclick=function(){ var err=document.getElementById('f-err'); if(fcur===1){ var m=essentialsMissing(); if(m.length){ err.textContent='Please complete: '+m.join(', ')+'.'; return; } } err.textContent=''; showStep(fcur+1); };
@@ -2358,7 +2379,7 @@ boot();
     var btn=document.getElementById('f-submit'); btn.disabled=true; btn.textContent='Posting\u2026';
     SB.rpc('dr_submit_case', payload).then(function(res){
       btn.disabled=false; btn.textContent='Post case';
-      if(res&&res.data&&res.data.ok){ closeSubmit(); if(form) form.innerHTML=''; toast('Your case is live in the room.'); loadFeed(true); loadMyCases(); }
+      if(res&&res.data&&res.data.ok){ if(FREE_ASKS.length && SB && currentUser){ try{ SB.rpc('dr_set_case_free_asks',{p_free_asks:FREE_ASKS}).catch(function(){}); }catch(e){} } closeSubmit(); if(form) form.innerHTML=''; toast('Your case is live in the room.'); loadFeed(true); loadMyCases(); }
       else { err.textContent=reasonMsg((res&&res.data&&res.data.reason)||'error'); }
     }).catch(function(){ btn.disabled=false; btn.textContent='Post case'; err.textContent='Could not post right now \u2014 please try again.'; });
   }
@@ -2645,6 +2666,8 @@ boot();
       var who=(r.visibility==='anon')?'Anonymous PM':(r.responder_context||r.alias||'PM');
       var opt=r.chosen_option?'<div class="rsp-opt">Leans toward: <b>'+escHtml(r.chosen_option)+'</b></div>':'';
       var wo=r.watch_out?'<div class="rsp-wo"><span class="rsp-wo-l">Risks or assumptions</span>'+nl(r.watch_out)+'</div>':'';
+      var askn=r.questions_to_ask_next?'<div class="rsp-wo"><span class="rsp-wo-l">Would ask next</span>'+nl(r.questions_to_ask_next)+'</div>':'';
+      var nstep=r.suggested_next_step?'<div class="rsp-wo"><span class="rsp-wo-l">Suggested next step</span>'+nl(r.suggested_next_step)+'</div>':'';
       var hc=(Number(r.helpful_count)||0)>0?'<span class="rsp-hc">'+r.helpful_count+' found helpful</span>':'';
       var acted=r.acted_on?'<span class="rsp-acted">\u2713 Submitter acted on this</span>':'';
       var conf=r.confidence&&CONF[r.confidence]?'<span class="rsp-conf c-'+escHtml(r.confidence)+'">'+CONF[r.confidence]+'</span>':'';
@@ -2659,7 +2682,7 @@ boot();
       var chk = respChecklist(d, r);
       return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r">'+qlabel+'<span class="rsp-stars">'+starsMarkup(stars)+'</span></span></div>'
         +'<div class="rsp-badges">'+conf+acted+hc+'</div>'+flag
-        +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo
+        +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo+askn+nstep
         +wantsGridHtml(d, r)+chk
         +'<div class="rsp-foot"><span class="rsp-foot-l">'+act+'</span><span class="rsp-foot-r">'+rep+'</span></div></div>';
     }).join('');
