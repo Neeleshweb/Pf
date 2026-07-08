@@ -2406,10 +2406,13 @@ boot();
       var res=card.querySelector('.draft-resume'); if(res) res.onclick=function(){ resumeDraft(id, kind, cid); };
     });
   }
+  var respDraftId=null, pendingRespDraft=null, curRespCaseId=null, curRespCaseTitle='';
+  function gatherResponseDraft(){ var g=function(id){ var el=document.getElementById(id); return el?(el.value||''):''; }; var wa=[]; [].slice.call(document.querySelectorAll('#cd-respond .cd-want-in')).forEach(function(t){ wa.push({want:t.getAttribute('data-want'), answer:t.value||''}); }); var fa=[]; [].slice.call(document.querySelectorAll('#cd-respond .cd-fa-ans')).forEach(function(t){ fa.push({q:t.getAttribute('data-fa'), answer:t.value||''}); }); return {opt:g('rf-opt'), body:g('rf-body'), wo:g('rf-wo'), asknext:g('rf-asknext'), nextstep:g('rf-nextstep'), conf:g('rf-conf'), want_answers:wa, free_ask_answers:fa}; }
+  function applyResponseDraft(data){ data=data||{}; var set=function(id,v){ var el=document.getElementById(id); if(el&&v!=null&&v!=='') el.value=v; }; set('rf-opt',data.opt); set('rf-body',data.body); set('rf-wo',data.wo); set('rf-asknext',data.asknext); set('rf-nextstep',data.nextstep); set('rf-conf',data.conf); var wm={}; (data.want_answers||[]).forEach(function(x){ wm[x.want]=x.answer; }); [].slice.call(document.querySelectorAll('#cd-respond .cd-want-in')).forEach(function(t){ var w=t.getAttribute('data-want'); if(wm[w]!=null&&wm[w]!=='') t.value=wm[w]; }); var fm={}; (data.free_ask_answers||[]).forEach(function(x){ fm[x.q]=x.answer; }); [].slice.call(document.querySelectorAll('#cd-respond .cd-fa-ans')).forEach(function(t){ var q=t.getAttribute('data-fa'); if(fm[q]!=null&&fm[q]!=='') t.value=fm[q]; }); }
   function resumeDraft(id, kind, cid){
     if(!SB) return;
     SB.rpc('dr_draft_get',{p_id:id}).then(function(r){ var dft=(r&&r.data)||{}; var data=dft.data||{};
-      if(kind==='response' && cid){ if(typeof openCase==='function') openCase(cid); }
+      if(kind==='response' && cid){ pendingRespDraft={caseId:cid, id:id, data:data}; if(typeof openCase==='function') openCase(cid); }
       else { caseDraftId=id; form.innerHTML=''; buildForm(); applyCaseDraft(data); showStep(1); ov.classList.add('open'); document.body.style.overflow='hidden'; }
     }, function(){});
   }
@@ -2455,8 +2458,9 @@ boot();
         var faSend=(FREE_ASKS&&FREE_ASKS.length)?FREE_ASKS.slice():[].slice.call(document.querySelectorAll('.fa-item > span')).map(function(sp){return (sp.textContent||'').trim();}).filter(Boolean);
         if(faSend.length && SB){ SB.rpc('dr_set_case_free_asks',{p_free_asks:faSend}).then(function(rr){ if(rr&&rr.data&&rr.data.ok){ console.log('[DR] free_asks saved:', faSend.length); } else { console.warn('[DR] free_asks NOT saved:', rr&&(rr.error||rr.data)); if(typeof toast==='function') toast('Heads up: specific questions did not save \u2014 check console'); } }).catch(function(e){ console.warn('[DR] free_asks save error:', e); }); }
         else { console.warn('[DR] no free_asks captured; array len=', (FREE_ASKS&&FREE_ASKS.length)||0, 'dom items=', document.querySelectorAll('.fa-item').length); }
-        if(caseDraftId && SB){ try{ SB.rpc('dr_draft_delete',{p_id:caseDraftId}).then(function(){},function(){}); }catch(e){} caseDraftId=null; }
-        closeSubmit(); if(form) form.innerHTML=''; toast('Your case is live in the room.'); loadFeed(true); loadMyCases(); loadDrafts();
+        var _cdid=caseDraftId; caseDraftId=null;
+        closeSubmit(); if(form) form.innerHTML=''; toast('Your case is live in the room.'); loadFeed(true); loadMyCases();
+        if(_cdid && SB){ SB.rpc('dr_draft_delete',{p_id:_cdid}).then(function(){ loadDrafts(); },function(){ loadDrafts(); }); } else { loadDrafts(); }
       }
       else { err.textContent=reasonMsg((res&&res.data&&res.data.reason)||'error'); }
     }).catch(function(){ btn.disabled=false; btn.textContent='Post case'; err.textContent='Could not post right now \u2014 please try again.'; });
@@ -2578,13 +2582,17 @@ boot();
 
   /* ---- detail (read-only in 1a) ---- */
   var cov=document.getElementById('case-overlay');
-  function closeCase(){ if(cov){ cov.classList.remove('open'); document.body.style.overflow=''; } }
+  function closeCase(){
+    if(curRespCaseId && SB && currentUser){ var _b=((document.getElementById('rf-body')||{}).value||'').trim(); if(_b.length>10){ SB.rpc('dr_draft_save',{p_id:respDraftId,p_kind:'response',p_case_id:curRespCaseId,p_title:('Re: '+(curRespCaseTitle||'a case')),p_data:gatherResponseDraft()}).then(function(r){ var o=(r&&r.data)||{}; if(o.ok){ respDraftId=o.id; if(typeof toast==='function') toast('Response saved to drafts'); loadDrafts(); } }, function(){}); } }
+    curRespCaseId=null;
+    if(cov){ cov.classList.remove('open'); document.body.style.overflow=''; }
+  }
   if(cov) cov.addEventListener('click', function(e){ if(e.target===cov) closeCase(); });
   function row(label, val){ return val?('<div class="cd-row"><div class="cd-label">'+label+'</div><div class="cd-val">'+val+'</div></div>'):''; }
   function listRow(label, arr, cls){ return (arr&&arr.length)?row(label, arr.map(function(x){return '<span class="cd-chip'+(cls?' '+cls:'')+'">'+escHtml(x)+'</span>';}).join('')):''; }
   function nl(t){ return escHtml(t).replace(/\n/g,'<br>'); }
   function fmtResolution(t){ return escHtml(t||'').split('\n').map(function(ln){ var s=ln.trim(); if(s && /^[A-Z\u2019' ]{3,32}$/.test(s)) return '<span class="cd-res-h">'+ln+'</span>'; return ln; }).join('<br>'); }
-  function openCase(id){
+  function openCase(id){ respDraftId=null;
     if(!SB||!id) return;
     SB.rpc('dr_get_case',{p_id:id}).then(function(res){
       var m=document.getElementById('case-detail'); if(!m) return;
@@ -2851,6 +2859,7 @@ boot();
   function markActed(rid, val, d){ if(!SB) return; SB.rpc('dr_mark_acted',{p_response_id:rid,p_acted:val}).then(function(res){ var r=(res&&res.data)||{}; if(r.ok){ if(typeof toast==='function') toast(val?'Marked \u2014 the reviewer will see you acted on it':'Unmarked'); loadResponses(d); } }).catch(function(){}); }
   var _respShow=null;
   function renderRespondArea(el, d, mine){
+    curRespCaseId = mine?null:(d&&d.id); curRespCaseTitle=(d&&d.title)||'';
     if(!el) return;
     if(d.is_mine){
       if(d.status==='live'){
@@ -2907,6 +2916,7 @@ boot();
     var rbk=document.getElementById('rf-back'); if(rbk) rbk.onclick=function(){ var err=document.getElementById('rf-err'); if(err) err.textContent=''; rShow(1); };
     [].slice.call(el.querySelectorAll('.fstep-pip')).forEach(function(p){ p.onclick=function(){ var t=+p.getAttribute('data-rgoto'); if(t>rcur && rbodyShort()){ var err=document.getElementById('rf-err'); if(err) err.textContent='Your take needs at least a sentence or two first.'; return; } rShow(t); }; });
     rShow(1);
+    if(pendingRespDraft && pendingRespDraft.caseId===(d&&d.id) && !mine){ applyResponseDraft(pendingRespDraft.data); respDraftId=pendingRespDraft.id; pendingRespDraft=null; }
   }
   function updWantsMeter(scopeSel, d, key, meterId){
     var el=document.getElementById(meterId); if(!el) return;
@@ -2952,7 +2962,7 @@ boot();
       SB.rpc('dr_post_response',{p_case_id:d.id,p_body:body,p_chosen_option:opt,p_watch_out:wo,p_want_answers:wg.list,p_confidence:conf,p_visibility:vis}).then(function(res){
         var r=(res&&res.data)||{};
         if(!r.ok){ if(err) err.textContent=respErr(r.reason); if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } return; }
-        var done=function(){ if(typeof toast==='function') toast(isUpdate?'Response updated':'Response posted'); loadResponses(d); loadFeed(true); loadMyCases(); };
+        var done=function(){ if(typeof toast==='function') toast(isUpdate?'Response updated':'Response posted'); if(respDraftId && SB){ var _rid=respDraftId; respDraftId=null; SB.rpc('dr_draft_delete',{p_id:_rid}).then(function(){ loadDrafts(); },function(){ loadDrafts(); }); } curRespCaseId=null; loadResponses(d); loadFeed(true); loadMyCases(); };
         Promise.all([SB.rpc('dr_set_response_meta',{p_case_id:d.id,p_ask_next:asknext,p_next_step:nextstep}).then(function(){},function(){}), (faAns.length?SB.rpc('dr_set_response_free_asks',{p_case_id:d.id,p_answers:faAns}).then(function(){},function(){}):Promise.resolve())]).then(done,done);
       }).catch(function(){ if(err) err.textContent='Something went wrong. Try again.'; if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } });
     }
