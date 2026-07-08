@@ -1566,6 +1566,12 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .fa-x{background:none;border:none;color:var(--muted);font-size:1.1rem;line-height:1;cursor:pointer;flex-shrink:0}
 .fa-x:hover{color:var(--red)}
 .fa-in{width:100%;background:var(--field-bg);border:1px solid var(--border2);border-radius:8px;padding:.55rem .6rem;color:var(--white);font-size:.88rem;font-family:inherit}
+.cd-nc{font-size:.66rem;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--accent2);background:var(--accent2-dim);padding:.22rem .5rem;border-radius:100px}
+.cd-nc-btn{background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:8px;padding:.3rem .7rem;font:inherit;font-size:.74rem;cursor:pointer}
+.cd-nc-btn:hover{color:var(--white);border-color:var(--accent2)}
+.cd-fa{margin:.3rem 0 0;padding-left:1.1rem}
+.cd-fa li{margin:.25rem 0;color:var(--text2);font-size:.9rem}
+.fc-nc{font-size:.68rem;font-weight:600;color:var(--accent2);margin-left:.5rem;white-space:nowrap}
 .chip-add-emoji{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .4rem;font:inherit;font-size:.9rem;width:46px;text-align:center;margin-right:.35rem}
 .chip-add-emoji:focus{outline:none;border-style:solid}
 .examples-more-wrap{text-align:center}
@@ -2397,7 +2403,7 @@ boot();
       + '<span class="fc-date-r">'+fcDate(r.created_at)+'</span></div>';
     return '<div class="feed-card" data-id="'+escHtml(r.id)+'">'
       + attrs
-      + '<div class="fc-src-r">'+capOne('Source','<span class="fc-src">'+drSrcLabel(r.source_type)+'</span>')+'</div>'
+      + '<div class="fc-src-r">'+capOne('Source','<span class="fc-src">'+drSrcLabel(r.source_type)+'</span>')+(r.needs_context?'<span class="fc-nc">\u2753 Needs more context</span>':'')+'</div>'
       + '<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
       + '<div class="fc-meta">'+fcChipRow('Category', r.categories||[], 'fc-tag')+fcChipRow('Wants', (r.help_types||[]).map(helpLabel), 'fc-help')+fcChipRow('Who\u2019s involved', r.stakeholders||[], 'fc-stk')+'</div>'
       + '<div class="fc-foot">'+ctxHtml(r)+'<span class="fc-foot-r">'+urgent+(r.is_mine?shareBtnHtml(r.id):'')+(Number(r.high_signal)>0?'<span class="fc-hs">\u2b50 '+r.high_signal+' high-signal</span>':'')+'<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Needs responses':(rc+(rc===1?' response':' responses')))+'</span></span></div>'
@@ -2515,13 +2521,14 @@ boot();
       else {
         var opts=(d.options||[]).map(function(o,i){ return '<div class="cd-opt"><span>'+('ABCDE'.charAt(i)||'\u2022')+'</span>'+escHtml(o)+'</div>'; }).join('');
         var help=(d.help_types||[]).map(function(h){ return '<span class="cd-chip y">'+escHtml(helpLabel(h))+'</span>'; }).join('');
-        m.innerHTML='<div class="cd-head">'+(d.is_mine?'<span class="cd-ctx mine">Your case</span>':'<span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span>')+'<span class="cd-head-r">'+(d.is_mine?'<button type="button" class="cd-share" id="cd-share-btn">\u2197 Share</button>':'')+'<span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span></span></div>'
+        m.innerHTML='<div class="cd-head">'+(d.is_mine?'<span class="cd-ctx mine">Your case</span>':'<span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span>')+'<span class="cd-head-r">'+(d.is_mine?'<button type="button" class="cd-share" id="cd-share-btn">\u2197 Share</button>':'')+(d.needs_context?'<span class="cd-nc">\u2753 Needs more context</span>':'')+'<span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span>'+((!d.is_mine&&currentUser)?'<button type="button" class="cd-nc-btn" id="cd-nc-btn">Ask for more context</button>':'')+'</span></div>'
           +'<h2 class="cd-title">'+escHtml(d.title)+'</h2>'
           +row('The decision','<strong>'+escHtml(d.decision)+'</strong>')
           +row('Situation', nl(d.situation))
           +(opts?('<div class="cd-row"><div class="cd-label">Options</div><div class="cd-val">'+opts+'</div></div>'):'')
           +row('Biggest risk', nl(d.biggest_risk))
           +(help?row('Help needed', help):'')
+          +((d.free_asks&&d.free_asks.length)?row('Specific questions','<ul class="cd-fa">'+d.free_asks.map(function(q){ return '<li>'+escHtml(q)+'</li>'; }).join('')+'</ul>'):'')
           +listRow('Categories', d.categories, 'cat')
           +listRow('Stakeholders', d.stakeholders, 'stk')
           +(d.product_context?row('Product', escHtml(d.product_context)):'')
@@ -2537,6 +2544,7 @@ boot();
           +'<div id="cd-responses" class="cd-resp-list"></div></div>';
         loadResponses(d);
         var csb=document.getElementById('cd-share-btn'); if(csb) csb.onclick=function(){ openShare(d.id); };
+        var ncb=document.getElementById('cd-nc-btn'); if(ncb) ncb.onclick=function(){ ncb.disabled=true; SB.rpc('dr_request_context',{p_case_id:d.id}).then(function(r){ if(r&&r.data&&r.data.ok){ if(typeof toast==='function') toast('Flagged \u2014 the asker will be nudged for more context'); ncb.textContent='\u2713 Flagged'; } else { ncb.disabled=false; } }).catch(function(){ ncb.disabled=false; }); };
       }
       cov.classList.add('open'); document.body.style.overflow='hidden';
     }).catch(function(){});
