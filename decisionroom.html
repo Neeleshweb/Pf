@@ -1554,6 +1554,9 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .rsp-chk-i{font-size:.72rem;display:inline-flex;align-items:center;gap:.25rem}
 .rsp-chk-i.y{color:var(--green)}
 .rsp-chk-i.n{color:var(--muted2);opacity:.75}
+.fc-src-r{margin:.15rem 0 .35rem}
+.fc-src{font-size:.72rem;color:var(--muted)}
+.fc-hs{font-size:.72rem;color:var(--accent2);font-weight:600;margin-left:.5rem;white-space:nowrap}
 .chip-add-emoji{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .4rem;font:inherit;font-size:.9rem;width:46px;text-align:center;margin-right:.35rem}
 .chip-add-emoji:focus{outline:none;border-style:solid}
 .examples-more-wrap{text-align:center}
@@ -2362,6 +2365,7 @@ boot();
 
   /* ---- feed (keyset) ---- */
   var feedCursor=null, feedDone=false, feedLoading=false;
+  function drSrcLabel(st){ var m={community_submission:'Community-submitted',editorial_case:'PM Toolkit Editorial',anonymized_field_case:'Anonymized field case',practice_scenario:'Practice scenario',expert_case:'Expert-created'}; return escHtml(m[st]||'Community-submitted'); }
   function feedCardHtml(r){
     var rc=Number(r.response_count)||0;
     var urgent=(r.urgency==='today')?'<span class="fc-urgent">\u23F1 Needs input today</span>':'';
@@ -2372,9 +2376,10 @@ boot();
       + '<span class="fc-date-r">'+fcDate(r.created_at)+'</span></div>';
     return '<div class="feed-card" data-id="'+escHtml(r.id)+'">'
       + attrs
+      + '<div class="fc-src-r">'+capOne('Source','<span class="fc-src">'+drSrcLabel(r.source_type)+'</span>')+'</div>'
       + '<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
       + '<div class="fc-meta">'+fcChipRow('Category', r.categories||[], 'fc-tag')+fcChipRow('Wants', (r.help_types||[]).map(helpLabel), 'fc-help')+fcChipRow('Who\u2019s involved', r.stakeholders||[], 'fc-stk')+'</div>'
-      + '<div class="fc-foot">'+ctxHtml(r)+'<span class="fc-foot-r">'+urgent+(r.is_mine?shareBtnHtml(r.id):'')+'<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Needs responses':(rc+(rc===1?' response':' responses')))+'</span></span></div>'
+      + '<div class="fc-foot">'+ctxHtml(r)+'<span class="fc-foot-r">'+urgent+(r.is_mine?shareBtnHtml(r.id):'')+(Number(r.high_signal)>0?'<span class="fc-hs">\u2b50 '+r.high_signal+' high-signal</span>':'')+'<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Needs responses':(rc+(rc===1?' response':' responses')))+'</span></span></div>'
       + '</div>';
   }
   function loadFeed(reset){
@@ -2639,7 +2644,7 @@ boot();
       var stars=starsFor(wpct, hpct, r.report_count);
       var who=(r.visibility==='anon')?'Anonymous PM':(r.responder_context||r.alias||'PM');
       var opt=r.chosen_option?'<div class="rsp-opt">Leans toward: <b>'+escHtml(r.chosen_option)+'</b></div>':'';
-      var wo=r.watch_out?'<div class="rsp-wo"><span class="rsp-wo-l">Watch out</span>'+nl(r.watch_out)+'</div>':'';
+      var wo=r.watch_out?'<div class="rsp-wo"><span class="rsp-wo-l">Risks or assumptions</span>'+nl(r.watch_out)+'</div>':'';
       var hc=(Number(r.helpful_count)||0)>0?'<span class="rsp-hc">'+r.helpful_count+' found helpful</span>':'';
       var acted=r.acted_on?'<span class="rsp-acted">\u2713 Submitter acted on this</span>':'';
       var conf=r.confidence&&CONF[r.confidence]?'<span class="rsp-conf c-'+escHtml(r.confidence)+'">'+CONF[r.confidence]+'</span>':'';
@@ -2750,7 +2755,9 @@ boot();
       +'<div class="cd-f-row"><div class="cd-f-col"><label class="cd-f-l">Your confidence</label><select id="rf-conf"><option value="low"'+csel('low')+'>Low</option><option value="med"'+csel('med')+'>Medium</option><option value="high"'+csel('high')+'>High</option></select></div>'
       +'<div class="cd-f-col"><label class="cd-f-l">Show me as</label><select id="rf-vis"><option value="cred"'+vsel('cred')+'>My PM context</option><option value="anon"'+vsel('anon')+'>Anonymous PM</option></select></div></div>'
       +'<label class="cd-f-l">Your take <span class="req">*</span></label><textarea id="rf-body" rows="4" maxlength="2500" placeholder="What would you do, and why? Draw on what you\u2019ve actually seen \u2014 not generic advice.">'+(mine?escHtml(mine.body):'')+'</textarea>'
-      +'<label class="cd-f-l">One thing to watch out for <span class="cd-f-opt">optional</span></label><textarea id="rf-wo" rows="2" maxlength="600" placeholder="The risk or blind spot you\u2019d flag.">'+(mine?escHtml(mine.watch_out||''):'')+'</textarea>'
+      +'<label class="cd-f-l">Risks or assumptions <span class="cd-f-opt">optional</span></label><textarea id="rf-wo" rows="2" maxlength="600" placeholder="What could make your recommendation wrong?">'+(mine?escHtml(mine.watch_out||''):'')+'</textarea>'
+      +'<label class="cd-f-l">What I would ask next <span class="cd-f-opt">optional</span></label><textarea id="rf-asknext" rows="2" maxlength="600" placeholder="What info would you want before finalizing the decision?">'+(mine?escHtml(mine.questions_to_ask_next||''):'')+'</textarea>'
+      +'<label class="cd-f-l">Suggested next step <span class="req">*</span></label><textarea id="rf-nextstep" rows="2" maxlength="600" placeholder="What should the PM do next \u2014 in the next meeting, sprint, or conversation?">'+(mine?escHtml(mine.suggested_next_step||''):'')+'</textarea>'
       +'</div>'
       +'<div class="fstep" data-rstep="2">'
       +(wantsInputsHtml(d, mine)?'<label class="cd-f-l">Answer each ask <span class="req">*</span> <span class="cd-f-opt">this is what earns your rating</span></label>':'')
@@ -2790,11 +2797,14 @@ boot();
     var opt=((document.getElementById('rf-opt')||{}).value||'').trim();
     var wo=((document.getElementById('rf-wo')||{}).value||'').trim();
     var conf=((document.getElementById('rf-conf')||{}).value||'').trim();
+    var asknext=((document.getElementById('rf-asknext')||{}).value||'').trim();
+    var nextstep=((document.getElementById('rf-nextstep')||{}).value||'').trim();
     var vis=((document.getElementById('rf-vis')||{}).value||'').trim();
     var err=document.getElementById('rf-err'), btn=document.getElementById('rf-submit');
     var bodyEl=document.getElementById('rf-body');
     [].slice.call(document.querySelectorAll('#cd-respond .field-err')).forEach(function(e){ e.classList.remove('field-err'); });
     if(body.length<20){ if(err) err.textContent='Your take needs at least a sentence or two \u2014 the highlighted box is too short.'; if(_respShow) _respShow(1); if(bodyEl){ bodyEl.classList.add('field-err'); bodyEl.focus(); bodyEl.scrollIntoView({block:'center',behavior:'smooth'}); } return; }
+    if(nextstep.length<3){ if(err) err.textContent='Add a suggested next step \u2014 what should the PM do next?'; if(_respShow) _respShow(1); var nsEl=document.getElementById('rf-nextstep'); if(nsEl){ nsEl.classList.add('field-err'); nsEl.focus(); nsEl.scrollIntoView({block:'center',behavior:'smooth'}); } return; }
     var wg=gatherWants('#cd-respond','answer');
     if(wg.missing){
       var boxes=[].slice.call(document.querySelectorAll('#cd-respond .cd-want-in')); var first=null;
@@ -2809,7 +2819,8 @@ boot();
       SB.rpc('dr_post_response',{p_case_id:d.id,p_body:body,p_chosen_option:opt,p_watch_out:wo,p_want_answers:wg.list,p_confidence:conf,p_visibility:vis}).then(function(res){
         var r=(res&&res.data)||{};
         if(!r.ok){ if(err) err.textContent=respErr(r.reason); if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } return; }
-        if(typeof toast==='function') toast(isUpdate?'Response updated':'Response posted'); loadResponses(d); loadFeed(true); loadMyCases();
+        var done=function(){ if(typeof toast==='function') toast(isUpdate?'Response updated':'Response posted'); loadResponses(d); loadFeed(true); loadMyCases(); };
+        SB.rpc('dr_set_response_meta',{p_case_id:d.id,p_ask_next:asknext,p_next_step:nextstep}).then(done).catch(done);
       }).catch(function(){ if(err) err.textContent='Something went wrong. Try again.'; if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } });
     }
     if(!pctGood(g.pct)){
