@@ -2297,7 +2297,7 @@ boot();
     list.innerHTML=FREE_ASKS.map(function(q,i){ return '<div class="fa-item"><span>'+escHtml(q)+'</span><button type="button" class="fa-x" data-i="'+i+'" aria-label="Remove">\u00d7</button></div>'; }).join('');
     [].slice.call(sugg.querySelectorAll('.fa-s')).forEach(function(b){ b.onclick=function(){ var q=b.getAttribute('data-q'); if(FREE_ASKS.indexOf(q)<0) FREE_ASKS.push(q); renderFreeAsks(); }; });
     [].slice.call(list.querySelectorAll('.fa-x')).forEach(function(b){ b.onclick=function(){ FREE_ASKS.splice(Number(b.getAttribute('data-i')),1); renderFreeAsks(); }; });
-    if(inp) inp.onkeydown=function(e){ if(e.key==='Enter'){ e.preventDefault(); var v=(inp.value||'').trim(); if(v.length>4 && FREE_ASKS.indexOf(v)<0){ FREE_ASKS.push(v); if(ASK_POOL.indexOf(v)<0) ASK_POOL.push(v); inp.value=''; renderFreeAsks(); if(SB&&currentUser){ try{ SB.rpc('dr_add_ask',{p_value:v}).catch(function(){}); }catch(e2){} } } } };
+    if(inp) inp.onkeydown=function(e){ if(e.key==='Enter'){ e.preventDefault(); var v=(inp.value||'').trim(); if(v.length>4 && FREE_ASKS.indexOf(v)<0){ FREE_ASKS.push(v); if(ASK_POOL.indexOf(v)<0) ASK_POOL.push(v); inp.value=''; renderFreeAsks(); if(SB&&currentUser){ try{ SB.rpc('dr_add_ask',{p_value:v}).then(function(rr){ console.log('[DR] dr_add_ask saved:', v, rr&&rr.data); }).catch(function(e2){ console.warn('[DR] dr_add_ask error:', e2); }); }catch(e3){} } } } };
   }
   function buildForm(){
     if(!form) return;
@@ -2575,7 +2575,7 @@ boot();
       + ws.map(function(w){ return '<label class="cd-want-l">'+escHtml(helpLabel(w))+'</label><textarea class="cd-want-in" data-want="'+escHtml(w)+'" rows="2" maxlength="600" placeholder="How you\u2019d help with this \u2014 or N/A">'+escHtml(wantPrefill(mine,w))+'</textarea>'; }).join('')
       +'</div>'; }
   function freeAskAnsPrefill(mine, q){ if(!mine||!mine.free_ask_answers) return ''; for(var i=0;i<mine.free_ask_answers.length;i++){ if(mine.free_ask_answers[i].q===q) return mine.free_ask_answers[i].answer||''; } return ''; }
-  function freeAskInputsHtml(d, mine){ var fas=d.free_asks||[]; if(!fas.length) return ''; return '<div class="cd-fa-ask"><div class="cd-want-h">Specific questions asked <span class="cd-f-opt">optional \u2014 answer what you can</span></div>'+fas.map(function(q){ return '<label class="cd-want-l">'+escHtml(q)+'</label><textarea class="cd-fa-ans" data-fa="'+escHtml(q)+'" rows="2" maxlength="600" placeholder="Your answer to this question">'+escHtml(freeAskAnsPrefill(mine,q))+'</textarea>'; }).join('')+'</div>'; }
+  function freeAskInputsHtml(d, mine){ var fas=d.free_asks||[]; if(!fas.length) return ''; return '<div class="cd-fa-ask"><div class="cd-want-h">Specific questions asked <span class="cd-f-opt">optional \u2014 answer what you can</span></div>'+fas.map(function(q){ return '<label class="cd-want-l">'+escHtml(q)+'</label><textarea class="cd-fa-ans" data-fa="'+escHtml(q)+'" rows="2" maxlength="600" placeholder="Your answer to this question">'+escHtml(freeAskAnsPrefill(mine,q))+'</textarea>'; }).join('')+'<div class="cd-wmeter" id="rf-fameter"></div></div>'; }
   function gatherFreeAskAns(scopeSel){ var out=[]; [].slice.call(document.querySelectorAll(scopeSel+' .cd-fa-ans')).forEach(function(t){ var v=(t.value||'').trim(); if(v) out.push({q:t.getAttribute('data-fa'), answer:v}); }); return out; }
   function gatherWants(scopeSel, key){ var out=[], miss=0; [].slice.call(document.querySelectorAll(scopeSel+' .cd-want-in')).forEach(function(t){ var w=t.getAttribute('data-want'), v=(t.value||'').trim(); if(!v) miss++; var o={want:w}; o[key]=v; out.push(o); }); return {list:out, missing:miss}; }
   function isNA(v){ return !v || String(v).trim().toLowerCase()==='n/a' || String(v).trim().toLowerCase()==='na'; }
@@ -2629,6 +2629,15 @@ boot();
       if(!a) val='<span class="wg-na">\u2014</span>';
       return '<div class="wg-row'+(s!=='ok'?' na':'')+'"><div class="wg-want">'+escHtml(helpLabel(w))+'</div><div class="wg-got">'+val+'</div></div>'; }).join('');
     return '<div class="wg '+(pctGood(g.pct)?'wg-good':'wg-bad')+'"><div class="wg-h">Addresses <b>'+g.sat+' of '+g.total+'</b> asks \u00b7 <b>'+g.pct+'%</b></div><div class="wg-grid">'+rows+'</div></div>'; }
+  function freeAskGridHtml(d, r){ var fas=d.free_asks||[]; if(!fas.length || !(r.free_ask_answers&&r.free_ask_answers.length)) return '';
+    var map={}; (r.free_ask_answers||[]).forEach(function(x){ map[x.q]=x.answer; });
+    var g=gateEntries(fas.map(function(q){return {want:q, answer:map[q]||''};}), fas.length, 'answer');
+    var st={}; g.statuses.forEach(function(sx){ st[sx.want]=sx.status; });
+    var rows=fas.map(function(q){ var a=map[q]; var sv=st[q]||'na';
+      var val = sv==='na' ? '<span class="wg-na">N/A</span>' : (sv==='low' ? (nl(a)+'<span class="wg-flag">low detail \u00b7 not counted</span>') : nl(a));
+      if(!a) val='<span class="wg-na">\u2014</span>';
+      return '<div class="wg-row'+(sv!=='ok'?' na':'')+'"><div class="wg-want">'+escHtml(q)+'</div><div class="wg-got">'+val+'</div></div>'; }).join('');
+    return '<div class="wg '+(pctGood(g.pct)?'wg-good':'wg-bad')+'"><div class="wg-h">Answered <b>'+g.sat+' of '+g.total+'</b> questions \u00b7 <b>'+g.pct+'%</b></div><div class="wg-grid">'+rows+'</div></div>'; }
   function respErr(reason){ return ({auth:'Please sign in first.',body:'Add a bit more \u2014 at least a sentence or two.',wants:'Please answer every ask \u2014 write \u201CN/A\u201D for any you can\u2019t help with.',missing:'This case is no longer available.',own:'You can\u2019t respond to your own case.',closed:'This case is closed to new responses.',rate:'You\u2019ve posted a lot today \u2014 try again later.'})[reason]||'Couldn\u2019t post your response.'; }
   function caseWantsPct(d){ var ws=d.help_types||[]; var wo=d.want_outcomes||[]; if(!wo.length) return null; var src=ws.length?ws:wo.map(function(x){return x.want;}); var map={}; wo.forEach(function(x){ map[x.want]=x.outcome; }); return gateEntries(src.map(function(w){return {want:w, outcome:map[w]||''};}), src.length, 'outcome'); }
   function outcomeHtml(d){
@@ -2670,6 +2679,8 @@ boot();
     }).catch(function(){ listEl.innerHTML='<p class="cd-resp-load">Couldn\u2019t load responses.</p>'; });
   }
   function respWantsPct(d, r){ var ws=d.help_types||[]; if(!ws.length) return 0; var map={}; (r.want_answers||[]).forEach(function(x){ map[x.want]=x.answer; }); return gateEntries(ws.map(function(w){return {want:w, answer:map[w]||''};}), ws.length, 'answer').pct; }
+  function respFaPct(d, r){ var fas=d.free_asks||[]; if(!fas.length) return null; var map={}; (r.free_ask_answers||[]).forEach(function(x){ map[x.q]=x.answer; }); return gateEntries(fas.map(function(q){return {want:q, answer:map[q]||''};}), fas.length, 'answer').pct; }
+  function respCombinedPct(d, r){ var ws=d.help_types||[], fas=d.free_asks||[]; var tot=ws.length+fas.length; if(!tot) return 0; var wm={}; (r.want_answers||[]).forEach(function(x){ wm[x.want]=x.answer; }); var fm={}; (r.free_ask_answers||[]).forEach(function(x){ fm[x.q]=x.answer; }); var wsat=gateEntries(ws.map(function(w){return {want:w, answer:wm[w]||''};}), ws.length, 'answer').sat; var fsat=gateEntries(fas.map(function(q){return {want:q, answer:fm[q]||''};}), fas.length, 'answer').sat; return Math.round((wsat+fsat)/tot*100); }
   function respChecklist(d, r){
     var ws=d.help_types||[]; var map={}; (r.want_answers||[]).forEach(function(x){ map[x.want]=x.answer; });
     function meaningful(a){ a=(a||'').trim(); return a.length>3 && !/^n\/?a\.?$/i.test(a); }
@@ -2688,7 +2699,7 @@ boot();
     var CONF={low:'Low confidence',med:'Medium confidence',high:'High confidence'};
     listEl.innerHTML=rs.map(function(r){
       var flagged=(Number(r.report_count)||0)>=5;
-      var wpct=respWantsPct(d, r); var hpct=maxHelp>0?((Number(r.helpful_count)||0)/maxHelp*100):0;
+      var wpct=respCombinedPct(d, r); var hpct=maxHelp>0?((Number(r.helpful_count)||0)/maxHelp*100):0;
       var stars=starsFor(wpct, hpct, r.report_count);
       var who=(r.visibility==='anon')?'Anonymous PM':(r.responder_context||r.alias||'PM');
       var opt=r.chosen_option?'<div class="rsp-opt">Leans toward: <b>'+escHtml(r.chosen_option)+'</b></div>':'';
@@ -2710,7 +2721,7 @@ boot();
       return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r">'+qlabel+'<span class="rsp-stars">'+starsMarkup(stars)+'</span></span></div>'
         +'<div class="rsp-badges">'+conf+acted+hc+'</div>'+flag
         +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo+askn+nstep
-        +wantsGridHtml(d, r)+chk
+        +wantsGridHtml(d, r)+freeAskGridHtml(d, r)+chk
         +'<div class="rsp-foot"><span class="rsp-foot-l">'+act+'</span><span class="rsp-foot-r">'+rep+'</span></div></div>';
     }).join('');
     [].slice.call(listEl.querySelectorAll('.rsp-help')).forEach(function(b){ b.onclick=function(){ markHelpful(b.getAttribute('data-r'), b); }; });
@@ -2819,6 +2830,8 @@ boot();
     var rsb=document.getElementById('rf-submit'); if(rsb) rsb.onclick=function(){ submitResponse(d, !!mine); };
     var upd=function(){ updWantsMeter('#cd-respond', d, 'answer', 'rf-wmeter'); };
     [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ t.addEventListener('input', function(){ t.classList.remove('field-err'); upd(); }); }); upd();
+    var updFa=function(){ updFaMeter('#cd-respond', d, 'rf-fameter'); };
+    [].slice.call(el.querySelectorAll('.cd-fa-ans')).forEach(function(t){ t.addEventListener('input', updFa); }); updFa();
     var bodyEl=document.getElementById('rf-body'); if(bodyEl) bodyEl.addEventListener('input', function(){ bodyEl.classList.remove('field-err'); });
     var RSTEPS=2, rcur=1;
     function rShow(n){ n=Math.max(1,Math.min(RSTEPS,n)); rcur=n;
@@ -2842,6 +2855,14 @@ boot();
     var g=gateEntries(entries, ws.length||entries.length, key);
     el.className='cd-wmeter '+(pctGood(g.pct)?'good':'bad');
     el.innerHTML='<div class="cd-wmeter-bar"><span style="width:'+g.pct+'%"></span></div><div class="cd-wmeter-t"><b>'+g.sat+' of '+g.total+'</b> asks meaningfully met \u00b7 <b>'+g.pct+'%</b>'+(pctGood(g.pct)?' \u2014 above the 70% bar':' \u2014 below the 70% bar')+'</div>';
+  }
+  function updFaMeter(scopeSel, d, meterId){
+    var el=document.getElementById(meterId); if(!el) return;
+    var fas=d.free_asks||[]; if(!fas.length){ el.innerHTML=''; return; }
+    var entries=[]; [].slice.call(document.querySelectorAll(scopeSel+' .cd-fa-ans')).forEach(function(t){ entries.push({want:t.getAttribute('data-fa'), answer:t.value||''}); });
+    var g=gateEntries(entries, fas.length, 'answer');
+    el.className='cd-wmeter '+(pctGood(g.pct)?'good':'bad');
+    el.innerHTML='<div class="cd-wmeter-bar"><span style="width:'+g.pct+'%"></span></div><div class="cd-wmeter-t"><b>'+g.sat+' of '+g.total+'</b> questions answered \u00b7 <b>'+g.pct+'%</b></div>';
   }
   function submitResponse(d, isUpdate){
     var body=((document.getElementById('rf-body')||{}).value||'').trim();
@@ -2896,10 +2917,10 @@ boot();
   function closerDecisionAid(d){
     var rs=curCaseResponses||[]; var ws=d.help_types||[];
     if(!rs.length) return {html:'<div class="cd-aid cd-aid-none">No responses yet \u2014 you can still close, but waiting for input usually pays off.</div>', summary:''};
-    var pcts=rs.map(function(r){ return respWantsPct(d, r); });
+    var pcts=rs.map(function(r){ return respCombinedPct(d, r); });
     var avg=Math.round(pcts.reduce(function(a,b){return a+b;},0)/rs.length);
     var maxHelp=0; rs.forEach(function(x){ if((Number(x.helpful_count)||0)>maxHelp) maxHelp=Number(x.helpful_count)||0; });
-    var rated=rs.map(function(r){ var wp=respWantsPct(d,r); var hp=maxHelp>0?((Number(r.helpful_count)||0)/maxHelp*100):0; return {r:r, stars:starsFor(wp,hp,r.report_count)}; }).sort(function(a,b){return b.stars-a.stars;});
+    var rated=rs.map(function(r){ var wp=respCombinedPct(d,r); var hp=maxHelp>0?((Number(r.helpful_count)||0)/maxHelp*100):0; return {r:r, stars:starsFor(wp,hp,r.report_count)}; }).sort(function(a,b){return b.stars-a.stars;});
     var top=rated[0];
     var lean={}; rs.forEach(function(r){ if(r.chosen_option){ lean[r.chosen_option]=(lean[r.chosen_option]||0)+1; } });
     var leanArr=Object.keys(lean).map(function(k){return {k:k,n:lean[k]};}).sort(function(a,b){return b.n-a.n;});
@@ -2966,16 +2987,18 @@ boot();
       var faOutcomes=(fas.length?gatherFAOut():[]);
       if(wg.missing){ if(err) err.textContent='Please note how each ask went \u2014 write \u201CN/A\u201D for any the room couldn\u2019t help with.'; return; }
       var g=gateEntries(wg.list, ws.length||wg.list.length, 'outcome');
+      var faG=(fas.length?gateEntries(faOutcomes.map(function(x){return {want:x.q, outcome:x.answer};}), fas.length, 'outcome'):{sat:0,total:0,pct:0});
+      var combSat=g.sat+faG.sat, combTot=g.total+faG.total, combPct=combTot?Math.round(combSat/combTot*100):g.pct;
       function doClose(){
         if(btn){ btn.disabled=true; btn.textContent='Closing\u2026'; }
-        SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt,p_want_outcomes:wg.list,p_wants_satisfied:g.sat,p_resolved_pct:g.pct}).then(function(r){
+        SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt,p_want_outcomes:wg.list,p_wants_satisfied:combSat,p_resolved_pct:combPct}).then(function(r){
           var o=(r&&r.data)||{}; if(!o.ok){ if(err) err.textContent=(o.reason==='wants'?'Please note how each ask went (N/A is fine).':'Couldn\u2019t close the case.'); if(btn){ btn.disabled=false; btn.textContent='Close case'; } return; }
           if(fas.length && SB){ try{ SB.rpc('dr_set_free_ask_outcomes',{p_case_id:d.id,p_outcomes:faOutcomes}).catch(function(){}); }catch(e){} }
           if(typeof toast==='function') toast('Case closed'); openCase(d.id); loadFeed(true); loadMyCases(); if(typeof loadLibrary==='function') loadLibrary(true);
         }).catch(function(){ if(err) err.textContent='Something went wrong.'; if(btn){ btn.disabled=false; btn.textContent='Close case'; } });
       }
-      if(ws.length && !pctGood(g.pct)){
-        drConfirm({title:'Only '+g.pct+'% of your asks were met', body:'By your own read, <b>'+g.sat+' of '+g.total+'</b> asks (<b>'+g.pct+'%</b>) were meaningfully met \u2014 below the 70% bar. You can close now, or wait for more responses to cover the gaps.', confirm:'Close anyway', cancel:'Wait for more', onConfirm:doClose });
+      if((ws.length||fas.length) && !pctGood(combPct)){
+        drConfirm({title:'Only '+combPct+'% was met', body:'By your own read, <b>'+combSat+' of '+combTot+'</b> asks + questions (<b>'+combPct+'%</b>) were meaningfully met \u2014 below the 70% bar. You can close now, or wait for more responses to cover the gaps.', confirm:'Close anyway', cancel:'Wait for more', onConfirm:doClose });
         return;
       }
       doClose();
