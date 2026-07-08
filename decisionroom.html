@@ -1588,6 +1588,12 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .cd-final-lab{font-size:.85rem;color:var(--text2)}
 .cd-final-exp{font-size:.77rem;color:var(--muted);margin-top:.5rem;line-height:1.55}
 .cd-final-exp b{color:var(--text2)}
+.draft-card{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.5rem}
+.draft-kind{font-size:.64rem;letter-spacing:.5px;text-transform:uppercase;font-weight:700;color:var(--accent2)}
+.draft-title{font-size:.98rem;color:var(--white);font-weight:600;line-height:1.35}
+.draft-act{display:flex;gap:.5rem;margin-top:.2rem}
+.draft-act .draft-resume{padding:.4rem .9rem;font-size:.82rem}
+.draft-act .draft-del{padding:.4rem .9rem;font-size:.82rem}
 .chip-add-emoji{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .4rem;font:inherit;font-size:.9rem;width:46px;text-align:center;margin-right:.35rem}
 .chip-add-emoji:focus{outline:none;border-style:solid}
 .examples-more-wrap{text-align:center}
@@ -1807,6 +1813,7 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
   </div>
   <div id="feed-list" class="feed-grid"></div>
   <button type="button" id="feed-more" class="btn-ghost" style="display:none">Load more</button>
+  <div id="drafts-wrap" style="display:none"><h3 class="myc-h">Your drafts</h3><p class="sec-sub" style="margin:-.3rem 0 .6rem">Unfinished cases save here automatically when you cancel. Resume any time.</p><div id="drafts-list" class="feed-grid"></div></div>
   <div id="mycases-wrap" style="display:none"><h3 class="myc-h">Your cases</h3><div class="myc-filter" id="myc-filter"><button type="button" class="myc-fbtn on" data-f="all">All</button><button type="button" class="myc-fbtn" data-f="live">Open</button><button type="button" class="myc-fbtn" data-f="closed">Closed</button></div><div id="mycases-list" class="feed-grid"></div></div>
 </section>
 
@@ -2357,7 +2364,7 @@ boot();
     [].slice.call(form.querySelectorAll('.fstep-pip')).forEach(function(pip){ pip.onclick=function(){ var t=+pip.getAttribute('data-goto'); if(t>fcur && fcur===1){ var m=essentialsMissing(); if(m.length){ document.getElementById('f-err').textContent='Please complete: '+m.join(', ')+'.'; return; } } document.getElementById('f-err').textContent=''; showStep(t); }; });
     [].slice.call(form.querySelectorAll('.chip')).forEach(function(c){ c.onclick=function(){ c.classList.toggle('sel'); }; });
     [].slice.call(form.querySelectorAll('.chip-add-in')).forEach(function(inp){ inp.onkeydown=function(e){ if(e.key==='Enter'){ e.preventDefault(); addCustomChip(inp); } }; });
-    document.getElementById('f-cancel').onclick=closeSubmit;
+    document.getElementById('f-cancel').onclick=saveCaseDraftAndClose;
     document.getElementById('f-submit').onclick=doSubmit;
     attachAutocomplete(document.getElementById('f-title'), TITLE_AC);
     attachAutocomplete(document.getElementById('f-situation'), LONG_AC);
@@ -2366,7 +2373,47 @@ boot();
     showStep(1);
   }
 
-  function drOpenSubmit(){ if(!ov||!form) return; if(!form.innerHTML) buildForm(); showStep(1); ov.classList.add('open'); document.body.style.overflow='hidden'; }
+  var caseDraftId=null;
+  function gatherCaseDraft(){
+    var data={fields:{},chips:{},opts:[],free_asks:(typeof FREE_ASKS!=='undefined'?FREE_ASKS.slice():[])};
+    [].slice.call(document.querySelectorAll('#submit-overlay input[id^="f-"],#submit-overlay textarea[id^="f-"],#submit-overlay select[id^="f-"]')).forEach(function(el){ if(el.type==='checkbox') return; data.fields[el.id]=el.value||''; });
+    ['f-help','f-cat','f-stk','f-cons'].forEach(function(id){ if(document.getElementById(id)) data.chips[id]=selChips(id); });
+    data.opts=[].slice.call(document.querySelectorAll('#f-options .optinput')).map(function(i){ return i.value||''; });
+    return data;
+  }
+  function applyCaseDraft(data){ data=data||{};
+    Object.keys(data.fields||{}).forEach(function(id){ var el=document.getElementById(id); if(el) el.value=data.fields[id]; });
+    var wrap=document.getElementById('f-options'); if(wrap && data.opts && data.opts.length){ wrap.innerHTML=''; data.opts.forEach(function(){ addOpt(); }); var ins=wrap.querySelectorAll('.optinput'); data.opts.forEach(function(v,i){ if(ins[i]) ins[i].value=v; }); if(typeof updateOptNote==='function') updateOptNote(); }
+    Object.keys(data.chips||{}).forEach(function(id){ var sel=data.chips[id]||[]; [].slice.call(document.querySelectorAll('#'+id+' .chip')).forEach(function(c){ if(sel.indexOf(c.getAttribute('data-v'))>=0) c.classList.add('sel'); else c.classList.remove('sel'); }); });
+    if(typeof FREE_ASKS!=='undefined'){ FREE_ASKS=(data.free_asks||[]).slice(); if(typeof renderFreeAsks==='function') renderFreeAsks(); }
+  }
+  function saveCaseDraftAndClose(){
+    var t=((document.getElementById('f-title')||{}).value||'').trim(), sit=((document.getElementById('f-situation')||{}).value||'').trim();
+    if(SB && currentUser && (t.length>2 || sit.length>10)){
+      SB.rpc('dr_draft_save',{p_id:caseDraftId,p_kind:'case',p_case_id:null,p_title:(t||'Untitled case'),p_data:gatherCaseDraft()}).then(function(r){ var o=(r&&r.data)||{}; if(o.ok){ caseDraftId=o.id; if(typeof toast==='function') toast('Saved to drafts'); loadDrafts(); } }, function(){});
+    }
+    closeSubmit();
+  }
+  function loadDrafts(){
+    var w=document.getElementById('drafts-wrap'), list=document.getElementById('drafts-list'); if(!w||!list) return;
+    if(!SB||!currentUser){ w.style.display='none'; return; }
+    SB.rpc('dr_drafts_list').then(function(r){ var rows=(r&&r.data)||[]; if(!rows.length){ w.style.display='none'; list.innerHTML=''; return; } w.style.display=''; list.innerHTML=rows.map(function(dr){ return '<div class="draft-card" data-id="'+escHtml(dr.id)+'" data-kind="'+escHtml(dr.kind||'case')+'" data-case="'+escHtml(dr.case_id||'')+'"><div class="draft-kind">'+((dr.kind==='response')?'Response draft':'Case draft')+'</div><div class="draft-title">'+escHtml(dr.title||'Untitled')+'</div><div class="draft-act"><button type="button" class="btn-primary draft-resume">Resume</button><button type="button" class="btn-ghost draft-del">Delete</button></div></div>'; }).join(''); wireDrafts(); }, function(){});
+  }
+  function wireDrafts(){
+    [].slice.call(document.querySelectorAll('#drafts-list .draft-card')).forEach(function(card){
+      var id=card.getAttribute('data-id'), kind=card.getAttribute('data-kind'), cid=card.getAttribute('data-case');
+      var del=card.querySelector('.draft-del'); if(del) del.onclick=function(){ if(!SB) return; SB.rpc('dr_draft_delete',{p_id:id}).then(function(){ loadDrafts(); }, function(){}); };
+      var res=card.querySelector('.draft-resume'); if(res) res.onclick=function(){ resumeDraft(id, kind, cid); };
+    });
+  }
+  function resumeDraft(id, kind, cid){
+    if(!SB) return;
+    SB.rpc('dr_draft_get',{p_id:id}).then(function(r){ var dft=(r&&r.data)||{}; var data=dft.data||{};
+      if(kind==='response' && cid){ if(typeof openCase==='function') openCase(cid); }
+      else { caseDraftId=id; form.innerHTML=''; buildForm(); applyCaseDraft(data); showStep(1); ov.classList.add('open'); document.body.style.overflow='hidden'; }
+    }, function(){});
+  }
+  function drOpenSubmit(){ if(!ov||!form) return; if(!form.innerHTML){ caseDraftId=null; buildForm(); } showStep(1); ov.classList.add('open'); document.body.style.overflow='hidden'; }
   function closeSubmit(){ if(!ov) return; ov.classList.remove('open'); document.body.style.overflow=''; }
   window.drOpenSubmit=drOpenSubmit;
   if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) closeSubmit(); });
@@ -2408,7 +2455,8 @@ boot();
         var faSend=(FREE_ASKS&&FREE_ASKS.length)?FREE_ASKS.slice():[].slice.call(document.querySelectorAll('.fa-item > span')).map(function(sp){return (sp.textContent||'').trim();}).filter(Boolean);
         if(faSend.length && SB){ SB.rpc('dr_set_case_free_asks',{p_free_asks:faSend}).then(function(rr){ if(rr&&rr.data&&rr.data.ok){ console.log('[DR] free_asks saved:', faSend.length); } else { console.warn('[DR] free_asks NOT saved:', rr&&(rr.error||rr.data)); if(typeof toast==='function') toast('Heads up: specific questions did not save \u2014 check console'); } }).catch(function(e){ console.warn('[DR] free_asks save error:', e); }); }
         else { console.warn('[DR] no free_asks captured; array len=', (FREE_ASKS&&FREE_ASKS.length)||0, 'dom items=', document.querySelectorAll('.fa-item').length); }
-        closeSubmit(); if(form) form.innerHTML=''; toast('Your case is live in the room.'); loadFeed(true); loadMyCases();
+        if(caseDraftId && SB){ try{ SB.rpc('dr_draft_delete',{p_id:caseDraftId}).then(function(){},function(){}); }catch(e){} caseDraftId=null; }
+        closeSubmit(); if(form) form.innerHTML=''; toast('Your case is live in the room.'); loadFeed(true); loadMyCases(); loadDrafts();
       }
       else { err.textContent=reasonMsg((res&&res.data&&res.data.reason)||'error'); }
     }).catch(function(){ btn.disabled=false; btn.textContent='Post case'; err.textContent='Could not post right now \u2014 please try again.'; });
@@ -2668,10 +2716,13 @@ boot();
           return '<div class="wg-row'+(s!=='ok'?' na':'')+'"><div class="wg-want">'+escHtml(helpLabel(w))+'</div><div class="wg-got">'+val+'</div></div>'; }).join('')
         +'</div></div>';
     }
+    var faGrid='';
+    var _fas=d.free_asks||[], _fao=d.free_ask_outcomes||[];
+    if(_fas.length && _fao.length){ var fmap={}; _fao.forEach(function(x){ fmap[x.q]=x.answer; }); var fg=gateEntries(_fas.map(function(q){return {want:q, outcome:fmap[q]||''};}), _fas.length, 'outcome'); var fst={}; fg.statuses.forEach(function(sx){ fst[sx.want]=sx.status; }); faGrid='<div class="wg wg-out '+(pctGood(fg.pct)?'wg-good':'wg-bad')+'"><div class="wg-h">How each question was answered \u00b7 <b>'+fg.pct+'%</b></div><div class="wg-grid">'+_fas.map(function(q){ var o=fmap[q]; var sv=fst[q]||'na'; var val=sv==='na'?'<span class="wg-na">Not answered</span>':(sv==='low'?(nl(o)+'<span class="wg-flag">low detail \u00b7 not counted</span>'):nl(o)); if(!o) val='<span class="wg-na">\u2014</span>'; return '<div class="wg-row'+(sv!=='ok'?' na':'')+'"><div class="wg-want">'+escHtml(q)+'</div><div class="wg-got">'+val+'</div></div>'; }).join('')+'</div></div>'; }
     return '<div class="cd-outcome'+(resolved?'':' bad')+'">'+head+warn
       +(d.resolved_option?'<div class="cd-outcome-opt">Went with: <b>'+escHtml(d.resolved_option)+'</b></div>':'')
       +(d.resolution?'<div class="cd-outcome-body">'+fmtResolution(d.resolution)+'</div>':'')
-      +grid+'</div>';
+      +grid+faGrid+'</div>';
   }
   var curCaseResponses=[];
   function loadResponses(d){
@@ -3112,7 +3163,7 @@ boot();
   }
   window.drOpenProfile=function(isOnboarding){ openProfileForm(isOnboarding); };
 
-  window.drAfterAuth=function(){ loadMyCases(); refreshBell(); if(profileIncomplete() && !profilePrompted){ profilePrompted=true; setTimeout(function(){ if(profileIncomplete()) openProfileForm(true); }, 1000); } };
+  window.drAfterAuth=function(){ loadMyCases(); loadDrafts(); refreshBell(); if(profileIncomplete() && !profilePrompted){ profilePrompted=true; setTimeout(function(){ if(profileIncomplete()) openProfileForm(true); }, 1000); } };
   renderExamples(true);   /* immediate render from seed list */
   populateFilter();
   loadTaxonomy();         /* then refresh from DB (adds any custom values) */
