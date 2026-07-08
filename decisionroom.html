@@ -1579,6 +1579,15 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .cd-fa-ask{margin-top:.8rem}
 .cd-fa-ans{width:100%;background:var(--field-bg);border:1px solid var(--border2);border-radius:8px;padding:.5rem .6rem;color:var(--white);font-size:.9rem;font-family:inherit;margin-bottom:.6rem;resize:vertical}
 .cd-aid-subh{font-size:.7rem;letter-spacing:.5px;text-transform:uppercase;font-weight:700;color:var(--accent2);margin:.8rem 0 .3rem}
+.cd-final{border-radius:12px;padding:.9rem 1rem;margin:.5rem 0 .2rem;border:1px solid var(--border2)}
+.cd-final.g{background:rgba(var(--green-rgb),.08);border-color:rgba(var(--green-rgb),.3)}
+.cd-final.r{background:rgba(var(--red-rgb),.06);border-color:rgba(var(--red-rgb),.28)}
+.cd-final-top{display:flex;align-items:baseline;gap:.55rem;flex-wrap:wrap}
+.cd-final-big{font-family:var(--font-display);font-size:1.7rem;line-height:1}
+.cd-final.g .cd-final-big{color:var(--green)} .cd-final.r .cd-final-big{color:var(--red)}
+.cd-final-lab{font-size:.85rem;color:var(--text2)}
+.cd-final-exp{font-size:.77rem;color:var(--muted);margin-top:.5rem;line-height:1.55}
+.cd-final-exp b{color:var(--text2)}
 .chip-add-emoji{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .4rem;font:inherit;font-size:.9rem;width:46px;text-align:center;margin-right:.35rem}
 .chip-add-emoji:focus{outline:none;border-style:solid}
 .examples-more-wrap{text-align:center}
@@ -2944,10 +2953,13 @@ boot();
     L.push('NEXT STEP');
     L.push(avg>=70 ? 'Coverage is solid \u2014 record the decision, then mark the responses you act on as it plays out.' : ('Coverage is thin (' + avg + '%) \u2014 either wait for stronger responses, or close now noting which asks went unmet (you can reopen later).'));
     var summary=L.join('\n');
+    var asksSat=cover.reduce(function(a,x){return a+x.c;},0), qSat=faCover.reduce(function(a,x){return a+x.c;},0);
+    var grandT=((ws.length+fas.length)*rs.length)||1;
+    var asksContrib=Math.round(asksSat/grandT*100), qContrib=Math.round(qSat/grandT*100);
     var html='<div class="cd-aid"><div class="cd-aid-h">Before you close \u2014 what the room gave you</div>'
       +'<div class="cd-aid-avg '+(pctGood(avg)?'g':'r')+'"><span class="cd-aid-big">'+avg+'%</span><span>average coverage across '+rs.length+' response'+(rs.length===1?'':'s')+'</span></div>'
-      +'<div class="cd-aid-grid">'+coverHtml+'</div>'
-      +(faCoverHtml?'<div class="cd-aid-subh">Your specific questions</div><div class="cd-aid-grid">'+faCoverHtml+'</div>':'')
+      +'<div class="cd-aid-subh">Wants/asks satisfied ('+asksContrib+'%)</div><div class="cd-aid-grid">'+coverHtml+'</div>'
+      +(faCoverHtml?'<div class="cd-aid-subh">Your specific questions ('+qContrib+'%)</div><div class="cd-aid-grid">'+faCoverHtml+'</div>':'')
       +'<p class="cd-aid-note">This is a rules-based read of the responses (an AI-written summary comes in a later phase). Edit the draft below before it becomes your record.</p></div>';
     return {html:html, summary:summary};
   }
@@ -2972,13 +2984,18 @@ boot();
       +'<label class="cd-f-l">What you decided &amp; why <span class="cd-f-opt">editable \u2014 pre-filled from the responses</span></label><textarea id="cf-res" rows="4" maxlength="1500" placeholder="A line on what you chose and how it\u2019s playing out."></textarea>'
       +wantsBlock
       +faBlock
+      +'<div class="cd-final" id="cf-finalscore"></div>'
       +'<div class="cd-form-act"><button type="button" class="btn-primary" id="cf-submit">Close case</button><button type="button" class="btn-ghost" id="cf-cancel">Cancel</button><span class="cd-form-err" id="cf-err"></span></div></div>';
     var resEl=document.getElementById('cf-res'); if(resEl && aid.summary) resEl.value=aid.summary;
     var upd=function(){ updWantsMeter('#cd-respond', d, 'outcome', 'cf-wmeter'); };
     [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ t.addEventListener('input', upd); }); upd();
     function gatherFAOut(){ var out=[]; [].slice.call(el.querySelectorAll('.cd-fa-in')).forEach(function(t){ out.push({q:t.getAttribute('data-fa'), answer:(t.value||'').trim()}); }); return out; }
-    function faMeter(){ var mel=document.getElementById('cf-fameter'); if(!mel) return; var list=gatherFAOut(); var tot=list.length; var sat=list.filter(function(x){ var a=(x.answer||'').trim(); return a.length>3 && !/^n\/?a\.?$/i.test(a); }).length; var pct=tot?Math.round(100*sat/tot):0; mel.innerHTML='<div class="cd-aid-avg '+(pct>=70?'g':'r')+'" style="margin:.5rem 0 0"><span class="cd-aid-big">'+pct+'%</span><span>of your specific questions answered ('+sat+'/'+tot+')</span></div>'; }
+    function faMeter(){ var mel=document.getElementById('cf-fameter'); if(!mel) return; var list=gatherFAOut(); var tot=list.length; var sat=list.filter(function(x){ var a=(x.answer||'').trim(); return a.length>3 && !/^n\/?a\.?$/i.test(a); }).length; var pct=tot?Math.round(100*sat/tot):0; mel.className='cd-wmeter '+(pct>=70?'good':'bad'); mel.innerHTML='<div class="cd-wmeter-bar"><span style="width:'+pct+'%"></span></div><div class="cd-wmeter-t"><b>'+sat+' of '+tot+'</b> specific questions answered \u00b7 <b>'+pct+'%</b></div>'; }
     [].slice.call(el.querySelectorAll('.cd-fa-in')).forEach(function(t){ t.addEventListener('input', faMeter); }); faMeter();
+    var roomR=(function(){ var ps=(curCaseResponses||[]).map(function(r){return respCombinedPct(d,r);}); return ps.length?Math.round(ps.reduce(function(a,b){return a+b;},0)/ps.length):0; })();
+    function currentO(){ var we=[]; [].slice.call(el.querySelectorAll('.cd-want-in')).forEach(function(t){ we.push({want:t.getAttribute('data-want'), outcome:t.value||''}); }); var wg2=gateEntries(we, ws.length||we.length, 'outcome'); var fo=gatherFAOut(); var fg2=(fas.length?gateEntries(fo.map(function(x){return {want:x.q, outcome:x.answer};}), fas.length, 'outcome'):{sat:0,total:0}); var sat=wg2.sat+fg2.sat, tot=ws.length+fas.length; return tot?Math.round(sat/tot*100):0; }
+    function updFinalScore(){ var fe=document.getElementById('cf-finalscore'); if(!fe) return; var O=currentO(); var F=Math.round(0.65*O+0.35*roomR); var ok=F>=70; fe.className='cd-final '+(ok?'g':'r'); fe.innerHTML='<div class="cd-final-top"><span class="cd-final-big">'+F+'%</span><span class="cd-final-lab">final resolution score \u2014 '+(ok?'closes as <b>Resolved</b> (can\u2019t be reopened)':'below 70% \u2014 you can <b>reopen</b> this later')+'</span></div><div class="cd-final-exp"><b>How it\u2019s calculated:</b> your own read (<b>'+O+'%</b>, weighted 65% \u2014 you\u2019re the best judge) blended with the room\u2019s coverage (<b>'+roomR+'%</b>, weighted 35%). At 70%+ the case closes for good; below 70% it stays reopenable.</div>'; }
+    [].slice.call(el.querySelectorAll('.cd-want-in,.cd-fa-in')).forEach(function(t){ t.addEventListener('input', updFinalScore); }); updFinalScore();
     document.getElementById('cf-cancel').onclick=function(){ renderRespondArea(el, d, null); };
     document.getElementById('cf-submit').onclick=function(){
       var res=((document.getElementById('cf-res')||{}).value||'').trim(), opt=((document.getElementById('cf-opt')||{}).value||'').trim();
@@ -2989,16 +3006,17 @@ boot();
       var g=gateEntries(wg.list, ws.length||wg.list.length, 'outcome');
       var faG=(fas.length?gateEntries(faOutcomes.map(function(x){return {want:x.q, outcome:x.answer};}), fas.length, 'outcome'):{sat:0,total:0,pct:0});
       var combSat=g.sat+faG.sat, combTot=g.total+faG.total, combPct=combTot?Math.round(combSat/combTot*100):g.pct;
+      var finalPct=Math.round(0.65*combPct+0.35*roomR);
       function doClose(){
         if(btn){ btn.disabled=true; btn.textContent='Closing\u2026'; }
-        SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt,p_want_outcomes:wg.list,p_wants_satisfied:combSat,p_resolved_pct:combPct}).then(function(r){
+        SB.rpc('dr_close_case',{p_case_id:d.id,p_resolution:res,p_resolved_option:opt,p_want_outcomes:wg.list,p_wants_satisfied:combSat,p_resolved_pct:finalPct}).then(function(r){
           var o=(r&&r.data)||{}; if(!o.ok){ if(err) err.textContent=(o.reason==='wants'?'Please note how each ask went (N/A is fine).':'Couldn\u2019t close the case.'); if(btn){ btn.disabled=false; btn.textContent='Close case'; } return; }
           if(fas.length && SB){ try{ SB.rpc('dr_set_free_ask_outcomes',{p_case_id:d.id,p_outcomes:faOutcomes}).then(function(){},function(){}); }catch(e){} }
           if(typeof toast==='function') toast('Case closed'); openCase(d.id); loadFeed(true); loadMyCases(); if(typeof loadLibrary==='function') loadLibrary(true);
         }).catch(function(){ if(err) err.textContent='Something went wrong.'; if(btn){ btn.disabled=false; btn.textContent='Close case'; } });
       }
-      if((ws.length||fas.length) && !pctGood(combPct)){
-        drConfirm({title:'Only '+combPct+'% was met', body:'By your own read, <b>'+combSat+' of '+combTot+'</b> asks + questions (<b>'+combPct+'%</b>) were meaningfully met \u2014 below the 70% bar. You can close now, or wait for more responses to cover the gaps.', confirm:'Close anyway', cancel:'Wait for more', onConfirm:doClose });
+      if(!pctGood(finalPct)){
+        drConfirm({title:'Final score '+finalPct+'% \u2014 below 70%', body:'Final resolution <b>'+finalPct+'%</b> = your read <b>'+combPct+'%</b> (\u00d765%) + the room\u2019s coverage <b>'+roomR+'%</b> (\u00d735%) \u2014 below the 70% bar. Close now (you can reopen later), or wait for more responses to lift it.', confirm:'Close anyway', cancel:'Wait for more', onConfirm:doClose });
         return;
       }
       doClose();
