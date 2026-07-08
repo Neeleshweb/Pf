@@ -1576,6 +1576,9 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .cd-fa-in{width:100%;background:var(--field-bg);border:1px solid var(--border2);border-radius:8px;padding:.5rem .6rem;color:var(--white);font-size:.9rem;font-family:inherit;margin-bottom:.6rem;resize:vertical}
 .cd-fa-out li{display:flex;flex-direction:column;gap:.15rem;margin:.4rem 0}
 .cd-fa-out li span{color:var(--text2)}
+.cd-fa-ask{margin-top:.8rem}
+.cd-fa-ans{width:100%;background:var(--field-bg);border:1px solid var(--border2);border-radius:8px;padding:.5rem .6rem;color:var(--white);font-size:.9rem;font-family:inherit;margin-bottom:.6rem;resize:vertical}
+.cd-aid-subh{font-size:.7rem;letter-spacing:.5px;text-transform:uppercase;font-weight:700;color:var(--accent2);margin:.8rem 0 .3rem}
 .chip-add-emoji{background:var(--surface);border:1px dashed var(--accent2);color:var(--accent2);border-radius:100px;padding:.32rem .4rem;font:inherit;font-size:.9rem;width:46px;text-align:center;margin-right:.35rem}
 .chip-add-emoji:focus{outline:none;border-style:solid}
 .examples-more-wrap{text-align:center}
@@ -2392,7 +2395,12 @@ boot();
     var btn=document.getElementById('f-submit'); btn.disabled=true; btn.textContent='Posting\u2026';
     SB.rpc('dr_submit_case', payload).then(function(res){
       btn.disabled=false; btn.textContent='Post case';
-      if(res&&res.data&&res.data.ok){ if(FREE_ASKS.length && SB && currentUser){ try{ SB.rpc('dr_set_case_free_asks',{p_free_asks:FREE_ASKS}).catch(function(){}); }catch(e){} } closeSubmit(); if(form) form.innerHTML=''; toast('Your case is live in the room.'); loadFeed(true); loadMyCases(); }
+      if(res&&res.data&&res.data.ok){
+        var faSend=(FREE_ASKS&&FREE_ASKS.length)?FREE_ASKS.slice():[].slice.call(document.querySelectorAll('.fa-item > span')).map(function(sp){return (sp.textContent||'').trim();}).filter(Boolean);
+        if(faSend.length && SB){ SB.rpc('dr_set_case_free_asks',{p_free_asks:faSend}).then(function(rr){ if(rr&&rr.data&&rr.data.ok){ console.log('[DR] free_asks saved:', faSend.length); } else { console.warn('[DR] free_asks NOT saved:', rr&&(rr.error||rr.data)); if(typeof toast==='function') toast('Heads up: specific questions did not save \u2014 check console'); } }).catch(function(e){ console.warn('[DR] free_asks save error:', e); }); }
+        else { console.warn('[DR] no free_asks captured; array len=', (FREE_ASKS&&FREE_ASKS.length)||0, 'dom items=', document.querySelectorAll('.fa-item').length); }
+        closeSubmit(); if(form) form.innerHTML=''; toast('Your case is live in the room.'); loadFeed(true); loadMyCases();
+      }
       else { err.textContent=reasonMsg((res&&res.data&&res.data.reason)||'error'); }
     }).catch(function(){ btn.disabled=false; btn.textContent='Post case'; err.textContent='Could not post right now \u2014 please try again.'; });
   }
@@ -2566,6 +2574,9 @@ boot();
       +'<p class="cd-want-n">This is what makes a DecisionRoom response different from a forum comment: speak to each thing the PM actually asked for. Write <b>N/A</b> if you can\u2019t help with one.</p>'
       + ws.map(function(w){ return '<label class="cd-want-l">'+escHtml(helpLabel(w))+'</label><textarea class="cd-want-in" data-want="'+escHtml(w)+'" rows="2" maxlength="600" placeholder="How you\u2019d help with this \u2014 or N/A">'+escHtml(wantPrefill(mine,w))+'</textarea>'; }).join('')
       +'</div>'; }
+  function freeAskAnsPrefill(mine, q){ if(!mine||!mine.free_ask_answers) return ''; for(var i=0;i<mine.free_ask_answers.length;i++){ if(mine.free_ask_answers[i].q===q) return mine.free_ask_answers[i].answer||''; } return ''; }
+  function freeAskInputsHtml(d, mine){ var fas=d.free_asks||[]; if(!fas.length) return ''; return '<div class="cd-fa-ask"><div class="cd-want-h">Specific questions asked <span class="cd-f-opt">optional \u2014 answer what you can</span></div>'+fas.map(function(q){ return '<label class="cd-want-l">'+escHtml(q)+'</label><textarea class="cd-fa-ans" data-fa="'+escHtml(q)+'" rows="2" maxlength="600" placeholder="Your answer to this question">'+escHtml(freeAskAnsPrefill(mine,q))+'</textarea>'; }).join('')+'</div>'; }
+  function gatherFreeAskAns(scopeSel){ var out=[]; [].slice.call(document.querySelectorAll(scopeSel+' .cd-fa-ans')).forEach(function(t){ var v=(t.value||'').trim(); if(v) out.push({q:t.getAttribute('data-fa'), answer:v}); }); return out; }
   function gatherWants(scopeSel, key){ var out=[], miss=0; [].slice.call(document.querySelectorAll(scopeSel+' .cd-want-in')).forEach(function(t){ var w=t.getAttribute('data-want'), v=(t.value||'').trim(); if(!v) miss++; var o={want:w}; o[key]=v; out.push(o); }); return {list:out, missing:miss}; }
   function isNA(v){ return !v || String(v).trim().toLowerCase()==='n/a' || String(v).trim().toLowerCase()==='na'; }
   /* ---- Phase 2a: deterministic quality gate (rules-only; topical relevance is Phase 3 AI) ---- */
@@ -2801,7 +2812,7 @@ boot();
       +'<div class="fstep" data-rstep="2">'
       +(wantsInputsHtml(d, mine)?'<label class="cd-f-l">Answer each ask <span class="req">*</span> <span class="cd-f-opt">this is what earns your rating</span></label>':'')
       +wantsInputsHtml(d, mine)
-      +((d.free_asks&&d.free_asks.length)?'<div class="cd-fa-r"><div class="cd-f-l">Specific questions from the asker</div><ul class="cd-fa">'+d.free_asks.map(function(q){ return '<li>'+escHtml(q)+'</li>'; }).join('')+'</ul></div>':'')
+      +freeAskInputsHtml(d, mine)
       +'<div class="cd-wmeter" id="rf-wmeter"></div>'
       +'</div>'
       +'<div class="cd-form-act"><button type="button" class="btn-ghost" id="rf-back" style="display:none">\u2190 Back</button><button type="button" class="btn-primary" id="rf-next">Next \u2192</button><button type="button" class="btn-primary" id="rf-submit" style="display:none">'+(mine?'Update response':'Post response')+'</button><span class="cd-form-err" id="rf-err"></span></div></div>';
@@ -2839,6 +2850,7 @@ boot();
     var conf=((document.getElementById('rf-conf')||{}).value||'').trim();
     var asknext=((document.getElementById('rf-asknext')||{}).value||'').trim();
     var nextstep=((document.getElementById('rf-nextstep')||{}).value||'').trim();
+    var faAns=gatherFreeAskAns('#cd-respond');
     var vis=((document.getElementById('rf-vis')||{}).value||'').trim();
     var err=document.getElementById('rf-err'), btn=document.getElementById('rf-submit');
     var bodyEl=document.getElementById('rf-body');
@@ -2860,7 +2872,7 @@ boot();
         var r=(res&&res.data)||{};
         if(!r.ok){ if(err) err.textContent=respErr(r.reason); if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } return; }
         var done=function(){ if(typeof toast==='function') toast(isUpdate?'Response updated':'Response posted'); loadResponses(d); loadFeed(true); loadMyCases(); };
-        SB.rpc('dr_set_response_meta',{p_case_id:d.id,p_ask_next:asknext,p_next_step:nextstep}).then(done).catch(done);
+        Promise.all([SB.rpc('dr_set_response_meta',{p_case_id:d.id,p_ask_next:asknext,p_next_step:nextstep}).catch(function(){}), (faAns.length?SB.rpc('dr_set_response_free_asks',{p_case_id:d.id,p_answers:faAns}).catch(function(){}):Promise.resolve())]).then(done).catch(done);
       }).catch(function(){ if(err) err.textContent='Something went wrong. Try again.'; if(btn){ btn.disabled=false; btn.textContent=isUpdate?'Update response':'Post response'; } });
     }
     if(!pctGood(g.pct)){
@@ -2894,6 +2906,9 @@ boot();
     var cover=ws.map(function(w){ var c=0; rs.forEach(function(r){ var m={}; (r.want_answers||[]).forEach(function(x){m[x.want]=x.answer;}); if(qualityOk(m[w], []).ok) c++; }); return {w:w, c:c}; });
     var thin=cover.slice().sort(function(a,b){return a.c-b.c;})[0];
     var coverHtml=cover.map(function(x){ return '<div class="cd-aid-row"><span>'+escHtml(helpLabel(x.w))+'</span><b class="'+(x.c/rs.length>=0.7?'g':'r')+'">'+x.c+'/'+rs.length+'</b></div>'; }).join('');
+    var fas=d.free_asks||[];
+    var faCover=fas.map(function(q){ var c=0; rs.forEach(function(r){ var m={}; (r.free_ask_answers||[]).forEach(function(x){m[x.q]=x.answer;}); if(qualityOk(m[q]||'', []).ok) c++; }); return {q:q, c:c}; });
+    var faCoverHtml=faCover.map(function(x){ return '<div class="cd-aid-row"><span>'+escHtml(x.q)+'</span><b class="'+(rs.length&&x.c/rs.length>=0.7?'g':'r')+'">'+x.c+'/'+rs.length+'</b></div>'; }).join('');
     var topWho=top?((top.r.visibility==='anon')?'an anonymous PM':(top.r.responder_context||top.r.alias||'a PM')):'';
     var L=[];
     L.push('WHAT I DECIDED');
@@ -2911,6 +2926,7 @@ boot();
     var html='<div class="cd-aid"><div class="cd-aid-h">Before you close \u2014 what the room gave you</div>'
       +'<div class="cd-aid-avg '+(pctGood(avg)?'g':'r')+'"><span class="cd-aid-big">'+avg+'%</span><span>average coverage across '+rs.length+' response'+(rs.length===1?'':'s')+'</span></div>'
       +'<div class="cd-aid-grid">'+coverHtml+'</div>'
+      +(faCoverHtml?'<div class="cd-aid-subh">Your specific questions</div><div class="cd-aid-grid">'+faCoverHtml+'</div>':'')
       +'<p class="cd-aid-note">This is a rules-based read of the responses (an AI-written summary comes in a later phase). Edit the draft below before it becomes your record.</p></div>';
     return {html:html, summary:summary};
   }
