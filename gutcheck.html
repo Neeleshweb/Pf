@@ -431,6 +431,16 @@
     /* AUDIENCE MODAL */
     .aud-overlay { position: fixed; inset: 0; background: rgba(4,4,4,.85); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; padding: 1.3rem; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 600; }
     .aud-overlay.open { opacity: 1; pointer-events: auto; }
+    .gcp-modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;max-width:440px;width:100%;max-height:90vh;overflow:auto}
+    .gcp-h{font-size:1.35rem;font-weight:800;color:var(--white)}
+    .gcp-sub{font-size:.84rem;color:var(--text2);margin:.3rem 0 1rem;line-height:1.55}
+    .gcp-l{display:block;font-size:.8rem;font-weight:600;color:var(--text2);margin:.85rem 0 .3rem}
+    .gcp-opt{font-weight:400;color:var(--muted);font-size:.74rem}
+    .gcp-modal select,.gcp-modal input{width:100%;background:var(--field-bg);border:1px solid var(--border2);border-radius:8px;padding:.6rem .7rem;color:var(--white);font-size:.9rem;font-family:inherit}
+    .gcp-act{display:flex;gap:.6rem;align-items:center;margin-top:1.3rem}
+    .gcp-save{background:var(--accent);color:var(--btn-ink,#fff);border:none;border-radius:9px;padding:.6rem 1.2rem;font-weight:600;cursor:pointer}
+    .gcp-later{background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:9px;padding:.6rem 1.1rem;cursor:pointer}
+    .gcp-err{font-size:.8rem;color:var(--red)}
     .aud-modal { background: var(--card); border: 1px solid var(--border2); border-radius: 18px; padding: 2rem 1.8rem; max-width: 460px; width: 100%; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
     .aud-modal h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 1px; margin-bottom: .5rem; }
     .aud-modal p { font-size: .86rem; color: var(--muted); margin-bottom: 1.4rem; line-height: 1.6; }
@@ -945,7 +955,7 @@
     <div class="rec-tile green" title="On curated dilemmas (real calls + industry) with a known best, how often your pick matched what a strong PM actually did."><b id="rec-calib">—</b><small>matched the pros</small></div>
     <div class="rec-tile green" title="On member-submitted dilemmas, how often your pick matched the room’s answer — scored by the surprisingly-popular method, not a plain vote count."><b id="rec-room">—</b><small>matched the room</small></div>
     <div class="rec-tile blue"><b id="rec-level">Associate</b><small>judgment level</small></div>
-    <div class="rec-tile"><b id="rec-aud">—</b><small>you identify as</small></div>
+    <div class="rec-tile" style="cursor:pointer" onclick="window.gcEditProfile&&window.gcEditProfile(false)" title="Edit your PM profile"><b id="rec-aud">—</b><small>you identify as &middot; tap to edit</small></div>
     <div class="rec-tile amber"><b id="rec-subs">0</b><small>dilemmas submitted</small></div>
   </div>
   <div class="rec-legend"><b>Matched the pros</b> — curated dilemmas with a known best. <b>Matched the room</b> — community dilemmas, scored by the <b>surprisingly-popular</b> method (the answer that beats what people expected, which is right more often than the plain majority).</div>
@@ -1184,6 +1194,13 @@ loadSharedTaxonomy();
 var DOMAINS=[]; var DIFFS=['Intro','Intermediate','Advanced'];
 function loadDomains(){ if(!SB) return; try{ SB.rpc('pjl_taxonomy',{p_kind:'domain'}).then(function(res){ if(res&&!res.error&&res.data&&res.data.length){ DOMAINS=res.data.map(function(r){return r.value;}); } }).catch(function(){}); }catch(e){} }
 loadDomains();
+var GC_ROLES=[]; var GCP=null;
+var GC_ROLE_MAP={'APM / Associate PM':'Associate','Product Manager':'Product Manager','Senior PM':'Senior','Lead / Staff PM':'Lead','Group PM':'Group PM','Director of Product':'Director','VP Product':'VP','Founder / CPO':'Founder','Other':'PM'};
+function gcRoleLabel(role){ return GC_ROLE_MAP[role]||role||''; }
+function gcProfOpts(list, sel){ return (list||[]).map(function(v){ return '<option value="'+escHtml(v)+'"'+(sel===v?' selected':'')+'>'+escHtml(v)+'</option>'; }).join(''); }
+function loadGcRoles(){ if(!SB) return; try{ SB.rpc('pjl_taxonomy',{p_kind:'role'}).then(function(res){ if(res&&!res.error&&res.data&&res.data.length){ GC_ROLES=res.data.map(function(r){return r.value;}); } }).catch(function(){}); }catch(e){} }
+function loadGcProfile(){ if(!SB||!currentUser) return Promise.resolve(); return SB.rpc('dr_get_or_create_profile').then(function(res){ var p=(res&&res.data)||{}; if(p&&p.profile) p=p.profile; if(p&&(p.role||p.track||p.product_type)){ GCP=p; if(p.track==='working'||p.track==='aspiring'){ GC.audience=p.track; gcSave(GC); } } }).catch(function(){}); }
+loadGcRoles();
 
 /* ---- Reusable filter bar: sort dropdown(s) + scrollable category pills ---- */
 var _fbarDocWired = false;
@@ -1840,7 +1857,7 @@ function checkReady(d){
 function commit(d, key){
   if (SB && !currentUser){ openSignIn('Sign in to lock in your call — it then syncs across all your devices.'); return; }
   /* always confirm audience per vote so each call is tagged accurately */
-  var __rt=document.getElementById('today-reason'); var __reason=__rt?(__rt.value||'').trim():''; if(!__reason){ if(__rt){ __rt.style.borderColor='var(--red)'; __rt.focus(); } var __rh=document.querySelector('.call-hint'); if(__rh){ __rh.textContent='Add your reasoning to lock your call.'; __rh.style.color='var(--red)'; } return; } var __ce=document.querySelector('.cc-btn.sel'); if(!__ce){ var __cc=document.querySelector('.call-conf'); if(__cc) __cc.classList.add('cc-err'); return; } if(__rt) __rt.style.borderColor=''; var __pred=null; if (d.tier===3){ var __pe=document.querySelector('.cp-btn.sel'); var __cp2=document.querySelector('.call-predict'); if(__cp2 && !__pe){ __cp2.classList.add('cp-err'); return; } if(__pe) __pred=__pe.getAttribute('data-pk'); } pendingCommit = { d:d, key:key, conf:+__ce.getAttribute('data-c'), pred:__pred }; openAud();
+  var __rt=document.getElementById('today-reason'); var __reason=__rt?(__rt.value||'').trim():''; if(!__reason){ if(__rt){ __rt.style.borderColor='var(--red)'; __rt.focus(); } var __rh=document.querySelector('.call-hint'); if(__rh){ __rh.textContent='Add your reasoning to lock your call.'; __rh.style.color='var(--red)'; } return; } var __ce=document.querySelector('.cc-btn.sel'); if(!__ce){ var __cc=document.querySelector('.call-conf'); if(__cc) __cc.classList.add('cc-err'); return; } if(__rt) __rt.style.borderColor=''; var __pred=null; if (d.tier===3){ var __pe=document.querySelector('.cp-btn.sel'); var __cp2=document.querySelector('.call-predict'); if(__cp2 && !__pe){ __cp2.classList.add('cp-err'); return; } if(__pe) __pred=__pe.getAttribute('data-pk'); } pendingCommit = { d:d, key:key, conf:+__ce.getAttribute('data-c'), pred:__pred }; if(GC.audience){ var __pc=pendingCommit; pendingCommit=null; doCommit(__pc.d,__pc.key,__pc.conf,__pc.pred); } else { openGcProfile(true); }
 }
 var pendingCommit = null;
 function doCommit(d, key, conf, pred){
@@ -1924,6 +1941,40 @@ function reveal(d, instant){
 /* ---------- AUDIENCE MODAL ---------- */
 var audOv = document.getElementById('aud-overlay');
 function openAud(){ audOv.classList.add('open'); }
+function openGcProfile(isPrompt){
+  if(!currentUser){ if(typeof openSignIn==='function') openSignIn('Sign in to set up your PM profile.'); return; }
+  var d=GCP||{}; var ex=document.getElementById('gc-prof-ov'); if(ex&&ex.parentNode) ex.parentNode.removeChild(ex);
+  var ind=(d.industries&&d.industries.length)?d.industries[0]:'';
+  var ov=document.createElement('div'); ov.id='gc-prof-ov'; ov.className='aud-overlay';
+  ov.innerHTML='<div class="gcp-modal">'
+    +'<div class="gcp-h">'+(isPrompt?'Set up your PM profile':'Edit your profile')+'</div>'
+    +'<p class="gcp-sub">'+(isPrompt?'We use this to place your call among the right peers (Breaking-in vs Working PMs) instead of asking every time. ':'')+'Shared across GutCheck and DecisionRoom \u2014 your real name and company are never shown.</p>'
+    +'<label class="gcp-l">Your role</label><select id="gp-role"><option value="">\u2014 select \u2014</option>'+gcProfOpts(GC_ROLES, d.role)+'</select>'
+    +'<label class="gcp-l">Working as a PM now?</label><select id="gp-track"><option value="working"'+(d.track==='working'?' selected':'')+'>Yes, currently a PM</option><option value="aspiring"'+(d.track==='aspiring'?' selected':'')+'>Aspiring / transitioning</option></select>'
+    +'<label class="gcp-l">Primary product type</label><select id="gp-prod"><option value="">\u2014 select \u2014</option>'+gcProfOpts(DOMAINS, d.product_type)+'</select>'
+    +'<label class="gcp-l">Years of PM experience</label><input id="gp-years" type="number" min="0" max="50" inputmode="numeric" value="'+escHtml(d.years_experience||'')+'" placeholder="e.g. 7"/>'
+    +'<label class="gcp-l">Industry <span class="gcp-opt">optional</span></label><input id="gp-ind" type="text" maxlength="40" value="'+escHtml(ind)+'" placeholder="e.g. Fintech"/>'
+    +'<label class="gcp-l">LinkedIn URL <span class="gcp-opt">optional</span></label><input id="gp-li" type="url" maxlength="200" value="'+escHtml(d.linkedin_url||'')+'" placeholder="https://linkedin.com/in/\u2026"/>'
+    +'<div class="gcp-act"><button type="button" class="gcp-save" id="gp-save">Save profile</button><button type="button" class="gcp-later" id="gp-later">'+(isPrompt?'Not now':'Cancel')+'</button><span class="gcp-err" id="gp-err"></span></div>'
+    +'</div>';
+  document.body.appendChild(ov); requestAnimationFrame(function(){ ov.classList.add('open'); });
+  function close(){ ov.classList.remove('open'); setTimeout(function(){ if(ov.parentNode) ov.parentNode.removeChild(ov); }, 200); }
+  ov.addEventListener('click', function(e){ if(e.target===ov){ close(); if(isPrompt) pendingCommit=null; } });
+  document.getElementById('gp-later').onclick=function(){ close(); if(isPrompt) pendingCommit=null; };
+  document.getElementById('gp-save').onclick=function(){
+    var err=document.getElementById('gp-err');
+    var role=((document.getElementById('gp-role')||{}).value||''), track=((document.getElementById('gp-track')||{}).value||'working'), prod=((document.getElementById('gp-prod')||{}).value||''), years=((document.getElementById('gp-years')||{}).value||'').trim(), indv=((document.getElementById('gp-ind')||{}).value||'').trim(), li=((document.getElementById('gp-li')||{}).value||'').trim();
+    if(!role||!prod||!years){ if(err) err.textContent='Add your role, product type, and years to finish.'; return; }
+    var btn=document.getElementById('gp-save'); if(btn){ btn.disabled=true; btn.textContent='Saving\u2026'; }
+    SB.rpc('dr_save_profile',{p_role:role,p_track:track,p_product_type:prod,p_years:years,p_industries:indv?[indv]:null,p_linkedin:li||null}).then(function(res){
+      var r=(res&&res.data)||{};
+      if(r.ok){ GCP=GCP||{}; GCP.role=role; GCP.track=track; GCP.product_type=prod; GCP.years_experience=years; if(indv) GCP.industries=[indv]; if(li) GCP.linkedin_url=li; GC.audience=track; gcSave(GC); if(typeof refreshRecord==='function') refreshRecord(); if(typeof toast==='function') toast('Profile saved'); close();
+        if(pendingCommit){ var pc=pendingCommit; pendingCommit=null; doCommit(pc.d,pc.key,pc.conf,pc.pred); }
+      } else { if(err) err.textContent='Could not save. Try again.'; if(btn){ btn.disabled=false; btn.textContent='Save profile'; } }
+    }).catch(function(){ if(err) err.textContent='Could not save. Try again.'; if(btn){ btn.disabled=false; btn.textContent='Save profile'; } });
+  };
+}
+window.gcEditProfile=openGcProfile;
 function closeAud(){ audOv.classList.remove('open'); }
 [].slice.call(document.querySelectorAll('.aud-opt')).forEach(function(b){
   b.onclick = function(){ GC.audience = b.getAttribute('data-aud'); gcSave(GC); closeAud(); refreshRecord(); if (pendingCommit){ var p=pendingCommit; pendingCommit=null; doCommit(p.d, p.key, p.conf, p.pred); } };
@@ -2981,7 +3032,7 @@ function boot(){
   SB.auth.getSession().then(function(res){
     var sess = res && res.data && res.data.session; currentUser = sess ? sess.user : null;
     if(!currentUser){ GC = freshGC(); gcSave(GC); }   // signed out elsewhere -> clear this device's cached profile
-    return currentUser ? loadProfile().then(loadMyVotes) : Promise.resolve();
+    return currentUser ? loadProfile().then(loadMyVotes).then(loadGcProfile) : Promise.resolve();
   }).then(function(){
     applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord(); loadSubStats(); loadMyQueue(); openTourAfterSignin();
   }).catch(function(){ applyStreak(); updateAuthUI(); initToday(); renderArchive(); refreshRecord(); });
@@ -2990,7 +3041,7 @@ function boot(){
     currentUser = sess ? sess.user : null;
     var now = currentUser ? currentUser.id : null;
     if(now === was){ updateAuthUI(); return; }
-    if(currentUser){ loadProfile().then(loadMyVotes).then(function(){ applyStreak(); updateAuthUI(); renderToday(); loadFeed(); renderArchive(); refreshRecord(); loadMyQueue(); openTourAfterSignin(); }); }
+    if(currentUser){ loadProfile().then(loadMyVotes).then(loadGcProfile).then(function(){ applyStreak(); updateAuthUI(); renderToday(); loadFeed(); renderArchive(); refreshRecord(); loadMyQueue(); openTourAfterSignin(); }); }
     else { GC = freshGC(); gcSave(GC); applyStreak(); updateAuthUI(); renderToday(); loadFeed(); renderArchive(); refreshRecord(); loadSubStats(); loadMyQueue(); }
   });
 }
