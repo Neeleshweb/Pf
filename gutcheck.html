@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:C2a-scoring 2026-07-09T03:18:08.884046+00:00 -->
+<!-- build:C2a-bank-categories 2026-07-09T15:51:06.007613+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Gut Check by Neelesh Singh — daily practice for product judgment. Make the call before you see the crowd, compare with PMs worldwide, and build a judgment profile no AI can hand you."/>
@@ -1345,7 +1345,7 @@ var DIM = { u:'🎯 User Focus', e:'📊 Evidence', s:'🤝 Stakeholders', r:'�
    best: the key Neelesh chose (t1) or the wise/known path (t2). null = genuine judgment call, no "right" answer.
 */
 var BANK = [
-  { id:'cl-sync', tier:1, level:'Principal', source:'A real call I made · CoreLogic', tags:'platform · data · stakeholders',
+  { id:'cl-sync', tier:1, level:'Principal', source:'A real call I made · CoreLogic', tags:'platform · data · stakeholders', category:'stakeholder-conflict',
     scenario:'Two products — <strong>MLSTOUCH</strong> (agents) and <strong>OneHome</strong> (consumers) — serve the same people but don’t share data. Favorites saved on one vanish on the other; 1-star reviews are climbing and your VP just forwarded one titled <strong>“Fix this.”</strong> Engineering’s gut says a proper fix is a multi-month rebuild. Sales wants something visible this sprint.',
     q:'Your first move?',
     opts:[
@@ -1358,7 +1358,7 @@ var BANK = [
     real:'I quantified it: a large share of 1-star reviews and tickets traced to data-sync failures. That evidence justified building a <strong>Centralized Service Layer</strong> (a true 0→1 backbone). Result: <strong>complaints fell 40%, the rating climbed 4.6 → 4.8, and retention rose 15%</strong>. Fix the system, not the symptom — and never enter a VP’s office without a number.',
     lesson:'Turn a political fight into an evidence problem.' },
 
-  { id:'ig-pivot', tier:2, level:'Associate', source:'Public product moment · Instagram', tags:'focus · 0→1 · courage',
+  { id:'ig-pivot', tier:2, level:'Associate', source:'Public product moment · Instagram', tags:'focus · 0→1 · courage', category:'strategy',
     scenario:'Your check-in app, <strong>Burbn</strong>, has loyal-but-tiny usage. Digging into the data, almost no one uses the check-ins, plans, or points — but the <strong>photo-sharing with filters</strong> is quietly on fire. The app is cluttered with everything you lovingly built.',
     q:'What do you do?',
     opts:[
@@ -1371,7 +1371,7 @@ var BANK = [
     real:'The team stripped Burbn down to photos, filters, and sharing, and relaunched it as <strong>Instagram</strong>. It hit a million users in months and was acquired by Facebook within ~2 years. The lesson PMs cite to this day: <strong>find the one thing users love, and have the courage to cut the rest.</strong>',
     lesson:'Subtraction is a product decision.' },
 
-  { id:'fiix-hierarchy', tier:1, level:'Senior', source:'A real call I made · FIIX', tags:'scope · timeline · capacity',
+  { id:'fiix-hierarchy', tier:1, level:'Senior', source:'A real call I made · FIIX', tags:'scope · timeline · capacity', category:'resourcing-capacity',
     scenario:'You’re shipping a new org-hierarchy model — <strong>Root Org Units, Sites, and Divisions</strong> — committed for end of Q2. You planned it and asked Team Leads to decompose the epics over the break. You return to find <strong>none of the decomposition done</strong>, and the team’s estimate now says including Divisions pushes you past the quarter.',
     q:'How do you protect the outcome?',
     opts:[
@@ -1384,7 +1384,7 @@ var BANK = [
     real:'I de-scoped Divisions and shipped the foundation on time. De-scoping freed engineering capacity — so rather than leave it idle, I pulled a customer-requested enhancement from <strong>Voice-of-Customer</strong> data into the gap. We delivered the hierarchy <strong>and</strong> a bonus customer win, in the quarter.',
     lesson:'Scope reduction works best when paired with deliberate reinvestment.' },
 
-  { id:'cmms-failcodes', tier:2, level:'Senior', source:'Industry dilemma · CMMS / maintenance', tags:'data quality · adoption · friction',
+  { id:'cmms-failcodes', tier:2, level:'Senior', source:'Industry dilemma · CMMS / maintenance', tags:'data quality · adoption · friction', category:'data-analytics',
     scenario:'In your maintenance platform, <strong>failure codes</strong> (problem → cause → action) make reliability analytics possible — but only if technicians actually fill them in. Today they’re optional and usage is spotty, so the analytics are unreliable. A stakeholder proposes making them <strong>mandatory</strong> to close any work order.',
     q:'Your call?',
     opts:[
@@ -1397,7 +1397,7 @@ var BANK = [
     real:null,
     lesson:'“Mandatory” is a tax on your most time-pressured user — spend it only where the data earns it.' },
 
-  { id:'cl-aibet', tier:1, level:'Senior', source:'A real call I made · CoreLogic', tags:'AI · scoping · trust',
+  { id:'cl-aibet', tier:1, level:'Senior', source:'A real call I made · CoreLogic', tags:'AI · scoping · trust', category:'ai-new-tech',
     scenario:'It’s peak AI hype. Leadership asks: <strong>“What’s our AI play?”</strong> Your platform serves 900K agents. Engineering is wary of accuracy, legal is wary of MLS-compliance rules, and you know the gap between an AI feature and an AI gimmick is about to define your roadmap.',
     q:'Where do you start?',
     opts:[
@@ -1410,7 +1410,7 @@ var BANK = [
     real:'The funnel showed the <strong>description field</strong> was the biggest drop-off in listing creation. I anchored AI there — a one-tap draft from photos + metadata, with the <strong>agent in the loop</strong> for compliance. Listing creation got up to <strong>5× faster</strong>, and the platform grew <strong>900K → 1M+ (~+11% in a quarter)</strong>. The AI play that works is attached to a number.',
     lesson:'Attach AI to a measured problem, keep the human in the loop.' },
 
-  { id:'netflix-qwikster', tier:2, level:'Senior', source:'Public product moment · Netflix', tags:'pricing · migration · timing',
+  { id:'netflix-qwikster', tier:2, level:'Senior', source:'Public product moment · Netflix', tags:'pricing · migration · timing', category:'pricing-packaging',
     scenario:'You run a beloved DVD-by-mail business, but you’re certain streaming is the future. The two businesses have different economics and you want to move fast. A plan emerges: <strong>split them into two separate brands and sites</strong>, with separate accounts and a price increase, to let streaming run free.',
     q:'Do you split them?',
     opts:[
@@ -1423,7 +1423,7 @@ var BANK = [
     real:'Netflix announced the split (“<strong>Qwikster</strong>”) alongside a price hike. The backlash was severe — hundreds of thousands of cancellations and a sharp stock drop — and Netflix <strong>reversed the split within weeks</strong>. The strategy survived; the rollout didn’t. Lesson: <strong>right bet, wrong migration, real cost.</strong>',
     lesson:'A correct strategy can still fail on a careless migration.' },
 
-  { id:'fiix-estimate', tier:1, level:'Principal', source:'A real call I made · FIIX', tags:'estimation · scope · evidence',
+  { id:'fiix-estimate', tier:1, level:'Principal', source:'A real call I made · FIIX', tags:'estimation · scope · evidence', category:'execution-delivery',
     scenario:'A strategically important <strong>Global Site Selector</strong> (filter the whole product to chosen sites) comes back from estimation as <strong>too big for the quarter</strong>. Engineering proposes cutting scope to fit. The reduced version would deliver limited customer value.',
     q:'Your move?',
     opts:[
@@ -1436,7 +1436,7 @@ var BANK = [
     real:'The forecast was based on ~10 historical sprints, including old periods that no longer reflected the team’s current throughput. Recent velocity was substantially higher. I challenged the assumption and asked the team to re-forecast on <strong>recent</strong> velocity — the work became achievable in-quarter <strong>with full scope</strong>. Challenge assumptions before you challenge scope.',
     lesson:'Challenge the assumptions before you challenge the scope.' },
 
-  { id:'enterprise-bespoke', tier:2, level:'Senior', source:'Industry dilemma · B2B SaaS', tags:'roadmap · revenue · focus',
+  { id:'enterprise-bespoke', tier:2, level:'Senior', source:'Industry dilemma · B2B SaaS', tags:'roadmap · revenue · focus', category:'roadmap',
     scenario:'Your biggest prospect — a <strong>seven-figure enterprise deal</strong> — will sign, but only if you build a fairly bespoke feature that maybe two other customers would ever use. Sales is ecstatic. The work would consume a meaningful chunk of next quarter’s roadmap.',
     q:'What do you do?',
     opts:[
@@ -1449,7 +1449,7 @@ var BANK = [
     real:null,
     lesson:'A big customer’s specific ask often hides a general capability — find it before you say yes or no.' },
 
-  { id:'cgi-advisor', tier:1, level:'Senior', source:'A real call I made · CGI / Fidelity', tags:'automation · workflow · trust',
+  { id:'cgi-advisor', tier:1, level:'Senior', source:'A real call I made · CGI / Fidelity', tags:'automation · workflow · trust', category:'technical-tradeoffs',
     scenario:'Financial advisors build tailored, mixed-asset portfolios <strong>by hand</strong> — slow, inconsistent advisor to advisor, and retention is flat. Leadership says “modernize,” but nobody agrees what that means. Some want full robo-automation.',
     q:'Where do you begin?',
     opts:[
@@ -1462,7 +1462,7 @@ var BANK = [
     real:'Shadowing showed the grind was the <strong>assembly</strong>, not the advice. We built a portal that assembled compliant mixed-asset portfolios in <strong>seconds</strong> from approved models — advisors kept the judgment, the machine took the grind. <strong>Monthly retention rose 8%.</strong> Automate the grind, amplify the human.',
     lesson:'Automate the grind; amplify the judgment.' },
 
-  { id:'slack-pivot', tier:2, level:'Senior', source:'Public product moment · Slack', tags:'pivot · 0→1 · insight',
+  { id:'slack-pivot', tier:2, level:'Senior', source:'Public product moment · Slack', tags:'pivot · 0→1 · insight', category:'discovery',
     scenario:'Your startup spent years building an online game. It isn’t taking off. But to build it, your team created an <strong>internal chat tool</strong> you all now can’t live without — searchable, channel-based, oddly delightful. The game is the company; the chat tool is a byproduct.',
     q:'What’s the bet?',
     opts:[
@@ -1475,7 +1475,7 @@ var BANK = [
     real:'The team bet the company on the byproduct and shipped it as <strong>Slack</strong> — one of the fastest-growing business tools of its era, later acquired for ~$27B. The original game (Glitch) was shut down. Sometimes the product is hiding in <strong>how you work, not what you set out to make.</strong>',
     lesson:'The strongest signal is often your own behavior, not your plan.' },
 
-  { id:'fiix-refine', tier:1, level:'Senior', source:'A real call I made · FIIX', tags:'process · team · operating model',
+  { id:'fiix-refine', tier:1, level:'Senior', source:'A real call I made · FIIX', tags:'process · team · operating model', category:'team-org',
     scenario:'Backlog refinement is a mess. Requirements show up for the first time <strong>during</strong> the meeting, so sessions sprawl into clarification and guesswork — and after a recent project, story decomposition and engineering expectations were badly misaligned.',
     q:'How do you fix the meeting?',
     opts:[
@@ -1488,7 +1488,7 @@ var BANK = [
     real:'I introduced a weekly pre-refinement: Product reviews upcoming work with Team Leads, who review PRDs/UX/OPBs, raise questions early, and own decomposition into epics/stories. Refinement became a <strong>Lead-led discussion</strong>, not a first reading. Estimates got sharper, open questions dropped, and the pipeline stayed healthy.',
     lesson:'Refinement should validate understanding, not create it.' },
 
-  { id:'cmms-offline', tier:2, level:'Senior', source:'Industry dilemma · CMMS / field', tags:'cost · reliability · users',
+  { id:'cmms-offline', tier:2, level:'Senior', source:'Industry dilemma · CMMS / field', tags:'cost · reliability · users', category:'technical-tradeoffs',
     scenario:'Your maintenance technicians work in basements, plant floors, and remote sites — often with <strong>no connectivity</strong>. Today the mobile app assumes a connection, and techs lose work or scribble on paper. Full <strong>offline mode</strong> (local storage, sync, conflict resolution) is a large, risky engineering investment.',
     q:'Do you commit to offline?',
     opts:[
@@ -1501,7 +1501,7 @@ var BANK = [
     real:null,
     lesson:'Offline sync is easy to promise and brutal to build — validate the slice before betting the quarter.' },
 
-  { id:'dropbox-mvp', tier:2, level:'Associate', source:'Public product moment · Dropbox', tags:'validation · MVP · evidence',
+  { id:'dropbox-mvp', tier:2, level:'Associate', source:'Public product moment · Dropbox', tags:'validation · MVP · evidence', category:'build-vs-validate',
     scenario:'You believe in frictionless file sync, but building it is hard and the “magic” is tough to convey. Before pouring months into engineering, you need to know real people actually want this — and investors aren’t convinced the demand is there.',
     q:'How do you validate before building?',
     opts:[
@@ -1514,7 +1514,7 @@ var BANK = [
     real:'Dropbox’s founder made a short <strong>demo video</strong> showing the seamless sync (much of it not yet built). The beta waitlist jumped dramatically overnight — reportedly from ~5,000 to ~75,000 — validating demand before heavy engineering. <strong>The cheapest way to test a magic is to show it, not build it.</strong>',
     lesson:'Test the magic by showing it before you build it.' },
 
-  { id:'fiix-facilities', tier:1, level:'Senior', source:'A real call I made · FIIX', tags:'validation · scope · evidence',
+  { id:'fiix-facilities', tier:1, level:'Senior', source:'A real call I made · FIIX', tags:'validation · scope · evidence', category:'build-vs-validate',
     scenario:'During planning, <strong>UX proposes that Facilities support meter readings</strong> like other asset types. On the surface it’s consistent — lots of asset types already use meter-based maintenance. But you suspect facilities aren’t actually managed that way.',
     q:'Your move?',
     opts:[
@@ -1527,7 +1527,7 @@ var BANK = [
     real:'I validated with usage analysis, domain research, and SME input — facilities <strong>don’t</strong> need meter-driven maintenance the way traditional assets do. I shared the evidence with UX, who agreed. We avoided adding complexity with no customer value and preserved capacity for higher-priority work. The strongest product arguments are evidence-based, not opinion-based.',
     lesson:'Validate that the problem exists before you build the plausible solution.' },
 
-  { id:'cmms-sunset', tier:2, level:'Senior', source:'Industry dilemma · B2B SaaS', tags:'sunset · loyalty · maintenance cost',
+  { id:'cmms-sunset', tier:2, level:'Senior', source:'Industry dilemma · B2B SaaS', tags:'sunset · loyalty · maintenance cost', category:'sunset-deprecation',
     scenario:'A legacy feature is used by only <strong>~5% of customers</strong> — but they <em>love</em> it and a couple are vocal, large accounts. It’s expensive to maintain, blocks a platform upgrade, and slows every release. Killing it frees the team; keeping it placates a loud minority.',
     q:'What do you do?',
     opts:[
@@ -1540,7 +1540,7 @@ var BANK = [
     real:null,
     lesson:'The question is rarely whether to sunset, but how humanely you do it.' },
 
-  { id:'twitter-280', tier:2, level:'Senior', source:'Public product moment · Twitter', tags:'identity · data · change',
+  { id:'twitter-280', tier:2, level:'Senior', source:'Public product moment · Twitter', tags:'identity · data · change', category:'vision-positioning',
     scenario:'Your product’s defining constraint is a <strong>140-character limit</strong> — beloved, iconic, and the source of its culture. But data shows people hit the limit and abandon tweets, and cramming causes awkward abbreviations. There’s pressure to <strong>double it to 280</strong>. Purists will revolt.',
     q:'Do you change the sacred constraint?',
     opts:[
@@ -1553,7 +1553,7 @@ var BANK = [
     real:'Twitter rolled <strong>280 characters</strong> to a test group first, found most tweets still stayed short (the fear of endless walls of text didn’t materialize), and then expanded it broadly. The feared culture collapse never came. <strong>When changing something sacred, let a cohort’s behavior — not the loudest voices — make the call.</strong>',
     lesson:'When touching something sacred, let a cohort’s behavior decide.' },
 
-  { id:'cmms-alerts', tier:2, level:'Associate', source:'Industry dilemma · notifications', tags:'engagement · trust · attention',
+  { id:'cmms-alerts', tier:2, level:'Associate', source:'Industry dilemma · notifications', tags:'engagement · trust · attention', category:'metrics-measurement',
     scenario:'Engagement is soft. A stakeholder wants to add <strong>more push notifications and email alerts</strong> — overdue work orders, asset warnings, weekly digests — to pull users back in. Early tests show more alerts <em>do</em> bump short-term logins.',
     q:'Do you turn up the volume?',
     opts:[
@@ -1566,7 +1566,7 @@ var BANK = [
     real:null,
     lesson:'A login bump from more alerts can quietly bankrupt the user’s trust — attention is the budget.' },
 
-  { id:'airbnb-scale', tier:2, level:'Associate', source:'Public product moment · Airbnb', tags:'early-stage · users · do-things-that-don’t-scale',
+  { id:'airbnb-scale', tier:2, level:'Associate', source:'Public product moment · Airbnb', tags:'early-stage · users · do-things-that-don’t-scale', category:'discovery',
     scenario:'Your early marketplace is stalling. Listings look unappealing — hosts upload dark, blurry phone photos and nobody books them. A teammate says “we’re a tech company, the fix has to <strong>scale</strong> — let’s build a photo-tips tool and auto-enhancement.” Growth is flat <em>now</em>.',
     q:'What do you do this week?',
     opts:[
