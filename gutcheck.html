@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:C1-editprofile-fix 2026-07-09T02:52:34.314886Z -->
+<!-- build:C1d-submitter-level 2026-07-09T03:01:14.751016+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Gut Check by Neelesh Singh — daily practice for product judgment. Make the call before you see the crowd, compare with PMs worldwide, and build a judgment profile no AI can hand you."/>
@@ -2533,7 +2533,8 @@ function loadMyQueue(){
       if(okEl){ okEl.style.display='block'; okEl.textContent='\u2713 It\u2019s live \u2014 PMs can vote on it now'+((r&&r.remaining!=null)?(' \u00B7 '+r.remaining+' more today'):'')+'.'; }
       nextB.textContent='Live \u2713';
       subStats.total=(subStats.total||0)+1; subStats.week=(subStats.week||0)+1; applySubStatus(); loadSubStats();
-      if((S.domain||S.difficulty) && SB && currentUser){ try{ SB.rpc('gc_set_last_submission_meta',{p_domain:S.domain||null,p_difficulty:S.difficulty||null}).then(function(){ if(typeof loadFeed==='function') loadFeed(); }).catch(function(){}); }catch(e){} }
+      var __sublvl=(GCP&&GCP.role)?gcRoleLabel(GCP.role):null;
+      if((S.domain||S.difficulty||__sublvl) && SB && currentUser){ try{ SB.rpc('gc_set_last_submission_meta',{p_domain:S.domain||null,p_difficulty:S.difficulty||null,p_level:__sublvl}).then(function(){ if(typeof loadFeed==='function') loadFeed(); }).catch(function(){}); }catch(e){} }
       if(typeof loadMyQueue==='function') loadMyQueue(); if(typeof loadFeed==='function') loadFeed();
       setTimeout(function(){ close(); nextB.disabled=false; nextB.textContent='Post it live \u2192'; }, 1900);
     }).catch(function(){ say('Couldn\u2019t post right now \u2014 please try again.'); nextB.disabled=false; nextB.textContent='Post it live \u2192'; });
