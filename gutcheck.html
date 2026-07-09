@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- build:C1-editprofile-fix 2026-07-09T02:52:34.314886Z -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Gut Check by Neelesh Singh — daily practice for product judgment. Make the call before you see the crowd, compare with PMs worldwide, and build a judgment profile no AI can hand you."/>
@@ -441,6 +442,7 @@
     .gcp-save{background:var(--accent);color:var(--btn-ink,#fff);border:none;border-radius:9px;padding:.6rem 1.2rem;font-weight:600;cursor:pointer}
     .gcp-later{background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:9px;padding:.6rem 1.1rem;cursor:pointer}
     .gcp-err{font-size:.8rem;color:var(--red)}
+    .gcp-namephoto{background:none;border:none;color:var(--accent);font-size:.82rem;cursor:pointer;margin-top:.9rem;padding:0;text-decoration:underline}
     .aud-modal { background: var(--card); border: 1px solid var(--border2); border-radius: 18px; padding: 2rem 1.8rem; max-width: 460px; width: 100%; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
     .aud-modal h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 1px; margin-bottom: .5rem; }
     .aud-modal p { font-size: .86rem; color: var(--muted); margin-bottom: 1.4rem; line-height: 1.6; }
@@ -1955,12 +1957,13 @@ function openGcProfile(isPrompt){
     +'<label class="gcp-l">Years of PM experience</label><input id="gp-years" type="number" min="0" max="50" inputmode="numeric" value="'+escHtml(d.years_experience||'')+'" placeholder="e.g. 7"/>'
     +'<label class="gcp-l">Industry <span class="gcp-opt">optional</span></label><input id="gp-ind" type="text" maxlength="40" value="'+escHtml(ind)+'" placeholder="e.g. Fintech"/>'
     +'<label class="gcp-l">LinkedIn URL <span class="gcp-opt">optional</span></label><input id="gp-li" type="url" maxlength="200" value="'+escHtml(d.linkedin_url||'')+'" placeholder="https://linkedin.com/in/\u2026"/>'
-    +'<div class="gcp-act"><button type="button" class="gcp-save" id="gp-save">Save profile</button><button type="button" class="gcp-later" id="gp-later">'+(isPrompt?'Not now':'Cancel')+'</button><span class="gcp-err" id="gp-err"></span></div>'
+    +'<div class="gcp-act"><button type="button" class="gcp-save" id="gp-save">Save profile</button><button type="button" class="gcp-later" id="gp-later">'+(isPrompt?'Not now':'Cancel')+'</button><span class="gcp-err" id="gp-err"></span></div>'+(isPrompt?'':'<button type="button" class="gcp-namephoto" id="gp-namephoto">Edit display name &amp; photo \u2192</button>')
     +'</div>';
   document.body.appendChild(ov); requestAnimationFrame(function(){ ov.classList.add('open'); });
   function close(){ ov.classList.remove('open'); setTimeout(function(){ if(ov.parentNode) ov.parentNode.removeChild(ov); }, 200); }
   ov.addEventListener('click', function(e){ if(e.target===ov){ close(); if(isPrompt) pendingCommit=null; } });
   document.getElementById('gp-later').onclick=function(){ close(); if(isPrompt) pendingCommit=null; };
+  var __np=document.getElementById('gp-namephoto'); if(__np) __np.onclick=function(){ close(); if(typeof openEditProfile==='function') openEditProfile(); };
   document.getElementById('gp-save').onclick=function(){
     var err=document.getElementById('gp-err');
     var role=((document.getElementById('gp-role')||{}).value||''), track=((document.getElementById('gp-track')||{}).value||'working'), prod=((document.getElementById('gp-prod')||{}).value||''), years=((document.getElementById('gp-years')||{}).value||'').trim(), indv=((document.getElementById('gp-ind')||{}).value||'').trim(), li=((document.getElementById('gp-li')||{}).value||'').trim();
@@ -2956,9 +2959,9 @@ function closeMobileMenuIfOpen(){ var menu=document.getElementById('mobile-menu'
 function wireAccountMenu(){
   var btn=document.getElementById('acct-btn'), menu=document.getElementById('acct-menu');
   if(btn&&menu) btn.onclick=function(e){ e.stopPropagation(); menu.classList.toggle('open'); };
-  var ed=document.getElementById('acct-edit'); if(ed) ed.onclick=function(){ if(menu)menu.classList.remove('open'); openEditProfile(); };
+  var ed=document.getElementById('acct-edit'); if(ed) ed.onclick=function(){ if(menu)menu.classList.remove('open'); openGcProfile(false); };
   var so=document.getElementById('acct-signout'); if(so) so.onclick=function(){ if(menu)menu.classList.remove('open'); signOutUser(); };
-  var med=document.getElementById('macct-edit'); if(med) med.onclick=function(){ closeMobileMenuIfOpen(); openEditProfile(); };
+  var med=document.getElementById('macct-edit'); if(med) med.onclick=function(){ closeMobileMenuIfOpen(); openGcProfile(false); };
   var mso=document.getElementById('macct-signout'); if(mso) mso.onclick=function(){ closeMobileMenuIfOpen(); signOutUser(); };
   var mnsi=document.getElementById('mnav-signin'); if(mnsi) mnsi.onclick=function(){ closeMobileMenuIfOpen(); openSignIn(); };
 }
