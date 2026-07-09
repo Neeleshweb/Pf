@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:C2a-bank-categories 2026-07-09T15:51:06.007613+00:00 -->
+<!-- build:C2b-judgment-card 2026-07-09T20:10:08.750519+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Gut Check by Neelesh Singh — daily practice for product judgment. Make the call before you see the crowd, compare with PMs worldwide, and build a judgment profile no AI can hand you."/>
@@ -251,6 +251,16 @@
     .rv-profup-h { font-size: .72rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; color: var(--muted2); }
     .rv-profup-b { font-size: .92rem; color: var(--text2); }
     .rv-profup-b b { color: var(--white); }
+    .jp-card { background: linear-gradient(135deg, var(--accent-dim), var(--accent2-dim)); border: 1px solid var(--border2); border-radius: 14px; padding: 1.2rem 1.3rem; margin-bottom: 1.2rem; }
+    .jp-card.jp-empty { background: var(--surface); }
+    .jp-level { font-size: 1.15rem; font-weight: 800; color: var(--white); line-height: 1.25; }
+    .jp-sub { font-size: .76rem; color: var(--text2); margin-top: .25rem; }
+    .jp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: .9rem; }
+    .jp-tile { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .7rem .8rem; display: flex; flex-direction: column; gap: .15rem; }
+    .jp-tile.full { grid-column: 1 / -1; }
+    .jp-tile b { font-size: 1rem; color: var(--white); font-weight: 700; }
+    .jp-tile small { font-size: .66rem; letter-spacing: .4px; text-transform: uppercase; color: var(--muted2); font-weight: 600; }
+    .jp-note { font-size: .72rem; color: var(--muted); margin-top: .85rem; font-style: italic; }
     .call-q { font-size: 1.15rem; font-weight: 600; color: var(--white); margin-bottom: 1rem; line-height: 1.4; }
     .call-opt { display: block; width: 100%; text-align: left; background: var(--card2); border: 1px solid var(--border2); border-radius: 12px; padding: .95rem 1.1rem; margin-bottom: .7rem; color: var(--text2); font-size: .88rem; line-height: 1.55; transition: border-color .2s, transform .15s, background .2s; }
     .call-opt:hover { border-color: var(--accent); transform: translateX(3px); color: var(--white); }
@@ -1718,6 +1728,23 @@ function syncJudgment(entries, roomSP){
   var rows=[]; for(var c in sc.cats){ var cs=sc.cats[c]; rows.push({ user_id:currentUser.id, category:c, reps:cs.reps, alignment_score:cs.signal, calibration_score:catCalib(cs), confidence_trend:null, updated_at:new Date().toISOString() }); }
   if(rows.length){ try{ SB.from('gc_category_score').upsert(rows, {onConflict:'user_id,category'}).then(function(){},function(){}); }catch(e){} }
 }
+function judgmentCardHTML(entries, roomSP){
+  var sc=computeCategoryScores(entries, roomSP); var p=computeJudgmentProfile(sc);
+  if(!p.reps){ return '<div class="jp-card jp-empty"><div class="jp-level">Your Judgment Profile</div><div class="jp-sub">Answer dilemmas that have a verdict (curated, or community once the room settles) and your level, calibration and strongest category appear here.</div></div>'; }
+  var catL=function(slug){ var m=slug&&CAT_META[slug]; return m?(m.i+' '+m.l):'\u2014'; };
+  var bf=(p.bestFit&&p.bestFit.length)?p.bestFit.map(escHtml).join(', '):'\u2014';
+  return '<div class="jp-card">'
+    +'<div class="jp-head"><div class="jp-level">'+escHtml(p.level)+'</div><div class="jp-sub">Your Judgment Profile \u00b7 '+p.reps+' scored call'+(p.reps===1?'':'s')+' \u00b7 '+(p.calibration!=null?p.calibration+'% calibration':'building calibration')+'</div></div>'
+    +'<div class="jp-grid">'
+    +'<div class="jp-tile"><b>'+(p.calibration!=null?p.calibration+'%':'\u2014')+'</b><small>Calibration</small></div>'
+    +'<div class="jp-tile"><b>'+p.reps+'</b><small>Calls scored</small></div>'
+    +'<div class="jp-tile"><b>'+catL(p.strongest)+'</b><small>Strongest category</small></div>'
+    +'<div class="jp-tile"><b>'+catL(p.needsPractice)+'</b><small>Needs practice</small></div>'
+    +'<div class="jp-tile full"><b>'+bf+'</b><small>Best-fit domains</small></div>'
+    +'</div>'
+    +'<div class="jp-note">Levels reflect consistent decisions over time \u2014 not a guarantee of correctness.</div>'
+    +'</div>';
+}
 function fingerprintHTML(entries, roomSP){
   entries=entries||[]; roomSP=roomSP||{}; var order=Object.keys(DIM); var MIN=3;
   /* dims derived from the actual resolved calls when available (DB-sourced), else the cumulative profile value */
@@ -1796,7 +1823,7 @@ function renderJournal(){
     var ids=Object.keys(GC.calls||{});
     if(!ids.length){ mountEl.innerHTML='<div class="jr-empty">Make your first call and it\u2019ll appear here \u2014 your private record of how you decide.</div>'; return; }
     var le=ids.map(function(id){ var r=jrResolve(id,null); return { d:r.d, bank:r.bank, choice:GC.calls[id], reason:null, created_at:null }; });
-    mountEl.innerHTML=unlockGateHTML()+'<div class="pf-fp'+((GC.decisions||0)<3?' pf-locked':'')+'">'+fingerprintHTML(le)+'</div>'+'<div class="jr-list">'+le.map(jrEntryHTML).join('')+'</div><div class="jr-note">Showing calls saved on this device. Sign in on the live site to sync your full journal with reasoning and dates.</div>';
+    mountEl.innerHTML=unlockGateHTML()+'<div class="pf-fp'+((GC.decisions||0)<3?' pf-locked':'')+'">'+judgmentCardHTML(le, {})+fingerprintHTML(le)+'</div>'+'<div class="jr-list">'+le.map(jrEntryHTML).join('')+'</div><div class="jr-note">Showing calls saved on this device. Sign in on the live site to sync your full journal with reasoning and dates.</div>';
     return;
   }
   if(!currentUser){
@@ -1820,7 +1847,7 @@ function renderJournal(){
       return spP.then(function(spres){
         if(token!==renderJournal._t) return;
         var roomSP={}; if(spres && spres.data){ spres.data.forEach(function(r){ roomSP[r.dilemma_id]={sp:r.sp_opt,total:(+r.total_votes||0)}; }); }
-        mountEl.innerHTML=unlockGateHTML()+'<div class="pf-fp'+((GC.decisions||0)<3?' pf-locked':'')+'">'+fingerprintHTML(ents, roomSP)+'</div>'+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
+        mountEl.innerHTML=unlockGateHTML()+'<div class="pf-fp'+((GC.decisions||0)<3?' pf-locked':'')+'">'+judgmentCardHTML(ents, roomSP)+fingerprintHTML(ents, roomSP)+'</div>'+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
         syncJudgment(ents, roomSP);
         var rEl=document.getElementById('rec-room');
         if(rEl){ var MIN=3,tot=0,mat=0; ents.forEach(function(e){ if(e.d && e.d.tier===3){ var rr=roomSP[e.d.id]; if(rr && rr.total>=MIN){ tot++; if(e.choice && e.choice===rr.sp) mat++; } } });
