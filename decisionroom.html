@@ -2530,7 +2530,7 @@ boot();
     if(reset){ libCursor=null; libDone=false; }
     var catEl=document.getElementById('lib-cat'); var cat=catEl?catEl.value:null;
     var stEl=document.getElementById('lib-status'); var lst=stEl?stEl.value:'closed';
-    SB.rpc('dr_feed',{p_limit:12,p_before:libCursor,p_category:cat,p_status:lst}).then(function(res){
+    SB.rpc('dr_feed',{p_limit:12,p_before:libCursor,p_category:cat,p_status:lst,p_urgency:null,p_product:null,p_experience:null}).then(function(res){
       libLoading=false; var list=document.getElementById('lib-list'); if(!list) return;
       var rows=(res&&res.data)||[];
       if(reset) list.innerHTML='';
