@@ -705,7 +705,7 @@
 .feed-back:hover{border-color:var(--accent)}
 .feed-h{font-family:var(--font-display);font-size:1.35rem;letter-spacing:.5px;margin:.4rem 0 .9rem;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
 .feed-h .feed-sub{font-family:inherit;font-size:.8rem;letter-spacing:0;color:var(--muted);font-weight:400}
-.feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.9rem}
+.feed-grid{display:grid;grid-template-columns:1fr;gap:.9rem}
 .feed-card{text-align:left;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;cursor:pointer;transition:border-color .15s,transform .15s;display:flex;flex-direction:column;gap:.55rem;font:inherit;color:inherit}
 .feed-card:hover{border-color:var(--accent);transform:translateY(-2px)}
 .feed-card-top{display:flex;justify-content:space-between;align-items:center;gap:.5rem}
@@ -1211,7 +1211,7 @@
 .fbar{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;margin:.3rem 0 1.1rem}
 .fbar select{background:var(--card2);border:1px solid var(--border2);color:var(--white);border-radius:8px;padding:.5rem .7rem;font:inherit;font-size:.85rem}
 .fbar .btn-primary{margin-left:auto}
-.feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(338px,1fr));gap:1rem}
+.feed-grid{display:grid;grid-template-columns:1fr;gap:1rem;max-width:760px;margin-left:auto;margin-right:auto}
 .feed-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.25rem 1.35rem;cursor:pointer;display:flex;flex-direction:column;gap:.6rem;transition:border-color .15s,transform .15s;box-shadow:var(--card-shadow)}
 .feed-card:hover{border-color:var(--accent);transform:translateY(-2px)}
 .fc-top{display:flex;gap:.4rem;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
@@ -1243,7 +1243,7 @@
 .feed-empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:2rem;border:1px dashed var(--border2);border-radius:14px}
 #feed-more{margin:1rem auto 0;display:block}
 .myc-h{font-family:var(--font-display);font-size:1.4rem;letter-spacing:.5px;margin:1.8rem 0 .8rem;color:var(--white)}
-.fc-exp{ margin:-6px 0 16px; }
+.fc-exp{ grid-column:1 / -1; margin:-6px 0 16px; }
     .fc-exp > #case-detail{ background:var(--surface); border:1px solid var(--border2); border-top:none; border-radius:0 0 14px 14px; padding:1.3rem 1.4rem; box-shadow:0 10px 26px rgba(0,0,0,.14); }
     .feed-card.expanded{ border-bottom-left-radius:0 !important; border-bottom-right-radius:0 !important; }
     #case-overlay{ display:none !important; }
@@ -1494,7 +1494,7 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .cd-res-h{display:block;font-size:.66rem;font-weight:800;letter-spacing:.5px;color:var(--accent2);margin-top:.7rem}
 .cd-res-h:first-child{margin-top:0}
 /* ---- Phase 2f: card redesign + labeled capsules + share ---- */
-.feed-grid{grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.2rem}
+.feed-grid{grid-template-columns:1fr;gap:1.2rem}
 .feed-card{padding:1.4rem 1.5rem;gap:.7rem}
 .fc-attrs{display:flex;flex-wrap:wrap;gap:.55rem .9rem;align-items:flex-end}
 .fc-cap{display:inline-flex;flex-direction:column;gap:.24rem}
