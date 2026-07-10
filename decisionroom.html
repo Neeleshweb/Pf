@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:D1-reviewer-badge 2026-07-10T15:34:57.028100+00:00 -->
+<!-- build:D2-ranking-pillcolors 2026-07-10T20:32:42.503742+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="DecisionRoom by Neelesh Singh — bring a real product decision into a room of credible PMs and get structured feedback from people who've handled the same situation. Anonymous in public; credible underneath."/>
@@ -1314,7 +1314,10 @@
 .jp-level.t3{background:rgba(255,193,7,.16);border-color:rgba(255,193,7,.45)}
 .jp-level.t4{background:rgba(171,71,188,.16);border-color:rgba(171,71,188,.45)}
 .jp-level.t5{background:rgba(38,166,154,.18);border-color:rgba(38,166,154,.5)}
-.jp-cat{border-color:rgba(126,87,194,.42)}
+.jp-calib{background:rgba(66,165,245,.14);border-color:rgba(66,165,245,.42)}
+.jp-calls{background:rgba(120,144,156,.16);border-color:rgba(120,144,156,.42)}
+.jp-cat{background:rgba(126,87,194,.15);border-color:rgba(126,87,194,.42)}
+.jp-dom{background:rgba(38,166,154,.15);border-color:rgba(38,166,154,.44)}
 .pf-alias-row{display:flex;gap:.5rem;margin-bottom:.2rem}
 .pf-alias-row input{flex:1}
 .pf-alias-btn{background:var(--surface);border:1px solid var(--border2);color:var(--white);border-radius:8px;padding:.4rem .9rem;cursor:pointer;font-size:.85rem;white-space:nowrap}
@@ -2781,6 +2784,14 @@ boot();
   function respWantsPct(d, r){ var ws=d.help_types||[]; if(!ws.length) return 0; var map={}; (r.want_answers||[]).forEach(function(x){ map[x.want]=x.answer; }); return gateEntries(ws.map(function(w){return {want:w, answer:map[w]||''};}), ws.length, 'answer').pct; }
   function respFaPct(d, r){ var fas=d.free_asks||[]; if(!fas.length) return null; var map={}; (r.free_ask_answers||[]).forEach(function(x){ map[x.q]=x.answer; }); return gateEntries(fas.map(function(q){return {want:q, answer:map[q]||''};}), fas.length, 'answer').pct; }
   function respCombinedPct(d, r){ var ws=d.help_types||[], fas=d.free_asks||[]; var tot=ws.length+fas.length; if(!tot) return 0; var wm={}; (r.want_answers||[]).forEach(function(x){ wm[x.want]=x.answer; }); var fm={}; (r.free_ask_answers||[]).forEach(function(x){ fm[x.q]=x.answer; }); var wsat=gateEntries(ws.map(function(w){return {want:w, answer:wm[w]||''};}), ws.length, 'answer').sat; var fsat=gateEntries(fas.map(function(q){return {want:q, answer:fm[q]||''};}), fas.length, 'answer').sat; return Math.round((wsat+fsat)/tot*100); }
+  function respScore(d, r){
+    var acted = r.acted_on ? 2 : 0;
+    var helpful = Number(r.helpful_count)||0;
+    var covBonus = respCombinedPct(d, r) >= 70 ? 1 : 0;
+    var reports = Number(r.report_count)||0;
+    var jm = ({'Early signal':0,'Consistent pattern emerging':0.4,'Strong category signal':0.8,'Senior-PM-like pattern emerging':1.1,'High-calibration reviewer':1.5})[r.jp_level]||0;
+    return acted + helpful + covBonus + jm - reports*2;
+  }
   function respChecklist(d, r){
     var ws=d.help_types||[]; var map={}; (r.want_answers||[]).forEach(function(x){ map[x.want]=x.answer; });
     function meaningful(a){ a=(a||'').trim(); return a.length>3 && !/^n\/?a\.?$/i.test(a); }
@@ -2802,8 +2813,8 @@ boot();
     var tcls={'Early signal':'t1','Consistent pattern emerging':'t2','Strong category signal':'t3','Senior-PM-like pattern emerging':'t4','High-calibration reviewer':'t5'}[r.jp_level]||'t2';
     return '<div class="rsp-jp">'
       +'<span class="jp-pill jp-level '+tcls+'"><span class="jp-ic">'+tier+'</span>'+escHtml(r.jp_level)+'</span>'
-      +(r.jp_calib!=null?'<span class="jp-pill"><span class="jp-lab">Calibration</span>'+r.jp_calib+'%</span>':'')
-      +'<span class="jp-pill"><span class="jp-lab">Calls</span>'+r.jp_calls+'</span>'
+      +(r.jp_calib!=null?'<span class="jp-pill jp-calib"><span class="jp-lab">Calibration</span>'+r.jp_calib+'%</span>':'')
+      +'<span class="jp-pill jp-calls"><span class="jp-lab">Calls</span>'+r.jp_calls+'</span>'
       +(cat?'<span class="jp-pill jp-cat"><span class="jp-lab">Strong in</span>'+escHtml(cat)+'</span>':'')
       +(dom?'<span class="jp-pill jp-dom"><span class="jp-lab">Best domain</span>'+escHtml(dom)+'</span>':'')
       +'</div>';
@@ -2812,6 +2823,7 @@ boot();
     if(!rs.length){ listEl.innerHTML='<p class="cd-resp-empty">'+(d.is_mine?'No responses yet \u2014 share your case to get the first one.':(d.status==='live'?'No responses yet. Be the first to weigh in.':'No responses were posted.'))+'</p>'; return; }
     var maxHelp=0; rs.forEach(function(x){ if((Number(x.helpful_count)||0)>maxHelp) maxHelp=Number(x.helpful_count)||0; });
     var CONF={low:'Low confidence',med:'Medium confidence',high:'High confidence'};
+    rs=(rs||[]).slice().sort(function(a,b){ var sc=respScore(d,b)-respScore(d,a); return sc!==0?sc:((new Date(a.created_at))-(new Date(b.created_at))); });
     listEl.innerHTML=rs.map(function(r){
       var flagged=(Number(r.report_count)||0)>=5;
       var wpct=respCombinedPct(d, r); var hpct=maxHelp>0?((Number(r.helpful_count)||0)/maxHelp*100):0;
