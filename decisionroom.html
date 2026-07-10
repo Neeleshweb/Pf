@@ -1243,7 +1243,11 @@
 .feed-empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:2rem;border:1px dashed var(--border2);border-radius:14px}
 #feed-more{margin:1rem auto 0;display:block}
 .myc-h{font-family:var(--font-display);font-size:1.4rem;letter-spacing:.5px;margin:1.8rem 0 .8rem;color:var(--white)}
-.dr-ov{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(3px);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:3vh 1rem;overflow-y:auto}
+.fc-exp{ margin:-6px 0 16px; }
+    .fc-exp > #case-detail{ background:var(--surface); border:1px solid var(--border2); border-top:none; border-radius:0 0 14px 14px; padding:1.3rem 1.4rem; box-shadow:0 10px 26px rgba(0,0,0,.14); }
+    .feed-card.expanded{ border-bottom-left-radius:0 !important; border-bottom-right-radius:0 !important; }
+    #case-overlay{ display:none !important; }
+    .dr-ov{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(3px);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:3vh 1rem;overflow-y:auto}
 .dr-ov.open{display:flex}
 .dr-modal{background:var(--surface);border:1px solid var(--border2);border-radius:18px;max-width:640px;width:100%;padding:1.6rem;position:relative;margin:auto}
 .dr-modal .modal-t{font-family:var(--font-display);font-size:1.7rem;letter-spacing:.5px;margin-bottom:.2rem}
@@ -2485,7 +2489,7 @@ boot();
       + '<div class="fc-foot">'+ctxHtml(r)+'<span class="fc-foot-r">'+urgent+(r.is_mine?shareBtnHtml(r.id):'')+(Number(r.high_signal)>0?'<span class="fc-hs">\u2b50 '+r.high_signal+' high-signal</span>':'')+'<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Needs responses':(rc+(rc===1?' response':' responses')))+'</span></span></div>'
       + '</div>';
   }
-  function loadFeed(reset){
+  function loadFeed(reset){ detachExp();
     if(!SB||feedLoading) return; feedLoading=true;
     if(reset){ feedCursor=null; feedDone=false; }
     function fv(id,dflt){ var e=document.getElementById(id); return e?e.value:dflt; }
@@ -2521,7 +2525,7 @@ boot();
       + '<div class="fc-foot">'+ctxHtml(r)+'<span class="fc-foot-r">'+(r.is_mine?shareBtnHtml(r.id):'')+reopen+met+'</span></div>'
       + '</div>';
   }
-  function loadLibrary(reset){
+  function loadLibrary(reset){ detachExp();
     if(!SB||libLoading) return; libLoading=true;
     if(reset){ libCursor=null; libDone=false; }
     var catEl=document.getElementById('lib-cat'); var cat=catEl?catEl.value:null;
@@ -2554,7 +2558,7 @@ boot();
       + '<div class="fc-foot"><span class="fc-ctx mine">Your case</span><span class="fc-foot-r">'+shareBtnHtml(r.id)+reopen+foot+'</span></div>'
       + '</div>';
   }
-  function renderMyCases(){
+  function renderMyCases(){ detachExp();
     var w=document.getElementById('mycases-wrap'), list=document.getElementById('mycases-list'); if(!w||!list) return;
     var rows=myCasesData||[];
     if(!rows.length){ w.style.display='none'; return; }
@@ -2574,10 +2578,16 @@ boot();
     if(!SB||!currentUser){ w.style.display='none'; return; }
     SB.rpc('dr_my_cases').then(function(res){ myCasesData=(res&&res.data)||[]; renderMyCases(); }).catch(function(){});
   }
+  var expandedId=null;
+  function detachExp(){ var m=document.getElementById('case-detail'), home=document.getElementById('case-overlay'); if(m&&home) home.appendChild(m); var ex; while((ex=document.querySelector('.fc-exp'))){ if(ex.parentNode) ex.parentNode.removeChild(ex); } var pe=document.querySelector('.feed-card.expanded'); if(pe) pe.classList.remove('expanded'); }
+  function collapseCard(){ detachExp(); expandedId=null; }
+  function reattachDetail(scope){ if(!expandedId) return; var card=(scope||document).querySelector('.feed-card[data-id="'+String(expandedId).replace(/["\\]/g,'')+'"]'); if(!card || card.classList.contains('expanded')) return; var exp=document.createElement('div'); exp.className='fc-exp'; card.parentNode.insertBefore(exp, card.nextSibling); var m=document.getElementById('case-detail'); if(m) exp.appendChild(m); card.classList.add('expanded'); }
+  function toggleCard(card, id){ if(expandedId===id){ collapseCard(); return; } detachExp(); expandedId=id; var exp=document.createElement('div'); exp.className='fc-exp'; card.parentNode.insertBefore(exp, card.nextSibling); var m=document.getElementById('case-detail'); if(m) exp.appendChild(m); card.classList.add('expanded'); openCase(id); try{ card.scrollIntoView({behavior:'smooth',block:'nearest'}); }catch(e){} }
   function wireCards(scope){
-    [].slice.call(scope.querySelectorAll('.feed-card')).forEach(function(c){ if(c._w) return; c._w=1; c.onclick=function(){ openCase(c.getAttribute('data-id')); }; });
+    [].slice.call(scope.querySelectorAll('.feed-card')).forEach(function(c){ if(c._w) return; c._w=1; c.onclick=function(){ toggleCard(c, c.getAttribute('data-id')); }; });
     [].slice.call(scope.querySelectorAll('.fc-share')).forEach(function(b){ if(b._w) return; b._w=1; b.onclick=function(e){ e.stopPropagation(); openShare(b.getAttribute('data-share')); }; });
     [].slice.call(scope.querySelectorAll('.fc-reopen')).forEach(function(b){ if(b._w) return; b._w=1; b.onclick=function(e){ e.stopPropagation(); reopenCase(b.getAttribute('data-reopen')); }; });
+    reattachDetail(scope);
   }
 
   /* ---- detail (read-only in 1a) ---- */
@@ -2585,7 +2595,7 @@ boot();
   function closeCase(){
     if(curRespCaseId && SB && currentUser){ var _b=((document.getElementById('rf-body')||{}).value||'').trim(); if(_b.length>10){ SB.rpc('dr_draft_save',{p_id:respDraftId,p_kind:'response',p_case_id:curRespCaseId,p_title:('Re: '+(curRespCaseTitle||'a case')),p_data:gatherResponseDraft()}).then(function(r){ var o=(r&&r.data)||{}; if(o.ok){ respDraftId=o.id; if(typeof toast==='function') toast('Response saved to drafts'); loadDrafts(); } }, function(){}); } }
     curRespCaseId=null;
-    if(cov){ cov.classList.remove('open'); document.body.style.overflow=''; }
+    collapseCard(); document.body.style.overflow='';
   }
   if(cov) cov.addEventListener('click', function(e){ if(e.target===cov) closeCase(); });
   function row(label, val){ return val?('<div class="cd-row"><div class="cd-label">'+label+'</div><div class="cd-val">'+val+'</div></div>'):''; }
@@ -2627,7 +2637,7 @@ boot();
         var csb=document.getElementById('cd-share-btn'); if(csb) csb.onclick=function(){ openShare(d.id); };
         var ncb=document.getElementById('cd-nc-btn'); if(ncb && !d.i_flagged) ncb.onclick=function(){ ncb.disabled=true; SB.rpc('dr_request_context',{p_case_id:d.id}).then(function(r){ if(r&&r.data&&r.data.ok){ if(typeof toast==='function') toast('Flagged \u2014 the asker will be nudged for more context'); ncb.textContent='\u2713 Flagged'; } else { ncb.disabled=false; } }).catch(function(){ ncb.disabled=false; }); };
       }
-      cov.classList.add('open'); document.body.style.overflow='hidden';
+      cov.classList.add('open');
     }).catch(function(){});
   }
 
@@ -2851,7 +2861,7 @@ boot();
     drConfirm({title:'Reopen this case?', body:'This puts it back in the open feed so PMs can respond again. Your outcome notes will be cleared (the responses stay). Only available because fewer than 70% of your asks were met.', confirm:'Reopen', cancel:'Cancel', onConfirm:function(){
       if(!SB) return;
       SB.rpc('dr_reopen_case',{p_case_id:id}).then(function(res){ var r=(res&&res.data)||{};
-        if(r.ok){ if(typeof toast==='function') toast('Case reopened \u2014 back in the open feed'); loadMyCases(); loadFeed(true); if(typeof loadLibrary==='function') loadLibrary(true); if(cov&&cov.classList.contains('open')) openCase(id); }
+        if(r.ok){ if(typeof toast==='function') toast('Case reopened \u2014 back in the open feed'); loadMyCases(); loadFeed(true); if(typeof loadLibrary==='function') loadLibrary(true); if(expandedId===id) openCase(id); }
         else { if(typeof toast==='function') toast(r.reason==='resolved'?'Fully-resolved cases can\u2019t be reopened':'Couldn\u2019t reopen this case'); }
       }).catch(function(){});
     }});
