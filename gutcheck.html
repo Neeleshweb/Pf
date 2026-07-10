@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:C2b-community-fix 2026-07-09T20:34:57.868961+00:00 -->
+<!-- build:gc-scoring-fixes 2026-07-10T17:20:36.094885+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Gut Check by Neelesh Singh — daily practice for product judgment. Make the call before you see the crowd, compare with PMs worldwide, and build a judgment profile no AI can hand you."/>
@@ -1338,7 +1338,7 @@ function injectRoomVerdict(d, box, isLive){
     rows.forEach(function(r){ total+=(+r.votes||0); totalPred+=(+r.predicted||0); });
     if(total<3){ box.innerHTML='<div class="rv-break">Only '+total+' call'+(total===1?'':'s')+' so far — the room’s verdict needs a few more to mean something'+(isLive?'.':' (this one closed early).')+'</div>'; return; }
     var sp=null; rows.forEach(function(r){ if(r.is_sp) sp=r; }); if(!sp) sp=rows[0];
-    (function(){ var pb=document.getElementById('rv-profup-box'); if(!pb) return; var cm=d.category&&CAT_META[d.category]; if(!cm) return; var mine=GC.calls&&GC.calls[d.id]; if(!mine||!sp||!sp.opt) return; var conf=(GC.conf&&GC.conf[d.id])||2; var delta=[0,3,5,7][conf]||5; var matched=(mine===sp.opt); pb.className='rv-profup '+(matched?'up':'down'); pb.innerHTML='<span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(matched?('You matched the room \u2014 <b>+'+delta+'%</b> to your <b>'+escHtml(cm.l)+'</b> signal.'):('A different read from the room \u2014 <b>\u2212'+delta+'%</b> to your <b>'+escHtml(cm.l)+'</b> signal.'))+'</span>'; })();
+    (function(){ var pb=document.getElementById('rv-profup-box'); if(!pb || pb.getAttribute('data-did')!==d.id) return; var cm=d.category&&CAT_META[d.category]; if(!cm) return; var realSp=null; rows.forEach(function(rr){ if(rr.is_sp) realSp=rr; }); if(!realSp||!realSp.opt) return; var mine=GC.calls&&GC.calls[d.id]; if(!mine) return; var conf=(GC.conf&&GC.conf[d.id])||2; var delta=[0,3,5,7][conf]||5; var matched=(mine===realSp.opt); pb.className='rv-profup '+(matched?'up':'down'); pb.innerHTML='<span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(matched?('You matched the room \u2014 <b>+'+delta+'%</b> to your <b>'+escHtml(cm.l)+'</b> signal.'):('A different read from the room \u2014 <b>\u2212'+delta+'%</b> to your <b>'+escHtml(cm.l)+'</b> signal.'))+'</span>'; })();
     var hasPred=totalPred>0;
     var optTitle=function(k){ var o=(d.opts||[]).filter(function(x){return x.k===k;})[0]; return o?o.t:''; };
     var _esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c];}); };
@@ -1724,11 +1724,15 @@ function judgmentLevel(reps, calib){
 }
 function catCalib(cs){ var r1=cs.n1?cs.m1/cs.n1:null, r3=cs.n3?cs.m3/cs.n3:null; return (r1!=null&&r3!=null)?Math.max(0,Math.min(100,Math.round(50+(r3-r1)*50))):null; }
 function computeJudgmentProfile(sc){
-  var cats=sc.cats||{}, doms=sc.doms||{}; var totalReps=0,n1=0,m1=0,n3=0,m3=0,best=null,worst=null;
-  for(var c in cats){ var cs=cats[c]; totalReps+=cs.reps; n1+=cs.n1;m1+=cs.m1;n3+=cs.n3;m3+=cs.m3; if(cs.reps>=3){ if(!best||cs.signal>cats[best].signal) best=c; if(!worst||cs.signal<cats[worst].signal) worst=c; } }
+  var cats=sc.cats||{}, doms=sc.doms||{}; var totalReps=0,n1=0,m1=0,n3=0,m3=0; var qual=[];
+  for(var c in cats){ var cs=cats[c]; totalReps+=cs.reps; n1+=cs.n1;m1+=cs.m1;n3+=cs.n3;m3+=cs.m3; if(cs.reps>=3) qual.push({c:c, signal:cs.signal, reps:cs.reps}); }
+  qual.sort(function(a,b){ return (b.signal-a.signal) || (b.reps-a.reps) || (a.c<b.c?-1:1); });
+  var best = qual.length ? qual[0].c : null;
+  var worst = qual.length>=2 ? qual[qual.length-1].c : null;   /* only when >=2 distinct qualifying categories, and always != strongest */
   var r1=n1?m1/n1:null, r3=n3?m3/n3:null; var calib=(r1!=null&&r3!=null)?Math.max(0,Math.min(100,Math.round(50+(r3-r1)*50))):50;
-  var domArr=[]; for(var dm in doms){ var dd=doms[dm]; if(dd.reps>=2) domArr.push({dm:dm, rate:dd.matched/dd.reps}); } domArr.sort(function(a,b){return b.rate-a.rate;});
-  return {reps:totalReps, calibration:calib, level:judgmentLevel(totalReps,calib), strongest:best, needsPractice:worst, bestFit:domArr.slice(0,3).map(function(x){return x.dm;}), cats:cats};
+  var domArr=[]; for(var dm in doms){ var dd=doms[dm]; if(dd.reps>=2) domArr.push({dm:dm, rate:dd.matched/dd.reps, matched:dd.matched, reps:dd.reps}); }
+  domArr.sort(function(a,b){ return (b.rate-a.rate) || (b.matched-a.matched) || (b.reps-a.reps) || (a.dm<b.dm?-1:1); });   /* single best domain by match RATE, tie-broken by matches then volume */
+  return {reps:totalReps, calibration:calib, level:judgmentLevel(totalReps,calib), strongest:best, needsPractice:worst, bestFit:(domArr.length?[domArr[0].dm]:[]), cats:cats};
 }
 function syncJudgment(entries, roomSP){
   var sc=computeCategoryScores(entries, roomSP); var prof=computeJudgmentProfile(sc); GC.judgment=prof;
@@ -1984,8 +1988,8 @@ function reveal(d, instant){
   if (fx){ var chips=''; for (var k in fx){ var v=fx[k]; chips += '<span class="rv-dim '+(v>0?'up':(v<0?'down':''))+'">'+DIM[k]+' '+(v>0?'+':'')+v+'</span>'; } if(chips) h += '<div class="rv-dims" style="margin-top:1rem">'+chips+'</div>'; }
   var __cm = d.category && CAT_META[d.category];
   if(__cm){ var __conf=(GC.conf&&GC.conf[d.id])||2; var __delta=[0,3,5,7][__conf]||5; var __v=d.best||null; if(!__v && d.tier===3 && typeof roomSP!=='undefined' && roomSP){ var __rs=roomSP[d.id]; if(__rs&&__rs.total>=3&&__rs.sp) __v=__rs.sp; } var __mt=(__v!=null)?(youKey===__v):null;
-    if(__mt!==null){ h += '<div id="rv-profup-box" class="rv-profup '+(__mt?'up':'down')+'"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(__mt?('You matched the verdict \u2014 <b>+'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'):('A different read \u2014 <b>\u2212'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'))+'</span></div>'; }
-    else { h += '<div id="rv-profup-box" class="rv-profup"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">This call feeds your <b>'+escHtml(__cm.l)+'</b> signal.</span></div>'; } }
+    if(__mt!==null){ h += '<div id="rv-profup-box" data-did="'+escHtml(d.id)+'" class="rv-profup '+(__mt?'up':'down')+'"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(__mt?('You matched the verdict \u2014 <b>+'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'):('A different read \u2014 <b>\u2212'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'))+'</span></div>'; }
+    else { h += '<div id="rv-profup-box" data-did="'+escHtml(d.id)+'" class="rv-profup"><span class="rv-profup-h">\uD83D\uDCC8 Recorded</span><span class="rv-profup-b">Locked in. Your <b>'+escHtml(__cm.l)+'</b> signal updates once the room reaches a verdict (3+ votes).</span></div>'; } }
   /* breakdown */
   if (d.tier===3){ h += '<div class="rv-h y">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'; if(d.breakdown) h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
   else { h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-feed-race-fix 2026-07-10T02:51:53.556146+00:00 -->
+<!-- build:D1-reviewer-badge 2026-07-10T15:34:57.028100+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="DecisionRoom by Neelesh Singh — bring a real product decision into a room of credible PMs and get structured feedback from people who've handled the same situation. Anonymous in public; credible underneath."/>
@@ -1304,6 +1304,10 @@
 .cd-resp-list{display:flex;flex-direction:column;gap:.8rem;margin-top:.4rem}
 .rsp-card{background:var(--card2);border:1px solid var(--border2);border-radius:13px;padding:1rem 1.1rem}
 .rsp-top{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin-bottom:.5rem;flex-wrap:wrap}
+.rsp-jp{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;background:var(--accent2-dim);border:1px solid var(--border2);border-radius:9px;padding:.35rem .6rem;margin:.45rem 0 .1rem;font-size:.76rem}
+.rsp-jp-t{font-size:.95rem;line-height:1}
+.rsp-jp b{color:var(--white);font-weight:700}
+.rsp-jp-s{color:var(--text2)}
 .rsp-who{font-size:.74rem;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--accent3)}
 .rsp-hc{font-size:.7rem;font-weight:600;color:var(--green)}
 .rsp-opt{font-size:.8rem;color:var(--muted);margin-bottom:.45rem}
@@ -2778,6 +2782,14 @@ boot();
     ];
     return '<div class="rsp-chk">'+items.map(function(it){ return '<span class="rsp-chk-i '+(it.ok?'y':'n')+'">'+(it.ok?'\u2713':'\u2013')+' '+escHtml(it.t)+'</span>'; }).join('')+'</div>';
   }
+  function drCatLabel(sl){ if(!sl) return ''; var x=String(sl).replace(/-/g,' '); return x.charAt(0).toUpperCase()+x.slice(1); }
+  function jpBadge(r){
+    if(!r || !(Number(r.jp_calls)>=3) || !r.jp_level) return '';
+    var tier={'Early signal':'\uD83C\uDF31','Consistent pattern emerging':'\uD83D\uDCCA','Strong category signal':'\u2B50','Senior-PM-like pattern emerging':'\uD83C\uDFC5','High-calibration reviewer':'\uD83C\uDFC6'}[r.jp_level]||'\uD83D\uDCCA';
+    var cat=r.jp_strongest?drCatLabel(r.jp_strongest):'';
+    return '<div class="rsp-jp" title="GutCheck judgment profile"><span class="rsp-jp-t">'+tier+'</span><b>'+escHtml(r.jp_level)+'</b>'
+      +'<span class="rsp-jp-s">'+(r.jp_calib!=null?(r.jp_calib+'% calibration \u00b7 '):'')+r.jp_calls+' calls'+(cat?(' \u00b7 strong in '+escHtml(cat)):'')+'</span></div>';
+  }
   function renderResponseList(listEl, rs, d){
     if(!rs.length){ listEl.innerHTML='<p class="cd-resp-empty">'+(d.is_mine?'No responses yet \u2014 share your case to get the first one.':(d.status==='live'?'No responses yet. Be the first to weigh in.':'No responses were posted.'))+'</p>'; return; }
     var maxHelp=0; rs.forEach(function(x){ if((Number(x.helpful_count)||0)>maxHelp) maxHelp=Number(x.helpful_count)||0; });
@@ -2803,7 +2815,7 @@ boot();
       var rep = (currentUser && !r.is_mine) ? '<button type="button" class="rsp-report'+(r.i_reported?' done':'')+'" data-r="'+escHtml(r.id)+'"'+(r.i_reported?' disabled':'')+'>'+(r.i_reported?'Reported':'\u2691 Report')+'</button>' : '';
       var qlabel = flagged ? '<span class="rsp-q low">Not actionable</span>' : (wpct>=75 ? '<span class="rsp-q high">High ask coverage</span>' : (wpct>=40 ? '<span class="rsp-q mid">Useful perspective</span>' : '<span class="rsp-q low">Low coverage</span>'));
       var chk = respChecklist(d, r);
-      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r">'+qlabel+'<span class="rsp-stars">'+starsMarkup(stars)+'</span></span></div>'
+      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r">'+qlabel+'<span class="rsp-stars">'+starsMarkup(stars)+'</span></span></div>'+jpBadge(r)
         +'<div class="rsp-badges">'+conf+acted+hc+'</div>'+flag
         +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo+askn+nstep
         +wantsGridHtml(d, r)+freeAskGridHtml(d, r)+chk
