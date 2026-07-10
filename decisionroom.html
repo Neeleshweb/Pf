@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- build:dr-feed-race-fix 2026-07-10T02:51:53.556146+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="DecisionRoom by Neelesh Singh — bring a real product decision into a room of credible PMs and get structured feedback from people who've handled the same situation. Anonymous in public; credible underneath."/>
@@ -2489,25 +2490,31 @@ boot();
       + '<div class="fc-foot">'+ctxHtml(r)+'<span class="fc-foot-r">'+urgent+(r.is_mine?shareBtnHtml(r.id):'')+(Number(r.high_signal)>0?'<span class="fc-hs">\u2b50 '+r.high_signal+' high-signal</span>':'')+'<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Needs responses':(rc+(rc===1?' response':' responses')))+'</span></span></div>'
       + '</div>';
   }
+  var feedReqId=0, feedRetry=0;
   function loadFeed(reset){ detachExp();
     if(!SB||feedLoading) return; feedLoading=true;
     if(reset){ feedCursor=null; feedDone=false; }
+    var myReq=reset?(++feedReqId):feedReqId;
     function fv(id,dflt){ var e=document.getElementById(id); return e?e.value:dflt; }
     var status=fv('feed-status','live');
     var args={p_limit:12,p_before:feedCursor,p_category:fv('feed-cat',null),p_status:status,
               p_urgency:fv('feed-urg',null),p_product:fv('feed-prod',null),p_experience:fv('feed-exp',null)};
     SB.rpc('dr_feed',args).then(function(res){
-      feedLoading=false; var list=document.getElementById('feed-list'); if(!list) return;
+      feedLoading=false;
+      if(reset && myReq!==feedReqId) return;
+      var list=document.getElementById('feed-list');
+      if(!list){ if(reset && feedRetry<6){ feedRetry++; setTimeout(function(){ loadFeed(true); }, 250); } return; }
+      feedRetry=0;
       var rows=(res&&res.data)||[];
-      if(reset) list.innerHTML='';
-      if(reset && !rows.length){ list.innerHTML='<div class="feed-empty">'+(status==='live'?'No open cases match these filters yet.':'No resolved cases match these filters yet.')+'</div>'; }
       var closedish=(status==='closed'||status==='outcome'||status==='resolved'||status==='partial');
-      rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', closedish?libCardHtml(r):feedCardHtml(r)); });
+      var html=''; rows.forEach(function(r){ try{ html+=(closedish?libCardHtml(r):feedCardHtml(r)); }catch(e){ if(window.console) console.warn('[DR] feed card failed:', (r&&r.id), e); } });
+      if(reset){ list.innerHTML = rows.length ? html : '<div class="feed-empty">'+(status==='live'?'No open cases match these filters yet.':'No resolved cases match these filters yet.')+'</div>'; }
+      else { list.insertAdjacentHTML('beforeend', html); }
       if(rows.length) feedCursor=closedish?(rows[rows.length-1].closed_at||rows[rows.length-1].created_at):rows[rows.length-1].created_at;
       if(rows.length<12) feedDone=true;
       var more=document.getElementById('feed-more'); if(more) more.style.display=feedDone?'none':'';
       wireCards(list);
-    }).catch(function(){ feedLoading=false; });
+    }).catch(function(e){ feedLoading=false; if(window.console) console.warn('[DR] feed load failed:', e); });
   }
   var libCursor=null, libDone=false, libLoading=false;
   function libCardHtml(r){
@@ -3183,7 +3190,7 @@ boot();
   }
   window.drOpenProfile=function(isOnboarding){ openProfileForm(isOnboarding); };
 
-  window.drAfterAuth=function(){ loadMyCases(); loadDrafts(); refreshBell(); if(profileIncomplete() && !profilePrompted){ profilePrompted=true; setTimeout(function(){ if(profileIncomplete()) openProfileForm(true); }, 1000); } };
+  window.drAfterAuth=function(){ loadMyCases(); loadDrafts(); if(typeof loadFeed==='function') loadFeed(true); refreshBell(); if(profileIncomplete() && !profilePrompted){ profilePrompted=true; setTimeout(function(){ if(profileIncomplete()) openProfileForm(true); }, 1000); } };
   renderExamples(true);   /* immediate render from seed list */
   populateFilter();
   loadTaxonomy();         /* then refresh from DB (adds any custom values) */
