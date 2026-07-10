@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:D2-score-pill-sort 2026-07-10T21:03:14.000957+00:00 -->
+<!-- build:D2-relevance-boost 2026-07-10T21:39:03.027872+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="DecisionRoom by Neelesh Singh — bring a real product decision into a room of credible PMs and get structured feedback from people who've handled the same situation. Anonymous in public; credible underneath."/>
@@ -2789,16 +2789,20 @@ boot();
   function respFaPct(d, r){ var fas=d.free_asks||[]; if(!fas.length) return null; var map={}; (r.free_ask_answers||[]).forEach(function(x){ map[x.q]=x.answer; }); return gateEntries(fas.map(function(q){return {want:q, answer:map[q]||''};}), fas.length, 'answer').pct; }
   function respCombinedPct(d, r){ var ws=d.help_types||[], fas=d.free_asks||[]; var tot=ws.length+fas.length; if(!tot) return 0; var wm={}; (r.want_answers||[]).forEach(function(x){ wm[x.want]=x.answer; }); var fm={}; (r.free_ask_answers||[]).forEach(function(x){ fm[x.q]=x.answer; }); var wsat=gateEntries(ws.map(function(w){return {want:w, answer:wm[w]||''};}), ws.length, 'answer').sat; var fsat=gateEntries(fas.map(function(q){return {want:q, answer:fm[q]||''};}), fas.length, 'answer').sat; return Math.round((wsat+fsat)/tot*100); }
   var respSortMode='score';
+  function jpNorm(x){ return String(x||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
   function respScore(d, r){
     var s=0;
     s += r.acted_on ? 30 : 0;
     s += Math.min(Number(r.helpful_count)||0, 6) * 5;
     s += Math.round((respCombinedPct(d, r)||0) * 0.25);
-    s += ({'Early signal':0,'Consistent pattern emerging':2,'Strong category signal':4,'Senior-PM-like pattern emerging':6,'High-calibration reviewer':8})[r.jp_level]||0;
+    var cred = ({'Early signal':0,'Consistent pattern emerging':1.5,'Strong category signal':3,'Senior-PM-like pattern emerging':4.5,'High-calibration reviewer':6})[r.jp_level]||0;
+    if(r.jp_strongest && (d.categories||[]).some(function(c){ return jpNorm(c)===jpNorm(r.jp_strongest); })) cred += 2;   /* strong in THIS case's category */
+    if(r.jp_bestfit && d.product_context && jpNorm(r.jp_bestfit)===jpNorm(d.product_context)) cred += 2;                  /* best in THIS case's domain */
+    s += cred;                                                  /* credibility + relevance, max 10 */
     s -= Math.min(Number(r.report_count)||0, 4) * 12;
     return Math.max(0, Math.min(100, Math.round(s)));
   }
-  function scorePill(d, r){ return '<span class="rsp-score" title="Signal score out of 100. Weighted most by the case owner acting on it and readers marking it helpful, then how fully it answers the asks (coverage). A small boost for the reviewer\u2019s GutCheck track record. Reports lower it.">\u26A1 '+respScore(d,r)+'<i>/100</i></span>'; }
+  function scorePill(d, r){ return '<span class="rsp-score" title="Signal score out of 100. Weighted most by the case owner acting on it and readers marking it helpful, then how fully it answers the asks (coverage). A small boost for the reviewer\u2019s GutCheck track record \u2014 a little more when their strongest category or best domain matches this case. Reports lower it.">\u26A1 '+respScore(d,r)+'<i>/100</i></span>'; }
   function sortResponses(rs, d, mode){
     var arr=(rs||[]).slice();
     var byScore=function(a,b){ return (respScore(d,b)-respScore(d,a)) || (new Date(a.created_at)-new Date(b.created_at)); };
