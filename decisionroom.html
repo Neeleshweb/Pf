@@ -1304,10 +1304,21 @@
 .cd-resp-list{display:flex;flex-direction:column;gap:.8rem;margin-top:.4rem}
 .rsp-card{background:var(--card2);border:1px solid var(--border2);border-radius:13px;padding:1rem 1.1rem}
 .rsp-top{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin-bottom:.5rem;flex-wrap:wrap}
-.rsp-jp{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;background:var(--accent2-dim);border:1px solid var(--border2);border-radius:9px;padding:.35rem .6rem;margin:.45rem 0 .1rem;font-size:.76rem}
-.rsp-jp-t{font-size:.95rem;line-height:1}
-.rsp-jp b{color:var(--white);font-weight:700}
-.rsp-jp-s{color:var(--text2)}
+.rsp-jp{display:flex;flex-wrap:wrap;gap:.4rem;margin:.7rem 0 .65rem}
+.jp-pill{display:inline-flex;align-items:center;gap:.35rem;background:var(--surface);border:1px solid var(--border2);border-radius:100px;padding:.28rem .65rem;font-size:.74rem;color:var(--white)}
+.jp-lab{color:var(--muted2);font-size:.62rem;letter-spacing:.4px;text-transform:uppercase;font-weight:700}
+.jp-ic{font-size:.92rem;line-height:1}
+.jp-level{font-weight:700}
+.jp-level.t1{background:rgba(120,144,156,.16);border-color:rgba(120,144,156,.4)}
+.jp-level.t2{background:rgba(66,165,245,.16);border-color:rgba(66,165,245,.42)}
+.jp-level.t3{background:rgba(255,193,7,.16);border-color:rgba(255,193,7,.45)}
+.jp-level.t4{background:rgba(171,71,188,.16);border-color:rgba(171,71,188,.45)}
+.jp-level.t5{background:rgba(38,166,154,.18);border-color:rgba(38,166,154,.5)}
+.jp-cat{border-color:rgba(126,87,194,.42)}
+.pf-alias-row{display:flex;gap:.5rem;margin-bottom:.2rem}
+.pf-alias-row input{flex:1}
+.pf-alias-btn{background:var(--surface);border:1px solid var(--border2);color:var(--white);border-radius:8px;padding:.4rem .9rem;cursor:pointer;font-size:.85rem;white-space:nowrap}
+.pf-alias-note{font-size:.72rem;color:var(--muted);margin:0 0 .6rem}
 .rsp-who{font-size:.74rem;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--accent3)}
 .rsp-hc{font-size:.7rem;font-weight:600;color:var(--green)}
 .rsp-opt{font-size:.8rem;color:var(--muted);margin-bottom:.45rem}
@@ -2787,8 +2798,15 @@ boot();
     if(!r || !(Number(r.jp_calls)>=3) || !r.jp_level) return '';
     var tier={'Early signal':'\uD83C\uDF31','Consistent pattern emerging':'\uD83D\uDCCA','Strong category signal':'\u2B50','Senior-PM-like pattern emerging':'\uD83C\uDFC5','High-calibration reviewer':'\uD83C\uDFC6'}[r.jp_level]||'\uD83D\uDCCA';
     var cat=r.jp_strongest?drCatLabel(r.jp_strongest):'';
-    return '<div class="rsp-jp" title="GutCheck judgment profile"><span class="rsp-jp-t">'+tier+'</span><b>'+escHtml(r.jp_level)+'</b>'
-      +'<span class="rsp-jp-s">'+(r.jp_calib!=null?(r.jp_calib+'% calibration \u00b7 '):'')+r.jp_calls+' calls'+(cat?(' \u00b7 strong in '+escHtml(cat)):'')+'</span></div>';
+    var dom=r.jp_bestfit||'';
+    var tcls={'Early signal':'t1','Consistent pattern emerging':'t2','Strong category signal':'t3','Senior-PM-like pattern emerging':'t4','High-calibration reviewer':'t5'}[r.jp_level]||'t2';
+    return '<div class="rsp-jp">'
+      +'<span class="jp-pill jp-level '+tcls+'"><span class="jp-ic">'+tier+'</span>'+escHtml(r.jp_level)+'</span>'
+      +(r.jp_calib!=null?'<span class="jp-pill"><span class="jp-lab">Calibration</span>'+r.jp_calib+'%</span>':'')
+      +'<span class="jp-pill"><span class="jp-lab">Calls</span>'+r.jp_calls+'</span>'
+      +(cat?'<span class="jp-pill jp-cat"><span class="jp-lab">Strong in</span>'+escHtml(cat)+'</span>':'')
+      +(dom?'<span class="jp-pill jp-dom"><span class="jp-lab">Best domain</span>'+escHtml(dom)+'</span>':'')
+      +'</div>';
   }
   function renderResponseList(listEl, rs, d){
     if(!rs.length){ listEl.innerHTML='<p class="cd-resp-empty">'+(d.is_mine?'No responses yet \u2014 share your case to get the first one.':(d.status==='live'?'No responses yet. Be the first to weigh in.':'No responses were posted.'))+'</p>'; return; }
@@ -3164,6 +3182,7 @@ boot();
     ov.innerHTML='<div class="prof-modal" role="dialog" aria-modal="true">'
       +'<div class="prof-h">'+(isOnboarding?'Complete your PM profile':'Edit your profile')+'</div>'
       +'<p class="prof-sub">Self-attested \u2014 this shows as context on your cases and responses (e.g. \u201CSenior PM \u00b7 B2B SaaS \u00b7 7y\u201D). Your real name and company are never shown.</p>'
+      +'<label class="prof-l">Display name (alias)</label><div class="pf-alias-row"><input id="pf-alias" type="text" maxlength="24" value="'+escHtml(d.alias||'')+'" placeholder="e.g. PM-SageForge"/><button type="button" class="pf-alias-btn" id="pf-alias-btn">Rename</button></div><div class="pf-alias-note" id="pf-alias-note">Shown to others instead of your name \u00b7 3\u201324 chars, must be unique.</div>'
       +'<label class="prof-l">Your role</label><select id="pf-role"><option value="">\u2014 select \u2014</option>'+profOpts(DR_ROLES||ROLES, d.role)+'</select>'
       +'<label class="prof-l">Working as a PM now?</label><select id="pf-track"><option value="working"'+(d.track==='working'?' selected':'')+'>Yes, currently a PM</option><option value="aspiring"'+(d.track==='aspiring'?' selected':'')+'>Aspiring / transitioning</option></select>'
       +'<label class="prof-l">Primary product type</label><select id="pf-prod"><option value="">\u2014 select \u2014</option>'+profOpts(PRODUCT, d.product_type)+'</select>'
@@ -3177,6 +3196,7 @@ boot();
     function close(){ ov.classList.remove('open'); setTimeout(function(){ if(ov.parentNode) ov.parentNode.removeChild(ov); }, 200); }
     ov.addEventListener('click', function(e){ if(e.target===ov){ profilePrompted=true; close(); } });
     document.getElementById('pf-later').onclick=function(){ profilePrompted=true; close(); };
+    (function(){ var abtn=document.getElementById('pf-alias-btn'); if(!abtn) return; abtn.onclick=function(){ var inp=document.getElementById('pf-alias'), note=document.getElementById('pf-alias-note'); var v=(inp&&inp.value||'').trim(); if(!SB) return; abtn.disabled=true; SB.rpc('dr_rename_alias',{p_alias:v}).then(function(res){ abtn.disabled=false; var o=(res&&res.data)||{}; if(o.ok){ if(DRP) DRP.alias=o.alias; if(note){ note.textContent='Saved'+(o.renames_left!=null?(' \u00b7 '+o.renames_left+' rename(s) left'):''); note.style.color='var(--green)'; } } else { if(note){ note.textContent=({taken:'That name is taken \u2014 try another.',limit:'Rename limit reached (max '+(o.cap||3)+').',length:'Use 3\u201324 characters.',chars:'Letters, numbers, spaces, - and _ only.',auth:'Please sign in.'})[o.error]||'Could not rename.'; note.style.color='var(--red)'; } } }, function(){ abtn.disabled=false; if(note){ note.textContent='Could not rename. Try again.'; note.style.color='var(--red)'; } }); }; })();
     document.getElementById('pf-save').onclick=function(){ saveProfileForm(close); };
   }
   function saveProfileForm(done){
