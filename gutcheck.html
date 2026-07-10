@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:C2a-bank-categories 2026-07-09T15:51:06.007613+00:00 -->
+<!-- build:C2b-community-fix 2026-07-09T20:34:57.868961+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Gut Check by Neelesh Singh — daily practice for product judgment. Make the call before you see the crowd, compare with PMs worldwide, and build a judgment profile no AI can hand you."/>
@@ -251,6 +251,24 @@
     .rv-profup-h { font-size: .72rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; color: var(--muted2); }
     .rv-profup-b { font-size: .92rem; color: var(--text2); }
     .rv-profup-b b { color: var(--white); }
+    .jp-card { background: linear-gradient(135deg, var(--accent-dim), var(--accent2-dim)); border: 1px solid var(--border2); border-radius: 14px; padding: 1.2rem 1.3rem; margin-bottom: 1.2rem; }
+    .jp-card.jp-empty { background: var(--surface); }
+    .jp-level { font-size: 1.15rem; font-weight: 800; color: var(--white); line-height: 1.25; }
+    .jp-sub { font-size: .76rem; color: var(--text2); margin-top: .25rem; }
+    .jp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: .9rem; }
+    .jp-tile { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: .7rem .8rem; display: flex; flex-direction: column; gap: .15rem; }
+    .jp-tile.full { grid-column: 1 / -1; }
+    .jp-tile b { font-size: 1rem; color: var(--white); font-weight: 700; }
+    .jp-tile small { font-size: .66rem; letter-spacing: .4px; text-transform: uppercase; color: var(--muted2); font-weight: 600; }
+    .jp-note { font-size: .72rem; color: var(--muted); margin-top: .85rem; font-style: italic; }
+    .jp-how { margin-top: .7rem; }
+    .jp-how > summary { font-size: .76rem; font-weight: 600; color: var(--accent); cursor: pointer; list-style: none; }
+    .jp-how > summary::-webkit-details-marker { display: none; }
+    .jp-how > summary::before { content: '\002B  '; }
+    .jp-how[open] > summary::before { content: '\2212  '; }
+    .jp-how ul { margin: .5rem 0 0; padding-left: 1rem; }
+    .jp-how li { font-size: .74rem; color: var(--text2); line-height: 1.5; margin: .3rem 0; }
+    .jp-how li b { color: var(--white); }
     .call-q { font-size: 1.15rem; font-weight: 600; color: var(--white); margin-bottom: 1rem; line-height: 1.4; }
     .call-opt { display: block; width: 100%; text-align: left; background: var(--card2); border: 1px solid var(--border2); border-radius: 12px; padding: .95rem 1.1rem; margin-bottom: .7rem; color: var(--text2); font-size: .88rem; line-height: 1.55; transition: border-color .2s, transform .15s, background .2s; }
     .call-opt:hover { border-color: var(--accent); transform: translateX(3px); color: var(--white); }
@@ -1320,6 +1338,7 @@ function injectRoomVerdict(d, box, isLive){
     rows.forEach(function(r){ total+=(+r.votes||0); totalPred+=(+r.predicted||0); });
     if(total<3){ box.innerHTML='<div class="rv-break">Only '+total+' call'+(total===1?'':'s')+' so far — the room’s verdict needs a few more to mean something'+(isLive?'.':' (this one closed early).')+'</div>'; return; }
     var sp=null; rows.forEach(function(r){ if(r.is_sp) sp=r; }); if(!sp) sp=rows[0];
+    (function(){ var pb=document.getElementById('rv-profup-box'); if(!pb) return; var cm=d.category&&CAT_META[d.category]; if(!cm) return; var mine=GC.calls&&GC.calls[d.id]; if(!mine||!sp||!sp.opt) return; var conf=(GC.conf&&GC.conf[d.id])||2; var delta=[0,3,5,7][conf]||5; var matched=(mine===sp.opt); pb.className='rv-profup '+(matched?'up':'down'); pb.innerHTML='<span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(matched?('You matched the room \u2014 <b>+'+delta+'%</b> to your <b>'+escHtml(cm.l)+'</b> signal.'):('A different read from the room \u2014 <b>\u2212'+delta+'%</b> to your <b>'+escHtml(cm.l)+'</b> signal.'))+'</span>'; })();
     var hasPred=totalPred>0;
     var optTitle=function(k){ var o=(d.opts||[]).filter(function(x){return x.k===k;})[0]; return o?o.t:''; };
     var _esc=function(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c];}); };
@@ -1718,6 +1737,23 @@ function syncJudgment(entries, roomSP){
   var rows=[]; for(var c in sc.cats){ var cs=sc.cats[c]; rows.push({ user_id:currentUser.id, category:c, reps:cs.reps, alignment_score:cs.signal, calibration_score:catCalib(cs), confidence_trend:null, updated_at:new Date().toISOString() }); }
   if(rows.length){ try{ SB.from('gc_category_score').upsert(rows, {onConflict:'user_id,category'}).then(function(){},function(){}); }catch(e){} }
 }
+function judgmentCardHTML(entries, roomSP){
+  var sc=computeCategoryScores(entries, roomSP); var p=computeJudgmentProfile(sc);
+  if(!p.reps){ return '<div class="jp-card jp-empty"><div class="jp-level">Your Judgment Profile</div><div class="jp-sub">Answer dilemmas that have a verdict (curated, or community once the room settles) and your level, calibration and strongest category appear here.</div></div>'; }
+  var catL=function(slug){ var m=slug&&CAT_META[slug]; return m?(m.i+' '+m.l):'\u2014'; };
+  var bf=(p.bestFit&&p.bestFit.length)?p.bestFit.map(escHtml).join(', '):'\u2014';
+  return '<div class="jp-card">'
+    +'<div class="jp-head"><div class="jp-level">'+escHtml(p.level)+'</div><div class="jp-sub">Your Judgment Profile \u00b7 '+p.reps+' scored call'+(p.reps===1?'':'s')+' \u00b7 '+(p.calibration!=null?p.calibration+'% calibration':'building calibration')+'</div></div>'
+    +'<div class="jp-grid">'
+    +'<div class="jp-tile"><b>'+(p.calibration!=null?p.calibration+'%':'\u2014')+'</b><small>Calibration</small></div>'
+    +'<div class="jp-tile"><b>'+p.reps+'</b><small>Calls scored</small></div>'
+    +'<div class="jp-tile"><b>'+catL(p.strongest)+'</b><small>Strongest category</small></div>'
+    +'<div class="jp-tile"><b>'+catL(p.needsPractice)+'</b><small>Needs practice</small></div>'
+    +'<div class="jp-tile full"><b>'+bf+'</b><small>Best-fit domains</small></div>'
+    +'</div>'
+    +'<div class="jp-note">Levels reflect consistent decisions over time \u2014 not a guarantee of correctness.</div>'+'<details class="jp-how"><summary>What these mean &amp; when they unlock</summary><ul>'+'<li><b>Level</b> \u2014 set by reps + calibration: Early signal (0\u20135) \u00b7 Consistent pattern (6\u201315, 45%+) \u00b7 Strong category signal (16\u201339, 55%+) \u00b7 Senior-PM-like (40\u201354, 70%+) \u00b7 High-calibration (55+, 80%+). You get the highest level you fully qualify for.</li>'+'<li><b>Calibration</b> \u2014 how well your confidence matches your accuracy. Needs both <b>Confident</b> and <b>Hunch</b> calls to move off 50% (with only one confidence level there is nothing to compare).</li>'+'<li><b>Calls scored</b> \u2014 calls on dilemmas that have a verdict: curated always, community once the room has <b>3+</b> votes.</li>'+'<li><b>Strongest / Needs practice</b> \u2014 your highest- and lowest-signal category; each unlocks at <b>3+</b> scored calls in that category.</li>'+'<li><b>Best-fit domains</b> \u2014 the product domains you match most on; a domain appears after <b>2+</b> scored calls in it.</li>'+'</ul></details>'
+    +'</div>';
+}
 function fingerprintHTML(entries, roomSP){
   entries=entries||[]; roomSP=roomSP||{}; var order=Object.keys(DIM); var MIN=3;
   /* dims derived from the actual resolved calls when available (DB-sourced), else the cumulative profile value */
@@ -1796,7 +1832,7 @@ function renderJournal(){
     var ids=Object.keys(GC.calls||{});
     if(!ids.length){ mountEl.innerHTML='<div class="jr-empty">Make your first call and it\u2019ll appear here \u2014 your private record of how you decide.</div>'; return; }
     var le=ids.map(function(id){ var r=jrResolve(id,null); return { d:r.d, bank:r.bank, choice:GC.calls[id], reason:null, created_at:null }; });
-    mountEl.innerHTML=unlockGateHTML()+'<div class="pf-fp'+((GC.decisions||0)<3?' pf-locked':'')+'">'+fingerprintHTML(le)+'</div>'+'<div class="jr-list">'+le.map(jrEntryHTML).join('')+'</div><div class="jr-note">Showing calls saved on this device. Sign in on the live site to sync your full journal with reasoning and dates.</div>';
+    mountEl.innerHTML=unlockGateHTML()+'<div class="pf-fp'+((GC.decisions||0)<3?' pf-locked':'')+'">'+judgmentCardHTML(le, {})+fingerprintHTML(le)+'</div>'+'<div class="jr-list">'+le.map(jrEntryHTML).join('')+'</div><div class="jr-note">Showing calls saved on this device. Sign in on the live site to sync your full journal with reasoning and dates.</div>';
     return;
   }
   if(!currentUser){
@@ -1820,7 +1856,7 @@ function renderJournal(){
       return spP.then(function(spres){
         if(token!==renderJournal._t) return;
         var roomSP={}; if(spres && spres.data){ spres.data.forEach(function(r){ roomSP[r.dilemma_id]={sp:r.sp_opt,total:(+r.total_votes||0)}; }); }
-        mountEl.innerHTML=unlockGateHTML()+'<div class="pf-fp'+((GC.decisions||0)<3?' pf-locked':'')+'">'+fingerprintHTML(ents, roomSP)+'</div>'+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
+        mountEl.innerHTML=unlockGateHTML()+'<div class="pf-fp'+((GC.decisions||0)<3?' pf-locked':'')+'">'+judgmentCardHTML(ents, roomSP)+fingerprintHTML(ents, roomSP)+'</div>'+'<div class="jr-list">'+ents.map(jrEntryHTML).join('')+'</div>';
         syncJudgment(ents, roomSP);
         var rEl=document.getElementById('rec-room');
         if(rEl){ var MIN=3,tot=0,mat=0; ents.forEach(function(e){ if(e.d && e.d.tier===3){ var rr=roomSP[e.d.id]; if(rr && rr.total>=MIN){ tot++; if(e.choice && e.choice===rr.sp) mat++; } } });
@@ -1948,8 +1984,8 @@ function reveal(d, instant){
   if (fx){ var chips=''; for (var k in fx){ var v=fx[k]; chips += '<span class="rv-dim '+(v>0?'up':(v<0?'down':''))+'">'+DIM[k]+' '+(v>0?'+':'')+v+'</span>'; } if(chips) h += '<div class="rv-dims" style="margin-top:1rem">'+chips+'</div>'; }
   var __cm = d.category && CAT_META[d.category];
   if(__cm){ var __conf=(GC.conf&&GC.conf[d.id])||2; var __delta=[0,3,5,7][__conf]||5; var __v=d.best||null; if(!__v && d.tier===3 && typeof roomSP!=='undefined' && roomSP){ var __rs=roomSP[d.id]; if(__rs&&__rs.total>=3&&__rs.sp) __v=__rs.sp; } var __mt=(__v!=null)?(youKey===__v):null;
-    if(__mt!==null){ h += '<div class="rv-profup '+(__mt?'up':'down')+'"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(__mt?('You matched the verdict \u2014 <b>+'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'):('A different read \u2014 <b>\u2212'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'))+'</span></div>'; }
-    else { h += '<div class="rv-profup"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">This call feeds your <b>'+escHtml(__cm.l)+'</b> signal.</span></div>'; } }
+    if(__mt!==null){ h += '<div id="rv-profup-box" class="rv-profup '+(__mt?'up':'down')+'"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(__mt?('You matched the verdict \u2014 <b>+'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'):('A different read \u2014 <b>\u2212'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'))+'</span></div>'; }
+    else { h += '<div id="rv-profup-box" class="rv-profup"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">This call feeds your <b>'+escHtml(__cm.l)+'</b> signal.</span></div>'; } }
   /* breakdown */
   if (d.tier===3){ h += '<div class="rv-h y">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'; if(d.breakdown) h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
   else { h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
