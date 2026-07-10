@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:gc-scoring-fixes 2026-07-10T17:20:36.094885+00:00 -->
+<!-- build:alias-rename 2026-07-10T20:18:11.731931+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Gut Check by Neelesh Singh — daily practice for product judgment. Make the call before you see the crowd, compare with PMs worldwide, and build a judgment profile no AI can hand you."/>
@@ -460,6 +460,10 @@
     .gcp-save{background:var(--accent);color:var(--btn-ink,#fff);border:none;border-radius:9px;padding:.6rem 1.2rem;font-weight:600;cursor:pointer}
     .gcp-later{background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:9px;padding:.6rem 1.1rem;cursor:pointer}
     .gcp-err{font-size:.8rem;color:var(--red)}
+    .gcp-alias-row{display:flex;gap:.5rem;margin-bottom:.2rem}
+    .gcp-alias-row input{flex:1}
+    .gcp-alias-btn{background:var(--card);border:1px solid var(--border2);color:var(--white);border-radius:8px;padding:.4rem .9rem;cursor:pointer;font-size:.85rem;white-space:nowrap}
+    .gcp-alias-note{font-size:.72rem;color:var(--muted);margin:0 0 .6rem}
     .gcp-namephoto{background:none;border:none;color:var(--accent);font-size:.82rem;cursor:pointer;margin-top:.9rem;padding:0;text-decoration:underline}
     .aud-modal { background: var(--card); border: 1px solid var(--border2); border-radius: 18px; padding: 2rem 1.8rem; max-width: 460px; width: 100%; text-align: center; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
     .aud-modal h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 1px; margin-bottom: .5rem; }
@@ -2033,6 +2037,7 @@ function openGcProfile(isPrompt){
   ov.innerHTML='<div class="gcp-modal">'
     +'<div class="gcp-h">'+(isPrompt?'Set up your PM profile':'Edit your profile')+'</div>'
     +'<p class="gcp-sub">'+(isPrompt?'We use this to place your call among the right peers (Breaking-in vs Working PMs) instead of asking every time. ':'')+'Shared across GutCheck and DecisionRoom \u2014 your real name and company are never shown.</p>'
+    +'<label class="gcp-l">Display name (alias)</label><div class="gcp-alias-row"><input id="gp-alias" type="text" maxlength="24" value="'+escHtml(d.alias||'')+'" placeholder="e.g. PM-SageForge"/><button type="button" class="gcp-alias-btn" id="gp-alias-btn">Rename</button></div><div class="gcp-alias-note" id="gp-alias-note">Shown to others instead of your name \u00b7 3\u201324 chars, must be unique.</div>'
     +'<label class="gcp-l">Your role</label><select id="gp-role"><option value="">\u2014 select \u2014</option>'+gcProfOpts(GC_ROLES, d.role)+'</select>'
     +'<label class="gcp-l">Working as a PM now?</label><select id="gp-track"><option value="working"'+(d.track==='working'?' selected':'')+'>Yes, currently a PM</option><option value="aspiring"'+(d.track==='aspiring'?' selected':'')+'>Aspiring / transitioning</option></select>'
     +'<label class="gcp-l">Primary product type</label><select id="gp-prod"><option value="">\u2014 select \u2014</option>'+gcProfOpts(DOMAINS, d.product_type)+'</select>'
@@ -2046,6 +2051,7 @@ function openGcProfile(isPrompt){
   ov.addEventListener('click', function(e){ if(e.target===ov){ close(); if(isPrompt) pendingCommit=null; } });
   document.getElementById('gp-later').onclick=function(){ close(); if(isPrompt) pendingCommit=null; };
   var __np=document.getElementById('gp-namephoto'); if(__np) __np.onclick=function(){ close(); if(typeof openEditProfile==='function') openEditProfile(); };
+  (function(){ var abtn=document.getElementById('gp-alias-btn'); if(abtn) abtn.onclick=function(){ var inp=document.getElementById('gp-alias'), note=document.getElementById('gp-alias-note'); var v=(inp&&inp.value||'').trim(); if(!SB) return; abtn.disabled=true; SB.rpc('dr_rename_alias',{p_alias:v}).then(function(res){ abtn.disabled=false; var o=(res&&res.data)||{}; if(o.ok){ if(GCP) GCP.alias=o.alias; if(note){ note.textContent='Saved'+(o.renames_left!=null?(' \u00b7 '+o.renames_left+' rename(s) left'):''); note.style.color='var(--green)'; } } else { if(note){ note.textContent=({taken:'That name is taken \u2014 try another.',limit:'Rename limit reached (max '+(o.cap||3)+').',length:'Use 3\u201324 characters.',chars:'Letters, numbers, spaces, - and _ only.',auth:'Please sign in.'})[o.error]||'Could not rename.'; note.style.color='var(--red)'; } } }, function(){ abtn.disabled=false; if(note){ note.textContent='Could not rename. Try again.'; note.style.color='var(--red)'; } }); }; })();
   document.getElementById('gp-save').onclick=function(){
     var err=document.getElementById('gp-err');
     var role=((document.getElementById('gp-role')||{}).value||''), track=((document.getElementById('gp-track')||{}).value||'working'), prod=((document.getElementById('gp-prod')||{}).value||''), years=((document.getElementById('gp-years')||{}).value||'').trim(), indv=((document.getElementById('gp-ind')||{}).value||'').trim(), li=((document.getElementById('gp-li')||{}).value||'').trim();
