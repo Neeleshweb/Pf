@@ -239,6 +239,28 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     }
+  .lb-bar{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;margin-bottom:1rem}
+  .lb-win{font-size:.82rem;color:var(--muted,#6b7280);display:flex;align-items:center;gap:.5rem}
+  .lb-win select{background:var(--card,#fff);border:1px solid var(--border,#e5e7eb);color:var(--ink,#111);border-radius:9px;padding:.45rem .7rem;font-size:.86rem}
+  .lb-refresh{background:var(--card,#fff);border:1px solid var(--border,#e5e7eb);color:var(--ink,#111);border-radius:9px;padding:.45rem .9rem;font-size:.86rem;cursor:pointer}
+  .lb-refresh:hover{border-color:var(--accent,#6d5efc)}
+  .lb-list{border:1px solid var(--border,#e5e7eb);border-radius:14px;overflow:hidden;background:var(--card,#fff)}
+  .lb-list.loading{opacity:.55}
+  .lb-row{display:grid;grid-template-columns:44px 1fr 68px 62px 66px 68px;align-items:center;gap:.4rem;padding:.7rem .9rem;border-bottom:1px solid var(--border,#eee);font-size:.88rem}
+  .lb-row:last-child{border-bottom:none}
+  .lb-head{font-size:.68rem;letter-spacing:.5px;text-transform:uppercase;color:var(--muted,#6b7280);font-weight:700;background:var(--tint,#f7f7fb)}
+  .lb-rk{font-weight:800;color:var(--muted,#6b7280);text-align:center}
+  .lb-row.first .lb-rk{color:var(--accent,#6d5efc)}
+  .lb-who{display:flex;align-items:center;gap:.4rem;font-weight:600;color:var(--ink,#111);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lb-tier{font-size:1rem}
+  .lb-crown{font-size:1rem}
+  .lb-you{font-size:.6rem;text-transform:uppercase;letter-spacing:.4px;background:var(--accent,#6d5efc);color:#fff;border-radius:100px;padding:.05rem .4rem;font-weight:700}
+  .lb-sc{font-weight:800;color:var(--accent,#6d5efc);text-align:right}
+  .lb-n{text-align:right;color:var(--muted,#6b7280);font-variant-numeric:tabular-nums}
+  .lb-row.me{background:color-mix(in srgb,var(--accent,#6d5efc) 8%,transparent)}
+  .lb-pin{border-top:2px dashed var(--border,#e5e7eb)}
+  .lb-empty{padding:1.4rem;text-align:center;color:var(--muted,#6b7280);font-size:.9rem}
+  @media(max-width:560px){ .lb-row{grid-template-columns:32px 1fr 54px 48px;font-size:.82rem} .lb-row .lb-n:nth-child(5),.lb-row .lb-n:nth-child(6){display:none} }
   </style>
 </head>
 <body>
@@ -391,6 +413,28 @@
   </div>
 </section>
 
+<section class="section tint" id="lb-sec">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Reputation</span>
+      <div class="sec-title">Top reviewers</div>
+      <p class="sec-sub">Ranked by the value their DecisionRoom answers create \u2014 the case owner acting on it and readers marking it helpful count most, then how fully they answer. Points come from other people\u2019s actions, so the board can\u2019t be gamed.</p>
+    </div>
+    <div class="lb-bar">
+      <label class="lb-win">Window
+        <select id="lb-window">
+          <option value="week">Trending this week</option>
+          <option value="today">Today</option>
+          <option value="yesterday">Yesterday</option>
+          <option value="7d">Last 7 days</option>
+          <option value="all">All-time</option>
+        </select>
+      </label>
+      <button type="button" id="lb-refresh" class="lb-refresh">\u21bb Refresh</button>
+    </div>
+    <div id="lb-list" class="lb-list"><div class="lb-empty">Loading\u2026</div></div>
+  </div>
+</section>
 <footer class="foot">
   <div class="foot-links">
     <a href="/judgment-lab.html">Judgment Lab</a>
@@ -503,6 +547,59 @@ var LAB_CATS = [
 document.getElementById('foot-yr').textContent = new Date().getFullYear();
 </script>
 
+<script>
+(function(){
+  var HOSTS=['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','pm-gut-check.pages.dev'];
+  var PROD=HOSTS.indexOf(location.hostname)!==-1;
+  var URL=PROD?'https://oxxzygbfgmlnvavjmhct.supabase.co':'https://wdfttdakwygkdgfakavc.supabase.co';
+  var REF=PROD?'oxxzygbfgmlnvavjmhct':'wdfttdakwygkdgfakavc';
+  var ANON=PROD?'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkZnR0ZGFrd3lna2RnZmFrYXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNjI2NTYsImV4cCI6MjA5NzczODY1Nn0.1D85vTzCoi7nUYH9YllsdV47AEDhFliT3zsjUfYXJss';
+  var TIER={'Early signal':'\uD83C\uDF31','Consistent pattern emerging':'\uD83D\uDCCA','Strong category signal':'\u2B50','Senior-PM-like pattern emerging':'\uD83C\uDFC5','High-calibration reviewer':'\uD83C\uDFC6'};
+  function esc(t){ return String(t==null?'':t).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function jlUserId(){ try{ var t=JSON.parse(localStorage.getItem('sb-'+REF+'-auth-token')); if(!t) return null; return (t.user&&t.user.id)||(t.currentSession&&t.currentSession.user&&t.currentSession.user.id)||null; }catch(e){ return null; } }
+  function lbRange(w){ var now=new Date(), until=now.toISOString();
+    if(w==='today'){ var d=new Date(now); d.setHours(0,0,0,0); return [d.toISOString(), until]; }
+    if(w==='yesterday'){ var s=new Date(now); s.setDate(s.getDate()-1); s.setHours(0,0,0,0); var u=new Date(now); u.setHours(0,0,0,0); return [s.toISOString(), u.toISOString()]; }
+    if(w==='7d'){ var s7=new Date(now); s7.setDate(s7.getDate()-7); return [s7.toISOString(), until]; }
+    if(w==='week'){ var wd=(now.getDay()+6)%7; var mon=new Date(now); mon.setDate(mon.getDate()-wd); mon.setHours(0,0,0,0); return [mon.toISOString(), until]; }
+    return ['2020-01-01T00:00:00.000Z', until];
+  }
+  function rowHtml(x, w){
+    var crown=(w==='week'&&x.rank===1)?'<span class="lb-crown" title="Reviewer of the Week">\uD83D\uDC51</span>':'';
+    var tier=TIER[x.level]||'';
+    return '<div class="lb-row'+(x.is_me?' me':'')+(x.rank===1?' first':'')+'">'
+      +'<span class="lb-rk">'+x.rank+'</span>'
+      +'<span class="lb-who">'+crown+'<span class="lb-tier">'+tier+'</span>'+esc(x.alias)+(x.is_me?'<span class="lb-you">you</span>':'')+'</span>'
+      +'<span class="lb-sc">'+x.score+'</span>'
+      +'<span class="lb-n">'+x.acted+'</span>'
+      +'<span class="lb-n">'+x.helpful+'</span>'
+      +'<span class="lb-n">'+x.covered+'</span>'
+      +'</div>';
+  }
+  function lbRender(res, w){
+    var el=document.getElementById('lb-list'); if(!el) return;
+    var top=(res&&res.top)||[]; var me=(res&&res.me)||null;
+    if(!top.length){ el.innerHTML='<div class="lb-empty">No scored reviewer activity in this window yet. Answer cases that owners act on and readers find helpful to appear here.</div>'; return; }
+    var head='<div class="lb-row lb-head"><span class="lb-rk">#</span><span class="lb-who">Reviewer</span><span class="lb-sc">Score</span><span class="lb-n">Acted</span><span class="lb-n">Helpful</span><span class="lb-n">Covered</span></div>';
+    var body=top.map(function(x){ return rowHtml(x, w); }).join('');
+    var inTop=top.some(function(x){ return x.is_me; });
+    var pin=(me && !inTop)?('<div class="lb-pin">'+rowHtml({rank:me.rank,alias:me.alias,score:me.score,acted:me.acted,helpful:me.helpful,covered:me.covered,level:me.level,is_me:true}, w)+'</div>'):'';
+    el.innerHTML=head+body+pin;
+  }
+  var lbBusy=false;
+  function lbLoad(){
+    var wEl=document.getElementById('lb-window'); if(!wEl||lbBusy) return; lbBusy=true;
+    var w=wEl.value, rg=lbRange(w), me=jlUserId();
+    var el=document.getElementById('lb-list'); if(el) el.classList.add('loading');
+    fetch(URL+'/rest/v1/rpc/dr_reviewer_leaderboard',{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json'},body:JSON.stringify({p_since:rg[0],p_until:rg[1],p_limit:20,p_me:me})})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(res){ lbBusy=false; if(el) el.classList.remove('loading'); lbRender(res||{}, w); })
+      .catch(function(){ lbBusy=false; if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load the leaderboard. Tap Refresh to retry.</div>'; } });
+  }
+  function initLb(){ var wEl=document.getElementById('lb-window'), rEl=document.getElementById('lb-refresh'); if(!wEl) return; wEl.onchange=lbLoad; if(rEl) rEl.onclick=lbLoad; lbLoad(); }
+  if(document.readyState!=='loading') initLb(); else document.addEventListener('DOMContentLoaded', initLb);
+})();
+</script>
 <script src="/gc-auth.js"></script>
 </body>
 </html>
