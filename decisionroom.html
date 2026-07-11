@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:D2-relevance-boost 2026-07-10T21:39:03.027872+00:00 -->
+<!-- build:D2-pill-tooltips 2026-07-10T22:04:59.735080+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="DecisionRoom by Neelesh Singh — bring a real product decision into a room of credible PMs and get structured feedback from people who've handled the same situation. Anonymous in public; credible underneath."/>
@@ -1308,6 +1308,13 @@
 .rsp-sort-bar select{background:var(--surface);border:1px solid var(--border2);color:var(--white);border-radius:8px;padding:.35rem .6rem;font-size:.82rem}
 .rsp-score{display:inline-flex;align-items:baseline;gap:.15rem;background:rgba(255,193,7,.16);border:1px solid rgba(255,193,7,.42);color:var(--white);border-radius:100px;padding:.15rem .55rem;font-size:.82rem;font-weight:700;cursor:help}
 .rsp-score i{font-size:.62rem;font-weight:600;color:var(--muted2);font-style:normal}
+.tip-i{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;margin-left:.35rem;border-radius:50%;border:1px solid var(--border2);background:transparent;color:var(--muted2);font-size:.6rem;font-weight:800;font-style:italic;line-height:1;padding:0;cursor:pointer;vertical-align:middle;flex:none}
+.tip-i:hover{color:#fff;border-color:var(--accent);background:var(--accent)}
+.rsp-tip{position:absolute;z-index:99999;max-width:300px;background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:1rem 1.15rem;box-shadow:0 16px 44px rgba(0,0,0,.4);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .16s ease,transform .16s ease}
+.rsp-tip.show{opacity:1;transform:none;pointer-events:auto}
+.rsp-tip-h{font-size:.96rem;font-weight:800;color:var(--white);margin-bottom:.45rem}
+.rsp-tip-b{font-size:.82rem;color:var(--text2);line-height:1.55}
+.rsp-tip-x{margin-top:.85rem;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:.42rem 1rem;font-size:.82rem;font-weight:600;cursor:pointer}
 .rsp-jp{display:flex;flex-wrap:wrap;gap:.4rem;margin:.7rem 0 .65rem}
 .jp-pill{display:inline-flex;align-items:center;gap:.35rem;background:var(--surface);border:1px solid var(--border2);border-radius:100px;padding:.28rem .65rem;font-size:.74rem;color:var(--white)}
 .jp-lab{color:var(--muted2);font-size:.62rem;letter-spacing:.4px;text-transform:uppercase;font-weight:700}
@@ -2788,6 +2795,27 @@ boot();
   function respWantsPct(d, r){ var ws=d.help_types||[]; if(!ws.length) return 0; var map={}; (r.want_answers||[]).forEach(function(x){ map[x.want]=x.answer; }); return gateEntries(ws.map(function(w){return {want:w, answer:map[w]||''};}), ws.length, 'answer').pct; }
   function respFaPct(d, r){ var fas=d.free_asks||[]; if(!fas.length) return null; var map={}; (r.free_ask_answers||[]).forEach(function(x){ map[x.q]=x.answer; }); return gateEntries(fas.map(function(q){return {want:q, answer:map[q]||''};}), fas.length, 'answer').pct; }
   function respCombinedPct(d, r){ var ws=d.help_types||[], fas=d.free_asks||[]; var tot=ws.length+fas.length; if(!tot) return 0; var wm={}; (r.want_answers||[]).forEach(function(x){ wm[x.want]=x.answer; }); var fm={}; (r.free_ask_answers||[]).forEach(function(x){ fm[x.q]=x.answer; }); var wsat=gateEntries(ws.map(function(w){return {want:w, answer:wm[w]||''};}), ws.length, 'answer').sat; var fsat=gateEntries(fas.map(function(q){return {want:q, answer:fm[q]||''};}), fas.length, 'answer').sat; return Math.round((wsat+fsat)/tot*100); }
+  function tipI(k){ return '<button type="button" class="tip-i" data-tip="'+k+'" aria-label="What is this?">i</button>'; }
+  var TIPS={
+   coverage:{t:'Ask coverage',b:'How fully this response answers the case\u2019s asks and specific questions. \u201CHigh\u201D means most were addressed with real, substantive replies. It\u2019s one of the biggest parts of the score \u2014 it goes up when more asks get thorough answers, down when they\u2019re skipped or one-liners. To improve: answer each ask and question with a clear, specific reply.'},
+   score:{t:'Signal score \u2014 out of 100',b:'This response\u2019s overall ranking signal. Weighted most by the case owner acting on it and readers marking it helpful, then by how fully it answers the asks. A small boost when the reviewer\u2019s strengths match this case; reports lower it. To improve: give an answer the owner acts on and others find genuinely useful.'},
+   stars:{t:'Quality rating \u2014 out of 5',b:'A quick, glance-level quality score from how well the response covers the asks and how many found it helpful, minus reports. It\u2019s a fast \u201Cis this solid?\u201D read \u2014 the \u26A1 score is the fuller ranking signal (it also credits owner-acted-on and reviewer fit). It rises with better coverage and helpful marks.'},
+   level:{t:'Reviewer judgment level',b:'The reviewer\u2019s GutCheck level \u2014 how consistent their practice-call decisions have been over time. Higher levels mean more reps at good calibration, and give a small boost to this score. It rises as they complete more GutChecks with their confidence matching their accuracy.'},
+   calib:{t:'Calibration',b:'How well the reviewer\u2019s confidence matches their actual accuracy on GutCheck \u2014 high means when they\u2019re confident, they\u2019re usually right. It needs both confident and hunch calls to move off 50%, and feeds their level (a small score boost).'},
+   calls:{t:'Calls scored',b:'How many GutCheck practice dilemmas the reviewer has completed with a verdict \u2014 their sample size. More calls means more evidence behind their level and strengths. It grows each time they lock a call on a dilemma that has a verdict.'},
+   cat:{t:'Strongest category',b:'The category the reviewer scores highest on in GutCheck. If it matches this case\u2019s category, they earn a small relevance boost to the score \u2014 a reviewer strong in this exact topic is more credible here.'},
+   dom:{t:'Best-fit domain',b:'The product domain where the reviewer matches the verdict most on GutCheck. If it matches this case\u2019s product/domain, they earn a small relevance boost \u2014 they\u2019ve shown good judgment in this kind of product.'},
+   conf:{t:'Reviewer confidence',b:'How sure the reviewer said they were when posting (low / medium / high). It\u2019s context for you, not a score factor. High confidence with a strong, well-covered answer is a good sign; high confidence with thin coverage is worth a closer look.'}
+  };
+  function showTip(key, anchorEl){
+    var tip=document.getElementById('rsp-tip');
+    if(!tip){ tip=document.createElement('div'); tip.id='rsp-tip'; tip.className='rsp-tip'; tip.innerHTML='<div class="rsp-tip-h"></div><div class="rsp-tip-b"></div><button type="button" class="rsp-tip-x">Got it</button>'; document.body.appendChild(tip); tip.querySelector('.rsp-tip-x').onclick=function(){ tip.classList.remove('show'); }; }
+    var c=TIPS[key]; if(!c) return;
+    tip.querySelector('.rsp-tip-h').textContent=c.t; tip.querySelector('.rsp-tip-b').textContent=c.b;
+    tip.classList.add('show'); var w=tip.offsetWidth||300, r=anchorEl.getBoundingClientRect();
+    tip.style.top=(r.bottom+window.scrollY+8)+'px'; tip.style.left=Math.max(8, Math.min(r.left+window.scrollX-8, window.innerWidth-w-12))+'px';
+  }
+  document.addEventListener('click', function(e){ var b=(e.target.closest)?e.target.closest('.tip-i'):null; if(b){ e.preventDefault(); e.stopPropagation(); showTip(b.getAttribute('data-tip'), b); return; } var tip=document.getElementById('rsp-tip'); if(tip && tip.classList.contains('show') && !tip.contains(e.target)) tip.classList.remove('show'); });
   var respSortMode='score';
   function jpNorm(x){ return String(x||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
   function respScore(d, r){
@@ -2802,7 +2830,7 @@ boot();
     s -= Math.min(Number(r.report_count)||0, 4) * 12;
     return Math.max(0, Math.min(100, Math.round(s)));
   }
-  function scorePill(d, r){ return '<span class="rsp-score" title="Signal score out of 100. Weighted most by the case owner acting on it and readers marking it helpful, then how fully it answers the asks (coverage). A small boost for the reviewer\u2019s GutCheck track record \u2014 a little more when their strongest category or best domain matches this case. Reports lower it.">\u26A1 '+respScore(d,r)+'<i>/100</i></span>'; }
+  function scorePill(d, r){ return '<span class="rsp-score">\u26A1 '+respScore(d,r)+'<i>/100</i>'+tipI('score')+'</span>'; }
   function sortResponses(rs, d, mode){
     var arr=(rs||[]).slice();
     var byScore=function(a,b){ return (respScore(d,b)-respScore(d,a)) || (new Date(a.created_at)-new Date(b.created_at)); };
@@ -2833,11 +2861,11 @@ boot();
     var dom=r.jp_bestfit||'';
     var tcls={'Early signal':'t1','Consistent pattern emerging':'t2','Strong category signal':'t3','Senior-PM-like pattern emerging':'t4','High-calibration reviewer':'t5'}[r.jp_level]||'t2';
     return '<div class="rsp-jp">'
-      +'<span class="jp-pill jp-level '+tcls+'"><span class="jp-ic">'+tier+'</span>'+escHtml(r.jp_level)+'</span>'
-      +(r.jp_calib!=null?'<span class="jp-pill jp-calib"><span class="jp-lab">Calibration</span>'+r.jp_calib+'%</span>':'')
-      +'<span class="jp-pill jp-calls"><span class="jp-lab">Calls</span>'+r.jp_calls+'</span>'
-      +(cat?'<span class="jp-pill jp-cat"><span class="jp-lab">Strong in</span>'+escHtml(cat)+'</span>':'')
-      +(dom?'<span class="jp-pill jp-dom"><span class="jp-lab">Best domain</span>'+escHtml(dom)+'</span>':'')
+      +'<span class="jp-pill jp-level '+tcls+'"><span class="jp-ic">'+tier+'</span>'+escHtml(r.jp_level)+tipI('level')+'</span>'
+      +(r.jp_calib!=null?'<span class="jp-pill jp-calib"><span class="jp-lab">Calibration</span>'+r.jp_calib+'%'+tipI('calib')+'</span>':'')
+      +'<span class="jp-pill jp-calls"><span class="jp-lab">Calls</span>'+r.jp_calls+tipI('calls')+'</span>'
+      +(cat?'<span class="jp-pill jp-cat"><span class="jp-lab">Strong in</span>'+escHtml(cat)+tipI('cat')+'</span>':'')
+      +(dom?'<span class="jp-pill jp-dom"><span class="jp-lab">Best domain</span>'+escHtml(dom)+tipI('dom')+'</span>':'')
       +'</div>';
   }
   function renderResponseList(listEl, rs, d){
@@ -2857,7 +2885,7 @@ boot();
       var nstep=r.suggested_next_step?'<div class="rsp-wo"><span class="rsp-wo-l">Suggested next step</span>'+nl(r.suggested_next_step)+'</div>':'';
       var hc=(Number(r.helpful_count)||0)>0?'<span class="rsp-hc">'+r.helpful_count+' found helpful</span>':'';
       var acted=r.acted_on?'<span class="rsp-acted">\u2713 Submitter acted on this</span>':'';
-      var conf=r.confidence&&CONF[r.confidence]?'<span class="rsp-conf c-'+escHtml(r.confidence)+'">'+CONF[r.confidence]+'</span>':'';
+      var conf=r.confidence&&CONF[r.confidence]?'<span class="rsp-conf c-'+escHtml(r.confidence)+'">'+CONF[r.confidence]+tipI('conf')+'</span>':'';
       var flag=flagged?'<div class="rsp-flag">\u26A0 '+(Number(r.report_count)||0)+' readers flagged this as biased or low-quality \u2014 its credibility and rating are reduced.</div>':'';
       var act;
       if(r.is_mine){ act='<span class="rsp-yours">Your response</span>'; }
@@ -2865,9 +2893,10 @@ boot();
       else if(currentUser){ act='<button type="button" class="rsp-help'+(r.marked?' on':'')+'" data-r="'+escHtml(r.id)+'">'+(r.marked?'\u2713 Marked helpful':'Mark helpful')+'</button>'; }
       else { act=''; }
       var rep = (currentUser && !r.is_mine) ? '<button type="button" class="rsp-report'+(r.i_reported?' done':'')+'" data-r="'+escHtml(r.id)+'"'+(r.i_reported?' disabled':'')+'>'+(r.i_reported?'Reported':'\u2691 Report')+'</button>' : '';
-      var qlabel = flagged ? '<span class="rsp-q low">Not actionable</span>' : (wpct>=75 ? '<span class="rsp-q high">High ask coverage</span>' : (wpct>=40 ? '<span class="rsp-q mid">Useful perspective</span>' : '<span class="rsp-q low">Low coverage</span>'));
+      var qmeta = flagged ? ['low','Not actionable'] : (wpct>=75 ? ['high','High ask coverage'] : (wpct>=40 ? ['mid','Useful perspective'] : ['low','Low coverage']));
+      var qlabel = '<span class="rsp-q '+qmeta[0]+'">'+qmeta[1]+tipI('coverage')+'</span>';
       var chk = respChecklist(d, r);
-      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r">'+qlabel+scorePill(d,r)+'<span class="rsp-stars">'+starsMarkup(stars)+'</span></span></div>'+jpBadge(r)
+      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r">'+qlabel+scorePill(d,r)+'<span class="rsp-stars">'+starsMarkup(stars)+tipI('stars')+'</span></span></div>'+jpBadge(r)
         +'<div class="rsp-badges">'+conf+acted+hc+'</div>'+flag
         +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo+askn+nstep
         +wantsGridHtml(d, r)+freeAskGridHtml(d, r)+chk
