@@ -317,6 +317,14 @@
     .lb-pod-score,.lb-pod-1 .lb-pod-score{font-size:1.35rem;margin-top:0}
     .lb-pod-base{margin-top:0;margin-left:auto}
   }
+  .lb-av{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;color:#fff;font-weight:800;font-size:.72rem;flex:none;letter-spacing:.4px;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+  .lb-c-top{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+  .lb-pod{max-width:320px}
+  .lb-pod .lb-av{width:54px;height:54px;font-size:1.15rem;margin:.15rem auto .1rem}
+  .lb-pod-1 .lb-av{width:62px;height:62px;font-size:1.3rem}
+  .lb-pod .lb-stats{justify-content:center;margin-top:.75rem}
+  .lb-pod .lb-stat{text-align:left}
+  @media(max-width:560px){ .lb-pod .lb-av{margin:0} .lb-pod .lb-stats{width:100%;margin-top:.55rem} .lb-pod{flex-wrap:wrap} }
   </style>
 </head>
 <body>
@@ -647,15 +655,20 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function drCat(sl){ if(!sl) return '\u2014'; var x=String(sl).replace(/-/g,' '); return x.charAt(0).toUpperCase()+x.slice(1); }
   function fmtN(v){ v=Number(v)||0; return (v%1===0)?String(v):v.toFixed(1); }
   function lbStat(cls,lab,val,key){ return '<span class="lb-stat '+cls+'"><span class="lb-slab">'+lab+tipI(key)+'</span><b class="lb-sval">'+val+'</b></span>'; }
+  function lbAvatar(alias){ var a=String(alias||'PM'); var parts=a.replace(/[^A-Za-z0-9]/g,' ').trim().split(/\s+/); var init=(parts.map(function(w){return w[0]||'';}).join('').slice(0,2)||'P').toUpperCase(); var h=0,i; for(i=0;i<a.length;i++){ h=(h*31+a.charCodeAt(i))>>>0; } return '<span class="lb-av" style="background:hsl('+(h%360)+',52%,52%)">'+esc(init)+'</span>'; }
+  function statsHtml(x){
+    var green=lbStat('g','Owner acted on',x.acted,'acted')+lbStat('g','Marked helpful',x.helpful,'helpful')+lbStat('g','High-coverage',x.covered,'covered')+lbStat('g','GutCheck credibility',fmtN(x.jbonus||0),'jbonus')+lbStat('g','Reports (\u2212)',x.reports,'reports');
+    var ctx=lbStat('c','Calls scored',(x.calls||0),'calls')+lbStat('c','Strongest',drCat(x.strongest),'strongest')+lbStat('c','Best domain',esc(x.best_domain||'\u2014'),'domain')+lbStat('c','DR responses',(x.dr_total||0),'drtotal')+lbStat('c','High-signal',(x.high_signal||0),'highsignal')+lbStat('c','High-confidence',(x.high_conf||0),'highconf');
+    return '<div class="lb-stats">'+green+ctx+'</div>';
+  }
   function cardHtml(x, w){
     var crown=(w==='week'&&x.rank===1)?'<span class="lb-crown" title="Reviewer of the Week">\uD83D\uDC51</span>':'';
     var tier=TIER[x.level]||'';
-    var green=lbStat('g','Owner acted on',x.acted,'acted')+lbStat('g','Marked helpful',x.helpful,'helpful')+lbStat('g','High-coverage',x.covered,'covered')+lbStat('g','GutCheck credibility',fmtN(x.jbonus||0),'jbonus')+lbStat('g','Reports (\u2212)',x.reports,'reports');
-    var ctx=lbStat('c','Calls scored',(x.calls||0),'calls')+lbStat('c','Strongest',drCat(x.strongest),'strongest')+lbStat('c','Best domain',esc(x.best_domain||'\u2014'),'domain')+lbStat('c','DR responses',(x.dr_total||0),'drtotal')+lbStat('c','High-signal',(x.high_signal||0),'highsignal')+lbStat('c','High-confidence',(x.high_conf||0),'highconf');
-    return '<div class="lb-card'+(x.is_me?' me':'')+(x.rank===1?' first':'')+'">'
-      +'<div class="lb-c-top"><span class="lb-rank">'+(x.rank<=3?['\uD83E\uDD47','\uD83E\uDD48','\uD83E\uDD49'][x.rank-1]:('#'+x.rank))+'</span>'+crown+'<span class="lb-tier">'+tier+'</span><span class="lb-alias">'+esc(x.alias)+(x.is_me?'<span class="lb-you">you</span>':'')+'</span>'
+    var rb=(x.rank<=3)?['\uD83E\uDD47','\uD83E\uDD48','\uD83E\uDD49'][x.rank-1]:('#'+x.rank);
+    return '<div class="lb-card'+(x.is_me?' me':'')+'">'
+      +'<div class="lb-c-top"><span class="lb-rank">'+rb+'</span>'+lbAvatar(x.alias)+'<span class="lb-tier">'+tier+'</span>'+crown+'<span class="lb-alias">'+esc(x.alias)+(x.is_me?'<span class="lb-you">you</span>':'')+'</span>'
       +'<span class="lb-score">'+fmtN(x.score)+'<i>pts'+tipI('score')+'</i></span></div>'
-      +'<div class="lb-stats">'+green+ctx+'</div>'
+      +statsHtml(x)
       +'</div>';
   }
   function podiumHtml(top, w){
@@ -665,10 +678,12 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       var tier=TIER[x.level]||''; var crown=(w==='week'&&x.rank===1)?' \uD83D\uDC51':'';
       return '<div class="lb-pod lb-pod-'+x.rank+(x.is_me?' me':'')+'">'
         +'<div class="lb-pod-medal">'+medals[mi]+'</div>'
+        +lbAvatar(x.alias)
         +'<div class="lb-pod-tier">'+tier+'</div>'
         +'<div class="lb-pod-alias">'+esc(x.alias)+(x.is_me?'<span class="lb-you">you</span>':'')+'</div>'
         +'<div class="lb-pod-score">'+fmtN(x.score)+'<span>pts</span></div>'
         +'<div class="lb-pod-base">#'+x.rank+crown+'</div>'
+        +statsHtml(x)
         +'</div>';
     }
     return '<div class="lb-podium">'+pod(top[1],1)+pod(top[0],0)+pod(top[2],2)+'</div>';
@@ -677,11 +692,12 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var el=document.getElementById('lb-list'); if(!el) return;
     var top=(res&&res.top)||[]; var me=(res&&res.me)||null;
     if(!top.length){ el.innerHTML='<div class="lb-empty">No scored reviewer activity in this window yet. Answer cases that owners act on and readers find helpful to appear here.</div>'; return; }
-    var body=top.map(function(x){ return cardHtml(x, w); }).join('');
+    var rest=top.slice(3);
+    var body=rest.map(function(x){ return cardHtml(x, w); }).join('');
     var inTop=top.some(function(x){ return x.is_me; });
     var meRow=me?({rank:me.rank,alias:me.alias,score:me.score,acted:me.acted,helpful:me.helpful,covered:me.covered,reports:me.reports,calls:me.calls,strongest:me.strongest,best_domain:me.best_domain,dr_total:me.dr_total,high_signal:me.high_signal,high_conf:me.high_conf,level:me.level,is_me:true}):null;
     var pin=(meRow && !inTop)?('<div class="lb-pin-label">Your rank</div>'+cardHtml(meRow, w)):'';
-    el.innerHTML=podiumHtml(top, w)+'<div class="lb-standings-h">Full standings</div>'+body+pin;
+    el.innerHTML=podiumHtml(top.slice(0,3), w)+(rest.length?('<div class="lb-standings-h">The rest of the field</div>'+body):'')+pin;
   }
   var lbBusy=false;
   function lbLoad(){
