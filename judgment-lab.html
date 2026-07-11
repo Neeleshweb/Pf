@@ -291,6 +291,32 @@
   .lb-tip-b{font-size:.82rem;color:var(--muted,#4b5563);line-height:1.55}
   .lb-tip-x{margin-top:.85rem;background:var(--accent,#6d5efc);color:#fff;border:none;border-radius:9px;padding:.42rem 1rem;font-size:.82rem;font-weight:600;cursor:pointer}
   @media(max-width:560px){ .lb-score{font-size:1.3rem} .lb-stat{flex:1 1 calc(50% - .45rem)} .lb-sval{max-width:none} }
+  .lb-podium{display:flex;justify-content:center;align-items:flex-end;gap:.7rem;margin-bottom:1.5rem}
+  .lb-pod{flex:1 1 0;max-width:215px;border-radius:16px 16px 0 0;padding:1rem .8rem 1.1rem;text-align:center;border:1px solid var(--border,#e5e7eb);border-bottom:3px solid var(--border,#e5e7eb);background:var(--card,#fff)}
+  .lb-pod-1{order:2;padding-top:1.7rem;background:linear-gradient(180deg,rgba(255,199,0,.2),var(--card,#fff));border-color:rgba(212,160,23,.55);border-bottom-color:#d4a017}
+  .lb-pod-2{order:1;background:linear-gradient(180deg,rgba(160,160,170,.2),var(--card,#fff));border-color:rgba(150,150,160,.55);border-bottom-color:#9aa0a6}
+  .lb-pod-3{order:3;background:linear-gradient(180deg,rgba(205,127,50,.2),var(--card,#fff));border-color:rgba(180,110,45,.55);border-bottom-color:#b46e2d}
+  .lb-pod-medal{font-size:2.1rem;line-height:1}
+  .lb-pod-1 .lb-pod-medal{font-size:2.6rem}
+  .lb-pod-tier{font-size:1.15rem;margin-top:.25rem;line-height:1}
+  .lb-pod-alias{font-weight:800;color:var(--ink,#111);font-size:.95rem;margin-top:.35rem;display:flex;flex-direction:column;align-items:center;gap:.2rem;word-break:break-word;line-height:1.25}
+  .lb-pod-score{font-size:1.75rem;font-weight:900;color:#16a34a;margin-top:.4rem;line-height:1}
+  .lb-pod-1 .lb-pod-score{font-size:2.1rem}
+  .lb-pod-score span{font-size:.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-left:.2rem}
+  .lb-pod-base{margin-top:.55rem;font-weight:800;color:var(--muted,#6b7280);font-size:.8rem;background:var(--tint,#f6f7fb);border-radius:8px;padding:.28rem}
+  .lb-pod.me{outline:2px solid var(--accent,#6d5efc);outline-offset:-2px}
+  .lb-standings-h{font-size:.66rem;text-transform:uppercase;letter-spacing:.6px;color:var(--muted,#6b7280);font-weight:800;margin:.2rem 0 .7rem}
+  @media(max-width:560px){
+    .lb-podium{flex-direction:column;align-items:stretch;gap:.5rem;margin-bottom:1.1rem}
+    .lb-pod{max-width:none;border-radius:12px;border-bottom-width:1px;display:flex;align-items:center;gap:.7rem;text-align:left;padding:.75rem .9rem}
+    .lb-pod-1{order:1;padding-top:.75rem} .lb-pod-2{order:2} .lb-pod-3{order:3}
+    .lb-pod-1{border-left:4px solid #d4a017} .lb-pod-2{border-left:4px solid #9aa0a6} .lb-pod-3{border-left:4px solid #b46e2d}
+    .lb-pod-medal,.lb-pod-1 .lb-pod-medal{font-size:1.7rem}
+    .lb-pod-tier{margin-top:0}
+    .lb-pod-alias{flex-direction:row;margin-top:0;flex:1}
+    .lb-pod-score,.lb-pod-1 .lb-pod-score{font-size:1.35rem;margin-top:0}
+    .lb-pod-base{margin-top:0;margin-left:auto}
+  }
   </style>
 </head>
 <body>
@@ -448,7 +474,7 @@
     <div class="sec-head">
       <span class="sec-eyebrow">Reputation</span>
       <div class="sec-title">Top reviewers</div>
-      <p class="sec-sub">Ranked by the value their DecisionRoom answers create in the selected window. Each card’s <b>Score</b> is the sum of the <b style="color:#16a34a">green</b> stats — owner acted-on counts most, then helpful marks and coverage; reports subtract. <b>Grey</b> stats are lifetime context and don’t change the ranking. Tap any ⓘ on a stat to learn what it means. Points come from other people’s actions, so the board can’t be gamed.</p>
+      <p class="sec-sub">Ranked by the value their DecisionRoom answers create in the selected window. Each card’s <b>Score</b> is the sum of the <b style="color:#16a34a">green</b> stats — owner acted-on counts most, then helpful marks, coverage, and a small GutCheck-credibility bonus; reports subtract. <b>Grey</b> stats are lifetime context and don’t change the ranking. Tap any ⓘ on a stat to learn what it means. Points come from other people’s actions, so the board can’t be gamed.</p>
     </div>
     <div class="lb-bar">
       <label class="lb-win">Window
@@ -596,10 +622,11 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   }
   function tipI(k){ return '<button type="button" class="lb-tip-i" data-tip="'+k+'" aria-label="What is this?">i</button>'; }
   var LBTIPS={
-   score:{t:'Score \u2014 the ranking metric',b:'The reviewer\u2019s total points for the selected window \u2014 the sum of the green stats on the card. It is not on a fixed scale (there is no maximum); it grows with the value they create, and it decides the ranking. Different from a DecisionRoom response\u2019s \u26A1 /100 score, which rates one single answer out of 100 \u2014 this instead adds up a reviewer\u2019s value across all their answers in the window.'},
+   score:{t:'Score \u2014 the ranking metric',b:'The reviewer\u2019s total points for the selected window, and what orders the board. It adds up only the green stats: owner acted-on is worth 2 points each, helpful marks and high-coverage answers 1 each, GutCheck credibility adds a small per-answer bonus, and every report subtracts 2. There is no maximum \u2014 it grows with the value they create. Different from a DecisionRoom response\u2019s \u26A1 /100 score, which rates one single answer out of 100 \u2014 this sums a reviewer\u2019s value across all their answers in the window.'},
    acted:{t:'Owner acted on (this window)',b:'A count of how many of their answers the case owner marked \u201Cacted on\u201D in this window. Worth the most \u2014 each adds 2 points \u2014 because it means real advice was actually used. Green: it raises the Score.'},
    helpful:{t:'Marked helpful (this window)',b:'A count of the helpful marks their answers earned from readers in this window. Each adds 1 point. Green: it raises the Score. Grows when people find their answers genuinely useful.'},
    covered:{t:'High-coverage answers (this window)',b:'A count of how many of their answers thoroughly addressed the case\u2019s asks in this window. Each adds 1 point. Green: it raises the Score. Grows by answering every ask with a real, specific reply.'},
+   jbonus:{t:'GutCheck credibility (this window)',b:'A small bonus each answer earns from the reviewer\u2019s GutCheck level \u2014 the better their judgment on practice calls, the more credit here (0 for Early signal, up to 2 per answer for High-calibration). Green: it raises the Score. It is the one green stat sourced from GutCheck rather than DecisionRoom, and it is capped so it can never outweigh answers people actually act on.'},
    reports:{t:'Reports (this window)',b:'A count of reports their answers received in this window. Each subtracts 2 points. It is in the green group because it changes the Score \u2014 but this one lowers it. Kept at 0 by posting genuine, on-topic answers.'},
    calls:{t:'GutCheck calls scored (lifetime)',b:'A lifetime count of GutCheck practice dilemmas they have completed with a verdict \u2014 the sample size behind their judgment level. Grey: context only, it does NOT change the Score or the ranking.'},
    strongest:{t:'Strongest category (lifetime)',b:'The category they score highest on in GutCheck. Grey: context only, it does not affect the Score. Shows where their judgment is sharpest.'},
@@ -618,17 +645,33 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   }
   document.addEventListener('click', function(e){ var b=(e.target.closest)?e.target.closest('.lb-tip-i'):null; if(b){ e.preventDefault(); e.stopPropagation(); showLbTip(b.getAttribute('data-tip'), b); return; } var tip=document.getElementById('lb-tip'); if(tip && tip.classList.contains('show') && !tip.contains(e.target)) tip.classList.remove('show'); });
   function drCat(sl){ if(!sl) return '\u2014'; var x=String(sl).replace(/-/g,' '); return x.charAt(0).toUpperCase()+x.slice(1); }
+  function fmtN(v){ v=Number(v)||0; return (v%1===0)?String(v):v.toFixed(1); }
   function lbStat(cls,lab,val,key){ return '<span class="lb-stat '+cls+'"><span class="lb-slab">'+lab+tipI(key)+'</span><b class="lb-sval">'+val+'</b></span>'; }
   function cardHtml(x, w){
     var crown=(w==='week'&&x.rank===1)?'<span class="lb-crown" title="Reviewer of the Week">\uD83D\uDC51</span>':'';
     var tier=TIER[x.level]||'';
-    var green=lbStat('g','Owner acted on',x.acted,'acted')+lbStat('g','Marked helpful',x.helpful,'helpful')+lbStat('g','High-coverage',x.covered,'covered')+lbStat('g','Reports (\u2212)',x.reports,'reports');
+    var green=lbStat('g','Owner acted on',x.acted,'acted')+lbStat('g','Marked helpful',x.helpful,'helpful')+lbStat('g','High-coverage',x.covered,'covered')+lbStat('g','GutCheck credibility',fmtN(x.jbonus||0),'jbonus')+lbStat('g','Reports (\u2212)',x.reports,'reports');
     var ctx=lbStat('c','Calls scored',(x.calls||0),'calls')+lbStat('c','Strongest',drCat(x.strongest),'strongest')+lbStat('c','Best domain',esc(x.best_domain||'\u2014'),'domain')+lbStat('c','DR responses',(x.dr_total||0),'drtotal')+lbStat('c','High-signal',(x.high_signal||0),'highsignal')+lbStat('c','High-confidence',(x.high_conf||0),'highconf');
     return '<div class="lb-card'+(x.is_me?' me':'')+(x.rank===1?' first':'')+'">'
-      +'<div class="lb-c-top"><span class="lb-rank">#'+x.rank+'</span>'+crown+'<span class="lb-tier">'+tier+'</span><span class="lb-alias">'+esc(x.alias)+(x.is_me?'<span class="lb-you">you</span>':'')+'</span>'
-      +'<span class="lb-score">'+x.score+'<i>pts'+tipI('score')+'</i></span></div>'
+      +'<div class="lb-c-top"><span class="lb-rank">'+(x.rank<=3?['\uD83E\uDD47','\uD83E\uDD48','\uD83E\uDD49'][x.rank-1]:('#'+x.rank))+'</span>'+crown+'<span class="lb-tier">'+tier+'</span><span class="lb-alias">'+esc(x.alias)+(x.is_me?'<span class="lb-you">you</span>':'')+'</span>'
+      +'<span class="lb-score">'+fmtN(x.score)+'<i>pts'+tipI('score')+'</i></span></div>'
       +'<div class="lb-stats">'+green+ctx+'</div>'
       +'</div>';
+  }
+  function podiumHtml(top, w){
+    if(!top.length) return '';
+    var medals=['\uD83E\uDD47','\uD83E\uDD48','\uD83E\uDD49'];
+    function pod(x, mi){ if(!x) return '';
+      var tier=TIER[x.level]||''; var crown=(w==='week'&&x.rank===1)?' \uD83D\uDC51':'';
+      return '<div class="lb-pod lb-pod-'+x.rank+(x.is_me?' me':'')+'">'
+        +'<div class="lb-pod-medal">'+medals[mi]+'</div>'
+        +'<div class="lb-pod-tier">'+tier+'</div>'
+        +'<div class="lb-pod-alias">'+esc(x.alias)+(x.is_me?'<span class="lb-you">you</span>':'')+'</div>'
+        +'<div class="lb-pod-score">'+fmtN(x.score)+'<span>pts</span></div>'
+        +'<div class="lb-pod-base">#'+x.rank+crown+'</div>'
+        +'</div>';
+    }
+    return '<div class="lb-podium">'+pod(top[1],1)+pod(top[0],0)+pod(top[2],2)+'</div>';
   }
   function lbRender(res, w){
     var el=document.getElementById('lb-list'); if(!el) return;
@@ -638,7 +681,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var inTop=top.some(function(x){ return x.is_me; });
     var meRow=me?({rank:me.rank,alias:me.alias,score:me.score,acted:me.acted,helpful:me.helpful,covered:me.covered,reports:me.reports,calls:me.calls,strongest:me.strongest,best_domain:me.best_domain,dr_total:me.dr_total,high_signal:me.high_signal,high_conf:me.high_conf,level:me.level,is_me:true}):null;
     var pin=(meRow && !inTop)?('<div class="lb-pin-label">Your rank</div>'+cardHtml(meRow, w)):'';
-    el.innerHTML=body+pin;
+    el.innerHTML=podiumHtml(top, w)+'<div class="lb-standings-h">Full standings</div>'+body+pin;
   }
   var lbBusy=false;
   function lbLoad(){
