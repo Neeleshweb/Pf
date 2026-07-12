@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-d4-tabs 2026-07-12T05:10:00Z -->
+  <!-- build:lb-d4-fixes 2026-07-12T06:35:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -372,8 +372,18 @@
   .lb-tip{position:absolute;z-index:99999;max-width:300px;background:var(--card,#fff);border:1px solid var(--border,#e4e8f4);border-radius:14px;padding:1rem 1.15rem;box-shadow:0 16px 44px rgba(0,0,0,.18);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .16s ease,transform .16s ease}
   .lb-tip.show{opacity:1;transform:none;pointer-events:auto}
   .lb-tip-h{font-size:.95rem;font-weight:800;color:var(--ink,#16233f);margin-bottom:.45rem}
-  .lb-tip-b{font-size:.82rem;color:var(--muted,#4b5563);line-height:1.55}
+  .lb-tip-b{font-size:.82rem;color:var(--muted,#4b5563);line-height:1.55;white-space:pre-line}
   .lb-tip-x{margin-top:.85rem;background:var(--accent,#4f43d8);color:#fff;border:none;border-radius:9px;padding:.42rem 1rem;font-size:.82rem;font-weight:600;cursor:pointer}
+  /* --- D4: desktop expandable detail row (submitter board) --- */
+  .lb-xtog{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;margin-left:.3rem;border:1px solid var(--border2,#d3d9ec);background:#fff;color:var(--muted,#8a91a0);border-radius:6px;cursor:pointer;padding:0;flex:none;transition:transform .18s,border-color .15s,color .15s}
+  .lb-xtog:hover{border-color:var(--accent,#4f43d8);color:var(--accent,#4f43d8)}
+  .lb-xtog svg{width:11px;height:11px}
+  tr.lb-tr[data-open="1"] .lb-xtog{transform:rotate(180deg);border-color:var(--accent,#4f43d8);color:var(--accent,#4f43d8)}
+  tr.lb-xrow{display:none}
+  tr.lb-xrow.show{display:table-row}
+  tr.lb-xrow > td{background:#F8F9FD;border-left:none !important;padding:.7rem .9rem !important;text-align:left}
+  .lb-xgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.42rem}
+  .lb-xhint{font-size:.66rem;color:var(--muted,#9aa0b0);font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:.5rem}
   /* --- D4: board tabs --- */
   .lb-tabs{display:inline-flex;gap:.25rem;background:#EFF1F7;border:1px solid var(--border,#e4e8f4);border-radius:12px;padding:.25rem;margin:1.1rem 0 .2rem}
   .lb-tab{background:transparent;border:none;color:var(--muted,#5c6479);font-weight:700;font-size:.84rem;padding:.5rem .95rem;border-radius:9px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s,color .15s}
@@ -381,7 +391,8 @@
   .lb-tab.active{background:#fff;color:#1e2a4d;box-shadow:0 1px 4px rgba(20,25,45,.12)}
   /* --- D3b: champion banner --- */
   .lb-champ{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;border:1px solid #F0D9A0;border-radius:16px;padding:.85rem 1.1rem;margin:0 0 1.2rem;background:linear-gradient(90deg,#FFF6E2,#FFFDF8 60%);box-shadow:0 6px 20px rgba(227,155,12,.10)}
-  .lb-champ-ic{width:30px;height:30px;flex:none;line-height:0}
+  .lb-champ-ic{width:46px;height:34px;flex:none;line-height:0;display:flex;align-items:center;justify-content:center;margin-right:.25rem}
+  .lb-champ-ic svg{width:100%;height:100%;display:block}
   .lb-champ-t{font-weight:800;color:var(--ink,#16233f);font-size:.95rem}
   .lb-champ-t b{color:#B8790A}
   .lb-champ-s{font-size:.8rem;color:var(--muted,#7a8091);margin-top:.1rem;line-height:1.45}
@@ -569,11 +580,11 @@
     <div class="lb-topbar">
       <div class="lb-title-row">
         <span class="lb-trophy" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v3a6 6 0 0 1-12 0V4Z"/><path d="M6 5H4a2 2 0 0 0 0 4h2"/><path d="M18 5h2a2 2 0 0 1 0 4h-2"/><path d="M12 13v3"/><path d="M9 20h6"/><path d="M10 16h4l-.4 4h-3.2Z" fill="currentColor" stroke="none"/></svg></span>
-        <h2 class="lb-title">Top Responders</h2>
+        <h2 class="lb-title" id="lb-title">Top Responders</h2>
       </div>
       <span class="lb-live"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/><path d="m8 12 3 3 5-6"/></svg>Updated live — recalculates on every refresh</span>
     </div>
-    <p class="lb-sub">Ranked by the quality of DecisionRoom responses to submitted cases.<span class="lb-sub2">Each <b>Score</b> sums the green stats — owner acted-on counts most, then helpful marks, coverage, and a small GutCheck-credibility bonus; reports subtract. Grey stats are lifetime context and don’t change the ranking. Tap any ⓘ to learn what a stat means. Points come from other people’s actions, so the board can’t be gamed.</span></p>
+    <p class="lb-sub" id="lb-sub"></p>
     <div class="lb-tabs" id="lb-tabs" role="tablist" aria-label="Leaderboard type">
       <button type="button" class="lb-tab active" data-board="rev" role="tab" aria-selected="true">Reviewers</button>
       <button type="button" class="lb-tab" data-board="sub" role="tab">Case Submitters</button>
@@ -584,11 +595,12 @@
         <button type="button" class="lb-pill" data-win="yesterday" role="tab">Yesterday</button>
         <button type="button" class="lb-pill active" data-win="week" role="tab" aria-selected="true">This Week</button>
         <button type="button" class="lb-pill" data-win="lastweek" role="tab">Last Week</button>
-        <button type="button" class="lb-pill" data-win="7d" role="tab">Last 7 Days</button>
+        <button type="button" class="lb-pill" data-win="7d" role="tab">Rolling 7 Days</button>
         <button type="button" class="lb-pill" data-win="month" role="tab">This Month</button>
         <button type="button" class="lb-pill" data-win="lastmonth" role="tab">Last Month</button>
         <button type="button" class="lb-pill" data-win="all" role="tab">All Time</button>
       </div>
+      <button type="button" class="lb-tip-i" data-tip="windows" aria-label="What do these windows mean?" style="width:18px;height:18px;font-size:.66rem;align-self:center;color:var(--muted,#8a91a0)">i</button>
       <button type="button" id="lb-refresh" class="lb-refresh" aria-label="Refresh leaderboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Refresh</button>
     </div>
     <div id="lb-champ" class="lb-champ" style="display:none"></div>
@@ -748,7 +760,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
    domain:{t:'Best domain (lifetime)',b:'The product domain where they match the verdict most on GutCheck. Grey: context only, it does not affect the Score. Shows the kind of product they read best.'},
    drtotal:{t:'DecisionRoom responses (lifetime)',b:'A lifetime count of every answer they have posted in DecisionRoom. Grey: context only \u2014 it does NOT change the Score. Activity alone earns nothing; value does.'},
    highsignal:{t:'High-signal responses (lifetime)',b:'A lifetime count of their answers that earned 2 or more helpful marks. Grey: context only, it does not change the Score \u2014 but it is a strong sign of consistent quality.'},
-   highconf:{t:'High-confidence responses (lifetime)',b:'A lifetime count of answers they posted marked \u201Chigh confidence\u201D. Grey: context only, it does not affect the Score \u2014 it just shows how boldly they tend to answer.'}
+   highconf:{t:'High-confidence responses (lifetime)',b:'A lifetime count of answers they posted marked \u201Chigh confidence\u201D. Grey: context only, it does not affect the Score \u2014 it just shows how boldly they tend to answer.'},
+    windows:{t:'What the time windows mean',b:'They are NOT the same thing.\n\n\u2022 This Week \u2014 the CURRENT Monday\u2013Sunday week, so far. Grows as the week goes on.\n\u2022 Last Week \u2014 the PREVIOUS Monday\u2013Sunday week. A finished, fixed calendar week.\n\u2022 Rolling 7 Days \u2014 the last 7 days counting back from right now, ignoring calendar weeks. On a Thursday this spans parts of two different weeks.\n\nSo \u201cLast Week\u201d and \u201cRolling 7 Days\u201d almost always cover different days and will show different rankings. That is expected, not a bug.\n\u2022 This Month / Last Month work the same way, on calendar months.'}
   };
   function showLbTip(key, anchorEl){
     var tip=document.getElementById('lb-tip');
@@ -914,6 +927,20 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   }
   /* --- D3b: Reviewer of the Week banner --- */
   function champCrown(){ return '<span class="lb-champ-ic">'+crownSvg()+'</span>'; }
+  var BOARD_COPY={
+    rev:{ title:'Top Responders',
+      lead:'Ranked by the quality of the responses people write on other PMs\u2019 cases.',
+      body:'Each <b>Score</b> sums the green stats \u2014 the case owner acting on your response counts most, then helpful marks from readers, how thoroughly you answered the asks, and a small GutCheck-credibility bonus; reports subtract. Grey stats are lifetime context and don\u2019t change the ranking. Points come from other people\u2019s actions, so the board can\u2019t be gamed.' },
+    sub:{ title:'Top Case Authors',
+      lead:'Ranked by the quality of the decisions people bring to the room \u2014 not how many they post.',
+      body:'Each <b>Score</b> sums the green stats \u2014 <b>Clarity &amp; Completeness</b> is the biggest term, so a fuller brief is the single highest-leverage thing you can do. You also earn points for the calibre of reviewer your case attracts, the responses it draws, closing the loop well, and acting on the advice you asked for. Thin or abandoned cases <b>lose</b> points, so posting more without care scores you lower, not higher. Grey stats are context only.' }
+  };
+  function setBoardCopy(board){
+    var c=BOARD_COPY[board]||BOARD_COPY.rev;
+    var t=document.getElementById('lb-title'), sb=document.getElementById('lb-sub');
+    if(t) t.textContent=c.title;
+    if(sb) sb.innerHTML=esc(c.lead)+'<span class="lb-sub2">'+c.body+' Tap any \u24D8 to learn what a stat means.</span>';
+  }
   function renderChamp(d,board){
     var el=document.getElementById('lb-champ'); if(!el) return;
     var isSub=(board==='sub');
@@ -1058,10 +1085,22 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     }
     return '<div class="lb-podium"><div class="lb-confetti">'+confettiSvg()+'</div>'+pod(top[1])+pod(top[0])+pod(top[2])+'</div>';
   }
+  function chevSvg(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>'; }
+  function sbXrow(x,cols){
+    var g=sbStat('c','Best case',fmtN(x.best_case||0),'best')
+      +sbStat('c','Avg resp./case',fmtN(x.avg_responses||0),'avgresp')
+      +sbStat('c','Responses total',(x.responses||0),'resp')
+      +sbStat('c','Reviewer rank',(x.reviewer_rank?('#'+x.reviewer_rank):'\u2014'),'revrank')
+      +sbStat('c','Calls scored',(x.calls||0),'calls')
+      +sbStat('c','Judgment level',esc(x.level||'\u2014'),'lvl')
+      +sbStat('c','Strongest category',drCat(x.strongest),'strongest')
+      +sbStat('c','Best domain',esc(x.best_domain||'\u2014'),'domain');
+    return '<tr class="lb-xrow"><td colspan="'+cols+'"><div class="lb-xhint">More about '+esc(x.alias)+' \u00b7 context only, no effect on score</div><div class="lb-xgrid">'+g+'</div></td></tr>';
+  }
   function sbRow(x,pinned){
-    return '<tr class="lb-tr'+(x.is_me?' me':'')+(pinned?' pin':'')+'">'
+    return '<tr class="lb-tr'+(x.is_me?' me':'')+(pinned?' pin':'')+'" data-open="0">'
       +'<td class="lb-rk">'+x.rank+'</td>'
-      +'<td class="lb-td-who"><span class="lb-who">'+lbAvatar(x.alias)+'<span class="lb-who-name">'+esc(x.alias)+'</span>'+(x.is_me?'<span class="lb-you lb-you-td">you</span>':'')+'</span></td>'
+      +'<td class="lb-td-who"><span class="lb-who">'+lbAvatar(x.alias)+'<span class="lb-who-name">'+esc(x.alias)+'</span>'+(x.is_me?'<span class="lb-you lb-you-td">you</span>':'')+'<button type="button" class="lb-xtog" aria-label="Show more stats">'+chevSvg()+'</button></span></td>'
       +tdNum('g',fmtN(x.clarity_pts||0))+tdNum('g',fmtN(x.top_reviewer||0))+tdNum('g',fmtN(x.responses_pts||0))
       +tdNum('g',fmtN(x.resolved_pts||0))+tdNum('g',fmtN(x.high_signal_pts||0))+tdNum('g',fmtN(x.acted_pts||0))
       +tdNum('g',fmtN(x.gutcheck_cred||0))+tdNum('g',fmtN(x.standing_bonus||0))
@@ -1087,8 +1126,9 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +thc('Cases','cases')+thc('Avg Clarity','avgclar')+thc('Close Rate','close')+thc('Give-Back','give')
       +'<th class="lb-th-tp"><span class="lb-th-in"><span class="lb-th-t">Total Points \u2193</span>'+sbTip('standing')+'</span></th>'
       +'</tr></thead>';
-    var body=rows.map(function(x){ return sbRow(x,false); }).join('');
-    if(meRow){ body+='<tr class="lb-pin-sep"><td colspan="17" class="lb-pin-lab">Your rank</td></tr>'+sbRow(meRow,true); }
+    var COLS=17;
+    var body=rows.map(function(x){ return sbRow(x,false)+sbXrow(x,COLS); }).join('');
+    if(meRow){ body+='<tr class="lb-pin-sep"><td colspan="'+COLS+'" class="lb-pin-lab">Your rank</td></tr>'+sbRow(meRow,true)+sbXrow(meRow,COLS); }
     return '<div class="lb-table-wrap"><table class="lb-table">'+cg+th+'<tbody>'+body+'</tbody></table></div>';
   }
   function sbMcard(x,pinned){
@@ -1149,6 +1189,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       var cur=tabs.querySelector('.lb-tab.active'); if(cur){ cur.classList.remove('active'); cur.removeAttribute('aria-selected'); }
       b.classList.add('active'); b.setAttribute('aria-selected','true');
       lbBoard=b.getAttribute('data-board')||'rev';
+      setBoardCopy(lbBoard);
       /* cases move slower than responses -> default the submitter board to This Month */
       var want=(lbBoard==='sub')?'month':'week';
       var pl=document.getElementById('lb-pills');
@@ -1161,9 +1202,22 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       lbBusy=false;
       lbLoad(); loadChamp(); loadHist();
     });
+    setBoardCopy(lbBoard);
     /* lazy seal: closes out any completed week that is not yet frozen (no cron) */
     jlRpc('dr_seal_weeks').then(function(){ loadChamp(); loadHist(); }).catch(function(){ loadChamp(); loadHist(); });
     document.addEventListener('click', function(e){
+      if(e.target.closest && !e.target.closest('.lb-tip-i')){
+        var tr=e.target.closest('tr.lb-tr');
+        if(tr){
+          var nx=tr.nextElementSibling;
+          if(nx && nx.classList && nx.classList.contains('lb-xrow')){
+            var open=tr.getAttribute('data-open')==='1';
+            tr.setAttribute('data-open', open?'0':'1');
+            if(open) nx.classList.remove('show'); else nx.classList.add('show');
+            return;
+          }
+        }
+      }
       var h=(e.target.closest)?e.target.closest('.lb-mc-head'):null; if(!h) return;
       var card=h.parentNode; if(!card||!card.classList||!card.classList.contains('lb-mc')) return;
       card.setAttribute('data-open', card.getAttribute('data-open')==='1'?'0':'1');
