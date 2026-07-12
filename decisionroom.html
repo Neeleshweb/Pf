@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-d3b-champion 2026-07-12T03:10:00Z -->
+<!-- build:dr-d4-exemplary 2026-07-12T10:15:00Z -->
 <!-- build:D2-pill-tooltips 2026-07-10T22:04:59.735080+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -1314,7 +1314,7 @@
 .rsp-tip{position:absolute;z-index:99999;max-width:300px;background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:1rem 1.15rem;box-shadow:0 16px 44px rgba(0,0,0,.4);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .16s ease,transform .16s ease}
 .rsp-tip.show{opacity:1;transform:none;pointer-events:auto}
 .rsp-tip-h{font-size:.96rem;font-weight:800;color:var(--white);margin-bottom:.45rem}
-.rsp-tip-b{font-size:.82rem;color:var(--text2);line-height:1.55}
+.rsp-tip-b{font-size:.82rem;color:var(--text2);line-height:1.55;white-space:pre-line}
 .rsp-tip-x{margin-top:.85rem;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:.42rem 1rem;font-size:.82rem;font-weight:600;cursor:pointer}
 .rsp-jp{display:flex;flex-wrap:wrap;gap:.4rem;margin:.7rem 0 .65rem}
 .jp-pill{display:inline-flex;align-items:center;gap:.35rem;background:var(--surface);border:1px solid var(--border2);border-radius:100px;padding:.28rem .65rem;font-size:.74rem;color:var(--white)}
@@ -1394,6 +1394,56 @@
 .rsp-top-r{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
 .rsp-acted{font-size:.66rem;font-weight:700;color:var(--accent2);background:var(--accent2-dim);border:1px solid rgba(var(--accent2-rgb),.34);border-radius:100px;padding:.12rem .55rem;white-space:nowrap}
 .rsp-card.is-acted{border-color:rgba(var(--accent2-rgb),.4);box-shadow:0 0 0 1px rgba(var(--accent2-rgb),.12)}
+/* --- D4: Clarity & Completeness meter --- */
+.cm-wrap{border:1px solid var(--border2);border-radius:12px;background:var(--card2);padding:.85rem 1rem;margin:0 0 1.1rem}
+.cm-top{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;flex-wrap:wrap}
+.cm-t{font-weight:700;font-size:.86rem;color:var(--white)}
+.cm-score{font-weight:800;font-size:.95rem;color:var(--accent2)}
+.cm-score small{font-size:.7rem;color:var(--muted);font-weight:700}
+.cm-bar{height:7px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin:.6rem 0 .55rem}
+.cm-fill{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s ease}
+.cm-note{font-size:.76rem;color:var(--muted);line-height:1.5}
+.cm-note b{color:#cfd6e6}
+.cm-list{margin:.55rem 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.25rem .8rem}
+.cm-li{font-size:.75rem;color:var(--muted);display:flex;gap:.35rem;align-items:flex-start;line-height:1.4}
+.cm-li.done{color:#7fd6a4}
+.cm-li i{font-style:normal;flex:none}
+/* --- D4: Exemplary decisions strip (reuses the standard feed card) --- */
+.ex-strip{margin:0 0 1.6rem}
+.ex-h{display:flex;align-items:center;gap:.5rem;margin:0 0 .7rem;flex-wrap:wrap}
+.ex-h-t{font-weight:800;font-size:1rem;color:var(--white)}
+.ex-h-s{font-size:.76rem;color:var(--muted)}
+/* the card class is .feed-card (NOT .fc) -- ex-on is added to exemplary cards
+   wherever they appear (strip AND the Exemplary library filter) */
+.feed-card.ex-on{position:relative;overflow:hidden;border-color:rgba(240,180,41,.45);
+  background:linear-gradient(180deg,rgba(240,180,41,.10),rgba(240,180,41,.02) 42%,rgba(240,180,41,0) 70%),var(--card2);
+  box-shadow:0 0 0 1px rgba(240,180,41,.10),0 14px 40px rgba(240,180,41,.08)}
+.feed-card.ex-on:hover{border-color:rgba(240,180,41,.75);box-shadow:0 0 0 1px rgba(240,180,41,.20),0 18px 48px rgba(240,180,41,.14)}
+.feed-card.ex-on::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#FBD24B,#E39B0C);border-radius:14px 0 0 14px;z-index:2}
+.ex-conf{position:absolute;top:0;right:0;width:230px;height:96px;pointer-events:none;opacity:.75;z-index:0}
+.ex-conf svg{width:100%;height:100%;display:block}
+.ex-ribbon{display:inline-flex;align-items:center;gap:.4rem;position:relative;z-index:3;margin:0 0 .7rem}
+.ex-medal{width:26px;height:34px;flex:none;line-height:0}
+.ex-medal svg{width:100%;height:100%;display:block}
+.ex-lab{display:inline-flex;align-items:center;gap:.3rem;font-size:.63rem;font-weight:800;text-transform:uppercase;
+  letter-spacing:.5px;color:#F6D98A;background:rgba(240,180,41,.14);border:1px solid rgba(240,180,41,.45);
+  border-radius:100px;padding:.16rem .55rem}
+.ex-lab .tip-i{width:13px;height:13px;font-size:.55rem;border-color:currentColor;color:inherit;opacity:.75}
+.ex-lab .tip-i:hover{opacity:1}
+.feed-card.ex-on .fc-top,.feed-card.ex-on .fc-title,.feed-card.ex-on .fc-attrs{position:relative;z-index:1}
+/* --- D4: private case breakdown (owner only) --- */
+.cb-wrap{border:1px solid var(--border2);border-radius:12px;background:var(--card2);padding:.85rem 1rem;margin:.9rem 0}
+.cb-h{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;flex-wrap:wrap;margin-bottom:.6rem}
+.cb-t{font-weight:700;font-size:.86rem;color:var(--white)}
+.cb-tot{font-weight:800;color:var(--accent2)}
+.cb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.4rem}
+.cb-i{display:flex;justify-content:space-between;gap:.5rem;border:1px solid var(--border2);border-radius:8px;padding:.4rem .55rem;font-size:.75rem}
+.cb-i span{color:var(--muted)}
+.cb-i b{color:var(--white)}
+.cb-i.pos b{color:#7fd6a4}
+.cb-i.neg b{color:#f08b8b}
+.cb-tip{font-size:.74rem;color:var(--muted);margin-top:.6rem;line-height:1.5}
 /* --- D3b: Reviewer of the Week --- */
 .rsp-card.is-champ{border-color:rgba(240,180,41,.55);background:linear-gradient(180deg,rgba(240,180,41,.10),rgba(240,180,41,0) 42%),var(--card2);box-shadow:0 0 0 1px rgba(240,180,41,.16),0 10px 30px rgba(240,180,41,.07)}
 .rsp-card.is-champ::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:13px 0 0 13px;background:linear-gradient(180deg,#FBD24B,#E39B0C)}
@@ -1717,7 +1767,7 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
     <p class="hero-sub">Bring a real product call into a room of credible PMs and get <strong>structured feedback</strong> from people who&rsquo;ve handled the same situation &mdash; not hot takes, not a forum, not an AI guessing. Post <strong>anonymously</strong>: your judgment, not your job title, does the talking.</p>
     <div class="hero-ctas">
       <button type="button" class="btn-primary" data-cta="submit">Submit a decision</button>
-      <button type="button" class="btn-ghost" data-cta="review">Join as a reviewer</button><button type="button" class="btn-ghost" data-cta="library">Browse resolved cases</button>
+      <button type="button" class="btn-ghost" data-cta="library">Browse resolved cases</button>
     </div>
     <a class="dr-bridge" href="/gutcheck.html">Trust your gut first &rarr; <span>play GutCheck</span>, then bring the hard ones here.</a>
   </div>
@@ -1863,7 +1913,11 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
   <div class="sec-eyebrow g">The library</div>
   <div class="sec-title">Resolved <span class="g">Decisions</span></div>
   <p class="sec-sub">Closed cases &mdash; <b>Resolved</b> (70%+ of asks met) and <b>Partially resolved</b>. See what the PM decided and how each ask was met. The record a forum thread never keeps.</p>
-  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All decisions</option><option value="resolved">Resolved only</option><option value="partial">Partially resolved</option></select></div>
+  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All decisions</option><option value="exemplary">🏅 Exemplary only</option><option value="resolved">Resolved only</option><option value="partial">Partially resolved</option></select></div>
+  <div class="ex-strip" id="ex-strip" style="display:none">
+    <div class="ex-h"><span class="ex-h-t">🏅 Exemplary decisions</span><span class="ex-h-s">Closed with a strong resolution — this is what a great case looks like.</span></div>
+    <div id="ex-list" class="feed-grid ex-grid"></div>
+  </div>
   <div id="lib-list" class="feed-grid"></div>
   <button type="button" id="lib-more" class="btn-ghost" style="display:none">Load more</button>
 </section>
@@ -1874,7 +1928,7 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
     <p>Founding members get in first &mdash; submit the decision you&rsquo;re stuck on, or lend your judgment as a founding reviewer and help shape the room.</p>
     <div class="cta-row">
       <button type="button" class="btn-primary" data-cta="submit">Submit a decision</button>
-      <button type="button" class="btn-ghost" data-cta="review">Join as a reviewer</button><button type="button" class="btn-ghost" data-cta="library">Browse resolved cases</button>
+      <button type="button" class="btn-ghost" data-cta="library">Browse resolved cases</button>
     </div>
     <div class="dr-soon">Early access &middot; case submission opens to founding members first.</div>
   </div>
@@ -2324,7 +2378,7 @@ boot();
   function addOpt(){ var wrap=document.getElementById('f-options'); if(!wrap) return; var n=wrap.querySelectorAll('.optrow').length; var L='ABCDEF'.charAt(n)||'?'; var row=document.createElement('div'); row.className='optrow'; row.innerHTML='<span class="optlbl">'+L+'</span><input class="optinput" maxlength="160" placeholder="Option '+L+'">'; wrap.appendChild(row); }
 
   var fcur=1, FSTEPS=3;
-  function showStep(n){ if(!form) return; n=Math.max(1,Math.min(FSTEPS,n)); fcur=n;
+  function showStep(n){ if(typeof renderClarityMeter==='function') setTimeout(renderClarityMeter,0); if(!form) return; n=Math.max(1,Math.min(FSTEPS,n)); fcur=n;
     [].slice.call(form.querySelectorAll('.fstep')).forEach(function(st){ st.classList.toggle('active', (+st.getAttribute('data-fstep'))===n); });
     [].slice.call(form.querySelectorAll('.fstep-pip')).forEach(function(p){ var pn=+p.getAttribute('data-goto'); p.classList.toggle('on', pn<=n); p.classList.toggle('cur', pn===n); });
     var fill=document.getElementById('fsteps-fill'); if(fill) fill.style.width=Math.round((n-1)/(FSTEPS-1)*100)+'%';
@@ -2333,6 +2387,86 @@ boot();
     if(nx) nx.style.display = n<FSTEPS?'':'none';
     if(sb) sb.style.display = n===FSTEPS?'':'none';
     var modal=form.closest('.dr-modal'); if(modal&&modal.scrollTo){ try{ modal.scrollTo({top:0,behavior:'smooth'}); }catch(e){ modal.scrollTop=0; } }
+  }
+  /* ===================== D4: CLARITY & COMPLETENESS METER =====================
+     MIRRORS public.dr_case_clarity() EXACTLY. 10 checks x 0.5 = 5.0 max.
+     If a threshold changes in SQL, change it HERE too (single rubric, two homes).
+     This NEVER blocks submission -- the required fields are the only gate.      */
+  var CM_CHECKS=[
+    {k:'situation', lab:'Situation is fully told (100+ chars)',
+     f:function(v){ return v.situation.length>=100; }},
+    {k:'decision',  lab:'Decision stated precisely (40+ chars)',
+     f:function(v){ return v.decision.length>=40; }},
+    {k:'risk',      lab:'Biggest risk spelled out (40+ chars)',
+     f:function(v){ return v.risk.length>=40; }},
+    {k:'options',   lab:'Three or more real options',
+     f:function(v){ return v.options>=3; }},
+    {k:'asks',      lab:'Two or more asks selected',
+     f:function(v){ return v.asks>=2; }},
+    {k:'freeasks',  lab:'At least one specific question for reviewers',
+     f:function(v){ return v.freeAsks>=1; }},
+    {k:'product',   lab:'Product context set',
+     f:function(v){ return !!v.product; }},
+    {k:'stake',     lab:'At least one stakeholder named',
+     f:function(v){ return v.stakeholders>=1; }},
+    {k:'rec',       lab:'You took a position (recommendation, 30+ chars)',
+     f:function(v){ return v.rec.length>=30; }},
+    {k:'ground',    lab:'Grounded: evidence, what you tried, or constraints',
+     f:function(v){ return v.evidence.length>=30 || v.tried.length>=30 || v.constraints>=1 || v.consNote.length>=20; }}
+  ];
+  function cmValues(){
+    var g=function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
+    var opts=[].slice.call(document.querySelectorAll('#f-options .optinput')).map(function(i){return i.value.trim();}).filter(Boolean);
+    var fa=(FREE_ASKS&&FREE_ASKS.length)?FREE_ASKS.length:document.querySelectorAll('.fa-item').length;
+    return {
+      situation:g('f-situation'), decision:g('f-decision'), risk:g('f-risk'),
+      options:opts.length,
+      asks:(typeof selChips==='function'?selChips('f-help').length:0),
+      freeAsks:fa,
+      product:g('f-product'),
+      stakeholders:(typeof selChips==='function'?selChips('f-stk').length:0),
+      rec:g('f-rec'),
+      constraints:(typeof selChips==='function'?selChips('f-cons').length:0),
+      consNote:g('f-cons-note'), evidence:g('f-evidence'), tried:g('f-tried')
+    };
+  }
+  function cmScore(){
+    var v=cmValues(), n=0, res=[];
+    for(var i=0;i<CM_CHECKS.length;i++){ var ok=false; try{ ok=!!CM_CHECKS[i].f(v); }catch(e){ ok=false; }
+      if(ok) n++; res.push({lab:CM_CHECKS[i].lab, ok:ok}); }
+    return {score:n*0.5, passed:n, checks:res};
+  }
+  function renderClarityMeter(){
+    var el=document.getElementById('cm-meter'); if(!el) return;
+    var r=cmScore(), pct=Math.round((r.score/5)*100);
+    var missing=r.checks.filter(function(c){ return !c.ok; });
+    var reqLeft=(typeof essentialsMissing==='function')?essentialsMissing():[];
+    var head;
+    if(reqLeft.length){
+      head='<b>You can post as soon as the required fields are done.</b> Everything below is optional \u2014 it only makes the case stronger.';
+    } else if(r.score>=4){
+      head='<b>Strong brief.</b> You can post now \u2014 this is the kind of case that pulls in the best reviewers.';
+    } else {
+      head='<b>You can post this right now</b> \u2014 the required fields are done, so nothing is blocking you. But a fuller brief attracts better reviewers, gets more useful responses, and is far more likely to reach a real resolution. Each item below adds 0.5.';
+    }
+    var lis=r.checks.map(function(c){
+      return '<li class="cm-li'+(c.ok?' done':'')+'"><i>'+(c.ok?'\u2713':'\u25CB')+'</i><span>'+escHtml(c.lab)+'</span></li>';
+    }).join('');
+    el.innerHTML='<div class="cm-top"><span class="cm-t">Clarity &amp; Completeness</span>'
+      +'<span class="cm-score">'+r.score.toFixed(1)+'<small> / 5.0</small></span></div>'
+      +'<div class="cm-bar"><span class="cm-fill" style="width:'+pct+'%"></span></div>'
+      +'<div class="cm-note">'+head+'</div>'
+      +'<ul class="cm-list">'+lis+'</ul>';
+  }
+  var cmTimer=null;
+  function cmBind(){
+    var form=document.getElementById('submit-form'); if(!form || form.getAttribute('data-cm')==='1') return;
+    form.setAttribute('data-cm','1');
+    var go=function(){ if(cmTimer) clearTimeout(cmTimer); cmTimer=setTimeout(renderClarityMeter,150); };
+    form.addEventListener('input', go);
+    form.addEventListener('change', go);
+    form.addEventListener('click', go);   /* chips + option add/remove + free-ask add */
+    renderClarityMeter();
   }
   function essentialsMissing(){ var m=[]; var g=function(id){ var el=document.getElementById(id); return el?el.value.trim():''; };
     var opts=[].slice.call(document.querySelectorAll('#f-options .optinput')).map(function(i){return i.value.trim();}).filter(Boolean);
@@ -2350,6 +2484,7 @@ boot();
   function loadAskPool(){ if(!SB) return; try{ SB.rpc('dr_ask_suggestions').then(function(res){ if(res&&!res.error&&res.data&&res.data.length){ ASK_POOL=res.data.slice(); } }).catch(function(){}); }catch(e){} }
   var FREE_ASKS=[];
   function renderFreeAsks(){
+    if(typeof renderClarityMeter==='function') setTimeout(renderClarityMeter,0);
     var sugg=document.getElementById('fa-sugg'), list=document.getElementById('fa-list'), inp=document.getElementById('fa-in'); if(!sugg||!list) return;
     sugg.innerHTML=ASK_POOL.filter(function(q){ return FREE_ASKS.indexOf(q)<0; }).map(function(q){ return '<button type="button" class="fa-s" data-q="'+escHtml(q)+'">+ '+escHtml(q)+'</button>'; }).join('');
     list.innerHTML=FREE_ASKS.map(function(q,i){ return '<div class="fa-item"><span>'+escHtml(q)+'</span><button type="button" class="fa-x" data-i="'+i+'" aria-label="Remove">\u00d7</button></div>'; }).join('');
@@ -2395,11 +2530,13 @@ boot();
      +'<label class="conf"><input type="checkbox" id="f-conf3"> <span>I removed security-sensitive details. <span class="req">*</span></span></label>'
      +'<label class="conf"><input type="checkbox" id="f-conf4"> <span>I understand this will be visible to other users, and that I am responsible for its accuracy. <span class="req">*</span></span></label></div>'
      +'</div>'
+     +'<div class="cm-wrap" id="cm-meter"></div>'
      +'<div class="form-actions"><button type="button" class="btn-ghost" id="f-cancel">Cancel</button><span class="fa-spacer"></span><button type="button" class="btn-ghost" id="f-back" style="display:none">\u2190 Back</button><button type="button" class="btn-primary" id="f-next">Next \u2192</button><button type="button" class="btn-primary" id="f-submit" style="display:none">Post case</button></div>'
      +'<div class="form-err" id="f-err"></div>';
     renderTaxInto('f-help','help'); renderTaxInto('f-cat','category');
     FREE_ASKS=[]; renderFreeAsks();
     addOpt(); addOpt(); updateOptNote();
+    cmBind();
     document.getElementById('f-addopt').onclick=function(){ if(document.querySelectorAll('#f-options .optrow').length<6){ addOpt(); updateOptNote(); } };
     document.getElementById('f-next').onclick=function(){ var err=document.getElementById('f-err'); if(fcur===1){ var m=essentialsMissing(); if(m.length){ err.textContent='Please complete: '+m.join(', ')+'.'; return; } } err.textContent=''; showStep(fcur+1); };
     document.getElementById('f-back').onclick=function(){ document.getElementById('f-err').textContent=''; showStep(fcur-1); };
@@ -2569,7 +2706,154 @@ boot();
       + '<div class="fc-foot">'+ctxHtml(r)+'<span class="fc-foot-r">'+(r.is_mine?shareBtnHtml(r.id):'')+reopen+met+'</span></div>'
       + '</div>';
   }
+  /* ===================== D4: EXEMPLARY DECISIONS ===================== */
+  /* ===================== D4: EXEMPLARY DECORATIONS ===================== */
+  var EXTIPS={};   /* case_id -> {t,b}  (per-case "why is this exemplary") */
+  var EX_IDS={};   /* case_id -> row   (so library cards can be decorated too) */
+  function exMedalSvg(){
+    return '<svg viewBox="0 0 56 74" aria-hidden="true">'
+      +'<defs><linearGradient id="exmg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBD24B"/><stop offset="1" stop-color="#E39B0C"/></linearGradient></defs>'
+      +'<path d="M19 33 L13 66 L22 58 L20 33 Z" fill="#E39B0C"/><path d="M37 33 L43 66 L34 58 L36 33 Z" fill="#E39B0C"/>'
+      +'<circle cx="28" cy="24" r="21" fill="url(#exmg)" stroke="rgba(255,255,255,.55)" stroke-width="2"/>'
+      +'<path d="M28 12 l3.6 7.4 8.1 1.2 -5.9 5.7 1.4 8.1 -7.2 -3.8 -7.2 3.8 1.4 -8.1 -5.9 -5.7 8.1 -1.2 Z" fill="#8a5a05" opacity=".55"/>'
+      +'</svg>';
+  }
+  function exConfettiSvg(){
+    var bits=[[18,14,'#F6C544',-18,'r'],[52,40,'#8B7FF0',22,'d'],[86,12,'#5BC7A9',10,'r'],[120,44,'#F08BB0',-30,'d'],
+              [150,18,'#7FA8F0',15,'r'],[182,52,'#F6C544',40,'d'],[208,22,'#7ED9A0',-12,'r'],[70,70,'#8B7FF0',28,'d'],
+              [140,74,'#F08BB0',-24,'r'],[196,80,'#5BC7A9',18,'d']];
+    var o='<svg viewBox="0 0 230 96" aria-hidden="true">';
+    for(var i=0;i<bits.length;i++){ var p=bits[i];
+      if(p[4]==='r') o+='<rect x="'+p[0]+'" y="'+p[1]+'" width="8" height="4" rx="1.5" fill="'+p[2]+'" transform="rotate('+p[3]+' '+(p[0]+4)+' '+(p[1]+2)+')"/>';
+      else o+='<rect x="'+p[0]+'" y="'+p[1]+'" width="6" height="6" fill="'+p[2]+'" transform="rotate('+(p[3]+45)+' '+(p[0]+3)+' '+(p[1]+3)+')"/>';
+    }
+    return o+'</svg>';
+  }
+  /* plain-English reason, built from THIS case's own numbers */
+  function exReason(c){
+    var pct=Math.round(Number(c.final_pct)||0),
+        rc=Number(c.responses||c.response_count)||0,
+        hs=Number(c.high_signal)||0,
+        cl=Number(c.clarity)||0;
+    var b='A case earns the medal when the person who asked it closed it having got at least 70% of what they needed. It is here because other PMs actually solved it \u2014 not because of who wrote it.\n\n';
+    b+='\u2022 Resolved: the asker got '+pct+'% of what they asked for answered.\n';
+    b+='\u2022 Responses: it drew '+rc+' '+(rc===1?'reply':'replies')+(hs>0?(', '+hs+' of which '+(hs===1?'was':'were')+' marked genuinely helpful by readers'):'')+'.\n';
+    b+='\u2022 Brief quality: the case itself scored '+cl.toFixed(1)+' out of 5 on Clarity & Completeness.\n\n';
+    b+='Read it as a worked example: this is what a case worth answering looks like.';
+    return {t:'Why this is exemplary', b:b};
+  }
+  /* turn a standard feed card into an exemplary one WITHOUT wrapping it
+     (a wrapper would break the inline-expand panel that gets inserted after the card) */
+  function exBadgeHtml(c){
+    EXTIPS[c.id]=exReason(c);
+    return '<span class="ex-conf">'+exConfettiSvg()+'</span>'
+      +'<span class="ex-ribbon"><span class="ex-medal">'+exMedalSvg()+'</span>'
+      +'<span class="ex-lab">Exemplary'+tipI('ex:'+c.id)+'</span></span>';
+  }
+  function exDecorate(html, c){
+    var badge=exBadgeHtml(c);
+    var out=html.replace('class="feed-card', 'class="feed-card ex-on');   /* matches "feed-card" AND "feed-card lib" */
+    var i=out.indexOf('>');
+    return (i<0) ? out : (out.slice(0,i+1) + badge + out.slice(i+1));
+  }
+  /* The library list can paint BEFORE dr_featured_cases resolves. When the ids
+     land, retro-fit the medal onto any already-rendered card. */
+  function exApplyToList(){
+    var list=document.getElementById('lib-list'); if(!list) return;
+    [].slice.call(list.querySelectorAll('.feed-card[data-id]')).forEach(function(card){
+      var id=card.getAttribute('data-id'), c=EX_IDS[id];
+      if(!c || card.classList.contains('ex-on')) return;
+      card.classList.add('ex-on');
+      card.insertAdjacentHTML('afterbegin', exBadgeHtml(c));
+    });
+  }
+
+  function loadExemplary(){
+    var strip=document.getElementById('ex-strip'), list=document.getElementById('ex-list');
+    if(!strip||!list||!SB) return;
+    SB.rpc('dr_featured_cases',{p_limit:6}).then(function(res){
+      var d=(res&&res.data)||null;
+      var rows=(d&&d.ok&&d.cases)?d.cases:[];
+      for(var k=0;k<rows.length;k++){ EX_IDS[rows[k].id]=rows[k]; }
+      exApplyToList();   /* retro-fit medals onto library cards already on screen */
+      if(!rows.length){ strip.style.display='none'; list.innerHTML=''; return; }
+      /* feedCardHtml() is the SAME component the feed and library use, so these
+         cards are identical to the rest of the product -- no bespoke mini-card. */
+      var html='';
+      for(var i=0;i<rows.length;i++){
+        try{ html+=exDecorate(feedCardHtml(rows[i]), rows[i]); }catch(e){}
+      }
+      if(!html){ strip.style.display='none'; list.innerHTML=''; return; }
+      strip.style.display='block';
+      list.innerHTML=html;
+      if(typeof wireCards==='function') wireCards(list);
+    }, function(){});
+  }
+
+  /* ============ D4: PRIVATE CASE BREAKDOWN (submitter only) ============ */
+  function clearCaseBreakdown(){
+    /* signing out must remove it immediately, without a page refresh */
+    if(!currentUser){ var h=document.getElementById('cb-host'); if(h) h.innerHTML=''; }
+  }
+  function renderCaseBreakdown(caseId){
+    var host=document.getElementById('cb-host'); if(!host||!SB) return;
+    if(!currentUser){ host.innerHTML=''; return; }
+    SB.rpc('dr_case_breakdown',{p_case_id:caseId}).then(function(res){
+      var d=(res&&res.data)||null;
+      if(!d||!d.ok){ host.innerHTML=''; return; }   /* not yours / signed out -> render nothing */
+      var p=d.points||{};
+      function it(lab,val,cls){ var n=Number(val)||0;
+        return '<div class="cb-i '+(n>0?'pos':(n<0?'neg':''))+'"><span>'+lab+'</span><b>'+(n>0?'+':'')+n+'</b></div>'; }
+      var grid=it('Clarity &amp; Completeness', p.clarity)
+        +it('Top-reviewer pull', p.top_reviewer)
+        +it('Responses', p.responses)
+        +it('Resolved well', p.resolved_high)
+        +it('High-signal replies', p.high_signal)
+        +it('You acted on advice', p.acted)
+        +it('Needs-context flags', p.context_flags)
+        +it('Abandoned', p.abandoned);
+      var tip;
+      if(Number(d.clarity)<5){
+        tip='Your brief scored <b>'+Number(d.clarity).toFixed(1)+' / 5</b> on Clarity &amp; Completeness \u2014 the biggest single term. A fuller brief pulls in stronger reviewers and is far more likely to reach a real resolution.';
+      } else {
+        tip='Your brief scored full marks on Clarity &amp; Completeness. The rest of the score now depends on the room \u2014 and on you closing the loop.';
+      }
+      if(Number(d.responses)>Number(d.responses_counted)){
+        tip+=' Only the first '+d.responses_counted+' responses count toward points (the rest still help you).';
+      }
+      host.innerHTML='<div class="cb-wrap"><div class="cb-h"><span class="cb-t">\uD83D\uDD12 Your case score <span style="color:var(--muted);font-weight:600">(only you can see this)</span></span>'
+        +'<span class="cb-tot">'+(Number(d.score)||0)+' pts</span></div>'
+        +'<div class="cb-grid">'+grid+'</div>'
+        +'<div class="cb-tip">'+tip+'</div></div>';
+    }, function(){});
+  }
+
+  function libDecorate(html, r){
+    /* medal on any card that is an exemplary decision, wherever it is listed */
+    var ex=EX_IDS[r.id];
+    return ex ? exDecorate(html, ex) : html;
+  }
+  function loadLibraryExemplary(){
+    /* the 'Exemplary only' filter: served straight from dr_featured_cases */
+    var list=document.getElementById('lib-list'); if(!list||!SB) return;
+    var more=document.getElementById('lib-more'); if(more) more.style.display='none';
+    var strip=document.getElementById('ex-strip'); if(strip) strip.style.display='none';  /* no duplicate */
+    libLoading=true;
+    SB.rpc('dr_featured_cases',{p_limit:60}).then(function(res){
+      libLoading=false; libDone=true;
+      var d=(res&&res.data)||null, rows=(d&&d.ok&&d.cases)?d.cases:[];
+      for(var k=0;k<rows.length;k++){ EX_IDS[rows[k].id]=rows[k]; }
+      if(!rows.length){ list.innerHTML='<div class="feed-empty">No exemplary decisions yet \u2014 a case earns the medal once it is closed with at least 70% of what the asker needed answered.</div>'; return; }
+      var html='';
+      for(var i=0;i<rows.length;i++){ try{ html+=exDecorate(libCardHtml(rows[i]), rows[i]); }catch(e){} }
+      list.innerHTML=html;
+      if(typeof wireCards==='function') wireCards(list);
+    }, function(){ libLoading=false; });
+  }
   function loadLibrary(reset){ detachExp();
+    var stEl0=document.getElementById('lib-status');
+    if(stEl0 && stEl0.value==='exemplary'){ if(reset){ libCursor=null; libDone=false; } loadLibraryExemplary(); return; }
+    loadExemplary();
     if(!SB||libLoading) return; libLoading=true;
     if(reset){ libCursor=null; libDone=false; }
     var catEl=document.getElementById('lib-cat'); var cat=catEl?catEl.value:null;
@@ -2579,7 +2863,7 @@ boot();
       var rows=(res&&res.data)||[];
       if(reset) list.innerHTML='';
       if(reset && !rows.length){ list.innerHTML='<div class="feed-empty">No resolved cases yet \u2014 they appear here once PMs close cases with outcomes.</div>'; }
-      rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', libCardHtml(r)); });
+      rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', libDecorate(libCardHtml(r), r)); });
       if(rows.length){ libCursor=rows[rows.length-1].closed_at||rows[rows.length-1].created_at; }
       if(rows.length<12) libDone=true;
       var more=document.getElementById('lib-more'); if(more) more.style.display=libDone?'none':'';
@@ -2656,6 +2940,7 @@ boot();
         var opts=(d.options||[]).map(function(o,i){ return '<div class="cd-opt"><span>'+('ABCDE'.charAt(i)||'\u2022')+'</span>'+escHtml(o)+'</div>'; }).join('');
         var help=(d.help_types||[]).map(function(h){ return '<span class="cd-chip y">'+escHtml(helpLabel(h))+'</span>'; }).join('');
         m.innerHTML='<div class="cd-head">'+(d.is_mine?'<span class="cd-ctx mine">Your case</span>':'<span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span>')+'<span class="cd-head-r">'+(d.is_mine?'<button type="button" class="cd-share" id="cd-share-btn">\u2197 Share</button>':'')+(d.needs_context?'<span class="cd-nc">\u2753 Needs more context</span>':'')+'<span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span>'+((!d.is_mine&&currentUser)?'<button type="button" class="cd-nc-btn" id="cd-nc-btn"'+(d.i_flagged?' disabled':'')+'>'+(d.i_flagged?'\u2713 Flagged':'Ask for more context')+'</button>':'')+'</span></div>'
+          +(d.is_mine?'<div id="cb-host"></div>':'')
           +'<h2 class="cd-title">'+escHtml(d.title)+'</h2>'
           +row('The decision','<strong>'+escHtml(d.decision)+'</strong>')
           +row('Situation', nl(d.situation))
@@ -2679,6 +2964,7 @@ boot();
           +'<div id="cd-responses" class="cd-resp-list"></div></div>';
         loadResponses(d);
         var csb=document.getElementById('cd-share-btn'); if(csb) csb.onclick=function(){ openShare(d.id); };
+        if(d.is_mine && typeof renderCaseBreakdown==='function') renderCaseBreakdown(d.id);
         var ncb=document.getElementById('cd-nc-btn'); if(ncb && !d.i_flagged) ncb.onclick=function(){ ncb.disabled=true; SB.rpc('dr_request_context',{p_case_id:d.id}).then(function(r){ if(r&&r.data&&r.data.ok){ if(typeof toast==='function') toast('Flagged \u2014 the asker will be nudged for more context'); ncb.textContent='\u2713 Flagged'; } else { ncb.disabled=false; } }).catch(function(){ ncb.disabled=false; }); };
       }
       cov.classList.add('open');
@@ -2820,7 +3106,8 @@ boot();
   function showTip(key, anchorEl){
     var tip=document.getElementById('rsp-tip');
     if(!tip){ tip=document.createElement('div'); tip.id='rsp-tip'; tip.className='rsp-tip'; tip.innerHTML='<div class="rsp-tip-h"></div><div class="rsp-tip-b"></div><button type="button" class="rsp-tip-x">Got it</button>'; document.body.appendChild(tip); tip.querySelector('.rsp-tip-x').onclick=function(){ tip.classList.remove('show'); }; }
-    var c=TIPS[key]; if(!c) return;
+    var c=(String(key||'').indexOf('ex:')===0) ? EXTIPS[String(key).slice(3)] : TIPS[key];
+    if(!c) return;
     tip.querySelector('.rsp-tip-h').textContent=c.t; tip.querySelector('.rsp-tip-b').textContent=c.b;
     tip.classList.add('show'); var w=tip.offsetWidth||300, r=anchorEl.getBoundingClientRect();
     tip.style.top=(r.bottom+window.scrollY+8)+'px'; tip.style.left=Math.max(8, Math.min(r.left+window.scrollX-8, window.innerWidth-w-12))+'px';
@@ -3320,7 +3607,7 @@ boot();
   }
   window.drOpenProfile=function(isOnboarding){ openProfileForm(isOnboarding); };
 
-  window.drAfterAuth=function(){ loadChampion(); loadMyCases(); loadDrafts(); if(typeof loadFeed==='function') loadFeed(true); refreshBell(); if(profileIncomplete() && !profilePrompted){ profilePrompted=true; setTimeout(function(){ if(profileIncomplete()) openProfileForm(true); }, 1000); } };
+  window.drAfterAuth=function(){ clearCaseBreakdown(); loadChampion(); loadMyCases(); loadDrafts(); if(typeof loadFeed==='function') loadFeed(true); refreshBell(); if(profileIncomplete() && !profilePrompted){ profilePrompted=true; setTimeout(function(){ if(profileIncomplete()) openProfileForm(true); }, 1000); } };
   renderExamples(true);   /* immediate render from seed list */
   populateFilter();
   loadTaxonomy();         /* then refresh from DB (adds any custom values) */
