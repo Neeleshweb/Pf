@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-d4-clarity 2026-07-12T08:00:00Z -->
+<!-- build:dr-d4-fixes 2026-07-12T09:10:00Z -->
 <!-- build:D2-pill-tooltips 2026-07-10T22:04:59.735080+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -1408,18 +1408,13 @@
 .cm-li{font-size:.75rem;color:var(--muted);display:flex;gap:.35rem;align-items:flex-start;line-height:1.4}
 .cm-li.done{color:#7fd6a4}
 .cm-li i{font-style:normal;flex:none}
-/* --- D4: Exemplary decisions strip --- */
-.ex-strip{margin:0 0 1.3rem}
-.ex-h{display:flex;align-items:center;gap:.5rem;margin:0 0 .6rem;flex-wrap:wrap}
+/* --- D4: Exemplary decisions strip (reuses the standard feed card) --- */
+.ex-strip{margin:0 0 1.6rem}
+.ex-h{display:flex;align-items:center;gap:.5rem;margin:0 0 .7rem;flex-wrap:wrap}
 .ex-h-t{font-weight:800;font-size:1rem;color:var(--white)}
 .ex-h-s{font-size:.76rem;color:var(--muted)}
-.ex-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.7rem}
-.ex-card{border:1px solid rgba(240,180,41,.35);border-radius:12px;background:linear-gradient(180deg,rgba(240,180,41,.08),rgba(240,180,41,0) 55%),var(--card2);padding:.8rem .9rem;cursor:pointer;transition:border-color .15s,transform .12s}
-.ex-card:hover{border-color:rgba(240,180,41,.7);transform:translateY(-1px)}
-.ex-badge{display:inline-flex;align-items:center;gap:.25rem;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#F6D98A;background:rgba(240,180,41,.14);border:1px solid rgba(240,180,41,.4);border-radius:100px;padding:.12rem .5rem}
-.ex-title{font-weight:700;font-size:.9rem;color:var(--white);margin:.45rem 0 .4rem;line-height:1.35}
-.ex-meta{display:flex;gap:.7rem;flex-wrap:wrap;font-size:.72rem;color:var(--muted)}
-.ex-meta b{color:#cfd6e6}
+.ex-grid .fc{border-color:rgba(240,180,41,.38);background:linear-gradient(180deg,rgba(240,180,41,.07),rgba(240,180,41,0) 38%),var(--card2)}
+.ex-grid .fc:hover{border-color:rgba(240,180,41,.65)}
 /* --- D4: private case breakdown (owner only) --- */
 .cb-wrap{border:1px solid var(--border2);border-radius:12px;background:var(--card2);padding:.85rem 1rem;margin:.9rem 0}
 .cb-h{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;flex-wrap:wrap;margin-bottom:.6rem}
@@ -1902,7 +1897,10 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
   <div class="sec-title">Resolved <span class="g">Decisions</span></div>
   <p class="sec-sub">Closed cases &mdash; <b>Resolved</b> (70%+ of asks met) and <b>Partially resolved</b>. See what the PM decided and how each ask was met. The record a forum thread never keeps.</p>
   <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All decisions</option><option value="resolved">Resolved only</option><option value="partial">Partially resolved</option></select></div>
-  <div class="ex-strip" id="ex-strip" style="display:none"></div>
+  <div class="ex-strip" id="ex-strip" style="display:none">
+    <div class="ex-h"><span class="ex-h-t">🏅 Exemplary decisions</span><span class="ex-h-s">Closed with a strong resolution — this is what a great case looks like.</span></div>
+    <div id="ex-list" class="feed-grid ex-grid"></div>
+  </div>
   <div id="lib-list" class="feed-grid"></div>
   <button type="button" id="lib-more" class="btn-ghost" style="display:none">Load more</button>
 </section>
@@ -2363,7 +2361,7 @@ boot();
   function addOpt(){ var wrap=document.getElementById('f-options'); if(!wrap) return; var n=wrap.querySelectorAll('.optrow').length; var L='ABCDEF'.charAt(n)||'?'; var row=document.createElement('div'); row.className='optrow'; row.innerHTML='<span class="optlbl">'+L+'</span><input class="optinput" maxlength="160" placeholder="Option '+L+'">'; wrap.appendChild(row); }
 
   var fcur=1, FSTEPS=3;
-  function showStep(n){ if(!form) return; n=Math.max(1,Math.min(FSTEPS,n)); fcur=n;
+  function showStep(n){ if(typeof renderClarityMeter==='function') setTimeout(renderClarityMeter,0); if(!form) return; n=Math.max(1,Math.min(FSTEPS,n)); fcur=n;
     [].slice.call(form.querySelectorAll('.fstep')).forEach(function(st){ st.classList.toggle('active', (+st.getAttribute('data-fstep'))===n); });
     [].slice.call(form.querySelectorAll('.fstep-pip')).forEach(function(p){ var pn=+p.getAttribute('data-goto'); p.classList.toggle('on', pn<=n); p.classList.toggle('cur', pn===n); });
     var fill=document.getElementById('fsteps-fill'); if(fill) fill.style.width=Math.round((n-1)/(FSTEPS-1)*100)+'%';
@@ -2445,7 +2443,7 @@ boot();
   }
   var cmTimer=null;
   function cmBind(){
-    var form=document.getElementById('case-form'); if(!form || form.getAttribute('data-cm')==='1') return;
+    var form=document.getElementById('submit-form'); if(!form || form.getAttribute('data-cm')==='1') return;
     form.setAttribute('data-cm','1');
     var go=function(){ if(cmTimer) clearTimeout(cmTimer); cmTimer=setTimeout(renderClarityMeter,150); };
     form.addEventListener('input', go);
@@ -2693,34 +2691,33 @@ boot();
   }
   /* ===================== D4: EXEMPLARY DECISIONS ===================== */
   function loadExemplary(){
-    var el=document.getElementById('ex-strip'); if(!el||!SB) return;
+    var strip=document.getElementById('ex-strip'), list=document.getElementById('ex-list');
+    if(!strip||!list||!SB) return;
     SB.rpc('dr_featured_cases',{p_limit:6}).then(function(res){
       var d=(res&&res.data)||null;
       var rows=(d&&d.ok&&d.cases)?d.cases:[];
-      if(!rows.length){ el.style.display='none'; el.innerHTML=''; return; }
-      var cards=rows.map(function(c){
-        return '<div class="ex-card" data-ex="'+escHtml(c.id)+'">'
-          +'<span class="ex-badge">\uD83C\uDFC5 Exemplary</span>'
-          +'<div class="ex-title">'+escHtml(c.title||'Untitled case')+'</div>'
-          +'<div class="ex-meta">'
-            +'<span><b>'+Math.round(Number(c.final_pct)||0)+'%</b> resolved</span>'
-            +'<span><b>'+(Number(c.responses)||0)+'</b> responses</span>'
-            +'<span>clarity <b>'+(Number(c.clarity)||0).toFixed(1)+'</b>/5</span>'
-          +'</div></div>';
-      }).join('');
-      el.style.display='block';
-      el.innerHTML='<div class="ex-h"><span class="ex-h-t">\uD83C\uDFC5 Exemplary decisions</span>'
-        +'<span class="ex-h-s">Closed with a strong resolution \u2014 these are what a great case looks like.</span></div>'
-        +'<div class="ex-row">'+cards+'</div>';
-      [].slice.call(el.querySelectorAll('.ex-card')).forEach(function(card){
-        card.onclick=function(){ var id=card.getAttribute('data-ex'); if(id && typeof openCase==='function') openCase(id); };
-      });
+      if(!rows.length){ strip.style.display='none'; list.innerHTML=''; return; }
+      /* feedCardHtml() is the SAME component the feed and library use, so these
+         cards are identical to the rest of the product -- no bespoke mini-card. */
+      var html='';
+      for(var i=0;i<rows.length;i++){
+        try{ html+=feedCardHtml(rows[i]); }catch(e){}
+      }
+      if(!html){ strip.style.display='none'; list.innerHTML=''; return; }
+      strip.style.display='block';
+      list.innerHTML=html;
+      if(typeof wireCards==='function') wireCards(list);
     }, function(){});
   }
 
   /* ============ D4: PRIVATE CASE BREAKDOWN (submitter only) ============ */
+  function clearCaseBreakdown(){
+    /* signing out must remove it immediately, without a page refresh */
+    if(!currentUser){ var h=document.getElementById('cb-host'); if(h) h.innerHTML=''; }
+  }
   function renderCaseBreakdown(caseId){
     var host=document.getElementById('cb-host'); if(!host||!SB) return;
+    if(!currentUser){ host.innerHTML=''; return; }
     SB.rpc('dr_case_breakdown',{p_case_id:caseId}).then(function(res){
       var d=(res&&res.data)||null;
       if(!d||!d.ok){ host.innerHTML=''; return; }   /* not yours / signed out -> render nothing */
@@ -3505,7 +3502,7 @@ boot();
   }
   window.drOpenProfile=function(isOnboarding){ openProfileForm(isOnboarding); };
 
-  window.drAfterAuth=function(){ loadChampion(); loadMyCases(); loadDrafts(); if(typeof loadFeed==='function') loadFeed(true); refreshBell(); if(profileIncomplete() && !profilePrompted){ profilePrompted=true; setTimeout(function(){ if(profileIncomplete()) openProfileForm(true); }, 1000); } };
+  window.drAfterAuth=function(){ clearCaseBreakdown(); loadChampion(); loadMyCases(); loadDrafts(); if(typeof loadFeed==='function') loadFeed(true); refreshBell(); if(profileIncomplete() && !profilePrompted){ profilePrompted=true; setTimeout(function(){ if(profileIncomplete()) openProfileForm(true); }, 1000); } };
   renderExamples(true);   /* immediate render from seed list */
   populateFilter();
   loadTaxonomy();         /* then refresh from DB (adds any custom values) */
