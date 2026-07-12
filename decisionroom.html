@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-d4-fixes 2026-07-12T09:10:00Z -->
+<!-- build:dr-d4-exemplary 2026-07-12T10:15:00Z -->
 <!-- build:D2-pill-tooltips 2026-07-10T22:04:59.735080+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -1314,7 +1314,7 @@
 .rsp-tip{position:absolute;z-index:99999;max-width:300px;background:var(--card);border:1px solid var(--border2);border-radius:14px;padding:1rem 1.15rem;box-shadow:0 16px 44px rgba(0,0,0,.4);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .16s ease,transform .16s ease}
 .rsp-tip.show{opacity:1;transform:none;pointer-events:auto}
 .rsp-tip-h{font-size:.96rem;font-weight:800;color:var(--white);margin-bottom:.45rem}
-.rsp-tip-b{font-size:.82rem;color:var(--text2);line-height:1.55}
+.rsp-tip-b{font-size:.82rem;color:var(--text2);line-height:1.55;white-space:pre-line}
 .rsp-tip-x{margin-top:.85rem;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:.42rem 1rem;font-size:.82rem;font-weight:600;cursor:pointer}
 .rsp-jp{display:flex;flex-wrap:wrap;gap:.4rem;margin:.7rem 0 .65rem}
 .jp-pill{display:inline-flex;align-items:center;gap:.35rem;background:var(--surface);border:1px solid var(--border2);border-radius:100px;padding:.28rem .65rem;font-size:.74rem;color:var(--white)}
@@ -1413,8 +1413,25 @@
 .ex-h{display:flex;align-items:center;gap:.5rem;margin:0 0 .7rem;flex-wrap:wrap}
 .ex-h-t{font-weight:800;font-size:1rem;color:var(--white)}
 .ex-h-s{font-size:.76rem;color:var(--muted)}
-.ex-grid .fc{border-color:rgba(240,180,41,.38);background:linear-gradient(180deg,rgba(240,180,41,.07),rgba(240,180,41,0) 38%),var(--card2)}
-.ex-grid .fc:hover{border-color:rgba(240,180,41,.65)}
+/* the card class is .feed-card (NOT .fc) -- ex-on is added to exemplary cards
+   wherever they appear (strip AND the Exemplary library filter) */
+.feed-card.ex-on{position:relative;overflow:hidden;border-color:rgba(240,180,41,.45);
+  background:linear-gradient(180deg,rgba(240,180,41,.10),rgba(240,180,41,.02) 42%,rgba(240,180,41,0) 70%),var(--card2);
+  box-shadow:0 0 0 1px rgba(240,180,41,.10),0 14px 40px rgba(240,180,41,.08)}
+.feed-card.ex-on:hover{border-color:rgba(240,180,41,.75);box-shadow:0 0 0 1px rgba(240,180,41,.20),0 18px 48px rgba(240,180,41,.14)}
+.feed-card.ex-on::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(180deg,#FBD24B,#E39B0C);border-radius:14px 0 0 14px;z-index:2}
+.ex-conf{position:absolute;top:0;right:0;width:230px;height:96px;pointer-events:none;opacity:.75;z-index:0}
+.ex-conf svg{width:100%;height:100%;display:block}
+.ex-ribbon{display:inline-flex;align-items:center;gap:.4rem;position:relative;z-index:3;margin:0 0 .7rem}
+.ex-medal{width:26px;height:34px;flex:none;line-height:0}
+.ex-medal svg{width:100%;height:100%;display:block}
+.ex-lab{display:inline-flex;align-items:center;gap:.3rem;font-size:.63rem;font-weight:800;text-transform:uppercase;
+  letter-spacing:.5px;color:#F6D98A;background:rgba(240,180,41,.14);border:1px solid rgba(240,180,41,.45);
+  border-radius:100px;padding:.16rem .55rem}
+.ex-lab .tip-i{width:13px;height:13px;font-size:.55rem;border-color:currentColor;color:inherit;opacity:.75}
+.ex-lab .tip-i:hover{opacity:1}
+.feed-card.ex-on .fc-top,.feed-card.ex-on .fc-title,.feed-card.ex-on .fc-attrs{position:relative;z-index:1}
 /* --- D4: private case breakdown (owner only) --- */
 .cb-wrap{border:1px solid var(--border2);border-radius:12px;background:var(--card2);padding:.85rem 1rem;margin:.9rem 0}
 .cb-h{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;flex-wrap:wrap;margin-bottom:.6rem}
@@ -1896,7 +1913,7 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
   <div class="sec-eyebrow g">The library</div>
   <div class="sec-title">Resolved <span class="g">Decisions</span></div>
   <p class="sec-sub">Closed cases &mdash; <b>Resolved</b> (70%+ of asks met) and <b>Partially resolved</b>. See what the PM decided and how each ask was met. The record a forum thread never keeps.</p>
-  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All decisions</option><option value="resolved">Resolved only</option><option value="partial">Partially resolved</option></select></div>
+  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All decisions</option><option value="exemplary">🏅 Exemplary only</option><option value="resolved">Resolved only</option><option value="partial">Partially resolved</option></select></div>
   <div class="ex-strip" id="ex-strip" style="display:none">
     <div class="ex-h"><span class="ex-h-t">🏅 Exemplary decisions</span><span class="ex-h-s">Closed with a strong resolution — this is what a great case looks like.</span></div>
     <div id="ex-list" class="feed-grid ex-grid"></div>
@@ -2690,18 +2707,81 @@ boot();
       + '</div>';
   }
   /* ===================== D4: EXEMPLARY DECISIONS ===================== */
+  /* ===================== D4: EXEMPLARY DECORATIONS ===================== */
+  var EXTIPS={};   /* case_id -> {t,b}  (per-case "why is this exemplary") */
+  var EX_IDS={};   /* case_id -> row   (so library cards can be decorated too) */
+  function exMedalSvg(){
+    return '<svg viewBox="0 0 56 74" aria-hidden="true">'
+      +'<defs><linearGradient id="exmg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FBD24B"/><stop offset="1" stop-color="#E39B0C"/></linearGradient></defs>'
+      +'<path d="M19 33 L13 66 L22 58 L20 33 Z" fill="#E39B0C"/><path d="M37 33 L43 66 L34 58 L36 33 Z" fill="#E39B0C"/>'
+      +'<circle cx="28" cy="24" r="21" fill="url(#exmg)" stroke="rgba(255,255,255,.55)" stroke-width="2"/>'
+      +'<path d="M28 12 l3.6 7.4 8.1 1.2 -5.9 5.7 1.4 8.1 -7.2 -3.8 -7.2 3.8 1.4 -8.1 -5.9 -5.7 8.1 -1.2 Z" fill="#8a5a05" opacity=".55"/>'
+      +'</svg>';
+  }
+  function exConfettiSvg(){
+    var bits=[[18,14,'#F6C544',-18,'r'],[52,40,'#8B7FF0',22,'d'],[86,12,'#5BC7A9',10,'r'],[120,44,'#F08BB0',-30,'d'],
+              [150,18,'#7FA8F0',15,'r'],[182,52,'#F6C544',40,'d'],[208,22,'#7ED9A0',-12,'r'],[70,70,'#8B7FF0',28,'d'],
+              [140,74,'#F08BB0',-24,'r'],[196,80,'#5BC7A9',18,'d']];
+    var o='<svg viewBox="0 0 230 96" aria-hidden="true">';
+    for(var i=0;i<bits.length;i++){ var p=bits[i];
+      if(p[4]==='r') o+='<rect x="'+p[0]+'" y="'+p[1]+'" width="8" height="4" rx="1.5" fill="'+p[2]+'" transform="rotate('+p[3]+' '+(p[0]+4)+' '+(p[1]+2)+')"/>';
+      else o+='<rect x="'+p[0]+'" y="'+p[1]+'" width="6" height="6" fill="'+p[2]+'" transform="rotate('+(p[3]+45)+' '+(p[0]+3)+' '+(p[1]+3)+')"/>';
+    }
+    return o+'</svg>';
+  }
+  /* plain-English reason, built from THIS case's own numbers */
+  function exReason(c){
+    var pct=Math.round(Number(c.final_pct)||0),
+        rc=Number(c.responses||c.response_count)||0,
+        hs=Number(c.high_signal)||0,
+        cl=Number(c.clarity)||0;
+    var b='A case earns the medal when the person who asked it closed it having got at least 70% of what they needed. It is here because other PMs actually solved it \u2014 not because of who wrote it.\n\n';
+    b+='\u2022 Resolved: the asker got '+pct+'% of what they asked for answered.\n';
+    b+='\u2022 Responses: it drew '+rc+' '+(rc===1?'reply':'replies')+(hs>0?(', '+hs+' of which '+(hs===1?'was':'were')+' marked genuinely helpful by readers'):'')+'.\n';
+    b+='\u2022 Brief quality: the case itself scored '+cl.toFixed(1)+' out of 5 on Clarity & Completeness.\n\n';
+    b+='Read it as a worked example: this is what a case worth answering looks like.';
+    return {t:'Why this is exemplary', b:b};
+  }
+  /* turn a standard feed card into an exemplary one WITHOUT wrapping it
+     (a wrapper would break the inline-expand panel that gets inserted after the card) */
+  function exBadgeHtml(c){
+    EXTIPS[c.id]=exReason(c);
+    return '<span class="ex-conf">'+exConfettiSvg()+'</span>'
+      +'<span class="ex-ribbon"><span class="ex-medal">'+exMedalSvg()+'</span>'
+      +'<span class="ex-lab">Exemplary'+tipI('ex:'+c.id)+'</span></span>';
+  }
+  function exDecorate(html, c){
+    var badge=exBadgeHtml(c);
+    var out=html.replace('class="feed-card', 'class="feed-card ex-on');   /* matches "feed-card" AND "feed-card lib" */
+    var i=out.indexOf('>');
+    return (i<0) ? out : (out.slice(0,i+1) + badge + out.slice(i+1));
+  }
+  /* The library list can paint BEFORE dr_featured_cases resolves. When the ids
+     land, retro-fit the medal onto any already-rendered card. */
+  function exApplyToList(){
+    var list=document.getElementById('lib-list'); if(!list) return;
+    [].slice.call(list.querySelectorAll('.feed-card[data-id]')).forEach(function(card){
+      var id=card.getAttribute('data-id'), c=EX_IDS[id];
+      if(!c || card.classList.contains('ex-on')) return;
+      card.classList.add('ex-on');
+      card.insertAdjacentHTML('afterbegin', exBadgeHtml(c));
+    });
+  }
+
   function loadExemplary(){
     var strip=document.getElementById('ex-strip'), list=document.getElementById('ex-list');
     if(!strip||!list||!SB) return;
     SB.rpc('dr_featured_cases',{p_limit:6}).then(function(res){
       var d=(res&&res.data)||null;
       var rows=(d&&d.ok&&d.cases)?d.cases:[];
+      for(var k=0;k<rows.length;k++){ EX_IDS[rows[k].id]=rows[k]; }
+      exApplyToList();   /* retro-fit medals onto library cards already on screen */
       if(!rows.length){ strip.style.display='none'; list.innerHTML=''; return; }
       /* feedCardHtml() is the SAME component the feed and library use, so these
          cards are identical to the rest of the product -- no bespoke mini-card. */
       var html='';
       for(var i=0;i<rows.length;i++){
-        try{ html+=feedCardHtml(rows[i]); }catch(e){}
+        try{ html+=exDecorate(feedCardHtml(rows[i]), rows[i]); }catch(e){}
       }
       if(!html){ strip.style.display='none'; list.innerHTML=''; return; }
       strip.style.display='block';
@@ -2748,7 +2828,31 @@ boot();
     }, function(){});
   }
 
+  function libDecorate(html, r){
+    /* medal on any card that is an exemplary decision, wherever it is listed */
+    var ex=EX_IDS[r.id];
+    return ex ? exDecorate(html, ex) : html;
+  }
+  function loadLibraryExemplary(){
+    /* the 'Exemplary only' filter: served straight from dr_featured_cases */
+    var list=document.getElementById('lib-list'); if(!list||!SB) return;
+    var more=document.getElementById('lib-more'); if(more) more.style.display='none';
+    var strip=document.getElementById('ex-strip'); if(strip) strip.style.display='none';  /* no duplicate */
+    libLoading=true;
+    SB.rpc('dr_featured_cases',{p_limit:60}).then(function(res){
+      libLoading=false; libDone=true;
+      var d=(res&&res.data)||null, rows=(d&&d.ok&&d.cases)?d.cases:[];
+      for(var k=0;k<rows.length;k++){ EX_IDS[rows[k].id]=rows[k]; }
+      if(!rows.length){ list.innerHTML='<div class="feed-empty">No exemplary decisions yet \u2014 a case earns the medal once it is closed with at least 70% of what the asker needed answered.</div>'; return; }
+      var html='';
+      for(var i=0;i<rows.length;i++){ try{ html+=exDecorate(libCardHtml(rows[i]), rows[i]); }catch(e){} }
+      list.innerHTML=html;
+      if(typeof wireCards==='function') wireCards(list);
+    }, function(){ libLoading=false; });
+  }
   function loadLibrary(reset){ detachExp();
+    var stEl0=document.getElementById('lib-status');
+    if(stEl0 && stEl0.value==='exemplary'){ if(reset){ libCursor=null; libDone=false; } loadLibraryExemplary(); return; }
     loadExemplary();
     if(!SB||libLoading) return; libLoading=true;
     if(reset){ libCursor=null; libDone=false; }
@@ -2759,7 +2863,7 @@ boot();
       var rows=(res&&res.data)||[];
       if(reset) list.innerHTML='';
       if(reset && !rows.length){ list.innerHTML='<div class="feed-empty">No resolved cases yet \u2014 they appear here once PMs close cases with outcomes.</div>'; }
-      rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', libCardHtml(r)); });
+      rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', libDecorate(libCardHtml(r), r)); });
       if(rows.length){ libCursor=rows[rows.length-1].closed_at||rows[rows.length-1].created_at; }
       if(rows.length<12) libDone=true;
       var more=document.getElementById('lib-more'); if(more) more.style.display=libDone?'none':'';
@@ -3002,7 +3106,8 @@ boot();
   function showTip(key, anchorEl){
     var tip=document.getElementById('rsp-tip');
     if(!tip){ tip=document.createElement('div'); tip.id='rsp-tip'; tip.className='rsp-tip'; tip.innerHTML='<div class="rsp-tip-h"></div><div class="rsp-tip-b"></div><button type="button" class="rsp-tip-x">Got it</button>'; document.body.appendChild(tip); tip.querySelector('.rsp-tip-x').onclick=function(){ tip.classList.remove('show'); }; }
-    var c=TIPS[key]; if(!c) return;
+    var c=(String(key||'').indexOf('ex:')===0) ? EXTIPS[String(key).slice(3)] : TIPS[key];
+    if(!c) return;
     tip.querySelector('.rsp-tip-h').textContent=c.t; tip.querySelector('.rsp-tip-b').textContent=c.b;
     tip.classList.add('show'); var w=tip.offsetWidth||300, r=anchorEl.getBoundingClientRect();
     tip.style.top=(r.bottom+window.scrollY+8)+'px'; tip.style.left=Math.max(8, Math.min(r.left+window.scrollX-8, window.innerWidth-w-12))+'px';
