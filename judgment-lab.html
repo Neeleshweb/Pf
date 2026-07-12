@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-d4-fixes 2026-07-12T06:35:00Z -->
+  <!-- build:lb-d4-ranksync 2026-07-12T07:10:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -1027,7 +1027,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     highsig:{t:'High-signal responses',b:'Responses on your cases that at least 2 readers marked helpful. 1 pt each. A good brief pulls better answers \u2014 this measures that.'},
     acted:{t:'Acted on',b:'Cases where you marked at least one response as acted on, worth 2 pts each. It rewards actually using the advice you asked for.'},
     gccred:{t:'GutCheck credibility',b:'Your GutCheck judgment level, applied per case: Consistent 0.5 \u00b7 Strong 1 \u00b7 Senior-like 1.5 \u00b7 High-calibration 2. Same rule reviewers get per response.'},
-    standing:{t:'Standing bonus',b:'A one-time bonus if you are also a top-3 reviewer: #1 = +3, #2 = +2, #3 = +1. It rewards people who give back and also bring cases. Applied once, not per case.'},
+    standing:{t:'Standing bonus',b:'A one-time bonus if you are also a top-3 reviewer on the ALL-TIME Reviewers board: #1 = +3, #2 = +2, #3 = +1. It rewards people who give back and also bring cases. Applied once, not per case \u2014 and it is deliberately all-time, so it does not swing with the window selector.'},
     flags:{t:'Needs-context flags (\u2212)',b:'Each time a reader flags one of your cases as needing more context, \u22122. It is the direct counterweight to posting thin briefs.'},
     aband:{t:'Abandoned (\u2212)',b:'\u22123 for a case left open past 30 days that got 3+ responses and you never acted on any of them. People gave you their time \u2014 leaving it hanging costs you.'},
     cases:{t:'Cases submitted',b:'How many cases you posted in this window. Context only \u2014 it does not add points by itself. Volume without quality actually scores negative.'},
@@ -1036,7 +1036,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     give:{t:'Give-back',b:'How many responses you have written on OTHER people\u2019s cases. Context only \u2014 it does not add points here, but it is what keeps the room alive.'},
     best:{t:'Best case',b:'Your single highest-scoring case in this window.'},
     avgresp:{t:'Avg responses / case',b:'Average number of responses your cases attracted in this window.'},
-    revrank:{t:'Reviewer rank',b:'Your current position on the all-time Reviewers board, if you are in the top 3.'},
+    revrank:{t:'Reviewer rank (this window)',b:'Where this person sits on the Reviewers board \u2014 for the SAME time window you have selected here. Switch the window and this moves with it.\n\nIt will always match the Reviewers tab exactly. A dash means they had no scored responses in this window.'},
+    standrank:{t:'All-time reviewer rank',b:'This person\u2019s position on the ALL-TIME Reviewers board \u2014 shown only for the top 3. This is the rank that earns the Standing bonus (#1 = +3, #2 = +2, #3 = +1), which is why it is all-time and does NOT change with the window selector.'},
     calls:{t:'Calls scored',b:'How many GutCheck dilemmas you have answered and had scored (lifetime).'},
     lvl:{t:'Judgment level',b:'Your GutCheck judgment level (lifetime), which drives the GutCheck credibility column.'},
     strongest:{t:'Strongest category',b:'The problem category where your GutCheck judgment matches the room most often.'},
@@ -1063,7 +1064,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +sbStat('c','Give-back',(x.give_back||0),'give')
       +sbStat('c','Best case',fmtN(x.best_case||0),'best')
       +sbStat('c','Avg resp./case',fmtN(x.avg_responses||0),'avgresp')
-      +sbStat('c','Reviewer rank',(x.reviewer_rank?('#'+x.reviewer_rank):'\u2014'),'revrank')
+      +sbStat('c','Reviewer rank (this window)',(x.reviewer_rank?('#'+x.reviewer_rank):'\u2014'),'revrank')
+      +sbStat('c','All-time reviewer rank',(x.standing_rank?('#'+x.standing_rank):'\u2014'),'standrank')
       +sbStat('c','Calls scored',(x.calls||0),'calls')
       +sbStat('c','Level',esc(x.level||'\u2014'),'lvl')
       +sbStat('c','Strongest',drCat(x.strongest),'strongest')
@@ -1090,7 +1092,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var g=sbStat('c','Best case',fmtN(x.best_case||0),'best')
       +sbStat('c','Avg resp./case',fmtN(x.avg_responses||0),'avgresp')
       +sbStat('c','Responses total',(x.responses||0),'resp')
-      +sbStat('c','Reviewer rank',(x.reviewer_rank?('#'+x.reviewer_rank):'\u2014'),'revrank')
+      +sbStat('c','Reviewer rank (this window)',(x.reviewer_rank?('#'+x.reviewer_rank):'\u2014'),'revrank')
+      +sbStat('c','All-time reviewer rank',(x.standing_rank?('#'+x.standing_rank):'\u2014'),'standrank')
       +sbStat('c','Calls scored',(x.calls||0),'calls')
       +sbStat('c','Judgment level',esc(x.level||'\u2014'),'lvl')
       +sbStat('c','Strongest category',drCat(x.strongest),'strongest')
