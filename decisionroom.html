@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- build:dr-d3b-champion 2026-07-12T03:10:00Z -->
 <!-- build:D2-pill-tooltips 2026-07-10T22:04:59.735080+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -1393,6 +1394,13 @@
 .rsp-top-r{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
 .rsp-acted{font-size:.66rem;font-weight:700;color:var(--accent2);background:var(--accent2-dim);border:1px solid rgba(var(--accent2-rgb),.34);border-radius:100px;padding:.12rem .55rem;white-space:nowrap}
 .rsp-card.is-acted{border-color:rgba(var(--accent2-rgb),.4);box-shadow:0 0 0 1px rgba(var(--accent2-rgb),.12)}
+/* --- D3b: Reviewer of the Week --- */
+.rsp-card.is-champ{border-color:rgba(240,180,41,.55);background:linear-gradient(180deg,rgba(240,180,41,.10),rgba(240,180,41,0) 42%),var(--card2);box-shadow:0 0 0 1px rgba(240,180,41,.16),0 10px 30px rgba(240,180,41,.07)}
+.rsp-card.is-champ::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:13px 0 0 13px;background:linear-gradient(180deg,#FBD24B,#E39B0C)}
+.rsp-card{position:relative}
+.jp-pill.jp-crown{background:linear-gradient(135deg,rgba(251,210,75,.20),rgba(227,155,12,.12));border-color:rgba(240,180,41,.5);color:#F6D98A;font-weight:700}
+.jp-crown .jp-ic{font-size:.9rem}
+.jp-crown .jp-streak{margin-left:.1rem;opacity:.95}
 .rsp-acted-btn{font:inherit;font-size:.74rem;font-weight:600;color:var(--accent2);background:transparent;border:1px solid rgba(var(--accent2-rgb),.4);border-radius:100px;padding:.28rem .8rem;cursor:pointer;transition:all .12s}
 .rsp-acted-btn:hover{background:var(--accent2-dim)}
 .rsp-acted-btn.on{background:var(--accent2-dim);color:var(--accent2)}
@@ -2783,6 +2791,7 @@ boot();
     var listEl=document.getElementById('cd-responses'), actEl=document.getElementById('cd-respond');
     if(!listEl||!SB) return;
     listEl.innerHTML='<p class="cd-resp-load">Loading responses\u2026</p>';
+    if(drChamp.alias===null) loadChampion();
     SB.rpc('dr_case_responses',{p_case_id:d.id}).then(function(res){
       var data=(res&&res.data)||{}, rs=data.responses||[];
       curCaseResponses=rs;
@@ -2805,7 +2814,8 @@ boot();
    calls:{t:'Calls scored',b:'How many GutCheck practice dilemmas the reviewer has completed with a verdict \u2014 their sample size. More calls means more evidence behind their level and strengths. It grows each time they lock a call on a dilemma that has a verdict.'},
    cat:{t:'Strongest category',b:'The category the reviewer scores highest on in GutCheck. If it matches this case\u2019s category, they earn a small relevance boost to the score \u2014 a reviewer strong in this exact topic is more credible here.'},
    dom:{t:'Best-fit domain',b:'The product domain where the reviewer matches the verdict most on GutCheck. If it matches this case\u2019s product/domain, they earn a small relevance boost \u2014 they\u2019ve shown good judgment in this kind of product.'},
-   conf:{t:'Reviewer confidence',b:'How sure the reviewer said they were when posting (low / medium / high). It\u2019s context for you, not a score factor. High confidence with a strong, well-covered answer is a good sign; high confidence with thin coverage is worth a closer look.'}
+   conf:{t:'Reviewer confidence',b:'How sure the reviewer said they were when posting (low / medium / high). It\u2019s context for you, not a score factor. High confidence with a strong, well-covered answer is a good sign; high confidence with thin coverage is worth a closer look.'},
+   champ:{t:'Reviewer of the Week',b:'This reviewer is currently #1 on the DecisionRoom leaderboard for this week \u2014 their responses have been acted on by case owners, marked helpful by readers, and answered the asks thoroughly. The crown is live: if someone overtakes them, it moves. It is a mark of standing only \u2014 it does NOT push their response higher in the ranking. A \uD83D\uDD25 shows consecutive weeks at #1.'}
   };
   function showTip(key, anchorEl){
     var tip=document.getElementById('rsp-tip');
@@ -2854,13 +2864,37 @@ boot();
     return '<div class="rsp-chk">'+items.map(function(it){ return '<span class="rsp-chk-i '+(it.ok?'y':'n')+'">'+(it.ok?'\u2713':'\u2013')+' '+escHtml(it.t)+'</span>'; }).join('')+'</div>';
   }
   function drCatLabel(sl){ if(!sl) return ''; var x=String(sl).replace(/-/g,' '); return x.charAt(0).toUpperCase()+x.slice(1); }
+  /* --- D3b: Reviewer of the Week (crown + streak) --- */
+  var drChamp={alias:null,streak:0,live:false};
+  function loadChampion(){
+    if(!SB) return;
+    SB.rpc('dr_reviewer_of_week').then(function(res){
+      var d=(res&&res.data)||null; if(!d||!d.ok) return;
+      var was=drChamp.streak;
+      drChamp={alias:d.alias||null, streak:Number(d.streak)||0, live:!!d.live};
+      /* if a case is already open and the streak changed, repaint its crown pills */
+      if(drChamp.streak!==was && drChamp.streak>=2){
+        var st='<span class="jp-streak">\uD83D\uDD25 '+drChamp.streak+'</span>';
+        [].slice.call(document.querySelectorAll('.jp-crown')).forEach(function(p){
+          if(!p.querySelector('.jp-streak')){ var b=p.querySelector('.tip-i'); if(b) b.insertAdjacentHTML('beforebegin', st); }
+        });
+      }
+    }, function(){});
+  }
+  function crownPill(r){
+    if(!r || !r.is_champion) return '';
+    var st=(drChamp.streak>=2)?'<span class="jp-streak">\uD83D\uDD25 '+drChamp.streak+'</span>':'';
+    return '<span class="jp-pill jp-crown"><span class="jp-ic">\uD83D\uDC51</span>Reviewer of the Week'+st+tipI('champ')+'</span>';
+  }
   function jpBadge(r){
-    if(!r || !(Number(r.jp_calls)>=3) || !r.jp_level) return '';
+    var crown=crownPill(r);
+    if(!r || !(Number(r.jp_calls)>=3) || !r.jp_level) return crown?('<div class="rsp-jp">'+crown+'</div>'):'';
     var tier={'Early signal':'\uD83C\uDF31','Consistent pattern emerging':'\uD83D\uDCCA','Strong category signal':'\u2B50','Senior-PM-like pattern emerging':'\uD83C\uDFC5','High-calibration reviewer':'\uD83C\uDFC6'}[r.jp_level]||'\uD83D\uDCCA';
     var cat=r.jp_strongest?drCatLabel(r.jp_strongest):'';
     var dom=r.jp_bestfit||'';
     var tcls={'Early signal':'t1','Consistent pattern emerging':'t2','Strong category signal':'t3','Senior-PM-like pattern emerging':'t4','High-calibration reviewer':'t5'}[r.jp_level]||'t2';
     return '<div class="rsp-jp">'
+      +crown
       +'<span class="jp-pill jp-level '+tcls+'"><span class="jp-ic">'+tier+'</span>'+escHtml(r.jp_level)+tipI('level')+'</span>'
       +(r.jp_calib!=null?'<span class="jp-pill jp-calib"><span class="jp-lab">Calibration</span>'+r.jp_calib+'%'+tipI('calib')+'</span>':'')
       +'<span class="jp-pill jp-calls"><span class="jp-lab">Calls</span>'+r.jp_calls+tipI('calls')+'</span>'
@@ -2896,7 +2930,7 @@ boot();
       var qmeta = flagged ? ['low','Not actionable'] : (wpct>=75 ? ['high','High ask coverage'] : (wpct>=40 ? ['mid','Useful perspective'] : ['low','Low coverage']));
       var qlabel = '<span class="rsp-q '+qmeta[0]+'">'+qmeta[1]+tipI('coverage')+'</span>';
       var chk = respChecklist(d, r);
-      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r">'+qlabel+scorePill(d,r)+'<span class="rsp-stars">'+starsMarkup(stars)+tipI('stars')+'</span></span></div>'+jpBadge(r)
+      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+(r.is_champion?' is-champ':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r">'+qlabel+scorePill(d,r)+'<span class="rsp-stars">'+starsMarkup(stars)+tipI('stars')+'</span></span></div>'+jpBadge(r)
         +'<div class="rsp-badges">'+conf+acted+hc+'</div>'+flag
         +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo+askn+nstep
         +wantsGridHtml(d, r)+freeAskGridHtml(d, r)+chk
@@ -3286,7 +3320,7 @@ boot();
   }
   window.drOpenProfile=function(isOnboarding){ openProfileForm(isOnboarding); };
 
-  window.drAfterAuth=function(){ loadMyCases(); loadDrafts(); if(typeof loadFeed==='function') loadFeed(true); refreshBell(); if(profileIncomplete() && !profilePrompted){ profilePrompted=true; setTimeout(function(){ if(profileIncomplete()) openProfileForm(true); }, 1000); } };
+  window.drAfterAuth=function(){ loadChampion(); loadMyCases(); loadDrafts(); if(typeof loadFeed==='function') loadFeed(true); refreshBell(); if(profileIncomplete() && !profilePrompted){ profilePrompted=true; setTimeout(function(){ if(profileIncomplete()) openProfileForm(true); }, 1000); } };
   renderExamples(true);   /* immediate render from seed list */
   populateFilter();
   loadTaxonomy();         /* then refresh from DB (adds any custom values) */
