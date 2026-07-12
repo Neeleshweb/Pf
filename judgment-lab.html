@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-restyle-v4 2026-07-12T02:05:00Z -->
+  <!-- build:lb-d3b-champion 2026-07-12T03:30:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -374,6 +374,21 @@
   .lb-tip-h{font-size:.95rem;font-weight:800;color:var(--ink,#16233f);margin-bottom:.45rem}
   .lb-tip-b{font-size:.82rem;color:var(--muted,#4b5563);line-height:1.55}
   .lb-tip-x{margin-top:.85rem;background:var(--accent,#4f43d8);color:#fff;border:none;border-radius:9px;padding:.42rem 1rem;font-size:.82rem;font-weight:600;cursor:pointer}
+  /* --- D3b: champion banner --- */
+  .lb-champ{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;border:1px solid #F0D9A0;border-radius:16px;padding:.85rem 1.1rem;margin:0 0 1.2rem;background:linear-gradient(90deg,#FFF6E2,#FFFDF8 60%);box-shadow:0 6px 20px rgba(227,155,12,.10)}
+  .lb-champ-ic{width:30px;height:30px;flex:none;line-height:0}
+  .lb-champ-t{font-weight:800;color:var(--ink,#16233f);font-size:.95rem}
+  .lb-champ-t b{color:#B8790A}
+  .lb-champ-s{font-size:.8rem;color:var(--muted,#7a8091);margin-top:.1rem;line-height:1.45}
+  .lb-champ-streak{display:inline-flex;align-items:center;gap:.25rem;background:#FFEDD0;border:1px solid #F2CE8A;color:#A8620A;border-radius:100px;padding:.16rem .55rem;font-size:.72rem;font-weight:800;margin-left:.4rem}
+  .lb-champ-you{background:var(--accent,#4f43d8);color:#fff;border-radius:100px;padding:.14rem .5rem;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;margin-left:.35rem}
+  /* --- D3b: rank history graph --- */
+  .lb-hist{margin-top:1.4rem;border:1px solid var(--border,#e4e8f4);border-radius:16px;background:var(--card,#fff);padding:1.1rem 1.2rem 1rem;box-shadow:0 4px 18px rgba(20,25,45,.05)}
+  .lb-hist-h{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;flex-wrap:wrap;margin-bottom:.2rem}
+  .lb-hist-t{font-weight:800;font-size:1rem;color:var(--ink,#16233f)}
+  .lb-hist-s{font-size:.78rem;color:var(--muted,#8a91a0)}
+  .lb-hist-svg{width:100%;height:190px;display:block;margin-top:.5rem;overflow:visible}
+  .lb-hist-empty{font-size:.85rem;color:var(--muted,#8a91a0);padding:.6rem 0 .2rem}
   .lb-empty{padding:1.6rem;text-align:center;color:var(--muted,#6b7280);font-size:.92rem;border:1px solid var(--border,#e4e8f4);border-radius:16px;background:var(--card,#fff)}
   @media(max-width:860px){
     #lb-sec .lb-topbar{align-items:flex-start}
@@ -567,7 +582,9 @@
       </div>
       <button type="button" id="lb-refresh" class="lb-refresh" aria-label="Refresh leaderboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Refresh</button>
     </div>
+    <div id="lb-champ" class="lb-champ" style="display:none"></div>
     <div id="lb-list" class="lb-list"><div class="lb-empty">Loading…</div></div>
+    <div id="lb-hist" class="lb-hist" style="display:none"></div>
   </div>
 </section>
 <footer class="foot">
@@ -691,6 +708,12 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   var ANON=PROD?'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkZnR0ZGFrd3lna2RnZmFrYXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNjI2NTYsImV4cCI6MjA5NzczODY1Nn0.1D85vTzCoi7nUYH9YllsdV47AEDhFliT3zsjUfYXJss';
   var TIER={'Early signal':'\uD83C\uDF31','Consistent pattern emerging':'\uD83D\uDCCA','Strong category signal':'\u2B50','Senior-PM-like pattern emerging':'\uD83C\uDFC5','High-calibration reviewer':'\uD83C\uDFC6'};
   function esc(t){ return String(t==null?'':t).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function jlToken(){ try{ var t=JSON.parse(localStorage.getItem('sb-'+REF+'-auth-token')); if(!t) return null; return t.access_token||(t.currentSession&&t.currentSession.access_token)||null; }catch(e){ return null; } }
+  function jlRpc(fn, body){
+    var tok=jlToken();
+    return fetch(URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+(tok||ANON),'Content-Type':'application/json'},body:JSON.stringify(body||{})})
+      .then(function(r){ return r.ok?r.json():null; });
+  }
   function jlUserId(){ try{ var t=JSON.parse(localStorage.getItem('sb-'+REF+'-auth-token')); if(!t) return null; return (t.user&&t.user.id)||(t.currentSession&&t.currentSession.user&&t.currentSession.user.id)||null; }catch(e){ return null; } }
   function lbRange(w){ var now=new Date(), until=now.toISOString();
     function sod(d){ var x=new Date(d); x.setHours(0,0,0,0); return x; }
@@ -877,6 +900,80 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     }
     el.innerHTML=podiumHtml(top.slice(0,3), w)+restHtml;
   }
+  /* --- D3b: Reviewer of the Week banner --- */
+  function champCrown(){ return '<span class="lb-champ-ic">'+crownSvg()+'</span>'; }
+  function renderChamp(d){
+    var el=document.getElementById('lb-champ'); if(!el) return;
+    if(!d || !d.ok || !d.alias){ el.innerHTML=''; el.style.display='none'; return; }
+    var streak=Number(d.streak)||0;
+    var st=(streak>=2)?'<span class="lb-champ-streak">\uD83D\uDD25 '+streak+' weeks</span>':'';
+    var you=d.is_me?'<span class="lb-champ-you">you</span>':'';
+    var sub=d.live
+      ? 'Leading the current week right now \u2014 the crown moves the moment someone overtakes them.'
+      : 'No scored activity yet this week, so this is last week\u2019s winner. Post a response and the crown is up for grabs.';
+    el.style.display='flex';
+    el.innerHTML=champCrown()
+      +'<div><div class="lb-champ-t">Reviewer of the Week: <b>'+esc(d.alias)+'</b>'+you+st+'</div>'
+      +'<div class="lb-champ-s">'+sub+'</div></div>';
+  }
+  function loadChamp(){ jlRpc('dr_reviewer_of_week').then(function(d){ renderChamp(d); }).catch(function(){}); }
+
+  /* --- D3b: 8-week rank progression graph (signed-in only) --- */
+  function histSvg(weeks){
+    var pts=weeks.filter(function(w){ return w.rank!=null; });
+    if(pts.length<1) return '';
+    var W=700,H=170,PL=38,PR=14,PT=14,PB=28;
+    var n=weeks.length, iw=(W-PL-PR)/Math.max(n-1,1);
+    var maxR=1; weeks.forEach(function(w){ if(w.rank!=null && Number(w.rank)>maxR) maxR=Number(w.rank); });
+    maxR=Math.max(maxR,3);
+    function X(i){ return PL+i*iw; }
+    function Y(r){ return PT+((Number(r)-1)/(maxR-1||1))*(H-PT-PB); }  /* rank 1 at TOP */
+    var g='',i,w,lastI=-1,seg=[],segs=[];
+    for(i=0;i<n;i++){ w=weeks[i];
+      if(w.rank!=null){ seg.push([X(i),Y(w.rank)]); lastI=i; }
+      else { if(seg.length){ segs.push(seg); seg=[]; } }
+    }
+    if(seg.length) segs.push(seg);
+    /* gridlines: rank 1 and worst */
+    g+='<line x1="'+PL+'" y1="'+Y(1)+'" x2="'+(W-PR)+'" y2="'+Y(1)+'" stroke="#EDEFF5" stroke-width="1"/>';
+    g+='<line x1="'+PL+'" y1="'+Y(maxR)+'" x2="'+(W-PR)+'" y2="'+Y(maxR)+'" stroke="#EDEFF5" stroke-width="1"/>';
+    g+='<text x="'+(PL-8)+'" y="'+(Y(1)+4)+'" text-anchor="end" font-size="10" fill="#9aa0b0" font-weight="700">#1</text>';
+    g+='<text x="'+(PL-8)+'" y="'+(Y(maxR)+4)+'" text-anchor="end" font-size="10" fill="#9aa0b0" font-weight="700">#'+maxR+'</text>';
+    /* line segments (gaps where you did not score) */
+    segs.forEach(function(sg){
+      if(sg.length<2) return;
+      g+='<polyline fill="none" stroke="#4f43d8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" points="'+sg.map(function(p){return p[0]+','+p[1];}).join(' ')+'"/>';
+    });
+    /* dots + labels */
+    for(i=0;i<n;i++){ w=weeks[i];
+      var lab=String(w.week_start||'').slice(5);  /* MM-DD */
+      g+='<text x="'+X(i)+'" y="'+(H-6)+'" text-anchor="middle" font-size="9.5" fill="#9aa0b0">'+esc(lab)+'</text>';
+      if(w.rank==null) continue;
+      var isBest=(Number(w.rank)===1);
+      g+='<circle cx="'+X(i)+'" cy="'+Y(w.rank)+'" r="'+(isBest?5.5:4.2)+'" fill="'+(isBest?'#E39B0C':'#4f43d8')+'" stroke="#fff" stroke-width="2"/>';
+      g+='<text x="'+X(i)+'" y="'+(Y(w.rank)-10)+'" text-anchor="middle" font-size="10" font-weight="800" fill="'+(isBest?'#B8790A':'#4f43d8')+'">#'+w.rank+'</text>';
+    }
+    return '<svg class="lb-hist-svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Your rank over the last 8 weeks">'+g+'</svg>';
+  }
+  function renderHist(d){
+    var el=document.getElementById('lb-hist'); if(!el) return;
+    if(!d || !d.ok || !d.signed_in){ el.innerHTML=''; el.style.display='none'; return; }
+    var weeks=d.weeks||[];
+    var scored=weeks.filter(function(w){ return w.rank!=null; });
+    if(!weeks.length){ el.innerHTML=''; el.style.display='none'; return; }
+    el.style.display='block';
+    var best=scored.length?Math.min.apply(null,scored.map(function(w){return Number(w.rank);})):null;
+    var head='<div class="lb-hist-h"><span class="lb-hist-t">Your rank history</span><span class="lb-hist-s">'
+      +(best?('Last '+weeks.length+' weeks \u00b7 best finish #'+best):('Last '+weeks.length+' completed weeks'))+'</span></div>';
+    el.innerHTML=head+(scored.length
+      ? histSvg(weeks)
+      : '<div class="lb-hist-empty">You have no scored weeks yet. Answer a case that the owner acts on, or that readers mark helpful, and you\u2019ll appear here.</div>');
+  }
+  function loadHist(){
+    if(!jlUserId()){ var e=document.getElementById('lb-hist'); if(e){ e.innerHTML=''; e.style.display='none'; } return; }
+    jlRpc('dr_my_rank_history',{p_weeks:8}).then(function(d){ renderHist(d); }).catch(function(){});
+  }
+
   var lbBusy=false, lbWin='week';
   function lbLoad(){
     if(lbBusy) return; lbBusy=true;
@@ -898,7 +995,9 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       lbWin=b.getAttribute('data-win')||'week';
       lbLoad();
     });
-    if(rEl) rEl.onclick=lbLoad;
+    if(rEl) rEl.onclick=function(){ lbLoad(); loadChamp(); loadHist(); };
+    /* lazy seal: closes out any completed week that is not yet frozen (no cron) */
+    jlRpc('dr_seal_weeks').then(function(){ loadChamp(); loadHist(); }).catch(function(){ loadChamp(); loadHist(); });
     document.addEventListener('click', function(e){
       var h=(e.target.closest)?e.target.closest('.lb-mc-head'):null; if(!h) return;
       var card=h.parentNode; if(!card||!card.classList||!card.classList.contains('lb-mc')) return;
