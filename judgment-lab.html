@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-d3b-champion 2026-07-12T03:30:00Z -->
+  <!-- build:lb-d4-tabs 2026-07-12T05:10:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -374,6 +374,11 @@
   .lb-tip-h{font-size:.95rem;font-weight:800;color:var(--ink,#16233f);margin-bottom:.45rem}
   .lb-tip-b{font-size:.82rem;color:var(--muted,#4b5563);line-height:1.55}
   .lb-tip-x{margin-top:.85rem;background:var(--accent,#4f43d8);color:#fff;border:none;border-radius:9px;padding:.42rem 1rem;font-size:.82rem;font-weight:600;cursor:pointer}
+  /* --- D4: board tabs --- */
+  .lb-tabs{display:inline-flex;gap:.25rem;background:#EFF1F7;border:1px solid var(--border,#e4e8f4);border-radius:12px;padding:.25rem;margin:1.1rem 0 .2rem}
+  .lb-tab{background:transparent;border:none;color:var(--muted,#5c6479);font-weight:700;font-size:.84rem;padding:.5rem .95rem;border-radius:9px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s,color .15s}
+  .lb-tab:hover{color:#1e2a4d}
+  .lb-tab.active{background:#fff;color:#1e2a4d;box-shadow:0 1px 4px rgba(20,25,45,.12)}
   /* --- D3b: champion banner --- */
   .lb-champ{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;border:1px solid #F0D9A0;border-radius:16px;padding:.85rem 1.1rem;margin:0 0 1.2rem;background:linear-gradient(90deg,#FFF6E2,#FFFDF8 60%);box-shadow:0 6px 20px rgba(227,155,12,.10)}
   .lb-champ-ic{width:30px;height:30px;flex:none;line-height:0}
@@ -569,6 +574,10 @@
       <span class="lb-live"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/><path d="m8 12 3 3 5-6"/></svg>Updated live — recalculates on every refresh</span>
     </div>
     <p class="lb-sub">Ranked by the quality of DecisionRoom responses to submitted cases.<span class="lb-sub2">Each <b>Score</b> sums the green stats — owner acted-on counts most, then helpful marks, coverage, and a small GutCheck-credibility bonus; reports subtract. Grey stats are lifetime context and don’t change the ranking. Tap any ⓘ to learn what a stat means. Points come from other people’s actions, so the board can’t be gamed.</span></p>
+    <div class="lb-tabs" id="lb-tabs" role="tablist" aria-label="Leaderboard type">
+      <button type="button" class="lb-tab active" data-board="rev" role="tab" aria-selected="true">Reviewers</button>
+      <button type="button" class="lb-tab" data-board="sub" role="tab">Case Submitters</button>
+    </div>
     <div class="lb-bar">
       <div class="lb-pills" id="lb-pills" role="tablist" aria-label="Leaderboard window">
         <button type="button" class="lb-pill" data-win="today" role="tab">Today</button>
@@ -744,7 +753,10 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function showLbTip(key, anchorEl){
     var tip=document.getElementById('lb-tip');
     if(!tip){ tip=document.createElement('div'); tip.id='lb-tip'; tip.className='lb-tip'; tip.innerHTML='<div class="lb-tip-h"></div><div class="lb-tip-b"></div><button type="button" class="lb-tip-x">Got it</button>'; document.body.appendChild(tip); tip.querySelector('.lb-tip-x').onclick=function(){ tip.classList.remove('show'); }; }
-    var c=LBTIPS[key]; if(!c) return;
+    var k=String(key||''); var c=(k.indexOf('sb:')===0)
+      ? ((typeof SBTIPS!=='undefined') ? SBTIPS[k.slice(3)] : null)
+      : LBTIPS[k];
+    if(!c) return;
     tip.querySelector('.lb-tip-h').textContent=c.t; tip.querySelector('.lb-tip-b').textContent=c.b;
     tip.classList.add('show'); var wd=tip.offsetWidth||300, r=anchorEl.getBoundingClientRect();
     tip.style.top=(r.bottom+window.scrollY+8)+'px'; tip.style.left=Math.max(8, Math.min(r.left+window.scrollX-8, window.innerWidth-wd-12))+'px';
@@ -902,21 +914,24 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   }
   /* --- D3b: Reviewer of the Week banner --- */
   function champCrown(){ return '<span class="lb-champ-ic">'+crownSvg()+'</span>'; }
-  function renderChamp(d){
+  function renderChamp(d,board){
     var el=document.getElementById('lb-champ'); if(!el) return;
+    var isSub=(board==='sub');
     if(!d || !d.ok || !d.alias){ el.innerHTML=''; el.style.display='none'; return; }
     var streak=Number(d.streak)||0;
     var st=(streak>=2)?'<span class="lb-champ-streak">\uD83D\uDD25 '+streak+' weeks</span>':'';
     var you=d.is_me?'<span class="lb-champ-you">you</span>':'';
     var sub=d.live
       ? 'Leading the current week right now \u2014 the crown moves the moment someone overtakes them.'
-      : 'No scored activity yet this week, so this is last week\u2019s winner. Post a response and the crown is up for grabs.';
+      : (isSub
+          ? 'No scored cases yet this week, so this is last week\u2019s winner. Post a strong brief and the crown is up for grabs.'
+          : 'No scored activity yet this week, so this is last week\u2019s winner. Post a response and the crown is up for grabs.');
     el.style.display='flex';
     el.innerHTML=champCrown()
-      +'<div><div class="lb-champ-t">Reviewer of the Week: <b>'+esc(d.alias)+'</b>'+you+st+'</div>'
+      +'<div><div class="lb-champ-t">'+(isSub?'Case Submitter of the Week':'Reviewer of the Week')+': <b>'+esc(d.alias)+'</b>'+you+st+'</div>'
       +'<div class="lb-champ-s">'+sub+'</div></div>';
   }
-  function loadChamp(){ jlRpc('dr_reviewer_of_week').then(function(d){ renderChamp(d); }).catch(function(){}); }
+  function loadChamp(){ var b=lbBoard; jlRpc(b==='sub'?'dr_submitter_of_week':'dr_reviewer_of_week').then(function(d){ if(b===lbBoard) renderChamp(d,b); }).catch(function(){}); }
 
   /* --- D3b: 8-week rank progression graph (signed-in only) --- */
   function histSvg(weeks){
@@ -971,17 +986,148 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   }
   function loadHist(){
     if(!jlUserId()){ var e=document.getElementById('lb-hist'); if(e){ e.innerHTML=''; e.style.display='none'; } return; }
-    jlRpc('dr_my_rank_history',{p_weeks:8}).then(function(d){ renderHist(d); }).catch(function(){});
+    var b=lbBoard;
+    jlRpc(b==='sub'?'dr_my_submitter_history':'dr_my_rank_history',{p_weeks:8})
+      .then(function(d){ if(b===lbBoard) renderHist(d); }).catch(function(){});
   }
 
-  var lbBusy=false, lbWin='week';
+  /* ================= D4: CASE SUBMITTERS BOARD ================= */
+  var SBTIPS={
+    clarity:{t:'Clarity & Completeness',b:'How complete each brief is, across 10 checks (situation, decision, options, risk, asks, free asks, product context, stakeholders, your recommendation, evidence/tried/constraints). Each case scores 0\u20135, worth \u00d73. It is the single biggest term \u2014 writing a fuller brief is the highest-leverage thing a submitter can do.'},
+    pull:{t:'Top-reviewer pull',b:'The strongest reviewer your case attracted. Gold #1 reviewer = 6 pts, silver = 5, bronze = 4, any Strong-level-or-better reviewer = 3. Taken as the single best per case (never added up), so one case cannot farm it.'},
+    resp:{t:'Responses received',b:'Points for responses your cases drew: min(responses, 5) \u00d7 2 per case. Capped so one viral case cannot dominate the board.'},
+    resolved:{t:'Resolved well',b:'Cases you closed with a final resolution of 70% or higher, worth 2 pts each. Closing the loop well is the whole point of DecisionRoom.'},
+    highsig:{t:'High-signal responses',b:'Responses on your cases that at least 2 readers marked helpful. 1 pt each. A good brief pulls better answers \u2014 this measures that.'},
+    acted:{t:'Acted on',b:'Cases where you marked at least one response as acted on, worth 2 pts each. It rewards actually using the advice you asked for.'},
+    gccred:{t:'GutCheck credibility',b:'Your GutCheck judgment level, applied per case: Consistent 0.5 \u00b7 Strong 1 \u00b7 Senior-like 1.5 \u00b7 High-calibration 2. Same rule reviewers get per response.'},
+    standing:{t:'Standing bonus',b:'A one-time bonus if you are also a top-3 reviewer: #1 = +3, #2 = +2, #3 = +1. It rewards people who give back and also bring cases. Applied once, not per case.'},
+    flags:{t:'Needs-context flags (\u2212)',b:'Each time a reader flags one of your cases as needing more context, \u22122. It is the direct counterweight to posting thin briefs.'},
+    aband:{t:'Abandoned (\u2212)',b:'\u22123 for a case left open past 30 days that got 3+ responses and you never acted on any of them. People gave you their time \u2014 leaving it hanging costs you.'},
+    cases:{t:'Cases submitted',b:'How many cases you posted in this window. Context only \u2014 it does not add points by itself. Volume without quality actually scores negative.'},
+    avgclar:{t:'Avg clarity',b:'Average Clarity & Completeness across your cases in this window, out of 5. Context only.'},
+    close:{t:'Close rate',b:'The share of your cases in this window that you actually closed. Context only \u2014 but a low close rate means people answered and never learned what happened.'},
+    give:{t:'Give-back',b:'How many responses you have written on OTHER people\u2019s cases. Context only \u2014 it does not add points here, but it is what keeps the room alive.'},
+    best:{t:'Best case',b:'Your single highest-scoring case in this window.'},
+    avgresp:{t:'Avg responses / case',b:'Average number of responses your cases attracted in this window.'},
+    revrank:{t:'Reviewer rank',b:'Your current position on the all-time Reviewers board, if you are in the top 3.'},
+    calls:{t:'Calls scored',b:'How many GutCheck dilemmas you have answered and had scored (lifetime).'},
+    lvl:{t:'Judgment level',b:'Your GutCheck judgment level (lifetime), which drives the GutCheck credibility column.'},
+    strongest:{t:'Strongest category',b:'The problem category where your GutCheck judgment matches the room most often.'},
+    domain:{t:'Best domain',b:'The product domain where your GutCheck judgment matches the room most often.'}
+  };
+  function sbTip(k){ return '<button type="button" class="lb-tip-i" data-tip="sb:'+k+'" aria-label="What is this?">i</button>'; }
+  function sbStat(cls,lab,val,key){
+    return '<div class="lb-stat '+cls+'"><span class="lb-slab">'+lab+(key?sbTip(key):'')+'</span><span class="lb-sval">'+val+'</span></div>';
+  }
+  function sbStatsHtml(x){
+    var green=sbStat('g','Clarity pts',fmtN(x.clarity_pts||0),'clarity')
+      +sbStat('g','Top-reviewer pull',fmtN(x.top_reviewer||0),'pull')
+      +sbStat('g','Responses pts',fmtN(x.responses_pts||0),'resp')
+      +sbStat('g','Resolved well',fmtN(x.resolved_pts||0),'resolved')
+      +sbStat('g','High-signal',fmtN(x.high_signal_pts||0),'highsig')
+      +sbStat('g','Acted on',fmtN(x.acted_pts||0),'acted')
+      +sbStat('g','GutCheck cred.',fmtN(x.gutcheck_cred||0),'gccred')
+      +sbStat('g','Standing bonus',fmtN(x.standing_bonus||0),'standing')
+      +sbStat('r','Flags (\u2212)',fmtN(x.flags_pts||0),'flags')
+      +sbStat('r','Abandoned (\u2212)',fmtN(x.abandoned_pts||0),'aband');
+    var grey=sbStat('c','Cases',(x.cases||0),'cases')
+      +sbStat('c','Avg clarity',fmtN(x.avg_clarity||0)+' / 5','avgclar')
+      +sbStat('c','Close rate',(x.close_rate||0)+'%','close')
+      +sbStat('c','Give-back',(x.give_back||0),'give')
+      +sbStat('c','Best case',fmtN(x.best_case||0),'best')
+      +sbStat('c','Avg resp./case',fmtN(x.avg_responses||0),'avgresp')
+      +sbStat('c','Reviewer rank',(x.reviewer_rank?('#'+x.reviewer_rank):'\u2014'),'revrank')
+      +sbStat('c','Calls scored',(x.calls||0),'calls')
+      +sbStat('c','Level',esc(x.level||'\u2014'),'lvl')
+      +sbStat('c','Strongest',drCat(x.strongest),'strongest')
+      +sbStat('c','Best domain',esc(x.best_domain||'\u2014'),'domain');
+    return '<div class="lb-stats"><div class="lb-pairs">'+green+'</div><div class="lb-pairs" style="margin-top:.42rem">'+grey+'</div></div>';
+  }
+  function sbPodium(top,w){
+    if(!top.length) return '';
+    function pod(x){ if(!x) return '';
+      var crown=(w==='week'&&x.rank===1)?('<span class="lb-crown">'+crownSvg()+'</span>'):'';
+      return '<div class="lb-pod lb-pod-'+x.rank+(x.is_me?' me':'')+'">'
+        + crown
+        + '<span class="lb-medal">'+medalSvg(x.rank)+'</span>'
+        + '<div class="lb-pod-ava">'+laurelSvg('l')+lbAvatar(x.alias)+laurelSvg('r')+'</div>'
+        + '<div class="lb-pod-alias">'+esc(x.alias)+(x.is_me?'<span class="lb-you">you</span>':'')+'</div>'
+        + '<div class="lb-pod-score">'+fmtN(x.score)+'<span>pts</span></div>'
+        + sbStatsHtml(x)
+        + '</div>';
+    }
+    return '<div class="lb-podium"><div class="lb-confetti">'+confettiSvg()+'</div>'+pod(top[1])+pod(top[0])+pod(top[2])+'</div>';
+  }
+  function sbRow(x,pinned){
+    return '<tr class="lb-tr'+(x.is_me?' me':'')+(pinned?' pin':'')+'">'
+      +'<td class="lb-rk">'+x.rank+'</td>'
+      +'<td class="lb-td-who"><span class="lb-who">'+lbAvatar(x.alias)+'<span class="lb-who-name">'+esc(x.alias)+'</span>'+(x.is_me?'<span class="lb-you lb-you-td">you</span>':'')+'</span></td>'
+      +tdNum('g',fmtN(x.clarity_pts||0))+tdNum('g',fmtN(x.top_reviewer||0))+tdNum('g',fmtN(x.responses_pts||0))
+      +tdNum('g',fmtN(x.resolved_pts||0))+tdNum('g',fmtN(x.high_signal_pts||0))+tdNum('g',fmtN(x.acted_pts||0))
+      +tdNum('g',fmtN(x.gutcheck_cred||0))+tdNum('g',fmtN(x.standing_bonus||0))
+      +tdNum('r',fmtN(x.flags_pts||0))+tdNum('r',fmtN(x.abandoned_pts||0))
+      +tdNum('c',(x.cases||0))+tdNum('c',fmtN(x.avg_clarity||0))+tdNum('c',(x.close_rate||0)+'%')+tdNum('c',(x.give_back||0))
+      +'<td class="lb-td-tp"><span class="lb-tp" style="color:'+tpColor(x.alias)+'">'+fmtN(x.score)+'<i>pts</i></span></td>'
+      +'</tr>';
+  }
+  function sbTable(rows,meRow){
+    function thc(lab,key){ return '<th><span class="lb-th-in"><span class="lb-th-t">'+lab+'</span>'+sbTip(key)+'</span></th>'; }
+    var cg='<colgroup><col class="c-rank"><col class="c-who">'
+      +'<col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num">'
+      +'<col class="c-num"><col class="c-num">'
+      +'<col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num">'
+      +'<col class="c-tp"></colgroup>';
+    var th='<thead><tr>'
+      +'<th class="l"><span class="lb-th-in l"><span class="lb-th-t">Rank</span></span></th>'
+      +'<th class="l"><span class="lb-th-in l"><span class="lb-th-t">Submitter</span></span></th>'
+      +thc('Clarity &amp; Completeness','clarity')+thc('Top-Reviewer Pull','pull')+thc('Responses','resp')
+      +thc('Resolved Well','resolved')+thc('High-Signal','highsig')+thc('Acted On','acted')
+      +thc('GutCheck Cred.','gccred')+thc('Standing Bonus','standing')
+      +thc('Flags (\u2212)','flags')+thc('Abandoned (\u2212)','aband')
+      +thc('Cases','cases')+thc('Avg Clarity','avgclar')+thc('Close Rate','close')+thc('Give-Back','give')
+      +'<th class="lb-th-tp"><span class="lb-th-in"><span class="lb-th-t">Total Points \u2193</span>'+sbTip('standing')+'</span></th>'
+      +'</tr></thead>';
+    var body=rows.map(function(x){ return sbRow(x,false); }).join('');
+    if(meRow){ body+='<tr class="lb-pin-sep"><td colspan="17" class="lb-pin-lab">Your rank</td></tr>'+sbRow(meRow,true); }
+    return '<div class="lb-table-wrap"><table class="lb-table">'+cg+th+'<tbody>'+body+'</tbody></table></div>';
+  }
+  function sbMcard(x,pinned){
+    return '<div class="lb-mc'+(x.is_me?' me':'')+(pinned?' pin':'')+'" data-open="0">'
+      +'<button type="button" class="lb-mc-head"><span class="lb-mc-rank">'+x.rank+'</span>'+lbAvatar(x.alias)
+      +'<span class="lb-mc-alias"><span class="lb-mc-nm">'+esc(x.alias)+'</span>'+(x.is_me?'<span class="lb-you">you</span>':'')+'</span>'
+      +'<span class="lb-mc-tp" style="color:'+tpColor(x.alias)+'">'+fmtN(x.score)+'<i>pts</i></span>'
+      +'<svg class="lb-mc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>'
+      +'<div class="lb-mc-body">'+sbStatsHtml(x)+'</div></div>';
+  }
+  function sbRender(res,w){
+    var el=document.getElementById('lb-list'); if(!el) return;
+    var top=(res&&res.top)||[]; var me=(res&&res.me)||null;
+    if(!top.length){ el.innerHTML='<div class="lb-empty">No scored cases in this window yet. Post a case with a full brief \u2014 clarity is the biggest single term, and a fuller brief attracts better reviewers.</div>'; return; }
+    var rest=top.slice(3);
+    var inTop=top.some(function(x){ return x.is_me; });
+    var meRow=(me && !inTop)?me:null;
+    var restHtml='';
+    if(rest.length || meRow){
+      restHtml='<div class="lb-rest-head"><span class="lb-rest-ico">'+peopleSvg()+'</span><div><div class="lb-rest-title">Ranks 4 &amp; Below</div><div class="lb-rest-sub">The top three are featured on the podium above.</div></div></div>'
+        + sbTable(rest,meRow) + '<div class="lb-mcards">'+rest.map(function(x){return sbMcard(x,false);}).join('')
+        + (meRow?('<div class="lb-mc-pinlab">Your rank</div>'+sbMcard(meRow,true)):'') + '</div>';
+    }
+    el.innerHTML=sbPodium(top.slice(0,3),w)+restHtml;
+  }
+
+  var lbBusy=false, lbWin='week', lbBoard='rev';
   function lbLoad(){
     if(lbBusy) return; lbBusy=true;
-    var rg=lbRange(lbWin), me=jlUserId();
+    var rg=lbRange(lbWin), me=jlUserId(), board=lbBoard;
+    var fn=(board==='sub')?'dr_submitter_leaderboard':'dr_reviewer_leaderboard';
     var el=document.getElementById('lb-list'); if(el) el.classList.add('loading');
-    fetch(URL+'/rest/v1/rpc/dr_reviewer_leaderboard',{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json'},body:JSON.stringify({p_since:rg[0],p_until:rg[1],p_limit:20,p_me:me})})
+    fetch(URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json'},body:JSON.stringify({p_since:rg[0],p_until:rg[1],p_limit:20,p_me:me})})
       .then(function(r){ return r.ok?r.json():null; })
-      .then(function(res){ lbBusy=false; if(el) el.classList.remove('loading'); lbRender(res||{}, lbWin); })
+      .then(function(res){
+        lbBusy=false; if(el) el.classList.remove('loading');
+        if(board!==lbBoard) return;                 /* stale response guard */
+        if(board==='sub') sbRender(res||{}, lbWin); else lbRender(res||{}, lbWin);
+      })
       .catch(function(){ lbBusy=false; if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load the leaderboard. Tap Refresh to retry.</div>'; } });
   }
   function initLb(){
@@ -996,6 +1142,25 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       lbLoad();
     });
     if(rEl) rEl.onclick=function(){ lbLoad(); loadChamp(); loadHist(); };
+    var tabs=document.getElementById('lb-tabs');
+    if(tabs) tabs.addEventListener('click', function(e){
+      var b=(e.target.closest)?e.target.closest('.lb-tab'):null; if(!b) return;
+      if(b.classList.contains('active')) return;
+      var cur=tabs.querySelector('.lb-tab.active'); if(cur){ cur.classList.remove('active'); cur.removeAttribute('aria-selected'); }
+      b.classList.add('active'); b.setAttribute('aria-selected','true');
+      lbBoard=b.getAttribute('data-board')||'rev';
+      /* cases move slower than responses -> default the submitter board to This Month */
+      var want=(lbBoard==='sub')?'month':'week';
+      var pl=document.getElementById('lb-pills');
+      if(pl){ var np=pl.querySelector('.lb-pill[data-win="'+want+'"]');
+        if(np && !np.classList.contains('active')){
+          var cp=pl.querySelector('.lb-pill.active'); if(cp){ cp.classList.remove('active'); cp.removeAttribute('aria-selected'); }
+          np.classList.add('active'); np.setAttribute('aria-selected','true'); lbWin=want;
+        }
+      }
+      lbBusy=false;
+      lbLoad(); loadChamp(); loadHist();
+    });
     /* lazy seal: closes out any completed week that is not yet frozen (no cron) */
     jlRpc('dr_seal_weeks').then(function(){ loadChamp(); loadHist(); }).catch(function(){ loadChamp(); loadHist(); });
     document.addEventListener('click', function(e){
