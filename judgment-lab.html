@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-d4-ranksync 2026-07-12T07:10:00Z -->
+  <!-- build:lb-d6-vault 2026-07-12T14:00:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -374,6 +374,68 @@
   .lb-tip-h{font-size:.95rem;font-weight:800;color:var(--ink,#16233f);margin-bottom:.45rem}
   .lb-tip-b{font-size:.82rem;color:var(--muted,#4b5563);line-height:1.55;white-space:pre-line}
   .lb-tip-x{margin-top:.85rem;background:var(--accent,#4f43d8);color:#fff;border:none;border-radius:9px;padding:.42rem 1rem;font-size:.82rem;font-weight:600;cursor:pointer}
+  /* ===================== D6: PERFORMANCE VAULT ===================== */
+  .vt-cta{position:relative;overflow:hidden;border:1px solid var(--border,#e4e8f4);border-radius:20px;padding:2.2rem 1.8rem;background:linear-gradient(135deg,#F6F4FF,#FFF9EC 55%,#F1FAF5);box-shadow:0 12px 40px rgba(20,25,45,.08);text-align:center}
+  .vt-cta-conf{position:absolute;inset:0 0 auto 0;height:120px;pointer-events:none;opacity:.85}
+  .vt-cta-conf svg{width:100%;height:100%;display:block}
+  .vt-lock{width:54px;height:54px;margin:0 auto .8rem;color:#6C5CE7;position:relative;z-index:1}
+  .vt-lock svg{width:100%;height:100%;display:block}
+  .vt-cta-t{position:relative;z-index:1;font-family:'Bebas Neue',sans-serif;font-size:clamp(1.9rem,4vw,2.6rem);letter-spacing:1px;line-height:1.05;color:var(--ink,#16233f)}
+  .vt-cta-s{position:relative;z-index:1;max-width:640px;margin:.6rem auto 0;font-size:.95rem;line-height:1.6;color:var(--muted,#4b5563)}
+  .vt-cta-s b{color:#5B4BD4}
+  .vt-cta-b{position:relative;z-index:1;display:inline-flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-top:1.2rem}
+  .vt-btn{display:inline-flex;align-items:center;gap:.4rem;background:#1e2a4d;color:#fff;border:none;border-radius:11px;padding:.68rem 1.15rem;font-size:.86rem;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit}
+  .vt-btn:hover{background:#2c3b66}
+  .vt-btn.alt{background:#fff;color:#1e2a4d;border:1px solid var(--border,#e4e8f4)}
+  .vt-btn.alt:hover{border-color:#1e2a4d}
+  .vt-teaser{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.6rem;margin-top:1.6rem;text-align:left;filter:blur(.5px);opacity:.62}
+  .vt-tz{border:1px dashed var(--border2,#d3d9ec);border-radius:12px;padding:.7rem .8rem;background:rgba(255,255,255,.7)}
+  .vt-tz b{display:block;font-size:.78rem;color:var(--ink,#16233f)}
+  .vt-tz span{font-size:.72rem;color:var(--muted,#8a91a0);line-height:1.4}
+  /* unlock ladder */
+  .vt-ladder{border:1px solid var(--border,#e4e8f4);border-radius:18px;background:var(--card,#fff);padding:1.4rem 1.5rem;box-shadow:0 6px 22px rgba(20,25,45,.06)}
+  .vt-lad-h{font-weight:800;font-size:1.05rem;color:var(--ink,#16233f)}
+  .vt-lad-s{font-size:.84rem;color:var(--muted,#7a8091);margin:.25rem 0 1rem;line-height:1.5}
+  .vt-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.7rem}
+  .vt-step{border:1px solid var(--border,#e4e8f4);border-radius:14px;padding:.85rem .95rem;background:#FBFCFE;position:relative}
+  .vt-step.done{border-color:#BFE7CE;background:#F2FBF5}
+  .vt-ring{width:34px;height:34px;margin-bottom:.5rem}
+  .vt-step-t{font-weight:700;font-size:.86rem;color:var(--ink,#16233f)}
+  .vt-step-s{font-size:.75rem;color:var(--muted,#8a91a0);margin-top:.2rem;line-height:1.45}
+  .vt-step-a{display:inline-block;margin-top:.5rem;font-size:.76rem;font-weight:700;color:var(--accent,#4f43d8);text-decoration:none}
+  .vt-step-a:hover{text-decoration:underline}
+  .vt-step.done .vt-step-a{color:#15803d}
+  /* Zone 1 standing */
+  .vt-zone{margin-bottom:1.6rem}
+  .vt-zh{display:flex;align-items:baseline;gap:.55rem;margin:0 0 .8rem;flex-wrap:wrap}
+  .vt-zn{font-size:.64rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#fff;background:#1e2a4d;border-radius:100px;padding:.16rem .5rem}
+  .vt-zt{font-weight:800;font-size:1.08rem;color:var(--ink,#16233f)}
+  .vt-zs{font-size:.8rem;color:var(--muted,#8a91a0)}
+  .vt-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .vt-card{border:1px solid var(--border,#e4e8f4);border-radius:18px;background:var(--card,#fff);padding:1.2rem 1.3rem;box-shadow:0 6px 22px rgba(20,25,45,.05)}
+  .vt-card.rev{background:linear-gradient(180deg,#F4F3FF,#fff 55%)}
+  .vt-card.aut{background:linear-gradient(180deg,#FFF7E9,#fff 55%)}
+  .vt-ct{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.7rem}
+  .vt-ct-t{font-weight:800;font-size:.95rem;color:var(--ink,#16233f)}
+  .vt-pct{font-size:.72rem;font-weight:800;border-radius:100px;padding:.18rem .55rem;background:#EEF1F8;color:#3a4358}
+  .vt-card.rev .vt-pct{background:#EAE7FF;color:#4b3fc4}
+  .vt-card.aut .vt-pct{background:#FDEFD4;color:#a8700a}
+  .vt-big{display:flex;align-items:baseline;gap:.45rem;flex-wrap:wrap}
+  .vt-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;line-height:1;letter-spacing:.5px;color:var(--ink,#16233f)}
+  .vt-card.rev .vt-num{color:#5B4BD4}
+  .vt-card.aut .vt-num{color:#E39B0C}
+  .vt-unit{font-size:.62rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted,#9aa0b0)}
+  .vt-delta{font-size:.76rem;font-weight:800;border-radius:100px;padding:.12rem .45rem}
+  .vt-delta.up{background:#EAF8F0;color:#15803d}
+  .vt-delta.dn{background:#FDF0F0;color:#c0392b}
+  .vt-delta.flat{background:#F1F3F8;color:#7a8091}
+  .vt-mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:.4rem;margin-top:.9rem}
+  .vt-m{border:1px solid var(--border,#eef1f7);border-radius:10px;padding:.45rem .55rem;background:rgba(255,255,255,.75)}
+  .vt-m span{display:block;font-size:.6rem;text-transform:uppercase;letter-spacing:.3px;color:var(--muted,#8a91a0);font-weight:800;line-height:1.3}
+  .vt-m b{display:block;font-size:.92rem;color:var(--ink,#16233f);margin-top:.15rem}
+  .vt-gc{border:1px solid var(--border,#e4e8f4);border-radius:18px;background:linear-gradient(180deg,#F1FAF5,#fff 55%);padding:1.1rem 1.3rem;box-shadow:0 6px 22px rgba(20,25,45,.05)}
+  .vt-none{padding:1.1rem;border:1px dashed var(--border2,#d3d9ec);border-radius:14px;color:var(--muted,#8a91a0);font-size:.86rem;line-height:1.5;background:#FBFCFE}
+  @media(max-width:860px){ .vt-cards{grid-template-columns:1fr} }
   /* --- D4: desktop expandable detail row (submitter board) --- */
   .lb-xtog{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;margin-left:.3rem;border:1px solid var(--border2,#d3d9ec);background:#fff;color:var(--muted,#8a91a0);border-radius:6px;cursor:pointer;padding:0;flex:none;transition:transform .18s,border-color .15s,color .15s}
   .lb-xtog:hover{border-color:var(--accent,#4f43d8);color:var(--accent,#4f43d8)}
@@ -587,7 +649,8 @@
     <p class="lb-sub" id="lb-sub"></p>
     <div class="lb-tabs" id="lb-tabs" role="tablist" aria-label="Leaderboard type">
       <button type="button" class="lb-tab active" data-board="rev" role="tab" aria-selected="true">Reviewers</button>
-      <button type="button" class="lb-tab" data-board="sub" role="tab">Case Submitters</button>
+      <button type="button" class="lb-tab" data-board="sub" role="tab">Case Authors</button>
+      <button type="button" class="lb-tab" data-board="vault" role="tab">🔐 My Vault</button>
     </div>
     <div class="lb-bar">
       <div class="lb-pills" id="lb-pills" role="tablist" aria-label="Leaderboard window">
@@ -931,6 +994,9 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     rev:{ title:'Top Responders',
       lead:'Ranked by the quality of the responses people write on other PMs\u2019 cases.',
       body:'Each <b>Score</b> sums the green stats \u2014 the case owner acting on your response counts most, then helpful marks from readers, how thoroughly you answered the asks, and a small GutCheck-credibility bonus; reports subtract. Grey stats are lifetime context and don\u2019t change the ranking. Points come from other people\u2019s actions, so the board can\u2019t be gamed.' },
+    vault:{ title:'My Vault',
+      lead:'Your private performance record \u2014 only you can see this.',
+      body:'The leaderboards tell you where you rank. The Vault tells you whether you are actually getting <b>better</b>, and what to fix next. Nothing here is public, and nothing here is shared.' },
     sub:{ title:'Top Case Authors',
       lead:'Ranked by the quality of the decisions people bring to the room \u2014 not how many they post.',
       body:'Each <b>Score</b> sums the green stats \u2014 <b>Clarity &amp; Completeness</b> is the biggest term, so a fuller brief is the single highest-leverage thing you can do. You also earn points for the calibre of reviewer your case attracts, the responses it draws, closing the loop well, and acting on the advice you asked for. Thin or abandoned cases <b>lose</b> points, so posting more without care scores you lower, not higher. Grey stats are context only.' }
@@ -958,7 +1024,11 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +'<div><div class="lb-champ-t">'+(isSub?'Case Submitter of the Week':'Reviewer of the Week')+': <b>'+esc(d.alias)+'</b>'+you+st+'</div>'
       +'<div class="lb-champ-s">'+sub+'</div></div>';
   }
-  function loadChamp(){ var b=lbBoard; jlRpc(b==='sub'?'dr_submitter_of_week':'dr_reviewer_of_week').then(function(d){ if(b===lbBoard) renderChamp(d,b); }).catch(function(){}); }
+  function loadChamp(){
+    var b=lbBoard;
+    if(b==='vault'){ var e=document.getElementById('lb-champ'); if(e){ e.innerHTML=''; e.style.display='none'; } return; }
+    jlRpc(b==='sub'?'dr_submitter_of_week':'dr_reviewer_of_week').then(function(d){ if(b===lbBoard) renderChamp(d,b); }).catch(function(){});
+  }
 
   /* --- D3b: 8-week rank progression graph (signed-in only) --- */
   function histSvg(weeks){
@@ -1012,6 +1082,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       : '<div class="lb-hist-empty">You have no scored weeks yet. Answer a case that the owner acts on, or that readers mark helpful, and you\u2019ll appear here.</div>');
   }
   function loadHist(){
+    var hEl=document.getElementById('lb-hist');
+    if(lbBoard==='vault'){ if(hEl){ hEl.innerHTML=''; hEl.style.display='none'; } return; }  /* Zone 2 brings its own graphs */
     if(!jlUserId()){ var e=document.getElementById('lb-hist'); if(e){ e.innerHTML=''; e.style.display='none'; } return; }
     var b=lbBoard;
     jlRpc(b==='sub'?'dr_my_submitter_history':'dr_my_rank_history',{p_weeks:8})
@@ -1158,8 +1230,129 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     el.innerHTML=sbPodium(top.slice(0,3),w)+restHtml;
   }
 
+  /* ===================== D6: PERFORMANCE VAULT ===================== */
+  function lockSvg(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none"/><path d="M12 16.9v1.6"/></svg>';
+  }
+  function ringSvg(done, pctDone){
+    var r=14, c=2*Math.PI*r, off=c*(1-Math.max(0,Math.min(1,pctDone)));
+    return '<svg class="vt-ring" viewBox="0 0 36 36">'
+      +'<circle cx="18" cy="18" r="'+r+'" fill="none" stroke="#E7EAF1" stroke-width="4"/>'
+      +'<circle cx="18" cy="18" r="'+r+'" fill="none" stroke="'+(done?'#22a45d':'#4f43d8')+'" stroke-width="4" stroke-linecap="round" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 18 18)"/>'
+      +(done?'<path d="M12.5 18.2l3.4 3.4 7-7.2" fill="none" stroke="#22a45d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>':'')
+      +'</svg>';
+  }
+  /* --- signed OUT: sell it --- */
+  function vaultSignedOut(){
+    return '<div class="vt-cta"><span class="vt-cta-conf">'+confettiSvg()+'</span>'
+      +'<span class="vt-lock">'+lockSvg()+'</span>'
+      +'<div class="vt-cta-t">Your Vault is locked</div>'
+      +'<p class="vt-cta-s">Leaderboards tell you where you rank. The Vault tells you <b>whether you are getting better</b> \u2014 and exactly which PM muscle is weak.'
+      +' Sign in, take a few GutCheck calls and answer one real case, and it opens up: your judgment profile, your rank over time, the categories you keep getting wrong, and one concrete thing to do next.</p>'
+      +'<div class="vt-cta-b"><a class="vt-btn" href="/gutcheck.html">Start with GutCheck \u2192</a>'
+      +'<a class="vt-btn alt" href="/decisionroom.html">Answer a live case</a></div>'
+      +'<div class="vt-teaser">'
+        +'<div class="vt-tz"><b>Your Standing</b><span>Score, rank, percentile, streaks, crowns</span></div>'
+        +'<div class="vt-tz"><b>Trajectory</b><span>8-week trend, category radar, calibration</span></div>'
+        +'<div class="vt-tz"><b>Diagnosis</b><span>What is holding you back, and the fix</span></div>'
+        +'<div class="vt-tz"><b>Your Work</b><span>Every response and case, scored</span></div>'
+      +'</div></div>';
+  }
+  /* --- signed in, but not enough data yet: the unlock ladder --- */
+  function vaultLadder(u){
+    function step(done, ratio, t, sub, href, cta){
+      return '<div class="vt-step'+(done?' done':'')+'">'+ringSvg(done, ratio)
+        +'<div class="vt-step-t">'+t+'</div><div class="vt-step-s">'+sub+'</div>'
+        +(done?'<span class="vt-step-a">\u2713 Done</span>':'<a class="vt-step-a" href="'+href+'">'+cta+' \u2192</a>')+'</div>';
+    }
+    var calls=Number(u.calls)||0;
+    return '<div class="vt-ladder"><div class="vt-lad-h">\uD83D\uDD13 Two steps from a live Vault</div>'
+      +'<div class="vt-lad-s">The Vault is built from your real judgment data \u2014 so it needs a little of it first. Each step below unlocks a zone. Nothing here is ever public.</div>'
+      +'<div class="vt-steps">'
+      + step(!!u.calls_done, calls/3, 'Score 3 GutCheck calls', calls+' of 3 done \u2014 this creates your judgment profile: level, calibration and strongest category.', '/gutcheck.html', 'Take a call')
+      + step(!!u.profile_done, u.profile_done?1:0, 'Create your DecisionRoom profile', 'Your alias and context, so reviewers know who they are helping.', '/decisionroom.html', 'Set it up')
+      + step(!!u.resp_done, Math.min(1,(Number(u.responses)||0)), 'Answer one real case', (Number(u.responses)||0)+' written \u2014 this starts your reviewer score, rank and streak.', '/decisionroom.html', 'Find a case')
+      + step(!!u.case_done, Math.min(1,(Number(u.cases)||0)), 'Submit one case', (Number(u.cases)||0)+' posted \u2014 this starts your author score and clarity tracking.', '/decisionroom.html', 'Post a case')
+      +'</div></div>';
+  }
+  function vtDelta(d){
+    if(d===null||d===undefined) return '';
+    var n=Number(d);
+    if(!n) return '<span class="vt-delta flat">no change</span>';
+    return '<span class="vt-delta '+(n>0?'up':'dn')+'">'+(n>0?'\u25B2 +':'\u25BC ')+fmtN(n)+'</span>';
+  }
+  function vtM(lab,val){ return '<div class="vt-m"><span>'+lab+'</span><b>'+val+'</b></div>'; }
+  function vaultCard(cls, title, x, extra){
+    if(!x || !x.active){
+      return '<div class="vt-card '+cls+'"><div class="vt-ct"><span class="vt-ct-t">'+title+'</span></div>'
+        +'<div class="vt-none">Nothing scored in this window yet. Pick a wider window above, or go and do the work \u2014 the number only moves when other people act on what you wrote.</div></div>';
+    }
+    var pct=(x.percentile!=null)
+      ? '<span class="vt-pct" title="Rank '+x.rank+' of '+x.total_active+' active">Top '+x.percentile+'% \u00b7 #'+x.rank+'</span>' : '';
+    return '<div class="vt-card '+cls+'">'
+      +'<div class="vt-ct"><span class="vt-ct-t">'+title+'</span>'+pct+'</div>'
+      +'<div class="vt-big"><span class="vt-num">'+fmtN(x.score)+'</span><span class="vt-unit">pts</span>'+vtDelta(x.delta)+'</div>'
+      +'<div class="vt-mini">'
+        +vtM('Best rank', x.best_rank?('#'+x.best_rank):'\u2014')
+        +vtM('Crowns \uD83D\uDC51', (x.crowns||0))
+        +vtM('Streak \uD83D\uDD25', (x.streak||0))
+        + extra
+      +'</div></div>';
+  }
+  function vaultZone1(d){
+    var r=d.reviewer||{}, a=d.author||{}, g=d.gutcheck||{};
+    var revExtra=vtM('Acted on',(r.acted||0))+vtM('Helpful',(r.helpful||0))+vtM('Covered',(r.covered||0))+vtM('Reports',(r.reports||0));
+    var autExtra=vtM('Cases',(a.cases||0))+vtM('Avg clarity',(a.avg_clarity!=null?fmtN(a.avg_clarity)+'/5':'\u2014'))+vtM('Close rate',((a.close_rate||0)+'%'))+vtM('Exemplary \uD83C\uDFC5',(a.exemplary||0));
+    var gc='<div class="vt-gc"><div class="vt-ct"><span class="vt-ct-t">\uD83E\uDDED GutCheck judgment</span></div><div class="vt-mini">'
+      +vtM('Level', esc(g.level||'\u2014'))
+      +vtM('Calls scored', (g.calls||0))
+      +vtM('Calibration', (g.calibration!=null?(Math.round(g.calibration)+'%'):'\u2014'))
+      +vtM('Strongest', drCat(g.strongest))
+      +vtM('Weakest', drCat(g.weakest))
+      +vtM('Best domain', esc(g.best_domain||'\u2014'))
+      +'</div></div>';
+    return '<div class="vt-zone">'
+      +'<div class="vt-zh"><span class="vt-zn">Zone 1</span><span class="vt-zt">Your Standing</span>'
+      +'<span class="vt-zs">Where you sit right now \u2014 in the window selected above.</span></div>'
+      +'<div class="vt-cards">'
+        +vaultCard('rev','As a reviewer', d.reviewer, revExtra)
+        +vaultCard('aut','As a case author', d.author, autExtra)
+      +'</div><div style="margin-top:1rem">'+gc+'</div></div>';
+  }
+  function vaultRender(d){
+    var el=document.getElementById('lb-list'); if(!el) return;
+    if(!d || !d.ok){ el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; return; }
+    if(!d.signed_in){ el.innerHTML=vaultSignedOut(); return; }
+    var u=d.unlock||{};
+    var html='';
+    if(!u.all_done) html+=vaultLadder(u)+'<div style="height:1.4rem"></div>';
+    html+=vaultZone1(d);
+    el.innerHTML=html;
+  }
+  function loadVault(){
+    var el=document.getElementById('lb-list');
+    if(!jlUserId()){ if(el) el.innerHTML=vaultSignedOut(); return; }
+    var rg=lbRange(lbWin), pv=lbPrevRange(lbWin);
+    if(el) el.classList.add('loading');
+    var b=lbBoard;
+    jlRpc('dr_my_vault',{p_since:rg[0],p_until:rg[1],p_prev_since:pv[0],p_prev_until:pv[1]})
+      .then(function(d){ if(b!==lbBoard) return; if(el) el.classList.remove('loading'); vaultRender(d); })
+      .catch(function(){ if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; } });
+  }
+  /* previous equivalent window, for the trend arrow */
+  function lbPrevRange(w){
+    var rg=lbRange(w), a=new Date(rg[0]), b=new Date(rg[1]);
+    var span=b-a;
+    if(w==='all') return [null,null];
+    if(w==='month'){ var m=new Date(a); m.setMonth(m.getMonth()-1); return [m.toISOString(), a.toISOString()]; }
+    if(w==='lastmonth'){ var m2=new Date(a); m2.setMonth(m2.getMonth()-1); return [m2.toISOString(), a.toISOString()]; }
+    var pa=new Date(a.getTime()-span);
+    return [pa.toISOString(), a.toISOString()];
+  }
+
   var lbBusy=false, lbWin='week', lbBoard='rev';
   function lbLoad(){
+    if(lbBoard==='vault'){ loadVault(); return; }
     if(lbBusy) return; lbBusy=true;
     var rg=lbRange(lbWin), me=jlUserId(), board=lbBoard;
     var fn=(board==='sub')?'dr_submitter_leaderboard':'dr_reviewer_leaderboard';
@@ -1194,7 +1387,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       lbBoard=b.getAttribute('data-board')||'rev';
       setBoardCopy(lbBoard);
       /* cases move slower than responses -> default the submitter board to This Month */
-      var want=(lbBoard==='sub')?'month':'week';
+      var want=(lbBoard==='rev')?'week':'month';
       var pl=document.getElementById('lb-pills');
       if(pl){ var np=pl.querySelector('.lb-pill[data-win="'+want+'"]');
         if(np && !np.classList.contains('active')){
