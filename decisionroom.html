@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-d4-exemplary 2026-07-12T10:15:00Z -->
+<!-- build:dr-d4-libdedupe 2026-07-12T12:30:00Z -->
 <!-- build:D2-pill-tooltips 2026-07-10T22:04:59.735080+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -1913,7 +1913,7 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
   <div class="sec-eyebrow g">The library</div>
   <div class="sec-title">Resolved <span class="g">Decisions</span></div>
   <p class="sec-sub">Closed cases &mdash; <b>Resolved</b> (70%+ of asks met) and <b>Partially resolved</b>. See what the PM decided and how each ask was met. The record a forum thread never keeps.</p>
-  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All decisions</option><option value="exemplary">🏅 Exemplary only</option><option value="resolved">Resolved only</option><option value="partial">Partially resolved</option></select></div>
+  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All decisions</option><option value="exemplary">🏅 Exemplary only</option><option value="resolved">Resolved — excluding exemplary</option><option value="partial">Partially resolved</option></select></div>
   <div class="ex-strip" id="ex-strip" style="display:none">
     <div class="ex-h"><span class="ex-h-t">🏅 Exemplary decisions</span><span class="ex-h-s">Closed with a strong resolution — this is what a great case looks like.</span></div>
     <div id="ex-list" class="feed-grid ex-grid"></div>
@@ -2768,107 +2768,99 @@ boot();
     });
   }
 
-  function loadExemplary(){
+  /* ---- exemplary ids are needed BEFORE the list renders, so we can dedupe ---- */
+  var EX_ROWS=[], exIdsLoaded=false;
+  function fetchExIds(force){
+    if(!SB) return Promise.resolve({});
+    if(exIdsLoaded && !force) return Promise.resolve(EX_IDS);
+    return SB.rpc('dr_featured_cases',{p_limit:60}).then(function(res){
+      var d=(res&&res.data)||null;
+      EX_ROWS=(d&&d.ok&&d.cases)?d.cases:[];
+      EX_IDS={};
+      for(var k=0;k<EX_ROWS.length;k++){ EX_IDS[EX_ROWS[k].id]=EX_ROWS[k]; }
+      exIdsLoaded=true;
+      return EX_IDS;
+    }, function(){ return EX_IDS; });
+  }
+  /* the strip: ONLY under "All decisions". Anywhere else it would duplicate the
+     list (that was the "I see 4 exemplary cards" bug) or pollute a filter. */
+  function renderExStrip(show){
     var strip=document.getElementById('ex-strip'), list=document.getElementById('ex-list');
-    if(!strip||!list||!SB) return;
-    SB.rpc('dr_featured_cases',{p_limit:6}).then(function(res){
-      var d=(res&&res.data)||null;
-      var rows=(d&&d.ok&&d.cases)?d.cases:[];
-      for(var k=0;k<rows.length;k++){ EX_IDS[rows[k].id]=rows[k]; }
-      exApplyToList();   /* retro-fit medals onto library cards already on screen */
-      if(!rows.length){ strip.style.display='none'; list.innerHTML=''; return; }
-      /* feedCardHtml() is the SAME component the feed and library use, so these
-         cards are identical to the rest of the product -- no bespoke mini-card. */
-      var html='';
-      for(var i=0;i<rows.length;i++){
-        try{ html+=exDecorate(feedCardHtml(rows[i]), rows[i]); }catch(e){}
-      }
-      if(!html){ strip.style.display='none'; list.innerHTML=''; return; }
-      strip.style.display='block';
-      list.innerHTML=html;
-      if(typeof wireCards==='function') wireCards(list);
-    }, function(){});
+    if(!strip||!list) return;
+    if(!show || !EX_ROWS.length){ strip.style.display='none'; list.innerHTML=''; return; }
+    var html='';
+    for(var i=0;i<EX_ROWS.length;i++){
+      try{ html+=exDecorate(feedCardHtml(EX_ROWS[i]), EX_ROWS[i]); }catch(e){}
+    }
+    if(!html){ strip.style.display='none'; list.innerHTML=''; return; }
+    strip.style.display='block';
+    list.innerHTML=html;
+    if(typeof wireCards==='function') wireCards(list);
   }
 
-  /* ============ D4: PRIVATE CASE BREAKDOWN (submitter only) ============ */
-  function clearCaseBreakdown(){
-    /* signing out must remove it immediately, without a page refresh */
-    if(!currentUser){ var h=document.getElementById('cb-host'); if(h) h.innerHTML=''; }
-  }
-  function renderCaseBreakdown(caseId){
-    var host=document.getElementById('cb-host'); if(!host||!SB) return;
-    if(!currentUser){ host.innerHTML=''; return; }
-    SB.rpc('dr_case_breakdown',{p_case_id:caseId}).then(function(res){
-      var d=(res&&res.data)||null;
-      if(!d||!d.ok){ host.innerHTML=''; return; }   /* not yours / signed out -> render nothing */
-      var p=d.points||{};
-      function it(lab,val,cls){ var n=Number(val)||0;
-        return '<div class="cb-i '+(n>0?'pos':(n<0?'neg':''))+'"><span>'+lab+'</span><b>'+(n>0?'+':'')+n+'</b></div>'; }
-      var grid=it('Clarity &amp; Completeness', p.clarity)
-        +it('Top-reviewer pull', p.top_reviewer)
-        +it('Responses', p.responses)
-        +it('Resolved well', p.resolved_high)
-        +it('High-signal replies', p.high_signal)
-        +it('You acted on advice', p.acted)
-        +it('Needs-context flags', p.context_flags)
-        +it('Abandoned', p.abandoned);
-      var tip;
-      if(Number(d.clarity)<5){
-        tip='Your brief scored <b>'+Number(d.clarity).toFixed(1)+' / 5</b> on Clarity &amp; Completeness \u2014 the biggest single term. A fuller brief pulls in stronger reviewers and is far more likely to reach a real resolution.';
-      } else {
-        tip='Your brief scored full marks on Clarity &amp; Completeness. The rest of the score now depends on the room \u2014 and on you closing the loop.';
-      }
-      if(Number(d.responses)>Number(d.responses_counted)){
-        tip+=' Only the first '+d.responses_counted+' responses count toward points (the rest still help you).';
-      }
-      host.innerHTML='<div class="cb-wrap"><div class="cb-h"><span class="cb-t">\uD83D\uDD12 Your case score <span style="color:var(--muted);font-weight:600">(only you can see this)</span></span>'
-        +'<span class="cb-tot">'+(Number(d.score)||0)+' pts</span></div>'
-        +'<div class="cb-grid">'+grid+'</div>'
-        +'<div class="cb-tip">'+tip+'</div></div>';
-    }, function(){});
-  }
-
+  var libReqId=0;
   function libDecorate(html, r){
-    /* medal on any card that is an exemplary decision, wherever it is listed */
     var ex=EX_IDS[r.id];
     return ex ? exDecorate(html, ex) : html;
   }
-  function loadLibraryExemplary(){
-    /* the 'Exemplary only' filter: served straight from dr_featured_cases */
-    var list=document.getElementById('lib-list'); if(!list||!SB) return;
+
+  /* "Exemplary only" filter -- served straight from the cached exemplary rows */
+  function loadLibraryExemplary(myReq){
+    var list=document.getElementById('lib-list'); if(!list) return;
     var more=document.getElementById('lib-more'); if(more) more.style.display='none';
-    var strip=document.getElementById('ex-strip'); if(strip) strip.style.display='none';  /* no duplicate */
-    libLoading=true;
-    SB.rpc('dr_featured_cases',{p_limit:60}).then(function(res){
-      libLoading=false; libDone=true;
-      var d=(res&&res.data)||null, rows=(d&&d.ok&&d.cases)?d.cases:[];
-      for(var k=0;k<rows.length;k++){ EX_IDS[rows[k].id]=rows[k]; }
-      if(!rows.length){ list.innerHTML='<div class="feed-empty">No exemplary decisions yet \u2014 a case earns the medal once it is closed with at least 70% of what the asker needed answered.</div>'; return; }
-      var html='';
-      for(var i=0;i<rows.length;i++){ try{ html+=exDecorate(libCardHtml(rows[i]), rows[i]); }catch(e){} }
-      list.innerHTML=html;
-      if(typeof wireCards==='function') wireCards(list);
-    }, function(){ libLoading=false; });
+    renderExStrip(false);                       /* no strip: the list IS the strip */
+    if(myReq!==libReqId) return;
+    libLoading=false; libDone=true;
+    if(!EX_ROWS.length){
+      list.innerHTML='<div class="feed-empty">No exemplary decisions yet \u2014 a case earns the medal once it is closed with at least 70% of what the asker needed answered, and at least one PM actually helped.</div>';
+      return;
+    }
+    var html='';
+    for(var i=0;i<EX_ROWS.length;i++){ try{ html+=exDecorate(libCardHtml(EX_ROWS[i]), EX_ROWS[i]); }catch(e){} }
+    list.innerHTML=html;
+    if(typeof wireCards==='function') wireCards(list);
   }
-  function loadLibrary(reset){ detachExp();
-    var stEl0=document.getElementById('lib-status');
-    if(stEl0 && stEl0.value==='exemplary'){ if(reset){ libCursor=null; libDone=false; } loadLibraryExemplary(); return; }
-    loadExemplary();
-    if(!SB||libLoading) return; libLoading=true;
-    if(reset){ libCursor=null; libDone=false; }
-    var catEl=document.getElementById('lib-cat'); var cat=catEl?catEl.value:null;
-    var stEl=document.getElementById('lib-status'); var lst=stEl?stEl.value:'closed';
-    SB.rpc('dr_feed',{p_limit:12,p_before:libCursor,p_category:cat,p_status:lst,p_urgency:null,p_product:null,p_experience:null}).then(function(res){
-      libLoading=false; var list=document.getElementById('lib-list'); if(!list) return;
+
+  function loadLibrary(reset){
+    detachExp();
+    if(!SB) return;
+    var stEl=document.getElementById('lib-status');
+    var st=stEl?stEl.value:'closed';
+    /* a filter change must never be swallowed by an in-flight request */
+    if(reset){ libCursor=null; libDone=false; libReqId++; }
+    else if(libLoading) return;
+    var myReq=libReqId;
+    libLoading=true;
+
+    fetchExIds(!!reset).then(function(){
+      if(myReq!==libReqId) return null;
+      if(st==='exemplary'){ loadLibraryExemplary(myReq); return null; }
+      renderExStrip(st==='closed');            /* strip ONLY on "All decisions" */
+      var catEl=document.getElementById('lib-cat'); var cat=catEl?catEl.value:null;
+      return SB.rpc('dr_feed',{p_limit:12,p_before:libCursor,p_category:cat,p_status:st,
+                               p_urgency:null,p_product:null,p_experience:null});
+    }).then(function(res){
+      if(!res || myReq!==libReqId) return;
+      libLoading=false;
+      var list=document.getElementById('lib-list'); if(!list) return;
       var rows=(res&&res.data)||[];
+      /* NEVER show a case twice, and keep the buckets mutually exclusive:
+           closed   -> exemplary are already in the strip above  => hide here
+           resolved -> "excluding exemplary" (they have their own filter) => hide here
+           partial  -> an exemplary case can't be partial anyway  => nothing to hide */
+      var hideEx=(st==='closed'||st==='resolved');
+      var shown=hideEx ? rows.filter(function(r){ return !EX_IDS[r.id]; }) : rows;
       if(reset) list.innerHTML='';
-      if(reset && !rows.length){ list.innerHTML='<div class="feed-empty">No resolved cases yet \u2014 they appear here once PMs close cases with outcomes.</div>'; }
-      rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', libDecorate(libCardHtml(r), r)); });
+      shown.forEach(function(r){ list.insertAdjacentHTML('beforeend', libDecorate(libCardHtml(r), r)); });
+      if(reset && !list.children.length){
+        list.innerHTML='<div class="feed-empty">No cases match this filter yet.</div>';
+      }
+      /* cursor/paging must follow the RAW rows, not the filtered view */
       if(rows.length){ libCursor=rows[rows.length-1].closed_at||rows[rows.length-1].created_at; }
       if(rows.length<12) libDone=true;
       var more=document.getElementById('lib-more'); if(more) more.style.display=libDone?'none':'';
       wireCards(list);
-    }).catch(function(){ libLoading=false; });
+    }, function(){ if(myReq===libReqId) libLoading=false; });
   }
   var myCasesData=[], myCasesFilter='all';
   function wantsMetBadge(r){ var g=caseWantsPct(r); if(!g) return '<span class="fc-rc">Closed</span>'; return '<span class="fc-met '+(pctGood(g.pct)?'g':'r')+'">'+g.sat+' of '+g.total+' met \u00b7 '+g.pct+'%</span>'; }
