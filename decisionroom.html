@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-d4-exemplary 2026-07-12T10:15:00Z -->
+<!-- build:dr-d4-libfilter 2026-07-12T11:05:00Z -->
 <!-- build:D2-pill-tooltips 2026-07-10T22:04:59.735080+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -2828,6 +2828,7 @@ boot();
     }, function(){});
   }
 
+  var libReqId=0;
   function libDecorate(html, r){
     /* medal on any card that is an exemplary decision, wherever it is listed */
     var ex=EX_IDS[r.id];
@@ -2838,8 +2839,10 @@ boot();
     var list=document.getElementById('lib-list'); if(!list||!SB) return;
     var more=document.getElementById('lib-more'); if(more) more.style.display='none';
     var strip=document.getElementById('ex-strip'); if(strip) strip.style.display='none';  /* no duplicate */
+    libReqId++; var myReq=libReqId;
     libLoading=true;
     SB.rpc('dr_featured_cases',{p_limit:60}).then(function(res){
+      if(myReq!==libReqId) return;
       libLoading=false; libDone=true;
       var d=(res&&res.data)||null, rows=(d&&d.ok&&d.cases)?d.cases:[];
       for(var k=0;k<rows.length;k++){ EX_IDS[rows[k].id]=rows[k]; }
@@ -2848,27 +2851,35 @@ boot();
       for(var i=0;i<rows.length;i++){ try{ html+=exDecorate(libCardHtml(rows[i]), rows[i]); }catch(e){} }
       list.innerHTML=html;
       if(typeof wireCards==='function') wireCards(list);
-    }, function(){ libLoading=false; });
+    }, function(){ if(myReq===libReqId) libLoading=false; });
   }
   function loadLibrary(reset){ detachExp();
     var stEl0=document.getElementById('lib-status');
     if(stEl0 && stEl0.value==='exemplary'){ if(reset){ libCursor=null; libDone=false; } loadLibraryExemplary(); return; }
+    if(!SB) return;
+    /* A filter change must NEVER be swallowed by an in-flight request.
+       Old code did `if(libLoading) return;` BEFORE the reset, so changing the
+       filter mid-request silently did nothing and the stale list stayed up.
+       Now: a reset always wins, and a request-id guard drops late responses. */
+    if(reset){ libCursor=null; libDone=false; libReqId++; }
+    else if(libLoading) return;
+    var myReq=libReqId;
+    libLoading=true;
     loadExemplary();
-    if(!SB||libLoading) return; libLoading=true;
-    if(reset){ libCursor=null; libDone=false; }
     var catEl=document.getElementById('lib-cat'); var cat=catEl?catEl.value:null;
     var stEl=document.getElementById('lib-status'); var lst=stEl?stEl.value:'closed';
     SB.rpc('dr_feed',{p_limit:12,p_before:libCursor,p_category:cat,p_status:lst,p_urgency:null,p_product:null,p_experience:null}).then(function(res){
+      if(myReq!==libReqId) return;                 /* a newer filter won -- drop this */
       libLoading=false; var list=document.getElementById('lib-list'); if(!list) return;
       var rows=(res&&res.data)||[];
       if(reset) list.innerHTML='';
-      if(reset && !rows.length){ list.innerHTML='<div class="feed-empty">No resolved cases yet \u2014 they appear here once PMs close cases with outcomes.</div>'; }
+      if(reset && !rows.length){ list.innerHTML='<div class="feed-empty">No cases match this filter yet.</div>'; }
       rows.forEach(function(r){ list.insertAdjacentHTML('beforeend', libDecorate(libCardHtml(r), r)); });
       if(rows.length){ libCursor=rows[rows.length-1].closed_at||rows[rows.length-1].created_at; }
       if(rows.length<12) libDone=true;
       var more=document.getElementById('lib-more'); if(more) more.style.display=libDone?'none':'';
       wireCards(list);
-    }).catch(function(){ libLoading=false; });
+    }, function(){ if(myReq===libReqId) libLoading=false; });
   }
   var myCasesData=[], myCasesFilter='all';
   function wantsMetBadge(r){ var g=caseWantsPct(r); if(!g) return '<span class="fc-rc">Closed</span>'; return '<span class="fc-met '+(pctGood(g.pct)?'g':'r')+'">'+g.sat+' of '+g.total+' met \u00b7 '+g.pct+'%</span>'; }
