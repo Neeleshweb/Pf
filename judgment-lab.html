@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-d6-vault 2026-07-12T14:00:00Z -->
+  <!-- build:lb-d6-vault2 2026-07-12T15:40:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -829,9 +829,10 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function showLbTip(key, anchorEl){
     var tip=document.getElementById('lb-tip');
     if(!tip){ tip=document.createElement('div'); tip.id='lb-tip'; tip.className='lb-tip'; tip.innerHTML='<div class="lb-tip-h"></div><div class="lb-tip-b"></div><button type="button" class="lb-tip-x">Got it</button>'; document.body.appendChild(tip); tip.querySelector('.lb-tip-x').onclick=function(){ tip.classList.remove('show'); }; }
-    var k=String(key||''); var c=(k.indexOf('sb:')===0)
-      ? ((typeof SBTIPS!=='undefined') ? SBTIPS[k.slice(3)] : null)
-      : LBTIPS[k];
+    var k=String(key||''), c;
+    if(k.indexOf('sb:')===0)      c=(typeof SBTIPS!=='undefined') ? SBTIPS[k.slice(3)] : null;
+    else if(k.indexOf('vt:')===0) c=(typeof VTIPS!=='undefined')  ? VTIPS[k.slice(3)]  : null;
+    else                          c=LBTIPS[k];
     if(!c) return;
     tip.querySelector('.lb-tip-h').textContent=c.t; tip.querySelector('.lb-tip-b').textContent=c.b;
     tip.classList.add('show'); var wd=tip.offsetWidth||300, r=anchorEl.getBoundingClientRect();
@@ -1231,6 +1232,30 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   }
 
   /* ===================== D6: PERFORMANCE VAULT ===================== */
+  var VTIPS={
+    revscore:{t:'Your reviewer score',b:'Points earned from the responses you wrote in the window selected above.\n\nowner acted on it x2 \u00b7 + helpful marks \u00b7 + how fully you answered the asks \u00b7 + a small GutCheck-credibility bonus \u00b7 \u2212 reports x2.\n\nEvery point comes from someone ELSE acting on your work, which is why it cannot be gamed.'},
+    autscore:{t:'Your author score',b:'Points earned from the cases you posted in the window selected above.\n\nClarity & Completeness x3 (the biggest term) \u00b7 + the calibre of reviewer your case attracted \u00b7 + responses it drew \u00b7 + closing it well \u00b7 + acting on the advice \u00b7 \u2212 context flags \u00b7 \u2212 abandoned cases.\n\nPosting more thin cases lowers this score, it does not raise it.'},
+    pctile:{t:'Percentile and rank',b:'\u201cTop 23% \u00b7 #2\u201d means: of everyone ACTIVE in this window, you are 2nd, which puts you in the top 23%.\n\nThe denominator is people active in the window \u2014 not everyone who ever signed up \u2014 so it is an honest comparison against people who actually showed up.'},
+    delta:{t:'Trend',b:'How this score compares with the SAME length of time immediately before it. This Month is measured against Last Month, This Week against Last Week, and so on.\n\nThis is the number that matters: the leaderboard says where you rank, this says whether you are getting better.'},
+    bestrank:{t:'Best rank',b:'The highest position you have ever reached on this board, across every completed week we have sealed. It never goes down.'},
+    crowns:{t:'Crowns',b:'How many completed weeks you finished at #1 on this board. Weeks are frozen when they end, so a crown can never be taken away from you.'},
+    streak:{t:'Streak',b:'How many completed weeks in a row you have finished at #1, counting back from now. It resets the moment somebody else takes the top spot.'},
+    vacted:{t:'Acted on',b:'How many of your responses the case owner explicitly marked as acted on \u2014 they actually did what you suggested. This is the single strongest signal in the product, and it is worth double.'},
+    vhelpful:{t:'Helpful marks',b:'How many times readers marked your responses helpful. It means people found it useful \u2014 which is not quite the same as the owner acting on it.'},
+    vcovered:{t:'High-coverage responses',b:'Responses where you answered at least 70% of what the asker actually asked for, in real depth. Answering the interesting bits and skipping their real questions does not count.'},
+    vreports:{t:'Reports',b:'Times a response of yours was flagged by a reader. Each one subtracts 2 points. If this is not zero, go back and read those responses.'},
+    vcases:{t:'Cases posted',b:'How many cases you submitted in this window. On its own it earns you nothing \u2014 quality is what scores.'},
+    vclarity:{t:'Average clarity',b:'The average Clarity & Completeness of your briefs in this window, out of 5. It is the largest single term in your author score, so it is the fastest thing you can improve.\n\nA fuller brief attracts better reviewers and is far more likely to reach a real resolution.'},
+    vclose:{t:'Close rate',b:'The share of your cases that you actually closed out. People gave you their time \u2014 closing the loop tells them what happened, and it is why they answer you again.'},
+    vexemplary:{t:'Exemplary cases',b:'Cases of yours that earned the medal: closed, with the asker getting at least 70% of what they needed, and at least one PM who actually helped. These are shown in the Library as worked examples.'},
+    gclevel:{t:'Judgment level',b:'Your GutCheck level, from your scored calls and calibration.\n\nEarly signal \u2192 Consistent pattern \u2192 Strong category signal \u2192 Senior-PM-like \u2192 High-calibration reviewer.\n\nIt also feeds a small credibility bonus into both scores above.'},
+    gccalib:{t:'Calibration',b:'How well your confidence matches your accuracy. Being right when you said you were confident, and unsure when you were actually wrong, both raise it.\n\nHigh confidence + frequently wrong is the pattern that lowers it \u2014 and it is the most dangerous habit a PM can have.'},
+    gccalls:{t:'Calls scored',b:'How many GutCheck dilemmas you have answered and had scored, lifetime.'},
+    gcstrong:{t:'Strongest category',b:'The problem type where your judgment agrees with the room most often. Answer DecisionRoom cases here \u2014 you are more likely to be genuinely useful, and it scores faster.'},
+    gcweak:{t:'Weakest category',b:'The problem type where your judgment diverges from the room most often. This is not a criticism \u2014 it is the highest-value thing you can practise.'},
+    gcdomain:{t:'Best domain',b:'The product domain (B2B SaaS, B2C, Marketplace\u2026) where your judgment matches the room most often.'}
+  };
+  function vTip(k){ return '<button type="button" class="lb-tip-i" data-tip="vt:'+k+'" aria-label="What is this?">i</button>'; }
   function lockSvg(){
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none"/><path d="M12 16.9v1.6"/></svg>';
   }
@@ -1249,8 +1274,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +'<div class="vt-cta-t">Your Vault is locked</div>'
       +'<p class="vt-cta-s">Leaderboards tell you where you rank. The Vault tells you <b>whether you are getting better</b> \u2014 and exactly which PM muscle is weak.'
       +' Sign in, take a few GutCheck calls and answer one real case, and it opens up: your judgment profile, your rank over time, the categories you keep getting wrong, and one concrete thing to do next.</p>'
-      +'<div class="vt-cta-b"><a class="vt-btn" href="/gutcheck.html">Start with GutCheck \u2192</a>'
-      +'<a class="vt-btn alt" href="/decisionroom.html">Answer a live case</a></div>'
+      +'<div class="vt-cta-b"><a class="vt-btn" href="/gutcheck.html#today">Start with GutCheck \u2192</a>'
+      +'<a class="vt-btn alt" href="/decisionroom.html?do=respond">Answer a live case</a></div>'
       +'<div class="vt-teaser">'
         +'<div class="vt-tz"><b>Your Standing</b><span>Score, rank, percentile, streaks, crowns</span></div>'
         +'<div class="vt-tz"><b>Trajectory</b><span>8-week trend, category radar, calibration</span></div>'
@@ -1269,10 +1294,10 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     return '<div class="vt-ladder"><div class="vt-lad-h">\uD83D\uDD13 Two steps from a live Vault</div>'
       +'<div class="vt-lad-s">The Vault is built from your real judgment data \u2014 so it needs a little of it first. Each step below unlocks a zone. Nothing here is ever public.</div>'
       +'<div class="vt-steps">'
-      + step(!!u.calls_done, calls/3, 'Score 3 GutCheck calls', calls+' of 3 done \u2014 this creates your judgment profile: level, calibration and strongest category.', '/gutcheck.html', 'Take a call')
-      + step(!!u.profile_done, u.profile_done?1:0, 'Create your DecisionRoom profile', 'Your alias and context, so reviewers know who they are helping.', '/decisionroom.html', 'Set it up')
-      + step(!!u.resp_done, Math.min(1,(Number(u.responses)||0)), 'Answer one real case', (Number(u.responses)||0)+' written \u2014 this starts your reviewer score, rank and streak.', '/decisionroom.html', 'Find a case')
-      + step(!!u.case_done, Math.min(1,(Number(u.cases)||0)), 'Submit one case', (Number(u.cases)||0)+' posted \u2014 this starts your author score and clarity tracking.', '/decisionroom.html', 'Post a case')
+      + step(!!u.calls_done, calls/3, 'Score 3 GutCheck calls', calls+' of 3 done \u2014 this creates your judgment profile: level, calibration and strongest category.', '/gutcheck.html#today', 'Take today\u2019s call')
+      + step(!!u.profile_done, u.profile_done?1:0, 'Create your DecisionRoom profile', 'Your alias and context, so reviewers know who they are helping.', '/decisionroom.html#room', 'Set it up')
+      + step(!!u.resp_done, Math.min(1,(Number(u.responses)||0)), 'Answer one real case', (Number(u.responses)||0)+' written \u2014 this starts your reviewer score, rank and streak.', '/decisionroom.html?do=respond', 'Open a live case')
+      + step(!!u.case_done, Math.min(1,(Number(u.cases)||0)), 'Submit one case', (Number(u.cases)||0)+' posted \u2014 this starts your author score and clarity tracking.', '/decisionroom.html?do=submit', 'Open the case form')
       +'</div></div>';
   }
   function vtDelta(d){
@@ -1281,35 +1306,36 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     if(!n) return '<span class="vt-delta flat">no change</span>';
     return '<span class="vt-delta '+(n>0?'up':'dn')+'">'+(n>0?'\u25B2 +':'\u25BC ')+fmtN(n)+'</span>';
   }
-  function vtM(lab,val){ return '<div class="vt-m"><span>'+lab+'</span><b>'+val+'</b></div>'; }
+  function vtM(lab,val,tip){ return '<div class="vt-m"><span>'+lab+(tip?vTip(tip):'')+'</span><b>'+val+'</b></div>'; }
   function vaultCard(cls, title, x, extra){
     if(!x || !x.active){
       return '<div class="vt-card '+cls+'"><div class="vt-ct"><span class="vt-ct-t">'+title+'</span></div>'
         +'<div class="vt-none">Nothing scored in this window yet. Pick a wider window above, or go and do the work \u2014 the number only moves when other people act on what you wrote.</div></div>';
     }
     var pct=(x.percentile!=null)
-      ? '<span class="vt-pct" title="Rank '+x.rank+' of '+x.total_active+' active">Top '+x.percentile+'% \u00b7 #'+x.rank+'</span>' : '';
+      ? '<span class="vt-pct" title="Rank '+x.rank+' of '+x.total_active+' active">Top '+x.percentile+'% \u00b7 #'+x.rank+vTip('pctile')+'</span>' : '';
     return '<div class="vt-card '+cls+'">'
-      +'<div class="vt-ct"><span class="vt-ct-t">'+title+'</span>'+pct+'</div>'
-      +'<div class="vt-big"><span class="vt-num">'+fmtN(x.score)+'</span><span class="vt-unit">pts</span>'+vtDelta(x.delta)+'</div>'
+      +'<div class="vt-ct"><span class="vt-ct-t">'+title+vTip(cls==='rev'?'revscore':'autscore')+'</span>'+pct+'</div>'
+      +'<div class="vt-big"><span class="vt-num">'+fmtN(x.score)+'</span><span class="vt-unit">pts</span>'+vtDelta(x.delta)+vTip('delta')+'</div>'
       +'<div class="vt-mini">'
-        +vtM('Best rank', x.best_rank?('#'+x.best_rank):'\u2014')
-        +vtM('Crowns \uD83D\uDC51', (x.crowns||0))
-        +vtM('Streak \uD83D\uDD25', (x.streak||0))
+        +vtM('Best rank', x.best_rank?('#'+x.best_rank):'\u2014', 'bestrank')
+        +vtM('Crowns \uD83D\uDC51', (x.crowns||0), 'crowns')
+        +vtM('Streak \uD83D\uDD25', (x.streak||0), 'streak')
         + extra
       +'</div></div>';
   }
   function vaultZone1(d){
     var r=d.reviewer||{}, a=d.author||{}, g=d.gutcheck||{};
-    var revExtra=vtM('Acted on',(r.acted||0))+vtM('Helpful',(r.helpful||0))+vtM('Covered',(r.covered||0))+vtM('Reports',(r.reports||0));
-    var autExtra=vtM('Cases',(a.cases||0))+vtM('Avg clarity',(a.avg_clarity!=null?fmtN(a.avg_clarity)+'/5':'\u2014'))+vtM('Close rate',((a.close_rate||0)+'%'))+vtM('Exemplary \uD83C\uDFC5',(a.exemplary||0));
-    var gc='<div class="vt-gc"><div class="vt-ct"><span class="vt-ct-t">\uD83E\uDDED GutCheck judgment</span></div><div class="vt-mini">'
-      +vtM('Level', esc(g.level||'\u2014'))
-      +vtM('Calls scored', (g.calls||0))
-      +vtM('Calibration', (g.calibration!=null?(Math.round(g.calibration)+'%'):'\u2014'))
-      +vtM('Strongest', drCat(g.strongest))
-      +vtM('Weakest', drCat(g.weakest))
-      +vtM('Best domain', esc(g.best_domain||'\u2014'))
+    var revExtra=vtM('Acted on',(r.acted||0),'vacted')+vtM('Helpful',(r.helpful||0),'vhelpful')+vtM('Covered',(r.covered||0),'vcovered')+vtM('Reports',(r.reports||0),'vreports');
+    var autExtra=vtM('Cases',(a.cases||0),'vcases')+vtM('Avg clarity',(a.avg_clarity!=null?fmtN(a.avg_clarity)+'/5':'\u2014'),'vclarity')+vtM('Close rate',((a.close_rate||0)+'%'),'vclose')+vtM('Exemplary \uD83C\uDFC5',(a.exemplary||0),'vexemplary');
+    var gc='<div class="vt-gc"><div class="vt-ct"><span class="vt-ct-t">\uD83E\uDDED GutCheck judgment</span>'
+      +'<span class="vt-pct" style="background:#E7F3EC;color:#15803d">Lifetime \u00b7 not filtered by window</span></div><div class="vt-mini">'
+      +vtM('Level', esc(g.level||'\u2014'), 'gclevel')
+      +vtM('Calls scored', (g.calls||0), 'gccalls')
+      +vtM('Calibration', (g.calibration!=null?(Math.round(g.calibration)+'%'):'\u2014'), 'gccalib')
+      +vtM('Strongest', drCat(g.strongest), 'gcstrong')
+      +vtM('Weakest', drCat(g.weakest), 'gcweak')
+      +vtM('Best domain', esc(g.best_domain||'\u2014'), 'gcdomain')
       +'</div></div>';
     return '<div class="vt-zone">'
       +'<div class="vt-zh"><span class="vt-zn">Zone 1</span><span class="vt-zt">Your Standing</span>'

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-d4-libdedupe 2026-07-12T12:30:00Z -->
+<!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
 <!-- build:D2-pill-tooltips 2026-07-10T22:04:59.735080+00:00 -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -3607,7 +3607,31 @@ boot();
   loadFeed(true);
   loadLibrary(true);
   loadMyCases();
-  try{ var _dl=new URLSearchParams(location.search).get('case'); if(_dl){ setTimeout(function(){ openCase(_dl); }, 350); } }catch(e){}
+  try{
+    var _q=new URLSearchParams(location.search);
+    var _dl=_q.get('case');
+    if(_dl){ setTimeout(function(){ openCase(_dl); }, 350); }
+    /* D6: deep links from the Vault unlock ladder */
+    var _do=_q.get('do');
+    if(_do==='submit'){
+      setTimeout(function(){
+        var b=document.querySelector('[data-cta="submit"]');
+        if(b) b.click();
+      }, 450);
+    }
+    if(_do==='respond'){
+      setTimeout(function(){
+        var sec=document.getElementById('room');   /* the feed lives in section#room */
+        if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
+        /* open the case at the top of the feed once it has rendered */
+        var tries=0, t=setInterval(function(){
+          var card=document.querySelector('#feed-list .feed-card[data-id]');
+          if(card){ clearInterval(t); card.click(); }
+          if(++tries>50) clearInterval(t);
+        }, 150);
+      }, 500);
+    }
+  }catch(e){}
 })();
 
 </script>
