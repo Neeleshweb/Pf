@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-d6-vault2 2026-07-12T15:40:00Z -->
+  <!-- build:lb-d6-zone2 2026-07-12T17:00:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -436,6 +436,27 @@
   .vt-gc{border:1px solid var(--border,#e4e8f4);border-radius:18px;background:linear-gradient(180deg,#F1FAF5,#fff 55%);padding:1.1rem 1.3rem;box-shadow:0 6px 22px rgba(20,25,45,.05)}
   .vt-none{padding:1.1rem;border:1px dashed var(--border2,#d3d9ec);border-radius:14px;color:var(--muted,#8a91a0);font-size:.86rem;line-height:1.5;background:#FBFCFE}
   @media(max-width:860px){ .vt-cards{grid-template-columns:1fr} }
+  /* ===================== D6-2: ZONE 2 TRAJECTORY ===================== */
+  .vt-graphs{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .vt-g{border:1px solid var(--border,#e4e8f4);border-radius:18px;background:var(--card,#fff);padding:1.1rem 1.2rem;box-shadow:0 6px 22px rgba(20,25,45,.05)}
+  .vt-g-h{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.15rem;flex-wrap:wrap}
+  .vt-g-t{font-weight:800;font-size:.9rem;color:var(--ink,#16233f)}
+  .vt-g-s{font-size:.74rem;color:var(--muted,#8a91a0);margin-bottom:.6rem;line-height:1.45}
+  .vt-g svg{width:100%;height:auto;display:block;overflow:visible}
+  .vt-leg{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.5rem}
+  .vt-leg i{display:inline-flex;align-items:center;gap:.3rem;font-style:normal;font-size:.72rem;font-weight:700;color:var(--muted,#7a8091)}
+  .vt-leg i b{width:9px;height:9px;border-radius:3px;display:inline-block}
+  .vt-gempty{padding:1.4rem .6rem;text-align:center;color:var(--muted,#9aa0b0);font-size:.8rem;line-height:1.5}
+  .vt-radar-wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:1rem;align-items:center}
+  .vt-rlist{display:flex;flex-direction:column;gap:.35rem;max-height:230px;overflow:auto}
+  .vt-r{display:flex;align-items:center;gap:.5rem;font-size:.74rem}
+  .vt-r-n{flex:1;color:var(--ink,#16233f);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .vt-r-b{width:58px;height:6px;border-radius:99px;background:#EEF1F8;overflow:hidden;flex:none}
+  .vt-r-b i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#8B7FF0,#5BC7A9)}
+  .vt-r-v{width:34px;text-align:right;font-weight:800;color:var(--muted,#5c6479);flex:none}
+  .vt-r-reps{width:34px;text-align:right;font-size:.66rem;color:var(--muted,#aeb4c2);flex:none}
+  .vt-pb{font-size:.7rem;font-weight:800;color:#a8700a;background:#FDEFD4;border-radius:99px;padding:.1rem .45rem}
+  @media(max-width:860px){ .vt-graphs{grid-template-columns:1fr} .vt-radar-wrap{grid-template-columns:1fr} }
   /* --- D4: desktop expandable detail row (submitter board) --- */
   .lb-xtog{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;margin-left:.3rem;border:1px solid var(--border2,#d3d9ec);background:#fff;color:var(--muted,#8a91a0);border-radius:6px;cursor:pointer;padding:0;flex:none;transition:transform .18s,border-color .15s,color .15s}
   .lb-xtog:hover{border-color:var(--accent,#4f43d8);color:var(--accent,#4f43d8)}
@@ -1253,7 +1274,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     gccalls:{t:'Calls scored',b:'How many GutCheck dilemmas you have answered and had scored, lifetime.'},
     gcstrong:{t:'Strongest category',b:'The problem type where your judgment agrees with the room most often. Answer DecisionRoom cases here \u2014 you are more likely to be genuinely useful, and it scores faster.'},
     gcweak:{t:'Weakest category',b:'The problem type where your judgment diverges from the room most often. This is not a criticism \u2014 it is the highest-value thing you can practise.'},
-    gcdomain:{t:'Best domain',b:'The product domain (B2B SaaS, B2C, Marketplace\u2026) where your judgment matches the room most often.'}
+    gcdomain:{t:'Best domain',b:'The product domain (B2B SaaS, B2C, Marketplace\u2026) where your judgment matches the room most often. Lifetime.'},
+    gcwindow:{t:'GutCheck is now windowed',b:'These GutCheck numbers are computed from the calls you scored INSIDE the window selected above \u2014 so they move with the pills, exactly like your reviewer and author scores.\n\nYour lifetime figures are shown underneath, because level and calibration only become meaningful over many calls.\n\nA call is only scored when the dilemma has a known best answer, or when the room has reached a verdict (3+ votes). Unscored calls are ignored entirely rather than counted as wrong.'}
   };
   function vTip(k){ return '<button type="button" class="lb-tip-i" data-tip="vt:'+k+'" aria-label="What is this?">i</button>'; }
   function lockSvg(){
@@ -1328,15 +1350,24 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var r=d.reviewer||{}, a=d.author||{}, g=d.gutcheck||{};
     var revExtra=vtM('Acted on',(r.acted||0),'vacted')+vtM('Helpful',(r.helpful||0),'vhelpful')+vtM('Covered',(r.covered||0),'vcovered')+vtM('Reports',(r.reports||0),'vreports');
     var autExtra=vtM('Cases',(a.cases||0),'vcases')+vtM('Avg clarity',(a.avg_clarity!=null?fmtN(a.avg_clarity)+'/5':'\u2014'),'vclarity')+vtM('Close rate',((a.close_rate||0)+'%'),'vclose')+vtM('Exemplary \uD83C\uDFC5',(a.exemplary||0),'vexemplary');
+    var gl=d.gutcheck_life||{};
+    var noCalls=!(g.calls>0);
     var gc='<div class="vt-gc"><div class="vt-ct"><span class="vt-ct-t">\uD83E\uDDED GutCheck judgment</span>'
-      +'<span class="vt-pct" style="background:#E7F3EC;color:#15803d">Lifetime \u00b7 not filtered by window</span></div><div class="vt-mini">'
-      +vtM('Level', esc(g.level||'\u2014'), 'gclevel')
-      +vtM('Calls scored', (g.calls||0), 'gccalls')
-      +vtM('Calibration', (g.calibration!=null?(Math.round(g.calibration)+'%'):'\u2014'), 'gccalib')
-      +vtM('Strongest', drCat(g.strongest), 'gcstrong')
-      +vtM('Weakest', drCat(g.weakest), 'gcweak')
-      +vtM('Best domain', esc(g.best_domain||'\u2014'), 'gcdomain')
-      +'</div></div>';
+      +'<span class="vt-pct" style="background:#E7F3EC;color:#15803d">This window'+vTip('gcwindow')+'</span></div>'
+      +(noCalls
+        ? '<div class="vt-none">No GutCheck calls scored in this window. Your lifetime judgment level is <b>'+esc(gl.level||'\u2014')+'</b> from '+(gl.calls||0)+' scored call'+((gl.calls===1)?'':'s')+' \u2014 widen the window, or take today\u2019s call.</div>'
+        : '<div class="vt-mini">'
+          +vtM('Level', esc(g.level||'\u2014'), 'gclevel')
+          +vtM('Calls scored', (g.calls||0), 'gccalls')
+          +vtM('Calibration', (g.calibration!=null?(Math.round(g.calibration)+'%'):'\u2014'), 'gccalib')
+          +vtM('Strongest', drCat(g.strongest), 'gcstrong')
+          +vtM('Weakest', drCat(g.weakest), 'gcweak')
+          +vtM('Best domain', esc(g.best_domain||'\u2014'), 'gcdomain')
+          +'</div>'
+          +'<div style="margin-top:.6rem;font-size:.74rem;color:var(--muted,#8a91a0);line-height:1.5">'
+          +'Lifetime: <b>'+esc(gl.level||'\u2014')+'</b> \u00b7 '+(gl.calls||0)+' calls \u00b7 '
+          +(gl.calibration!=null?(Math.round(gl.calibration)+'% calibration'):'calibration \u2014')+'</div>')
+      +'</div>';
     return '<div class="vt-zone">'
       +'<div class="vt-zh"><span class="vt-zn">Zone 1</span><span class="vt-zt">Your Standing</span>'
       +'<span class="vt-zs">Where you sit right now \u2014 in the window selected above.</span></div>'
@@ -1345,7 +1376,150 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
         +vaultCard('aut','As a case author', d.author, autExtra)
       +'</div><div style="margin-top:1rem">'+gc+'</div></div>';
   }
-  function vaultRender(d){
+  /* ===================== D6-2: ZONE 2 TRAJECTORY ===================== */
+  function wkLabel(ws){
+    var d=new Date(ws+'T00:00:00Z');
+    return (d.getUTCMonth()+1)+'/'+d.getUTCDate();
+  }
+  /* generic line chart. series = [{key,color,label,invert}] ; invert = rank (1 is best -> draw at top) */
+  function vtLine(weeks, series, opts){
+    opts=opts||{};
+    var W=340, H=150, PL=30, PR=10, PT=12, PB=22;
+    var iw=W-PL-PR, ih=H-PT-PB;
+    var pts=weeks.length;
+    if(pts<1) return '<div class="vt-gempty">Nothing to plot yet.</div>';
+    var vals=[];
+    series.forEach(function(se){ weeks.forEach(function(w){ var v=w[se.key]; if(v!==null&&v!==undefined) vals.push(Number(v)); }); });
+    if(!vals.length) return '<div class="vt-gempty">'+(opts.empty||'No data in these weeks yet \u2014 the line appears as soon as you have some.')+'</div>';
+    var mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals);
+    if(opts.min!==undefined) mn=Math.min(mn,opts.min);
+    if(opts.max!==undefined) mx=Math.max(mx,opts.max);
+    if(mn===mx){ mn=Math.max(0,mn-1); mx=mx+1; }
+    var x=function(i){ return PL + (pts===1? iw/2 : (iw*i/(pts-1))); };
+    var y=function(v){
+      var t=(Number(v)-mn)/(mx-mn);
+      if(opts.invert) t=1-t;                       /* rank: #1 at the top */
+      return PT + ih - t*ih;
+    };
+    var o='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    /* gridlines */
+    for(var g=0; g<=3; g++){
+      var gy=PT+ih*g/3;
+      o+='<line x1="'+PL+'" y1="'+gy.toFixed(1)+'" x2="'+(W-PR)+'" y2="'+gy.toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>';
+    }
+    /* axis labels: top and bottom of the value range */
+    var topV = opts.invert ? mn : mx, botV = opts.invert ? mx : mn;
+    o+='<text x="'+(PL-6)+'" y="'+(PT+4)+'" text-anchor="end" font-size="8" fill="#aeb4c2">'+(opts.fmt?opts.fmt(topV):topV)+'</text>';
+    o+='<text x="'+(PL-6)+'" y="'+(PT+ih+3)+'" text-anchor="end" font-size="8" fill="#aeb4c2">'+(opts.fmt?opts.fmt(botV):botV)+'</text>';
+    series.forEach(function(se){
+      var seg=[], last=null;
+      weeks.forEach(function(w,i){
+        var v=w[se.key];
+        if(v===null||v===undefined){ last=null; return; }   /* gap, not a fake zero */
+        var px=x(i), py=y(v);
+        if(last===null) seg.push('M'+px.toFixed(1)+' '+py.toFixed(1));
+        else seg.push('L'+px.toFixed(1)+' '+py.toFixed(1));
+        last=1;
+      });
+      if(seg.length) o+='<path d="'+seg.join(' ')+'" fill="none" stroke="'+se.color+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>';
+      weeks.forEach(function(w,i){
+        var v=w[se.key]; if(v===null||v===undefined) return;
+        var isPB=(se.pb!==undefined && Number(v)===Number(se.pb));
+        o+='<circle cx="'+x(i).toFixed(1)+'" cy="'+y(v).toFixed(1)+'" r="'+(isPB?4:2.8)+'" fill="'+(isPB?'#E39B0C':se.color)+'" stroke="#fff" stroke-width="1.5"><title>'+wkLabel(w.week_start)+': '+(opts.fmt?opts.fmt(v):v)+(isPB?' \u2014 personal best':'')+'</title></circle>';
+      });
+    });
+    weeks.forEach(function(w,i){
+      o+='<text x="'+x(i).toFixed(1)+'" y="'+(H-6)+'" text-anchor="middle" font-size="8" fill="#aeb4c2">'+wkLabel(w.week_start)+'</text>';
+    });
+    return o+'</svg>';
+  }
+  function vtLegend(series){
+    return '<div class="vt-leg">'+series.map(function(se){
+      return '<i><b style="background:'+se.color+'"></b>'+se.label+'</i>';
+    }).join('')+'</div>';
+  }
+  /* radar over the GutCheck categories */
+  function vtRadar(cats){
+    if(!cats || !cats.length) return '<div class="vt-gempty">Score a few GutCheck calls and your category radar appears here \u2014 it is the map of which PM problems you actually read well.</div>';
+    var n=cats.length, S=230, cx=S/2, cy=S/2, R=82;
+    var o='<svg viewBox="0 0 '+S+' '+S+'" role="img">';
+    for(var r=1;r<=4;r++){
+      var rr=R*r/4, pts=[];
+      for(var i=0;i<Math.max(n,3);i++){
+        var a=(Math.PI*2*i/Math.max(n,3))-Math.PI/2;
+        pts.push((cx+rr*Math.cos(a)).toFixed(1)+','+(cy+rr*Math.sin(a)).toFixed(1));
+      }
+      o+='<polygon points="'+pts.join(' ')+'" fill="none" stroke="#EEF1F8" stroke-width="1"/>';
+    }
+    var poly=[];
+    for(var j=0;j<n;j++){
+      var ang=(Math.PI*2*j/n)-Math.PI/2;
+      var val=Math.max(0,Math.min(100,Number(cats[j].signal)||0))/100;
+      poly.push((cx+R*val*Math.cos(ang)).toFixed(1)+','+(cy+R*val*Math.sin(ang)).toFixed(1));
+      o+='<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+R*Math.cos(ang)).toFixed(1)+'" y2="'+(cy+R*Math.sin(ang)).toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>';
+    }
+    if(n>=3){
+      o+='<polygon points="'+poly.join(' ')+'" fill="rgba(139,127,240,.22)" stroke="#8B7FF0" stroke-width="2"/>';
+    }
+    for(var k=0;k<n;k++){
+      var a2=(Math.PI*2*k/n)-Math.PI/2;
+      var v2=Math.max(0,Math.min(100,Number(cats[k].signal)||0))/100;
+      o+='<circle cx="'+(cx+R*v2*Math.cos(a2)).toFixed(1)+'" cy="'+(cy+R*v2*Math.sin(a2)).toFixed(1)+'" r="3" fill="#8B7FF0"><title>'+esc(drCat(cats[k].category))+': signal '+cats[k].signal+'/100 \u00b7 '+cats[k].match_rate+'% match \u00b7 '+cats[k].reps+' calls</title></circle>';
+    }
+    o+='</svg>';
+    var list='<div class="vt-rlist">'+cats.map(function(c){
+      return '<div class="vt-r"><span class="vt-r-n">'+esc(drCat(c.category))+'</span>'
+        +'<span class="vt-r-b"><i style="width:'+Math.max(0,Math.min(100,Number(c.signal)||0))+'%"></i></span>'
+        +'<span class="vt-r-v">'+(c.signal!=null?c.signal:'\u2014')+'</span>'
+        +'<span class="vt-r-reps">'+(c.reps||0)+'\u00d7</span></div>';
+    }).join('')+'</div>';
+    return '<div class="vt-radar-wrap">'+o+list+'</div>';
+  }
+  function vaultZone2(t){
+    if(!t || !t.ok || !t.signed_in) return '';
+    var wks=t.weeks||[], b=t.bests||{};
+    var rankSeries=[
+      {key:'rev_rank', color:'#5B4BD4', label:'Reviewer rank', pb:b.best_rev_rank},
+      {key:'aut_rank', color:'#E39B0C', label:'Author rank',   pb:b.best_aut_rank}
+    ];
+    var scoreSeries=[
+      {key:'rev_score', color:'#5B4BD4', label:'Reviewer score', pb:b.best_rev_score},
+      {key:'aut_score', color:'#E39B0C', label:'Author score',   pb:b.best_aut_score}
+    ];
+    function g(t1,sub,body,leg){
+      return '<div class="vt-g"><div class="vt-g-h"><span class="vt-g-t">'+t1+'</span></div>'
+        +'<div class="vt-g-s">'+sub+'</div>'+body+(leg||'')+'</div>';
+    }
+    return '<div class="vt-zone">'
+      +'<div class="vt-zh"><span class="vt-zn">Zone 2</span><span class="vt-zt">Trajectory</span>'
+      +'<span class="vt-zs">The last 8 weeks. This is the part that actually tells you whether you are improving.</span></div>'
+      +'<div class="vt-graphs">'
+        + g('Rank over time', 'Both boards. Higher on the chart is better \u2014 gaps mean you had no scored activity that week. Gold dot = your personal best.',
+            vtLine(wks, rankSeries, {invert:true, min:1, fmt:function(v){return '#'+v;},
+              empty:'You have not been ranked in the last 8 weeks yet.'}), vtLegend(rankSeries))
+        + g('Score over time', 'Points earned each week, on both sides of the room.',
+            vtLine(wks, scoreSeries, {min:0, fmt:function(v){return fmtN(v);},
+              empty:'No points scored in the last 8 weeks yet.'}), vtLegend(scoreSeries))
+        + g('Calibration trend \uD83E\uDDED', 'How well your confidence matched reality, cumulative. 50 is the neutral starting point \u2014 above it, you are confident when you are right and unsure when you are not.',
+            vtLine(wks, [{key:'calibration', color:'#22a45d', label:'Calibration'}],
+              {min:0, max:100, fmt:function(v){return v+'%';},
+               empty:'Score GutCheck calls at BOTH confidence levels (a hunch and a confident call) and this line starts.'}),
+            vtLegend([{key:'calibration',color:'#22a45d',label:'Calibration %'}]))
+        + g('Brief quality over time', 'Average Clarity &amp; Completeness of the cases you posted each week, out of 5. This is the biggest term in your author score \u2014 and the fastest thing you can fix.',
+            vtLine(wks, [{key:'clarity', color:'#E39B0C', label:'Avg clarity', pb:b.best_clarity}],
+              {min:0, max:5, fmt:function(v){return fmtN(v);},
+               empty:'Post a case and its Clarity &amp; Completeness score lands here.'}),
+            vtLegend([{key:'clarity',color:'#E39B0C',label:'Avg clarity / 5'}]))
+        + g('Responses per case', 'How many replies your cases pulled in, per case, each week. If clarity climbs and this does not, the problem is where you are posting \u2014 not how you are writing.',
+            vtLine(wks, [{key:'resp_per_case', color:'#8B7FF0', label:'Responses / case'}],
+              {min:0, fmt:function(v){return fmtN(v);},
+               empty:'Post a case and the replies it draws show up here.'}),
+            vtLegend([{key:'resp_per_case',color:'#8B7FF0',label:'Responses per case'}]))
+        + g('Category radar \uD83E\uDDED', 'Where your judgment agrees with the room. The bar is your signal (0\u2013100); \u00d7 is how many calls you have made there. Answer DecisionRoom cases in your strong categories \u2014 practise the weak ones.',
+            vtRadar(t.radar||[]), '')
+      +'</div></div>';
+  }
+  function vaultRender(d, t){
     var el=document.getElementById('lb-list'); if(!el) return;
     if(!d || !d.ok){ el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; return; }
     if(!d.signed_in){ el.innerHTML=vaultSignedOut(); return; }
@@ -1353,6 +1527,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var html='';
     if(!u.all_done) html+=vaultLadder(u)+'<div style="height:1.4rem"></div>';
     html+=vaultZone1(d);
+    html+=vaultZone2(t);
     el.innerHTML=html;
   }
   function loadVault(){
@@ -1361,8 +1536,14 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var rg=lbRange(lbWin), pv=lbPrevRange(lbWin);
     if(el) el.classList.add('loading');
     var b=lbBoard;
-    jlRpc('dr_my_vault',{p_since:rg[0],p_until:rg[1],p_prev_since:pv[0],p_prev_until:pv[1]})
-      .then(function(d){ if(b!==lbBoard) return; if(el) el.classList.remove('loading'); vaultRender(d); })
+    Promise.all([
+      jlRpc('dr_my_vault',{p_since:rg[0],p_until:rg[1],p_prev_since:pv[0],p_prev_until:pv[1]}),
+      jlRpc('dr_my_trajectory',{p_weeks:8,p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; })
+    ]).then(function(res){
+        if(b!==lbBoard) return;
+        if(el) el.classList.remove('loading');
+        vaultRender(res[0], res[1]);
+      })
       .catch(function(){ if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; } });
   }
   /* previous equivalent window, for the trend arrow */
