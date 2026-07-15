@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-d6-zone3 2026-07-14T20:00:00Z -->
+  <!-- build:lb-d6-zone3b 2026-07-15T12:00:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -505,6 +505,7 @@
   @media(max-width:560px){ .wk-title{white-space:normal} .wk-pts{font-size:1.1rem;min-width:38px} }
   /* ===================== D6-4: ZONE 3 DIAGNOSIS ===================== */
   .dg-list{display:flex;flex-direction:column;gap:.7rem}
+  .dg-count{display:inline-block;margin-left:.6rem;font-size:.68rem;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:#c0392b;background:#FDF0F0;border-radius:99px;padding:.16rem .55rem;vertical-align:middle}
   .dg-card{border:1px solid var(--border,#e4e8f4);border-left-width:3px;border-radius:14px;background:var(--card,#fff);padding:.9rem 1.05rem;box-shadow:0 4px 16px rgba(20,25,45,.04)}
   .dg-card.dg-hidden{display:none}
   .dg-high,.dg-critical{border-left-color:#c0392b}
@@ -1484,11 +1485,14 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     if(!dg || !dg.ok || !dg.signed_in) return '';
     var rules=(dg.rules||[]);
     if(!rules.length) return '';
+    var fired=(dg.meta&&dg.meta.fired)||0;
+    var total=rules.length;
     var cards=rules.map(function(r,i){ return dgCard(r, i>=5); }).join('');
-    var more=(rules.length>5)?'<button type="button" class="dg-more" data-dg="more">See '+(rules.length-5)+' more \u25BE</button>':'';
+    var more=(total>5)?'<button type="button" class="dg-more" data-dg="more">See '+(total-5)+' more \u25BE</button>':'';
+    var count=(fired>0)?'<span class="dg-count">'+fired+' finding'+(fired===1?'':'s')+'</span>':'';
     return '<div class="vt-zone">'
-      +'<div class="vt-zh"><span class="vt-zn">Zone 3</span><span class="vt-zt">Diagnosis</span>'
-      +'<span class="vt-zs">The few things most worth fixing right now \u2014 based on all your activity.'+dgTip('what')+'</span></div>'
+      +'<div class="vt-zh"><span class="vt-zn">Zone 3</span><span class="vt-zt">Diagnosis</span>'+count
+      +'<span class="vt-zs">The few things most worth fixing right now \u2014 based on all your activity, ranked by impact.'+dgTip('what')+'</span></div>'
       +'<div class="dg-list" id="dg-list">'+cards+'</div>'+more
       +'</div>';
   }
