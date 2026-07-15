@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-d6-zone2 2026-07-12T17:00:00Z -->
+  <!-- build:lb-d6-zone4 2026-07-14T12:00:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -457,6 +457,52 @@
   .vt-r-reps{width:34px;text-align:right;font-size:.66rem;color:var(--muted,#aeb4c2);flex:none}
   .vt-pb{font-size:.7rem;font-weight:800;color:#a8700a;background:#FDEFD4;border-radius:99px;padding:.1rem .45rem}
   @media(max-width:860px){ .vt-graphs{grid-template-columns:1fr} .vt-radar-wrap{grid-template-columns:1fr} }
+  /* ===================== D6-3: ZONE 4 YOUR WORK ===================== */
+  .wk-panel{border:1px solid var(--border,#e4e8f4);border-radius:18px;background:var(--card,#fff);padding:1.1rem 1.2rem;box-shadow:0 6px 22px rgba(20,25,45,.05);margin-bottom:1rem}
+  .wk-h{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap;margin-bottom:.2rem}
+  .wk-h-t{font-weight:800;font-size:.95rem;color:var(--ink,#16233f);display:inline-flex;align-items:center}
+  .wk-h-n{font-size:.72rem;font-weight:800;border-radius:100px;padding:.14rem .5rem;background:#EEF1F8;color:#3a4358}
+  .wk-tools{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin:.55rem 0 .9rem}
+  .wk-tgrp{display:inline-flex;gap:.3rem;flex-wrap:wrap;align-items:center}
+  .wk-tlab{font-size:.6rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted,#9aa0b0);margin-right:.1rem}
+  .wk-fil,.wk-sort{background:#FBFCFE;border:1px solid var(--border,#e4e8f4);color:var(--muted,#6b7280);border-radius:99px;padding:.28rem .62rem;font-size:.72rem;font-weight:700;cursor:pointer;font-family:inherit;line-height:1;white-space:nowrap}
+  .wk-fil:hover,.wk-sort:hover{border-color:#b9c0d8;color:var(--ink,#16233f)}
+  .wk-fil.on,.wk-sort.on{background:#1e2a4d;border-color:#1e2a4d;color:#fff}
+  .wk-list{display:flex;flex-direction:column;gap:.5rem}
+  .wk-row{display:flex;align-items:flex-start;gap:.7rem;border:1px solid var(--border,#eef1f7);border-radius:13px;padding:.7rem .8rem;background:#FBFCFE;text-decoration:none;transition:border-color .15s,box-shadow .15s,transform .12s}
+  .wk-row:hover{border-color:#c7cef0;box-shadow:0 4px 14px rgba(20,25,45,.06);transform:translateY(-1px)}
+  .wk-row-main{flex:1;min-width:0}
+  .wk-title{font-weight:700;font-size:.86rem;color:var(--ink,#16233f);line-height:1.35;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .wk-sub{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin-top:.25rem}
+  .wk-date{font-size:.68rem;color:var(--muted,#9aa0b0);font-weight:600}
+  .wk-st{font-size:.62rem;font-weight:800;letter-spacing:.3px;text-transform:uppercase;border-radius:99px;padding:.1rem .45rem;background:#EEF1F8;color:#5c6479}
+  .wk-st.live{background:#E7F0FF;color:#2657c9}
+  .wk-st.closed{background:#EAF8F0;color:#15803d}
+  .wk-chips{display:flex;align-items:center;gap:.34rem;flex-wrap:wrap;margin-top:.4rem}
+  .wk-chip{font-size:.66rem;font-weight:700;border-radius:8px;padding:.14rem .42rem;background:#EEF1F8;color:#5c6479;white-space:nowrap}
+  .wk-chip.acted{background:#EAF8F0;color:#15803d}
+  .wk-chip.help{background:#EAE7FF;color:#4b3fc4}
+  .wk-chip.cover{background:#E7F3EC;color:#1f7a4d}
+  .wk-chip.rep{background:#FDF0F0;color:#c0392b}
+  .wk-chip.anon{background:#F1F3F8;color:#7a8091}
+  .wk-chip.exem{background:#FDEFD4;color:#a8700a}
+  .wk-chip.clar{background:#FFF7E9;color:#a8700a}
+  .wk-chip.resp{background:#EEF1F8;color:#3a4358}
+  .wk-pts{flex:none;align-self:center;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;line-height:1;letter-spacing:.4px;color:#15803d;text-align:right;min-width:44px}
+  .wk-pts small{display:block;font-family:'DM Sans',sans-serif;font-size:.54rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted,#9aa0b0);margin-top:.15rem}
+  .wk-pts.neg{color:#c0392b}
+  .wk-pts.zero{color:var(--muted,#9aa0b0)}
+  .wk-empty{padding:1.1rem;border:1px dashed var(--border2,#d3d9ec);border-radius:12px;color:var(--muted,#8a91a0);font-size:.84rem;line-height:1.5;background:#FBFCFE;text-align:center}
+  .wk-empty a{color:var(--accent,#4f43d8);font-weight:700;text-decoration:none}
+  .wk-empty a:hover{text-decoration:underline}
+  .wk-recon{margin-top:.85rem;border-top:1px dashed var(--border2,#d3d9ec);padding-top:.7rem;font-size:.8rem;line-height:1.5;color:var(--ink,#16233f)}
+  .wk-recon b{color:#15803d}
+  .wk-recon .wk-eq{color:var(--muted,#5c6479);font-weight:600}
+  .wk-recon.aut b{color:#a8700a}
+  .wk-recon.muted{color:var(--muted,#8a91a0)}
+  .wk-recon.muted b{color:var(--muted,#6b7280)}
+  .wk-none{padding:.7rem 0;color:var(--muted,#9aa0b0);font-size:.8rem}
+  @media(max-width:560px){ .wk-title{white-space:normal} .wk-pts{font-size:1.1rem;min-width:38px} }
   /* --- D4: desktop expandable detail row (submitter board) --- */
   .lb-xtog{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;margin-left:.3rem;border:1px solid var(--border2,#d3d9ec);background:#fff;color:var(--muted,#8a91a0);border-radius:6px;cursor:pointer;padding:0;flex:none;transition:transform .18s,border-color .15s,color .15s}
   .lb-xtog:hover{border-color:var(--accent,#4f43d8);color:var(--accent,#4f43d8)}
@@ -853,6 +899,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var k=String(key||''), c;
     if(k.indexOf('sb:')===0)      c=(typeof SBTIPS!=='undefined') ? SBTIPS[k.slice(3)] : null;
     else if(k.indexOf('vt:')===0) c=(typeof VTIPS!=='undefined')  ? VTIPS[k.slice(3)]  : null;
+    else if(k.indexOf('wk:')===0) c=(typeof WKTIPS!=='undefined')  ? WKTIPS[k.slice(3)] : null;
     else                          c=LBTIPS[k];
     if(!c) return;
     tip.querySelector('.lb-tip-h').textContent=c.t; tip.querySelector('.lb-tip-b').textContent=c.b;
@@ -1278,6 +1325,133 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     gcwindow:{t:'GutCheck is now windowed',b:'These GutCheck numbers are computed from the calls you scored INSIDE the window selected above \u2014 so they move with the pills, exactly like your reviewer and author scores.\n\nYour lifetime figures are shown underneath, because level and calibration only become meaningful over many calls.\n\nA call is only scored when the dilemma has a known best answer, or when the room has reached a verdict (3+ votes). Unscored calls are ignored entirely rather than counted as wrong.'}
   };
   function vTip(k){ return '<button type="button" class="lb-tip-i" data-tip="vt:'+k+'" aria-label="What is this?">i</button>'; }
+  /* ===================== D6-3: ZONE 4 YOUR WORK ===================== */
+  var WKTIPS={
+    resp:{t:'Responses you wrote',b:'Every answer you posted to a DecisionRoom case in the window selected above, with the points it earned:\n\nowner acted on it +2 \u00b7 each helpful mark +1 \u00b7 answering the asks in depth +1 \u00b7 a small GutCheck-credibility bonus \u00b7 \u2212 2 per report.\n\nThese are the SAME points that make up your reviewer score \u2014 add them up and you get the number in Zone 1.'},
+    cases:{t:'Cases you posted',b:'Every case you submitted in the window selected above, with the points it earned.\n\nA case scores on Clarity & Completeness (\u00d73, the biggest term) \u00b7 the calibre of reviewer it attracted \u00b7 the responses it drew \u00b7 closing it out well \u00b7 acting on the advice \u2014 minus context flags and stalled cases.\n\nThese points, plus your GutCheck credibility and any standing bonus, are exactly your author score.'}
+  };
+  function wkTip(k){ return '<button type="button" class="lb-tip-i" data-tip="wk:'+k+'" aria-label="What is this?">i</button>'; }
+  var wkData=null, wkRespFilter='all', wkRespSort='points', wkCaseFilter='all', wkCaseSort='points';
+  function wkTime(iso){ var t=new Date(iso).getTime(); return isNaN(t)?0:t; }
+  function wkDateFmt(iso){ if(!iso) return ''; var d=new Date(iso); if(isNaN(d.getTime())) return ''; var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; var s=M[d.getMonth()]+' '+d.getDate(); var now=new Date(); if(d.getFullYear()!==now.getFullYear()) s+=', '+d.getFullYear(); return s; }
+  function wkStatusChip(st){ st=String(st||''); if(st==='closed') return '<span class="wk-st closed">Closed</span>'; if(st==='live') return '<span class="wk-st live">Open</span>'; if(!st) return ''; return '<span class="wk-st">'+esc(st.charAt(0).toUpperCase()+st.slice(1))+'</span>'; }
+  function wkPtsHtml(p){ p=Number(p)||0; var cls=p<0?'neg':(p===0?'zero':''); return '<div class="wk-pts '+cls+'">'+(p>0?'+':'')+fmtN(p)+'<small>pts</small></div>'; }
+  function wkFilBtns(group, active, opts){ var cls=(group.indexOf('sort')>=0)?'wk-sort':'wk-fil'; return opts.map(function(o){ return '<button type="button" class="'+cls+(o[0]===active?' on':'')+'" data-wk="'+group+'" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join(''); }
+  /* ---- responses ---- */
+  function wkRespRow(r){
+    var chips=[];
+    if(r.acted)          chips.push('<span class="wk-chip acted">\u2705 Acted on</span>');
+    if((r.helpful||0)>0) chips.push('<span class="wk-chip help">\uD83D\uDC4D '+r.helpful+' helpful</span>');
+    if(r.covered)        chips.push('<span class="wk-chip cover">\uD83D\uDCCB Covered</span>');
+    if((r.reports||0)>0) chips.push('<span class="wk-chip rep">\u26A0\uFE0F '+r.reports+' report'+((r.reports===1)?'':'s')+'</span>');
+    if(r.anon)           chips.push('<span class="wk-chip anon">\uD83D\uDD76\uFE0F Anonymous</span>');
+    return '<a class="wk-row" href="/decisionroom.html?case='+encodeURIComponent(r.case_id)+'">'
+      +'<div class="wk-row-main"><span class="wk-title">'+esc(r.title||'Untitled case')+'</span>'
+      +'<div class="wk-sub"><span class="wk-date">'+wkDateFmt(r.created_at)+'</span>'+wkStatusChip(r.status)+'</div>'
+      +(chips.length?'<div class="wk-chips">'+chips.join('')+'</div>':'')
+      +'</div>'+wkPtsHtml(r.points)+'</a>';
+  }
+  function wkRespPass(r,f){ if(f==='acted') return !!r.acted; if(f==='helpful') return (r.helpful||0)>0; if(f==='attention') return (r.reports||0)>0; return true; }
+  function wkRespList(){
+    var arr=(wkData&&wkData.responses)||[];
+    if(!arr.length) return '<div class="wk-empty">You haven\u2019t answered any cases in this window.<br><a href="/decisionroom.html?do=respond">Open a live case \u2192</a></div>';
+    var rows=arr.filter(function(r){ return wkRespPass(r,wkRespFilter); });
+    rows.sort(function(a,b){ if(wkRespSort==='recent') return wkTime(b.created_at)-wkTime(a.created_at); var pa=Number(a.points)||0, pb=Number(b.points)||0; if(pb!==pa) return pb-pa; return wkTime(b.created_at)-wkTime(a.created_at); });
+    if(!rows.length) return '<div class="wk-none">No responses match this filter.</div>';
+    return rows.map(wkRespRow).join('');
+  }
+  function wkRespRecon(w){
+    var t=(w&&w.totals)||{}, n=t.responses_count||0;
+    if(t.reviewer_score!=null){
+      return '<div class="wk-recon">These <b>'+n+'</b> response'+(n===1?'':'s')+' add up to your reviewer score of <b>'+fmtN(t.reviewer_score)+'</b>'+(t.reviewer_rank?' <span class="wk-eq">(rank #'+t.reviewer_rank+' this window)</span>':'')+'.</div>';
+    }
+    return '<div class="wk-recon muted">'+n+' response'+(n===1?'':'s')+' \u00b7 <b>'+fmtN(t.responses_points||0)+'</b> pts \u2014 you\u2019re not ranked this window yet (your score turns positive once someone acts on what you wrote).</div>';
+  }
+  function wkRespPanelInner(){
+    var arr=(wkData&&wkData.responses)||[];
+    var tools = arr.length
+      ? '<div class="wk-tools"><span class="wk-tgrp"><span class="wk-tlab">Show</span>'
+        +wkFilBtns('resp-fil', wkRespFilter, [['all','All'],['acted','Acted on'],['helpful','Helpful'],['attention','Needs attention']])
+        +'</span><span class="wk-tgrp"><span class="wk-tlab">Sort</span>'
+        +wkFilBtns('resp-sort', wkRespSort, [['points','Points'],['recent','Recent']])+'</span></div>'
+      : '';
+    return '<div class="wk-h"><span class="wk-h-t">\uD83D\uDCDD Responses you wrote'+wkTip('resp')+'</span>'
+      +(arr.length?'<span class="wk-h-n">'+arr.length+'</span>':'')+'</div>'
+      +tools+'<div class="wk-list" id="wk-resp-list">'+wkRespList()+'</div>'
+      +(arr.length?wkRespRecon(wkData):'');
+  }
+  /* ---- cases ---- */
+  function wkCaseRow(c){
+    var chips=[];
+    chips.push('<span class="wk-chip clar">Clarity '+fmtN(c.clarity)+'/5</span>');
+    chips.push('<span class="wk-chip resp">\uD83D\uDCAC '+(c.responses||0)+' response'+((c.responses===1)?'':'s')+'</span>');
+    if(c.status==='closed') chips.push('<span class="wk-chip cover">\u2705 '+(c.final_pct!=null?c.final_pct:0)+'% resolved</span>');
+    if(c.exemplary)               chips.push('<span class="wk-chip exem">\uD83C\uDFC5 Exemplary</span>');
+    if((c.context_flags||0)>0)    chips.push('<span class="wk-chip rep">\u26A0\uFE0F '+c.context_flags+' context flag'+((c.context_flags===1)?'':'s')+'</span>');
+    if(c.abandoned===1)           chips.push('<span class="wk-chip rep">\uD83D\uDD52 Stalled</span>');
+    return '<a class="wk-row" href="/decisionroom.html?case='+encodeURIComponent(c.case_id)+'">'
+      +'<div class="wk-row-main"><span class="wk-title">'+esc(c.title||'Untitled case')+'</span>'
+      +'<div class="wk-sub"><span class="wk-date">'+wkDateFmt(c.created_at)+'</span>'+wkStatusChip(c.status)+'</div>'
+      +'<div class="wk-chips">'+chips.join('')+'</div>'
+      +'</div>'+wkPtsHtml(c.points)+'</a>';
+  }
+  function wkCasePass(c,f){ if(f==='exemplary') return !!c.exemplary; if(f==='open') return c.status!=='closed'; if(f==='closed') return c.status==='closed'; if(f==='attention') return c.abandoned===1 || (c.context_flags||0)>0; return true; }
+  function wkCaseList(){
+    var arr=(wkData&&wkData.cases)||[];
+    if(!arr.length) return '<div class="wk-empty">You haven\u2019t posted any cases in this window.<br><a href="/decisionroom.html?do=submit">Open the case form \u2192</a></div>';
+    var rows=arr.filter(function(c){ return wkCasePass(c,wkCaseFilter); });
+    rows.sort(function(a,b){ if(wkCaseSort==='recent') return wkTime(b.created_at)-wkTime(a.created_at); if(wkCaseSort==='clarity'){ var ca=Number(a.clarity)||0, cb=Number(b.clarity)||0; if(cb!==ca) return cb-ca; return wkTime(b.created_at)-wkTime(a.created_at); } var pa=Number(a.points)||0, pb=Number(b.points)||0; if(pb!==pa) return pb-pa; return wkTime(b.created_at)-wkTime(a.created_at); });
+    if(!rows.length) return '<div class="wk-none">No cases match this filter.</div>';
+    return rows.map(wkCaseRow).join('');
+  }
+  function wkCaseRecon(w){
+    var t=(w&&w.totals)||{}, n=t.cases_count||0;
+    if(t.author_score!=null){
+      var cred=Number(t.gutcheck_cred)||0, st=Number(t.standing_bonus)||0, cp=Number(t.cases_points)||0;
+      var eq='<b>'+n+'</b> case'+(n===1?'':'s')+' (<b>'+fmtN(cp)+'</b>)';
+      if(cred>0) eq+=' <span class="wk-eq">+ credibility ('+fmtN(cred)+')</span>';
+      if(st>0)   eq+=' <span class="wk-eq">+ standing ('+fmtN(st)+')</span>';
+      eq+=' <span class="wk-eq">=</span> author score <b>'+fmtN(t.author_score)+'</b>'+(t.author_rank?' <span class="wk-eq">(rank #'+t.author_rank+')</span>':'');
+      return '<div class="wk-recon aut">'+eq+'.</div>';
+    }
+    return '<div class="wk-recon muted">'+n+' case'+(n===1?'':'s')+' \u00b7 <b>'+fmtN(t.cases_points||0)+'</b> pts \u2014 not ranked this window yet (your author score turns positive once a case earns more than it costs).</div>';
+  }
+  function wkCasePanelInner(){
+    var arr=(wkData&&wkData.cases)||[];
+    var tools = arr.length
+      ? '<div class="wk-tools"><span class="wk-tgrp"><span class="wk-tlab">Show</span>'
+        +wkFilBtns('case-fil', wkCaseFilter, [['all','All'],['exemplary','Exemplary'],['open','Open'],['closed','Closed'],['attention','Needs attention']])
+        +'</span><span class="wk-tgrp"><span class="wk-tlab">Sort</span>'
+        +wkFilBtns('case-sort', wkCaseSort, [['points','Points'],['recent','Recent'],['clarity','Clarity']])+'</span></div>'
+      : '';
+    return '<div class="wk-h"><span class="wk-h-t">\uD83D\uDCC1 Cases you posted'+wkTip('cases')+'</span>'
+      +(arr.length?'<span class="wk-h-n">'+arr.length+'</span>':'')+'</div>'
+      +tools+'<div class="wk-list" id="wk-case-list">'+wkCaseList()+'</div>'
+      +(arr.length?wkCaseRecon(wkData):'');
+  }
+  function vaultZone4(w){
+    if(!w || !w.ok || !w.signed_in){ wkData=null; return ''; }
+    wkData=w;
+    return '<div class="vt-zone">'
+      +'<div class="vt-zh"><span class="vt-zn">Zone 4</span><span class="vt-zt">Your Work</span>'
+      +'<span class="vt-zs">The receipts \u2014 every response and case you logged in this window, and the points each earned. They add up to the scores at the top.</span></div>'
+      +'<div class="wk-panel" id="wk-resp-panel">'+wkRespPanelInner()+'</div>'
+      +'<div class="wk-panel" id="wk-case-panel">'+wkCasePanelInner()+'</div>'
+      +'</div>';
+  }
+  /* Zone 4 filter/sort: one delegated listener (document-level -> survives every
+     innerHTML re-render). Rebuilds only the affected panel; no refetch. */
+  document.addEventListener('click', function(e){
+    var b=(e.target.closest)?e.target.closest('[data-wk]'):null; if(!b) return;
+    var grp=b.getAttribute('data-wk'), v=b.getAttribute('data-v');
+    if(grp==='resp-fil') wkRespFilter=v;
+    else if(grp==='resp-sort') wkRespSort=v;
+    else if(grp==='case-fil') wkCaseFilter=v;
+    else if(grp==='case-sort') wkCaseSort=v;
+    else return;
+    if(grp.indexOf('resp')===0){ var re=document.getElementById('wk-resp-panel'); if(re) re.innerHTML=wkRespPanelInner(); }
+    else { var ce=document.getElementById('wk-case-panel'); if(ce) ce.innerHTML=wkCasePanelInner(); }
+  });
   function lockSvg(){
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none"/><path d="M12 16.9v1.6"/></svg>';
   }
@@ -1519,7 +1693,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
             vtRadar(t.radar||[]), '')
       +'</div></div>';
   }
-  function vaultRender(d, t){
+  function vaultRender(d, t, w){
     var el=document.getElementById('lb-list'); if(!el) return;
     if(!d || !d.ok){ el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; return; }
     if(!d.signed_in){ el.innerHTML=vaultSignedOut(); return; }
@@ -1528,6 +1702,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     if(!u.all_done) html+=vaultLadder(u)+'<div style="height:1.4rem"></div>';
     html+=vaultZone1(d);
     html+=vaultZone2(t);
+    html+=vaultZone4(w);   /* Zone 3 (Diagnosis) will slot in above this once built */
     el.innerHTML=html;
   }
   function loadVault(){
@@ -1538,11 +1713,12 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var b=lbBoard;
     Promise.all([
       jlRpc('dr_my_vault',{p_since:rg[0],p_until:rg[1],p_prev_since:pv[0],p_prev_until:pv[1]}),
-      jlRpc('dr_my_trajectory',{p_weeks:8,p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; })
+      jlRpc('dr_my_trajectory',{p_weeks:8,p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; }),
+      jlRpc('dr_my_work',{p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; })
     ]).then(function(res){
         if(b!==lbBoard) return;
         if(el) el.classList.remove('loading');
-        vaultRender(res[0], res[1]);
+        vaultRender(res[0], res[1], res[2]);
       })
       .catch(function(){ if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; } });
   }
