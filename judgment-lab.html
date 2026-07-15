@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-d6-zone4b 2026-07-14T18:30:00Z -->
+  <!-- build:lb-d6-zone3 2026-07-14T20:00:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -503,6 +503,27 @@
   .wk-recon.muted b{color:var(--muted,#6b7280)}
   .wk-none{padding:.7rem 0;color:var(--muted,#9aa0b0);font-size:.8rem}
   @media(max-width:560px){ .wk-title{white-space:normal} .wk-pts{font-size:1.1rem;min-width:38px} }
+  /* ===================== D6-4: ZONE 3 DIAGNOSIS ===================== */
+  .dg-list{display:flex;flex-direction:column;gap:.7rem}
+  .dg-card{border:1px solid var(--border,#e4e8f4);border-left-width:3px;border-radius:14px;background:var(--card,#fff);padding:.9rem 1.05rem;box-shadow:0 4px 16px rgba(20,25,45,.04)}
+  .dg-card.dg-hidden{display:none}
+  .dg-high,.dg-critical{border-left-color:#c0392b}
+  .dg-critical{border-left-color:#a01f14}
+  .dg-medium{border-left-color:#a8700a}
+  .dg-growth{border-left-color:#15803d}
+  .dg-top{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+  .dg-badge{font-size:.6rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;border-radius:99px;padding:.15rem .5rem}
+  .dg-b-high,.dg-b-critical{background:#FDF0F0;color:#c0392b}
+  .dg-b-medium{background:#FDEFD4;color:#a8700a}
+  .dg-b-growth{background:#EAF8F0;color:#15803d}
+  .dg-kind{font-size:.65rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--muted,#9aa0b0)}
+  .dg-title{font-weight:800;font-size:.96rem;color:var(--ink,#16233f);line-height:1.3;margin-bottom:.25rem}
+  .dg-saw{font-size:.86rem;line-height:1.5;color:var(--ink,#3a4358)}
+  .dg-why{font-size:.78rem;line-height:1.5;color:var(--muted,#6b7280);margin-top:.4rem}
+  .dg-cta{display:inline-block;margin-top:.7rem;font-size:.8rem;font-weight:800;color:var(--accent,#4f43d8);text-decoration:none}
+  .dg-cta:hover{text-decoration:underline}
+  .dg-more{margin-top:.7rem;width:100%;background:#FBFCFE;border:1px solid var(--border,#e4e8f4);color:var(--muted,#5c6479);border-radius:11px;padding:.6rem;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit}
+  .dg-more:hover{border-color:#b9c0d8;color:var(--ink,#16233f)}
   /* --- D4: desktop expandable detail row (submitter board) --- */
   .lb-xtog{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;margin-left:.3rem;border:1px solid var(--border2,#d3d9ec);background:#fff;color:var(--muted,#8a91a0);border-radius:6px;cursor:pointer;padding:0;flex:none;transition:transform .18s,border-color .15s,color .15s}
   .lb-xtog:hover{border-color:var(--accent,#4f43d8);color:var(--accent,#4f43d8)}
@@ -900,6 +921,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     if(k.indexOf('sb:')===0)      c=(typeof SBTIPS!=='undefined') ? SBTIPS[k.slice(3)] : null;
     else if(k.indexOf('vt:')===0) c=(typeof VTIPS!=='undefined')  ? VTIPS[k.slice(3)]  : null;
     else if(k.indexOf('wk:')===0) c=(typeof WKTIPS!=='undefined')  ? WKTIPS[k.slice(3)] : null;
+    else if(k.indexOf('dg:')===0) c=(typeof DGTIPS!=='undefined')  ? DGTIPS[k.slice(3)] : null;
     else                          c=LBTIPS[k];
     if(!c) return;
     tip.querySelector('.lb-tip-h').textContent=c.t; tip.querySelector('.lb-tip-b').textContent=c.b;
@@ -1429,6 +1451,57 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +tools+'<div class="wk-list" id="wk-case-list">'+wkCaseList()+'</div>'
       +(arr.length?wkCaseRecon(wkData):'');
   }
+  /* ===================== D6-4: ZONE 3 DIAGNOSIS ===================== */
+  var DGTIPS={ what:{t:'How Diagnosis works',b:'This reads ALL your activity \u2014 not the window pill above \u2014 and surfaces only the few patterns most worth fixing, ranked by the points (or judgment) at stake.\n\nEach card links straight to the exact case, response, or form to fix it. New here? You\u2019ll see next-step suggestions until there\u2019s enough of a track record to diagnose.'} };
+  function dgTip(k){ return '<button type="button" class="lb-tip-i" data-tip="dg:'+k+'" aria-label="What is this?">i</button>'; }
+  function dgHref(a){
+    if(!a) return '#';
+    if(a.ext==='gutcheck') return '/gutcheck.html#today';
+    var p=[];
+    if(a['do'])   p.push('do='+encodeURIComponent(a['do']));
+    if(a['case']) p.push('case='+encodeURIComponent(a['case']));
+    if(a.resp)    p.push('resp='+encodeURIComponent(a.resp));
+    if(a.cat)     p.push('cat='+encodeURIComponent(a.cat));
+    if(a.urg)     p.push('urg='+encodeURIComponent(a.urg));
+    return '/decisionroom.html'+(p.length?('?'+p.join('&')):'');
+  }
+  function dgSevLabel(s){ return ({critical:'Critical',high:'High impact',medium:'Worth fixing',growth:'Next step'})[s]||'Worth fixing'; }
+  function dgKindLabel(k){ return ({reviewer:'As a reviewer',author:'As an author',cross:'Across both',growth:''})[k]||''; }
+  function dgCard(r, hidden){
+    var sev=r.severity||'medium';
+    var kl=dgKindLabel(r.kind);
+    var why=(r.why && r.kind!=='growth')?'<div class="dg-why">'+esc(r.why)+'</div>':'';
+    return '<div class="dg-card dg-'+sev+(hidden?' dg-hidden':'')+'">'
+      +'<div class="dg-top"><span class="dg-badge dg-b-'+sev+'">'+dgSevLabel(sev)+'</span>'
+      +(kl?'<span class="dg-kind">'+kl+'</span>':'')+'</div>'
+      +'<div class="dg-title">'+esc(r.title||'')+'</div>'
+      +'<div class="dg-saw">'+esc(r.saw||'')+'</div>'
+      +why
+      +'<a class="dg-cta" href="'+dgHref(r.action)+'">'+esc(r.action_label||'Take action')+' \u2192</a>'
+      +'</div>';
+  }
+  function vaultZone3(dg){
+    if(!dg || !dg.ok || !dg.signed_in) return '';
+    var rules=(dg.rules||[]);
+    if(!rules.length) return '';
+    var cards=rules.map(function(r,i){ return dgCard(r, i>=5); }).join('');
+    var more=(rules.length>5)?'<button type="button" class="dg-more" data-dg="more">See '+(rules.length-5)+' more \u25BE</button>':'';
+    return '<div class="vt-zone">'
+      +'<div class="vt-zh"><span class="vt-zn">Zone 3</span><span class="vt-zt">Diagnosis</span>'
+      +'<span class="vt-zs">The few things most worth fixing right now \u2014 based on all your activity.'+dgTip('what')+'</span></div>'
+      +'<div class="dg-list" id="dg-list">'+cards+'</div>'+more
+      +'</div>';
+  }
+  /* Zone 3 "See more": reveal hidden cards (document-level -> survives re-render) */
+  document.addEventListener('click', function(e){
+    var b=(e.target.closest)?e.target.closest('[data-dg]'):null; if(!b) return;
+    if(b.getAttribute('data-dg')==='more'){
+      var list=document.getElementById('dg-list');
+      if(list){ [].slice.call(list.querySelectorAll('.dg-hidden')).forEach(function(c){ c.classList.remove('dg-hidden'); }); }
+      b.remove();
+    }
+  });
+
   function vaultZone4(w){
     if(!w || !w.ok || !w.signed_in){ wkData=null; return ''; }
     wkData=w;
@@ -1693,7 +1766,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
             vtRadar(t.radar||[]), '')
       +'</div></div>';
   }
-  function vaultRender(d, t, w){
+  function vaultRender(d, t, w, dg){
     var el=document.getElementById('lb-list'); if(!el) return;
     if(!d || !d.ok){ el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; return; }
     if(!d.signed_in){ el.innerHTML=vaultSignedOut(); return; }
@@ -1702,7 +1775,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     if(!u.all_done) html+=vaultLadder(u)+'<div style="height:1.4rem"></div>';
     html+=vaultZone1(d);
     html+=vaultZone2(t);
-    html+=vaultZone4(w);   /* Zone 3 (Diagnosis) will slot in above this once built */
+    html+=vaultZone3(dg);
+    html+=vaultZone4(w);
     el.innerHTML=html;
   }
   function loadVault(){
@@ -1714,11 +1788,12 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     Promise.all([
       jlRpc('dr_my_vault',{p_since:rg[0],p_until:rg[1],p_prev_since:pv[0],p_prev_until:pv[1]}),
       jlRpc('dr_my_trajectory',{p_weeks:8,p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; }),
-      jlRpc('dr_my_work',{p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; })
+      jlRpc('dr_my_work',{p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; }),
+      jlRpc('dr_my_diagnosis',{}).catch(function(){ return null; })
     ]).then(function(res){
         if(b!==lbBoard) return;
         if(el) el.classList.remove('loading');
-        vaultRender(res[0], res[1], res[2]);
+        vaultRender(res[0], res[1], res[2], res[3]);
       })
       .catch(function(){ if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; } });
   }
