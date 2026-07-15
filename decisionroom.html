@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
 <!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
 <!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
 <!-- build:D2-pill-tooltips 2026-07-10T22:04:59.735080+00:00 -->
@@ -1252,6 +1253,12 @@
     #case-overlay{ display:none !important; }
     .dr-ov{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(3px);z-index:200;display:none;align-items:flex-start;justify-content:center;padding:3vh 1rem;overflow-y:auto}
 .dr-ov.open{display:flex}
+    /* D6-4 deep-link: show the case overlay ONLY for deep links (dl-open),
+       overriding the inline-mode hide above without affecting feed expansion. */
+    #case-overlay.dl-open{ display:flex !important; }
+    #case-overlay.dl-open > #case-detail{ background:var(--surface); border:1px solid var(--border2); border-radius:16px; padding:1.4rem 1.5rem; max-width:680px; width:100%; margin:auto; box-shadow:0 24px 64px rgba(0,0,0,.5); }
+    .dl-close{ position:fixed; top:1.1rem; right:1.3rem; z-index:210; width:38px; height:38px; border-radius:50%; background:var(--card2); border:1px solid var(--border2); color:var(--white); font-size:1.35rem; line-height:1; cursor:pointer; }
+    .dl-close:hover{ background:var(--surface); }
 .dr-modal{background:var(--surface);border:1px solid var(--border2);border-radius:18px;max-width:640px;width:100%;padding:1.6rem;position:relative;margin:auto}
 .dr-modal .modal-t{font-family:var(--font-display);font-size:1.7rem;letter-spacing:.5px;margin-bottom:.2rem}
 .dr-modal .modal-sub{font-size:.83rem;color:var(--muted);margin-bottom:1.1rem}
@@ -2990,9 +2997,29 @@ boot();
   function closeCase(){
     if(curRespCaseId && SB && currentUser){ var _b=((document.getElementById('rf-body')||{}).value||'').trim(); if(_b.length>10){ SB.rpc('dr_draft_save',{p_id:respDraftId,p_kind:'response',p_case_id:curRespCaseId,p_title:('Re: '+(curRespCaseTitle||'a case')),p_data:gatherResponseDraft()}).then(function(r){ var o=(r&&r.data)||{}; if(o.ok){ respDraftId=o.id; if(typeof toast==='function') toast('Response saved to drafts'); loadDrafts(); } }, function(){}); } }
     curRespCaseId=null;
+    if(cov){ cov.classList.remove('open','dl-open'); }
     collapseCard(); document.body.style.overflow='';
   }
   if(cov) cov.addEventListener('click', function(e){ if(e.target===cov) closeCase(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var c=document.getElementById('case-overlay'); if(c && c.classList.contains('dl-open')) closeCase(); } });
+  /* D6-4 deep-link open: render a case into the (normally-hidden) overlay and
+     force it visible via dl-open. Used by ?case= deep links, which have no feed
+     card to expand inline. Leaves the feed's inline-expansion flow untouched. */
+  function drDeepOpenCase(id){
+    if(!id) return;
+    detachExp(); expandedId=null;                 /* #case-detail back in the overlay, no inline expander */
+    var m=document.getElementById('case-detail'); if(m) m.innerHTML='<p class="cd-miss">Loading\u2026</p>';
+    openCase(id);                                  /* renders into #case-detail, adds 'open' */
+    if(cov){
+      cov.classList.add('dl-open');
+      if(!document.getElementById('dl-close')){
+        var x=document.createElement('button'); x.id='dl-close'; x.type='button'; x.className='dl-close'; x.setAttribute('aria-label','Close'); x.innerHTML='&times;';
+        x.onclick=function(){ closeCase(); };
+        cov.appendChild(x);
+      }
+    }
+    document.body.style.overflow='hidden';
+  }
   function row(label, val){ return val?('<div class="cd-row"><div class="cd-label">'+label+'</div><div class="cd-val">'+val+'</div></div>'):''; }
   function listRow(label, arr, cls){ return (arr&&arr.length)?row(label, arr.map(function(x){return '<span class="cd-chip'+(cls?' '+cls:'')+'">'+escHtml(x)+'</span>';}).join('')):''; }
   function nl(t){ return escHtml(t).replace(/\n/g,'<br>'); }
@@ -3716,7 +3743,7 @@ boot();
     if(_do==='edit' && _case){
       drReady(function(){ if(typeof drOpenEdit==='function') drOpenEdit(_case); });
     } else if(_case){
-      drReady(function(){ openCase(_case); if(_resp) drScrollToResponse(_resp); else if(_do==='respond') drScrollToComposer(); });
+      drReady(function(){ drDeepOpenCase(_case); if(_resp) drScrollToResponse(_resp); else if(_do==='respond') drScrollToComposer(); });
     } else if(_do==='submit'){
       drReady(function(){ var b=document.querySelector('[data-cta="submit"]'); if(b) b.click(); });
     } else if(_do==='respond'){
