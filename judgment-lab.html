@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-d6-zone4 2026-07-14T12:00:00Z -->
+  <!-- build:lb-d6-zone4b 2026-07-14T18:30:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -1345,7 +1345,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     if(r.covered)        chips.push('<span class="wk-chip cover">\uD83D\uDCCB Covered</span>');
     if((r.reports||0)>0) chips.push('<span class="wk-chip rep">\u26A0\uFE0F '+r.reports+' report'+((r.reports===1)?'':'s')+'</span>');
     if(r.anon)           chips.push('<span class="wk-chip anon">\uD83D\uDD76\uFE0F Anonymous</span>');
-    return '<a class="wk-row" href="/decisionroom.html?case='+encodeURIComponent(r.case_id)+'">'
+    return '<a class="wk-row" href="/decisionroom.html?case='+encodeURIComponent(r.case_id)+(r.response_id?'&resp='+encodeURIComponent(r.response_id):'')+'">'
       +'<div class="wk-row-main"><span class="wk-title">'+esc(r.title||'Untitled case')+'</span>'
       +'<div class="wk-sub"><span class="wk-date">'+wkDateFmt(r.created_at)+'</span>'+wkStatusChip(r.status)+'</div>'
       +(chips.length?'<div class="wk-chips">'+chips.join('')+'</div>':'')

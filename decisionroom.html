@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
 <!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
 <!-- build:D2-pill-tooltips 2026-07-10T22:04:59.735080+00:00 -->
   <meta charset="UTF-8" />
@@ -1599,6 +1600,13 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .cd-head-r{display:flex;gap:.55rem;align-items:center}
 .cd-share{font:inherit;font-size:.74rem;font-weight:700;color:var(--prod-fg);background:transparent;border:1px solid rgba(var(--teal-rgb),.36);border-radius:8px;padding:.28rem .7rem;cursor:pointer}
 .cd-share:hover{background:rgba(var(--teal-rgb),.14);color:var(--prod-fg)}
+/* ---- D6-4: case editing + deep-link response highlight ---- */
+.cd-edit{color:var(--accent);border-color:rgba(var(--accent-rgb),.4)}
+.cd-edit:hover{background:rgba(var(--accent-rgb),.12);color:var(--accent)}
+.edit-banner{background:rgba(var(--accent-rgb),.1);border:1px solid rgba(var(--accent-rgb),.3);color:inherit;border-radius:11px;padding:.7rem .85rem;margin-bottom:1rem;font-size:.82rem;line-height:1.5}
+.edit-banner b{color:var(--accent)}
+.rsp-card.rsp-hl{animation:rspFlash 3.2s ease-out}
+@keyframes rspFlash{0%,60%{box-shadow:0 0 0 2px var(--accent),0 8px 30px rgba(var(--accent-rgb),.28)}100%{box-shadow:0 0 0 0 transparent}}
 .cd-ctx.mine{color:var(--accent);font-weight:700}
 .cd-chip.cat{color:var(--accent);border-color:rgba(var(--accent-rgb),.4);background:rgba(var(--accent-rgb),.08)}
 .cd-chip.stk{color:var(--stk-fg);border-color:rgba(var(--violet-rgb),.36);background:rgba(var(--violet-rgb),.1)}
@@ -2592,15 +2600,81 @@ boot();
     if(!SB) return;
     SB.rpc('dr_draft_get',{p_id:id}).then(function(r){ var dft=(r&&r.data)||{}; var data=dft.data||{};
       if(kind==='response' && cid){ pendingRespDraft={caseId:cid, id:id, data:data}; if(typeof openCase==='function') openCase(cid); }
-      else { caseDraftId=id; form.innerHTML=''; buildForm(); applyCaseDraft(data); showStep(1); ov.classList.add('open'); document.body.style.overflow='hidden'; }
+      else { editCaseId=null; caseDraftId=id; form.innerHTML=''; buildForm(); applyCaseDraft(data); showStep(1); ov.classList.add('open'); document.body.style.overflow='hidden'; }
     }, function(){});
   }
-  function drOpenSubmit(){ if(!ov||!form) return; if(!form.innerHTML){ caseDraftId=null; buildForm(); } showStep(1); ov.classList.add('open'); document.body.style.overflow='hidden'; }
-  function closeSubmit(){ if(!ov) return; ov.classList.remove('open'); document.body.style.overflow=''; }
+  function drOpenSubmit(){ if(!ov||!form) return; editCaseId=null; if(!form.innerHTML){ caseDraftId=null; buildForm(); } showStep(1); ov.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeSubmit(){ if(!ov) return; if(editCaseId){ editCaseId=null; if(form) form.innerHTML=''; } ov.classList.remove('open'); document.body.style.overflow=''; }
   window.drOpenSubmit=drOpenSubmit;
   if(ov) ov.addEventListener('click', function(e){ if(e.target===ov) closeSubmit(); });
 
-  function reasonMsg(r){ return ({auth:'Please sign in again.',confidential:'Please confirm you\u2019ve removed confidential info.',title:'Title needs at least 6 characters.',situation:'Add a bit more situation context.',decision:'Describe the decision a little more.',options:'Add at least two options.',risk:'Describe the biggest risk a little more.',help:'Pick at least one ask.',rate:'You\u2019ve posted several cases today \u2014 try again later.'})[r]||'Could not post right now.'; }
+  /* ===================== D6-4: CASE EDITING (owner, open cases) ===================== */
+  var editCaseId=null;
+  /* make sure every stored chip value exists as a selectable chip, so custom
+     (user-typed) categories/asks/etc. are never lost when editing. */
+  function ensureChips(groupId, values){
+    var host=document.getElementById(groupId); if(!host) return;
+    (values||[]).forEach(function(v){ if(v==null||v==='') return; var safe=String(v).replace(/["\\]/g,''); if(!host.querySelector('.chip[data-v="'+safe+'"]')){ var b=document.createElement('button'); b.type='button'; b.className='chip'; b.setAttribute('data-v', v); b.textContent=v; b.onclick=function(){ b.classList.toggle('sel'); }; host.appendChild(b); } });
+  }
+  /* returns true if the case already has responses (asks locked) */
+  function prefillFromCase(d){
+    ensureChips('f-help', d.help_types); ensureChips('f-cat', d.categories);
+    ensureChips('f-stk', d.stakeholders); ensureChips('f-cons', d.constraints_list);
+    applyCaseDraft({
+      fields:{ 'f-title':d.title||'', 'f-situation':d.situation||'', 'f-decision':d.decision||'',
+               'f-risk':d.biggest_risk||'', 'f-product':d.product_context||'', 'f-cons-note':d.constraints_note||'',
+               'f-rec':d.current_recommendation||'', 'f-evidence':d.evidence||'', 'f-tried':d.tried||'',
+               'f-urgency':d.urgency||'this_week' },
+      chips:{ 'f-help':d.help_types||[], 'f-cat':d.categories||[], 'f-stk':d.stakeholders||[], 'f-cons':d.constraints_list||[] },
+      opts:(d.options||[]).slice(), free_asks:(d.free_asks||[]).slice()
+    });
+    /* re-affirm confidentiality on the edited text (pre-checked, low friction) */
+    ['f-conf1','f-conf2','f-conf3','f-conf4'].forEach(function(id){ var el=document.getElementById(id); if(el) el.checked=true; });
+    /* anonymity is locked after posting */
+    var an=document.getElementById('f-anon'); if(an){ var fld=an.closest('.fld'); if(fld) fld.style.display='none'; }
+    /* asks are locked once the case has answers (protects sealed-week coverage / audit H1) */
+    var answered=(Number(d.response_count)||0)>0;
+    if(answered){ var help=document.getElementById('f-help'); if(help){ [].slice.call(help.querySelectorAll('.chip')).forEach(function(c){ c.setAttribute('disabled','disabled'); c.style.pointerEvents='none'; c.style.opacity='.55'; }); var inp=document.querySelector('#f-help ~ .chip-add-in, #f-help .chip-add-in'); if(inp){ inp.disabled=true; inp.style.display='none'; } } }
+    return answered;
+  }
+  function drOpenEdit(caseId){
+    if(!ov||!form||!caseId||!SB) return;
+    if(!currentUser){ if(typeof openSignIn==='function') openSignIn('Sign in to edit your case.'); return; }
+    SB.rpc('dr_get_case',{p_id:caseId}).then(function(res){
+      var d=(res&&res.data&&res.data.ok)?res.data['case']:null;
+      if(!d){ if(typeof toast==='function') toast('Couldn\u2019t load that case.'); return; }
+      if(!d.is_mine){ if(typeof toast==='function') toast('You can only edit your own case.'); return; }
+      if(d.status==='closed'){ if(typeof toast==='function') toast('Reopen this case before editing it.'); return; }
+      editCaseId=caseId; caseDraftId=null;
+      form.innerHTML=''; buildForm();
+      var answered=prefillFromCase(d);
+      var sb=document.getElementById('f-submit'); if(sb) sb.textContent='Save changes';
+      var cx=document.getElementById('f-cancel'); if(cx) cx.onclick=function(){ editCaseId=null; if(form) form.innerHTML=''; closeSubmit(); };
+      form.insertAdjacentHTML('afterbegin','<div class="edit-banner">\u270E You\u2019re editing a live case. '+(answered?'PMs have already answered the earlier version \u2014 your <b>asks are locked</b>, but everything else is editable.':'No responses yet \u2014 edit freely.')+' Anonymity can\u2019t be changed after posting.</div>');
+      showStep(1); ov.classList.add('open'); document.body.style.overflow='hidden';
+    }, function(){});
+  }
+  function doCaseUpdate(get, opts, help, cats, err){
+    var payload={
+      p_case_id:editCaseId,
+      p_title:get('f-title'), p_situation:get('f-situation'), p_decision:get('f-decision'),
+      p_options:opts, p_biggest_risk:get('f-risk'), p_help_types:help,
+      p_product_context:get('f-product')||null, p_categories:cats, p_stakeholders:selChips('f-stk'),
+      p_current_rec:get('f-rec')||null, p_constraints:selChips('f-cons'),
+      p_constraints_note:get('f-cons-note')||null, p_evidence:get('f-evidence')||null,
+      p_tried:get('f-tried')||null, p_urgency:get('f-urgency'),
+      p_free_asks:(typeof FREE_ASKS!=='undefined'&&FREE_ASKS.length)?FREE_ASKS.slice():[]
+    };
+    var btn=document.getElementById('f-submit'); if(btn){ btn.disabled=true; btn.textContent='Saving\u2026'; }
+    SB.rpc('dr_case_update', payload).then(function(res){
+      if(btn){ btn.disabled=false; btn.textContent='Save changes'; }
+      var o=(res&&res.data)||{};
+      if(o.ok){ var cid=editCaseId; editCaseId=null; if(form) form.innerHTML=''; closeSubmit(); if(typeof toast==='function') toast('Your case was updated.'); loadFeed(true); loadMyCases(); if(typeof loadLibrary==='function') loadLibrary(true); if(typeof openCase==='function') openCase(cid); }
+      else { err.textContent=reasonMsg(o.reason||'error'); }
+    }).catch(function(){ if(btn){ btn.disabled=false; btn.textContent='Save changes'; } err.textContent='Could not save right now \u2014 please try again.'; });
+  }
+
+  function reasonMsg(r){ return ({auth:'Please sign in again.',confidential:'Please confirm you\u2019ve removed confidential info.',title:'Title needs at least 6 characters.',situation:'Add a bit more situation context.',decision:'Describe the decision a little more.',options:'Add at least two options.',risk:'Describe the biggest risk a little more.',help:'Pick at least one ask.',rate:'You\u2019ve posted several cases today \u2014 try again later.',incomplete:'Please complete the required fields.',not_yours:'You can only edit your own case.',closed:'This case is closed \u2014 reopen it first.'})[r]||'Could not post right now.'; }
 
   function doSubmit(){
     var err=document.getElementById('f-err'); err.textContent='';
@@ -2620,6 +2694,7 @@ boot();
     if(!cats.length) miss.push('a problem category');
     if(!['f-conf1','f-conf2','f-conf3','f-conf4'].every(function(id){ var el=document.getElementById(id); return el&&el.checked; })) miss.push('all four confidentiality checks');
     if(miss.length){ err.textContent='Please complete: '+miss.join(', ')+'.'; if(miss.some(function(x){return x.indexOf('confidentiality')<0;})) showStep(1); return; }
+    if(editCaseId){ return doCaseUpdate(get, opts, help, cats, err); }
     var payload={
       p_title:get('f-title'), p_situation:get('f-situation'), p_decision:get('f-decision'),
       p_options:opts, p_biggest_risk:get('f-risk'), p_help_types:help,
@@ -2931,7 +3006,7 @@ boot();
       else {
         var opts=(d.options||[]).map(function(o,i){ return '<div class="cd-opt"><span>'+('ABCDE'.charAt(i)||'\u2022')+'</span>'+escHtml(o)+'</div>'; }).join('');
         var help=(d.help_types||[]).map(function(h){ return '<span class="cd-chip y">'+escHtml(helpLabel(h))+'</span>'; }).join('');
-        m.innerHTML='<div class="cd-head">'+(d.is_mine?'<span class="cd-ctx mine">Your case</span>':'<span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span>')+'<span class="cd-head-r">'+(d.is_mine?'<button type="button" class="cd-share" id="cd-share-btn">\u2197 Share</button>':'')+(d.needs_context?'<span class="cd-nc">\u2753 Needs more context</span>':'')+'<span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span>'+((!d.is_mine&&currentUser)?'<button type="button" class="cd-nc-btn" id="cd-nc-btn"'+(d.i_flagged?' disabled':'')+'>'+(d.i_flagged?'\u2713 Flagged':'Ask for more context')+'</button>':'')+'</span></div>'
+        m.innerHTML='<div class="cd-head">'+(d.is_mine?'<span class="cd-ctx mine">Your case</span>':'<span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span>')+'<span class="cd-head-r">'+(d.is_mine?'<button type="button" class="cd-share" id="cd-share-btn">\u2197 Share</button>':'')+((d.is_mine&&d.status!=='closed')?'<button type="button" class="cd-share cd-edit" id="cd-edit-btn">\u270E Edit</button>':'')+(d.needs_context?'<span class="cd-nc">\u2753 Needs more context</span>':'')+'<span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span>'+((!d.is_mine&&currentUser)?'<button type="button" class="cd-nc-btn" id="cd-nc-btn"'+(d.i_flagged?' disabled':'')+'>'+(d.i_flagged?'\u2713 Flagged':'Ask for more context')+'</button>':'')+'</span></div>'
           +(d.is_mine?'<div id="cb-host"></div>':'')
           +'<h2 class="cd-title">'+escHtml(d.title)+'</h2>'
           +row('The decision','<strong>'+escHtml(d.decision)+'</strong>')
@@ -2956,6 +3031,7 @@ boot();
           +'<div id="cd-responses" class="cd-resp-list"></div></div>';
         loadResponses(d);
         var csb=document.getElementById('cd-share-btn'); if(csb) csb.onclick=function(){ openShare(d.id); };
+        var ceb=document.getElementById('cd-edit-btn'); if(ceb) ceb.onclick=function(){ drOpenEdit(d.id); };
         if(d.is_mine && typeof renderCaseBreakdown==='function') renderCaseBreakdown(d.id);
         var ncb=document.getElementById('cd-nc-btn'); if(ncb && !d.i_flagged) ncb.onclick=function(){ ncb.disabled=true; SB.rpc('dr_request_context',{p_case_id:d.id}).then(function(r){ if(r&&r.data&&r.data.ok){ if(typeof toast==='function') toast('Flagged \u2014 the asker will be nudged for more context'); ncb.textContent='\u2713 Flagged'; } else { ncb.disabled=false; } }).catch(function(){ ncb.disabled=false; }); };
       }
@@ -3209,7 +3285,7 @@ boot();
       var qmeta = flagged ? ['low','Not actionable'] : (wpct>=75 ? ['high','High ask coverage'] : (wpct>=40 ? ['mid','Useful perspective'] : ['low','Low coverage']));
       var qlabel = '<span class="rsp-q '+qmeta[0]+'">'+qmeta[1]+tipI('coverage')+'</span>';
       var chk = respChecklist(d, r);
-      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+(r.is_champion?' is-champ':'')+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r">'+qlabel+scorePill(d,r)+'<span class="rsp-stars">'+starsMarkup(stars)+tipI('stars')+'</span></span></div>'+jpBadge(r)
+      return '<div class="rsp-card'+(r.acted_on?' is-acted':'')+(flagged?' is-flagged':'')+(r.is_champion?' is-champ':'')+'" data-rid="'+escHtml(r.id)+'"><div class="rsp-top"><span class="rsp-who">'+escHtml(who)+'</span><span class="rsp-top-r">'+qlabel+scorePill(d,r)+'<span class="rsp-stars">'+starsMarkup(stars)+tipI('stars')+'</span></span></div>'+jpBadge(r)
         +'<div class="rsp-badges">'+conf+acted+hc+'</div>'+flag
         +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo+askn+nstep
         +wantsGridHtml(d, r)+freeAskGridHtml(d, r)+chk
@@ -3607,29 +3683,47 @@ boot();
   loadFeed(true);
   loadLibrary(true);
   loadMyCases();
+  /* ===================== D6-4: precise deep-link router =====================
+     Every Vault CTA lands on the exact thing it points at:
+       ?case=<id>                 -> open that case
+       ?case=<id>&resp=<rid>      -> open case + scroll/flash that response
+       ?case=<id>&do=respond      -> open case + jump to the response composer
+       ?do=submit                 -> open the new-case form
+       ?do=edit&case=<id>         -> open the edit form for that case
+       ?do=respond                -> open the top live case in the feed
+       ?cat=<category> / ?urg=<u> -> pre-filter the feed (Zone 3 category rules)
+     Robust to cold loads: waits for SB + openCase instead of a fixed timeout. */
+  function drReady(fn){ var n=0, t=setInterval(function(){ if(SB && typeof openCase==='function'){ clearInterval(t); try{ fn(); }catch(e){} } else if(++n>80){ clearInterval(t); } }, 100); }
+  function drScrollToResponse(rid){
+    if(!rid) return; var safe=String(rid).replace(/["\\]/g,''), n=0;
+    var t=setInterval(function(){ var el=document.querySelector('.rsp-card[data-rid="'+safe+'"]'); if(el){ clearInterval(t); try{ el.scrollIntoView({behavior:'smooth', block:'center'}); }catch(e){} el.classList.add('rsp-hl'); setTimeout(function(){ el.classList.remove('rsp-hl'); }, 3200); } else if(++n>70){ clearInterval(t); } }, 120);
+  }
+  function drScrollToComposer(){
+    var n=0, t=setInterval(function(){ var el=document.getElementById('cd-respond'); if(el && el.offsetParent!==null && el.innerHTML.trim()){ clearInterval(t); try{ el.scrollIntoView({behavior:'smooth', block:'center'}); }catch(e){} var b=document.getElementById('rf-body'); if(b){ try{ b.focus(); }catch(e){} } } else if(++n>70){ clearInterval(t); } }, 120);
+  }
   try{
     var _q=new URLSearchParams(location.search);
-    var _dl=_q.get('case');
-    if(_dl){ setTimeout(function(){ openCase(_dl); }, 350); }
-    /* D6: deep links from the Vault unlock ladder */
-    var _do=_q.get('do');
-    if(_do==='submit'){
-      setTimeout(function(){
-        var b=document.querySelector('[data-cta="submit"]');
-        if(b) b.click();
-      }, 450);
+    var _case=_q.get('case'), _resp=_q.get('resp'), _do=_q.get('do'),
+        _cat=_q.get('cat'), _urg=_q.get('urg');
+
+    /* category / urgency pre-filter (used by Zone 3 category rules) */
+    if(_cat || _urg){
+      if(_cat){ var fc=document.getElementById('feed-cat'); if(fc){ var safeCat=String(_cat).replace(/["\\]/g,''); if(!fc.querySelector('option[value="'+safeCat+'"]')){ var o=document.createElement('option'); o.value=_cat; o.textContent=_cat; fc.appendChild(o); } fc.value=_cat; } }
+      if(_urg){ var fu=document.getElementById('feed-urg'); if(fu) fu.value=_urg; }
+      if(typeof loadFeed==='function') loadFeed(true);
     }
-    if(_do==='respond'){
+
+    if(_do==='edit' && _case){
+      drReady(function(){ if(typeof drOpenEdit==='function') drOpenEdit(_case); });
+    } else if(_case){
+      drReady(function(){ openCase(_case); if(_resp) drScrollToResponse(_resp); else if(_do==='respond') drScrollToComposer(); });
+    } else if(_do==='submit'){
+      drReady(function(){ var b=document.querySelector('[data-cta="submit"]'); if(b) b.click(); });
+    } else if(_do==='respond'){
       setTimeout(function(){
-        var sec=document.getElementById('room');   /* the feed lives in section#room */
-        if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
-        /* open the case at the top of the feed once it has rendered */
-        var tries=0, t=setInterval(function(){
-          var card=document.querySelector('#feed-list .feed-card[data-id]');
-          if(card){ clearInterval(t); card.click(); }
-          if(++tries>50) clearInterval(t);
-        }, 150);
-      }, 500);
+        var sec=document.getElementById('room'); if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
+        var tries=0, t=setInterval(function(){ var card=document.querySelector('#feed-list .feed-card[data-id]'); if(card){ clearInterval(t); card.click(); } if(++tries>60) clearInterval(t); }, 150);
+      }, 550);
     }
   }catch(e){}
 })();
