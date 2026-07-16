@@ -253,7 +253,8 @@
   .pcx-action{align-self:flex-start;font-size:.7rem;font-weight:800;color:var(--accent,#4f43d8);border:1px solid var(--accent,#4f43d8);border-radius:100px;padding:.2rem .62rem;opacity:.92}
   .pcx-foot{display:flex;align-items:center;gap:.4rem;font-size:.7rem;font-weight:800;color:var(--muted,#7a8091);margin-top:auto;text-transform:uppercase;letter-spacing:.3px}
   .pcx-dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.5;flex:none}
-  .pcx-note{text-align:center;font-size:.82rem;color:var(--muted,#8a91a0);margin-top:1.3rem}
+  .pcx-note{max-width:780px;margin:1.5rem auto 0;text-align:center;font-size:.92rem;line-height:1.65;color:var(--muted,#6b7280)}
+  .pcx-note b{color:var(--ink,#16233f);font-weight:700}
   @media(max-width:560px){ .pcx-grid{grid-template-columns:1fr} }
   .lb-list{}
   .lb-list.loading{opacity:.55;pointer-events:none}
@@ -630,7 +631,7 @@
         <button class="theme-opt" data-theme="classic" role="menuitem"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic</span><span class="theme-chk">✓</span></button>
       </div>
     </div>
-    <div class="nav-account" id="nav-account"><div id="gc-auth-slot"></div></div>
+    <div class="nav-account" id="nav-account"></div>
     <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
@@ -638,6 +639,7 @@
 <div class="mobile-backdrop" id="mobile-backdrop"></div>
 <aside class="mobile-menu" id="mobile-menu">
   <div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div>
+  <div id="mm-account" class="mm-account" style="display:none"></div>
   <details class="mm-jl" open>
     <summary class="mm-jl-sum">Judgment Lab<svg class="mm-jl-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
     <a class="mm-jl-item mm-jl-ov" href="/judgment-lab.html"><b>The Judgment Lab</b><small>Overview</small></a>
@@ -731,7 +733,7 @@
         <div class="pcx-foot"><span class="pcx-dot"></span>Vault · Your Work</div>
       </div>
     </div>
-    <p class="pcx-note">These are examples — sign in to see your own.</p>
+    <p class="pcx-note">These are generic examples — <b>yours come straight from your own record: pure data, no guesses.</b> New here? We hand you your first three moves. From there, just keep sharpening your judgment in GutCheck and bringing real decisions to DecisionRoom (or answering someone else's) — and we turn every rep into the exact next step that carries you from your first call to <b>the top of the leaderboard, recognized as a product leader.</b></p>
   </div>
 </section>
 
@@ -1837,6 +1839,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       })
       .catch(function(){ lbBusy=false; if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load the leaderboard. Tap Refresh to retry.</div>'; } });
   }
+  window.pmOnAuth=function(){ try{ lbLoad(); loadChamp(); loadHist(); }catch(e){} };
   function initLb(){
     var pills=document.getElementById('lb-pills'), rEl=document.getElementById('lb-refresh');
     if(!pills) return;
@@ -1894,6 +1897,6 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   if(document.readyState!=='loading') initLb(); else document.addEventListener('DOMContentLoaded', initLb);
 })();
 </script>
-<script src="/gc-auth.js"></script>
+<script src="/pm-auth.js"></script>
 </body>
 </html>
