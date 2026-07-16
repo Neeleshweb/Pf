@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- build:pg-stage1 2026-07-16T10:00:00Z -->
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Proving Ground — Product Judgment Lab</title>
+  <meta name="description" content="Train product judgment before the real decision gets expensive. Practise messy PM calls in GutCheck, bring real work decisions to DecisionRoom, and build a judgment profile that follows you across both."/>
+  <meta property="og:title" content="Product Judgment Lab"/>
+  <meta property="og:description" content="GutCheck trains your product judgment. DecisionRoom helps you apply it. Two connected ways to sharpen how you make the call."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="https://neeleshpmtoolkit.com/og-gutcheck.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <script>(function(){try{var t=localStorage.getItem('dr-theme');var ok={signal:1,editorial:1,warm:1,classic:1};if(t==='indigo')t='signal';if(!ok[t])t='signal';document.documentElement.setAttribute('data-dr-theme',t);}catch(e){document.documentElement.setAttribute('data-dr-theme','signal');}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black:#080808; --surface:#0f0f0f; --card:#141414; --card2:#191919;
+      --border:#242424; --border2:#2e2e2e; --white:#f0ece4; --muted:#9d968c; --muted2:#8c867c;
+      --accent-rgb:232,84,10; --accent2-rgb:240,165,0; --accent3-rgb:59,130,246; --green-rgb:74,222,128; --red-rgb:255,107,107;
+      --accent:rgb(var(--accent-rgb)); --accent2:rgb(var(--accent2-rgb)); --accent3:rgb(var(--accent3-rgb)); --green:rgb(var(--green-rgb)); --red:rgb(var(--red-rgb));
+      --accent-dim:rgba(var(--accent-rgb),0.12); --accent2-dim:rgba(var(--accent2-rgb),0.10); --accent3-dim:rgba(var(--accent3-rgb),0.10);
+      --nav-bg:rgba(8,8,8,0.92); --popover:rgba(18,18,18,0.97); --field-bg:rgba(255,255,255,0.045); --modal-bg:var(--card); --field-focus:#1a1613;
+      --text2:#c9c4bb; --text3:#a9a39a; --card-shadow:none; --btn-ink:#140d07;
+      --font-display:'Bebas Neue', sans-serif; --font-body:'DM Sans', sans-serif;
+      --radius:3px;
+    }
+    html[data-dr-theme="signal"]{
+      --black:#eef2fc; --surface:#f4f7ff; --card:#ffffff; --card2:#eef2fb;
+      --border:#e4e8f4; --border2:#d3d9ec; --white:#101424; --muted:#41495e; --muted2:#616a80;
+      --accent-rgb:79,67,216; --accent2-rgb:0,168,140; --accent3-rgb:37,99,235; --green-rgb:22,140,100; --red-rgb:200,60,60;
+      --nav-bg:rgba(255,255,255,0.82); --popover:rgba(255,255,255,0.98); --field-bg:#ffffff; --modal-bg:#ffffff; --field-focus:#ffffff;
+      --text2:#39415a; --text3:#5c6479; --card-shadow:0 2px 12px rgba(16,20,36,.07); --btn-ink:#fff;
+      --font-body:'Inter', sans-serif;
+    }
+    html[data-dr-theme="editorial"]{
+      --black:#f2ebdf; --surface:#faf7f2; --card:#ffffff; --card2:#f4ecdf;
+      --border:#e7ddce; --border2:#dccfb8; --white:#1a1714; --muted:#4a4034; --muted2:#6b6154;
+      --accent-rgb:124,45,45; --accent2-rgb:150,105,0; --accent3-rgb:58,90,58; --green-rgb:58,90,58; --red-rgb:168,45,45;
+      --nav-bg:rgba(250,247,242,0.86); --popover:rgba(255,255,255,0.98); --field-bg:#fffdf9; --modal-bg:#fffdf9; --field-focus:#fffdf9;
+      --text2:#463c30; --text3:#6b6154; --card-shadow:0 2px 12px rgba(26,23,20,.07); --btn-ink:#fff;
+      --font-body:'Inter', sans-serif;
+    }
+    html[data-dr-theme="warm"]{
+      --black:#0f0c09; --surface:#17130f; --card:#201a14; --card2:#261f18;
+      --border:#33291f; --border2:#3f3327; --white:#ece3d6; --muted:#9c8e7c; --muted2:#7d7060;
+      --accent-rgb:216,155,74; --accent2-rgb:224,168,90; --accent3-rgb:123,176,201; --green-rgb:122,180,120; --red-rgb:224,122,110;
+      --nav-bg:rgba(15,12,9,0.9); --popover:rgba(26,21,16,0.97); --field-bg:rgba(255,255,255,0.05); --modal-bg:var(--card); --btn-ink:#241a0f;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--white); font-family: var(--font-body); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: var(--font-body); cursor: pointer; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* NAV */
+    .nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; height: 60px; background: var(--nav-bg); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 3px; display: flex; align-items: center; gap: .5rem; }
+    .nav-logo .logo-box { width: 28px; height: 28px; border-radius: 7px; background: var(--accent); display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0; }
+    .nav-logo .logo-box svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+    .nav-logo .logo-word { font-family: var(--font-body); font-weight: 600; font-size: 1rem; letter-spacing: .2px; color: var(--white); }
+    .nav-logo .logo-word .ac { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 0; list-style: none; }
+    .nav-links a { display: block; padding: 0 .6rem; height: 60px; line-height: 60px; white-space: nowrap; font-size: .78rem; letter-spacing: .3px; text-transform: uppercase; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .nav-home { display: flex; align-items: center; gap: .45rem; font-size: .8rem; color: var(--white); letter-spacing: .5px; background: var(--accent); padding: .5rem 1.1rem; border-radius: var(--radius); font-weight: 500; transition: opacity .2s, transform .15s; }
+    .nav-home:hover { opacity: .9; transform: translateY(-1px); }
+    .nav-home svg { width: 15px; height: 15px; }
+    .theme-wrap { position: relative; display: flex; align-items: center; }
+    .theme-btn { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 10px; background: transparent; border: 1px solid var(--border2); color: var(--muted); cursor: pointer; transition: color .15s, border-color .15s; }
+    .theme-btn:hover { color: var(--white); border-color: var(--accent); }
+    .theme-btn svg { width: 17px; height: 17px; }
+    .theme-pop { position: absolute; top: calc(100% + 10px); right: 0; width: 220px; background: var(--popover); backdrop-filter: blur(16px); border: 1px solid var(--border2); border-radius: 14px; padding: .4rem; display: none; z-index: 320; box-shadow: 0 24px 60px rgba(0,0,0,.5); }
+    .theme-pop.open { display: block; }
+    .theme-pop-h { font-size: .58rem; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted2); padding: .5rem .6rem .35rem; }
+    .theme-opt { display: flex; align-items: center; gap: .6rem; width: 100%; text-align: left; background: transparent; border: none; color: var(--white); font: inherit; font-size: .86rem; padding: .6rem .6rem; border-radius: 9px; cursor: pointer; transition: background .15s; }
+    .theme-opt:hover { background: var(--card2); }
+    .theme-nm { flex: 1; }
+    .theme-def { font-size: .62rem; color: var(--muted2); }
+    .theme-sw { width: 18px; height: 18px; border-radius: 6px; flex-shrink: 0; border: 1px solid rgba(140,134,124,.4); }
+    .sw-signal { background: linear-gradient(135deg,#4f43d8 55%,#00b496 55%); }
+    .sw-editorial { background: linear-gradient(135deg,#faf7f2 55%,#7c2d2d 55%); }
+    .sw-warm { background: linear-gradient(135deg,#17130f 55%,#d89b4a 55%); }
+    .sw-classic { background: linear-gradient(135deg,#0f0f0f 55%,#e8540a 55%); }
+    .theme-chk { color: var(--accent); font-weight: 700; opacity: 0; }
+    .theme-opt.active .theme-chk { opacity: 1; }
+    .theme-opt.active { background: var(--accent-dim); }
+    .nav-account { display: flex; align-items: center; }
+
+    /* ===== Judgment Lab nav dropdown ===== */
+    .nav-dd { position: relative; display: flex; align-items: center; }
+    .nav-dd .nav-dd-trigger { display: inline-flex; align-items: center; gap: .3rem; height: 60px; padding: 0 .6rem; background: none; border: none; color: var(--muted); font-family: inherit; font-size: .78rem; letter-spacing: .3px; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: color .2s; }
+    .nav-dd:hover .nav-dd-trigger, .nav-dd:focus-within .nav-dd-trigger, .nav-dd .nav-dd-trigger.active { color: var(--white); }
+    .nav-dd-caret { width: 12px; height: 12px; transition: transform .2s; }
+    .nav-dd:hover .nav-dd-caret, .nav-dd:focus-within .nav-dd-caret { transform: rotate(180deg); }
+    .nav-dd-menu { position: absolute; top: calc(100% - 6px); left: 0; min-width: 270px; background: var(--popover); backdrop-filter: blur(16px); border: 1px solid var(--border2); border-radius: 14px; padding: .4rem; box-shadow: 0 24px 60px rgba(0,0,0,.4); display: none; z-index: 320; }
+    .nav-dd:hover .nav-dd-menu, .nav-dd:focus-within .nav-dd-menu { display: block; }
+    .nav-dd-menu .nav-dd-overview { display: flex; align-items: center; justify-content: space-between; gap: .65rem; height: auto; line-height: 1.35; padding: .62rem .7rem; border-radius: 10px; background: var(--accent-dim); text-transform: none; letter-spacing: normal; transition: background .15s; }
+    .nav-dd-overview:hover { background: var(--accent); }
+    .nav-dd-ov-tx b { display: block; font-size: .88rem; font-weight: 700; color: var(--white); }
+    .nav-dd-ov-tx small { display: block; font-size: .71rem; color: var(--muted); margin-top: .08rem; }
+    .nav-dd-overview:hover .nav-dd-ov-tx b, .nav-dd-overview:hover .nav-dd-ov-ar { color: var(--btn-ink); }
+    .nav-dd-overview:hover .nav-dd-ov-tx small { color: rgba(255,255,255,.82); }
+    .nav-dd-ov-ar { width: 16px; height: 16px; flex-shrink: 0; color: var(--accent); }
+    .nav-dd-div { height: 1px; background: var(--border); margin: .35rem .25rem; }
+    .nav-dd-menu .nav-dd-item { display: flex; align-items: flex-start; gap: .65rem; height: auto; line-height: 1.35; padding: .6rem .7rem; border-radius: 10px; color: var(--white); text-transform: none; letter-spacing: normal; transition: background .15s; }
+    .nav-dd-menu .nav-dd-item:hover { background: var(--card2); }
+    .nav-dd-menu .nav-dd-item.active { background: var(--accent-dim); }
+    .nav-dd-ic { width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--accent-dim); color: var(--accent); }
+    .nav-dd-ic svg { width: 16px; height: 16px; }
+    .nav-dd-ic.dr { background: var(--accent3-dim); color: var(--accent3); }
+    .nav-dd-ic.pg { background: var(--accent2-dim); color: var(--accent2); }
+    .nav-dd-tx b { display: block; font-size: .9rem; font-weight: 600; color: var(--white); }
+    .nav-dd-tx small { display: block; font-size: .72rem; color: var(--muted); margin-top: .12rem; }
+
+    .hamburger { display: none; width: 42px; height: 42px; border: 1px solid var(--border2); background: var(--card); border-radius: 10px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; }
+    .hamburger span { width: 18px; height: 2px; background: var(--white); border-radius: 2px; transition: transform .25s, opacity .2s; }
+    .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    .mobile-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.6); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 400; }
+    .mobile-backdrop.open { opacity: 1; pointer-events: auto; }
+    .mobile-menu { position: fixed; top: 0; right: 0; height: 100%; width: min(330px, 86vw); background: var(--surface); border-left: 1px solid var(--border2); transform: translateX(102%); transition: transform .32s cubic-bezier(.4,0,.2,1); z-index: 401; display: flex; flex-direction: column; box-shadow: -24px 0 60px rgba(0,0,0,.55); }
+    .mobile-menu.open { transform: translateX(0); }
+    .mm-head { display: flex; align-items: center; justify-content: space-between; padding: 1.05rem 1.2rem; border-bottom: 1px solid var(--border); }
+    .mm-title { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2.5px; font-size: 1.25rem; }
+    .mm-close { background: none; border: none; color: var(--muted); font-size: 1.15rem; cursor: pointer; width: 34px; height: 34px; border-radius: 8px; }
+    .mm-close:hover { background: var(--card); color: var(--white); }
+    .mm-body { padding: .55rem; overflow-y: auto; flex: 1; }
+    .mm-link { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .85rem 1rem; border-radius: 11px; color: var(--white); font-size: .95rem; cursor: pointer; transition: background .15s; }
+    .mm-link:hover { background: var(--card); }
+    .mm-jl { border-bottom: 1px solid var(--border); }
+    .mm-jl-sum { list-style: none; display: flex; align-items: center; justify-content: space-between; padding: .9rem 1rem; font-size: .95rem; font-weight: 600; color: var(--white); cursor: pointer; border-radius: 11px; }
+    .mm-jl-sum::-webkit-details-marker { display: none; }
+    .mm-jl-caret { width: 15px; height: 15px; color: var(--muted); transition: transform .2s; }
+    .mm-jl[open] .mm-jl-caret { transform: rotate(180deg); }
+    .mm-jl-item { display: block; padding: .6rem 1rem .6rem 1.2rem; border-radius: 11px; color: var(--white); }
+    .mm-jl-item:hover, .mm-jl-item.active { background: var(--card); }
+    .mm-jl-ov { background: var(--accent-dim); }
+    .mm-jl-ov b { color: var(--accent) !important; }
+    .mm-jl-item b { display: block; font-size: .9rem; font-weight: 600; }
+    .mm-jl-item small { display: block; font-size: .74rem; color: var(--muted); margin-top: .1rem; }
+    .mm-theme { border-top: 1px solid var(--border); margin-top: .4rem; padding: .55rem; }
+    .mm-theme-h { font-size: .58rem; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted2); padding: .3rem .4rem .45rem; }
+    .mm-theme .theme-opt { font-size: .95rem; padding: .7rem .5rem; }
+
+    /* HERO */
+    .hero { position: relative; overflow: hidden; padding: 5.5rem 1.5rem 3.5rem; text-align: center; }
+    .hero::before, .hero::after { content: ''; position: absolute; border-radius: 50%; filter: blur(90px); opacity: .5; pointer-events: none; z-index: 0; }
+    .hero::before { width: 460px; height: 460px; background: radial-gradient(circle, rgba(var(--accent-rgb),0.42), transparent 70%); top: -140px; left: -100px; animation: float1 14s ease-in-out infinite; }
+    .hero::after { width: 400px; height: 400px; background: radial-gradient(circle, rgba(var(--accent3-rgb),0.28), transparent 70%); bottom: -120px; right: 4%; animation: float2 18s ease-in-out infinite; }
+    @keyframes float1 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(50px,36px) scale(1.12);} }
+    @keyframes float2 { 0%,100% { transform: translate(0,0) scale(1);} 50% { transform: translate(-44px,-26px) scale(1.16);} }
+    .hero-grid { position: absolute; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(128,128,128,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(128,128,128,0.06) 1px, transparent 1px); background-size: 60px 60px; mask-image: radial-gradient(ellipse 90% 70% at 50% 45%, #000 30%, transparent 80%); -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 45%, #000 30%, transparent 80%); }
+    .hero-inner { position: relative; z-index: 1; max-width: 820px; margin: 0 auto; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-size: .72rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent2); border: 1px solid rgba(var(--accent2-rgb),.3); background: var(--accent2-dim); padding: .45rem 1rem; border-radius: 100px; margin-bottom: 1.6rem; }
+    .hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.7rem, 7vw, 5.2rem); letter-spacing: 1.5px; line-height: 1; }
+    .hero h1 em { color: var(--accent); font-style: normal; }
+    .hero-sub { margin: 1.4rem auto 0; max-width: 620px; color: var(--text2); font-size: 1.05rem; line-height: 1.7; }
+    .hero-sub strong { color: var(--white); font-weight: 600; }
+    .hero-ctas { display: flex; gap: .9rem; justify-content: center; flex-wrap: wrap; margin-top: 2.2rem; }
+    .btn-primary { background: var(--accent); color: var(--btn-ink); font-weight: 600; font-size: .92rem; padding: .9rem 1.8rem; border-radius: 12px; border: none; display: inline-flex; align-items: center; gap: .5rem; transition: transform .15s, filter .2s; }
+    .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    .btn-ghost { background: transparent; color: var(--white); font-weight: 500; font-size: .92rem; padding: .9rem 1.8rem; border-radius: 12px; border: 1px solid var(--border2); display: inline-flex; align-items: center; gap: .5rem; transition: border-color .2s, transform .15s; }
+    .btn-ghost:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+    /* SECTIONS */
+    .section { padding: 3.8rem 0; }
+    .section.tint { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .sec-head { text-align: center; max-width: 660px; margin: 0 auto 2.6rem; }
+    .sec-eyebrow { display: inline-block; font-size: .66rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: .7rem; }
+    .sec-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.9rem, 4.5vw, 2.9rem); letter-spacing: 1px; line-height: 1.02; }
+    .sec-title em { color: var(--accent); font-style: normal; }
+    .sec-sub { color: var(--text2); margin-top: .7rem; font-size: 1rem; line-height: 1.6; }
+
+    /* PRODUCT CARDS */
+    .lab-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+    .lab-card { position: relative; background: var(--card); border: 1px solid var(--border2); border-radius: 20px; padding: 2rem 1.9rem; overflow: hidden; box-shadow: var(--card-shadow); transition: transform .18s, border-color .2s; }
+    .lab-card:hover { transform: translateY(-4px); border-color: rgba(var(--accent-rgb),.5); }
+    .lab-card.dr:hover { border-color: rgba(var(--accent3-rgb),.5); }
+    .lab-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .lab-card.dr::before { background: linear-gradient(90deg, var(--accent3), var(--accent)); }
+    .lab-card-ic { width: 52px; height: 52px; border-radius: 14px; background: var(--accent-dim); color: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 1.1rem; }
+    .lab-card.dr .lab-card-ic { background: var(--accent3-dim); color: var(--accent3); }
+    .lab-card-ic svg { width: 26px; height: 26px; }
+    .lab-label { display: inline-block; font-size: .64rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; color: var(--accent); background: var(--accent-dim); padding: .32rem .75rem; border-radius: 100px; margin-bottom: .9rem; }
+    .lab-card.dr .lab-label { color: var(--accent3); background: var(--accent3-dim); }
+    .lab-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 2.15rem; letter-spacing: 1px; line-height: 1; }
+    .lab-headline { font-size: 1.08rem; font-weight: 600; margin-top: .35rem; color: var(--white); }
+    .lab-body { color: var(--text2); margin-top: .55rem; line-height: 1.6; font-size: .96rem; }
+    .lab-bullets { list-style: none; margin: 1.3rem 0 1.6rem; display: flex; flex-direction: column; gap: .6rem; }
+    .lab-bullets li { display: flex; align-items: flex-start; gap: .6rem; font-size: .92rem; color: var(--text2); }
+    .lab-bullets svg { width: 17px; height: 17px; color: var(--accent); flex-shrink: 0; margin-top: .16rem; }
+    .lab-card.dr .lab-bullets svg { color: var(--accent3); }
+    .lab-card .btn-primary { width: 100%; justify-content: center; }
+    .lab-card.dr .btn-primary { background: var(--accent3); color: #fff; }
+
+    /* FLOW */
+    .lab-flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: stretch; gap: 1rem; }
+    .flow-step { background: var(--card); border: 1px solid var(--border2); border-radius: 16px; padding: 1.5rem 1.4rem; box-shadow: var(--card-shadow); }
+    .flow-num { width: 34px; height: 34px; border-radius: 10px; background: var(--accent); color: var(--btn-ink); font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem; display: flex; align-items: center; justify-content: center; margin-bottom: .85rem; }
+    .flow-step h4 { font-size: 1.05rem; font-weight: 600; color: var(--white); }
+    .flow-step p { color: var(--text2); margin-top: .45rem; font-size: .92rem; line-height: 1.55; }
+    .lab-flow-arrow { align-self: center; color: var(--muted2); display: flex; }
+    .lab-flow-arrow svg { width: 24px; height: 24px; }
+
+    /* CATEGORIES */
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: .8rem; }
+    .cat-card { display: flex; align-items: flex-start; gap: .7rem; background: var(--card); border: 1px solid var(--border); border-radius: 13px; padding: .9rem 1rem; transition: border-color .2s, transform .15s; }
+    .cat-card:hover { border-color: rgba(var(--accent-rgb),.5); transform: translateY(-2px); }
+    .cat-card.custom { background: var(--accent-dim); border-color: rgba(var(--accent-rgb),.35); border-style: dashed; }
+    .cat-ic { font-size: 1.2rem; line-height: 1.35; flex-shrink: 0; }
+    .cat-tx b { display: block; font-size: .88rem; font-weight: 600; color: var(--white); }
+    .cat-tx small { display: block; font-size: .76rem; color: var(--muted); margin-top: .16rem; line-height: 1.4; }
+    .cat-note { text-align: center; color: var(--muted); font-size: .92rem; margin-top: 1.5rem; }
+    .cat-note b { color: var(--accent); font-weight: 600; }
+
+    /* FOOTER */
+    .foot { border-top: 1px solid var(--border); padding: 2.6rem 1.5rem; text-align: center; color: var(--muted); font-size: .85rem; }
+    .foot-links { display: flex; gap: 1.4rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem; }
+    .foot-links a { color: var(--text2); font-size: .82rem; letter-spacing: .3px; }
+    .foot-links a:hover { color: var(--accent); }
+
+    @media (max-width: 860px) {
+      .nav-links, .nav-home { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (max-width: 820px) {
+      .lab-cards { grid-template-columns: 1fr; }
+      .lab-flow { grid-template-columns: 1fr; }
+      .lab-flow-arrow { justify-self: center; }
+      .lab-flow-arrow svg { transform: rotate(90deg); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    }
+  /* ===================== LEADERBOARD (light, premium) ===================== */
+  .lb-list{}
+  .lb-list.loading{opacity:.55;pointer-events:none}
+  /* Header (scoped to #lb-sec so shared .sec-* classes on other sections are untouched) */
+  #lb-sec .lb-topbar{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
+  #lb-sec .lb-title-row{display:flex;align-items:center;gap:.7rem}
+  #lb-sec .lb-trophy{width:38px;height:38px;flex:none;color:#E39B0C}
+  #lb-sec .lb-trophy svg{width:100%;height:100%;display:block}
+  #lb-sec .lb-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.1rem,4.6vw,3.1rem);letter-spacing:1px;line-height:1;color:var(--ink,#16233f)}
+  #lb-sec .lb-live{display:inline-flex;align-items:center;gap:.4rem;font-size:.82rem;color:var(--muted,#5c6479);font-weight:600;white-space:nowrap}
+  #lb-sec .lb-live svg{width:16px;height:16px;color:#16a34a;flex:none}
+  #lb-sec .lb-sub{color:var(--muted,#41495e);font-size:1rem;line-height:1.55;margin:.55rem 0 0;max-width:840px;text-align:left}
+  #lb-sec .lb-sub b{color:#177a3f}
+  #lb-sec .lb-sub2{display:block;font-size:.83rem;color:var(--muted,#7a8091);margin-top:.35rem;line-height:1.5}
+  /* Filter pills */
+  .lb-bar{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin:1.15rem 0 1.5rem}
+  .lb-pills{display:flex;gap:.4rem;flex-wrap:wrap}
+  .lb-pill{background:var(--card,#fff);border:1px solid var(--border,#e4e8f4);color:var(--muted,#41495e);border-radius:10px;padding:.5rem .82rem;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s,border-color .15s,color .15s;white-space:nowrap;font-family:inherit}
+  .lb-pill:hover{border-color:#1e2a4d;color:#1e2a4d}
+  .lb-pill.active{background:#1e2a4d;border-color:#1e2a4d;color:#fff}
+  .lb-refresh{margin-left:auto;display:inline-flex;align-items:center;gap:.4rem;background:var(--card,#fff);border:1px solid var(--border,#e4e8f4);color:var(--muted,#41495e);border-radius:10px;padding:.5rem .85rem;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit}
+  .lb-refresh:hover{border-color:var(--accent,#4f43d8);color:var(--accent,#4f43d8)}
+  .lb-refresh svg{width:15px;height:15px}
+  /* Podium */
+  .lb-podium{position:relative;display:grid;grid-template-columns:1fr 1.16fr 1fr;align-items:stretch;gap:1rem;margin:0 0 1.7rem;padding-top:3.6rem}
+  .lb-confetti{position:absolute;left:-2%;right:-2%;top:0;height:130px;pointer-events:none;z-index:0;opacity:.9}
+  .lb-confetti svg{width:100%;height:100%;display:block;overflow:visible}
+  .lb-pod{position:relative;z-index:1;background:var(--card,#fff);border:1px solid var(--border,#e4e8f4);border-radius:18px;padding:2.2rem 1.15rem 1.3rem;box-shadow:0 6px 22px rgba(20,25,45,.06)}
+  .lb-pod-1{margin-top:-2.6rem;padding-top:2.9rem;z-index:2;border-color:#E9B949;background:linear-gradient(180deg,#FCE7A9 0%,#FFF4D4 42%,#FFFDF6 100%);box-shadow:0 16px 42px rgba(227,155,12,.26)}
+  .lb-pod-2{border-color:#C3CAD4;background:linear-gradient(180deg,#DDE2EA 0%,#EEF1F6 42%,#FCFDFE 100%);box-shadow:0 10px 30px rgba(120,132,150,.18)}
+  .lb-pod-3{border-color:#D9A579;background:linear-gradient(180deg,#EFCFAE 0%,#F8E5D2 42%,#FFFBF7 100%);box-shadow:0 10px 30px rgba(180,110,45,.18)}
+  .lb-pod.me{outline:2px solid var(--accent,#4f43d8);outline-offset:-2px}
+  .lb-medal{position:absolute;top:.95rem;left:.95rem;z-index:2;line-height:0}
+  .lb-crown{position:absolute;top:-1.4rem;left:50%;transform:translateX(-50%);z-index:4;line-height:0}
+  .lb-pod-ava{display:flex;align-items:center;justify-content:center;gap:.35rem;margin-top:.15rem}
+  .lb-laurel{flex:none;opacity:.92}
+  .lb-laurel.r{transform:scaleX(-1)}
+  .lb-pod-1 .lb-laurel{color:#E3A21A;opacity:1}
+  .lb-pod-2 .lb-laurel{color:#AEB4BD}
+  .lb-pod-3 .lb-laurel{color:#CB8A57}
+  .lb-pod .lb-av{width:58px;height:58px;font-size:1.25rem}
+  .lb-pod-1 .lb-av{width:66px;height:66px;font-size:1.4rem}
+  .lb-pod-alias{text-align:center;font-weight:800;font-size:1.02rem;color:var(--ink,#16233f);margin-top:.55rem;display:flex;justify-content:center;align-items:center;gap:.35rem;flex-wrap:wrap;line-height:1.2;word-break:break-word}
+  .lb-pod-tier{font-size:.95rem;line-height:1}
+  .lb-pod-score{text-align:center;font-family:'Bebas Neue',sans-serif;font-size:2.05rem;letter-spacing:.5px;line-height:1;margin-top:.4rem}
+  .lb-pod-1 .lb-pod-score{font-size:2.5rem;color:#E39B0C}
+  .lb-pod-2 .lb-pod-score{color:#6C5CE7}
+  .lb-pod-3 .lb-pod-score{color:#E4572E}
+  .lb-pod-score span{font-family:'Inter',sans-serif;font-size:.58rem;font-weight:800;letter-spacing:.6px;margin-left:.25rem;color:var(--muted,#9098a8);text-transform:uppercase}
+  /* Stat pills (shared: podium + mobile cards) */
+  .lb-stats{margin-top:1rem;display:flex;flex-direction:column;gap:.42rem}
+  .lb-pairs{display:grid;grid-template-columns:1fr 1fr;gap:.42rem}
+  .lb-trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.42rem}
+  .lb-stat{display:flex;flex-direction:column;align-items:flex-start;gap:.3rem;border:1px solid var(--border,#eef1f7);border-radius:9px;padding:.55rem .66rem;background:var(--card,#fff);min-width:0}
+  .lb-stat.g{background:#F1FAF4;border-color:#D7EEDE}
+  .lb-stat.r{background:#FDF2F2;border-color:#F4DADA}
+  .lb-stat.c{background:rgba(255,255,255,.86);border-color:#E7EAF1}
+  .lb-slab{display:block;font-size:.6rem;letter-spacing:.3px;text-transform:uppercase;color:var(--muted,#6b7280);font-weight:700;line-height:1.4}
+  .lb-stat.g .lb-slab{color:#15803d}
+  .lb-stat.r .lb-slab{color:#c0392b}
+  .lb-sval{font-size:.95rem;color:var(--ink,#16233f);font-weight:800;line-height:1.2;word-break:break-word;max-width:100%;text-align:left}
+  .lb-tip-i{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;margin-left:.28rem;border-radius:50%;border:1px solid currentColor;background:transparent;color:inherit;font-size:.56rem;font-weight:800;font-style:italic;line-height:1;padding:0;cursor:pointer;opacity:.55;flex:none;vertical-align:middle}
+  .lb-tip-i:hover{opacity:1}
+  .lb-you{font-size:.56rem;text-transform:uppercase;letter-spacing:.4px;background:var(--accent,#4f43d8);color:#fff;border-radius:100px;padding:.08rem .42rem;font-weight:800;flex:none}
+  .lb-av{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;color:#fff;font-weight:800;font-size:.72rem;flex:none;letter-spacing:.4px;box-shadow:0 1px 3px rgba(0,0,0,.18)}
+  /* Ranks 4+ header */
+  .lb-rest-head{display:flex;align-items:center;gap:.65rem;margin:.4rem 0 .95rem}
+  .lb-rest-ico{width:28px;height:28px;flex:none;color:var(--accent,#4f43d8);line-height:0}
+  .lb-rest-ico svg{width:100%;height:100%;display:block}
+  .lb-rest-title{font-weight:800;font-size:1.08rem;color:var(--ink,#16233f);line-height:1.15}
+  .lb-rest-sub{font-size:.8rem;color:var(--muted,#8a91a0);margin-top:.05rem}
+  /* Desktop table */
+  .lb-table-wrap{position:relative;overflow:hidden;border:1px solid var(--border,#e4e8f4);border-radius:16px;background:var(--card,#fff);box-shadow:0 4px 18px rgba(20,25,45,.05)}
+  .lb-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:.8rem}
+  .lb-table col.c-rank{width:3.6%}.lb-table col.c-who{width:16%}.lb-table col.c-num{width:5.7%}.lb-table col.c-txt{width:8.6%}.lb-table col.c-tp{width:8%}
+  .lb-table thead th{font-size:.6rem;letter-spacing:.2px;text-transform:uppercase;color:var(--muted,#6b7280);font-weight:800;padding:.85rem .5rem;text-align:center;white-space:normal;vertical-align:bottom;background:#fbfcfe;border-bottom:1px solid var(--border,#e4e8f4);line-height:1.3}
+  .lb-th-in{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:.3rem}
+  .lb-th-in.l{align-items:flex-start}
+  .lb-th-t{display:block;word-break:break-word}
+  .lb-table thead th .lb-tip-i{margin-left:0}
+  .lb-table thead th + th{border-left:1px solid #edeff5}
+  .lb-table tbody td + td{border-left:1px solid #f5f7fa}
+  .lb-table thead th.l{text-align:left;padding-left:.9rem}
+  .lb-th-tp{color:#c98a1a !important;background:#FDF6EA !important;border-left:1px solid #F1E1C1 !important;padding-left:.55rem !important;padding-right:.55rem !important}
+  .lb-sort{margin-left:.15rem}
+  .lb-table tbody tr{background:linear-gradient(90deg,#F3FAF5 0%,#F4F8FC 38%,#F7F5FD 68%,#FDF6F1 100%)}
+  .lb-table tbody tr:nth-child(even){background:linear-gradient(90deg,#FAFDFB 0%,#FAFCFE 38%,#FBFAFE 68%,#FEFBF8 100%)}
+  .lb-table tbody td{padding:.62rem .5rem;text-align:center;color:var(--ink,#16233f);border-bottom:1px solid #eef0f6;vertical-align:middle}
+  .lb-table tbody tr:last-child td{border-bottom:none}
+  .lb-rk{font-weight:800;color:var(--muted,#6b7280)}
+  .lb-td-who{text-align:left;padding-left:.9rem;overflow:hidden}
+  .lb-who{display:flex;align-items:center;gap:.5rem;min-width:0}
+  .lb-who .lb-av{width:30px;height:30px;font-size:.72rem}
+  .lb-who-name{font-weight:700;color:var(--ink,#16233f);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .lb-cell{display:inline-flex;align-items:center;justify-content:center;min-width:26px;padding:.26rem .44rem;border-radius:8px;font-weight:700;font-variant-numeric:tabular-nums}
+  .lb-cell.g{background:#EEF9F1;color:#177a3f}
+  .lb-cell.r{background:#FDF1F1;color:#c0392b}
+  .lb-cell.c{background:#F5F7FB;color:#3a4358}
+  .lb-td-text{white-space:normal;line-height:1.25;font-weight:600;color:#3a4358;font-size:.75rem;word-break:break-word}
+  .lb-td-tp{background:#FDF6EA !important;border-left:1px solid #F1E1C1 !important;border-bottom:1px solid #F0DCB8 !important;padding-left:.55rem !important;padding-right:.55rem !important}
+  .lb-table tbody tr:last-child .lb-td-tp{border-bottom:none !important}
+  .lb-tp{display:inline-flex;align-items:baseline;gap:.2rem;font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.4px}
+  .lb-tp i{font-family:'Inter',sans-serif;font-size:.5rem;font-weight:800;letter-spacing:.5px;color:var(--muted,#a99f8f);font-style:normal}
+  .lb-table tbody tr.me{background:linear-gradient(90deg,#EFEDFF 0%,#F2F0FF 50%,#F7F1FE 100%) !important}
+  .lb-table tbody tr.me .lb-td-tp{background:#FBF3E4 !important}
+  .lb-you-td{margin-left:.35rem}
+  .lb-pin-sep{background:#fff !important}
+  .lb-pin-sep td{background:#fff;border-bottom:none;border-left:none !important;padding:.75rem .9rem .25rem}
+  .lb-pin-lab{font-size:.62rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted,#8a91a0);font-weight:800;text-align:left}
+  .lb-table tr.pin td{border-top:1px dashed var(--border2,#d3d9ec)}
+  /* Mobile stacked cards (Option 2) */
+  .lb-mcards{display:none;flex-direction:column;gap:.7rem}
+  .lb-mc{border:1px solid var(--border,#e4e8f4);border-radius:14px;background:var(--card,#fff);overflow:hidden;box-shadow:0 3px 14px rgba(20,25,45,.05)}
+  .lb-mc.me{background:#F6F5FF;border-color:#D9D5FB}
+  .lb-mc.pin{border:1px dashed var(--border2,#d3d9ec)}
+  .lb-mc-head{display:flex;align-items:center;gap:.6rem;width:100%;background:none;border:none;padding:.8rem .9rem;cursor:pointer;text-align:left;font-family:inherit}
+  .lb-mc-rank{font-weight:800;color:var(--muted,#6b7280);font-size:.95rem;min-width:1.5rem;text-align:center}
+  .lb-mc .lb-av{width:34px;height:34px;font-size:.8rem}
+  .lb-mc-alias{flex:1;min-width:0;display:flex;align-items:center;gap:.35rem}
+  .lb-mc-nm{font-weight:700;color:var(--ink,#16233f);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .lb-mc-tp{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.4px;display:inline-flex;align-items:baseline;gap:.2rem;flex:none}
+  .lb-mc-tp i{font-family:'Inter',sans-serif;font-size:.5rem;font-weight:800;letter-spacing:.5px;color:var(--muted,#a09a90);font-style:normal}
+  .lb-mc-chev{width:16px;height:16px;color:var(--muted,#9aa0b0);transition:transform .18s;flex:none}
+  .lb-mc[data-open="1"] .lb-mc-chev{transform:rotate(180deg)}
+  .lb-mc-body{display:none;padding:0 .9rem .9rem}
+  .lb-mc[data-open="1"] .lb-mc-body{display:block}
+  .lb-mc-body .lb-stats{margin-top:.15rem}
+  .lb-mc-pinlab{font-size:.62rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted,#8a91a0);font-weight:800;margin:.7rem 0 -.1rem}
+  /* Tooltip popover + empty */
+  .lb-tip{position:absolute;z-index:99999;max-width:300px;background:var(--card,#fff);border:1px solid var(--border,#e4e8f4);border-radius:14px;padding:1rem 1.15rem;box-shadow:0 16px 44px rgba(0,0,0,.18);opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .16s ease,transform .16s ease}
+  .lb-tip.show{opacity:1;transform:none;pointer-events:auto}
+  .lb-tip-h{font-size:.95rem;font-weight:800;color:var(--ink,#16233f);margin-bottom:.45rem}
+  .lb-tip-b{font-size:.82rem;color:var(--muted,#4b5563);line-height:1.55;white-space:pre-line}
+  .lb-tip-x{margin-top:.85rem;background:var(--accent,#4f43d8);color:#fff;border:none;border-radius:9px;padding:.42rem 1rem;font-size:.82rem;font-weight:600;cursor:pointer}
+  /* ===================== D6: PERFORMANCE VAULT ===================== */
+  .vt-cta{position:relative;overflow:hidden;border:1px solid var(--border,#e4e8f4);border-radius:20px;padding:2.2rem 1.8rem;background:linear-gradient(135deg,#F6F4FF,#FFF9EC 55%,#F1FAF5);box-shadow:0 12px 40px rgba(20,25,45,.08);text-align:center}
+  .vt-cta-conf{position:absolute;inset:0 0 auto 0;height:120px;pointer-events:none;opacity:.85}
+  .vt-cta-conf svg{width:100%;height:100%;display:block}
+  .vt-lock{width:54px;height:54px;margin:0 auto .8rem;color:#6C5CE7;position:relative;z-index:1}
+  .vt-lock svg{width:100%;height:100%;display:block}
+  .vt-cta-t{position:relative;z-index:1;font-family:'Bebas Neue',sans-serif;font-size:clamp(1.9rem,4vw,2.6rem);letter-spacing:1px;line-height:1.05;color:var(--ink,#16233f)}
+  .vt-cta-s{position:relative;z-index:1;max-width:640px;margin:.6rem auto 0;font-size:.95rem;line-height:1.6;color:var(--muted,#4b5563)}
+  .vt-cta-s b{color:#5B4BD4}
+  .vt-cta-b{position:relative;z-index:1;display:inline-flex;gap:.6rem;flex-wrap:wrap;justify-content:center;margin-top:1.2rem}
+  .vt-btn{display:inline-flex;align-items:center;gap:.4rem;background:#1e2a4d;color:#fff;border:none;border-radius:11px;padding:.68rem 1.15rem;font-size:.86rem;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit}
+  .vt-btn:hover{background:#2c3b66}
+  .vt-btn.alt{background:#fff;color:#1e2a4d;border:1px solid var(--border,#e4e8f4)}
+  .vt-btn.alt:hover{border-color:#1e2a4d}
+  .vt-teaser{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:.6rem;margin-top:1.6rem;text-align:left;filter:blur(.5px);opacity:.62}
+  .vt-tz{border:1px dashed var(--border2,#d3d9ec);border-radius:12px;padding:.7rem .8rem;background:rgba(255,255,255,.7)}
+  .vt-tz b{display:block;font-size:.78rem;color:var(--ink,#16233f)}
+  .vt-tz span{font-size:.72rem;color:var(--muted,#8a91a0);line-height:1.4}
+  /* unlock ladder */
+  .vt-ladder{border:1px solid var(--border,#e4e8f4);border-radius:18px;background:var(--card,#fff);padding:1.4rem 1.5rem;box-shadow:0 6px 22px rgba(20,25,45,.06)}
+  .vt-lad-h{font-weight:800;font-size:1.05rem;color:var(--ink,#16233f)}
+  .vt-lad-s{font-size:.84rem;color:var(--muted,#7a8091);margin:.25rem 0 1rem;line-height:1.5}
+  .vt-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.7rem}
+  .vt-step{border:1px solid var(--border,#e4e8f4);border-radius:14px;padding:.85rem .95rem;background:#FBFCFE;position:relative}
+  .vt-step.done{border-color:#BFE7CE;background:#F2FBF5}
+  .vt-ring{width:34px;height:34px;margin-bottom:.5rem}
+  .vt-step-t{font-weight:700;font-size:.86rem;color:var(--ink,#16233f)}
+  .vt-step-s{font-size:.75rem;color:var(--muted,#8a91a0);margin-top:.2rem;line-height:1.45}
+  .vt-step-a{display:inline-block;margin-top:.5rem;font-size:.76rem;font-weight:700;color:var(--accent,#4f43d8);text-decoration:none}
+  .vt-step-a:hover{text-decoration:underline}
+  .vt-step.done .vt-step-a{color:#15803d}
+  /* Zone 1 standing */
+  .vt-zone{margin-bottom:1.6rem}
+  .vt-zh{display:flex;align-items:baseline;gap:.55rem;margin:0 0 .8rem;flex-wrap:wrap}
+  .vt-zn{font-size:.64rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#fff;background:#1e2a4d;border-radius:100px;padding:.16rem .5rem}
+  .vt-zt{font-weight:800;font-size:1.08rem;color:var(--ink,#16233f)}
+  .vt-zs{font-size:.8rem;color:var(--muted,#8a91a0)}
+  .vt-cards{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .vt-card{border:1px solid var(--border,#e4e8f4);border-radius:18px;background:var(--card,#fff);padding:1.2rem 1.3rem;box-shadow:0 6px 22px rgba(20,25,45,.05)}
+  .vt-card.rev{background:linear-gradient(180deg,#F4F3FF,#fff 55%)}
+  .vt-card.aut{background:linear-gradient(180deg,#FFF7E9,#fff 55%)}
+  .vt-ct{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.7rem}
+  .vt-ct-t{font-weight:800;font-size:.95rem;color:var(--ink,#16233f)}
+  .vt-pct{font-size:.72rem;font-weight:800;border-radius:100px;padding:.18rem .55rem;background:#EEF1F8;color:#3a4358}
+  .vt-card.rev .vt-pct{background:#EAE7FF;color:#4b3fc4}
+  .vt-card.aut .vt-pct{background:#FDEFD4;color:#a8700a}
+  .vt-big{display:flex;align-items:baseline;gap:.45rem;flex-wrap:wrap}
+  .vt-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;line-height:1;letter-spacing:.5px;color:var(--ink,#16233f)}
+  .vt-card.rev .vt-num{color:#5B4BD4}
+  .vt-card.aut .vt-num{color:#E39B0C}
+  .vt-unit{font-size:.62rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted,#9aa0b0)}
+  .vt-delta{font-size:.76rem;font-weight:800;border-radius:100px;padding:.12rem .45rem}
+  .vt-delta.up{background:#EAF8F0;color:#15803d}
+  .vt-delta.dn{background:#FDF0F0;color:#c0392b}
+  .vt-delta.flat{background:#F1F3F8;color:#7a8091}
+  .vt-mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:.4rem;margin-top:.9rem}
+  .vt-m{border:1px solid var(--border,#eef1f7);border-radius:10px;padding:.45rem .55rem;background:rgba(255,255,255,.75)}
+  .vt-m span{display:block;font-size:.6rem;text-transform:uppercase;letter-spacing:.3px;color:var(--muted,#8a91a0);font-weight:800;line-height:1.3}
+  .vt-m b{display:block;font-size:.92rem;color:var(--ink,#16233f);margin-top:.15rem}
+  .vt-gc{border:1px solid var(--border,#e4e8f4);border-radius:18px;background:linear-gradient(180deg,#F1FAF5,#fff 55%);padding:1.1rem 1.3rem;box-shadow:0 6px 22px rgba(20,25,45,.05)}
+  .vt-none{padding:1.1rem;border:1px dashed var(--border2,#d3d9ec);border-radius:14px;color:var(--muted,#8a91a0);font-size:.86rem;line-height:1.5;background:#FBFCFE}
+  @media(max-width:860px){ .vt-cards{grid-template-columns:1fr} }
+  /* ===================== D6-2: ZONE 2 TRAJECTORY ===================== */
+  .vt-graphs{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .vt-g{border:1px solid var(--border,#e4e8f4);border-radius:18px;background:var(--card,#fff);padding:1.1rem 1.2rem;box-shadow:0 6px 22px rgba(20,25,45,.05)}
+  .vt-g-h{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.15rem;flex-wrap:wrap}
+  .vt-g-t{font-weight:800;font-size:.9rem;color:var(--ink,#16233f)}
+  .vt-g-s{font-size:.74rem;color:var(--muted,#8a91a0);margin-bottom:.6rem;line-height:1.45}
+  .vt-g svg{width:100%;height:auto;display:block;overflow:visible}
+  .vt-leg{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.5rem}
+  .vt-leg i{display:inline-flex;align-items:center;gap:.3rem;font-style:normal;font-size:.72rem;font-weight:700;color:var(--muted,#7a8091)}
+  .vt-leg i b{width:9px;height:9px;border-radius:3px;display:inline-block}
+  .vt-gempty{padding:1.4rem .6rem;text-align:center;color:var(--muted,#9aa0b0);font-size:.8rem;line-height:1.5}
+  .vt-radar-wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:1rem;align-items:center}
+  .vt-rlist{display:flex;flex-direction:column;gap:.35rem;max-height:230px;overflow:auto}
+  .vt-r{display:flex;align-items:center;gap:.5rem;font-size:.74rem}
+  .vt-r-n{flex:1;color:var(--ink,#16233f);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .vt-r-b{width:58px;height:6px;border-radius:99px;background:#EEF1F8;overflow:hidden;flex:none}
+  .vt-r-b i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#8B7FF0,#5BC7A9)}
+  .vt-r-v{width:34px;text-align:right;font-weight:800;color:var(--muted,#5c6479);flex:none}
+  .vt-r-reps{width:34px;text-align:right;font-size:.66rem;color:var(--muted,#aeb4c2);flex:none}
+  .vt-pb{font-size:.7rem;font-weight:800;color:#a8700a;background:#FDEFD4;border-radius:99px;padding:.1rem .45rem}
+  @media(max-width:860px){ .vt-graphs{grid-template-columns:1fr} .vt-radar-wrap{grid-template-columns:1fr} }
+  /* ===================== D6-3: ZONE 4 YOUR WORK ===================== */
+  .wk-panel{border:1px solid var(--border,#e4e8f4);border-radius:18px;background:var(--card,#fff);padding:1.1rem 1.2rem;box-shadow:0 6px 22px rgba(20,25,45,.05);margin-bottom:1rem}
+  .wk-h{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap;margin-bottom:.2rem}
+  .wk-h-t{font-weight:800;font-size:.95rem;color:var(--ink,#16233f);display:inline-flex;align-items:center}
+  .wk-h-n{font-size:.72rem;font-weight:800;border-radius:100px;padding:.14rem .5rem;background:#EEF1F8;color:#3a4358}
+  .wk-tools{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin:.55rem 0 .9rem}
+  .wk-tgrp{display:inline-flex;gap:.3rem;flex-wrap:wrap;align-items:center}
+  .wk-tlab{font-size:.6rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted,#9aa0b0);margin-right:.1rem}
+  .wk-fil,.wk-sort{background:#FBFCFE;border:1px solid var(--border,#e4e8f4);color:var(--muted,#6b7280);border-radius:99px;padding:.28rem .62rem;font-size:.72rem;font-weight:700;cursor:pointer;font-family:inherit;line-height:1;white-space:nowrap}
+  .wk-fil:hover,.wk-sort:hover{border-color:#b9c0d8;color:var(--ink,#16233f)}
+  .wk-fil.on,.wk-sort.on{background:#1e2a4d;border-color:#1e2a4d;color:#fff}
+  .wk-list{display:flex;flex-direction:column;gap:.5rem}
+  .wk-row{display:flex;align-items:flex-start;gap:.7rem;border:1px solid var(--border,#eef1f7);border-radius:13px;padding:.7rem .8rem;background:#FBFCFE;text-decoration:none;transition:border-color .15s,box-shadow .15s,transform .12s}
+  .wk-row:hover{border-color:#c7cef0;box-shadow:0 4px 14px rgba(20,25,45,.06);transform:translateY(-1px)}
+  .wk-row-main{flex:1;min-width:0}
+  .wk-title{font-weight:700;font-size:.86rem;color:var(--ink,#16233f);line-height:1.35;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .wk-sub{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin-top:.25rem}
+  .wk-date{font-size:.68rem;color:var(--muted,#9aa0b0);font-weight:600}
+  .wk-st{font-size:.62rem;font-weight:800;letter-spacing:.3px;text-transform:uppercase;border-radius:99px;padding:.1rem .45rem;background:#EEF1F8;color:#5c6479}
+  .wk-st.live{background:#E7F0FF;color:#2657c9}
+  .wk-st.closed{background:#EAF8F0;color:#15803d}
+  .wk-chips{display:flex;align-items:center;gap:.34rem;flex-wrap:wrap;margin-top:.4rem}
+  .wk-chip{font-size:.66rem;font-weight:700;border-radius:8px;padding:.14rem .42rem;background:#EEF1F8;color:#5c6479;white-space:nowrap}
+  .wk-chip.acted{background:#EAF8F0;color:#15803d}
+  .wk-chip.help{background:#EAE7FF;color:#4b3fc4}
+  .wk-chip.cover{background:#E7F3EC;color:#1f7a4d}
+  .wk-chip.rep{background:#FDF0F0;color:#c0392b}
+  .wk-chip.anon{background:#F1F3F8;color:#7a8091}
+  .wk-chip.exem{background:#FDEFD4;color:#a8700a}
+  .wk-chip.clar{background:#FFF7E9;color:#a8700a}
+  .wk-chip.resp{background:#EEF1F8;color:#3a4358}
+  .wk-pts{flex:none;align-self:center;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;line-height:1;letter-spacing:.4px;color:#15803d;text-align:right;min-width:44px}
+  .wk-pts small{display:block;font-family:'DM Sans',sans-serif;font-size:.54rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted,#9aa0b0);margin-top:.15rem}
+  .wk-pts.neg{color:#c0392b}
+  .wk-pts.zero{color:var(--muted,#9aa0b0)}
+  .wk-empty{padding:1.1rem;border:1px dashed var(--border2,#d3d9ec);border-radius:12px;color:var(--muted,#8a91a0);font-size:.84rem;line-height:1.5;background:#FBFCFE;text-align:center}
+  .wk-empty a{color:var(--accent,#4f43d8);font-weight:700;text-decoration:none}
+  .wk-empty a:hover{text-decoration:underline}
+  .wk-recon{margin-top:.85rem;border-top:1px dashed var(--border2,#d3d9ec);padding-top:.7rem;font-size:.8rem;line-height:1.5;color:var(--ink,#16233f)}
+  .wk-recon b{color:#15803d}
+  .wk-recon .wk-eq{color:var(--muted,#5c6479);font-weight:600}
+  .wk-recon.aut b{color:#a8700a}
+  .wk-recon.muted{color:var(--muted,#8a91a0)}
+  .wk-recon.muted b{color:var(--muted,#6b7280)}
+  .wk-none{padding:.7rem 0;color:var(--muted,#9aa0b0);font-size:.8rem}
+  @media(max-width:560px){ .wk-title{white-space:normal} .wk-pts{font-size:1.1rem;min-width:38px} }
+  /* ===================== D6-4: ZONE 3 DIAGNOSIS ===================== */
+  .dg-list{display:flex;flex-direction:column;gap:.7rem}
+  .dg-count{display:inline-block;margin-left:.6rem;font-size:.68rem;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:#c0392b;background:#FDF0F0;border-radius:99px;padding:.16rem .55rem;vertical-align:middle}
+  .dg-card{border:1px solid var(--border,#e4e8f4);border-left-width:3px;border-radius:14px;background:var(--card,#fff);padding:.9rem 1.05rem;box-shadow:0 4px 16px rgba(20,25,45,.04)}
+  .dg-card.dg-hidden{display:none}
+  .dg-high,.dg-critical{border-left-color:#c0392b}
+  .dg-critical{border-left-color:#a01f14}
+  .dg-medium{border-left-color:#a8700a}
+  .dg-opportunity{border-left-color:#2563eb}
+  .dg-growth{border-left-color:#15803d}
+  .dg-top{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+  .dg-badge{font-size:.6rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;border-radius:99px;padding:.15rem .5rem}
+  .dg-b-high,.dg-b-critical{background:#FDF0F0;color:#c0392b}
+  .dg-b-medium{background:#FDEFD4;color:#a8700a}
+  .dg-b-opportunity{background:#E7F0FF;color:#2563eb}
+  .dg-b-growth{background:#EAF8F0;color:#15803d}
+  .dg-kind{font-size:.65rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--muted,#9aa0b0)}
+  .dg-title{font-weight:800;font-size:.96rem;color:var(--ink,#16233f);line-height:1.3;margin-bottom:.25rem}
+  .dg-saw{font-size:.86rem;line-height:1.5;color:var(--ink,#3a4358)}
+  .dg-why{font-size:.78rem;line-height:1.5;color:var(--muted,#6b7280);margin-top:.4rem}
+  .dg-cta{display:inline-block;margin-top:.7rem;font-size:.8rem;font-weight:800;color:var(--accent,#4f43d8);text-decoration:none}
+  .dg-cta:hover{text-decoration:underline}
+  .dg-more{margin-top:.7rem;width:100%;background:#FBFCFE;border:1px solid var(--border,#e4e8f4);color:var(--muted,#5c6479);border-radius:11px;padding:.6rem;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit}
+  .dg-more:hover{border-color:#b9c0d8;color:var(--ink,#16233f)}
+  /* --- D4: desktop expandable detail row (submitter board) --- */
+  .lb-xtog{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;margin-left:.3rem;border:1px solid var(--border2,#d3d9ec);background:#fff;color:var(--muted,#8a91a0);border-radius:6px;cursor:pointer;padding:0;flex:none;transition:transform .18s,border-color .15s,color .15s}
+  .lb-xtog:hover{border-color:var(--accent,#4f43d8);color:var(--accent,#4f43d8)}
+  .lb-xtog svg{width:11px;height:11px}
+  tr.lb-tr[data-open="1"] .lb-xtog{transform:rotate(180deg);border-color:var(--accent,#4f43d8);color:var(--accent,#4f43d8)}
+  tr.lb-xrow{display:none}
+  tr.lb-xrow.show{display:table-row}
+  tr.lb-xrow > td{background:#F8F9FD;border-left:none !important;padding:.7rem .9rem !important;text-align:left}
+  .lb-xgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.42rem}
+  .lb-xhint{font-size:.66rem;color:var(--muted,#9aa0b0);font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:.5rem}
+  /* --- D4: board tabs --- */
+  .lb-tabs{display:inline-flex;gap:.25rem;background:#EFF1F7;border:1px solid var(--border,#e4e8f4);border-radius:12px;padding:.25rem;margin:1.1rem 0 .2rem}
+  .lb-tab{background:transparent;border:none;color:var(--muted,#5c6479);font-weight:700;font-size:.84rem;padding:.5rem .95rem;border-radius:9px;cursor:pointer;font-family:inherit;white-space:nowrap;transition:background .15s,color .15s}
+  .lb-tab:hover{color:#1e2a4d}
+  .lb-tab.active{background:#fff;color:#1e2a4d;box-shadow:0 1px 4px rgba(20,25,45,.12)}
+  /* --- D3b: champion banner --- */
+  .lb-champ{display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;border:1px solid #F0D9A0;border-radius:16px;padding:.85rem 1.1rem;margin:0 0 1.2rem;background:linear-gradient(90deg,#FFF6E2,#FFFDF8 60%);box-shadow:0 6px 20px rgba(227,155,12,.10)}
+  .lb-champ-ic{width:46px;height:34px;flex:none;line-height:0;display:flex;align-items:center;justify-content:center;margin-right:.25rem}
+  .lb-champ-ic svg{width:100%;height:100%;display:block}
+  .lb-champ-t{font-weight:800;color:var(--ink,#16233f);font-size:.95rem}
+  .lb-champ-t b{color:#B8790A}
+  .lb-champ-s{font-size:.8rem;color:var(--muted,#7a8091);margin-top:.1rem;line-height:1.45}
+  .lb-champ-streak{display:inline-flex;align-items:center;gap:.25rem;background:#FFEDD0;border:1px solid #F2CE8A;color:#A8620A;border-radius:100px;padding:.16rem .55rem;font-size:.72rem;font-weight:800;margin-left:.4rem}
+  .lb-champ-you{background:var(--accent,#4f43d8);color:#fff;border-radius:100px;padding:.14rem .5rem;font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;margin-left:.35rem}
+  /* --- D3b: rank history graph --- */
+  .lb-hist{margin-top:1.4rem;border:1px solid var(--border,#e4e8f4);border-radius:16px;background:var(--card,#fff);padding:1.1rem 1.2rem 1rem;box-shadow:0 4px 18px rgba(20,25,45,.05)}
+  .lb-hist-h{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;flex-wrap:wrap;margin-bottom:.2rem}
+  .lb-hist-t{font-weight:800;font-size:1rem;color:var(--ink,#16233f)}
+  .lb-hist-s{font-size:.78rem;color:var(--muted,#8a91a0)}
+  .lb-hist-svg{width:100%;height:190px;display:block;margin-top:.5rem;overflow:visible}
+  .lb-hist-empty{font-size:.85rem;color:var(--muted,#8a91a0);padding:.6rem 0 .2rem}
+  .lb-empty{padding:1.6rem;text-align:center;color:var(--muted,#6b7280);font-size:.92rem;border:1px solid var(--border,#e4e8f4);border-radius:16px;background:var(--card,#fff)}
+  @media(max-width:860px){
+    #lb-sec .lb-topbar{align-items:flex-start}
+    .lb-podium{grid-template-columns:1fr;gap:.8rem;padding-top:2.2rem;margin-bottom:1.3rem}
+    .lb-pod{padding-top:2.4rem}
+    .lb-pod-1{margin-top:0;order:1}
+    .lb-pod-2{order:2}
+    .lb-pod-3{order:3}
+    .lb-confetti{height:95px}
+    .lb-table-wrap{display:none}
+    .lb-mcards{display:flex}
+    .lb-refresh{margin-left:0}
+  }
+  @media(max-width:400px){
+    .lb-pairs{grid-template-columns:1fr}
+    .lb-trio{grid-template-columns:1fr}
+    .lb-sval{max-width:none}
+  }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/index.html" class="nav-logo">
+    <span class="logo-box"><svg viewBox="0 0 24 24"><path d="M9 3h6M10 3v6.5L5.2 18a2 2 0 0 0 1.8 3h10a2 2 0 0 0 1.8-3L14 9.5V3"/><line x1="7.5" y1="14" x2="16.5" y2="14"/></svg></span>
+    <span class="logo-word">neeleshpm<span class="ac">toolkit</span></span>
+  </a>
+  <ul class="nav-links">
+    <li class="nav-dd">
+      <a href="/judgment-lab.html" class="nav-dd-trigger active" id="jl-trigger" aria-haspopup="true">Judgment Lab<svg class="nav-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></a>
+      <div class="nav-dd-menu" id="jl-menu" role="menu" aria-label="Judgment Lab">
+        <a href="/judgment-lab.html" class="nav-dd-overview" role="menuitem"><span class="nav-dd-ov-tx"><b>The Judgment Lab</b><small>How the two products fit together</small></span><svg class="nav-dd-ov-ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <div class="nav-dd-div"></div>
+        <a href="/gutcheck.html" class="nav-dd-item" role="menuitem"><span class="nav-dd-ic gc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a8 8 0 0 1 16 0"/><line x1="12" y1="13" x2="16" y2="9"/></svg></span><span class="nav-dd-tx"><b>GutCheck</b><small>Practice product judgment</small></span></a>
+        <a href="/decisionroom.html" class="nav-dd-item" role="menuitem"><span class="nav-dd-ic dr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="13" y2="14"/></svg></span><span class="nav-dd-tx"><b>DecisionRoom</b><small>Pressure-test real decisions</small></span></a>
+        <a href="/proving-ground.html" class="nav-dd-item" role="menuitem"><span class="nav-dd-ic pg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg></span><span class="nav-dd-tx"><b>Proving Ground</b><small>See where your judgment ranks</small></span></a>
+      </div>
+    </li>
+    <li><a href="/portfolio.html">Portfolio</a></li>
+    <li><a href="/toolkit.html">Toolkit</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="/index.html" class="nav-home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
+      Home
+    </a>
+    <div class="theme-wrap">
+      <button class="theme-btn" id="theme-btn" aria-label="Change theme" title="Appearance">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r="1.4"/><circle cx="17.5" cy="10.5" r="1.4"/><circle cx="6.5" cy="12.5" r="1.4"/><circle cx="8.5" cy="7.5" r="1.4"/><path d="M12 2C6.5 2 2 6 2 11a6 6 0 0 0 6 6h1.8c.9 0 1.5.6 1.5 1.4 0 .4-.2.8-.4 1.1-.3.4-.4.8-.4 1.2 0 1.1.9 1.9 2 1.9 5.5 0 10-4.5 10-10C22 6 17.5 2 12 2z"/></svg>
+      </button>
+      <div class="theme-pop" id="theme-pop" role="menu" aria-label="Theme">
+        <div class="theme-pop-h">Appearance</div>
+        <button class="theme-opt" data-theme="signal" role="menuitem"><span class="theme-sw sw-signal"></span><span class="theme-nm">Signal <span class="theme-def">default</span></span><span class="theme-chk">✓</span></button>
+        <button class="theme-opt" data-theme="editorial" role="menuitem"><span class="theme-sw sw-editorial"></span><span class="theme-nm">Editorial</span><span class="theme-chk">✓</span></button>
+        <button class="theme-opt" data-theme="warm" role="menuitem"><span class="theme-sw sw-warm"></span><span class="theme-nm">Warm dark</span><span class="theme-chk">✓</span></button>
+        <button class="theme-opt" data-theme="classic" role="menuitem"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic</span><span class="theme-chk">✓</span></button>
+      </div>
+    </div>
+    <div class="nav-account" id="nav-account"></div>
+    <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="mobile-backdrop" id="mobile-backdrop"></div>
+<aside class="mobile-menu" id="mobile-menu">
+  <div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div>
+  <details class="mm-jl" open>
+    <summary class="mm-jl-sum">Judgment Lab<svg class="mm-jl-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <a class="mm-jl-item mm-jl-ov" href="/judgment-lab.html"><b>The Judgment Lab</b><small>Overview</small></a>
+    <a class="mm-jl-item" href="/gutcheck.html"><b>GutCheck</b><small>Practice product judgment</small></a>
+    <a class="mm-jl-item" href="/decisionroom.html"><b>DecisionRoom</b><small>Pressure-test real decisions</small></a>
+  </details>
+  <nav class="mm-body" id="mm-body"></nav>
+  <div class="mm-theme"><div class="mm-theme-h">Appearance</div><button class="theme-opt" data-theme="signal"><span class="theme-sw sw-signal"></span><span class="theme-nm">Signal <span class="theme-def">default</span></span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="editorial"><span class="theme-sw sw-editorial"></span><span class="theme-nm">Editorial</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="warm"><span class="theme-sw sw-warm"></span><span class="theme-nm">Warm dark</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="classic"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic</span><span class="theme-chk">✓</span></button></div>
+</aside>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow"><span class="dot"></span> The Proving Ground</div>
+    <h1>Know exactly where your judgment <em>stands</em> — and your next move up.</h1>
+    <p class="hero-sub">Your live ranking among reviewers and case authors, plus a personal vault that turns every GutCheck call and DecisionRoom decision into a clear read on your judgment — <strong>why you stand where you do, and the highest-leverage way to climb.</strong></p>
+    <div class="hero-ctas">
+      <a href="/gutcheck.html#today" class="btn-primary" data-analytics="gutcheck_card_clicked" data-analytics-label="hero_primary">Take today's GutCheck</a>
+      <a href="/decisionroom.html" class="btn-ghost" data-analytics="decisionroom_card_clicked" data-analytics-label="hero_secondary">Bring a real decision</a>
+    </div>
+  </div>
+</section>
+
+<!-- SPLIT PRODUCT CARDS -->
+<section class="section">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Two ways to sharpen judgment</span>
+      <div class="sec-title">GutCheck trains it. DecisionRoom <em>applies</em> it.</div>
+      <p class="sec-sub">Separate products, one judgment system — not a choice between them.</p>
+    </div>
+    <div class="lab-cards">
+      <div class="lab-card gc">
+        <div class="lab-card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a8 8 0 0 1 16 0"/><line x1="12" y1="13" x2="16" y2="9"/></svg></div>
+        <span class="lab-label">Practice mode</span>
+        <h3>GutCheck</h3>
+        <div class="lab-headline">Train your PM judgment.</div>
+        <p class="lab-body">Make the call. Explain why. See the crowd. Build your judgment profile.</p>
+        <ul class="lab-bullets">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Daily product dilemmas</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Vote before seeing the crowd</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Judgment profile by category</li>
+        </ul>
+        <a href="/gutcheck.html#today" class="btn-primary" data-analytics="gutcheck_card_clicked" data-analytics-label="card_cta">Start a 3-minute dilemma</a>
+      </div>
+      <div class="lab-card dr">
+        <div class="lab-card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="13" y2="14"/></svg></div>
+        <span class="lab-label">Real-work mode</span>
+        <h3>DecisionRoom</h3>
+        <div class="lab-headline">Pressure-test a real decision.</div>
+        <p class="lab-body">Submit the context. Define the asks. Get structured PM feedback. Decide with clarity.</p>
+        <ul class="lab-bullets">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Anonymous structured cases</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Reviewer answers matched to your asks</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Decision record and outcome tracking</li>
+        </ul>
+        <a href="/decisionroom.html" class="btn-primary" data-analytics="decisionroom_card_clicked" data-analytics-label="card_cta">Submit a decision</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICE -> PROFILE -> APPLY -->
+<section class="section tint" data-analytics="practice_apply_flow_viewed">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-eyebrow">How they connect</span>
+      <div class="sec-title">Practice builds a profile. The profile earns <em>credibility.</em></div>
+    </div>
+    <div class="lab-flow">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <h4>Practise</h4>
+        <p>GutCheck gives you daily reps on product trade-offs.</p>
+      </div>
+      <div class="lab-flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <h4>Build your profile</h4>
+        <p>Your choices reveal strengths, blind spots, and decision style.</p>
+      </div>
+      <div class="lab-flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <h4>Apply judgment</h4>
+        <p>DecisionRoom uses your credibility when you review real PM decisions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORY COVERAGE -->
+<section class="section">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-eyebrow">Category coverage</span>
+      <div class="sec-title">Product judgment is not one skill.</div>
+      <p class="sec-sub">GutCheck and DecisionRoom organize decisions by the product trade-off being tested — one shared set of categories across both.</p>
+    </div>
+    <div class="cat-grid" id="cat-grid"></div>
+    <p class="cat-note">Don't see your call? <b>You can add your own category</b> when you post a dilemma or a case — the list grows with the community.</p>
+  </div>
+</section>
+
+<section class="section tint" id="lb-sec">
+  <div class="container">
+    <div class="lb-topbar">
+      <div class="lb-title-row">
+        <span class="lb-trophy" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v3a6 6 0 0 1-12 0V4Z"/><path d="M6 5H4a2 2 0 0 0 0 4h2"/><path d="M18 5h2a2 2 0 0 1 0 4h-2"/><path d="M12 13v3"/><path d="M9 20h6"/><path d="M10 16h4l-.4 4h-3.2Z" fill="currentColor" stroke="none"/></svg></span>
+        <h2 class="lb-title" id="lb-title">Top Responders</h2>
+      </div>
+      <span class="lb-live"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/><path d="m8 12 3 3 5-6"/></svg>Updated live — recalculates on every refresh</span>
+    </div>
+    <p class="lb-sub" id="lb-sub"></p>
+    <div class="lb-tabs" id="lb-tabs" role="tablist" aria-label="Leaderboard type">
+      <button type="button" class="lb-tab active" data-board="sub" role="tab" aria-selected="true">Author Leaderboard</button>
+      <button type="button" class="lb-tab" data-board="rev" role="tab">Reviewer Leaderboard</button>
+      <button type="button" class="lb-tab" data-board="vault" role="tab">🔐 Vault</button>
+    </div>
+    <div class="lb-bar">
+      <div class="lb-pills" id="lb-pills" role="tablist" aria-label="Leaderboard window">
+        <button type="button" class="lb-pill" data-win="today" role="tab">Today</button>
+        <button type="button" class="lb-pill" data-win="yesterday" role="tab">Yesterday</button>
+        <button type="button" class="lb-pill active" data-win="week" role="tab" aria-selected="true">This Week</button>
+        <button type="button" class="lb-pill" data-win="lastweek" role="tab">Last Week</button>
+        <button type="button" class="lb-pill" data-win="7d" role="tab">Rolling 7 Days</button>
+        <button type="button" class="lb-pill" data-win="month" role="tab">This Month</button>
+        <button type="button" class="lb-pill" data-win="lastmonth" role="tab">Last Month</button>
+        <button type="button" class="lb-pill" data-win="all" role="tab">All Time</button>
+      </div>
+      <button type="button" class="lb-tip-i" data-tip="windows" aria-label="What do these windows mean?" style="width:18px;height:18px;font-size:.66rem;align-self:center;color:var(--muted,#8a91a0)">i</button>
+      <button type="button" id="lb-refresh" class="lb-refresh" aria-label="Refresh leaderboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Refresh</button>
+    </div>
+    <div id="lb-champ" class="lb-champ" style="display:none"></div>
+    <div id="lb-list" class="lb-list"><div class="lb-empty">Loading…</div></div>
+    <div id="lb-hist" class="lb-hist" style="display:none"></div>
+  </div>
+</section>
+<footer class="foot">
+  <div class="foot-links">
+    <a href="/judgment-lab.html">Judgment Lab</a>
+    <a href="/gutcheck.html">GutCheck</a>
+    <a href="/decisionroom.html">DecisionRoom</a>
+    <a href="/toolkit.html">PM Toolkit</a>
+    <a href="/portfolio.html">Portfolio</a>
+  </div>
+  <div>© <span id="foot-yr"></span> Neelesh Singh · Product Judgment Lab</div>
+</footer>
+
+<script>
+/* ==== THEME SWITCHER (shared 'dr-theme' key across all PM Toolkit pages) ==== */
+(function(){
+  var VALID={signal:1,editorial:1,warm:1,classic:1};
+  function cur(){ try{ var t=localStorage.getItem('dr-theme'); if(t==='indigo')t='signal'; return VALID[t]?t:'signal'; }catch(e){ return 'signal'; } }
+  function mark(t){ [].slice.call(document.querySelectorAll('.theme-opt')).forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-theme')===t); }); }
+  function setTheme(t){ if(!VALID[t]) t='signal'; document.documentElement.setAttribute('data-dr-theme',t); try{ localStorage.setItem('dr-theme',t); }catch(e){} mark(t); }
+  window.drSetTheme=setTheme;
+  document.addEventListener('click', function(e){
+    var opt=e.target.closest('.theme-opt');
+    if(opt){ setTheme(opt.getAttribute('data-theme')); var pp=document.getElementById('theme-pop'); if(pp) pp.classList.remove('open'); return; }
+    var pop=document.getElementById('theme-pop');
+    if(e.target.closest('#theme-btn')){ if(pop) pop.classList.toggle('open'); return; }
+    if(pop && !e.target.closest('.theme-wrap')) pop.classList.remove('open');
+  });
+  mark(cur());
+})();
+</script>
+
+<script>
+/* ==== MOBILE MENU ==== */
+(function(){
+  var body=document.getElementById('mm-body'), ham=document.getElementById('hamburger'), bd=document.getElementById('mobile-backdrop'), menu=document.getElementById('mobile-menu'), closeBtn=document.getElementById('mm-close');
+  if(!body||!ham||!menu) return;
+  function openMenu(){ menu.classList.add('open'); bd.classList.add('open'); ham.classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeMenu(){ menu.classList.remove('open'); bd.classList.remove('open'); ham.classList.remove('open'); document.body.style.overflow=''; }
+  ham.addEventListener('click', function(){ menu.classList.contains('open')?closeMenu():openMenu(); });
+  bd.addEventListener('click', closeMenu); closeBtn.addEventListener('click', closeMenu);
+  function link(label, href){ var a=document.createElement('a'); a.className='mm-link'; a.textContent=label; a.href=href; a.onclick=function(){ closeMenu(); }; return a; }
+  body.appendChild(link('Portfolio', '/portfolio.html'));
+  body.appendChild(link('PM Toolkit', '/toolkit.html'));
+  body.appendChild(link('🏠  Home', '/index.html'));
+})();
+</script>
+
+<script>
+/* ==== ANALYTICS STUB (zero-dependency; ready for a provider later) ==== */
+(function(){
+  window.jlTrack = function(ev, meta){ try{ (window.dataLayer=window.dataLayer||[]).push({event:ev, meta:meta||{}}); }catch(e){} };
+  jlTrack('judgment_lab_viewed');
+  document.addEventListener('click', function(e){
+    var el=e.target.closest('[data-analytics]');
+    if(el) jlTrack(el.getAttribute('data-analytics'), { label: el.getAttribute('data-analytics-label')||'' });
+  });
+})();
+</script>
+
+<script>
+/* ==== CATEGORY GRID (data-driven — combined GutCheck + DecisionRoom taxonomy; swap to live dr_taxonomy in Phase 2/3) ==== */
+var LAB_CATS = [
+  {i:'🎯', n:'Prioritization & scope', d:'What to build now, later, or not at all.'},
+  {i:'🗺️', n:'Roadmap', d:'What to commit to, and in what order.'},
+  {i:'🔎', n:'Discovery', d:'What to research or validate before committing.'},
+  {i:'🔬', n:'Build vs. validate', d:'Should the team build, test, research, or wait?'},
+  {i:'📊', n:'Data & analytics', d:'What the numbers actually support.'},
+  {i:'📐', n:'Metrics & measurement', d:'Which metric really proves this worked.'},
+  {i:'🧪', n:'Experimentation & A/B', d:'Designing tests and reading results honestly.'},
+  {i:'🤝', n:'Stakeholder conflict', d:'How Product handles competing opinions.'},
+  {i:'🚨', n:'Customer escalation', d:"When a key account's demand hits the roadmap."},
+  {i:'🚀', n:'Launch & GTM', d:'How to ship — big-bang, beta, or staged.'},
+  {i:'♟️', n:'Strategy', d:'Where to play and how the pieces fit.'},
+  {i:'🧭', n:'Vision & positioning', d:'What the product stands for and against.'},
+  {i:'🎨', n:'UX & design', d:'When polish matters more than speed.'},
+  {i:'💳', n:'Pricing & packaging', d:'How value is packaged, charged, or limited.'},
+  {i:'⚙️', n:'Technical tradeoffs', d:'Debt, architecture, and build-vs-buy calls.'},
+  {i:'📦', n:'Execution & delivery', d:'Getting it shipped under real constraints.'},
+  {i:'👥', n:'Team & org', d:'How the team is structured and how it works.'},
+  {i:'⏳', n:'Resourcing & capacity', d:'Doing it with the time and people you have.'},
+  {i:'📈', n:'Career & growth', d:'Your own next move as a PM.'},
+  {i:'🌅', n:'Sunset & migration', d:'Moving users old-to-new without losing trust.'},
+  {i:'🛡️', n:'Compliance & risk', d:'Legal, security, and risk trade-offs.'},
+  {i:'🤖', n:'AI / new tech', d:'Where new tech creates real value vs. hype.'},
+  {i:'✨', n:'Something else', d:"Messy calls that don't fit neatly anywhere."}
+];
+(function(){
+  var g=document.getElementById('cat-grid'); if(!g) return;
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function renderCats(){
+    g.innerHTML = LAB_CATS.map(function(c){
+      var custom = c.n==='Something else' ? ' custom' : '';
+      return '<div class="cat-card'+custom+'" data-analytics="category_card_clicked" data-analytics-label="'+esc(c.n)+'"><span class="cat-ic">'+(c.i||'\uD83C\uDFF7\uFE0F')+'</span><div class="cat-tx"><b>'+esc(c.n)+'</b><small>'+esc(c.d||'')+'</small></div></div>';
+    }).join('');
+  }
+  renderCats();
+  /* live sync: pull the shared, growable taxonomy so custom categories appear here too */
+  (function(){
+    var HOSTS=['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','pm-gut-check.pages.dev'];
+    var PROD=HOSTS.indexOf(location.hostname)!==-1;
+    var URL=PROD?'https://oxxzygbfgmlnvavjmhct.supabase.co':'https://wdfttdakwygkdgfakavc.supabase.co';
+    var ANON=PROD?'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkZnR0ZGFrd3lna2RnZmFrYXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNjI2NTYsImV4cCI6MjA5NzczODY1Nn0.1D85vTzCoi7nUYH9YllsdV47AEDhFliT3zsjUfYXJss';
+    try{
+      fetch(URL+'/rest/v1/rpc/pjl_taxonomy',{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json'},body:JSON.stringify({p_kind:'category'})})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(rows){ if(rows&&rows.length){ LAB_CATS=rows.map(function(x){ return {i:x.icon||'\uD83C\uDFF7\uFE0F',n:x.value,d:x.blurb||''}; }); renderCats(); } })
+      .catch(function(){});
+    }catch(e){}
+  })();
+})();
+document.getElementById('foot-yr').textContent = new Date().getFullYear();
+</script>
+
+<script>
+(function(){
+  var HOSTS=['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','pm-gut-check.pages.dev'];
+  var PROD=HOSTS.indexOf(location.hostname)!==-1;
+  var URL=PROD?'https://oxxzygbfgmlnvavjmhct.supabase.co':'https://wdfttdakwygkdgfakavc.supabase.co';
+  var REF=PROD?'oxxzygbfgmlnvavjmhct':'wdfttdakwygkdgfakavc';
+  var ANON=PROD?'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkZnR0ZGFrd3lna2RnZmFrYXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNjI2NTYsImV4cCI6MjA5NzczODY1Nn0.1D85vTzCoi7nUYH9YllsdV47AEDhFliT3zsjUfYXJss';
+  var TIER={'Early signal':'\uD83C\uDF31','Consistent pattern emerging':'\uD83D\uDCCA','Strong category signal':'\u2B50','Senior-PM-like pattern emerging':'\uD83C\uDFC5','High-calibration reviewer':'\uD83C\uDFC6'};
+  function esc(t){ return String(t==null?'':t).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+  function jlToken(){ try{ var t=JSON.parse(localStorage.getItem('sb-'+REF+'-auth-token')); if(!t) return null; return t.access_token||(t.currentSession&&t.currentSession.access_token)||null; }catch(e){ return null; } }
+  function jlRpc(fn, body){
+    var tok=jlToken();
+    return fetch(URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+(tok||ANON),'Content-Type':'application/json'},body:JSON.stringify(body||{})})
+      .then(function(r){ return r.ok?r.json():null; });
+  }
+  function jlUserId(){ try{ var t=JSON.parse(localStorage.getItem('sb-'+REF+'-auth-token')); if(!t) return null; return (t.user&&t.user.id)||(t.currentSession&&t.currentSession.user&&t.currentSession.user.id)||null; }catch(e){ return null; } }
+  function lbRange(w){ var now=new Date(), until=now.toISOString();
+    function sod(d){ var x=new Date(d); x.setHours(0,0,0,0); return x; }
+    if(w==='today'){ return [sod(now).toISOString(), until]; }
+    if(w==='yesterday'){ var y=sod(now); y.setDate(y.getDate()-1); return [y.toISOString(), sod(now).toISOString()]; }
+    if(w==='7d'){ var s7=new Date(now); s7.setDate(s7.getDate()-7); return [s7.toISOString(), until]; }
+    if(w==='week'){ var wd=(now.getDay()+6)%7; var mon=sod(now); mon.setDate(mon.getDate()-wd); return [mon.toISOString(), until]; }
+    if(w==='lastweek'){ var wd2=(now.getDay()+6)%7; var mThisW=sod(now); mThisW.setDate(mThisW.getDate()-wd2); var mLastW=new Date(mThisW); mLastW.setDate(mLastW.getDate()-7); return [mLastW.toISOString(), mThisW.toISOString()]; }
+    if(w==='month'){ var m=sod(now); m.setDate(1); return [m.toISOString(), until]; }
+    if(w==='lastmonth'){ var mThis=sod(now); mThis.setDate(1); var mLast=new Date(mThis); mLast.setMonth(mLast.getMonth()-1); return [mLast.toISOString(), mThis.toISOString()]; }
+    return ['2020-01-01T00:00:00.000Z', until];
+  }
+  function tipI(k){ return '<button type="button" class="lb-tip-i" data-tip="'+k+'" aria-label="What is this?">i</button>'; }
+  var LBTIPS={
+   score:{t:'Score \u2014 the ranking metric',b:'The reviewer\u2019s total points for the selected window, and what orders the board. It adds up only the green stats: owner acted-on is worth 2 points each, helpful marks and high-coverage answers 1 each, GutCheck credibility adds a small per-answer bonus, and every report subtracts 2. There is no maximum \u2014 it grows with the value they create. Different from a DecisionRoom response\u2019s \u26A1 /100 score, which rates one single answer out of 100 \u2014 this sums a reviewer\u2019s value across all their answers in the window.'},
+   acted:{t:'Owner acted on (this window)',b:'A count of how many of their answers the case owner marked \u201Cacted on\u201D in this window. Worth the most \u2014 each adds 2 points \u2014 because it means real advice was actually used. Green: it raises the Score.'},
+   helpful:{t:'Marked helpful (this window)',b:'A count of the helpful marks their answers earned from readers in this window. Each adds 1 point. Green: it raises the Score. Grows when people find their answers genuinely useful.'},
+   covered:{t:'High-coverage answers (this window)',b:'A count of how many of their answers thoroughly addressed the case\u2019s asks in this window. Each adds 1 point. Green: it raises the Score. Grows by answering every ask with a real, specific reply.'},
+   jbonus:{t:'GutCheck credibility (this window)',b:'A small bonus each answer earns from the reviewer\u2019s GutCheck level \u2014 the better their judgment on practice calls, the more credit here (0 for Early signal, up to 2 per answer for High-calibration). Green: it raises the Score. It is the one green stat sourced from GutCheck rather than DecisionRoom, and it is capped so it can never outweigh answers people actually act on.'},
+   reports:{t:'Reports (this window)',b:'A count of reports their answers received in this window. Each subtracts 2 points. It is in the green group because it changes the Score \u2014 but this one lowers it. Kept at 0 by posting genuine, on-topic answers.'},
+   calls:{t:'GutCheck calls scored (lifetime)',b:'A lifetime count of GutCheck practice dilemmas they have completed with a verdict \u2014 the sample size behind their judgment level. Grey: context only, it does NOT change the Score or the ranking.'},
+   strongest:{t:'Strongest category (lifetime)',b:'The category they score highest on in GutCheck. Grey: context only, it does not affect the Score. Shows where their judgment is sharpest.'},
+   domain:{t:'Best domain (lifetime)',b:'The product domain where they match the verdict most on GutCheck. Grey: context only, it does not affect the Score. Shows the kind of product they read best.'},
+   drtotal:{t:'DecisionRoom responses (lifetime)',b:'A lifetime count of every answer they have posted in DecisionRoom. Grey: context only \u2014 it does NOT change the Score. Activity alone earns nothing; value does.'},
+   highsignal:{t:'High-signal responses (lifetime)',b:'A lifetime count of their answers that earned 2 or more helpful marks. Grey: context only, it does not change the Score \u2014 but it is a strong sign of consistent quality.'},
+   highconf:{t:'High-confidence responses (lifetime)',b:'A lifetime count of answers they posted marked \u201Chigh confidence\u201D. Grey: context only, it does not affect the Score \u2014 it just shows how boldly they tend to answer.'},
+    windows:{t:'What the time windows mean',b:'They are NOT the same thing.\n\n\u2022 This Week \u2014 the CURRENT Monday\u2013Sunday week, so far. Grows as the week goes on.\n\u2022 Last Week \u2014 the PREVIOUS Monday\u2013Sunday week. A finished, fixed calendar week.\n\u2022 Rolling 7 Days \u2014 the last 7 days counting back from right now, ignoring calendar weeks. On a Thursday this spans parts of two different weeks.\n\nSo \u201cLast Week\u201d and \u201cRolling 7 Days\u201d almost always cover different days and will show different rankings. That is expected, not a bug.\n\u2022 This Month / Last Month work the same way, on calendar months.'}
+  };
+  function showLbTip(key, anchorEl){
+    var tip=document.getElementById('lb-tip');
+    if(!tip){ tip=document.createElement('div'); tip.id='lb-tip'; tip.className='lb-tip'; tip.innerHTML='<div class="lb-tip-h"></div><div class="lb-tip-b"></div><button type="button" class="lb-tip-x">Got it</button>'; document.body.appendChild(tip); tip.querySelector('.lb-tip-x').onclick=function(){ tip.classList.remove('show'); }; }
+    var k=String(key||''), c;
+    if(k.indexOf('sb:')===0)      c=(typeof SBTIPS!=='undefined') ? SBTIPS[k.slice(3)] : null;
+    else if(k.indexOf('vt:')===0) c=(typeof VTIPS!=='undefined')  ? VTIPS[k.slice(3)]  : null;
+    else if(k.indexOf('wk:')===0) c=(typeof WKTIPS!=='undefined')  ? WKTIPS[k.slice(3)] : null;
+    else if(k.indexOf('dg:')===0) c=(typeof DGTIPS!=='undefined')  ? DGTIPS[k.slice(3)] : null;
+    else                          c=LBTIPS[k];
+    if(!c) return;
+    tip.querySelector('.lb-tip-h').textContent=c.t; tip.querySelector('.lb-tip-b').textContent=c.b;
+    tip.classList.add('show'); var wd=tip.offsetWidth||300, r=anchorEl.getBoundingClientRect();
+    tip.style.top=(r.bottom+window.scrollY+8)+'px'; tip.style.left=Math.max(8, Math.min(r.left+window.scrollX-8, window.innerWidth-wd-12))+'px';
+  }
+  document.addEventListener('click', function(e){ var b=(e.target.closest)?e.target.closest('.lb-tip-i'):null; if(b){ e.preventDefault(); e.stopPropagation(); showLbTip(b.getAttribute('data-tip'), b); return; } var tip=document.getElementById('lb-tip'); if(tip && tip.classList.contains('show') && !tip.contains(e.target)) tip.classList.remove('show'); });
+  function drCat(sl){ if(!sl) return '\u2014'; var x=String(sl).replace(/-/g,' '); return x.charAt(0).toUpperCase()+x.slice(1); }
+  function fmtN(v){ v=Number(v)||0; return (v%1===0)?String(v):v.toFixed(1); }
+  function lbStat(cls,lab,val,key){ return '<span class="lb-stat '+cls+'"><span class="lb-slab">'+lab+tipI(key)+'</span><b class="lb-sval">'+val+'</b></span>'; }
+  function lbAvatar(alias){ var a=String(alias||'PM'); var parts=a.replace(/[^A-Za-z0-9]/g,' ').trim().split(/\s+/); var init=(parts.map(function(w){return w[0]||'';}).join('').slice(0,2)||'P').toUpperCase(); var h=0,i; for(i=0;i<a.length;i++){ h=(h*31+a.charCodeAt(i))>>>0; } return '<span class="lb-av" style="background:hsl('+(h%360)+',52%,52%)">'+esc(init)+'</span>'; }
+  function statsHtml(x){
+    var pairs=lbStat('g','Owner acted on',x.acted,'acted')
+      +lbStat('g','Marked helpful',x.helpful,'helpful')
+      +lbStat('g','High-coverage',x.covered,'covered')
+      +lbStat('g','GutCheck cred.',fmtN(x.jbonus||0),'jbonus')
+      +lbStat('r','Reports (\u2212)',x.reports,'reports')
+      +lbStat('c','Calls scored',(x.calls||0),'calls')
+      +lbStat('c','Strongest',drCat(x.strongest),'strongest')
+      +lbStat('c','Best domain',esc(x.best_domain||'\u2014'),'domain');
+    var trio=lbStat('c','DR responses',(x.dr_total||0),'drtotal')
+      +lbStat('c','High-signal',(x.high_signal||0),'highsignal')
+      +lbStat('c','High-conf.',(x.high_conf||0),'highconf');
+    return '<div class="lb-stats"><div class="lb-pairs">'+pairs+'</div><div class="lb-trio">'+trio+'</div></div>';
+  }
+  function avatarHue(alias){ var a=String(alias||'PM'), h=0,i; for(i=0;i<a.length;i++){ h=(h*31+a.charCodeAt(i))>>>0; } return h%360; }
+  function tpColor(alias){ return 'hsl('+avatarHue(alias)+',55%,42%)'; }
+  function medalSvg(rank){
+    var c=rank===1?['#FBD24B','#E39B0C']:rank===2?['#D3D7DD','#9AA0A6']:['#E3AE79','#B46E2D'];
+    var id='lbmg'+rank;
+    return '<svg viewBox="0 0 56 74" width="46" height="60" aria-hidden="true">'
+      +'<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+c[0]+'"/><stop offset="1" stop-color="'+c[1]+'"/></linearGradient></defs>'
+      +'<path d="M19 33 L13 66 L22 58 L20 33 Z" fill="'+c[1]+'"/>'
+      +'<path d="M37 33 L43 66 L34 58 L36 33 Z" fill="'+c[1]+'"/>'
+      +'<circle cx="28" cy="24" r="21" fill="url(#'+id+')" stroke="#fff" stroke-width="2.5"/>'
+      +'<circle cx="28" cy="24" r="21" fill="none" stroke="rgba(0,0,0,.10)" stroke-width="1"/>'
+      +'<text x="28" y="25" text-anchor="middle" dominant-baseline="middle" font-family="Inter,sans-serif" font-weight="800" font-size="19" fill="#fff">'+rank+'</text>'
+      +'</svg>';
+  }
+  function crownSvg(){
+    return '<svg viewBox="0 0 64 46" width="52" height="37" aria-hidden="true">'
+      +'<defs><linearGradient id="lbcr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDE38C"/><stop offset="1" stop-color="#E7A00C"/></linearGradient></defs>'
+      +'<path d="M6 40 L9 15 L21 27 L32 6 L43 27 L55 15 L58 40 Z" fill="url(#lbcr)" stroke="#D18E08" stroke-width="1.4" stroke-linejoin="round"/>'
+      +'<rect x="7" y="39" width="50" height="6" rx="2.5" fill="#E7A00C"/>'
+      +'<circle cx="9" cy="13" r="3" fill="#FDE38C" stroke="#D18E08" stroke-width="1"/>'
+      +'<circle cx="32" cy="4" r="3.4" fill="#FDE38C" stroke="#D18E08" stroke-width="1"/>'
+      +'<circle cx="55" cy="13" r="3" fill="#FDE38C" stroke="#D18E08" stroke-width="1"/>'
+      +'</svg>';
+  }
+  function laurelSvg(cls){
+    var s='<svg class="lb-laurel '+cls+'" viewBox="0 0 46 86" width="26" height="52" aria-hidden="true"><g fill="currentColor">';
+    s+='<path d="M35 82 C 21 71 13 52 17 30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>';
+    var a=[[31,68,18],[27,58,24],[23,49,31],[20,40,39],[18,31,49]];
+    var b=[[39,66,-42],[36,56,-34],[32,47,-26],[28,38,-18]];
+    var i;
+    for(i=0;i<a.length;i++){ s+='<ellipse cx="'+a[i][0]+'" cy="'+a[i][1]+'" rx="7" ry="3.4" transform="rotate('+a[i][2]+' '+a[i][0]+' '+a[i][1]+')"/>'; }
+    for(i=0;i<b.length;i++){ s+='<ellipse cx="'+b[i][0]+'" cy="'+b[i][1]+'" rx="6" ry="3.1" transform="rotate('+b[i][2]+' '+b[i][0]+' '+b[i][1]+')"/>'; }
+    s+='</g></svg>';
+    return s;
+  }
+  function confettiSvg(){
+    var bits=[[60,70,'#F6C544',-18,'r'],[150,30,'#8B7FF0',22,'d'],[250,80,'#5BC7A9',10,'r'],[340,24,'#F08BB0',-30,'d'],[430,60,'#7FA8F0',15,'r'],[500,18,'#F6C544',40,'d'],[560,54,'#7ED9A0',-12,'r'],[620,20,'#8B7FF0',28,'d'],[690,66,'#F08BB0',-24,'r'],[760,30,'#5BC7A9',18,'d'],[830,74,'#7FA8F0',-16,'r'],[900,26,'#F6C544',34,'d'],[940,60,'#7ED9A0',-20,'r'],[110,88,'#F08BB0',12,'d'],[400,96,'#8B7FF0',-28,'r'],[660,98,'#5BC7A9',20,'d']];
+    var s='<svg viewBox="0 0 1000 130" preserveAspectRatio="xMidYMin meet" aria-hidden="true">';
+    for(var i=0;i<bits.length;i++){ var p=bits[i];
+      if(p[4]==='r'){ s+='<rect x="'+p[0]+'" y="'+p[1]+'" width="9" height="5" rx="1.5" fill="'+p[2]+'" transform="rotate('+p[3]+' '+(p[0]+4)+' '+(p[1]+2)+')"/>'; }
+      else { s+='<rect x="'+p[0]+'" y="'+p[1]+'" width="7" height="7" fill="'+p[2]+'" transform="rotate('+(p[3]+45)+' '+(p[0]+3)+' '+(p[1]+3)+')"/>'; }
+    }
+    s+='</svg>';
+    return s;
+  }
+  function peopleSvg(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+  }
+  function podiumHtml(top, w){
+    if(!top.length) return '';
+    function pod(x){ if(!x) return '';
+      var tier=TIER[x.level]||'';
+      var crown=(w==='week'&&x.rank===1)?('<span class="lb-crown">'+crownSvg()+'</span>'):'';
+      return '<div class="lb-pod lb-pod-'+x.rank+(x.is_me?' me':'')+'">'
+        + crown
+        + '<span class="lb-medal">'+medalSvg(x.rank)+'</span>'
+        + '<div class="lb-pod-ava">'+laurelSvg('l')+lbAvatar(x.alias)+laurelSvg('r')+'</div>'
+        + '<div class="lb-pod-alias">'+esc(x.alias)+(tier?'<span class="lb-pod-tier" title="'+esc(x.level||'')+'">'+tier+'</span>':'')+(x.is_me?'<span class="lb-you">you</span>':'')+'</div>'
+        + '<div class="lb-pod-score">'+fmtN(x.score)+'<span>pts</span></div>'
+        + statsHtml(x)
+        + '</div>';
+    }
+    return '<div class="lb-podium"><div class="lb-confetti">'+confettiSvg()+'</div>'+pod(top[1])+pod(top[0])+pod(top[2])+'</div>';
+  }
+  function tdNum(cls,val){ return '<td><span class="lb-cell '+cls+'">'+val+'</span></td>'; }
+  function tableRow(x, pinned){
+    var cls='lb-tr'+(x.is_me?' me':'')+(pinned?' pin':'');
+    return '<tr class="'+cls+'">'
+      +'<td class="lb-rk">'+x.rank+'</td>'
+      +'<td class="lb-td-who"><span class="lb-who">'+lbAvatar(x.alias)+'<span class="lb-who-name">'+esc(x.alias)+'</span>'+(x.is_me?'<span class="lb-you lb-you-td">you</span>':'')+'</span></td>'
+      +tdNum('g',x.acted)+tdNum('g',x.helpful)+tdNum('g',x.covered)+tdNum('g',fmtN(x.jbonus||0))+tdNum('r',x.reports)+tdNum('c',(x.calls||0))
+      +'<td class="lb-td-text">'+drCat(x.strongest)+'</td>'
+      +'<td class="lb-td-text">'+esc(x.best_domain||'\u2014')+'</td>'
+      +tdNum('c',(x.dr_total||0))+tdNum('c',(x.high_signal||0))+tdNum('c',(x.high_conf||0))
+      +'<td class="lb-td-tp"><span class="lb-tp" style="color:'+tpColor(x.alias)+'">'+fmtN(x.score)+'<i>pts</i></span></td>'
+      +'</tr>';
+  }
+  function tableHtml(rows, meRow){
+    function thc(lab,key,cls){ return '<th'+(cls?' class="'+cls+'"':'')+'><span class="lb-th-in"><span class="lb-th-t">'+lab+'</span>'+tipI(key)+'</span></th>'; }
+    var th='<thead><tr>'
+      +'<th class="l"><span class="lb-th-in l"><span class="lb-th-t">Rank</span></span></th>'
+      +'<th class="l"><span class="lb-th-in l"><span class="lb-th-t">Reviewer</span></span></th>'
+      +thc('Owner Acted On','acted')
+      +thc('Marked Helpful','helpful')
+      +thc('High-Coverage','covered')
+      +thc('GutCheck Cred.','jbonus')
+      +thc('Reports (\u2212)','reports')
+      +thc('Calls Scored','calls')
+      +thc('Strongest Problem Category','strongest')
+      +thc('Best Domain','domain')
+      +thc('DR Resp.','drtotal')
+      +thc('High-Signal','highsignal')
+      +thc('High-Conf.','highconf')
+      +'<th class="lb-th-tp"><span class="lb-th-in"><span class="lb-th-t">Total Points \u2193</span>'+tipI('score')+'</span></th>'
+      +'</tr></thead>';
+    var body=rows.map(function(x){ return tableRow(x,false); }).join('');
+    if(meRow){ body+='<tr class="lb-pin-sep"><td colspan="14" class="lb-pin-lab">Your rank</td></tr>'+tableRow(meRow,true); }
+    var cg='<colgroup><col class="c-rank"><col class="c-who">'+'<col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num">'+'<col class="c-txt"><col class="c-txt">'+'<col class="c-num"><col class="c-num"><col class="c-num">'+'<col class="c-tp"></colgroup>';
+    return '<div class="lb-table-wrap"><table class="lb-table">'+cg+th+'<tbody>'+body+'</tbody></table></div>';
+  }
+  function mcard(x, pinned){
+    return '<div class="lb-mc'+(x.is_me?' me':'')+(pinned?' pin':'')+'" data-open="0">'
+      +'<button type="button" class="lb-mc-head">'
+        +'<span class="lb-mc-rank">'+x.rank+'</span>'
+        +lbAvatar(x.alias)
+        +'<span class="lb-mc-alias"><span class="lb-mc-nm">'+esc(x.alias)+'</span>'+(x.is_me?'<span class="lb-you">you</span>':'')+'</span>'
+        +'<span class="lb-mc-tp" style="color:'+tpColor(x.alias)+'">'+fmtN(x.score)+'<i>pts</i></span>'
+        +'<svg class="lb-mc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>'
+      +'</button>'
+      +'<div class="lb-mc-body">'+statsHtml(x)+'</div>'
+      +'</div>';
+  }
+  function mcardsHtml(rows, meRow){
+    var body=rows.map(function(x){ return mcard(x,false); }).join('');
+    if(meRow){ body+='<div class="lb-mc-pinlab">Your rank</div>'+mcard(meRow,true); }
+    return '<div class="lb-mcards">'+body+'</div>';
+  }
+  function lbRender(res, w){
+    var el=document.getElementById('lb-list'); if(!el) return;
+    var top=(res&&res.top)||[]; var me=(res&&res.me)||null;
+    if(!top.length){ el.innerHTML='<div class="lb-empty">No scored reviewer activity in this window yet. Answer cases that owners act on and readers find helpful to appear here.</div>'; return; }
+    var rest=top.slice(3);
+    var inTop=top.some(function(x){ return x.is_me; });
+    var meRow=(me && !inTop)?{rank:me.rank,alias:me.alias,score:me.score,acted:me.acted,helpful:me.helpful,covered:me.covered,reports:me.reports,jbonus:me.jbonus,calls:me.calls,strongest:me.strongest,best_domain:me.best_domain,dr_total:me.dr_total,high_signal:me.high_signal,high_conf:me.high_conf,level:me.level,is_me:true}:null;
+    var restHtml='';
+    if(rest.length || meRow){
+      restHtml='<div class="lb-rest-head"><span class="lb-rest-ico">'+peopleSvg()+'</span><div><div class="lb-rest-title">Ranks 4 &amp; Below</div><div class="lb-rest-sub">The top three are featured on the podium above.</div></div></div>'
+        + tableHtml(rest, meRow)
+        + mcardsHtml(rest, meRow);
+    }
+    el.innerHTML=podiumHtml(top.slice(0,3), w)+restHtml;
+  }
+  /* --- D3b: Reviewer of the Week banner --- */
+  function champCrown(){ return '<span class="lb-champ-ic">'+crownSvg()+'</span>'; }
+  var BOARD_COPY={
+    rev:{ title:'Top Responders',
+      lead:'Ranked by the quality of the responses people write on other PMs\u2019 cases.',
+      body:'Each <b>Score</b> sums the green stats \u2014 the case owner acting on your response counts most, then helpful marks from readers, how thoroughly you answered the asks, and a small GutCheck-credibility bonus; reports subtract. Grey stats are lifetime context and don\u2019t change the ranking. Points come from other people\u2019s actions, so the board can\u2019t be gamed.' },
+    vault:{ title:'My Vault',
+      lead:'Your private performance record \u2014 only you can see this.',
+      body:'The leaderboards tell you where you rank. The Vault tells you whether you are actually getting <b>better</b>, and what to fix next. Nothing here is public, and nothing here is shared.' },
+    sub:{ title:'Top Case Authors',
+      lead:'Ranked by the quality of the decisions people bring to the room \u2014 not how many they post.',
+      body:'Each <b>Score</b> sums the green stats \u2014 <b>Clarity &amp; Completeness</b> is the biggest term, so a fuller brief is the single highest-leverage thing you can do. You also earn points for the calibre of reviewer your case attracts, the responses it draws, closing the loop well, and acting on the advice you asked for. Thin or abandoned cases <b>lose</b> points, so posting more without care scores you lower, not higher. Grey stats are context only.' }
+  };
+  function setBoardCopy(board){
+    var c=BOARD_COPY[board]||BOARD_COPY.rev;
+    var t=document.getElementById('lb-title'), sb=document.getElementById('lb-sub');
+    if(t) t.textContent=c.title;
+    if(sb) sb.innerHTML=esc(c.lead)+'<span class="lb-sub2">'+c.body+' Tap any \u24D8 to learn what a stat means.</span>';
+  }
+  function renderChamp(d,board){
+    var el=document.getElementById('lb-champ'); if(!el) return;
+    var isSub=(board==='sub');
+    if(!d || !d.ok || !d.alias){ el.innerHTML=''; el.style.display='none'; return; }
+    var streak=Number(d.streak)||0;
+    var st=(streak>=2)?'<span class="lb-champ-streak">\uD83D\uDD25 '+streak+' weeks</span>':'';
+    var you=d.is_me?'<span class="lb-champ-you">you</span>':'';
+    var sub=d.live
+      ? 'Leading the current week right now \u2014 the crown moves the moment someone overtakes them.'
+      : (isSub
+          ? 'No scored cases yet this week, so this is last week\u2019s winner. Post a strong brief and the crown is up for grabs.'
+          : 'No scored activity yet this week, so this is last week\u2019s winner. Post a response and the crown is up for grabs.');
+    el.style.display='flex';
+    el.innerHTML=champCrown()
+      +'<div><div class="lb-champ-t">'+(isSub?'Case Submitter of the Week':'Reviewer of the Week')+': <b>'+esc(d.alias)+'</b>'+you+st+'</div>'
+      +'<div class="lb-champ-s">'+sub+'</div></div>';
+  }
+  function loadChamp(){
+    var b=lbBoard;
+    if(b==='vault'){ var e=document.getElementById('lb-champ'); if(e){ e.innerHTML=''; e.style.display='none'; } return; }
+    jlRpc(b==='sub'?'dr_submitter_of_week':'dr_reviewer_of_week').then(function(d){ if(b===lbBoard) renderChamp(d,b); }).catch(function(){});
+  }
+
+  /* --- D3b: 8-week rank progression graph (signed-in only) --- */
+  function histSvg(weeks){
+    var pts=weeks.filter(function(w){ return w.rank!=null; });
+    if(pts.length<1) return '';
+    var W=700,H=170,PL=38,PR=14,PT=14,PB=28;
+    var n=weeks.length, iw=(W-PL-PR)/Math.max(n-1,1);
+    var maxR=1; weeks.forEach(function(w){ if(w.rank!=null && Number(w.rank)>maxR) maxR=Number(w.rank); });
+    maxR=Math.max(maxR,3);
+    function X(i){ return PL+i*iw; }
+    function Y(r){ return PT+((Number(r)-1)/(maxR-1||1))*(H-PT-PB); }  /* rank 1 at TOP */
+    var g='',i,w,lastI=-1,seg=[],segs=[];
+    for(i=0;i<n;i++){ w=weeks[i];
+      if(w.rank!=null){ seg.push([X(i),Y(w.rank)]); lastI=i; }
+      else { if(seg.length){ segs.push(seg); seg=[]; } }
+    }
+    if(seg.length) segs.push(seg);
+    /* gridlines: rank 1 and worst */
+    g+='<line x1="'+PL+'" y1="'+Y(1)+'" x2="'+(W-PR)+'" y2="'+Y(1)+'" stroke="#EDEFF5" stroke-width="1"/>';
+    g+='<line x1="'+PL+'" y1="'+Y(maxR)+'" x2="'+(W-PR)+'" y2="'+Y(maxR)+'" stroke="#EDEFF5" stroke-width="1"/>';
+    g+='<text x="'+(PL-8)+'" y="'+(Y(1)+4)+'" text-anchor="end" font-size="10" fill="#9aa0b0" font-weight="700">#1</text>';
+    g+='<text x="'+(PL-8)+'" y="'+(Y(maxR)+4)+'" text-anchor="end" font-size="10" fill="#9aa0b0" font-weight="700">#'+maxR+'</text>';
+    /* line segments (gaps where you did not score) */
+    segs.forEach(function(sg){
+      if(sg.length<2) return;
+      g+='<polyline fill="none" stroke="#4f43d8" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" points="'+sg.map(function(p){return p[0]+','+p[1];}).join(' ')+'"/>';
+    });
+    /* dots + labels */
+    for(i=0;i<n;i++){ w=weeks[i];
+      var lab=String(w.week_start||'').slice(5);  /* MM-DD */
+      g+='<text x="'+X(i)+'" y="'+(H-6)+'" text-anchor="middle" font-size="9.5" fill="#9aa0b0">'+esc(lab)+'</text>';
+      if(w.rank==null) continue;
+      var isBest=(Number(w.rank)===1);
+      g+='<circle cx="'+X(i)+'" cy="'+Y(w.rank)+'" r="'+(isBest?5.5:4.2)+'" fill="'+(isBest?'#E39B0C':'#4f43d8')+'" stroke="#fff" stroke-width="2"/>';
+      g+='<text x="'+X(i)+'" y="'+(Y(w.rank)-10)+'" text-anchor="middle" font-size="10" font-weight="800" fill="'+(isBest?'#B8790A':'#4f43d8')+'">#'+w.rank+'</text>';
+    }
+    return '<svg class="lb-hist-svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Your rank over the last 8 weeks">'+g+'</svg>';
+  }
+  function renderHist(d){
+    var el=document.getElementById('lb-hist'); if(!el) return;
+    if(!d || !d.ok || !d.signed_in){ el.innerHTML=''; el.style.display='none'; return; }
+    var weeks=d.weeks||[];
+    var scored=weeks.filter(function(w){ return w.rank!=null; });
+    if(!weeks.length){ el.innerHTML=''; el.style.display='none'; return; }
+    el.style.display='block';
+    var best=scored.length?Math.min.apply(null,scored.map(function(w){return Number(w.rank);})):null;
+    var head='<div class="lb-hist-h"><span class="lb-hist-t">Your rank history</span><span class="lb-hist-s">'
+      +(best?('Last '+weeks.length+' weeks \u00b7 best finish #'+best):('Last '+weeks.length+' completed weeks'))+'</span></div>';
+    el.innerHTML=head+(scored.length
+      ? histSvg(weeks)
+      : '<div class="lb-hist-empty">You have no scored weeks yet. Answer a case that the owner acts on, or that readers mark helpful, and you\u2019ll appear here.</div>');
+  }
+  function loadHist(){
+    var hEl=document.getElementById('lb-hist');
+    if(lbBoard==='vault'){ if(hEl){ hEl.innerHTML=''; hEl.style.display='none'; } return; }  /* Zone 2 brings its own graphs */
+    if(!jlUserId()){ var e=document.getElementById('lb-hist'); if(e){ e.innerHTML=''; e.style.display='none'; } return; }
+    var b=lbBoard;
+    jlRpc(b==='sub'?'dr_my_submitter_history':'dr_my_rank_history',{p_weeks:8})
+      .then(function(d){ if(b===lbBoard) renderHist(d); }).catch(function(){});
+  }
+
+  /* ================= D4: CASE SUBMITTERS BOARD ================= */
+  var SBTIPS={
+    clarity:{t:'Clarity & Completeness',b:'How complete each brief is, across 10 checks (situation, decision, options, risk, asks, free asks, product context, stakeholders, your recommendation, evidence/tried/constraints). Each case scores 0\u20135, worth \u00d73. It is the single biggest term \u2014 writing a fuller brief is the highest-leverage thing a submitter can do.'},
+    pull:{t:'Top-reviewer pull',b:'The strongest reviewer your case attracted. Gold #1 reviewer = 6 pts, silver = 5, bronze = 4, any Strong-level-or-better reviewer = 3. Taken as the single best per case (never added up), so one case cannot farm it.'},
+    resp:{t:'Responses received',b:'Points for responses your cases drew: min(responses, 5) \u00d7 2 per case. Capped so one viral case cannot dominate the board.'},
+    resolved:{t:'Resolved well',b:'Cases you closed with a final resolution of 70% or higher, worth 2 pts each. Closing the loop well is the whole point of DecisionRoom.'},
+    highsig:{t:'High-signal responses',b:'Responses on your cases that at least 2 readers marked helpful. 1 pt each. A good brief pulls better answers \u2014 this measures that.'},
+    acted:{t:'Acted on',b:'Cases where you marked at least one response as acted on, worth 2 pts each. It rewards actually using the advice you asked for.'},
+    gccred:{t:'GutCheck credibility',b:'Your GutCheck judgment level, applied per case: Consistent 0.5 \u00b7 Strong 1 \u00b7 Senior-like 1.5 \u00b7 High-calibration 2. Same rule reviewers get per response.'},
+    standing:{t:'Standing bonus',b:'A one-time bonus if you are also a top-3 reviewer on the ALL-TIME Reviewers board: #1 = +3, #2 = +2, #3 = +1. It rewards people who give back and also bring cases. Applied once, not per case \u2014 and it is deliberately all-time, so it does not swing with the window selector.'},
+    flags:{t:'Needs-context flags (\u2212)',b:'Each time a reader flags one of your cases as needing more context, \u22122. It is the direct counterweight to posting thin briefs.'},
+    aband:{t:'Abandoned (\u2212)',b:'\u22123 for a case left open past 30 days that got 3+ responses and you never acted on any of them. People gave you their time \u2014 leaving it hanging costs you.'},
+    cases:{t:'Cases submitted',b:'How many cases you posted in this window. Context only \u2014 it does not add points by itself. Volume without quality actually scores negative.'},
+    avgclar:{t:'Avg clarity',b:'Average Clarity & Completeness across your cases in this window, out of 5. Context only.'},
+    close:{t:'Close rate',b:'The share of your cases in this window that you actually closed. Context only \u2014 but a low close rate means people answered and never learned what happened.'},
+    give:{t:'Give-back',b:'How many responses you have written on OTHER people\u2019s cases. Context only \u2014 it does not add points here, but it is what keeps the room alive.'},
+    best:{t:'Best case',b:'Your single highest-scoring case in this window.'},
+    avgresp:{t:'Avg responses / case',b:'Average number of responses your cases attracted in this window.'},
+    revrank:{t:'Reviewer rank (this window)',b:'Where this person sits on the Reviewers board \u2014 for the SAME time window you have selected here. Switch the window and this moves with it.\n\nIt will always match the Reviewers tab exactly. A dash means they had no scored responses in this window.'},
+    standrank:{t:'All-time reviewer rank',b:'This person\u2019s position on the ALL-TIME Reviewers board \u2014 shown only for the top 3. This is the rank that earns the Standing bonus (#1 = +3, #2 = +2, #3 = +1), which is why it is all-time and does NOT change with the window selector.'},
+    calls:{t:'Calls scored',b:'How many GutCheck dilemmas you have answered and had scored (lifetime).'},
+    lvl:{t:'Judgment level',b:'Your GutCheck judgment level (lifetime), which drives the GutCheck credibility column.'},
+    strongest:{t:'Strongest category',b:'The problem category where your GutCheck judgment matches the room most often.'},
+    domain:{t:'Best domain',b:'The product domain where your GutCheck judgment matches the room most often.'}
+  };
+  function sbTip(k){ return '<button type="button" class="lb-tip-i" data-tip="sb:'+k+'" aria-label="What is this?">i</button>'; }
+  function sbStat(cls,lab,val,key){
+    return '<div class="lb-stat '+cls+'"><span class="lb-slab">'+lab+(key?sbTip(key):'')+'</span><span class="lb-sval">'+val+'</span></div>';
+  }
+  function sbStatsHtml(x){
+    var green=sbStat('g','Clarity pts',fmtN(x.clarity_pts||0),'clarity')
+      +sbStat('g','Top-reviewer pull',fmtN(x.top_reviewer||0),'pull')
+      +sbStat('g','Responses pts',fmtN(x.responses_pts||0),'resp')
+      +sbStat('g','Resolved well',fmtN(x.resolved_pts||0),'resolved')
+      +sbStat('g','High-signal',fmtN(x.high_signal_pts||0),'highsig')
+      +sbStat('g','Acted on',fmtN(x.acted_pts||0),'acted')
+      +sbStat('g','GutCheck cred.',fmtN(x.gutcheck_cred||0),'gccred')
+      +sbStat('g','Standing bonus',fmtN(x.standing_bonus||0),'standing')
+      +sbStat('r','Flags (\u2212)',fmtN(x.flags_pts||0),'flags')
+      +sbStat('r','Abandoned (\u2212)',fmtN(x.abandoned_pts||0),'aband');
+    var grey=sbStat('c','Cases',(x.cases||0),'cases')
+      +sbStat('c','Avg clarity',fmtN(x.avg_clarity||0)+' / 5','avgclar')
+      +sbStat('c','Close rate',(x.close_rate||0)+'%','close')
+      +sbStat('c','Give-back',(x.give_back||0),'give')
+      +sbStat('c','Best case',fmtN(x.best_case||0),'best')
+      +sbStat('c','Avg resp./case',fmtN(x.avg_responses||0),'avgresp')
+      +sbStat('c','Reviewer rank (this window)',(x.reviewer_rank?('#'+x.reviewer_rank):'\u2014'),'revrank')
+      +sbStat('c','All-time reviewer rank',(x.standing_rank?('#'+x.standing_rank):'\u2014'),'standrank')
+      +sbStat('c','Calls scored',(x.calls||0),'calls')
+      +sbStat('c','Level',esc(x.level||'\u2014'),'lvl')
+      +sbStat('c','Strongest',drCat(x.strongest),'strongest')
+      +sbStat('c','Best domain',esc(x.best_domain||'\u2014'),'domain');
+    return '<div class="lb-stats"><div class="lb-pairs">'+green+'</div><div class="lb-pairs" style="margin-top:.42rem">'+grey+'</div></div>';
+  }
+  function sbPodium(top,w){
+    if(!top.length) return '';
+    function pod(x){ if(!x) return '';
+      var crown=(w==='week'&&x.rank===1)?('<span class="lb-crown">'+crownSvg()+'</span>'):'';
+      return '<div class="lb-pod lb-pod-'+x.rank+(x.is_me?' me':'')+'">'
+        + crown
+        + '<span class="lb-medal">'+medalSvg(x.rank)+'</span>'
+        + '<div class="lb-pod-ava">'+laurelSvg('l')+lbAvatar(x.alias)+laurelSvg('r')+'</div>'
+        + '<div class="lb-pod-alias">'+esc(x.alias)+(x.is_me?'<span class="lb-you">you</span>':'')+'</div>'
+        + '<div class="lb-pod-score">'+fmtN(x.score)+'<span>pts</span></div>'
+        + sbStatsHtml(x)
+        + '</div>';
+    }
+    return '<div class="lb-podium"><div class="lb-confetti">'+confettiSvg()+'</div>'+pod(top[1])+pod(top[0])+pod(top[2])+'</div>';
+  }
+  function chevSvg(){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>'; }
+  function sbXrow(x,cols){
+    var g=sbStat('c','Best case',fmtN(x.best_case||0),'best')
+      +sbStat('c','Avg resp./case',fmtN(x.avg_responses||0),'avgresp')
+      +sbStat('c','Responses total',(x.responses||0),'resp')
+      +sbStat('c','Reviewer rank (this window)',(x.reviewer_rank?('#'+x.reviewer_rank):'\u2014'),'revrank')
+      +sbStat('c','All-time reviewer rank',(x.standing_rank?('#'+x.standing_rank):'\u2014'),'standrank')
+      +sbStat('c','Calls scored',(x.calls||0),'calls')
+      +sbStat('c','Judgment level',esc(x.level||'\u2014'),'lvl')
+      +sbStat('c','Strongest category',drCat(x.strongest),'strongest')
+      +sbStat('c','Best domain',esc(x.best_domain||'\u2014'),'domain');
+    return '<tr class="lb-xrow"><td colspan="'+cols+'"><div class="lb-xhint">More about '+esc(x.alias)+' \u00b7 context only, no effect on score</div><div class="lb-xgrid">'+g+'</div></td></tr>';
+  }
+  function sbRow(x,pinned){
+    return '<tr class="lb-tr'+(x.is_me?' me':'')+(pinned?' pin':'')+'" data-open="0">'
+      +'<td class="lb-rk">'+x.rank+'</td>'
+      +'<td class="lb-td-who"><span class="lb-who">'+lbAvatar(x.alias)+'<span class="lb-who-name">'+esc(x.alias)+'</span>'+(x.is_me?'<span class="lb-you lb-you-td">you</span>':'')+'<button type="button" class="lb-xtog" aria-label="Show more stats">'+chevSvg()+'</button></span></td>'
+      +tdNum('g',fmtN(x.clarity_pts||0))+tdNum('g',fmtN(x.top_reviewer||0))+tdNum('g',fmtN(x.responses_pts||0))
+      +tdNum('g',fmtN(x.resolved_pts||0))+tdNum('g',fmtN(x.high_signal_pts||0))+tdNum('g',fmtN(x.acted_pts||0))
+      +tdNum('g',fmtN(x.gutcheck_cred||0))+tdNum('g',fmtN(x.standing_bonus||0))
+      +tdNum('r',fmtN(x.flags_pts||0))+tdNum('r',fmtN(x.abandoned_pts||0))
+      +tdNum('c',(x.cases||0))+tdNum('c',fmtN(x.avg_clarity||0))+tdNum('c',(x.close_rate||0)+'%')+tdNum('c',(x.give_back||0))
+      +'<td class="lb-td-tp"><span class="lb-tp" style="color:'+tpColor(x.alias)+'">'+fmtN(x.score)+'<i>pts</i></span></td>'
+      +'</tr>';
+  }
+  function sbTable(rows,meRow){
+    function thc(lab,key){ return '<th><span class="lb-th-in"><span class="lb-th-t">'+lab+'</span>'+sbTip(key)+'</span></th>'; }
+    var cg='<colgroup><col class="c-rank"><col class="c-who">'
+      +'<col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num">'
+      +'<col class="c-num"><col class="c-num">'
+      +'<col class="c-num"><col class="c-num"><col class="c-num"><col class="c-num">'
+      +'<col class="c-tp"></colgroup>';
+    var th='<thead><tr>'
+      +'<th class="l"><span class="lb-th-in l"><span class="lb-th-t">Rank</span></span></th>'
+      +'<th class="l"><span class="lb-th-in l"><span class="lb-th-t">Submitter</span></span></th>'
+      +thc('Clarity &amp; Completeness','clarity')+thc('Top-Reviewer Pull','pull')+thc('Responses','resp')
+      +thc('Resolved Well','resolved')+thc('High-Signal','highsig')+thc('Acted On','acted')
+      +thc('GutCheck Cred.','gccred')+thc('Standing Bonus','standing')
+      +thc('Flags (\u2212)','flags')+thc('Abandoned (\u2212)','aband')
+      +thc('Cases','cases')+thc('Avg Clarity','avgclar')+thc('Close Rate','close')+thc('Give-Back','give')
+      +'<th class="lb-th-tp"><span class="lb-th-in"><span class="lb-th-t">Total Points \u2193</span>'+sbTip('standing')+'</span></th>'
+      +'</tr></thead>';
+    var COLS=17;
+    var body=rows.map(function(x){ return sbRow(x,false)+sbXrow(x,COLS); }).join('');
+    if(meRow){ body+='<tr class="lb-pin-sep"><td colspan="'+COLS+'" class="lb-pin-lab">Your rank</td></tr>'+sbRow(meRow,true)+sbXrow(meRow,COLS); }
+    return '<div class="lb-table-wrap"><table class="lb-table">'+cg+th+'<tbody>'+body+'</tbody></table></div>';
+  }
+  function sbMcard(x,pinned){
+    return '<div class="lb-mc'+(x.is_me?' me':'')+(pinned?' pin':'')+'" data-open="0">'
+      +'<button type="button" class="lb-mc-head"><span class="lb-mc-rank">'+x.rank+'</span>'+lbAvatar(x.alias)
+      +'<span class="lb-mc-alias"><span class="lb-mc-nm">'+esc(x.alias)+'</span>'+(x.is_me?'<span class="lb-you">you</span>':'')+'</span>'
+      +'<span class="lb-mc-tp" style="color:'+tpColor(x.alias)+'">'+fmtN(x.score)+'<i>pts</i></span>'
+      +'<svg class="lb-mc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>'
+      +'<div class="lb-mc-body">'+sbStatsHtml(x)+'</div></div>';
+  }
+  function sbRender(res,w){
+    var el=document.getElementById('lb-list'); if(!el) return;
+    var top=(res&&res.top)||[]; var me=(res&&res.me)||null;
+    if(!top.length){ el.innerHTML='<div class="lb-empty">No scored cases in this window yet. Post a case with a full brief \u2014 clarity is the biggest single term, and a fuller brief attracts better reviewers.</div>'; return; }
+    var rest=top.slice(3);
+    var inTop=top.some(function(x){ return x.is_me; });
+    var meRow=(me && !inTop)?me:null;
+    var restHtml='';
+    if(rest.length || meRow){
+      restHtml='<div class="lb-rest-head"><span class="lb-rest-ico">'+peopleSvg()+'</span><div><div class="lb-rest-title">Ranks 4 &amp; Below</div><div class="lb-rest-sub">The top three are featured on the podium above.</div></div></div>'
+        + sbTable(rest,meRow) + '<div class="lb-mcards">'+rest.map(function(x){return sbMcard(x,false);}).join('')
+        + (meRow?('<div class="lb-mc-pinlab">Your rank</div>'+sbMcard(meRow,true)):'') + '</div>';
+    }
+    el.innerHTML=sbPodium(top.slice(0,3),w)+restHtml;
+  }
+
+  /* ===================== D6: PERFORMANCE VAULT ===================== */
+  var VTIPS={
+    revscore:{t:'Your reviewer score',b:'Points earned from the responses you wrote in the window selected above.\n\nowner acted on it x2 \u00b7 + helpful marks \u00b7 + how fully you answered the asks \u00b7 + a small GutCheck-credibility bonus \u00b7 \u2212 reports x2.\n\nEvery point comes from someone ELSE acting on your work, which is why it cannot be gamed.'},
+    autscore:{t:'Your author score',b:'Points earned from the cases you posted in the window selected above.\n\nClarity & Completeness x3 (the biggest term) \u00b7 + the calibre of reviewer your case attracted \u00b7 + responses it drew \u00b7 + closing it well \u00b7 + acting on the advice \u00b7 \u2212 context flags \u00b7 \u2212 abandoned cases.\n\nPosting more thin cases lowers this score, it does not raise it.'},
+    pctile:{t:'Percentile and rank',b:'\u201cTop 23% \u00b7 #2\u201d means: of everyone ACTIVE in this window, you are 2nd, which puts you in the top 23%.\n\nThe denominator is people active in the window \u2014 not everyone who ever signed up \u2014 so it is an honest comparison against people who actually showed up.'},
+    delta:{t:'Trend',b:'How this score compares with the SAME length of time immediately before it. This Month is measured against Last Month, This Week against Last Week, and so on.\n\nThis is the number that matters: the leaderboard says where you rank, this says whether you are getting better.'},
+    bestrank:{t:'Best rank',b:'The highest position you have ever reached on this board, across every completed week we have sealed. It never goes down.'},
+    crowns:{t:'Crowns',b:'How many completed weeks you finished at #1 on this board. Weeks are frozen when they end, so a crown can never be taken away from you.'},
+    streak:{t:'Streak',b:'How many completed weeks in a row you have finished at #1, counting back from now. It resets the moment somebody else takes the top spot.'},
+    vacted:{t:'Acted on',b:'How many of your responses the case owner explicitly marked as acted on \u2014 they actually did what you suggested. This is the single strongest signal in the product, and it is worth double.'},
+    vhelpful:{t:'Helpful marks',b:'How many times readers marked your responses helpful. It means people found it useful \u2014 which is not quite the same as the owner acting on it.'},
+    vcovered:{t:'High-coverage responses',b:'Responses where you answered at least 70% of what the asker actually asked for, in real depth. Answering the interesting bits and skipping their real questions does not count.'},
+    vreports:{t:'Reports',b:'Times a response of yours was flagged by a reader. Each one subtracts 2 points. If this is not zero, go back and read those responses.'},
+    vcases:{t:'Cases posted',b:'How many cases you submitted in this window. On its own it earns you nothing \u2014 quality is what scores.'},
+    vclarity:{t:'Average clarity',b:'The average Clarity & Completeness of your briefs in this window, out of 5. It is the largest single term in your author score, so it is the fastest thing you can improve.\n\nA fuller brief attracts better reviewers and is far more likely to reach a real resolution.'},
+    vclose:{t:'Close rate',b:'The share of your cases that you actually closed out. People gave you their time \u2014 closing the loop tells them what happened, and it is why they answer you again.'},
+    vexemplary:{t:'Exemplary cases',b:'Cases of yours that earned the medal: closed, with the asker getting at least 70% of what they needed, and at least one PM who actually helped. These are shown in the Library as worked examples.'},
+    gclevel:{t:'Judgment level',b:'Your GutCheck level, from your scored calls and calibration.\n\nEarly signal \u2192 Consistent pattern \u2192 Strong category signal \u2192 Senior-PM-like \u2192 High-calibration reviewer.\n\nIt also feeds a small credibility bonus into both scores above.'},
+    gccalib:{t:'Calibration',b:'How well your confidence matches your accuracy. Being right when you said you were confident, and unsure when you were actually wrong, both raise it.\n\nHigh confidence + frequently wrong is the pattern that lowers it \u2014 and it is the most dangerous habit a PM can have.'},
+    gccalls:{t:'Calls scored',b:'How many GutCheck dilemmas you have answered and had scored, lifetime.'},
+    gcstrong:{t:'Strongest category',b:'The problem type where your judgment agrees with the room most often. Answer DecisionRoom cases here \u2014 you are more likely to be genuinely useful, and it scores faster.'},
+    gcweak:{t:'Weakest category',b:'The problem type where your judgment diverges from the room most often. This is not a criticism \u2014 it is the highest-value thing you can practise.'},
+    gcdomain:{t:'Best domain',b:'The product domain (B2B SaaS, B2C, Marketplace\u2026) where your judgment matches the room most often. Lifetime.'},
+    gcwindow:{t:'GutCheck is now windowed',b:'These GutCheck numbers are computed from the calls you scored INSIDE the window selected above \u2014 so they move with the pills, exactly like your reviewer and author scores.\n\nYour lifetime figures are shown underneath, because level and calibration only become meaningful over many calls.\n\nA call is only scored when the dilemma has a known best answer, or when the room has reached a verdict (3+ votes). Unscored calls are ignored entirely rather than counted as wrong.'}
+  };
+  function vTip(k){ return '<button type="button" class="lb-tip-i" data-tip="vt:'+k+'" aria-label="What is this?">i</button>'; }
+  /* ===================== D6-3: ZONE 4 YOUR WORK ===================== */
+  var WKTIPS={
+    resp:{t:'Responses you wrote',b:'Every answer you posted to a DecisionRoom case in the window selected above, with the points it earned:\n\nowner acted on it +2 \u00b7 each helpful mark +1 \u00b7 answering the asks in depth +1 \u00b7 a small GutCheck-credibility bonus \u00b7 \u2212 2 per report.\n\nThese are the SAME points that make up your reviewer score \u2014 add them up and you get the number in Zone 1.'},
+    cases:{t:'Cases you posted',b:'Every case you submitted in the window selected above, with the points it earned.\n\nA case scores on Clarity & Completeness (\u00d73, the biggest term) \u00b7 the calibre of reviewer it attracted \u00b7 the responses it drew \u00b7 closing it out well \u00b7 acting on the advice \u2014 minus context flags and stalled cases.\n\nThese points, plus your GutCheck credibility and any standing bonus, are exactly your author score.'}
+  };
+  function wkTip(k){ return '<button type="button" class="lb-tip-i" data-tip="wk:'+k+'" aria-label="What is this?">i</button>'; }
+  var wkData=null, wkRespFilter='all', wkRespSort='points', wkCaseFilter='all', wkCaseSort='points';
+  function wkTime(iso){ var t=new Date(iso).getTime(); return isNaN(t)?0:t; }
+  function wkDateFmt(iso){ if(!iso) return ''; var d=new Date(iso); if(isNaN(d.getTime())) return ''; var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; var s=M[d.getMonth()]+' '+d.getDate(); var now=new Date(); if(d.getFullYear()!==now.getFullYear()) s+=', '+d.getFullYear(); return s; }
+  function wkStatusChip(st){ st=String(st||''); if(st==='closed') return '<span class="wk-st closed">Closed</span>'; if(st==='live') return '<span class="wk-st live">Open</span>'; if(!st) return ''; return '<span class="wk-st">'+esc(st.charAt(0).toUpperCase()+st.slice(1))+'</span>'; }
+  function wkPtsHtml(p){ p=Number(p)||0; var cls=p<0?'neg':(p===0?'zero':''); return '<div class="wk-pts '+cls+'">'+(p>0?'+':'')+fmtN(p)+'<small>pts</small></div>'; }
+  function wkFilBtns(group, active, opts){ var cls=(group.indexOf('sort')>=0)?'wk-sort':'wk-fil'; return opts.map(function(o){ return '<button type="button" class="'+cls+(o[0]===active?' on':'')+'" data-wk="'+group+'" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join(''); }
+  /* ---- responses ---- */
+  function wkRespRow(r){
+    var chips=[];
+    if(r.acted)          chips.push('<span class="wk-chip acted">\u2705 Acted on</span>');
+    if((r.helpful||0)>0) chips.push('<span class="wk-chip help">\uD83D\uDC4D '+r.helpful+' helpful</span>');
+    if(r.covered)        chips.push('<span class="wk-chip cover">\uD83D\uDCCB Covered</span>');
+    if((r.reports||0)>0) chips.push('<span class="wk-chip rep">\u26A0\uFE0F '+r.reports+' report'+((r.reports===1)?'':'s')+'</span>');
+    if(r.anon)           chips.push('<span class="wk-chip anon">\uD83D\uDD76\uFE0F Anonymous</span>');
+    return '<a class="wk-row" href="/decisionroom.html?case='+encodeURIComponent(r.case_id)+(r.response_id?'&resp='+encodeURIComponent(r.response_id):'')+'">'
+      +'<div class="wk-row-main"><span class="wk-title">'+esc(r.title||'Untitled case')+'</span>'
+      +'<div class="wk-sub"><span class="wk-date">'+wkDateFmt(r.created_at)+'</span>'+wkStatusChip(r.status)+'</div>'
+      +(chips.length?'<div class="wk-chips">'+chips.join('')+'</div>':'')
+      +'</div>'+wkPtsHtml(r.points)+'</a>';
+  }
+  function wkRespPass(r,f){ if(f==='acted') return !!r.acted; if(f==='helpful') return (r.helpful||0)>0; if(f==='attention') return (r.reports||0)>0; return true; }
+  function wkRespList(){
+    var arr=(wkData&&wkData.responses)||[];
+    if(!arr.length) return '<div class="wk-empty">You haven\u2019t answered any cases in this window.<br><a href="/decisionroom.html?do=respond">Open a live case \u2192</a></div>';
+    var rows=arr.filter(function(r){ return wkRespPass(r,wkRespFilter); });
+    rows.sort(function(a,b){ if(wkRespSort==='recent') return wkTime(b.created_at)-wkTime(a.created_at); var pa=Number(a.points)||0, pb=Number(b.points)||0; if(pb!==pa) return pb-pa; return wkTime(b.created_at)-wkTime(a.created_at); });
+    if(!rows.length) return '<div class="wk-none">No responses match this filter.</div>';
+    return rows.map(wkRespRow).join('');
+  }
+  function wkRespRecon(w){
+    var t=(w&&w.totals)||{}, n=t.responses_count||0;
+    if(t.reviewer_score!=null){
+      return '<div class="wk-recon">These <b>'+n+'</b> response'+(n===1?'':'s')+' add up to your reviewer score of <b>'+fmtN(t.reviewer_score)+'</b>'+(t.reviewer_rank?' <span class="wk-eq">(rank #'+t.reviewer_rank+' this window)</span>':'')+'.</div>';
+    }
+    return '<div class="wk-recon muted">'+n+' response'+(n===1?'':'s')+' \u00b7 <b>'+fmtN(t.responses_points||0)+'</b> pts \u2014 you\u2019re not ranked this window yet (your score turns positive once someone acts on what you wrote).</div>';
+  }
+  function wkRespPanelInner(){
+    var arr=(wkData&&wkData.responses)||[];
+    var tools = arr.length
+      ? '<div class="wk-tools"><span class="wk-tgrp"><span class="wk-tlab">Show</span>'
+        +wkFilBtns('resp-fil', wkRespFilter, [['all','All'],['acted','Acted on'],['helpful','Helpful'],['attention','Needs attention']])
+        +'</span><span class="wk-tgrp"><span class="wk-tlab">Sort</span>'
+        +wkFilBtns('resp-sort', wkRespSort, [['points','Points'],['recent','Recent']])+'</span></div>'
+      : '';
+    return '<div class="wk-h"><span class="wk-h-t">\uD83D\uDCDD Responses you wrote'+wkTip('resp')+'</span>'
+      +(arr.length?'<span class="wk-h-n">'+arr.length+'</span>':'')+'</div>'
+      +tools+'<div class="wk-list" id="wk-resp-list">'+wkRespList()+'</div>'
+      +(arr.length?wkRespRecon(wkData):'');
+  }
+  /* ---- cases ---- */
+  function wkCaseRow(c){
+    var chips=[];
+    chips.push('<span class="wk-chip clar">Clarity '+fmtN(c.clarity)+'/5</span>');
+    chips.push('<span class="wk-chip resp">\uD83D\uDCAC '+(c.responses||0)+' response'+((c.responses===1)?'':'s')+'</span>');
+    if(c.status==='closed') chips.push('<span class="wk-chip cover">\u2705 '+(c.final_pct!=null?c.final_pct:0)+'% resolved</span>');
+    if(c.exemplary)               chips.push('<span class="wk-chip exem">\uD83C\uDFC5 Exemplary</span>');
+    if((c.context_flags||0)>0)    chips.push('<span class="wk-chip rep">\u26A0\uFE0F '+c.context_flags+' context flag'+((c.context_flags===1)?'':'s')+'</span>');
+    if(c.abandoned===1)           chips.push('<span class="wk-chip rep">\uD83D\uDD52 Stalled</span>');
+    return '<a class="wk-row" href="/decisionroom.html?case='+encodeURIComponent(c.case_id)+'">'
+      +'<div class="wk-row-main"><span class="wk-title">'+esc(c.title||'Untitled case')+'</span>'
+      +'<div class="wk-sub"><span class="wk-date">'+wkDateFmt(c.created_at)+'</span>'+wkStatusChip(c.status)+'</div>'
+      +'<div class="wk-chips">'+chips.join('')+'</div>'
+      +'</div>'+wkPtsHtml(c.points)+'</a>';
+  }
+  function wkCasePass(c,f){ if(f==='exemplary') return !!c.exemplary; if(f==='open') return c.status!=='closed'; if(f==='closed') return c.status==='closed'; if(f==='attention') return c.abandoned===1 || (c.context_flags||0)>0; return true; }
+  function wkCaseList(){
+    var arr=(wkData&&wkData.cases)||[];
+    if(!arr.length) return '<div class="wk-empty">You haven\u2019t posted any cases in this window.<br><a href="/decisionroom.html?do=submit">Open the case form \u2192</a></div>';
+    var rows=arr.filter(function(c){ return wkCasePass(c,wkCaseFilter); });
+    rows.sort(function(a,b){ if(wkCaseSort==='recent') return wkTime(b.created_at)-wkTime(a.created_at); if(wkCaseSort==='clarity'){ var ca=Number(a.clarity)||0, cb=Number(b.clarity)||0; if(cb!==ca) return cb-ca; return wkTime(b.created_at)-wkTime(a.created_at); } var pa=Number(a.points)||0, pb=Number(b.points)||0; if(pb!==pa) return pb-pa; return wkTime(b.created_at)-wkTime(a.created_at); });
+    if(!rows.length) return '<div class="wk-none">No cases match this filter.</div>';
+    return rows.map(wkCaseRow).join('');
+  }
+  function wkCaseRecon(w){
+    var t=(w&&w.totals)||{}, n=t.cases_count||0;
+    if(t.author_score!=null){
+      var cred=Number(t.gutcheck_cred)||0, st=Number(t.standing_bonus)||0, cp=Number(t.cases_points)||0;
+      var eq='<b>'+n+'</b> case'+(n===1?'':'s')+' (<b>'+fmtN(cp)+'</b>)';
+      if(cred>0) eq+=' <span class="wk-eq">+ credibility ('+fmtN(cred)+')</span>';
+      if(st>0)   eq+=' <span class="wk-eq">+ standing ('+fmtN(st)+')</span>';
+      eq+=' <span class="wk-eq">=</span> author score <b>'+fmtN(t.author_score)+'</b>'+(t.author_rank?' <span class="wk-eq">(rank #'+t.author_rank+')</span>':'');
+      return '<div class="wk-recon aut">'+eq+'.</div>';
+    }
+    return '<div class="wk-recon muted">'+n+' case'+(n===1?'':'s')+' \u00b7 <b>'+fmtN(t.cases_points||0)+'</b> pts \u2014 not ranked this window yet (your author score turns positive once a case earns more than it costs).</div>';
+  }
+  function wkCasePanelInner(){
+    var arr=(wkData&&wkData.cases)||[];
+    var tools = arr.length
+      ? '<div class="wk-tools"><span class="wk-tgrp"><span class="wk-tlab">Show</span>'
+        +wkFilBtns('case-fil', wkCaseFilter, [['all','All'],['exemplary','Exemplary'],['open','Open'],['closed','Closed'],['attention','Needs attention']])
+        +'</span><span class="wk-tgrp"><span class="wk-tlab">Sort</span>'
+        +wkFilBtns('case-sort', wkCaseSort, [['points','Points'],['recent','Recent'],['clarity','Clarity']])+'</span></div>'
+      : '';
+    return '<div class="wk-h"><span class="wk-h-t">\uD83D\uDCC1 Cases you posted'+wkTip('cases')+'</span>'
+      +(arr.length?'<span class="wk-h-n">'+arr.length+'</span>':'')+'</div>'
+      +tools+'<div class="wk-list" id="wk-case-list">'+wkCaseList()+'</div>'
+      +(arr.length?wkCaseRecon(wkData):'');
+  }
+  /* ===================== D6-4: ZONE 3 DIAGNOSIS ===================== */
+  var DGTIPS={ what:{t:'How Diagnosis works',b:'This reads ALL your activity \u2014 not the window pill above \u2014 and surfaces only the few patterns most worth fixing, ranked by the points (or judgment) at stake.\n\nEach card links straight to the exact case, response, or form to fix it. New here? You\u2019ll see next-step suggestions until there\u2019s enough of a track record to diagnose.'} };
+  function dgTip(k){ return '<button type="button" class="lb-tip-i" data-tip="dg:'+k+'" aria-label="What is this?">i</button>'; }
+  function dgHref(a){
+    if(!a) return '#';
+    if(a.ext==='gutcheck') return '/gutcheck.html#today';
+    var p=[];
+    if(a['do'])   p.push('do='+encodeURIComponent(a['do']));
+    if(a['case']) p.push('case='+encodeURIComponent(a['case']));
+    if(a.resp)    p.push('resp='+encodeURIComponent(a.resp));
+    if(a.cat)     p.push('cat='+encodeURIComponent(a.cat));
+    if(a.urg)     p.push('urg='+encodeURIComponent(a.urg));
+    return '/decisionroom.html'+(p.length?('?'+p.join('&')):'');
+  }
+  function dgSevLabel(s){ return ({critical:'Critical',high:'High impact',medium:'Worth fixing',opportunity:'Opportunity',growth:'Next step'})[s]||'Worth fixing'; }
+  function dgKindLabel(k){ return ({reviewer:'As a reviewer',author:'As an author',cross:'Across both',growth:''})[k]||''; }
+  function dgCard(r, hidden){
+    var sev=r.severity||'medium';
+    var kl=dgKindLabel(r.kind);
+    var why=(r.why && r.kind!=='growth')?'<div class="dg-why">'+esc(r.why)+'</div>':'';
+    return '<div class="dg-card dg-'+sev+(hidden?' dg-hidden':'')+'">'
+      +'<div class="dg-top"><span class="dg-badge dg-b-'+sev+'">'+dgSevLabel(sev)+'</span>'
+      +(kl?'<span class="dg-kind">'+kl+'</span>':'')+'</div>'
+      +'<div class="dg-title">'+esc(r.title||'')+'</div>'
+      +'<div class="dg-saw">'+esc(r.saw||'')+'</div>'
+      +why
+      +'<a class="dg-cta" href="'+dgHref(r.action)+'">'+esc(r.action_label||'Take action')+' \u2192</a>'
+      +'</div>';
+  }
+  function vaultZone3(dg){
+    if(!dg || !dg.ok || !dg.signed_in) return '';
+    var rules=(dg.rules||[]);
+    if(!rules.length) return '';
+    var fired=(dg.meta&&dg.meta.fired)||0;
+    var total=rules.length;
+    var cards=rules.map(function(r,i){ return dgCard(r, i>=5); }).join('');
+    var more=(total>5)?'<button type="button" class="dg-more" data-dg="more">See '+(total-5)+' more \u25BE</button>':'';
+    var count=(fired>0)?'<span class="dg-count">'+fired+' finding'+(fired===1?'':'s')+'</span>':'';
+    return '<div class="vt-zone">'
+      +'<div class="vt-zh"><span class="vt-zn">Zone 3</span><span class="vt-zt">Diagnosis</span>'+count
+      +'<span class="vt-zs">The few things most worth fixing right now \u2014 based on all your activity, ranked by impact.'+dgTip('what')+'</span></div>'
+      +'<div class="dg-list" id="dg-list">'+cards+'</div>'+more
+      +'</div>';
+  }
+  /* Zone 3 "See more": reveal hidden cards (document-level -> survives re-render) */
+  document.addEventListener('click', function(e){
+    var b=(e.target.closest)?e.target.closest('[data-dg]'):null; if(!b) return;
+    if(b.getAttribute('data-dg')==='more'){
+      var list=document.getElementById('dg-list');
+      if(list){ [].slice.call(list.querySelectorAll('.dg-hidden')).forEach(function(c){ c.classList.remove('dg-hidden'); }); }
+      b.remove();
+    }
+  });
+
+  function vaultZone4(w){
+    if(!w || !w.ok || !w.signed_in){ wkData=null; return ''; }
+    wkData=w;
+    return '<div class="vt-zone">'
+      +'<div class="vt-zh"><span class="vt-zn">Zone 4</span><span class="vt-zt">Your Work</span>'
+      +'<span class="vt-zs">The receipts \u2014 every response and case you logged in this window, and the points each earned. They add up to the scores at the top.</span></div>'
+      +'<div class="wk-panel" id="wk-resp-panel">'+wkRespPanelInner()+'</div>'
+      +'<div class="wk-panel" id="wk-case-panel">'+wkCasePanelInner()+'</div>'
+      +'</div>';
+  }
+  /* Zone 4 filter/sort: one delegated listener (document-level -> survives every
+     innerHTML re-render). Rebuilds only the affected panel; no refetch. */
+  document.addEventListener('click', function(e){
+    var b=(e.target.closest)?e.target.closest('[data-wk]'):null; if(!b) return;
+    var grp=b.getAttribute('data-wk'), v=b.getAttribute('data-v');
+    if(grp==='resp-fil') wkRespFilter=v;
+    else if(grp==='resp-sort') wkRespSort=v;
+    else if(grp==='case-fil') wkCaseFilter=v;
+    else if(grp==='case-sort') wkCaseSort=v;
+    else return;
+    if(grp.indexOf('resp')===0){ var re=document.getElementById('wk-resp-panel'); if(re) re.innerHTML=wkRespPanelInner(); }
+    else { var ce=document.getElementById('wk-case-panel'); if(ce) ce.innerHTML=wkCasePanelInner(); }
+  });
+  function lockSvg(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none"/><path d="M12 16.9v1.6"/></svg>';
+  }
+  function ringSvg(done, pctDone){
+    var r=14, c=2*Math.PI*r, off=c*(1-Math.max(0,Math.min(1,pctDone)));
+    return '<svg class="vt-ring" viewBox="0 0 36 36">'
+      +'<circle cx="18" cy="18" r="'+r+'" fill="none" stroke="#E7EAF1" stroke-width="4"/>'
+      +'<circle cx="18" cy="18" r="'+r+'" fill="none" stroke="'+(done?'#22a45d':'#4f43d8')+'" stroke-width="4" stroke-linecap="round" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 18 18)"/>'
+      +(done?'<path d="M12.5 18.2l3.4 3.4 7-7.2" fill="none" stroke="#22a45d" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>':'')
+      +'</svg>';
+  }
+  /* --- signed OUT: sell it --- */
+  function vaultSignedOut(){
+    return '<div class="vt-cta"><span class="vt-cta-conf">'+confettiSvg()+'</span>'
+      +'<span class="vt-lock">'+lockSvg()+'</span>'
+      +'<div class="vt-cta-t">Your Vault is locked</div>'
+      +'<p class="vt-cta-s">Leaderboards tell you where you rank. The Vault tells you <b>whether you are getting better</b> \u2014 and exactly which PM muscle is weak.'
+      +' Sign in, take a few GutCheck calls and answer one real case, and it opens up: your judgment profile, your rank over time, the categories you keep getting wrong, and one concrete thing to do next.</p>'
+      +'<div class="vt-cta-b"><a class="vt-btn" href="/gutcheck.html#today">Start with GutCheck \u2192</a>'
+      +'<a class="vt-btn alt" href="/decisionroom.html?do=respond">Answer a live case</a></div>'
+      +'<div class="vt-teaser">'
+        +'<div class="vt-tz"><b>Your Standing</b><span>Score, rank, percentile, streaks, crowns</span></div>'
+        +'<div class="vt-tz"><b>Trajectory</b><span>8-week trend, category radar, calibration</span></div>'
+        +'<div class="vt-tz"><b>Diagnosis</b><span>What is holding you back, and the fix</span></div>'
+        +'<div class="vt-tz"><b>Your Work</b><span>Every response and case, scored</span></div>'
+      +'</div></div>';
+  }
+  /* --- signed in, but not enough data yet: the unlock ladder --- */
+  function vaultLadder(u){
+    function step(done, ratio, t, sub, href, cta){
+      return '<div class="vt-step'+(done?' done':'')+'">'+ringSvg(done, ratio)
+        +'<div class="vt-step-t">'+t+'</div><div class="vt-step-s">'+sub+'</div>'
+        +(done?'<span class="vt-step-a">\u2713 Done</span>':'<a class="vt-step-a" href="'+href+'">'+cta+' \u2192</a>')+'</div>';
+    }
+    var calls=Number(u.calls)||0;
+    return '<div class="vt-ladder"><div class="vt-lad-h">\uD83D\uDD13 Two steps from a live Vault</div>'
+      +'<div class="vt-lad-s">The Vault is built from your real judgment data \u2014 so it needs a little of it first. Each step below unlocks a zone. Nothing here is ever public.</div>'
+      +'<div class="vt-steps">'
+      + step(!!u.calls_done, calls/3, 'Score 3 GutCheck calls', calls+' of 3 done \u2014 this creates your judgment profile: level, calibration and strongest category.', '/gutcheck.html#today', 'Take today\u2019s call')
+      + step(!!u.profile_done, u.profile_done?1:0, 'Create your DecisionRoom profile', 'Your alias and context, so reviewers know who they are helping.', '/decisionroom.html#room', 'Set it up')
+      + step(!!u.resp_done, Math.min(1,(Number(u.responses)||0)), 'Answer one real case', (Number(u.responses)||0)+' written \u2014 this starts your reviewer score, rank and streak.', '/decisionroom.html?do=respond', 'Open a live case')
+      + step(!!u.case_done, Math.min(1,(Number(u.cases)||0)), 'Submit one case', (Number(u.cases)||0)+' posted \u2014 this starts your author score and clarity tracking.', '/decisionroom.html?do=submit', 'Open the case form')
+      +'</div></div>';
+  }
+  function vtDelta(d){
+    if(d===null||d===undefined) return '';
+    var n=Number(d);
+    if(!n) return '<span class="vt-delta flat">no change</span>';
+    return '<span class="vt-delta '+(n>0?'up':'dn')+'">'+(n>0?'\u25B2 +':'\u25BC ')+fmtN(n)+'</span>';
+  }
+  function vtM(lab,val,tip){ return '<div class="vt-m"><span>'+lab+(tip?vTip(tip):'')+'</span><b>'+val+'</b></div>'; }
+  function vaultCard(cls, title, x, extra){
+    if(!x || !x.active){
+      return '<div class="vt-card '+cls+'"><div class="vt-ct"><span class="vt-ct-t">'+title+'</span></div>'
+        +'<div class="vt-none">Nothing scored in this window yet. Pick a wider window above, or go and do the work \u2014 the number only moves when other people act on what you wrote.</div></div>';
+    }
+    var pct=(x.percentile!=null)
+      ? '<span class="vt-pct" title="Rank '+x.rank+' of '+x.total_active+' active">Top '+x.percentile+'% \u00b7 #'+x.rank+vTip('pctile')+'</span>' : '';
+    return '<div class="vt-card '+cls+'">'
+      +'<div class="vt-ct"><span class="vt-ct-t">'+title+vTip(cls==='rev'?'revscore':'autscore')+'</span>'+pct+'</div>'
+      +'<div class="vt-big"><span class="vt-num">'+fmtN(x.score)+'</span><span class="vt-unit">pts</span>'+vtDelta(x.delta)+vTip('delta')+'</div>'
+      +'<div class="vt-mini">'
+        +vtM('Best rank', x.best_rank?('#'+x.best_rank):'\u2014', 'bestrank')
+        +vtM('Crowns \uD83D\uDC51', (x.crowns||0), 'crowns')
+        +vtM('Streak \uD83D\uDD25', (x.streak||0), 'streak')
+        + extra
+      +'</div></div>';
+  }
+  function vaultZone1(d){
+    var r=d.reviewer||{}, a=d.author||{}, g=d.gutcheck||{};
+    var revExtra=vtM('Acted on',(r.acted||0),'vacted')+vtM('Helpful',(r.helpful||0),'vhelpful')+vtM('Covered',(r.covered||0),'vcovered')+vtM('Reports',(r.reports||0),'vreports');
+    var autExtra=vtM('Cases',(a.cases||0),'vcases')+vtM('Avg clarity',(a.avg_clarity!=null?fmtN(a.avg_clarity)+'/5':'\u2014'),'vclarity')+vtM('Close rate',((a.close_rate||0)+'%'),'vclose')+vtM('Exemplary \uD83C\uDFC5',(a.exemplary||0),'vexemplary');
+    var gl=d.gutcheck_life||{};
+    var noCalls=!(g.calls>0);
+    var gc='<div class="vt-gc"><div class="vt-ct"><span class="vt-ct-t">\uD83E\uDDED GutCheck judgment</span>'
+      +'<span class="vt-pct" style="background:#E7F3EC;color:#15803d">This window'+vTip('gcwindow')+'</span></div>'
+      +(noCalls
+        ? '<div class="vt-none">No GutCheck calls scored in this window. Your lifetime judgment level is <b>'+esc(gl.level||'\u2014')+'</b> from '+(gl.calls||0)+' scored call'+((gl.calls===1)?'':'s')+' \u2014 widen the window, or take today\u2019s call.</div>'
+        : '<div class="vt-mini">'
+          +vtM('Level', esc(g.level||'\u2014'), 'gclevel')
+          +vtM('Calls scored', (g.calls||0), 'gccalls')
+          +vtM('Calibration', (g.calibration!=null?(Math.round(g.calibration)+'%'):'\u2014'), 'gccalib')
+          +vtM('Strongest', drCat(g.strongest), 'gcstrong')
+          +vtM('Weakest', drCat(g.weakest), 'gcweak')
+          +vtM('Best domain', esc(g.best_domain||'\u2014'), 'gcdomain')
+          +'</div>'
+          +'<div style="margin-top:.6rem;font-size:.74rem;color:var(--muted,#8a91a0);line-height:1.5">'
+          +'Lifetime: <b>'+esc(gl.level||'\u2014')+'</b> \u00b7 '+(gl.calls||0)+' calls \u00b7 '
+          +(gl.calibration!=null?(Math.round(gl.calibration)+'% calibration'):'calibration \u2014')+'</div>')
+      +'</div>';
+    return '<div class="vt-zone">'
+      +'<div class="vt-zh"><span class="vt-zn">Zone 1</span><span class="vt-zt">Your Standing</span>'
+      +'<span class="vt-zs">Where you sit right now \u2014 in the window selected above.</span></div>'
+      +'<div class="vt-cards">'
+        +vaultCard('rev','As a reviewer', d.reviewer, revExtra)
+        +vaultCard('aut','As a case author', d.author, autExtra)
+      +'</div><div style="margin-top:1rem">'+gc+'</div></div>';
+  }
+  /* ===================== D6-2: ZONE 2 TRAJECTORY ===================== */
+  function wkLabel(ws){
+    var d=new Date(ws+'T00:00:00Z');
+    return (d.getUTCMonth()+1)+'/'+d.getUTCDate();
+  }
+  /* generic line chart. series = [{key,color,label,invert}] ; invert = rank (1 is best -> draw at top) */
+  function vtLine(weeks, series, opts){
+    opts=opts||{};
+    var W=340, H=150, PL=30, PR=10, PT=12, PB=22;
+    var iw=W-PL-PR, ih=H-PT-PB;
+    var pts=weeks.length;
+    if(pts<1) return '<div class="vt-gempty">Nothing to plot yet.</div>';
+    var vals=[];
+    series.forEach(function(se){ weeks.forEach(function(w){ var v=w[se.key]; if(v!==null&&v!==undefined) vals.push(Number(v)); }); });
+    if(!vals.length) return '<div class="vt-gempty">'+(opts.empty||'No data in these weeks yet \u2014 the line appears as soon as you have some.')+'</div>';
+    var mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals);
+    if(opts.min!==undefined) mn=Math.min(mn,opts.min);
+    if(opts.max!==undefined) mx=Math.max(mx,opts.max);
+    if(mn===mx){ mn=Math.max(0,mn-1); mx=mx+1; }
+    var x=function(i){ return PL + (pts===1? iw/2 : (iw*i/(pts-1))); };
+    var y=function(v){
+      var t=(Number(v)-mn)/(mx-mn);
+      if(opts.invert) t=1-t;                       /* rank: #1 at the top */
+      return PT + ih - t*ih;
+    };
+    var o='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    /* gridlines */
+    for(var g=0; g<=3; g++){
+      var gy=PT+ih*g/3;
+      o+='<line x1="'+PL+'" y1="'+gy.toFixed(1)+'" x2="'+(W-PR)+'" y2="'+gy.toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>';
+    }
+    /* axis labels: top and bottom of the value range */
+    var topV = opts.invert ? mn : mx, botV = opts.invert ? mx : mn;
+    o+='<text x="'+(PL-6)+'" y="'+(PT+4)+'" text-anchor="end" font-size="8" fill="#aeb4c2">'+(opts.fmt?opts.fmt(topV):topV)+'</text>';
+    o+='<text x="'+(PL-6)+'" y="'+(PT+ih+3)+'" text-anchor="end" font-size="8" fill="#aeb4c2">'+(opts.fmt?opts.fmt(botV):botV)+'</text>';
+    series.forEach(function(se){
+      var seg=[], last=null;
+      weeks.forEach(function(w,i){
+        var v=w[se.key];
+        if(v===null||v===undefined){ last=null; return; }   /* gap, not a fake zero */
+        var px=x(i), py=y(v);
+        if(last===null) seg.push('M'+px.toFixed(1)+' '+py.toFixed(1));
+        else seg.push('L'+px.toFixed(1)+' '+py.toFixed(1));
+        last=1;
+      });
+      if(seg.length) o+='<path d="'+seg.join(' ')+'" fill="none" stroke="'+se.color+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>';
+      weeks.forEach(function(w,i){
+        var v=w[se.key]; if(v===null||v===undefined) return;
+        var isPB=(se.pb!==undefined && Number(v)===Number(se.pb));
+        o+='<circle cx="'+x(i).toFixed(1)+'" cy="'+y(v).toFixed(1)+'" r="'+(isPB?4:2.8)+'" fill="'+(isPB?'#E39B0C':se.color)+'" stroke="#fff" stroke-width="1.5"><title>'+wkLabel(w.week_start)+': '+(opts.fmt?opts.fmt(v):v)+(isPB?' \u2014 personal best':'')+'</title></circle>';
+      });
+    });
+    weeks.forEach(function(w,i){
+      o+='<text x="'+x(i).toFixed(1)+'" y="'+(H-6)+'" text-anchor="middle" font-size="8" fill="#aeb4c2">'+wkLabel(w.week_start)+'</text>';
+    });
+    return o+'</svg>';
+  }
+  function vtLegend(series){
+    return '<div class="vt-leg">'+series.map(function(se){
+      return '<i><b style="background:'+se.color+'"></b>'+se.label+'</i>';
+    }).join('')+'</div>';
+  }
+  /* radar over the GutCheck categories */
+  function vtRadar(cats){
+    if(!cats || !cats.length) return '<div class="vt-gempty">Score a few GutCheck calls and your category radar appears here \u2014 it is the map of which PM problems you actually read well.</div>';
+    var n=cats.length, S=230, cx=S/2, cy=S/2, R=82;
+    var o='<svg viewBox="0 0 '+S+' '+S+'" role="img">';
+    for(var r=1;r<=4;r++){
+      var rr=R*r/4, pts=[];
+      for(var i=0;i<Math.max(n,3);i++){
+        var a=(Math.PI*2*i/Math.max(n,3))-Math.PI/2;
+        pts.push((cx+rr*Math.cos(a)).toFixed(1)+','+(cy+rr*Math.sin(a)).toFixed(1));
+      }
+      o+='<polygon points="'+pts.join(' ')+'" fill="none" stroke="#EEF1F8" stroke-width="1"/>';
+    }
+    var poly=[];
+    for(var j=0;j<n;j++){
+      var ang=(Math.PI*2*j/n)-Math.PI/2;
+      var val=Math.max(0,Math.min(100,Number(cats[j].signal)||0))/100;
+      poly.push((cx+R*val*Math.cos(ang)).toFixed(1)+','+(cy+R*val*Math.sin(ang)).toFixed(1));
+      o+='<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+R*Math.cos(ang)).toFixed(1)+'" y2="'+(cy+R*Math.sin(ang)).toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>';
+    }
+    if(n>=3){
+      o+='<polygon points="'+poly.join(' ')+'" fill="rgba(139,127,240,.22)" stroke="#8B7FF0" stroke-width="2"/>';
+    }
+    for(var k=0;k<n;k++){
+      var a2=(Math.PI*2*k/n)-Math.PI/2;
+      var v2=Math.max(0,Math.min(100,Number(cats[k].signal)||0))/100;
+      o+='<circle cx="'+(cx+R*v2*Math.cos(a2)).toFixed(1)+'" cy="'+(cy+R*v2*Math.sin(a2)).toFixed(1)+'" r="3" fill="#8B7FF0"><title>'+esc(drCat(cats[k].category))+': signal '+cats[k].signal+'/100 \u00b7 '+cats[k].match_rate+'% match \u00b7 '+cats[k].reps+' calls</title></circle>';
+    }
+    o+='</svg>';
+    var list='<div class="vt-rlist">'+cats.map(function(c){
+      return '<div class="vt-r"><span class="vt-r-n">'+esc(drCat(c.category))+'</span>'
+        +'<span class="vt-r-b"><i style="width:'+Math.max(0,Math.min(100,Number(c.signal)||0))+'%"></i></span>'
+        +'<span class="vt-r-v">'+(c.signal!=null?c.signal:'\u2014')+'</span>'
+        +'<span class="vt-r-reps">'+(c.reps||0)+'\u00d7</span></div>';
+    }).join('')+'</div>';
+    return '<div class="vt-radar-wrap">'+o+list+'</div>';
+  }
+  function vaultZone2(t){
+    if(!t || !t.ok || !t.signed_in) return '';
+    var wks=t.weeks||[], b=t.bests||{};
+    var rankSeries=[
+      {key:'rev_rank', color:'#5B4BD4', label:'Reviewer rank', pb:b.best_rev_rank},
+      {key:'aut_rank', color:'#E39B0C', label:'Author rank',   pb:b.best_aut_rank}
+    ];
+    var scoreSeries=[
+      {key:'rev_score', color:'#5B4BD4', label:'Reviewer score', pb:b.best_rev_score},
+      {key:'aut_score', color:'#E39B0C', label:'Author score',   pb:b.best_aut_score}
+    ];
+    function g(t1,sub,body,leg){
+      return '<div class="vt-g"><div class="vt-g-h"><span class="vt-g-t">'+t1+'</span></div>'
+        +'<div class="vt-g-s">'+sub+'</div>'+body+(leg||'')+'</div>';
+    }
+    return '<div class="vt-zone">'
+      +'<div class="vt-zh"><span class="vt-zn">Zone 2</span><span class="vt-zt">Trajectory</span>'
+      +'<span class="vt-zs">The last 8 weeks. This is the part that actually tells you whether you are improving.</span></div>'
+      +'<div class="vt-graphs">'
+        + g('Rank over time', 'Both boards. Higher on the chart is better \u2014 gaps mean you had no scored activity that week. Gold dot = your personal best.',
+            vtLine(wks, rankSeries, {invert:true, min:1, fmt:function(v){return '#'+v;},
+              empty:'You have not been ranked in the last 8 weeks yet.'}), vtLegend(rankSeries))
+        + g('Score over time', 'Points earned each week, on both sides of the room.',
+            vtLine(wks, scoreSeries, {min:0, fmt:function(v){return fmtN(v);},
+              empty:'No points scored in the last 8 weeks yet.'}), vtLegend(scoreSeries))
+        + g('Calibration trend \uD83E\uDDED', 'How well your confidence matched reality, cumulative. 50 is the neutral starting point \u2014 above it, you are confident when you are right and unsure when you are not.',
+            vtLine(wks, [{key:'calibration', color:'#22a45d', label:'Calibration'}],
+              {min:0, max:100, fmt:function(v){return v+'%';},
+               empty:'Score GutCheck calls at BOTH confidence levels (a hunch and a confident call) and this line starts.'}),
+            vtLegend([{key:'calibration',color:'#22a45d',label:'Calibration %'}]))
+        + g('Brief quality over time', 'Average Clarity &amp; Completeness of the cases you posted each week, out of 5. This is the biggest term in your author score \u2014 and the fastest thing you can fix.',
+            vtLine(wks, [{key:'clarity', color:'#E39B0C', label:'Avg clarity', pb:b.best_clarity}],
+              {min:0, max:5, fmt:function(v){return fmtN(v);},
+               empty:'Post a case and its Clarity &amp; Completeness score lands here.'}),
+            vtLegend([{key:'clarity',color:'#E39B0C',label:'Avg clarity / 5'}]))
+        + g('Responses per case', 'How many replies your cases pulled in, per case, each week. If clarity climbs and this does not, the problem is where you are posting \u2014 not how you are writing.',
+            vtLine(wks, [{key:'resp_per_case', color:'#8B7FF0', label:'Responses / case'}],
+              {min:0, fmt:function(v){return fmtN(v);},
+               empty:'Post a case and the replies it draws show up here.'}),
+            vtLegend([{key:'resp_per_case',color:'#8B7FF0',label:'Responses per case'}]))
+        + g('Category radar \uD83E\uDDED', 'Where your judgment agrees with the room. The bar is your signal (0\u2013100); \u00d7 is how many calls you have made there. Answer DecisionRoom cases in your strong categories \u2014 practise the weak ones.',
+            vtRadar(t.radar||[]), '')
+      +'</div></div>';
+  }
+  function vaultRender(d, t, w, dg){
+    var el=document.getElementById('lb-list'); if(!el) return;
+    if(!d || !d.ok){ el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; return; }
+    if(!d.signed_in){ el.innerHTML=vaultSignedOut(); return; }
+    var u=d.unlock||{};
+    var html='';
+    if(!u.all_done) html+=vaultLadder(u)+'<div style="height:1.4rem"></div>';
+    html+=vaultZone1(d);
+    html+=vaultZone2(t);
+    html+=vaultZone3(dg);
+    html+=vaultZone4(w);
+    el.innerHTML=html;
+  }
+  function loadVault(){
+    var el=document.getElementById('lb-list');
+    if(!jlUserId()){ if(el) el.innerHTML=vaultSignedOut(); return; }
+    var rg=lbRange(lbWin), pv=lbPrevRange(lbWin);
+    if(el) el.classList.add('loading');
+    var b=lbBoard;
+    Promise.all([
+      jlRpc('dr_my_vault',{p_since:rg[0],p_until:rg[1],p_prev_since:pv[0],p_prev_until:pv[1]}),
+      jlRpc('dr_my_trajectory',{p_weeks:8,p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; }),
+      jlRpc('dr_my_work',{p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; }),
+      jlRpc('dr_my_diagnosis',{}).catch(function(){ return null; })
+    ]).then(function(res){
+        if(b!==lbBoard) return;
+        if(el) el.classList.remove('loading');
+        vaultRender(res[0], res[1], res[2], res[3]);
+      })
+      .catch(function(){ if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; } });
+  }
+  /* previous equivalent window, for the trend arrow */
+  function lbPrevRange(w){
+    var rg=lbRange(w), a=new Date(rg[0]), b=new Date(rg[1]);
+    var span=b-a;
+    if(w==='all') return [null,null];
+    if(w==='month'){ var m=new Date(a); m.setMonth(m.getMonth()-1); return [m.toISOString(), a.toISOString()]; }
+    if(w==='lastmonth'){ var m2=new Date(a); m2.setMonth(m2.getMonth()-1); return [m2.toISOString(), a.toISOString()]; }
+    var pa=new Date(a.getTime()-span);
+    return [pa.toISOString(), a.toISOString()];
+  }
+
+  var lbBusy=false, lbWin='week', lbBoard='sub';
+  function lbLoad(){
+    if(lbBoard==='vault'){ loadVault(); return; }
+    if(lbBusy) return; lbBusy=true;
+    var rg=lbRange(lbWin), me=jlUserId(), board=lbBoard;
+    var fn=(board==='sub')?'dr_submitter_leaderboard':'dr_reviewer_leaderboard';
+    var el=document.getElementById('lb-list'); if(el) el.classList.add('loading');
+    fetch(URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json'},body:JSON.stringify({p_since:rg[0],p_until:rg[1],p_limit:20,p_me:me})})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(res){
+        lbBusy=false; if(el) el.classList.remove('loading');
+        if(board!==lbBoard) return;                 /* stale response guard */
+        if(board==='sub') sbRender(res||{}, lbWin); else lbRender(res||{}, lbWin);
+      })
+      .catch(function(){ lbBusy=false; if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load the leaderboard. Tap Refresh to retry.</div>'; } });
+  }
+  function initLb(){
+    var pills=document.getElementById('lb-pills'), rEl=document.getElementById('lb-refresh');
+    if(!pills) return;
+    pills.addEventListener('click', function(e){
+      var b=(e.target.closest)?e.target.closest('.lb-pill'):null; if(!b) return;
+      if(b.classList.contains('active')) return;
+      var cur=pills.querySelector('.lb-pill.active'); if(cur){ cur.classList.remove('active'); cur.removeAttribute('aria-selected'); }
+      b.classList.add('active'); b.setAttribute('aria-selected','true');
+      lbWin=b.getAttribute('data-win')||'week';
+      lbLoad();
+    });
+    if(rEl) rEl.onclick=function(){ lbLoad(); loadChamp(); loadHist(); };
+    var tabs=document.getElementById('lb-tabs');
+    if(tabs) tabs.addEventListener('click', function(e){
+      var b=(e.target.closest)?e.target.closest('.lb-tab'):null; if(!b) return;
+      if(b.classList.contains('active')) return;
+      var cur=tabs.querySelector('.lb-tab.active'); if(cur){ cur.classList.remove('active'); cur.removeAttribute('aria-selected'); }
+      b.classList.add('active'); b.setAttribute('aria-selected','true');
+      lbBoard=b.getAttribute('data-board')||'rev';
+      setBoardCopy(lbBoard);
+      /* cases move slower than responses -> default the submitter board to This Month */
+      var want=(lbBoard==='rev')?'week':'month';
+      var pl=document.getElementById('lb-pills');
+      if(pl){ var np=pl.querySelector('.lb-pill[data-win="'+want+'"]');
+        if(np && !np.classList.contains('active')){
+          var cp=pl.querySelector('.lb-pill.active'); if(cp){ cp.classList.remove('active'); cp.removeAttribute('aria-selected'); }
+          np.classList.add('active'); np.setAttribute('aria-selected','true'); lbWin=want;
+        }
+      }
+      lbBusy=false;
+      lbLoad(); loadChamp(); loadHist();
+    });
+    setBoardCopy(lbBoard);
+    /* lazy seal: closes out any completed week that is not yet frozen (no cron) */
+    jlRpc('dr_seal_weeks').then(function(){ loadChamp(); loadHist(); }).catch(function(){ loadChamp(); loadHist(); });
+    document.addEventListener('click', function(e){
+      if(e.target.closest && !e.target.closest('.lb-tip-i')){
+        var tr=e.target.closest('tr.lb-tr');
+        if(tr){
+          var nx=tr.nextElementSibling;
+          if(nx && nx.classList && nx.classList.contains('lb-xrow')){
+            var open=tr.getAttribute('data-open')==='1';
+            tr.setAttribute('data-open', open?'0':'1');
+            if(open) nx.classList.remove('show'); else nx.classList.add('show');
+            return;
+          }
+        }
+      }
+      var h=(e.target.closest)?e.target.closest('.lb-mc-head'):null; if(!h) return;
+      var card=h.parentNode; if(!card||!card.classList||!card.classList.contains('lb-mc')) return;
+      card.setAttribute('data-open', card.getAttribute('data-open')==='1'?'0':'1');
+    });
+    lbLoad();
+  }
+  if(document.readyState!=='loading') initLb(); else document.addEventListener('DOMContentLoaded', initLb);
+})();
+</script>
+<script src="/gc-auth.js"></script>
+</body>
+</html>
