@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-d6-zone3c-pcnav 2026-07-16T18:00:00Z -->
+  <!-- build:pc-stage2 2026-07-16T14:00:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Product Judgment Lab — Neelesh Singh</title>
+  <title>Performance Center — Product Judgment Lab</title>
   <meta name="description" content="Train product judgment before the real decision gets expensive. Practise messy PM calls in GutCheck, bring real work decisions to DecisionRoom, and build a judgment profile that follows you across both."/>
   <meta property="og:title" content="Product Judgment Lab"/>
   <meta property="og:description" content="GutCheck trains your product judgment. DecisionRoom helps you apply it. Two connected ways to sharpen how you make the call."/>
@@ -242,6 +242,20 @@
       *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     }
   /* ===================== LEADERBOARD (light, premium) ===================== */
+  .pcx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin-top:.4rem}
+  .pcx-card{border:1px solid var(--border,#e4e8f4);border-left-width:3px;border-radius:16px;background:var(--card,#fff);padding:1.05rem 1.15rem;box-shadow:0 6px 22px rgba(20,25,45,.05);display:flex;flex-direction:column;gap:.55rem}
+  .pcx-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.6rem}
+  .pcx-tag{font-size:.66rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted,#8a91a0)}
+  .pcx-ic{flex:none;width:32px;height:32px;opacity:.92}
+  .pcx-ic svg{width:100%;height:100%;display:block}
+  .pcx-quote{font-size:.95rem;line-height:1.5;color:var(--ink,#16233f);font-weight:500}
+  .pcx-quote b{font-weight:800}
+  .pcx-action{align-self:flex-start;font-size:.7rem;font-weight:800;color:var(--accent,#4f43d8);border:1px solid var(--accent,#4f43d8);border-radius:100px;padding:.2rem .62rem;opacity:.92}
+  .pcx-foot{display:flex;align-items:center;gap:.4rem;font-size:.7rem;font-weight:800;color:var(--muted,#7a8091);margin-top:auto;text-transform:uppercase;letter-spacing:.3px}
+  .pcx-dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.5;flex:none}
+  .pcx-note{max-width:780px;margin:1.5rem auto 0;text-align:center;font-size:.92rem;line-height:1.65;color:var(--muted,#6b7280)}
+  .pcx-note b{color:var(--ink,#16233f);font-weight:700}
+  @media(max-width:560px){ .pcx-grid{grid-template-columns:1fr} }
   .lb-list{}
   .lb-list.loading{opacity:.55;pointer-events:none}
   /* Header (scoped to #lb-sec so shared .sec-* classes on other sections are untouched) */
@@ -594,7 +608,7 @@
         <div class="nav-dd-div"></div>
         <a href="/gutcheck.html" class="nav-dd-item" role="menuitem"><span class="nav-dd-ic gc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a8 8 0 0 1 16 0"/><line x1="12" y1="13" x2="16" y2="9"/></svg></span><span class="nav-dd-tx"><b>GutCheck</b><small>Practice product judgment</small></span></a>
         <a href="/decisionroom.html" class="nav-dd-item" role="menuitem"><span class="nav-dd-ic dr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="13" y2="14"/></svg></span><span class="nav-dd-tx"><b>DecisionRoom</b><small>Pressure-test real decisions</small></span></a>
-        <a href="/performance-center.html" class="nav-dd-item" role="menuitem"><span class="nav-dd-ic pg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg></span><span class="nav-dd-tx"><b>Performance Center</b><small>Rankings, growth &amp; your next move</small></span></a>
+        <a href="/performance-center.html" class="nav-dd-item" role="menuitem"><span class="nav-dd-ic pg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10M12 20V4M18 20v-6"/></svg></span><span class="nav-dd-tx"><b>Performance Center</b><small>Rankings, growth & your next move</small></span></a>
       </div>
     </li>
     <li><a href="/portfolio.html">Portfolio</a></li>
@@ -625,12 +639,12 @@
 <div class="mobile-backdrop" id="mobile-backdrop"></div>
 <aside class="mobile-menu" id="mobile-menu">
   <div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div>
+  <div id="mm-account" class="mm-account" style="display:none"></div>
   <details class="mm-jl" open>
     <summary class="mm-jl-sum">Judgment Lab<svg class="mm-jl-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
     <a class="mm-jl-item mm-jl-ov" href="/judgment-lab.html"><b>The Judgment Lab</b><small>Overview</small></a>
     <a class="mm-jl-item" href="/gutcheck.html"><b>GutCheck</b><small>Practice product judgment</small></a>
     <a class="mm-jl-item" href="/decisionroom.html"><b>DecisionRoom</b><small>Pressure-test real decisions</small></a>
-    <a class="mm-jl-item" href="/performance-center.html"><b>Performance Center</b><small>Rankings, growth &amp; your next move</small></a>
   </details>
   <nav class="mm-body" id="mm-body"></nav>
   <div class="mm-theme"><div class="mm-theme-h">Appearance</div><button class="theme-opt" data-theme="signal"><span class="theme-sw sw-signal"></span><span class="theme-nm">Signal <span class="theme-def">default</span></span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="editorial"><span class="theme-sw sw-editorial"></span><span class="theme-nm">Editorial</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="warm"><span class="theme-sw sw-warm"></span><span class="theme-nm">Warm dark</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="classic"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic</span><span class="theme-chk">✓</span></button></div>
@@ -640,9 +654,9 @@
 <section class="hero">
   <div class="hero-grid"></div>
   <div class="hero-inner">
-    <div class="hero-eyebrow"><span class="dot"></span> Product Judgment Lab</div>
-    <h1>Train product judgment before the real decision gets <em>expensive.</em></h1>
-    <p class="hero-sub">Practise messy PM calls in GutCheck. Bring real work decisions to DecisionRoom. <strong>Build a judgment profile that follows you across both.</strong></p>
+    <div class="hero-eyebrow"><span class="dot"></span> Performance Center</div>
+    <h1>Measure your product judgment. Track your growth. Climb the rankings. <em>Become a global product leader.</em></h1>
+    <p class="hero-sub">Everything you’ve accomplished, in one place — track your rankings, uncover your strengths and blind spots, understand why they matter, and get <strong>personalized guidance on exactly what to do next</strong>, with the exact actions to take.</p>
     <div class="hero-ctas">
       <a href="/gutcheck.html#today" class="btn-primary" data-analytics="gutcheck_card_clicked" data-analytics-label="hero_primary">Take today's GutCheck</a>
       <a href="/decisionroom.html" class="btn-ghost" data-analytics="decisionroom_card_clicked" data-analytics-label="hero_secondary">Bring a real decision</a>
@@ -650,84 +664,76 @@
   </div>
 </section>
 
-<!-- SPLIT PRODUCT CARDS -->
-<section class="section">
+<!-- WHAT YOU GET / EXAMPLES -->
+<section class="section" id="pc-examples">
   <div class="container">
     <div class="sec-head">
-      <span class="sec-eyebrow">Two ways to sharpen judgment</span>
-      <div class="sec-title">GutCheck trains it. DecisionRoom <em>applies</em> it.</div>
-      <p class="sec-sub">Separate products, one judgment system — not a choice between them.</p>
+      <span class="sec-eyebrow">What you’ll get</span>
+      <div class="sec-title">Not just a rank — a <em>plan to climb.</em></div>
+      <p class="sec-sub">Every call you make in GutCheck and DecisionRoom feeds one place. Here’s the kind of read the Performance Center gives you — where you stand, why, and the exact next move.</p>
     </div>
-    <div class="lab-cards">
-      <div class="lab-card gc">
-        <div class="lab-card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a8 8 0 0 1 16 0"/><line x1="12" y1="13" x2="16" y2="9"/></svg></div>
-        <span class="lab-label">Practice mode</span>
-        <h3>GutCheck</h3>
-        <div class="lab-headline">Train your PM judgment.</div>
-        <p class="lab-body">Make the call. Explain why. See the crowd. Build your judgment profile.</p>
-        <ul class="lab-bullets">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Daily product dilemmas</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Vote before seeing the crowd</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Judgment profile by category</li>
-        </ul>
-        <a href="/gutcheck.html#today" class="btn-primary" data-analytics="gutcheck_card_clicked" data-analytics-label="card_cta">Start a 3-minute dilemma</a>
+    <div class="pcx-grid">
+      <div class="pcx-card" style="border-left-color:#B8790A">
+        <div class="pcx-head"><span class="pcx-tag">Where you stand</span><span class="pcx-ic" style="color:#B8790A"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v3a6 6 0 0 1-12 0V4Z"/><path d="M6 5H4a2 2 0 0 0 0 4h2"/><path d="M18 5h2a2 2 0 0 1 0 4h-2"/><path d="M12 13v3"/><path d="M9 20h6"/></svg></span></div>
+        <div class="pcx-quote">You’re <b>#3 of 41 reviewers</b> this week — up 4 places from last week.</div>
+        <div class="pcx-foot"><span class="pcx-dot"></span>Live leaderboard</div>
       </div>
-      <div class="lab-card dr">
-        <div class="lab-card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="13" y2="14"/></svg></div>
-        <span class="lab-label">Real-work mode</span>
-        <h3>DecisionRoom</h3>
-        <div class="lab-headline">Pressure-test a real decision.</div>
-        <p class="lab-body">Submit the context. Define the asks. Get structured PM feedback. Decide with clarity.</p>
-        <ul class="lab-bullets">
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Anonymous structured cases</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Reviewer answers matched to your asks</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Decision record and outcome tracking</li>
-        </ul>
-        <a href="/decisionroom.html" class="btn-primary" data-analytics="decisionroom_card_clicked" data-analytics-label="card_cta">Submit a decision</a>
+      <div class="pcx-card" style="border-left-color:#4f43d8">
+        <div class="pcx-head"><span class="pcx-tag">Author standing</span><span class="pcx-ic" style="color:#4f43d8"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M8.5 12.5 7 21l5-3 5 3-1.5-8.5"/></svg></span></div>
+        <div class="pcx-quote">You’re the <b>#2 case author</b> this month, and top 5% for brief quality.</div>
+        <div class="pcx-foot"><span class="pcx-dot"></span>Live leaderboard</div>
+      </div>
+      <div class="pcx-card" style="border-left-color:#2563eb">
+        <div class="pcx-head"><span class="pcx-tag">Your trajectory</span><span class="pcx-ic" style="color:#2563eb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/></svg></span></div>
+        <div class="pcx-quote">Your calibration climbed <b>62% → 87%</b> over 8 weeks — you’re most sure when you’re right.</div>
+        <div class="pcx-foot"><span class="pcx-dot"></span>Vault · Trajectory</div>
+      </div>
+      <div class="pcx-card" style="border-left-color:#0e9f6e">
+        <div class="pcx-head"><span class="pcx-tag">Rank over time</span><span class="pcx-ic" style="color:#0e9f6e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span></div>
+        <div class="pcx-quote">You’ve climbed from <b>#12 to #3</b> among reviewers in 6 weeks.</div>
+        <div class="pcx-foot"><span class="pcx-dot"></span>Vault · Trajectory</div>
+      </div>
+      <div class="pcx-card" style="border-left-color:#7c3aed">
+        <div class="pcx-head"><span class="pcx-tag">Category radar</span><span class="pcx-ic" style="color:#7c3aed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 6-3 9H7L4 9z"/><circle cx="12" cy="12" r="1.4"/></svg></span></div>
+        <div class="pcx-quote">One radar shows it all — strongest in <b>Execution (57)</b>, room to grow in <b>Stakeholders (45)</b>.</div>
+        <div class="pcx-foot"><span class="pcx-dot"></span>Vault · Trajectory</div>
+      </div>
+      <div class="pcx-card" style="border-left-color:#a8700a">
+        <div class="pcx-head"><span class="pcx-tag">Category journey</span><span class="pcx-ic" style="color:#a8700a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/></svg></span></div>
+        <div class="pcx-quote">Your sharpest area is <b>Stakeholder Conflict</b>, but you rarely review there. Answer 2 open cases to climb faster.</div>
+        <span class="pcx-action">→ opens the exact case</span>
+        <div class="pcx-foot"><span class="pcx-dot"></span>Vault · Diagnosis</div>
+      </div>
+      <div class="pcx-card" style="border-left-color:#0e9f6e">
+        <div class="pcx-head"><span class="pcx-tag">Domain journey</span><span class="pcx-ic" style="color:#0e9f6e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span></div>
+        <div class="pcx-quote">Your <b>B2C</b> cases score highest — 18 avg vs 14 overall. Post more B2C decisions to compound your impact.</div>
+        <span class="pcx-action">→ post a B2C case</span>
+        <div class="pcx-foot"><span class="pcx-dot"></span>Vault · Diagnosis</div>
+      </div>
+      <div class="pcx-card" style="border-left-color:#c0392b">
+        <div class="pcx-head"><span class="pcx-tag">Your blind spot</span><span class="pcx-ic" style="color:#c0392b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="22" y1="12" x2="18" y2="12"/><line x1="6" y1="12" x2="2" y2="12"/><line x1="12" y1="6" x2="12" y2="2"/><line x1="12" y1="22" x2="12" y2="18"/></svg></span></div>
+        <div class="pcx-quote"><b>2 of your 3 high-confidence answers</b> didn’t land. Recalibrate with today’s GutCheck.</div>
+        <span class="pcx-action">→ the exact action to take</span>
+        <div class="pcx-foot"><span class="pcx-dot"></span>Vault · Diagnosis</div>
+      </div>
+      <div class="pcx-card" style="border-left-color:#E39B0C">
+        <div class="pcx-head"><span class="pcx-tag">Quick win</span><span class="pcx-ic" style="color:#E39B0C"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span></div>
+        <div class="pcx-quote">3 responses skipped the asker’s real questions. Reopen your lightest one and answer every ask.</div>
+        <span class="pcx-action">→ opens your lightest response</span>
+        <div class="pcx-foot"><span class="pcx-dot"></span>Vault · Diagnosis</div>
+      </div>
+      <div class="pcx-card" style="border-left-color:#7c3aed">
+        <div class="pcx-head"><span class="pcx-tag">The receipts</span><span class="pcx-ic" style="color:#7c3aed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M8 7h8"/><path d="M8 11h8"/><path d="M8 15h5"/></svg></span></div>
+        <div class="pcx-quote">These <b>12 responses</b> add up to your reviewer score of <b>14.5</b> — every point traced to a case you can reopen.</div>
+        <div class="pcx-foot"><span class="pcx-dot"></span>Vault · Your Work</div>
+      </div>
+      <div class="pcx-card" style="border-left-color:#2563eb">
+        <div class="pcx-head"><span class="pcx-tag">Your work, scored</span><span class="pcx-ic" style="color:#2563eb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M11 6h9"/><path d="M11 12h9"/><path d="M11 18h9"/><path d="m3 6 1 1 2-2"/><path d="m3 12 1 1 2-2"/><path d="m3 18 1 1 2-2"/></svg></span></div>
+        <div class="pcx-quote">See exactly which cases <b>earned</b> points and which <b>lost</b> them, side by side.</div>
+        <div class="pcx-foot"><span class="pcx-dot"></span>Vault · Your Work</div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- PRACTICE -> PROFILE -> APPLY -->
-<section class="section tint" data-analytics="practice_apply_flow_viewed">
-  <div class="container">
-    <div class="sec-head">
-      <span class="sec-eyebrow">How they connect</span>
-      <div class="sec-title">Practice builds a profile. The profile earns <em>credibility.</em></div>
-    </div>
-    <div class="lab-flow">
-      <div class="flow-step">
-        <div class="flow-num">1</div>
-        <h4>Practise</h4>
-        <p>GutCheck gives you daily reps on product trade-offs.</p>
-      </div>
-      <div class="lab-flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      <div class="flow-step">
-        <div class="flow-num">2</div>
-        <h4>Build your profile</h4>
-        <p>Your choices reveal strengths, blind spots, and decision style.</p>
-      </div>
-      <div class="lab-flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-      <div class="flow-step">
-        <div class="flow-num">3</div>
-        <h4>Apply judgment</h4>
-        <p>DecisionRoom uses your credibility when you review real PM decisions.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CATEGORY COVERAGE -->
-<section class="section">
-  <div class="container">
-    <div class="sec-head">
-      <span class="sec-eyebrow">Category coverage</span>
-      <div class="sec-title">Product judgment is not one skill.</div>
-      <p class="sec-sub">GutCheck and DecisionRoom organize decisions by the product trade-off being tested — one shared set of categories across both.</p>
-    </div>
-    <div class="cat-grid" id="cat-grid"></div>
-    <p class="cat-note">Don't see your call? <b>You can add your own category</b> when you post a dilemma or a case — the list grows with the community.</p>
+    <p class="pcx-note">These are generic examples — <b>yours come straight from your own record: pure data, no guesses.</b> New here? We hand you your first three moves. From there, just keep sharpening your judgment in GutCheck and bringing real decisions to DecisionRoom (or answering someone else's) — and we turn every rep into the exact next step that carries you from your first call to <b>the top of the leaderboard, recognized as a product leader.</b></p>
   </div>
 </section>
 
@@ -742,9 +748,9 @@
     </div>
     <p class="lb-sub" id="lb-sub"></p>
     <div class="lb-tabs" id="lb-tabs" role="tablist" aria-label="Leaderboard type">
-      <button type="button" class="lb-tab active" data-board="rev" role="tab" aria-selected="true">Reviewers</button>
-      <button type="button" class="lb-tab" data-board="sub" role="tab">Case Authors</button>
-      <button type="button" class="lb-tab" data-board="vault" role="tab">🔐 My Vault</button>
+      <button type="button" class="lb-tab active" data-board="sub" role="tab" aria-selected="true">Author Leaderboard</button>
+      <button type="button" class="lb-tab" data-board="rev" role="tab">Reviewer Leaderboard</button>
+      <button type="button" class="lb-tab" data-board="vault" role="tab">🔐 Vault</button>
     </div>
     <div class="lb-bar">
       <div class="lb-pills" id="lb-pills" role="tablist" aria-label="Leaderboard window">
@@ -1817,7 +1823,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     return [pa.toISOString(), a.toISOString()];
   }
 
-  var lbBusy=false, lbWin='week', lbBoard='rev';
+  var lbBusy=false, lbWin='week', lbBoard='sub';
   function lbLoad(){
     if(lbBoard==='vault'){ loadVault(); return; }
     if(lbBusy) return; lbBusy=true;
@@ -1833,6 +1839,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       })
       .catch(function(){ lbBusy=false; if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load the leaderboard. Tap Refresh to retry.</div>'; } });
   }
+  window.pmOnAuth=function(){ try{ lbLoad(); loadChamp(); loadHist(); }catch(e){} };
   function initLb(){
     var pills=document.getElementById('lb-pills'), rEl=document.getElementById('lb-refresh');
     if(!pills) return;
@@ -1890,6 +1897,6 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   if(document.readyState!=='loading') initLb(); else document.addEventListener('DOMContentLoaded', initLb);
 })();
 </script>
-<script src="/gc-auth.js"></script>
+<script src="/pm-auth.js"></script>
 </body>
 </html>
