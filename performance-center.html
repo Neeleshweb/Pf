@@ -56,7 +56,7 @@
     ::-webkit-scrollbar-track { background: var(--black); }
     ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
     :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
-    .container { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
+    .container { max-width: 1360px; margin: 0 auto; padding: 0 1.5rem; }
 
     /* NAV */
     .nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; height: 60px; background: var(--nav-bg); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
@@ -274,6 +274,7 @@
   .z2-sums{display:grid;grid-template-columns:repeat(auto-fit,minmax(184px,1fr));gap:.9rem;margin:.6rem 0 1rem}
   .z2-sum{position:relative;border:1px solid var(--border,#e7eaf4);border-radius:18px;background:var(--card,#fff);background:radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--a) 8%, #fff) 0%, var(--card,#fff) 55%);padding:1.15rem 1.15rem 1rem;box-shadow:0 10px 30px rgba(20,25,45,.06),0 2px 6px rgba(20,25,45,.04);display:flex;flex-direction:column;gap:.7rem;transition:transform .18s ease,box-shadow .18s ease}
   .z2-sum:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(20,25,45,.1),0 3px 8px rgba(20,25,45,.05)}
+  .z2-sum{min-height:150px;justify-content:space-between}
   .z2-sum-row{display:flex;align-items:flex-start;gap:.75rem}
   .z2-ic{flex:none;width:42px;height:42px;border-radius:13px;display:inline-flex;align-items:center;justify-content:center;background:var(--a);background:linear-gradient(150deg, var(--a), color-mix(in srgb, var(--a) 65%, #000 12%));box-shadow:0 6px 16px color-mix(in srgb, var(--a) 45%, transparent),0 0 0 4px color-mix(in srgb, var(--a) 12%, transparent)}
   .z2-ic svg{width:22px;height:22px}
@@ -282,7 +283,7 @@
   .z2-sum-big{font-size:1.12rem;font-weight:800;color:var(--ink,#16233f);line-height:1.2}
   .z2-up{font-size:.82rem;font-weight:800;color:#0EA46A}
   .z2-sum-s{font-size:.76rem;line-height:1.4;color:var(--muted,#727a8b)}
-  .z2-spark{width:100%;height:30px;overflow:visible}
+  .z2-spark{width:100%;height:34px;overflow:visible;margin-top:auto}
   .z2-sigbar{height:8px;border-radius:99px;background:#EEF1F8;overflow:hidden}
   .z2-sigbar i{display:block;height:100%;border-radius:99px;transition:width .6s ease}
   .z2-vs{--a:#5B4BD4;grid-column:span 1;border-color:#d8d3f6;background:radial-gradient(120% 140% at 100% 0%, #efecfe 0%, #fff 60%);box-shadow:0 12px 34px rgba(91,75,212,.14),0 2px 6px rgba(20,25,45,.05)}
@@ -330,13 +331,13 @@
   .z2-tipbox{display:flex;gap:.55rem;align-items:flex-start;background:linear-gradient(120deg,#eafaf0,#e8f6ef);border:1px solid #cfeeda;border-radius:12px;padding:.7rem .85rem;font-size:.78rem;line-height:1.45;color:#2c6a45}
   .z2-tipbox-ic{flex:none}
   .vt-radar-wrap{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
-  .vt-radarsvg{flex:none;width:210px;max-width:56%;height:auto}
+  .vt-radarsvg{flex:none;width:232px;max-width:52%;height:auto}
   .vt-radarpoly{transform-origin:center;animation:z2pop .6s .1s ease both}
   @keyframes z2pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
   .vt-rlist{flex:1;min-width:150px;display:flex;flex-direction:column;gap:.5rem}
   .vt-r{display:flex;align-items:center;gap:.5rem}
   .vt-r-dot{width:9px;height:9px;border-radius:50%;flex:none}
-  .vt-r-n{font-size:.76rem;font-weight:700;color:var(--ink,#3a4358);width:96px;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .vt-r-n{font-size:.78rem;font-weight:700;color:var(--ink,#3a4358);width:132px;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .vt-r-b{flex:1;height:8px;background:#EEF1F8;border-radius:99px;overflow:hidden}
   .vt-r-b i{display:block;height:100%;border-radius:99px;transition:width .6s ease}
   .vt-r-v{font-size:.76rem;font-weight:800;color:var(--ink,#16233f);width:26px;text-align:right;flex:none}
@@ -1469,6 +1470,10 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
 
   /* ===================== D6: PERFORMANCE VAULT ===================== */
   var VTIPS={
+    z2best:{t:'Best week',b:'What it is: the week in the last 8 where your combined reviewer + author points were highest.\n\nWhy it matters: it shows what your best looks like \u2014 a bar worth repeating.\n\nImproves when: you stack a strong review week with a well-received case.\n\nDrops when: activity is thin or scattered.\n\nLeadership edge: knowing your peak and how you hit it makes it repeatable \u2014 consistency is what compounds.'},
+    z2strong:{t:'Top strength',b:'What it is: the PM category where your GutCheck reads agree most with strong outcomes.\n\nWhy it matters: it is your sharpest instinct \u2014 your edge.\n\nImproves when: you keep practicing and applying judgment here.\n\nDrops when: you coast and stop testing it.\n\nLeadership edge: leaning into a real strength is how PMs build a reputation others seek out.'},
+    z2imp:{t:'Top improvement',b:'What it is: the metric that climbed the most across the last 8 weeks.\n\nWhy it matters: momentum in the right direction is the clearest sign the work is paying off.\n\nImproves when: you keep repeating whatever drove the gain.\n\nDrops when: you switch focus before the habit sticks.\n\nLeadership edge: visible, sustained improvement is the growth story that earns trust and bigger scope.'},
+    z2opp:{t:'Biggest opportunity',b:'What it is: your weakest scored category \u2014 where the fastest gains are still available.\n\nWhy it matters: your ceiling is set by your weakest area, not your strongest.\n\nImproves when: you deliberately practice and post cases here.\n\nDrops when: you avoid it and the blind spot hardens.\n\nLeadership edge: closing your biggest gap is what turns a specialist into a well-rounded leader.'},
     z2rank:{t:'Rank over time',b:'What it is: your weekly placement on the reviewer and author boards over the last 8 weeks (lower is better).\n\nWhy it matters: it shows whether your standing is climbing, flat, or slipping \u2014 the clearest read on momentum.\n\nImproves when: you keep posting sharp cases and leaving helpful, acted-on reviews week after week.\n\nDrops when: you go quiet, or your reviews stop landing while others stay active.\n\nLeadership edge: steady rank proves you deliver judgment reliably, not just once \u2014 what senior PM roles are trusted for.'},
     z2score:{t:'Score over time',b:'What it is: the points you earned each week as a reviewer and as an author.\n\nWhy it matters: it turns effort into a single trend you can watch rise.\n\nImproves when: your reviews get acted on and marked helpful, and your cases are clear and well-resolved.\n\nDrops when: activity dips or the quality of your contributions falls.\n\nLeadership edge: a rising score is evidence you compound value over time \u2014 the habit that separates strong PMs from busy ones.'},
     z2calib:{t:'Calibration trend',b:'What it is: how well your stated confidence matched reality in GutCheck (0\u2013100).\n\nWhy it matters: good judgment is not just being right \u2014 it is knowing how sure to be.\n\nImproves when: you\u2019re confident on calls you get right and appropriately unsure on the ones you miss.\n\nDrops when: you\u2019re highly confident and wrong, or hedge on calls you actually nail.\n\nLeadership edge: calibrated PMs are trusted to size risk and say \u201CI\u2019m not sure\u201D at the right moments \u2014 the core of good decision-making.'},
@@ -1882,8 +1887,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var o='<svg viewBox="0 0 '+W+' '+H+'" role="img" class="vt-linechart">';
     for(var g=0; g<=3; g++){ var gy=PT+ih*g/3; o+='<line x1="'+PL+'" y1="'+gy.toFixed(1)+'" x2="'+(W-PR)+'" y2="'+gy.toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>'; }
     var topV = opts.invert ? mn : mx, botV = opts.invert ? mx : mn;
-    o+='<text x="'+(PL-7)+'" y="'+(PT+4)+'" text-anchor="end" font-size="8.5" fill="#aeb4c2">'+(opts.fmt?opts.fmt(topV):topV)+'</text>';
-    o+='<text x="'+(PL-7)+'" y="'+(PT+ih+3)+'" text-anchor="end" font-size="8.5" fill="#aeb4c2">'+(opts.fmt?opts.fmt(botV):botV)+'</text>';
+    o+='<text x="'+(PL-7)+'" y="'+(PT+4)+'" text-anchor="end" font-size="10.5" fill="#aeb4c2">'+(opts.fmt?opts.fmt(topV):topV)+'</text>';
+    o+='<text x="'+(PL-7)+'" y="'+(PT+ih+3)+'" text-anchor="end" font-size="10.5" fill="#aeb4c2">'+(opts.fmt?opts.fmt(botV):botV)+'</text>';
     series.forEach(function(se){
       var seg=[], last=null;
       weeks.forEach(function(w,i){ var v=w[se.key]; if(v===null||v===undefined){ last=null; return; } var px=x(i), py=y(v); seg.push((last===null?'M':'L')+px.toFixed(1)+' '+py.toFixed(1)); last=1; });
@@ -1895,7 +1900,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
         o+='<circle cx="'+x(i).toFixed(1)+'" cy="'+y(v).toFixed(1)+'" r="'+(isPB?4.4:3.4)+'" fill="'+(isPB?'#E39B0C':se.color)+'" stroke="#fff" stroke-width="1.8"><title>'+wkLabel(w.week_start)+': '+(opts.fmt?opts.fmt(v):v)+(isPB?' \u2014 personal best':'')+'</title></circle>';
       });
     });
-    weeks.forEach(function(w,i){ o+='<text x="'+x(i).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle" font-size="8.5" fill="#aeb4c2">'+wkLabel(w.week_start)+'</text>'; });
+    weeks.forEach(function(w,i){ o+='<text x="'+x(i).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle" font-size="10.5" fill="#aeb4c2">'+wkLabel(w.week_start)+'</text>'; });
     return o+'</svg>';
   }
   function vtLegend(series){ return '<div class="vt-leg">'+series.map(function(se){ return '<i><b style="background:'+se.color+'"></b>'+se.label+'</i>'; }).join('')+'</div>'; }
@@ -1964,13 +1969,12 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var s=pt(0), e=pt(100), v=pt(pct);
     var color=pct>=70?'#22a45d':(pct>=50?'#E39B0C':'#c0392b');
     var c2=pct>=70?'#7BD4A0':(pct>=50?'#F4C15A':'#E07A6E');
-    var lg=(pct>50)?1:0;
     var o='<svg class="z2-gauge" viewBox="0 0 '+W+' '+H+'" role="img"><defs><linearGradient id="z2gg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="'+c2+'"/><stop offset="1" stop-color="'+color+'"/></linearGradient></defs>';
     o+='<path d="M'+s[0].toFixed(1)+' '+s[1].toFixed(1)+' A'+R+' '+R+' 0 0 1 '+e[0].toFixed(1)+' '+e[1].toFixed(1)+'" fill="none" stroke="#EDEFF6" stroke-width="17" stroke-linecap="round"/>';
-    o+='<path class="z2-gauge-arc" d="M'+s[0].toFixed(1)+' '+s[1].toFixed(1)+' A'+R+' '+R+' 0 '+lg+' 1 '+v[0].toFixed(1)+' '+v[1].toFixed(1)+'" fill="none" stroke="url(#z2gg)" stroke-width="17" stroke-linecap="round"/>';
+    o+='<path class="z2-gauge-arc" d="M'+s[0].toFixed(1)+' '+s[1].toFixed(1)+' A'+R+' '+R+' 0 0 1 '+v[0].toFixed(1)+' '+v[1].toFixed(1)+'" fill="none" stroke="url(#z2gg)" stroke-width="17" stroke-linecap="round"/>';
     o+='<text x="'+cx+'" y="'+(cy-18)+'" text-anchor="middle" font-size="36" font-weight="800" fill="'+color+'">'+pct+'%</text>';
     o+='<text x="'+cx+'" y="'+(cy)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#9aa0b0">'+(pct>=70?'Excellent calibration':(pct>=50?'On track':'Building'))+'</text>';
-    o+='<text x="'+(cx-R)+'" y="'+(cy+14)+'" text-anchor="middle" font-size="8.5" fill="#b6bccb">0%</text><text x="'+(cx+R)+'" y="'+(cy+14)+'" text-anchor="middle" font-size="8.5" fill="#b6bccb">100%</text>';
+    o+='<text x="'+(cx-R)+'" y="'+(cy+14)+'" text-anchor="middle" font-size="10.5" fill="#b6bccb">0%</text><text x="'+(cx+R)+'" y="'+(cy+14)+'" text-anchor="middle" font-size="10.5" fill="#b6bccb">100%</text>';
     return o+'</svg>';
   }
   function z2Bars(weeks, key, color, opts){
@@ -1989,9 +1993,9 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       var cx=PL+gap*i+gap/2;
       if(v!=null){ var h=(Number(v)/mx)*(H-PT-PB); var y=H-PB-h; var isLast=(i===lastIdx);
         o+='<rect class="z2-bar" x="'+(cx-bw/2).toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.max(h,1.5).toFixed(1)+'" rx="4" fill="url(#'+gid+')" opacity="'+(isLast?1:0.85)+'"><title>'+wkLabel(weeks[i].week_start)+': '+(opts.fmt?opts.fmt(v):fmtN(v))+'</title></rect>';
-        if(isLast){ var lbl=(opts.fmt?opts.fmt(v):fmtN(v)); o+='<rect x="'+(cx-11).toFixed(1)+'" y="'+(y-16).toFixed(1)+'" width="22" height="13" rx="6.5" fill="'+color+'"/><text x="'+cx.toFixed(1)+'" y="'+(y-6.5).toFixed(1)+'" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">'+lbl+'</text>'; }
+        if(isLast){ var lbl=(opts.fmt?opts.fmt(v):fmtN(v)); o+='<rect x="'+(cx-11).toFixed(1)+'" y="'+(y-16).toFixed(1)+'" width="22" height="13" rx="6.5" fill="'+color+'"/><text x="'+cx.toFixed(1)+'" y="'+(y-6.5).toFixed(1)+'" text-anchor="middle" font-size="10.5" font-weight="800" fill="#fff">'+lbl+'</text>'; }
       }
-      o+='<text x="'+cx.toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle" font-size="8.5" fill="#aeb4c2">'+wkLabel(weeks[i].week_start)+'</text>';
+      o+='<text x="'+cx.toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle" font-size="10.5" fill="#aeb4c2">'+wkLabel(weeks[i].week_start)+'</text>';
     });
     return o+'</svg>';
   }
@@ -2010,10 +2014,10 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
     shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>'
   };
-  function z2Sum(cls, icon, accent, label, big, sub, viz){
+  function z2Sum(cls, icon, accent, label, tipKey, big, sub, viz){
     return '<div class="z2-sum '+cls+'" style="--a:'+accent+'">'
-      +'<div class="z2-sum-row"><span class="z2-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+icon+'</svg></span>'
-      +'<div class="z2-sum-tx"><span class="z2-sum-l">'+label+'</span><span class="z2-sum-big">'+big+'</span><span class="z2-sum-s">'+sub+'</span></div></div>'
+      +'<div class="z2-sum-row"><span class="z2-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+icon+'</svg></span>'
+      +'<div class="z2-sum-tx"><span class="z2-sum-l">'+label+(tipKey?vTip(tipKey):'')+'</span><span class="z2-sum-big">'+big+'</span><span class="z2-sum-s">'+sub+'</span></div></div>'
       +(viz||'')+'</div>';
   }
   function z2Card(title, tipKey, desc, chip, body, tip){
@@ -2025,6 +2029,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var wks=t.weeks||[], b=t.bests||{}, radar=(t.radar||[]).slice();
     d=d||{};
     function comb(w){ return (w.rev_score!=null?Number(w.rev_score):0)+(w.aut_score!=null?Number(w.aut_score):0); }
+    wks.forEach(function(w){ w.__comb=(w.rev_score!=null||w.aut_score!=null)?comb(w):null; });
     var bestW=null, bestC=-1;
     wks.forEach(function(w){ if(w.rev_score!=null||w.aut_score!=null){ var c=comb(w); if(c>bestC){ bestC=c; bestW=w; } } });
     var rs=radar.filter(function(c){ return (c.reps||0)>=1 && c.signal!=null; }).sort(function(a,b2){ return (Number(b2.signal)||0)-(Number(a.signal)||0); });
@@ -2032,7 +2037,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var claFL=vtFirstLast(wks,'clarity'), calFL=vtFirstLast(wks,'calibration'), respFL=vtFirstLast(wks,'resp_per_case');
     var sf=null, sl=null; wks.forEach(function(w){ if(w.rev_score!=null||w.aut_score!=null){ var c=comb(w); if(sf===null) sf=c; sl=c; } });
     var rrFL=vtFirstLast(wks,'rev_rank');
-    var impKey={'Brief quality':'clarity','Calibration':'calibration','Responses / case':'resp_per_case','Weekly score':'rev_score'};
+    var impKey={'Brief quality':'clarity','Calibration':'calibration','Responses / case':'resp_per_case','Weekly score':'__comb'};
     var imps=[];
     if(claFL[0]!=null&&claFL[1]!=null&&claFL[1]>claFL[0]) imps.push({n:'Brief quality',d:(claFL[1]-claFL[0]),suf:'/5',norm:(claFL[1]-claFL[0])/5});
     if(calFL[0]!=null&&calFL[1]!=null&&calFL[1]>calFL[0]) imps.push({n:'Calibration',d:(calFL[1]-calFL[0]),suf:' pts',norm:(calFL[1]-calFL[0])/100});
@@ -2057,12 +2062,12 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
                           : 'Post cases, answer others, and take GutCheck calls \u2014 your 8-week trajectory builds here.';
 
     var summary='<div class="z2-sums">'
-      +z2Sum('','Z2BEST','#B57E1B','Best week', (bestW?wkLabel(bestW.week_start):'\u2014'), (bestW?'You were on fire! \uD83D\uDD25':'No scored week yet.'), z2Spark(wks,'rev_score','#B57E1B'))
-      +z2Sum('','Z2STAR','#CA8A04','Top strength', (strong?esc(drCat(strong.category)):'\u2014'), (strong?'Keep leveraging this edge.':'Take GutCheck calls to map this.'), (strong?z2SignalBar(strong.signal,'#CA8A04'):''))
-      +z2Sum('','Z2TREND','#0EA46A','Top improvement', (topImp?(esc(topImp.n)+' <span class="z2-up">\u2191 '+(topImp.suf==='/5'?topImp.d.toFixed(1):String(Math.round(topImp.d)))+topImp.suf+'</span>'):'\u2014'), (topImp?'Great upward trend.':'Your biggest gain shows here.'), (topImp?z2Spark(wks,impKey[topImp.n]||'rev_score','#0EA46A'):''))
-      +z2Sum('','Z2TARGET','#D64545','Biggest opportunity', (weak?esc(drCat(weak.category)):'\u2014'), (weak?'Focus here for max impact.':'Answer more cases to surface this.'), (weak?z2SignalBar(weak.signal,'#D64545'):''))
+      +z2Sum('',Z2IC.trophy,'#B57E1B','Best week','z2best', (bestW?wkLabel(bestW.week_start):'\u2014'), (bestW?'You were on fire! \uD83D\uDD25':'No scored week yet.'), z2Spark(wks,'__comb','#B57E1B'))
+      +z2Sum('',Z2IC.star,'#CA8A04','Top strength','z2strong', (strong?esc(drCat(strong.category)):'\u2014'), (strong?'Keep leveraging this edge.':'Take GutCheck calls to map this.'), z2Spark(wks,'__comb','#CA8A04'))
+      +z2Sum('',Z2IC.trend,'#0EA46A','Top improvement','z2imp', (topImp?(esc(topImp.n)+' <span class="z2-up">\u2191 '+(topImp.suf==='/5'?topImp.d.toFixed(1):String(Math.round(topImp.d)))+topImp.suf+'</span>'):'\u2014'), (topImp?'Great upward trend.':'Your biggest gain shows here.'), z2Spark(wks,(topImp?(impKey[topImp.n]||'__comb'):'__comb'),'#0EA46A'))
+      +z2Sum('',Z2IC.target,'#D64545','Biggest opportunity','z2opp', (weak?esc(drCat(weak.category)):'\u2014'), (weak?'Focus here for max impact.':'Answer more cases to surface this.'), z2Spark(wks,'__comb','#D64545'))
       +'<div class="z2-sum z2-vs" style="--a:#5B4BD4"><div class="z2-vs-hd"><span class="z2-sum-l">Vault Score'+vTip('z2vscore')+'</span></div>'
-        +'<div class="z2-vs-body"><span class="z2-vs-shield"><svg viewBox="0 0 24 24" fill="none" stroke="#5B4BD4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+Z2IC.shield+'</svg></span>'
+        +'<div class="z2-vs-body"><span class="z2-vs-shield"><svg viewBox="0 0 24 24" fill="none" stroke="#5B4BD4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="10.3" r="2.4"/><path d="M12 12.7V15.5"/></svg></span>'
         +'<div><div class="z2-vs-num">'+(vs!=null?vs:'\u2014')+'<span class="z2-vsd">/100</span></div>'
         +'<span class="z2-vs-trend z2-t-'+vsTrend+'">'+(vsTrend==='up'?'\u2191 improving':(vsTrend==='down'?'\u2193 slipping':'\u2192 steady'))+'</span></div></div>'
         +'<div class="z2-sum-s">40% reviewer \u00b7 40% author \u00b7 20% calibration</div></div>'
