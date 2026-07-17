@@ -268,6 +268,93 @@
   .pc-refresh svg{width:14px;height:14px}
   .pc-refresh.spinning svg{animation:pc-spin .7s linear infinite}
   @keyframes pc-spin{to{transform:rotate(360deg)}}
+  /* ---- Zone 2 (Trajectory) redesign ---- */
+  .z2-sums{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:.8rem;margin:.5rem 0 1.4rem}
+  .z2-sum{border:1px solid var(--border,#e4e8f4);border-radius:14px;background:var(--card,#fff);padding:.9rem 1rem;box-shadow:0 4px 16px rgba(20,25,45,.045);display:flex;flex-direction:column;gap:.32rem}
+  .z2-sum-top{display:flex;align-items:center;justify-content:space-between;gap:.4rem}
+  .z2-sum-l{font-size:.62rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted,#8a91a0)}
+  .z2-sum-ic{font-size:1rem;line-height:1}
+  .z2-sum-big{font-size:1.12rem;font-weight:800;color:var(--ink,#16233f);line-height:1.15}
+  .z2-sum-s{font-size:.75rem;line-height:1.4;color:var(--muted,#6b7280)}
+  .z2-spark{width:100%;height:26px;margin-top:.25rem;overflow:visible}
+  .z2-vs{border-color:#d9d5f7;background:linear-gradient(160deg,#faf9ff,#fff)}
+  .z2-vsn{font-size:1.85rem;font-weight:800;color:#5B4BD4}
+  .z2-vsd{font-size:.88rem;font-weight:700;color:var(--muted,#9aa0b0);margin-left:.1rem}
+  .z2-vs-foot{display:flex;align-items:center;justify-content:space-between;margin-top:.35rem}
+  .z2-vs-trend{font-size:.72rem;font-weight:800}
+  .z2-t-up{color:#15803d}.z2-t-down{color:#c0392b}.z2-t-flat{color:#8a91a0}
+  .z2-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
+  .z2-card{border:1px solid var(--border,#e4e8f4);border-radius:16px;background:var(--card,#fff);padding:1rem 1.1rem;box-shadow:0 4px 16px rgba(20,25,45,.045)}
+  .z2-card-h{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.5rem}
+  .z2-card-t{font-size:.86rem;font-weight:800;color:var(--ink,#16233f)}
+  .z2-card-b svg{width:100%;height:auto;display:block}
+  .z2-d{font-size:.71rem;font-weight:800;padding:.15rem .5rem;border-radius:99px;white-space:nowrap}
+  .z2-d-up{background:#E7F6EC;color:#15803d}.z2-d-down{background:#FDECEC;color:#c0392b}.z2-d-flat{background:#EEF1F8;color:#6b7280}
+  .z2-ranks{display:flex;flex-direction:column;gap:.5rem}
+  .z2-rankrow{display:flex;align-items:center;gap:.55rem}
+  .z2-rankl{font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;width:60px;flex:none}
+  .z2-boxrow{display:flex;gap:.28rem;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}
+  .z2-box{min-width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:8px;font-size:.77rem;font-weight:800;flex:none}
+  .z2-box-top{box-shadow:0 2px 8px rgba(0,0,0,.16)}
+  .z2-box-e{background:#F2F4FA;color:#c2c7d4}
+  .z2-note{font-size:.72rem;line-height:1.45;color:var(--muted,#8a91a0);margin-top:.55rem}
+  .z2-gauge{width:100%;max-width:210px;height:auto;display:block;margin:0 auto}
+  .z2-calhist{display:flex;flex-direction:column;gap:.42rem;margin-top:.55rem}
+  .z2-calb{display:flex;align-items:center;gap:.5rem}
+  .z2-calb-l{font-size:.7rem;font-weight:700;color:var(--muted,#8a91a0);width:74px;flex:none}
+  .z2-calb-t{flex:1;height:7px;background:#EEF1F8;border-radius:99px;overflow:hidden}
+  .z2-calb-t i{display:block;height:100%;border-radius:99px}
+  .z2-calb-v{font-size:.72rem;font-weight:800;color:var(--ink,#3a4358);width:36px;text-align:right;flex:none}
+  .z2-insight{display:flex;align-items:center;gap:.8rem;margin-top:1.4rem;padding:1rem 1.2rem;border-radius:14px;background:linear-gradient(120deg,#f3f1fe,#eef4ff);border:1px solid #e2e0f7;font-size:.86rem;line-height:1.5;color:var(--ink,#3a4358)}
+  .z2-insight-ic{font-size:1.2rem;flex:none}
+  .z2-insight-pct{margin-left:auto;flex:none;background:#5B4BD4;color:#fff;font-size:.72rem;font-weight:800;padding:.32rem .72rem;border-radius:99px;white-space:nowrap}
+  @media(max-width:560px){ .z2-insight{flex-wrap:wrap} .z2-insight-pct{margin-left:0} }
+  /* ---- Zone 3 (Diagnosis) redesign ---- */
+  .z3-summary{display:flex;gap:1rem;align-items:stretch;margin:.6rem 0 1.5rem;flex-wrap:wrap}
+  .z3-buckets{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.7rem;flex:1;min-width:260px}
+  .z3-bucket{display:flex;align-items:center;gap:.6rem;border:1px solid var(--border,#e4e8f4);border-radius:12px;background:var(--card,#fff);padding:.7rem .85rem;box-shadow:0 3px 12px rgba(20,25,45,.04)}
+  .z3-bk-ic{width:34px;height:34px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;flex:none}
+  .z3-bk-k{font-size:.6rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted,#9aa0b0)}
+  .z3-bk-l{font-size:.82rem;font-weight:800;color:var(--ink,#16233f)}
+  .z3-impact{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15rem;border:1px solid #d9d5f7;border-radius:14px;background:linear-gradient(160deg,#faf9ff,#fff);padding:.7rem 1.4rem;min-width:150px}
+  .z3-impact-l{font-size:.6rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted,#8a91a0)}
+  .z3-impact-g{width:84px;height:84px}
+  .z3-impact-s{font-size:.72rem;font-weight:800;color:#5B4BD4}
+  .z3-timeline{position:relative}
+  .z3-item{display:flex;gap:1rem;position:relative}
+  .z3-item.dg-hidden{display:none}
+  .z3-rail{flex:none;width:32px;display:flex;flex-direction:column;align-items:center;position:relative}
+  .z3-rail::before{content:'';position:absolute;top:32px;bottom:-1.1rem;left:50%;width:2px;background:var(--border,#e6e9f4);transform:translateX(-50%)}
+  .z3-item:last-child .z3-rail::before{display:none}
+  .z3-node{width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;color:#fff;z-index:1}
+  .z3-n-high,.z3-n-critical{background:#c0392b}.z3-n-medium{background:#a8700a}.z3-n-opportunity{background:#2563eb}.z3-n-growth{background:#15803d}
+  .z3-card{flex:1;min-width:0;border:1px solid var(--border,#e4e8f4);border-left-width:3px;border-radius:14px;background:var(--card,#fff);padding:1rem 1.15rem;box-shadow:0 4px 16px rgba(20,25,45,.045);margin-bottom:1.1rem}
+  .z3-card.dg-high,.z3-card.dg-critical{border-left-color:#c0392b}.z3-card.dg-medium{border-left-color:#a8700a}.z3-card.dg-opportunity{border-left-color:#2563eb}.z3-card.dg-growth{border-left-color:#15803d}
+  .z3-ctop{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.4rem}
+  .z3-badge{font-size:.6rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;border-radius:99px;padding:.16rem .5rem}
+  .z3-b-high,.z3-b-critical{background:#FDF0F0;color:#c0392b}.z3-b-medium{background:#FDEFD4;color:#a8700a}.z3-b-opportunity{background:#E7F0FF;color:#2563eb}.z3-b-growth{background:#EAF8F0;color:#15803d}
+  .z3-kind{font-size:.62rem;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:var(--muted,#9aa0b0)}
+  .z3-tags{margin-left:auto;display:flex;gap:.35rem;flex-wrap:wrap}
+  .z3-tag{font-size:.6rem;font-weight:800;border-radius:99px;padding:.16rem .5rem;white-space:nowrap}
+  .z3-t-qw{background:#EAF8F0;color:#15803d}.z3-t-lt{background:#EEF0FB;color:#5B4BD4}.z3-t-op{background:#E7F0FF;color:#2563eb}.z3-t-wf{background:#FDEFD4;color:#a8700a}.z3-t-ns{background:#F2F4FA;color:#6b7280}
+  .z3-title{font-weight:800;font-size:1rem;color:var(--ink,#16233f);line-height:1.3;margin-bottom:.65rem}
+  .z3-body{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding:.75rem 0;border-top:1px solid #eef1f8;border-bottom:1px solid #eef1f8}
+  .z3-col{min-width:0}
+  .z3-col-h{display:flex;align-items:center;gap:.35rem;font-size:.6rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted,#9aa0b0);margin-bottom:.35rem}
+  .z3-col p{margin:0;font-size:.82rem;line-height:1.5;color:var(--ink,#3a4358)}
+  .z3-cta{display:inline-block;font-size:.82rem;font-weight:800;color:var(--accent,#5B4BD4);text-decoration:none;line-height:1.4}
+  .z3-cta:hover{text-decoration:underline}
+  .z3-foot{display:flex;align-items:center;gap:1rem;margin-top:.75rem;flex-wrap:wrap}
+  .z3-imp{font-size:.76rem;color:var(--muted,#6b7280)}.z3-imp b{color:#15803d;font-weight:800}
+  .z3-affs{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap}
+  .z3-affl{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;color:var(--muted,#9aa0b0)}
+  .z3-aff{font-size:.68rem;font-weight:700;background:#F2F4FA;color:#5c6479;border-radius:99px;padding:.14rem .5rem}
+  .z3-conf{display:flex;align-items:center;gap:.35rem;margin-left:auto}
+  .z3-ring{width:38px;height:38px}
+  .z3-conf-l{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;color:var(--muted,#9aa0b0)}
+  .z3-footer{margin-top:1rem;font-size:.78rem;color:var(--muted,#8a91a0);text-align:center}
+  .z3-footer b{color:var(--ink,#3a4358);font-weight:700}
+  @media(max-width:640px){ .z3-body{grid-template-columns:1fr;gap:.7rem} .z3-rail{width:28px} .z3-node{width:28px;height:28px;font-size:.82rem} .z3-item{gap:.7rem} .z3-conf{margin-left:0} }
   @media(max-width:640px){ .pc-head{flex-direction:column;align-items:flex-start} .pc-ctrl{width:100%} .pc-pills{flex-wrap:wrap} }
   @media(max-width:560px){ .pcx-grid{grid-template-columns:1fr} }
   .lb-list{}
@@ -1484,32 +1571,111 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   }
   function dgSevLabel(s){ return ({critical:'Critical',high:'High impact',medium:'Worth fixing',opportunity:'Opportunity',growth:'Next step'})[s]||'Worth fixing'; }
   function dgKindLabel(k){ return ({reviewer:'As a reviewer',author:'As an author',cross:'Across both',growth:''})[k]||''; }
-  function dgCard(r, hidden){
-    var sev=r.severity||'medium';
-    var kl=dgKindLabel(r.kind);
-    var why=(r.why && r.kind!=='growth')?'<div class="dg-why">'+esc(r.why)+'</div>':'';
-    return '<div class="dg-card dg-'+sev+(hidden?' dg-hidden':'')+'">'
-      +'<div class="dg-top"><span class="dg-badge dg-b-'+sev+'">'+dgSevLabel(sev)+'</span>'
-      +(kl?'<span class="dg-kind">'+kl+'</span>':'')+'</div>'
-      +'<div class="dg-title">'+esc(r.title||'')+'</div>'
-      +'<div class="dg-saw">'+esc(r.saw||'')+'</div>'
-      +why
-      +'<a class="dg-cta" href="'+dgHref(r.action)+'">'+esc(r.action_label||'Take action')+' \u2192</a>'
-      +'</div>';
+  /* ---- Zone 3 (Diagnosis) redesign ---- */
+  var ICO={
+    eye:'<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+    shield:'<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+    rocket:'<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>'
+  };
+  var DGMETA={
+    R1:['Quick win',['Acted-on rate','Helpful rate']], R2:['Quick win',['Coverage','Helpful rate']],
+    R3:['Quick win',['Helpful rate','Acted-on rate']], R4:['Quick win',['Acted-on rate']],
+    R5:['Long-term habit',['Calibration','Reputation']], R6:['Quick win',['Reputation','Score']],
+    R7:['Opportunity',['Category signal','Score']], R8:['Long-term habit',['Score','Helpful rate']],
+    R9:['Quick win',['Helpful rate']], A1:['Quick win',['Clarity','Responses']],
+    A2:['Quick win',['Resolution','Score']], A3:['Long-term habit',['Acted-on','Engagement']],
+    A4:['Quick win',['Acted-on','Engagement']], A5:['Worth fixing',['Resolution','Score']],
+    A6:['Quick win',['Clarity','Engagement']], A7:['Opportunity',['Reach','Responses']],
+    A8:['Opportunity',['Reach','Responses']], X1:['Opportunity',['Activity','Score']],
+    X2:['Opportunity',['Category signal','Score']], X3:['Long-term habit',['Balance','Growth']],
+    X4:['Worth fixing',['Streak','Score']], X5:['Opportunity',['Domain fit','Score']],
+    X6:['Opportunity',['Weak category','Calibration']], A9:['Opportunity',['Domain fit','Impact']],
+    A10:['Opportunity',['Category fit','Impact']]
+  };
+  function dgMetaFor(id){ if(DGMETA[id]) return DGMETA[id]; if(String(id||'').indexOf('G_')===0) return ['Next step',['Getting started']]; return ['',[]]; }
+  function dgTagClass(t){ return ({'Quick win':'qw','Long-term habit':'lt','Opportunity':'op','Worth fixing':'wf','Next step':'ns'})[t]||'op'; }
+  function dgConf(r, meta){
+    meta=meta||{};
+    if(['R6','A5','A6','A2'].indexOf(r.id)>=0) return 92;
+    var n;
+    if(r.kind==='reviewer') n=meta.reviewer_responses||0;
+    else if(r.kind==='author') n=meta.author_cases||0;
+    else n=Math.max(meta.reviewer_responses||0, meta.author_cases||0, Math.round((meta.gutcheck_reps||0)/3));
+    return Math.max(55, Math.min(95, 55+n*4));
   }
-  function vaultZone3(dg){
+  function dgImprove(r){
+    if(r.kind==='growth') return '';
+    var n=Math.round(Number(r.impact)||0); if(n<=0) return '';
+    var unit=(r.kind==='author')?'author pts':(r.kind==='reviewer'?'reviewer pts':'pts');
+    return '+'+n+' '+unit;
+  }
+  function confRing(pct){
+    pct=Math.max(0,Math.min(100,Math.round(pct)));
+    var R=16, C=2*Math.PI*R, off=C*(1-pct/100);
+    var color=pct>=75?'#22a45d':(pct>=60?'#E39B0C':'#c0392b');
+    return '<svg class="z3-ring" viewBox="0 0 40 40" role="img"><circle cx="20" cy="20" r="16" fill="none" stroke="#EEF1F8" stroke-width="4"/><circle cx="20" cy="20" r="16" fill="none" stroke="'+color+'" stroke-width="4" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 20 20)"/><text x="20" y="24" text-anchor="middle" font-size="12" font-weight="800" fill="'+color+'">'+pct+'</text></svg>';
+  }
+  function z3ImpactGauge(score){
+    score=Math.max(0,Math.min(100,Math.round(score)));
+    var R=34, C=2*Math.PI*R, off=C*(1-score/100);
+    var color=score>=80?'#22a45d':(score>=60?'#E39B0C':'#c0392b');
+    return '<svg class="z3-impact-g" viewBox="0 0 84 84" role="img"><circle cx="42" cy="42" r="34" fill="none" stroke="#EEF1F8" stroke-width="7"/><circle cx="42" cy="42" r="34" fill="none" stroke="'+color+'" stroke-width="7" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 42 42)"/><text x="42" y="40" text-anchor="middle" font-size="20" font-weight="800" fill="'+color+'">'+score+'</text><text x="42" y="55" text-anchor="middle" font-size="9" font-weight="700" fill="#9aa0b0">/ 100</text></svg>';
+  }
+  function impactLabel(s){ return s>=85?'Strong record':(s>=70?'Solid \u2014 a few gaps':(s>=55?'Room to improve':'Focus needed')); }
+  function dgBucket(kicker, label, count, color){
+    return '<div class="z3-bucket"><span class="z3-bk-ic" style="background:'+color+'1a;color:'+color+'">'+count+'</span><div class="z3-bk-tx"><div class="z3-bk-k">'+kicker+'</div><div class="z3-bk-l">'+label+'</div></div></div>';
+  }
+  function dgTimelineItem(r, i, meta){
+    var sev=r.severity||'medium', num=i+1;
+    var kl=dgKindLabel(r.kind);
+    var conf=dgConf(r,meta), impv=dgImprove(r);
+    var mm=dgMetaFor(r.id), tag=mm[0], affects=mm[1]||[];
+    var affHtml=affects.map(function(a){ return '<span class="z3-aff">'+esc(a)+'</span>'; }).join('');
+    var tagHtml=tag?'<span class="z3-tag z3-t-'+dgTagClass(tag)+'">'+tag+'</span>':'';
+    var why=(r.why && r.kind!=='growth')?('<div class="z3-col"><div class="z3-col-h">'+ICO.shield+' Why it matters</div><p>'+esc(r.why)+'</p></div>'):'';
+    return '<div class="z3-item'+(i>=5?' dg-hidden':'')+'">'
+      +'<div class="z3-rail"><span class="z3-node z3-n-'+sev+'">'+num+'</span></div>'
+      +'<div class="z3-card dg-'+sev+'">'
+        +'<div class="z3-ctop"><span class="z3-badge z3-b-'+sev+'">'+dgSevLabel(sev)+'</span>'+(kl?'<span class="z3-kind">'+kl+'</span>':'')+(tagHtml?'<span class="z3-tags">'+tagHtml+'</span>':'')+'</div>'
+        +'<div class="z3-title">'+esc(r.title||'')+'</div>'
+        +'<div class="z3-body">'
+          +'<div class="z3-col"><div class="z3-col-h">'+ICO.eye+' What we saw</div><p>'+esc(r.saw||'')+'</p></div>'
+          +why
+          +'<div class="z3-col z3-col-act"><div class="z3-col-h">'+ICO.rocket+' Recommended action</div><a class="z3-cta" href="'+dgHref(r.action)+'">'+esc(r.action_label||'Take action')+' \u2192</a></div>'
+        +'</div>'
+        +'<div class="z3-foot">'
+          +(impv?'<span class="z3-imp">Est. improvement <b>'+impv+'</b></span>':'')
+          +(affHtml?'<span class="z3-affs"><span class="z3-affl">Affects</span>'+affHtml+'</span>':'')
+          +'<span class="z3-conf">'+confRing(conf)+'<span class="z3-conf-l">Confidence</span></span>'
+        +'</div>'
+      +'</div></div>';
+  }
+  function vaultZone3(dg, d){
     if(!dg || !dg.ok || !dg.signed_in) return '';
-    var rules=(dg.rules||[]);
+    var rules=(dg.rules||[]), meta=dg.meta||{};
     if(!rules.length) return '';
-    var fired=(dg.meta&&dg.meta.fired)||0;
-    var total=rules.length;
-    var cards=rules.map(function(r,i){ return dgCard(r, i>=5); }).join('');
-    var more=(total>5)?'<button type="button" class="dg-more" data-dg="more">See '+(total-5)+' more \u25BE</button>':'';
+    var cHigh=0,cMed=0,cOpp=0,cGrow=0;
+    rules.forEach(function(r){ var s=r.severity; if(s==='high'||s==='critical')cHigh++; else if(s==='medium')cMed++; else if(s==='opportunity')cOpp++; else cGrow++; });
+    var fired=meta.fired||0;
+    var sw={critical:14,high:9,medium:5,opportunity:2,growth:0};
+    var pen=0; rules.forEach(function(r){ pen+=(sw[r.severity]!=null?sw[r.severity]:5); });
+    var impactScore=Math.max(40, 100-Math.min(58,pen));
+    var buckets='<div class="z3-buckets">'
+      +dgBucket('Focus first','High impact',cHigh,'#c0392b')
+      +dgBucket('Next best','Worth fixing',cMed,'#a8700a')
+      +dgBucket('Keep building','Opportunities',cOpp,'#2563eb')
+      +dgBucket('Great progress',(cGrow>0?'Getting started':'You\u2019re improving'),cGrow,'#15803d')
+    +'</div>';
+    var gauge='<div class="z3-impact"><div class="z3-impact-l">Vault Impact Score</div>'+z3ImpactGauge(impactScore)+'<div class="z3-impact-s">'+impactLabel(impactScore)+'</div></div>';
+    var items=rules.map(function(r,i){ return dgTimelineItem(r,i,meta); }).join('');
+    var more=(rules.length>5)?'<button type="button" class="dg-more" data-dg="more">See '+(rules.length-5)+' more \u25BE</button>':'';
     var count=(fired>0)?'<span class="dg-count">'+fired+' finding'+(fired===1?'':'s')+'</span>':'';
-    return '<div class="vt-zone">'
+    return '<div class="vt-zone z3d">'
       +'<div class="vt-zh"><span class="vt-zn">Zone 3</span><span class="vt-zt">Diagnosis</span>'+count
       +'<span class="vt-zs">The few things most worth fixing right now \u2014 based on all your activity, ranked by impact.'+dgTip('what')+'</span></div>'
-      +'<div class="dg-list" id="dg-list">'+cards+'</div>'+more
+      +'<div class="z3-summary">'+buckets+gauge+'</div>'
+      +'<div class="z3-timeline dg-list" id="dg-list">'+items+'</div>'+more
+      +'<div class="z3-footer">Ranked by <b>impact \u00d7 confidence \u00d7 frequency</b> \u2014 fix the top one or two first for the biggest gains.</div>'
       +'</div>';
   }
   /* Zone 3 "See more": reveal hidden cards (document-level -> survives re-render) */
@@ -1742,49 +1908,148 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     }).join('')+'</div>';
     return '<div class="vt-radar-wrap">'+o+list+'</div>';
   }
-  function vaultZone2(t){
+  /* ---- Zone 2 (Trajectory) redesign helpers ---- */
+  function vtFirstLast(weeks, key){ var f=null,l=null; weeks.forEach(function(w){ var v=w[key]; if(v!=null){ if(f===null) f=Number(v); l=Number(v); } }); return [f,l]; }
+  function vsScore(d){
+    d=d||{}; var r=d.reviewer||{}, a=d.author||{}, g=d.gutcheck||{};
+    var comps=[], wts=[];
+    if(r.active && r.percentile!=null){ comps.push(100-Number(r.percentile)); wts.push(0.4); }
+    if(a.active && a.percentile!=null){ comps.push(100-Number(a.percentile)); wts.push(0.4); }
+    if(g.calibration!=null){ comps.push(Math.max(0,Math.min(100,Number(g.calibration)))); wts.push(0.2); }
+    if(!comps.length) return null;
+    var tw=0,sc=0; for(var i=0;i<comps.length;i++){ tw+=wts[i]; sc+=comps[i]*wts[i]; }
+    return Math.round(sc/tw);
+  }
+  function z2Spark(weeks, key, color, invert){
+    var vals=weeks.map(function(w){ return w[key]; });
+    var nums=vals.filter(function(v){ return v!=null; }).map(Number);
+    if(nums.length<2) return '';
+    var W=92,H=28,mn=Math.min.apply(null,nums),mx=Math.max.apply(null,nums); if(mn===mx){ mn-=1; mx+=1; }
+    var n=vals.length, seg=[], last=null;
+    vals.forEach(function(v,i){ if(v==null){ last=null; return; } var x=(n===1?W/2:W*i/(n-1)); var tt=(Number(v)-mn)/(mx-mn); if(invert) tt=1-tt; var y=3+(1-tt)*(H-6); seg.push((last===null?'M':'L')+x.toFixed(1)+' '+y.toFixed(1)); last=1; });
+    return '<svg class="z2-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><path d="'+seg.join(' ')+'" fill="none" stroke="'+color+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+  function z2RankBoxes(weeks, key, color){
+    var ranks=weeks.map(function(w){ return w[key]; }).filter(function(v){ return v!=null; }).map(Number);
+    var best=ranks.length?Math.min.apply(null,ranks):null;
+    return '<div class="z2-boxrow">'+weeks.map(function(w){
+      var v=w[key];
+      if(v==null) return '<span class="z2-box z2-box-e" title="'+wkLabel(w.week_start)+': not ranked">\u2013</span>';
+      var isBest=(Number(v)===best);
+      return '<span class="z2-box'+(isBest?' z2-box-top':'')+'" style="'+(isBest?('background:'+color+';color:#fff'):('background:'+color+'22;color:'+color))+'" title="'+wkLabel(w.week_start)+': #'+v+'">#'+v+'</span>';
+    }).join('')+'</div>';
+  }
+  function z2Gauge(pct){
+    if(pct==null) return '<div class="vt-gempty">Score GutCheck calls at both confidence levels and your calibration gauge appears here.</div>';
+    pct=Math.max(0,Math.min(100,Math.round(Number(pct))));
+    var W=190,H=112,cx=W/2,cy=98,R=78;
+    function pt(pp){ var a=Math.PI*(1-pp/100); return [cx+R*Math.cos(a), cy-R*Math.sin(a)]; }
+    var s=pt(0), e=pt(100), v=pt(pct);
+    var color=pct>=70?'#22a45d':(pct>=50?'#E39B0C':'#c0392b');
+    var lg=(pct>50)?1:0;
+    var o='<svg class="z2-gauge" viewBox="0 0 '+W+' '+H+'" role="img">';
+    o+='<path d="M'+s[0].toFixed(1)+' '+s[1].toFixed(1)+' A'+R+' '+R+' 0 0 1 '+e[0].toFixed(1)+' '+e[1].toFixed(1)+'" fill="none" stroke="#EDEFF6" stroke-width="13" stroke-linecap="round"/>';
+    o+='<path d="M'+s[0].toFixed(1)+' '+s[1].toFixed(1)+' A'+R+' '+R+' 0 '+lg+' 1 '+v[0].toFixed(1)+' '+v[1].toFixed(1)+'" fill="none" stroke="'+color+'" stroke-width="13" stroke-linecap="round"/>';
+    o+='<text x="'+cx+'" y="'+(cy-16)+'" text-anchor="middle" font-size="30" font-weight="800" fill="'+color+'">'+pct+'%</text>';
+    o+='<text x="'+cx+'" y="'+(cy+2)+'" text-anchor="middle" font-size="10" font-weight="700" fill="#9aa0b0">'+(pct>=70?'Excellent':(pct>=50?'On track':'Building'))+'</text>';
+    o+='</svg>';
+    return o;
+  }
+  function z2Bars(weeks, key, color, opts){
+    opts=opts||{};
+    var vals=weeks.map(function(w){ return w[key]; });
+    var nums=vals.filter(function(v){ return v!=null; }).map(Number);
+    if(!nums.length) return '<div class="vt-gempty">'+(opts.empty||'No data in these weeks yet.')+'</div>';
+    var mx=Math.max.apply(null,nums); if(opts.max!==undefined) mx=Math.max(mx,opts.max); if(mx<=0) mx=1;
+    var W=340,H=150,PL=6,PR=6,PT=12,PB=22,n=vals.length;
+    var gap=(W-PL-PR)/n, bw=gap*0.56;
+    var o='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+    for(var gi=0;gi<=3;gi++){ var gy=PT+(H-PT-PB)*gi/3; o+='<line x1="'+PL+'" y1="'+gy.toFixed(1)+'" x2="'+(W-PR)+'" y2="'+gy.toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>'; }
+    var lastIdx=-1; vals.forEach(function(v,i){ if(v!=null) lastIdx=i; });
+    vals.forEach(function(v,i){
+      var cx=PL+gap*i+gap/2;
+      if(v!=null){ var h=(Number(v)/mx)*(H-PT-PB); var y=H-PB-h; var isLast=(i===lastIdx);
+        o+='<rect x="'+(cx-bw/2).toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.max(h,1.5).toFixed(1)+'" rx="3.5" fill="'+color+'" opacity="'+(isLast?1:0.72)+'"><title>'+wkLabel(weeks[i].week_start)+': '+(opts.fmt?opts.fmt(v):fmtN(v))+'</title></rect>';
+        if(isLast) o+='<text x="'+cx.toFixed(1)+'" y="'+(y-4).toFixed(1)+'" text-anchor="middle" font-size="9.5" font-weight="800" fill="'+color+'">'+(opts.fmt?opts.fmt(v):fmtN(v))+'</text>';
+      }
+      o+='<text x="'+cx.toFixed(1)+'" y="'+(H-6)+'" text-anchor="middle" font-size="8" fill="#aeb4c2">'+wkLabel(weeks[i].week_start)+'</text>';
+    });
+    return o+'</svg>';
+  }
+  function z2Delta(v, opts){
+    opts=opts||{}; if(v==null) return '';
+    var n=Number(v), invert=opts.invert;
+    if(Math.abs(n)<(opts.eps||0.01)) return '<span class="z2-d z2-d-flat">\u2192 steady</span>';
+    var up=invert?(n<0):(n>0);
+    var mag=Math.abs(n); var txt=(opts.unit==='int'||opts.invert)?String(Math.round(mag)):mag.toFixed(1);
+    return '<span class="z2-d '+(up?'z2-d-up':'z2-d-down')+'">'+(up?'\u2191':'\u2193')+' '+txt+(opts.suffix||'')+'</span>';
+  }
+  function z2Card(title, delta, body, tip){ return '<div class="z2-card"><div class="z2-card-h"><span class="z2-card-t">'+title+'</span>'+(delta||'')+'</div><div class="z2-card-b">'+body+'</div>'+(tip||'')+'</div>'; }
+  function z2Sum(cls, icon, label, big, sub, extra){ return '<div class="z2-sum '+cls+'"><div class="z2-sum-top"><span class="z2-sum-l">'+label+'</span><span class="z2-sum-ic">'+icon+'</span></div><div class="z2-sum-big">'+big+'</div><div class="z2-sum-s">'+sub+'</div>'+(extra||'')+'</div>'; }
+
+  function vaultZone2(t, d){
     if(!t || !t.ok || !t.signed_in) return '';
-    var wks=t.weeks||[], b=t.bests||{};
-    var rankSeries=[
-      {key:'rev_rank', color:'#5B4BD4', label:'Reviewer rank', pb:b.best_rev_rank},
-      {key:'aut_rank', color:'#E39B0C', label:'Author rank',   pb:b.best_aut_rank}
-    ];
-    var scoreSeries=[
-      {key:'rev_score', color:'#5B4BD4', label:'Reviewer score', pb:b.best_rev_score},
-      {key:'aut_score', color:'#E39B0C', label:'Author score',   pb:b.best_aut_score}
-    ];
-    function g(t1,sub,body,leg){
-      return '<div class="vt-g"><div class="vt-g-h"><span class="vt-g-t">'+t1+'</span></div>'
-        +'<div class="vt-g-s">'+sub+'</div>'+body+(leg||'')+'</div>';
-    }
-    return '<div class="vt-zone">'
+    var wks=t.weeks||[], b=t.bests||{}, radar=(t.radar||[]).slice();
+    d=d||{};
+    function comb(w){ return (w.rev_score!=null?Number(w.rev_score):0)+(w.aut_score!=null?Number(w.aut_score):0); }
+    var bestW=null, bestC=-1;
+    wks.forEach(function(w){ if(w.rev_score!=null||w.aut_score!=null){ var c=comb(w); if(c>bestC){ bestC=c; bestW=w; } } });
+    var rs=radar.filter(function(c){ return (c.reps||0)>=1 && c.signal!=null; }).sort(function(a,b2){ return (Number(b2.signal)||0)-(Number(a.signal)||0); });
+    var strong=rs[0]||null, weak=(rs.length>1)?rs[rs.length-1]:null;
+    var claFL=vtFirstLast(wks,'clarity'), calFL=vtFirstLast(wks,'calibration'), respFL=vtFirstLast(wks,'resp_per_case');
+    var sf=null, sl=null; wks.forEach(function(w){ if(w.rev_score!=null||w.aut_score!=null){ var c=comb(w); if(sf===null) sf=c; sl=c; } });
+    var rrFL=vtFirstLast(wks,'rev_rank');
+    var imps=[];
+    if(claFL[0]!=null&&claFL[1]!=null&&claFL[1]>claFL[0]) imps.push({n:'Brief quality',d:(claFL[1]-claFL[0]),suf:'/5',norm:(claFL[1]-claFL[0])/5});
+    if(calFL[0]!=null&&calFL[1]!=null&&calFL[1]>calFL[0]) imps.push({n:'Calibration',d:(calFL[1]-calFL[0]),suf:' pts',norm:(calFL[1]-calFL[0])/100});
+    if(respFL[0]!=null&&respFL[1]!=null&&respFL[1]>respFL[0]) imps.push({n:'Responses / case',d:(respFL[1]-respFL[0]),suf:'',norm:(respFL[1]-respFL[0])/3});
+    if(sf!=null&&sl!=null&&sl>sf) imps.push({n:'Weekly score',d:(sl-sf),suf:' pts',norm:(sl-sf)/30});
+    imps.sort(function(a,b2){ return b2.norm-a.norm; });
+    var topImp=imps[0]||null;
+    var vs=vsScore(d);
+    var vsTrend=(sf!=null&&sl!=null)?(sl>sf?'up':(sl<sf?'down':'flat')):((calFL[0]!=null&&calFL[1]!=null)?(calFL[1]>calFL[0]?'up':'flat'):'flat');
+    var scoreDelta=(sf!=null&&sl!=null)?z2Delta(sl-sf,{suffix:' pts',unit:'int'}):'';
+    var rankDelta=(rrFL[0]!=null&&rrFL[1]!=null)?z2Delta(rrFL[1]-rrFL[0],{invert:true,suffix:' places'}):'';
+    var respDelta=(respFL[0]!=null&&respFL[1]!=null)?z2Delta(respFL[1]-respFL[0],{}):'';
+    var claDelta=(claFL[0]!=null&&claFL[1]!=null)?z2Delta(claFL[1]-claFL[0],{}):'';
+    var calNow=calFL[1], calOld=calFL[0];
+    var midW=wks[Math.max(0,Math.floor(wks.length/2))]||{}; var calMid=(midW.calibration!=null)?Number(midW.calibration):null;
+    function calBar(lbl,val){ if(val==null) return ''; var c=val>=70?'#22a45d':(val>=50?'#E39B0C':'#c0392b'); return '<div class="z2-calb"><span class="z2-calb-l">'+lbl+'</span><span class="z2-calb-t"><i style="width:'+Math.max(3,Math.min(100,val))+'%;background:'+c+'"></i></span><span class="z2-calb-v">'+Math.round(val)+'%</span></div>'; }
+    var calHist='<div class="z2-calhist">'+calBar('Now',calNow)+calBar('4 wks ago',calMid)+calBar('8 wks ago',calOld)+'</div>';
+    var pctBits=[]; if((d.reviewer||{}).percentile!=null) pctBits.push('top '+d.reviewer.percentile+'% of reviewers'); if((d.author||{}).percentile!=null) pctBits.push('top '+d.author.percentile+'% of authors');
+    var insight = topImp ? ('Your <b>'+esc(topImp.n.toLowerCase())+'</b> is trending up'+(strong?(', and <b>'+esc(drCat(strong.category))+'</b> is your sharpest area'):'')+'. '+(weak?('Put your next few reps into <b>'+esc(drCat(weak.category))+'</b> for the fastest gains.'):'Keep the streak going.'))
+                          : 'Post cases, answer others, and take GutCheck calls \u2014 your 8-week trajectory builds here.';
+    var shield='<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#5B4BD4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+
+    var summary='<div class="z2-sums">'
+      +z2Sum('z2-best','\uD83C\uDFC6','Best week', (bestW?wkLabel(bestW.week_start):'\u2014'), (bestW?('Your highest combined score \u2014 '+fmtN(bestC)+' pts.'):'No scored week yet.'), z2Spark(wks,'rev_score','#5B4BD4'))
+      +z2Sum('z2-strong','\u2B50','Top strength', (strong?esc(drCat(strong.category)):'\u2014'), (strong?('Signal '+strong.signal+'/100 \u2014 keep leveraging this edge.'):'Take GutCheck calls to map this.'), '')
+      +z2Sum('z2-imp','\uD83D\uDCC8','Top improvement', (topImp?esc(topImp.n):'\u2014'), (topImp?('Up '+(topImp.suf==='/5'?topImp.d.toFixed(1):String(Math.round(topImp.d)))+topImp.suf+' over 8 weeks \u2014 great trend.'):'Your biggest gain will show here.'), '')
+      +z2Sum('z2-opp','\uD83C\uDFAF','Biggest opportunity', (weak?esc(drCat(weak.category)):'\u2014'), (weak?('Signal '+weak.signal+' \u2014 focus here for max impact.'):'Answer more cases to surface this.'), '')
+      +z2Sum('z2-vs','','Vault Score', (vs!=null?('<span class="z2-vsn">'+vs+'</span><span class="z2-vsd">/100</span>'):'\u2014'), (vs!=null?'40% reviewer \u00b7 40% author \u00b7 20% calibration':'A sign of your all-round standing.'), '<div class="z2-vs-foot">'+shield+'<span class="z2-vs-trend z2-t-'+vsTrend+'">'+(vsTrend==='up'?'\u2191 improving':(vsTrend==='down'?'\u2193 slipping':'\u2192 steady'))+'</span></div>')
+      +'</div>';
+
+    var scoreSeries=[{key:'rev_score',color:'#5B4BD4',label:'Reviewer score',pb:b.best_rev_score},{key:'aut_score',color:'#E39B0C',label:'Author score',pb:b.best_aut_score}];
+
+    var grid='<div class="z2-grid">'
+      +z2Card('Rank over time', rankDelta,
+          '<div class="z2-ranks"><div class="z2-rankrow"><span class="z2-rankl" style="color:#5B4BD4">Reviewer</span>'+z2RankBoxes(wks,'rev_rank','#5B4BD4')+'</div>'
+          +'<div class="z2-rankrow"><span class="z2-rankl" style="color:#E39B0C">Author</span>'+z2RankBoxes(wks,'aut_rank','#E39B0C')+'</div></div>',
+          '<div class="z2-note">Lower is better. Solid box = your best week. \u2013 = no scored activity that week.</div>')
+      +z2Card('Score over time', scoreDelta, vtLine(wks, scoreSeries, {min:0, fmt:function(v){return fmtN(v);}, empty:'No points scored in the last 8 weeks yet.'})+vtLegend(scoreSeries), '')
+      +z2Card('Calibration trend', '', z2Gauge(calNow)+calHist, '<div class="z2-note">How well your confidence matched reality. Above 50 = you\u2019re sure when right, unsure when wrong.</div>')
+      +z2Card('Responses per case', respDelta, z2Bars(wks,'resp_per_case','#8B7FF0',{empty:'Post a case and the replies it draws show up here.'}), '')
+      +z2Card('Brief quality over time', claDelta, z2Bars(wks,'clarity','#E39B0C',{max:5,empty:'Post a case and its Clarity score lands here.'}), '<div class="z2-note">Avg Clarity &amp; Completeness / 5 \u2014 the biggest term in your author score.</div>')
+      +z2Card('Category radar', '', vtRadar(radar), '')
+      +'</div>';
+
+    var insightBar='<div class="z2-insight"><span class="z2-insight-ic">\u2728</span><div><b>Trajectory read.</b> '+insight+'</div>'
+      +(pctBits.length?('<span class="z2-insight-pct">'+esc(pctBits[0])+'</span>'):'')+'</div>';
+
+    return '<div class="vt-zone z2">'
       +'<div class="vt-zh"><span class="vt-zn">Zone 2</span><span class="vt-zt">Trajectory</span>'
-      +'<span class="vt-zs">The last 8 weeks. This is the part that actually tells you whether you are improving.</span></div>'
-      +'<div class="vt-graphs">'
-        + g('Rank over time', 'Both boards. Higher on the chart is better \u2014 gaps mean you had no scored activity that week. Gold dot = your personal best.',
-            vtLine(wks, rankSeries, {invert:true, min:1, fmt:function(v){return '#'+v;},
-              empty:'You have not been ranked in the last 8 weeks yet.'}), vtLegend(rankSeries))
-        + g('Score over time', 'Points earned each week, on both sides of the room.',
-            vtLine(wks, scoreSeries, {min:0, fmt:function(v){return fmtN(v);},
-              empty:'No points scored in the last 8 weeks yet.'}), vtLegend(scoreSeries))
-        + g('Calibration trend \uD83E\uDDED', 'How well your confidence matched reality, cumulative. 50 is the neutral starting point \u2014 above it, you are confident when you are right and unsure when you are not.',
-            vtLine(wks, [{key:'calibration', color:'#22a45d', label:'Calibration'}],
-              {min:0, max:100, fmt:function(v){return v+'%';},
-               empty:'Score GutCheck calls at BOTH confidence levels (a hunch and a confident call) and this line starts.'}),
-            vtLegend([{key:'calibration',color:'#22a45d',label:'Calibration %'}]))
-        + g('Brief quality over time', 'Average Clarity &amp; Completeness of the cases you posted each week, out of 5. This is the biggest term in your author score \u2014 and the fastest thing you can fix.',
-            vtLine(wks, [{key:'clarity', color:'#E39B0C', label:'Avg clarity', pb:b.best_clarity}],
-              {min:0, max:5, fmt:function(v){return fmtN(v);},
-               empty:'Post a case and its Clarity &amp; Completeness score lands here.'}),
-            vtLegend([{key:'clarity',color:'#E39B0C',label:'Avg clarity / 5'}]))
-        + g('Responses per case', 'How many replies your cases pulled in, per case, each week. If clarity climbs and this does not, the problem is where you are posting \u2014 not how you are writing.',
-            vtLine(wks, [{key:'resp_per_case', color:'#8B7FF0', label:'Responses / case'}],
-              {min:0, fmt:function(v){return fmtN(v);},
-               empty:'Post a case and the replies it draws show up here.'}),
-            vtLegend([{key:'resp_per_case',color:'#8B7FF0',label:'Responses per case'}]))
-        + g('Category radar \uD83E\uDDED', 'Where your judgment agrees with the room. The bar is your signal (0\u2013100); \u00d7 is how many calls you have made there. Answer DecisionRoom cases in your strong categories \u2014 practise the weak ones.',
-            vtRadar(t.radar||[]), '')
-      +'</div></div>';
+      +'<span class="vt-zs">The last 8 weeks \u2014 this is the part that actually tells you whether you\u2019re improving.</span></div>'
+      +summary+grid+insightBar+'</div>';
   }
   function vaultRender(d, t, w, dg){
     var el=document.getElementById(LBLIST); if(!el) return;
@@ -1794,8 +2059,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var html='';
     if(!u.all_done) html+=vaultLadder(u)+'<div style="height:1.4rem"></div>';
     html+=vaultZone1(d);
-    html+=vaultZone2(t);
-    html+=vaultZone3(dg);
+    html+=vaultZone2(t, d);
+    html+=vaultZone3(dg, d);
     html+=vaultZone4(w);
     el.innerHTML=html;
   }
