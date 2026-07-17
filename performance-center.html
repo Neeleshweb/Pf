@@ -255,6 +255,20 @@
   .pcx-dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.5;flex:none}
   .pcx-note{max-width:780px;margin:1.5rem auto 0;text-align:center;font-size:.92rem;line-height:1.65;color:var(--muted,#6b7280)}
   .pcx-note b{color:var(--ink,#16233f);font-weight:700}
+  .pc-winbar{justify-content:center;flex-wrap:wrap;margin:.2rem 0 1.9rem}
+  .pc-sec + .pc-sec{margin-top:2.9rem;padding-top:2.5rem;border-top:1px solid var(--border,#e4e8f4)}
+  .pc-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:.7rem}
+  .pc-ctrl{display:flex;align-items:center;gap:.55rem;flex-wrap:wrap}
+  .pc-pills{display:inline-flex;gap:.18rem;background:var(--surface,#eef1fa);border:1px solid var(--border,#e2e6f2);border-radius:13px;padding:.26rem;box-shadow:inset 0 1px 2px rgba(20,25,45,.04)}
+  .pc-pill{border:none;background:none;color:var(--muted,#6b7280);font-size:.75rem;font-weight:700;padding:.42rem .74rem;border-radius:9px;cursor:pointer;transition:background .15s,color .15s,box-shadow .15s;white-space:nowrap;font-family:inherit}
+  .pc-pill:hover{background:var(--card,#fff);color:var(--ink,#16233f)}
+  .pc-pill.active{background:linear-gradient(135deg,var(--accent,#4f43d8),#6d5ef0);color:#fff;box-shadow:0 3px 10px rgba(79,67,216,.32)}
+  .pc-refresh{display:inline-flex;align-items:center;gap:.42rem;background:var(--card,#fff);border:1px solid var(--border,#e2e6f2);color:var(--ink,#3a4358);font-size:.75rem;font-weight:800;padding:.5rem .82rem;border-radius:11px;cursor:pointer;box-shadow:0 1px 3px rgba(20,25,45,.06);transition:border-color .15s,color .15s,box-shadow .15s;font-family:inherit}
+  .pc-refresh:hover{border-color:var(--accent,#4f43d8);color:var(--accent,#4f43d8);box-shadow:0 4px 13px rgba(79,67,216,.16)}
+  .pc-refresh svg{width:14px;height:14px}
+  .pc-refresh.spinning svg{animation:pc-spin .7s linear infinite}
+  @keyframes pc-spin{to{transform:rotate(360deg)}}
+  @media(max-width:640px){ .pc-head{flex-direction:column;align-items:flex-start} .pc-ctrl{width:100%} .pc-pills{flex-wrap:wrap} }
   @media(max-width:560px){ .pcx-grid{grid-template-columns:1fr} }
   .lb-list{}
   .lb-list.loading{opacity:.55;pointer-events:none}
@@ -739,36 +753,27 @@
 
 <section class="section tint" id="lb-sec">
   <div class="container">
-    <div class="lb-topbar">
-      <div class="lb-title-row">
-        <span class="lb-trophy" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v3a6 6 0 0 1-12 0V4Z"/><path d="M6 5H4a2 2 0 0 0 0 4h2"/><path d="M18 5h2a2 2 0 0 1 0 4h-2"/><path d="M12 13v3"/><path d="M9 20h6"/><path d="M10 16h4l-.4 4h-3.2Z" fill="currentColor" stroke="none"/></svg></span>
-        <h2 class="lb-title" id="lb-title">Top Responders</h2>
-      </div>
-      <span class="lb-live"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z"/><path d="m8 12 3 3 5-6"/></svg>Updated live — recalculates on every refresh</span>
+    <div class="pc-sec" id="pc-rev">
+      <div class="pc-head"><div class="lb-title-row"><span class="lb-trophy" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v3a6 6 0 0 1-12 0V4Z"/><path d="M6 5H4a2 2 0 0 0 0 4h2"/><path d="M18 5h2a2 2 0 0 1 0 4h-2"/><path d="M12 13v3"/><path d="M9 20h6"/><path d="M10 16h4l-.4 4h-3.2Z" fill="currentColor" stroke="none"/></svg></span><h2 class="lb-title">Reviewer Leaderboard</h2></div><div class="pc-ctrl"><div class="pc-pills" data-sec="rev" role="tablist" aria-label="Time window"><button type="button" class="pc-pill" data-win="today" role="tab">Today</button><button type="button" class="pc-pill active" data-win="week" role="tab" aria-selected="true">This Week</button><button type="button" class="pc-pill" data-win="lastweek" role="tab">Last Week</button><button type="button" class="pc-pill" data-win="month" role="tab">This Month</button><button type="button" class="pc-pill" data-win="all" role="tab">All Time</button></div><button type="button" class="pc-refresh" data-sec="rev" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Refresh</button></div></div>
+      <p class="lb-sub" id="rev-sub"></p>
+      <div id="rev-champ" class="lb-champ" style="display:none"></div>
+      <div id="rev-list" class="lb-list"><div class="lb-empty">Loading…</div></div>
+      <div id="rev-hist" class="lb-hist" style="display:none"></div>
     </div>
-    <p class="lb-sub" id="lb-sub"></p>
-    <div class="lb-tabs" id="lb-tabs" role="tablist" aria-label="Leaderboard type">
-      <button type="button" class="lb-tab active" data-board="sub" role="tab" aria-selected="true">Author Leaderboard</button>
-      <button type="button" class="lb-tab" data-board="rev" role="tab">Reviewer Leaderboard</button>
-      <button type="button" class="lb-tab" data-board="vault" role="tab">🔐 Vault</button>
+
+    <div class="pc-sec" id="pc-sub">
+      <div class="pc-head"><div class="lb-title-row"><span class="lb-trophy" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v3a6 6 0 0 1-12 0V4Z"/><path d="M6 5H4a2 2 0 0 0 0 4h2"/><path d="M18 5h2a2 2 0 0 1 0 4h-2"/><path d="M12 13v3"/><path d="M9 20h6"/><path d="M10 16h4l-.4 4h-3.2Z" fill="currentColor" stroke="none"/></svg></span><h2 class="lb-title">Author Leaderboard</h2></div><div class="pc-ctrl"><div class="pc-pills" data-sec="sub" role="tablist" aria-label="Time window"><button type="button" class="pc-pill" data-win="today" role="tab">Today</button><button type="button" class="pc-pill" data-win="week" role="tab">This Week</button><button type="button" class="pc-pill" data-win="lastweek" role="tab">Last Week</button><button type="button" class="pc-pill active" data-win="month" role="tab" aria-selected="true">This Month</button><button type="button" class="pc-pill" data-win="all" role="tab">All Time</button></div><button type="button" class="pc-refresh" data-sec="sub" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Refresh</button></div></div>
+      <p class="lb-sub" id="sub-sub"></p>
+      <div id="sub-champ" class="lb-champ" style="display:none"></div>
+      <div id="sub-list" class="lb-list"><div class="lb-empty">Loading…</div></div>
+      <div id="sub-hist" class="lb-hist" style="display:none"></div>
     </div>
-    <div class="lb-bar">
-      <div class="lb-pills" id="lb-pills" role="tablist" aria-label="Leaderboard window">
-        <button type="button" class="lb-pill" data-win="today" role="tab">Today</button>
-        <button type="button" class="lb-pill" data-win="yesterday" role="tab">Yesterday</button>
-        <button type="button" class="lb-pill active" data-win="week" role="tab" aria-selected="true">This Week</button>
-        <button type="button" class="lb-pill" data-win="lastweek" role="tab">Last Week</button>
-        <button type="button" class="lb-pill" data-win="7d" role="tab">Rolling 7 Days</button>
-        <button type="button" class="lb-pill" data-win="month" role="tab">This Month</button>
-        <button type="button" class="lb-pill" data-win="lastmonth" role="tab">Last Month</button>
-        <button type="button" class="lb-pill" data-win="all" role="tab">All Time</button>
-      </div>
-      <button type="button" class="lb-tip-i" data-tip="windows" aria-label="What do these windows mean?" style="width:18px;height:18px;font-size:.66rem;align-self:center;color:var(--muted,#8a91a0)">i</button>
-      <button type="button" id="lb-refresh" class="lb-refresh" aria-label="Refresh leaderboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Refresh</button>
+
+    <div class="pc-sec" id="pc-vault">
+      <div class="pc-head"><div class="lb-title-row"><span class="lb-trophy" aria-hidden="true">🔐</span><h2 class="lb-title">Performance Vault</h2></div><div class="pc-ctrl"><div class="pc-pills" data-sec="vault" role="tablist" aria-label="Time window"><button type="button" class="pc-pill" data-win="today" role="tab">Today</button><button type="button" class="pc-pill" data-win="week" role="tab">This Week</button><button type="button" class="pc-pill" data-win="lastweek" role="tab">Last Week</button><button type="button" class="pc-pill active" data-win="month" role="tab" aria-selected="true">This Month</button><button type="button" class="pc-pill" data-win="all" role="tab">All Time</button></div><button type="button" class="pc-refresh" data-sec="vault" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Refresh</button></div></div>
+      <p class="lb-sub">Your private performance record — only you can see this. Nothing here is public or shared.</p>
+      <div id="vault-list" class="lb-list"></div>
     </div>
-    <div id="lb-champ" class="lb-champ" style="display:none"></div>
-    <div id="lb-list" class="lb-list"><div class="lb-empty">Loading…</div></div>
-    <div id="lb-hist" class="lb-hist" style="display:none"></div>
   </div>
 </section>
 <footer class="foot">
@@ -1077,7 +1082,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     return '<div class="lb-mcards">'+body+'</div>';
   }
   function lbRender(res, w){
-    var el=document.getElementById('lb-list'); if(!el) return;
+    var el=document.getElementById(LBLIST); if(!el) return;
     var top=(res&&res.top)||[]; var me=(res&&res.me)||null;
     if(!top.length){ el.innerHTML='<div class="lb-empty">No scored reviewer activity in this window yet. Answer cases that owners act on and readers find helpful to appear here.</div>'; return; }
     var rest=top.slice(3);
@@ -1111,7 +1116,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     if(sb) sb.innerHTML=esc(c.lead)+'<span class="lb-sub2">'+c.body+' Tap any \u24D8 to learn what a stat means.</span>';
   }
   function renderChamp(d,board){
-    var el=document.getElementById('lb-champ'); if(!el) return;
+    var el=document.getElementById(LBCHAMP); if(!el) return;
     var isSub=(board==='sub');
     if(!d || !d.ok || !d.alias){ el.innerHTML=''; el.style.display='none'; return; }
     var streak=Number(d.streak)||0;
@@ -1171,7 +1176,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     return '<svg class="lb-hist-svg" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Your rank over the last 8 weeks">'+g+'</svg>';
   }
   function renderHist(d){
-    var el=document.getElementById('lb-hist'); if(!el) return;
+    var el=document.getElementById(LBHIST); if(!el) return;
     if(!d || !d.ok || !d.signed_in){ el.innerHTML=''; el.style.display='none'; return; }
     var weeks=d.weeks||[];
     var scored=weeks.filter(function(w){ return w.rank!=null; });
@@ -1318,7 +1323,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +'<div class="lb-mc-body">'+sbStatsHtml(x)+'</div></div>';
   }
   function sbRender(res,w){
-    var el=document.getElementById('lb-list'); if(!el) return;
+    var el=document.getElementById(LBLIST); if(!el) return;
     var top=(res&&res.top)||[]; var me=(res&&res.me)||null;
     if(!top.length){ el.innerHTML='<div class="lb-empty">No scored cases in this window yet. Post a case with a full brief \u2014 clarity is the biggest single term, and a fuller brief attracts better reviewers.</div>'; return; }
     var rest=top.slice(3);
@@ -1782,7 +1787,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +'</div></div>';
   }
   function vaultRender(d, t, w, dg){
-    var el=document.getElementById('lb-list'); if(!el) return;
+    var el=document.getElementById(LBLIST); if(!el) return;
     if(!d || !d.ok){ el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; return; }
     if(!d.signed_in){ el.innerHTML=vaultSignedOut(); return; }
     var u=d.unlock||{};
@@ -1794,20 +1799,20 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     html+=vaultZone4(w);
     el.innerHTML=html;
   }
-  function loadVault(){
-    var el=document.getElementById('lb-list');
+  function loadVault(win){
+    LBLIST='vault-list';
+    var el=document.getElementById('vault-list');
     if(!jlUserId()){ if(el) el.innerHTML=vaultSignedOut(); return; }
-    var rg=lbRange(lbWin), pv=lbPrevRange(lbWin);
+    var rg=lbRange(win), pv=lbPrevRange(win);
     if(el) el.classList.add('loading');
-    var b=lbBoard;
     Promise.all([
       jlRpc('dr_my_vault',{p_since:rg[0],p_until:rg[1],p_prev_since:pv[0],p_prev_until:pv[1]}),
       jlRpc('dr_my_trajectory',{p_weeks:8,p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; }),
       jlRpc('dr_my_work',{p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; }),
       jlRpc('dr_my_diagnosis',{}).catch(function(){ return null; })
     ]).then(function(res){
-        if(b!==lbBoard) return;
         if(el) el.classList.remove('loading');
+        LBLIST='vault-list';
         vaultRender(res[0], res[1], res[2], res[3]);
       })
       .catch(function(){ if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; } });
@@ -1824,58 +1829,59 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   }
 
   var lbBusy=false, lbWin='week', lbBoard='sub';
-  function lbLoad(){
-    if(lbBoard==='vault'){ loadVault(); return; }
-    if(lbBusy) return; lbBusy=true;
-    var rg=lbRange(lbWin), me=jlUserId(), board=lbBoard;
+  var LBLIST='rev-list', LBCHAMP='rev-champ', LBHIST='rev-hist', pcTimer=null;
+  var winRev='week', winSub='month', winVault='month';   /* independent per-section windows */
+  /* Load one leaderboard (reviewer or author) into its own stacked section, for its
+     OWN window. Sets the render-target module vars synchronously right before each
+     render, so concurrent section loads never cross-render. */
+  function loadOneBoard(board, listId, champId, histId, win){
+    var rg=lbRange(win), me=jlUserId();
     var fn=(board==='sub')?'dr_submitter_leaderboard':'dr_reviewer_leaderboard';
-    var el=document.getElementById('lb-list'); if(el) el.classList.add('loading');
+    var listEl=document.getElementById(listId); if(listEl) listEl.classList.add('loading');
     fetch(URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json'},body:JSON.stringify({p_since:rg[0],p_until:rg[1],p_limit:20,p_me:me})})
       .then(function(r){ return r.ok?r.json():null; })
       .then(function(res){
-        lbBusy=false; if(el) el.classList.remove('loading');
-        if(board!==lbBoard) return;                 /* stale response guard */
-        if(board==='sub') sbRender(res||{}, lbWin); else lbRender(res||{}, lbWin);
+        if(listEl) listEl.classList.remove('loading');
+        LBLIST=listId;
+        if(board==='sub') sbRender(res||{}, win); else lbRender(res||{}, win);
       })
-      .catch(function(){ lbBusy=false; if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load the leaderboard. Tap Refresh to retry.</div>'; } });
+      .catch(function(){ if(listEl){ listEl.classList.remove('loading'); listEl.innerHTML='<div class="lb-empty">Could not load the leaderboard. Tap Refresh to retry.</div>'; } });
+    jlRpc(board==='sub'?'dr_submitter_of_week':'dr_reviewer_of_week').then(function(d){ LBCHAMP=champId; renderChamp(d,board); }).catch(function(){});
+    if(jlUserId()){
+      jlRpc(board==='sub'?'dr_my_submitter_history':'dr_my_rank_history',{p_weeks:8}).then(function(d){ LBHIST=histId; renderHist(d); }).catch(function(){});
+    } else { var he=document.getElementById(histId); if(he){ he.innerHTML=''; he.style.display='none'; } }
   }
-  window.pmOnAuth=function(){ try{ lbLoad(); loadChamp(); loadHist(); }catch(e){} };
+  function loadSection(sec){
+    if(sec==='rev') loadOneBoard('rev','rev-list','rev-champ','rev-hist', winRev);
+    else if(sec==='sub') loadOneBoard('sub','sub-list','sub-champ','sub-hist', winSub);
+    else if(sec==='vault') loadVault(winVault);
+  }
+  function setWin(sec, win){ if(sec==='rev') winRev=win; else if(sec==='sub') winSub=win; else winVault=win; loadSection(sec); }
+  function pcLoadNow(){ loadSection('rev'); loadSection('sub'); loadSection('vault'); }
+  function pcLoad(){ if(pcTimer) clearTimeout(pcTimer); pcTimer=setTimeout(pcLoadNow, 60); }
+  function lbLoad(){ pcLoad(); }  /* back-compat alias */
+  window.pmOnAuth=function(){ try{ pcLoad(); }catch(e){} };
+  function setSectionCopy(){
+    var rs=document.getElementById('rev-sub'); if(rs) rs.innerHTML=esc(BOARD_COPY.rev.lead)+'<span class="lb-sub2">'+BOARD_COPY.rev.body+' Tap any \u24D8 to learn what a stat means.</span>';
+    var ss=document.getElementById('sub-sub'); if(ss) ss.innerHTML=esc(BOARD_COPY.sub.lead)+'<span class="lb-sub2">'+BOARD_COPY.sub.body+' Tap any \u24D8 to learn what a stat means.</span>';
+  }
   function initLb(){
-    var pills=document.getElementById('lb-pills'), rEl=document.getElementById('lb-refresh');
-    if(!pills) return;
-    pills.addEventListener('click', function(e){
-      var b=(e.target.closest)?e.target.closest('.lb-pill'):null; if(!b) return;
-      if(b.classList.contains('active')) return;
-      var cur=pills.querySelector('.lb-pill.active'); if(cur){ cur.classList.remove('active'); cur.removeAttribute('aria-selected'); }
-      b.classList.add('active'); b.setAttribute('aria-selected','true');
-      lbWin=b.getAttribute('data-win')||'week';
-      lbLoad();
-    });
-    if(rEl) rEl.onclick=function(){ lbLoad(); loadChamp(); loadHist(); };
-    var tabs=document.getElementById('lb-tabs');
-    if(tabs) tabs.addEventListener('click', function(e){
-      var b=(e.target.closest)?e.target.closest('.lb-tab'):null; if(!b) return;
-      if(b.classList.contains('active')) return;
-      var cur=tabs.querySelector('.lb-tab.active'); if(cur){ cur.classList.remove('active'); cur.removeAttribute('aria-selected'); }
-      b.classList.add('active'); b.setAttribute('aria-selected','true');
-      lbBoard=b.getAttribute('data-board')||'rev';
-      setBoardCopy(lbBoard);
-      /* cases move slower than responses -> default the submitter board to This Month */
-      var want=(lbBoard==='rev')?'week':'month';
-      var pl=document.getElementById('lb-pills');
-      if(pl){ var np=pl.querySelector('.lb-pill[data-win="'+want+'"]');
-        if(np && !np.classList.contains('active')){
-          var cp=pl.querySelector('.lb-pill.active'); if(cp){ cp.classList.remove('active'); cp.removeAttribute('aria-selected'); }
-          np.classList.add('active'); np.setAttribute('aria-selected','true'); lbWin=want;
-        }
-      }
-      lbBusy=false;
-      lbLoad(); loadChamp(); loadHist();
-    });
-    setBoardCopy(lbBoard);
-    /* lazy seal: closes out any completed week that is not yet frozen (no cron) */
-    jlRpc('dr_seal_weeks').then(function(){ loadChamp(); loadHist(); }).catch(function(){ loadChamp(); loadHist(); });
+    if(!document.getElementById('pc-rev')) return;
+    /* one delegated handler: per-section time pills, per-section refresh, and the
+       expandable leaderboard rows / mobile cards */
     document.addEventListener('click', function(e){
+      var pill=(e.target.closest)?e.target.closest('.pc-pill'):null;
+      if(pill){
+        var bar=pill.closest('.pc-pills'), sec=bar&&bar.getAttribute('data-sec');
+        if(sec && !pill.classList.contains('active')){
+          var cur=bar.querySelector('.pc-pill.active'); if(cur){ cur.classList.remove('active'); cur.removeAttribute('aria-selected'); }
+          pill.classList.add('active'); pill.setAttribute('aria-selected','true');
+          setWin(sec, pill.getAttribute('data-win')||'week');
+        }
+        return;
+      }
+      var rf=(e.target.closest)?e.target.closest('.pc-refresh'):null;
+      if(rf){ var sec2=rf.getAttribute('data-sec'); if(sec2){ rf.classList.add('spinning'); setTimeout(function(){ rf.classList.remove('spinning'); }, 700); loadSection(sec2); } return; }
       if(e.target.closest && !e.target.closest('.lb-tip-i')){
         var tr=e.target.closest('tr.lb-tr');
         if(tr){
@@ -1892,7 +1898,10 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       var card=h.parentNode; if(!card||!card.classList||!card.classList.contains('lb-mc')) return;
       card.setAttribute('data-open', card.getAttribute('data-open')==='1'?'0':'1');
     });
-    lbLoad();
+    setSectionCopy();
+    /* lazy seal: closes out any completed week that is not yet frozen (no cron) */
+    jlRpc('dr_seal_weeks').then(function(){ pcLoad(); }).catch(function(){ pcLoad(); });
+    pcLoad();
   }
   if(document.readyState!=='loading') initLb(); else document.addEventListener('DOMContentLoaded', initLb);
 })();
