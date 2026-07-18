@@ -714,6 +714,128 @@
   .wk-recon.muted b{color:var(--muted,#6b7280)}
   .wk-none{padding:.7rem 0;color:var(--muted,#9aa0b0);font-size:.8rem}
   @media(max-width:560px){ .wk-title{white-space:normal} .wk-pts{font-size:1.1rem;min-width:38px} }
+  /* ---- Zone 4 (Your Work) portfolio ---- */
+  .vt-zone.z4{animation:z2fade .5s ease both}
+  .z4-export{margin-left:auto;display:inline-flex;align-items:center;gap:.4rem;background:var(--card,#fff);border:1px solid var(--border,#e2e6f2);color:var(--ink,#3a4358);font-size:.74rem;font-weight:800;padding:.45rem .8rem;border-radius:10px;cursor:pointer;box-shadow:0 1px 3px rgba(20,25,45,.06);font-family:inherit;transition:border-color .15s,color .15s,box-shadow .15s}
+  .z4-export:hover{border-color:#5B4BD4;color:#5B4BD4;box-shadow:0 4px 13px rgba(91,75,212,.16)}
+  .z4-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin:.7rem 0 1.4rem}
+  .wk-stat{display:flex;align-items:flex-start;gap:.7rem;border:1px solid var(--border,#e7eaf4);border-radius:16px;background:var(--card,#fff);background:radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--c) 7%, #fff) 0%, var(--card,#fff) 58%);padding:1.05rem 1.1rem;box-shadow:0 8px 26px rgba(20,25,45,.05);transition:transform .18s ease,box-shadow .18s ease}
+  .wk-stat:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(20,25,45,.09)}
+  .wk-stat-ic{flex:none;width:40px;height:40px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;color:#fff;background:var(--c);background:linear-gradient(150deg, color-mix(in srgb, var(--c) 84%, #fff 10%), var(--c));box-shadow:0 6px 16px color-mix(in srgb, var(--c) 40%, transparent)}
+  .wk-stat-tx{display:flex;flex-direction:column;gap:.05rem;min-width:0}
+  .wk-stat-l{font-size:.68rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted,#9098a8)}
+  .wk-stat-big{font-size:1.6rem;font-weight:800;color:var(--ink,#16233f);line-height:1.15}
+  .wk-stat-s{font-size:.72rem;color:var(--muted,#7a8291);line-height:1.35}
+  .z4-cols{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:1.3rem;align-items:start}
+  .z4-main{min-width:0;display:flex;flex-direction:column;gap:1.5rem}
+  .z4-side{display:flex;flex-direction:column;gap:1rem;position:sticky;top:1rem}
+  .wk-panel{border:1px solid var(--border,#e7eaf4);border-radius:20px;background:var(--card,#fff);padding:1.5rem 1.6rem;box-shadow:0 10px 30px rgba(20,25,45,.05);margin-bottom:0}
+  .wk-h{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.2rem}
+  .wk-h-ic{flex:none;width:34px;height:34px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;color:#fff}
+  .wk-h-ic.resp{background:linear-gradient(150deg,#8A7DF5,#6D5EF0);box-shadow:0 5px 14px rgba(109,94,240,.32)}
+  .wk-h-ic.case{background:linear-gradient(150deg,#5AA0F0,#2F82E4);box-shadow:0 5px 14px rgba(47,130,228,.3)}
+  .wk-h-t{font-size:1.12rem;font-weight:800;color:var(--ink,#16233f);display:inline-flex;align-items:center;gap:.1rem}
+  .wk-h-meta{margin-left:auto;font-size:.78rem;font-weight:700;color:var(--muted,#7a8291)}
+  .wk-h-meta b{color:var(--ink,#16233f)}
+  .wk-tools{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin:.9rem 0 1rem;justify-content:space-between}
+  .wk-tgrp{display:inline-flex;gap:.2rem;background:var(--surface,#eef1fa);border:1px solid var(--border,#e2e6f2);border-radius:12px;padding:.24rem}
+  .wk-right{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-left:auto}
+  .wk-search{display:inline-flex;align-items:center;gap:.4rem;border:1px solid var(--border,#e2e6f2);border-radius:11px;padding:.35rem .6rem;background:var(--card,#fff);color:var(--muted,#9aa0b0)}
+  .wk-search:focus-within{border-color:#5B4BD4}
+  .wk-search-in{border:none;outline:none;background:none;font-size:.78rem;font-family:inherit;color:var(--ink,#16233f);width:130px}
+  .wk-sortgrp{display:inline-flex;align-items:center;gap:.3rem}
+  .wk-tlab{font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted,#9aa0b0)}
+  .wk-fil,.wk-sort{border:none;background:none;color:var(--muted,#6b7280);font-size:.74rem;font-weight:700;padding:.4rem .7rem;border-radius:9px;cursor:pointer;font-family:inherit;transition:background .15s,color .15s,box-shadow .15s;white-space:nowrap}
+  .wk-fil:hover,.wk-sort:hover{background:var(--card,#fff);color:var(--ink,#16233f)}
+  .wk-fil.on,.wk-sort.on{background:linear-gradient(135deg,#5B4BD4,#6d5ef0);color:#fff;box-shadow:0 3px 10px rgba(91,75,212,.3)}
+  .wk-sort{border:1px solid transparent}
+  .wk-table{width:100%;border-collapse:collapse;font-size:.84rem}
+  .wk-table thead th{text-align:left;font-size:.62rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted,#9aa0b0);padding:.5rem .7rem;border-bottom:1px solid var(--border,#eef1f8)}
+  .wk-tr{border-bottom:1px solid #f2f4fa;transition:background .15s}
+  .wk-tr:hover{background:#fafbff}
+  .wk-tr td{padding:.85rem .7rem;vertical-align:middle}
+  .wk-tr.resp td:first-child{box-shadow:inset 3px 0 0 #6D5EF0}
+  .wk-tr.case td:first-child{box-shadow:inset 3px 0 0 #2F82E4}
+  .wk-c-title{max-width:280px}
+  .wk-t-link{display:block;font-weight:700;color:var(--ink,#16233f);text-decoration:none;line-height:1.35;font-size:.9rem}
+  .wk-t-link:hover{color:#5B4BD4}
+  .wk-t-meta{display:block;font-size:.72rem;color:var(--muted,#9aa0b0);margin-top:.15rem}
+  .wk-badge{display:inline-flex;align-items:center;font-size:.68rem;font-weight:800;border-radius:99px;padding:.2rem .55rem;white-space:nowrap}
+  .wk-b-acted{background:linear-gradient(135deg,#d6f6e3,#b8efce);color:#15803d}
+  .wk-b-help{background:linear-gradient(135deg,#dbeafe,#c3dafe);color:#2563EB}
+  .wk-b-att{background:linear-gradient(135deg,#fde0e0,#fbcaca);color:#DC2626}
+  .wk-b-po{background:#eef1f8;color:#6b7280}
+  .wk-b-closed{background:linear-gradient(135deg,#d6f6e3,#b8efce);color:#15803d}
+  .wk-b-open{background:linear-gradient(135deg,#dbeafe,#c3dafe);color:#2563EB}
+  .wk-badge-sub{display:block;font-size:.68rem;color:var(--muted,#9aa0b0);margin-top:.18rem}
+  .wk-track{display:block;height:6px;background:#EEF1F8;border-radius:99px;overflow:hidden;margin-top:.3rem;max-width:120px}
+  .wk-track i{display:block;height:100%;border-radius:99px;transition:width .6s ease}
+  .wk-help-top,.wk-resol-top{font-size:.76rem;color:var(--muted,#7a8291)}
+  .wk-help-top b,.wk-resol-top b{color:var(--ink,#16233f);font-weight:800;font-size:.86rem}
+  .wk-resol-l{font-size:.76rem;color:var(--muted,#9aa0b0)}
+  .wk-clar-v{font-size:.88rem;font-weight:800;color:var(--ink,#16233f);display:inline-flex;align-items:center;gap:.2rem}
+  .wk-clar-star{color:#CA8A04;display:inline-flex}
+  .wk-clar-l{display:block;font-size:.7rem;color:var(--muted,#9aa0b0);margin-top:.15rem}
+  .wk-pill{display:inline-block;font-size:.95rem;font-weight:800;padding:.28rem .6rem;border-radius:10px;white-space:nowrap}
+  .wk-pill.pos{background:linear-gradient(135deg,#e7f8ee,#d0f2df);color:#12793a}
+  .wk-pill.neg{background:linear-gradient(135deg,#fdecec,#fbdada);color:#c0392b}
+  .wk-pill.zero{background:#eef1f8;color:#6b7280}
+  .wk-pts-sub{display:block;font-size:.68rem;color:var(--muted,#9aa0b0);margin-top:.2rem}
+  .wk-qual{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:800;border-radius:99px;padding:.22rem .6rem;white-space:nowrap}
+  .wk-q-ex{background:linear-gradient(135deg,#fdf0cf,#f8e3a4);color:#9A6B04;box-shadow:0 2px 8px rgba(202,138,4,.2)}
+  .wk-q-st{background:linear-gradient(135deg,#e4e0fb,#d3ccf7);color:#5B4BD4}
+  .wk-q-gd{background:linear-gradient(135deg,#dbeafe,#c3dafe);color:#2563EB}
+  .wk-q-nw{background:linear-gradient(135deg,#fde0e0,#fbcaca);color:#DC2626}
+  .wk-q-po{background:#eef1f8;color:#6b7280}
+  .wk-medal{display:inline-flex;color:#CA8A04}
+  .wk-view{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;border:1px solid var(--border,#e2e6f2);color:var(--muted,#7a8291);text-decoration:none;transition:border-color .15s,color .15s,transform .15s}
+  .wk-view:hover{border-color:#5B4BD4;color:#5B4BD4;transform:translateY(-1px)}
+  .wk-resp-n{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:28px;border-radius:9px;background:#eef1f8;color:var(--ink,#3a4358);font-size:.8rem;font-weight:800}
+  .wk-seeall{text-align:center;margin-top:1rem;padding-top:.9rem;border-top:1px solid #f2f4fa}
+  .wk-seeall a{font-size:.82rem;font-weight:800;color:#5B4BD4;text-decoration:none}
+  .wk-seeall a:hover{text-decoration:underline}
+  .wk-empty{text-align:center;padding:2rem 1rem;color:var(--muted,#9aa0b0)}
+  .wk-empty svg{color:#c9cfe0;margin-bottom:.5rem}
+  .wk-empty p{margin:.2rem 0 .6rem;font-size:.86rem}
+  .wk-empty a{font-size:.84rem;font-weight:800;color:#5B4BD4;text-decoration:none}
+  .wk-side{border:1px solid var(--border,#e7eaf4);border-radius:18px;background:var(--card,#fff);padding:1.2rem 1.25rem;box-shadow:0 8px 26px rgba(20,25,45,.05)}
+  .wk-side-h{display:flex;align-items:center;gap:.35rem;font-size:.86rem;font-weight:800;color:var(--ink,#16233f);margin-bottom:.9rem}
+  .wk-side-empty{font-size:.8rem;color:var(--muted,#9aa0b0)}
+  .wk-donut-wrap{display:flex;flex-direction:column;align-items:center;gap:.8rem}
+  .wk-donut{width:104px;height:104px}
+  .wk-donut-leg{width:100%;display:flex;flex-direction:column;gap:.4rem}
+  .wk-dl{display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--muted,#6b7280)}
+  .wk-dl b{color:var(--ink,#16233f);margin-left:auto}
+  .wk-dl-dot{width:9px;height:9px;border-radius:50%;flex:none}
+  .wk-dl-p{font-size:.72rem;color:var(--muted,#9aa0b0);width:38px;text-align:right}
+  .wk-pbi-wrap{display:flex;flex-direction:column;gap:.55rem}
+  .wk-pbi{display:flex;align-items:center;gap:.5rem}
+  .wk-pbi-l{font-size:.76rem;color:var(--muted,#6b7280);width:104px;flex:none}
+  .wk-pbi-t{flex:1;height:7px;background:#EEF1F8;border-radius:99px;overflow:hidden}
+  .wk-pbi-t i{display:block;height:100%;border-radius:99px;transition:width .6s ease}
+  .wk-pbi-v{font-size:.78rem;font-weight:800;color:var(--ink,#16233f);width:46px;text-align:right;flex:none}
+  .wk-pbi.total{border-top:1px solid #eef1f8;padding-top:.5rem;margin-top:.15rem}
+  .wk-pbi.total .wk-pbi-l{font-weight:800;color:var(--ink,#16233f)}
+  .wk-perf{background:radial-gradient(120% 140% at 100% 0%, #fdf6e6, #fff 62%);border-color:#f0e2bd}
+  .wk-perf .wk-side-h{color:#9A6B04}
+  .wk-perf-big{font-size:1.15rem;font-weight:800;color:var(--ink,#16233f);line-height:1.25}
+  .wk-perf-s{font-size:.78rem;line-height:1.45;color:var(--muted,#7a8291);margin-top:.3rem}
+  .wk-perf-cta{display:inline-block;margin-top:.8rem;font-size:.8rem;font-weight:800;color:#9A6B04;text-decoration:none}
+  .wk-perf-cta:hover{text-decoration:underline}
+  .wk-dlt{display:inline-block;font-size:.72rem;font-weight:800;margin-top:.1rem}
+  .wk-dlt.up{color:#15803d}
+  .wk-dlt.down{color:#c0392b}
+  .wk-dlt.flat{color:var(--muted,#9aa0b0);font-weight:700}
+  .wk-grp td{background:#f7f8fc;font-size:.64rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted,#8a91a0);padding:.4rem .7rem !important;border-bottom:1px solid #eef1f8}
+  .wk-ach-list{display:flex;flex-direction:column;gap:.75rem}
+  .wk-ach{display:flex;align-items:flex-start;gap:.55rem}
+  .wk-ach-ic{flex:none;width:30px;height:30px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;color:#fff;background:var(--c);background:linear-gradient(150deg, color-mix(in srgb, var(--c) 82%, #fff 12%), var(--c));box-shadow:0 4px 12px color-mix(in srgb, var(--c) 35%, transparent)}
+  .wk-ach-tx{display:flex;flex-direction:column;min-width:0;flex:1}
+  .wk-ach-t{font-size:.8rem;font-weight:800;color:var(--ink,#16233f);line-height:1.25}
+  .wk-ach-s{font-size:.72rem;color:var(--muted,#7a8291);line-height:1.35}
+  .wk-ach-d{flex:none;font-size:.68rem;font-weight:700;color:var(--muted,#9aa0b0)}
+  @media(max-width:1080px){ .z4-cols{grid-template-columns:1fr} .z4-side{position:static;flex-direction:row;flex-wrap:wrap} .z4-side>*{flex:1;min-width:240px} }
+  @media(max-width:720px){ .wk-table{display:block;overflow-x:auto;white-space:nowrap} .wk-c-title{max-width:none} .wk-tools{flex-direction:column;align-items:stretch} .wk-right{margin-left:0} .wk-search-in{width:100%} }
   /* ===================== D6-4: ZONE 3 DIAGNOSIS ===================== */
   .dg-list{display:flex;flex-direction:column;gap:.7rem}
   .dg-count{display:inline-block;margin-left:.6rem;font-size:.68rem;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:#c0392b;background:#FDF0F0;border-radius:99px;padding:.16rem .55rem;vertical-align:middle}
@@ -1559,6 +1681,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function vTip(k){ return '<button type="button" class="lb-tip-i" data-tip="vt:'+k+'" aria-label="What is this?">i</button>'; }
   /* ===================== D6-3: ZONE 4 YOUR WORK ===================== */
   var WKTIPS={
+    what:{t:'Your Work',b:'What it is: your portfolio \u2014 every response and case you logged in this window, with what each earned.\n\nWhy it matters: these rows are the receipts behind your reviewer and author scores; nothing here is a guess.\n\nImproves when: you add work that gets acted on, marked helpful, and resolved.\n\nDrops when: activity stalls, or items get flagged and left unfixed.\n\nLeadership edge: a track record you can point to \u2014 specific decisions, specific outcomes \u2014 is what makes seniority legible to others.'},
+    pbi:{t:'Points by impact',b:'What it is: your earned points split by how much each item was worth \u2014 high, medium, or low impact.\n\nWhy it matters: it shows whether your points come from a few strong contributions or many small ones.\n\nImproves when: more of your work lands in the high-impact band (acted on, resolved, exemplary).\n\nDrops when: your points come mostly from low-impact activity.\n\nLeadership edge: concentrating effort where impact is highest \u2014 rather than staying busy \u2014 is the habit that separates senior PMs.'},
     resp:{t:'Responses you wrote',b:'Every answer you posted to a DecisionRoom case in the window selected above, with the points it earned:\n\nowner acted on it +2 \u00b7 each helpful mark +1 \u00b7 answering the asks in depth +1 \u00b7 a small GutCheck-credibility bonus \u00b7 \u2212 2 per report.\n\nThese are the SAME points that make up your reviewer score \u2014 add them up and you get the number in Zone 1.'},
     cases:{t:'Cases you posted',b:'Every case you submitted in the window selected above, with the points it earned.\n\nA case scores on Clarity & Completeness (\u00d73, the biggest term) \u00b7 the calibre of reviewer it attracted \u00b7 the responses it drew \u00b7 closing it out well \u00b7 acting on the advice \u2014 minus context flags and stalled cases.\n\nThese points, plus your GutCheck credibility and any standing bonus, are exactly your author score.'}
   };
@@ -1570,71 +1694,89 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function wkPtsHtml(p){ p=Number(p)||0; var cls=p<0?'neg':(p===0?'zero':''); return '<div class="wk-pts '+cls+'">'+(p>0?'+':'')+fmtN(p)+'<small>pts</small></div>'; }
   function wkFilBtns(group, active, opts){ var cls=(group.indexOf('sort')>=0)?'wk-sort':'wk-fil'; return opts.map(function(o){ return '<button type="button" class="'+cls+(o[0]===active?' on':'')+'" data-wk="'+group+'" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join(''); }
   /* ---- responses ---- */
-  function wkRespRow(r){
-    var chips=[];
-    if(r.acted)          chips.push('<span class="wk-chip acted">\u2705 Acted on</span>');
-    if((r.helpful||0)>0) chips.push('<span class="wk-chip help">\uD83D\uDC4D '+r.helpful+' helpful</span>');
-    if(r.covered)        chips.push('<span class="wk-chip cover">\uD83D\uDCCB Covered</span>');
-    if((r.reports||0)>0) chips.push('<span class="wk-chip rep">\u26A0\uFE0F '+r.reports+' report'+((r.reports===1)?'':'s')+'</span>');
-    if(r.anon)           chips.push('<span class="wk-chip anon">\uD83D\uDD76\uFE0F Anonymous</span>');
-    return '<a class="wk-row" href="/decisionroom.html?case='+encodeURIComponent(r.case_id)+(r.response_id?'&resp='+encodeURIComponent(r.response_id):'')+'">'
-      +'<div class="wk-row-main"><span class="wk-title">'+esc(r.title||'Untitled case')+'</span>'
-      +'<div class="wk-sub"><span class="wk-date">'+wkDateFmt(r.created_at)+'</span>'+wkStatusChip(r.status)+'</div>'
-      +(chips.length?'<div class="wk-chips">'+chips.join('')+'</div>':'')
-      +'</div>'+wkPtsHtml(r.points)+'</a>';
+  /* ===================== ZONE 4: YOUR WORK (portfolio) ===================== */
+  var wkRespQuery='', wkCaseQuery='';
+  var Z4IC={
+    chat:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
+    folder:'<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+    target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+    medal:'<circle cx="12" cy="9" r="6"/><path d="M8.5 13.5 7 22l5-3 5 3-1.5-8.5"/>',
+    thumb:'<path d="M7 11v9H3v-9zM7 11l4-8a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 2 2.4l-1.4 7A2 2 0 0 1 17.1 20H7"/>',
+    star:'<polygon points="12 2 15 9 22 9.3 16.5 14 18.5 21 12 17 5.5 21 7.5 14 2 9.3 9 9"/>',
+    eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>'
+  };
+  function z4ic(k,sz){ sz=sz||18; return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+Z4IC[k]+'</svg>'; }
+  function wkTier(p){ p=Number(p)||0; return p>=15?'high':(p>=6?'medium':(p>0?'low':'none')); }
+  function wkTierLabel(p){ var t=wkTier(p); return t==='high'?'High impact':(t==='medium'?'Medium impact':(t==='low'?'Low impact':'\u2014')); }
+  function wkPtsCell(p){ p=Number(p)||0; var cls=p<0?'neg':(p===0?'zero':'pos'); return '<td class="wk-c-pts"><span class="wk-pill '+cls+'">'+(p>0?'+':'')+fmtN(p)+'</span><span class="wk-pts-sub">'+wkTierLabel(p)+'</span></td>'; }
+  function wkQualResp(r){ if((r.reports||0)>0) return ['Needs work','nw']; var p=Number(r.points)||0; if(r.acted && (r.helpful||0)>=2 && p>=12) return ['Exemplary','ex']; if(r.acted || (r.helpful||0)>=2 || p>=10) return ['Strong','st']; if((r.helpful||0)>0 || p>0) return ['Good','gd']; return ['Posted','po']; }
+  function wkQualCase(c){ if(c.exemplary) return ['Exemplary','ex']; if((c.context_flags||0)>0 || c.abandoned===1) return ['Needs work','nw']; var p=Number(c.points)||0, fp=Number(c.final_pct)||0; if(p>=15 || fp>=70) return ['Strong','st']; if(p>0) return ['Good','gd']; return ['Posted','po']; }
+  function wkQualCell(q){ var medal=(q[1]==='ex')?'<span class="wk-medal">'+z4ic('medal',13)+'</span>':''; return '<td class="wk-c-qual"><span class="wk-qual wk-q-'+q[1]+'">'+medal+q[0]+'</span></td>'; }
+  function wkRespStatus(r){ if((r.reports||0)>0) return ['Needs attention','att','Flagged by readers']; if(r.acted) return ['Acted on','acted','Used in a decision']; if((r.helpful||0)>0) return ['Helpful','help','Well received']; return ['Posted','po','Awaiting response']; }
+  function wkCaseStatus(c){ if(c.status==='closed') return ['Closed','closed','Resolved']; if(c.abandoned===1) return ['Stalled','att','Went quiet']; return ['Open','open','Active']; }
+  function wkStatusCell(s){ return '<td class="wk-c-status"><span class="wk-badge wk-b-'+s[1]+'">'+s[0]+'</span><span class="wk-badge-sub">'+s[2]+'</span></td>'; }
+  function wkBar(pct,color){ pct=Math.max(0,Math.min(100,Number(pct)||0)); return '<span class="wk-track"><i style="width:'+pct+'%;background:'+color+'"></i></span>'; }
+  function wkHelpfulCell(r,maxH){ var h=Number(r.helpful||0); var pct=maxH>0?(h/maxH*100):0; return '<td class="wk-c-help"><span class="wk-help-top"><b>'+h+'</b> helpful</span>'+wkBar(pct,'#16A34A')+'</td>'; }
+  function wkClarityCell(c){ var v=Number(c.clarity)||0; var lab=v>=4.5?'Excellent':(v>=4?'Very good':(v>=3?'Good':(v>0?'Average':'\u2014'))); return '<td class="wk-c-clar"><span class="wk-clar-v">'+(v>0?fmtN(v)+'/5':'\u2014')+' <span class="wk-clar-star">'+z4ic('star',11)+'</span></span><span class="wk-clar-l">'+lab+'</span></td>'; }
+  function wkResolCell(c){ if(c.status!=='closed'){ return '<td class="wk-c-resol"><span class="wk-resol-l">In progress</span></td>'; } var fp=Number(c.final_pct)||0; return '<td class="wk-c-resol"><span class="wk-resol-top"><b>'+Math.round(fp)+'%</b> resolved</span>'+wkBar(fp, fp>=60?'#16A34A':(fp>=30?'#D97706':'#DC2626'))+'</td>'; }
+  function wkTitleCell(item, href){ return '<td class="wk-c-title"><a class="wk-t-link" href="'+href+'">'+esc(item.title||'Untitled')+'</a><span class="wk-t-meta">'+wkDateFmt(item.created_at)+' \u00b7 DecisionRoom</span></td>'; }
+  function wkActionCell(href){ return '<td class="wk-c-act"><a class="wk-view" href="'+href+'" title="Open">'+z4ic('eye',15)+'</a></td>'; }
+
+  function wkRespRow(r,maxH){
+    var href='/decisionroom.html?case='+encodeURIComponent(r.case_id)+(r.response_id?'&resp='+encodeURIComponent(r.response_id):'');
+    return '<tr class="wk-tr resp">'+wkTitleCell(r,href)+wkStatusCell(wkRespStatus(r))+wkHelpfulCell(r,maxH)+wkPtsCell(r.points)+wkQualCell(wkQualResp(r))+wkActionCell(href)+'</tr>';
+  }
+  function wkCaseRow(c){
+    var href='/decisionroom.html?case='+encodeURIComponent(c.case_id);
+    return '<tr class="wk-tr case">'+wkTitleCell(c,href)+wkStatusCell(wkCaseStatus(c))+wkClarityCell(c)+wkResolCell(c)+wkPtsCell(c.points)+wkQualCell(wkQualCase(c))+'<td class="wk-c-resp"><span class="wk-resp-n">'+(c.responses||0)+'</span></td></tr>';
   }
   function wkRespPass(r,f){ if(f==='acted') return !!r.acted; if(f==='helpful') return (r.helpful||0)>0; if(f==='attention') return (r.reports||0)>0; return true; }
+  function wkCasePass(c,f){ if(f==='exemplary') return !!c.exemplary; if(f==='open') return c.status!=='closed'; if(f==='closed') return c.status==='closed'; if(f==='attention') return c.abandoned===1 || (c.context_flags||0)>0; return true; }
+  /* date bucketing \u2014 groups the list when sorted by Recent */
+  function wkBucket(iso){
+    var t=wkTime(iso); if(!t) return 'Earlier';
+    var now=new Date(), d0=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime(), DAY=86400000;
+    if(t>=d0) return 'Today';
+    if(t>=d0-DAY) return 'Yesterday';
+    if(t>=d0-6*DAY) return 'This week';
+    if(t>=d0-13*DAY) return 'Last week';
+    return 'Earlier';
+  }
+  function wkGrouped(rows, render, cols, on){
+    if(!on) return rows.map(render).join('');
+    var last=null, out=[];
+    rows.forEach(function(x){ var b=wkBucket(x.created_at); if(b!==last){ out.push('<tr class="wk-grp"><td colspan="'+cols+'">'+b+'</td></tr>'); last=b; } out.push(render(x)); });
+    return out.join('');
+  }
+  function wkQmatch(item,q){ if(!q) return true; return String(item.title||'').toLowerCase().indexOf(q.toLowerCase())>=0; }
+
   function wkRespList(){
     var arr=(wkData&&wkData.responses)||[];
-    if(!arr.length) return '<div class="wk-empty">You haven\u2019t answered any cases in this window.<br><a href="/decisionroom.html?do=respond">Open a live case \u2192</a></div>';
-    var rows=arr.filter(function(r){ return wkRespPass(r,wkRespFilter); });
+    if(!arr.length) return '<div class="wk-empty">'+z4ic('chat',30)+'<p>No responses in this window yet.</p><a href="/decisionroom.html">Answer a live decision \u2192</a></div>';
+    var rows=arr.filter(function(r){ return wkRespPass(r,wkRespFilter) && wkQmatch(r,wkRespQuery); });
     rows.sort(function(a,b){ if(wkRespSort==='recent') return wkTime(b.created_at)-wkTime(a.created_at); var pa=Number(a.points)||0, pb=Number(b.points)||0; if(pb!==pa) return pb-pa; return wkTime(b.created_at)-wkTime(a.created_at); });
     if(!rows.length) return '<div class="wk-none">No responses match this filter.</div>';
-    return rows.map(wkRespRow).join('');
+    var maxH=1; arr.forEach(function(r){ maxH=Math.max(maxH, Number(r.helpful||0)); });
+    var shown=rows.slice(0,6);
+    var head='<thead><tr><th>Response</th><th>Status</th><th>Helpful</th><th>Points</th><th>Quality</th><th></th></tr></thead>';
+    var more=(rows.length>shown.length)?('<div class="wk-seeall"><a href="/decisionroom.html">See all '+rows.length+' responses \u2192</a></div>'):'';
+    return '<table class="wk-table">'+head+'<tbody>'+wkGrouped(shown, function(r){ return wkRespRow(r,maxH); }, 6, wkRespSort==='recent')+'</tbody></table>'+more;
+  }
+  function wkCaseList(){
+    var arr=(wkData&&wkData.cases)||[];
+    if(!arr.length) return '<div class="wk-empty">'+z4ic('folder',30)+'<p>You haven\u2019t posted any cases in this window.</p><a href="/decisionroom.html?do=submit">Open the case form \u2192</a></div>';
+    var rows=arr.filter(function(c){ return wkCasePass(c,wkCaseFilter) && wkQmatch(c,wkCaseQuery); });
+    rows.sort(function(a,b){ if(wkCaseSort==='recent') return wkTime(b.created_at)-wkTime(a.created_at); if(wkCaseSort==='clarity'){ var ca=Number(a.clarity)||0, cb=Number(b.clarity)||0; if(cb!==ca) return cb-ca; return wkTime(b.created_at)-wkTime(a.created_at); } var pa=Number(a.points)||0, pb=Number(b.points)||0; if(pb!==pa) return pb-pa; return wkTime(b.created_at)-wkTime(a.created_at); });
+    if(!rows.length) return '<div class="wk-none">No cases match this filter.</div>';
+    var shown=rows.slice(0,6);
+    var head='<thead><tr><th>Case</th><th>Status</th><th>Clarity</th><th>Resolution</th><th>Points</th><th>Quality</th><th>Replies</th></tr></thead>';
+    var more=(rows.length>shown.length)?('<div class="wk-seeall"><a href="/decisionroom.html">See all '+rows.length+' cases \u2192</a></div>'):'';
+    return '<table class="wk-table">'+head+'<tbody>'+wkGrouped(shown, wkCaseRow, 7, wkCaseSort==='recent')+'</tbody></table>'+more;
   }
   function wkRespRecon(w){
     var t=(w&&w.totals)||{}, n=t.responses_count||0;
-    if(t.reviewer_score!=null){
-      return '<div class="wk-recon">These <b>'+n+'</b> response'+(n===1?'':'s')+' add up to your reviewer score of <b>'+fmtN(t.reviewer_score)+'</b>'+(t.reviewer_rank?' <span class="wk-eq">(rank #'+t.reviewer_rank+' this window)</span>':'')+'.</div>';
-    }
+    if(t.reviewer_score!=null){ return '<div class="wk-recon">These <b>'+n+'</b> response'+(n===1?'':'s')+' add up to your reviewer score of <b>'+fmtN(t.reviewer_score)+'</b>'+(t.reviewer_rank?' <span class="wk-eq">(rank #'+t.reviewer_rank+' this window)</span>':'')+'.</div>'; }
     return '<div class="wk-recon muted">'+n+' response'+(n===1?'':'s')+' \u00b7 <b>'+fmtN(t.responses_points||0)+'</b> pts \u2014 you\u2019re not ranked this window yet (your score turns positive once someone acts on what you wrote).</div>';
-  }
-  function wkRespPanelInner(){
-    var arr=(wkData&&wkData.responses)||[];
-    var tools = arr.length
-      ? '<div class="wk-tools"><span class="wk-tgrp"><span class="wk-tlab">Show</span>'
-        +wkFilBtns('resp-fil', wkRespFilter, [['all','All'],['acted','Acted on'],['helpful','Helpful'],['attention','Needs attention']])
-        +'</span><span class="wk-tgrp"><span class="wk-tlab">Sort</span>'
-        +wkFilBtns('resp-sort', wkRespSort, [['points','Points'],['recent','Recent']])+'</span></div>'
-      : '';
-    return '<div class="wk-h"><span class="wk-h-t">\uD83D\uDCDD Responses you wrote'+wkTip('resp')+'</span>'
-      +(arr.length?'<span class="wk-h-n">'+arr.length+'</span>':'')+'</div>'
-      +tools+'<div class="wk-list" id="wk-resp-list">'+wkRespList()+'</div>'
-      +(arr.length?wkRespRecon(wkData):'');
-  }
-  /* ---- cases ---- */
-  function wkCaseRow(c){
-    var chips=[];
-    chips.push('<span class="wk-chip clar">Clarity '+fmtN(c.clarity)+'/5</span>');
-    chips.push('<span class="wk-chip resp">\uD83D\uDCAC '+(c.responses||0)+' response'+((c.responses===1)?'':'s')+'</span>');
-    if(c.status==='closed') chips.push('<span class="wk-chip cover">\u2705 '+(c.final_pct!=null?c.final_pct:0)+'% resolved</span>');
-    if(c.exemplary)               chips.push('<span class="wk-chip exem">\uD83C\uDFC5 Exemplary</span>');
-    if((c.context_flags||0)>0)    chips.push('<span class="wk-chip rep">\u26A0\uFE0F '+c.context_flags+' context flag'+((c.context_flags===1)?'':'s')+'</span>');
-    if(c.abandoned===1)           chips.push('<span class="wk-chip rep">\uD83D\uDD52 Stalled</span>');
-    return '<a class="wk-row" href="/decisionroom.html?case='+encodeURIComponent(c.case_id)+'">'
-      +'<div class="wk-row-main"><span class="wk-title">'+esc(c.title||'Untitled case')+'</span>'
-      +'<div class="wk-sub"><span class="wk-date">'+wkDateFmt(c.created_at)+'</span>'+wkStatusChip(c.status)+'</div>'
-      +'<div class="wk-chips">'+chips.join('')+'</div>'
-      +'</div>'+wkPtsHtml(c.points)+'</a>';
-  }
-  function wkCasePass(c,f){ if(f==='exemplary') return !!c.exemplary; if(f==='open') return c.status!=='closed'; if(f==='closed') return c.status==='closed'; if(f==='attention') return c.abandoned===1 || (c.context_flags||0)>0; return true; }
-  function wkCaseList(){
-    var arr=(wkData&&wkData.cases)||[];
-    if(!arr.length) return '<div class="wk-empty">You haven\u2019t posted any cases in this window.<br><a href="/decisionroom.html?do=submit">Open the case form \u2192</a></div>';
-    var rows=arr.filter(function(c){ return wkCasePass(c,wkCaseFilter); });
-    rows.sort(function(a,b){ if(wkCaseSort==='recent') return wkTime(b.created_at)-wkTime(a.created_at); if(wkCaseSort==='clarity'){ var ca=Number(a.clarity)||0, cb=Number(b.clarity)||0; if(cb!==ca) return cb-ca; return wkTime(b.created_at)-wkTime(a.created_at); } var pa=Number(a.points)||0, pb=Number(b.points)||0; if(pb!==pa) return pb-pa; return wkTime(b.created_at)-wkTime(a.created_at); });
-    if(!rows.length) return '<div class="wk-none">No cases match this filter.</div>';
-    return rows.map(wkCaseRow).join('');
   }
   function wkCaseRecon(w){
     var t=(w&&w.totals)||{}, n=t.cases_count||0;
@@ -1648,19 +1790,140 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     }
     return '<div class="wk-recon muted">'+n+' case'+(n===1?'':'s')+' \u00b7 <b>'+fmtN(t.cases_points||0)+'</b> pts \u2014 not ranked this window yet (your author score turns positive once a case earns more than it costs).</div>';
   }
+  function wkTools(kind){
+    var isR=(kind==='resp');
+    var fil=isR?wkFilBtns('resp-fil', wkRespFilter, [['all','All'],['acted','Acted on'],['helpful','Helpful'],['attention','Needs attention']])
+              :wkFilBtns('case-fil', wkCaseFilter, [['all','All'],['exemplary','Exemplary'],['open','Open'],['closed','Closed'],['attention','Needs attention']]);
+    var sort=isR?wkFilBtns('resp-sort', wkRespSort, [['points','Points'],['recent','Recent']])
+               :wkFilBtns('case-sort', wkCaseSort, [['points','Points'],['recent','Recent'],['clarity','Clarity']]);
+    var q=isR?wkRespQuery:wkCaseQuery;
+    return '<div class="wk-tools"><div class="wk-tgrp">'+fil+'</div><div class="wk-right"><span class="wk-search">'+z4ic('eye',13)
+      +'<input type="text" class="wk-search-in" data-wk-q="'+kind+'" placeholder="Search '+(isR?'responses':'cases')+'\u2026" value="'+esc(q)+'"></span>'
+      +'<span class="wk-sortgrp"><span class="wk-tlab">Sort</span>'+sort+'</span></div></div>';
+  }
+  function wkRespPanelInner(){
+    var arr=(wkData&&wkData.responses)||[], t=(wkData&&wkData.totals)||{};
+    return '<div class="wk-h"><span class="wk-h-ic resp">'+z4ic('chat',18)+'</span><span class="wk-h-t">Responses you wrote'+wkTip('resp')+'</span>'
+      +(arr.length?'<span class="wk-h-meta"><b>'+arr.length+'</b> \u00b7 '+fmtN(t.responses_points||0)+' pts</span>':'')+'</div>'
+      +(arr.length?wkTools('resp'):'')+'<div class="wk-list" id="wk-resp-list">'+wkRespList()+'</div>'
+      +(arr.length?wkRespRecon(wkData):'');
+  }
   function wkCasePanelInner(){
-    var arr=(wkData&&wkData.cases)||[];
-    var tools = arr.length
-      ? '<div class="wk-tools"><span class="wk-tgrp"><span class="wk-tlab">Show</span>'
-        +wkFilBtns('case-fil', wkCaseFilter, [['all','All'],['exemplary','Exemplary'],['open','Open'],['closed','Closed'],['attention','Needs attention']])
-        +'</span><span class="wk-tgrp"><span class="wk-tlab">Sort</span>'
-        +wkFilBtns('case-sort', wkCaseSort, [['points','Points'],['recent','Recent'],['clarity','Clarity']])+'</span></div>'
-      : '';
-    return '<div class="wk-h"><span class="wk-h-t">\uD83D\uDCC1 Cases you posted'+wkTip('cases')+'</span>'
-      +(arr.length?'<span class="wk-h-n">'+arr.length+'</span>':'')+'</div>'
-      +tools+'<div class="wk-list" id="wk-case-list">'+wkCaseList()+'</div>'
+    var arr=(wkData&&wkData.cases)||[], t=(wkData&&wkData.totals)||{};
+    return '<div class="wk-h"><span class="wk-h-ic case">'+z4ic('folder',18)+'</span><span class="wk-h-t">Cases you posted'+wkTip('cases')+'</span>'
+      +(arr.length?'<span class="wk-h-meta"><b>'+arr.length+'</b> \u00b7 '+fmtN(t.cases_points||0)+' pts</span>':'')+'</div>'
+      +(arr.length?wkTools('case'):'')+'<div class="wk-list" id="wk-case-list">'+wkCaseList()+'</div>'
       +(arr.length?wkCaseRecon(wkData):'');
   }
+  function wkStat(icon, color, label, big, sub){ return '<div class="wk-stat" style="--c:'+color+'"><span class="wk-stat-ic">'+z4ic(icon,20)+'</span><div class="wk-stat-tx"><span class="wk-stat-l">'+label+'</span><span class="wk-stat-big">'+big+'</span><span class="wk-stat-s">'+sub+'</span></div></div>'; }
+  /* period-over-period: same metrics recomputed on the previous equivalent window */
+  function wkStatNums(w){
+    if(!w||!w.ok) return null;
+    var t=w.totals||{}, resp=(w.responses||[]), cases=(w.cases||[]);
+    var rc=(t.responses_count!=null?t.responses_count:resp.length);
+    var withHelp=resp.filter(function(r){ return (r.helpful||0)>0; }).length;
+    return { resp:rc, cases:(t.cases_count!=null?t.cases_count:cases.length),
+             pts:(Number(t.responses_points)||0)+(Number(t.cases_points)||0),
+             exem:cases.filter(function(c){ return c.exemplary; }).length,
+             hr:(rc>0?Math.round(withHelp/rc*100):0) };
+  }
+  function wkDelta(cur, prev, suffix, word){
+    if(prev==null||cur==null) return '';
+    var diff=Number(cur)-Number(prev);
+    if(Math.abs(diff)<0.005) return '<span class="wk-dlt flat">no change '+(word||'this period')+'</span>';
+    return '<span class="wk-dlt '+(diff>0?'up':'down')+'">'+(diff>0?'+':'\u2212')+fmtN(Math.abs(diff))+(suffix||'')+' '+(word||'this period')+'</span>';
+  }
+  function wkStatsBar(w, wPrev){
+    var n=wkStatNums(w)||{resp:0,cases:0,pts:0,exem:0,hr:0}, pv=wkStatNums(wPrev);
+    function sub(cur, prevKey, fallback, suffix, word){ var dl=pv?wkDelta(cur, pv[prevKey], suffix, word):''; return dl||fallback; }
+    return '<div class="z4-stats">'
+      +wkStat('chat','#6D5EF0','Responses written', n.resp, sub(n.resp,'resp','logged this window'))
+      +wkStat('folder','#2F82E4','Cases posted', n.cases, sub(n.cases,'cases','logged this window'))
+      +wkStat('target','#7c3aed','Total points earned', fmtN(n.pts), sub(n.pts,'pts','across all your work'))
+      +wkStat('medal','#CA8A04','Exemplary items', n.exem, sub(n.exem,'exem','top-tier work'))
+      +wkStat('thumb','#16A34A','Helpful rate', n.hr+'%', sub(n.hr,'hr','of responses got a helpful mark','pts',' vs last period'))
+      +'</div>';
+  }
+  /* ---- achievements (derived from the same data \u2014 no extra backend) ---- */
+  function wkAchievements(w,d){
+    d=d||{}; var resp=(w.responses||[]), cases=(w.cases||[]), out=[];
+    function latest(arr){ var t=0,iso=null; arr.forEach(function(x){ var tt=wkTime(x.created_at); if(tt>t){ t=tt; iso=x.created_at; } }); return iso; }
+    var exem=cases.filter(function(c){ return c.exemplary; });
+    if(exem.length) out.push(['medal','#CA8A04','Exemplary Contributor','Earned '+exem.length+' exemplary item'+(exem.length===1?'':'s'), latest(exem)]);
+    var helpTot=0, helped=[]; resp.forEach(function(r){ var h=Number(r.helpful)||0; if(h>0){ helpTot+=h; helped.push(r); } });
+    if(helpTot>0) out.push(['thumb','#16A34A','Helpful Expert','Received '+helpTot+' helpful rating'+(helpTot===1?'':'s'), latest(helped)]);
+    var acted=resp.filter(function(r){ return r.acted; });
+    if(acted.length) out.push(['target','#6D5EF0','Trusted Advisor',acted.length+' response'+(acted.length===1?'':'s')+' used in a decision', latest(acted)]);
+    var rv=d.reviewer||{}, au=d.author||{};
+    var streak=Math.max(Number(rv.streak)||0, Number(au.streak)||0);
+    if(streak>1) out.push(['star','#DC2626','Consistency Streak','Active '+streak+' weeks running','']);
+    var crowns=(Number(rv.crowns)||0)+(Number(au.crowns)||0);
+    if(crowns>0) out.push(['medal','#9A6B04','Crowned #1',crowns+' week'+(crowns===1?'':'s')+' at the top','']);
+    var bests=[]; if(rv.best_rank) bests.push(Number(rv.best_rank)); if(au.best_rank) bests.push(Number(au.best_rank));
+    if(bests.length) out.push(['star','#2F82E4','Personal best','Peaked at rank #'+Math.min.apply(null,bests),'']);
+    if(!out.length) return '<div class="wk-side"><div class="wk-side-h">'+z4ic('medal',15)+' Achievements</div><div class="wk-side-empty">Your first exemplary item, helpful rating, or acted-on response unlocks a badge here.</div></div>';
+    return '<div class="wk-side"><div class="wk-side-h">'+z4ic('medal',15)+' Recent achievements</div><div class="wk-ach-list">'
+      +out.slice(0,4).map(function(a){
+        return '<div class="wk-ach"><span class="wk-ach-ic" style="--c:'+a[1]+'">'+z4ic(a[0],14)+'</span><div class="wk-ach-tx"><span class="wk-ach-t">'+a[2]+'</span><span class="wk-ach-s">'+a[3]+'</span></div>'+(a[4]?'<span class="wk-ach-d">'+wkDateFmt(a[4])+'</span>':'')+'</div>';
+      }).join('')+'</div></div>';
+  }
+  function wkDonut(rN,cN){
+    var tot=rN+cN; if(tot<=0) return '<div class="wk-side-empty">No items yet.</div>';
+    var R=34, C=2*Math.PI*R, rFrac=rN/tot, off=C*(1-rFrac);
+    return '<div class="wk-donut-wrap"><svg viewBox="0 0 96 96" class="wk-donut"><circle cx="48" cy="48" r="34" fill="none" stroke="#2F82E4" stroke-width="12"/><circle class="z3-ring-arc" cx="48" cy="48" r="34" fill="none" stroke="#6D5EF0" stroke-width="12" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 48 48)"/><text x="48" y="46" text-anchor="middle" font-size="20" font-weight="800" fill="var(--ink,#16233f)">'+tot+'</text><text x="48" y="60" text-anchor="middle" font-size="8.5" font-weight="700" fill="#9aa0b0">items</text></svg>'
+      +'<div class="wk-donut-leg"><div class="wk-dl"><span class="wk-dl-dot" style="background:#6D5EF0"></span>Responses <b>'+rN+'</b> <span class="wk-dl-p">'+(tot?Math.round(rFrac*100):0)+'%</span></div><div class="wk-dl"><span class="wk-dl-dot" style="background:#2F82E4"></span>Cases <b>'+cN+'</b> <span class="wk-dl-p">'+(tot?Math.round((1-rFrac)*100):0)+'%</span></div></div></div>';
+  }
+  function wkPointsByImpact(w){
+    var hi=0,me=0,lo=0; (w.responses||[]).concat(w.cases||[]).forEach(function(it){ var p=Number(it.points)||0; if(p<=0) return; var tr=wkTier(p); if(tr==='high') hi+=p; else if(tr==='medium') me+=p; else lo+=p; });
+    var tot=hi+me+lo; function bar(l,v,c){ var pct=tot>0?(v/tot*100):0; return '<div class="wk-pbi"><span class="wk-pbi-l">'+l+'</span><span class="wk-pbi-t"><i style="width:'+pct+'%;background:'+c+'"></i></span><span class="wk-pbi-v">'+fmtN(v)+'</span></div>'; }
+    return '<div class="wk-pbi-wrap">'+bar('High impact',hi,'#16A34A')+bar('Medium impact',me,'#D97706')+bar('Low impact',lo,'#9aa0b0')+'<div class="wk-pbi total"><span class="wk-pbi-l">Total</span><span class="wk-pbi-v">'+fmtN(tot)+'</span></div></div>';
+  }
+  function wkTopPerformer(d){
+    d=d||{}; var pcts=[]; if((d.reviewer||{}).percentile!=null) pcts.push(d.reviewer.percentile); if((d.author||{}).percentile!=null) pcts.push(d.author.percentile);
+    if(!pcts.length) return '';
+    var best=Math.min.apply(null,pcts);
+    return '<div class="wk-side wk-perf"><div class="wk-side-h">'+z4ic('star',15)+' Top performer</div><div class="wk-perf-big">You\u2019re in the top '+best+'%</div><div class="wk-perf-s">Keep going \u2014 you\u2019re ahead of '+(100-best)+'% of contributors.</div><a class="wk-perf-cta" href="#lb-sec">View leaderboards \u2192</a></div>';
+  }
+  function wkSidebar(w,d,wPrev){
+    var rN=(w.totals&&w.totals.responses_count)||(w.responses||[]).length;
+    var cN=(w.totals&&w.totals.cases_count)||(w.cases||[]).length;
+    return '<aside class="z4-side">'
+      +'<div class="wk-side"><div class="wk-side-h">Your contribution at a glance</div>'+wkDonut(rN,cN)+'</div>'
+      +'<div class="wk-side"><div class="wk-side-h">Points by impact'+wkTip('pbi')+'</div>'+wkPointsByImpact(w)+'</div>'
+      +wkTopPerformer(d)
+      +wkAchievements(w,d)
+      +'</aside>';
+  }
+  function vaultZone4(w, d, wPrev){
+    if(!w || !w.ok || !w.signed_in){ wkData=null; return ''; }
+    wkData=w;
+    return '<div class="vt-zone z4">'
+      +'<div class="vt-zh"><span class="vt-zn">Zone 4</span><span class="vt-zt">Your Work</span>'
+      +'<span class="vt-zs">Every contribution you\u2019ve made \u2014 and the impact you\u2019ve created. Each row adds up to the scores at the top.'+wkTip('what')+'</span>'
+      +'<button type="button" class="z4-export" data-wk-export="1">'+z4ic('eye',13)+' Export CSV</button></div>'
+      +wkStatsBar(w, wPrev)
+      +'<div class="z4-cols"><div class="z4-main">'
+        +'<div class="wk-panel" id="wk-resp-panel">'+wkRespPanelInner()+'</div>'
+        +'<div class="wk-panel" id="wk-case-panel">'+wkCasePanelInner()+'</div>'
+      +'</div>'+wkSidebar(w,d,wPrev)+'</div>'
+      +'</div>';
+  }
+  document.addEventListener('input', function(e){
+    var s=e.target.closest?e.target.closest('.wk-search-in'):null; if(!s) return;
+    var k=s.getAttribute('data-wk-q'), v=s.value;
+    if(k==='resp'){ wkRespQuery=v; var re=document.getElementById('wk-resp-list'); if(re) re.innerHTML=wkRespList(); }
+    else { wkCaseQuery=v; var ce=document.getElementById('wk-case-list'); if(ce) ce.innerHTML=wkCaseList(); }
+  });
+  document.addEventListener('click', function(e){
+    var b=e.target.closest?e.target.closest('[data-wk-export]'):null; if(!b||!wkData) return;
+    e.preventDefault();
+    function esc2(s){ s=String(s==null?'':s); return /[",\n]/.test(s)?('"'+s.replace(/"/g,'""')+'"'):s; }
+    var rows=[['Type','Title','Date','Status','Points','Helpful','Clarity','Resolution %','Responses']];
+    (wkData.responses||[]).forEach(function(r){ rows.push(['Response',r.title||'',wkDateFmt(r.created_at),wkRespStatus(r)[0],r.points||0,r.helpful||0,'','','']); });
+    (wkData.cases||[]).forEach(function(c){ rows.push(['Case',c.title||'',wkDateFmt(c.created_at),wkCaseStatus(c)[0],c.points||0,'',c.clarity||'',(c.status==='closed'?(c.final_pct||0):''),c.responses||0]); });
+    var csv=rows.map(function(r){ return r.map(esc2).join(','); }).join('\n');
+    try{ var bl=new Blob([csv],{type:'text/csv'}); var u=URL.createObjectURL(bl); var a=document.createElement('a'); a.href=u; a.download='your-work.csv'; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function(){ URL.revokeObjectURL(u); },1000); }catch(err){}
+  });
   /* ===================== D6-4: ZONE 3 DIAGNOSIS ===================== */
   var DGTIPS={
     what:{t:'How Diagnosis works',b:'What it is: a read of ALL your activity (not the window pill) that surfaces the few patterns most worth fixing, ranked by the points at stake.\n\nWhy it matters: it turns a pile of data into a short, prioritized to-do list.\n\nImproves when: you act on the top cards \u2014 each links to the exact case, response, or form to fix.\n\nDrops when: findings pile up unaddressed.\n\nLeadership edge: great PMs fix the highest-leverage thing first \u2014 this tells you what that is.'},
@@ -1830,16 +2093,6 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +bottom
       +'</div>';
   }
-  function vaultZone4(w){
-    if(!w || !w.ok || !w.signed_in){ wkData=null; return ''; }
-    wkData=w;
-    return '<div class="vt-zone">'
-      +'<div class="vt-zh"><span class="vt-zn">Zone 4</span><span class="vt-zt">Your Work</span>'
-      +'<span class="vt-zs">The receipts \u2014 every response and case you logged in this window, and the points each earned. They add up to the scores at the top.</span></div>'
-      +'<div class="wk-panel" id="wk-resp-panel">'+wkRespPanelInner()+'</div>'
-      +'<div class="wk-panel" id="wk-case-panel">'+wkCasePanelInner()+'</div>'
-      +'</div>';
-  }
   /* Zone 4 filter/sort: one delegated listener (document-level -> survives every
      innerHTML re-render). Rebuilds only the affected panel; no refetch. */
   document.addEventListener('click', function(e){
@@ -1850,8 +2103,11 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     else if(grp==='case-fil') wkCaseFilter=v;
     else if(grp==='case-sort') wkCaseSort=v;
     else return;
-    if(grp.indexOf('resp')===0){ var re=document.getElementById('wk-resp-panel'); if(re) re.innerHTML=wkRespPanelInner(); }
-    else { var ce=document.getElementById('wk-case-panel'); if(ce) ce.innerHTML=wkCasePanelInner(); }
+    var isR=(grp.indexOf('resp')===0);
+    var el=document.getElementById(isR?'wk-resp-panel':'wk-case-panel'); if(!el) return;
+    var act=document.activeElement, hadFocus=!!(act&&act.classList&&act.classList.contains('wk-search-in')&&act.getAttribute('data-wk-q')===(isR?'resp':'case'));
+    el.innerHTML=isR?wkRespPanelInner():wkCasePanelInner();
+    if(hadFocus){ var ni=el.querySelector('.wk-search-in'); if(ni){ ni.focus(); var L=ni.value.length; try{ ni.setSelectionRange(L,L); }catch(err){} } }
   });
   function lockSvg(){
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor" stroke="none"/><path d="M12 16.9v1.6"/></svg>';
@@ -2184,7 +2440,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +'<span class="vt-zs">The last 8 weeks \u2014 this is the part that actually tells you whether you\u2019re improving.</span></div>'
       +summary+grid+radarCard+insightBar+'</div>';
   }
-  function vaultRender(d, t, w, dg){
+  function vaultRender(d, t, w, dg, wPrev){
     var el=document.getElementById(LBLIST); if(!el) return;
     if(!d || !d.ok){ el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; return; }
     if(!d.signed_in){ el.innerHTML=vaultSignedOut(); return; }
@@ -2194,7 +2450,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     html+=vaultZone1(d);
     html+=vaultZone2(t, d);
     html+=vaultZone3(dg, d);
-    html+=vaultZone4(w);
+    html+=vaultZone4(w, d, wPrev);
     el.innerHTML=html;
   }
   function loadVault(win){
@@ -2207,11 +2463,12 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       jlRpc('dr_my_vault',{p_since:rg[0],p_until:rg[1],p_prev_since:pv[0],p_prev_until:pv[1]}),
       jlRpc('dr_my_trajectory',{p_weeks:8,p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; }),
       jlRpc('dr_my_work',{p_since:rg[0],p_until:rg[1]}).catch(function(){ return null; }),
-      jlRpc('dr_my_diagnosis',{}).catch(function(){ return null; })
+      jlRpc('dr_my_diagnosis',{}).catch(function(){ return null; }),
+      (pv[0]?jlRpc('dr_my_work',{p_since:pv[0],p_until:pv[1]}).catch(function(){ return null; }):Promise.resolve(null))
     ]).then(function(res){
         if(el) el.classList.remove('loading');
         LBLIST='vault-list';
-        vaultRender(res[0], res[1], res[2], res[3]);
+        vaultRender(res[0], res[1], res[2], res[3], res[4]);
       })
       .catch(function(){ if(el){ el.classList.remove('loading'); el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; } });
   }
