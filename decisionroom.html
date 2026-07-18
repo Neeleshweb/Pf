@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-domain-hosts 2026-07-18T12:00:00Z -->
+<!-- build:dr-domain-brand 2026-07-18T15:00:00Z -->
 <!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
 <!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
 <!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
@@ -10,10 +10,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="DecisionRoom by Neelesh Singh — bring a real product decision into a room of credible PMs and get structured feedback from people who've handled the same situation. Anonymous in public; credible underneath."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://neeleshpmtoolkit.com/decisionroom.html"/>
+  <link rel="canonical" href="https://productjudgmentlabs.com/decisionroom.html"/>
+  <meta property="og:url" content="https://productjudgmentlabs.com/decisionroom.html"/>
   <meta property="og:title" content="DecisionRoom — stuck on a product decision? Get a second opinion."/>
   <meta property="og:description" content="Structured feedback from experienced PMs who've handled similar situations. Post anonymously; your judgment, not your job title, does the talking."/>
-  <meta property="og:image" content="https://neeleshpmtoolkit.com/og-gutcheck.png"/>
+  <meta property="og:image" content="https://productjudgmentlabs.com/og-gutcheck.png"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="DecisionRoom — get a second opinion from credible PMs"/>
   <meta name="twitter:description" content="Bring a real product decision into a room of experienced PMs. Structured feedback, not a forum."/>
@@ -2139,7 +2140,7 @@ boot();
 /* ===== interactive journey map ===== */
 (function(){
   var mount=document.getElementById('dr-sim'); if(!mount) return;
-  var SITE='neeleshpmtoolkit.com', DR='neeleshpmtoolkit.com/decisionroom.html';
+  var SITE='productjudgmentlabs.com', DR='productjudgmentlabs.com/decisionroom.html';
   var scenes=[
     {label:'Open the site', addr:SITE, cap:'It starts in your browser — head to your DecisionRoom site.',
      html:'<div class="sim-blank"><div class="sim-url-big">'+SITE+'<span class="sim-caret"></span></div><div class="sim-blank-t">Portfolio \u00b7 PM Toolkit \u00b7 GutCheck \u00b7 DecisionRoom</div></div>'},
@@ -3352,7 +3353,7 @@ boot();
           +'<div class="share-card-t">'+escHtml(d.title||'A PM decision')+'</div>'
           +'<div class="share-card-d">'+escHtml((d.decision||'').slice(0,120))+((d.decision||'').length>120?'\u2026':'')+'</div>'
           +'<div class="share-card-m">'+escHtml(caseStatusLabel(d))+' \u00b7 '+n+' response'+(n===1?'':'s')+'</div>'
-          +'<div class="share-card-u">neeleshpmtoolkit.com</div></div>'
+          +'<div class="share-card-u">productjudgmentlabs.com</div></div>'
         +'<label class="share-l">Suggested caption <span class="share-opt">edit freely</span></label>'
         +'<textarea id="share-cap" class="share-cap" rows="6">'+escHtml(cap)+'</textarea>'
         +'<div class="share-note">LinkedIn doesn\u2019t let apps pre-fill post text, so we copy your caption to the clipboard \u2014 just paste when LinkedIn opens. Reddit gets the title filled in automatically.</div>'
