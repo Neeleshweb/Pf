@@ -341,7 +341,7 @@
   .vt-r-b{flex:1;height:8px;background:#EEF1F8;border-radius:99px;overflow:hidden}
   .vt-r-b i{display:block;height:100%;border-radius:99px;transition:width .6s ease}
   .vt-r-v{font-size:.76rem;font-weight:800;color:var(--ink,#16233f);width:26px;text-align:right;flex:none}
-  .z2-radar-card{margin-top:1rem}
+  .z2-radar-card{margin-top:1rem;background:radial-gradient(120% 130% at 0% 0%, #f4f2fe 0%, var(--card,#fff) 58%)}
   .z2-radar-card .vt-radar-wrap{gap:2.5rem;justify-content:center;align-items:center}
   .z2-radar-card .vt-radarsvg{width:330px;max-width:44%}
   .z2-radar-card .vt-rlist{flex:1;min-width:280px;max-width:680px;display:grid;grid-template-columns:1fr 1fr;gap:.6rem 2.2rem}
@@ -366,6 +366,7 @@
   .z3-summary{display:flex;gap:1rem;align-items:stretch;margin:.7rem 0 1.7rem;flex-wrap:wrap}
   .z3-buckets{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;flex:1;min-width:280px;border:1px solid var(--border,#e7eaf4);border-radius:18px;background:var(--card,#fff);padding:1.1rem 1.2rem;box-shadow:0 10px 30px rgba(20,25,45,.05)}
   .z3-bucket{display:flex;align-items:center;gap:.7rem}
+  .z3-bucket + .z3-bucket{border-left:1px solid #e7eaf4;padding-left:1rem}
   .z3-bk-ic{flex:none;width:42px;height:42px;border-radius:13px;display:inline-flex;align-items:center;justify-content:center;color:#fff;background:var(--c);background:linear-gradient(150deg, color-mix(in srgb, var(--c) 82%, #fff 12%), var(--c));box-shadow:0 6px 16px color-mix(in srgb, var(--c) 40%, transparent)}
   .z3-bk-k{font-size:.62rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted,#9aa0b0)}
   .z3-bk-l{font-size:.92rem;font-weight:800;color:var(--ink,#16233f);line-height:1.2}
@@ -397,12 +398,16 @@
   .z3-col{min-width:0}
   .z3-col-h{display:flex;align-items:center;gap:.35rem;font-size:.6rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted,#9aa0b0);margin-bottom:.4rem}
   .z3-col p{margin:0;font-size:.84rem;line-height:1.55;color:var(--ink,#3a4358)}
+  .z3-card .z3-col + .z3-col{border-left:1px solid #eef1f8;padding-left:1.1rem}
+  .z3-gist{font-size:.78rem;line-height:1.5;color:var(--muted,#6b7280);margin-top:.55rem;padding-top:.55rem;border-top:1px dashed #e7eaf4}
+  .z3-gist b{color:var(--ink,#3a4358);font-weight:700}
+  .z3-act-lead{font-size:.76rem;font-weight:700;color:var(--sc,#5B4BD4);margin-bottom:.45rem}
   .z3-col-act .z3-col-h{color:var(--sc,#D97706)}
   .z3-cta{display:inline-flex;align-items:center;gap:.45rem;margin-top:.15rem;background:var(--bc,#5B4BD4);background:linear-gradient(135deg, var(--bc,#5B4BD4), color-mix(in srgb, var(--bc,#5B4BD4) 82%, #000 10%));color:#fff;font-size:.84rem;font-weight:800;padding:.62rem .95rem;border-radius:11px;text-decoration:none;box-shadow:0 6px 16px color-mix(in srgb, var(--bc,#5B4BD4) 40%, transparent);transition:transform .16s ease,box-shadow .16s ease}
   .z3-cta:hover{transform:translateY(-2px);box-shadow:0 10px 24px color-mix(in srgb, var(--bc,#5B4BD4) 48%, transparent)}
   .z3-cta-ar{transition:transform .16s ease}
   .z3-cta:hover .z3-cta-ar{transform:translateX(3px)}
-  .z3-rrail{display:flex;flex-direction:column;gap:.75rem;border-left:1px solid #eef1f8;padding-left:1.2rem}
+  .z3-rrail{display:flex;flex-direction:column;gap:.65rem;border-left:1px solid #eef1f8;padding-left:1.2rem;justify-content:flex-start}
   .z3-tags{display:flex;gap:.4rem;flex-wrap:wrap}
   .z3-tag{font-size:.6rem;font-weight:800;border-radius:99px;padding:.2rem .55rem;white-space:nowrap;box-shadow:0 2px 6px rgba(20,25,45,.07)}
   .z3-t-qw{background:linear-gradient(135deg,#d6f6e3,#b8efce);color:#15803d}
@@ -422,7 +427,7 @@
   .z3-imp-author{background:#FEF3C7;color:#B45309}
   .z3-conf{flex:none;display:flex;flex-direction:column;align-items:center;gap:.15rem}
   .z3-conf-l{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;color:var(--muted,#9aa0b0);display:flex;align-items:center;gap:.1rem}
-  .z3-ring{width:52px;height:52px;filter:drop-shadow(0 3px 6px rgba(20,25,45,.1))}
+  .z3-ring{width:48px;height:48px;filter:drop-shadow(0 3px 6px rgba(20,25,45,.1))}
   .z3-affl{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.3px;color:var(--muted,#9aa0b0);display:block;margin-bottom:.35rem}
   .z3-affrow{display:flex;flex-wrap:wrap;gap:.4rem}
   .z3-aff{display:inline-flex;align-items:center;gap:.3rem;font-size:.68rem;font-weight:700;background:#F2F4FA;color:#4b5468;border-radius:99px;padding:.2rem .55rem}
@@ -443,7 +448,7 @@
   .dg-count{background:linear-gradient(135deg,#fde0e0,#fbcaca);color:#DC2626;font-size:.66rem;font-weight:800;padding:.22rem .6rem;border-radius:99px;margin-left:.2rem}
   .dg-more{margin:0 auto 1rem;display:block;background:var(--card,#fff);border:1px solid var(--border,#e2e6f2);color:var(--ink,#3a4358);font-size:.8rem;font-weight:800;padding:.55rem 1.1rem;border-radius:11px;cursor:pointer;box-shadow:0 2px 8px rgba(20,25,45,.06)}
   .dg-more:hover{border-color:#5B4BD4;color:#5B4BD4}
-  @media(max-width:1180px){ .z3-card{grid-template-columns:1fr 1fr 1fr} .z3-lead{grid-column:1/-1} .z3-rrail{grid-column:1/-1;border-left:none;border-top:1px solid #eef1f8;padding-left:0;padding-top:.9rem} .z3-rrow{justify-content:flex-start;gap:2rem} }
+  @media(max-width:1180px){ .z3-card{grid-template-columns:1fr 1fr 1fr} .z3-lead{grid-column:1/-1} .z3-lead .z3-gist{border-top:none;padding-top:0} .z3-rrail{grid-column:1/-1;border-left:none;border-top:1px solid #eef1f8;padding-left:0;padding-top:.9rem} .z3-rrow{justify-content:flex-start;gap:2rem} .z3-card .z3-col + .z3-col{border-left:none;padding-left:0} .z3-bucket + .z3-bucket{border-left:none;padding-left:0} }
   @media(max-width:720px){ .z3-card{grid-template-columns:1fr} .z3-lead,.z3-rrail{grid-column:auto} .z3-rail{width:72px} .z3-band small{display:none} .z3-item{gap:.7rem} }
   @media(max-width:640px){ .pc-head{flex-direction:column;align-items:flex-start} .pc-ctrl{width:100%} .pc-pills{flex-wrap:wrap} }
   @media(max-width:560px){ .pcx-grid{grid-template-columns:1fr} }
@@ -1760,7 +1765,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var sev=r.severity||'medium';
     var band=(sev==='critical'||sev==='high')?'high':(sev==='medium'?'medium':(sev==='opportunity'?'opportunity':'growth'));
     var bm=BAND[band], num=i+1, role=dgKindLabel(r.kind);
-    var conf=dgConf(r,meta), impv=dgImprove(r);
+    var conf=dgConf(r,meta), impv=dgImprove(r), imp=Math.round(Number(r.impact)||0);
     var mm=dgMetaFor(r.id), tag=mm[0], affects=mm[1]||[];
     var tagHtml=(tag?'<span class="z3-tag z3-t-'+dgTagClass(tag)+'">'+tag+'</span>':'')+'<span class="z3-tag z3-sev-'+band+'">'+dgSevLabel(sev)+'</span>';
     var affHtml=affects.map(function(a){ return '<span class="z3-aff">'+affIcon(a)+esc(a)+'</span>'; }).join('');
@@ -1768,14 +1773,15 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var impBadge='';
     if(impv){ var pp=impv.split('|'); impBadge='<div class="z3-imp"><span class="z3-imp-l">Estimated improvement'+dgTip('improve')+'</span><span class="z3-imp-b z3-imp-'+impKind+'"><b>'+pp[0]+'</b> '+pp[1]+'</span></div>'; }
     var learn=dgLearnWhy(r,conf,meta,affects);
+    var gist=(r.kind!=='growth'&&imp>0) ? ('<div class="z3-gist">Fixing this is worth about <b>'+imp+' points</b>'+(affects.length?(' and most improves <b>'+esc(affects[0])+'</b>'):'')+'.</div>') : (affects.length?('<div class="z3-gist">A solid next step \u2014 it builds <b>'+esc(affects[0])+'</b>.</div>'):'');
     var rail='<div class="z3-rail">'+(showBand?('<div class="z3-band z3-band-'+band+'"><span class="z3-band-ic">'+bm.icon+'</span><b>'+bm.label+'</b><small>'+bm.desc+'</small></div>'):'')+'<span class="z3-node z3-n-'+band+'">'+num+'</span></div>';
     return '<div class="z3-item dg-'+band+(i>=5?' dg-hidden':'')+'" style="--sc:'+SEVC[band]+';--bc:'+BTNC[band]+'">'
       +rail
       +'<div class="z3-card">'
-        +'<div class="z3-col z3-lead">'+(role?'<span class="z3-role">'+role+'</span>':'')+'<div class="z3-title">'+esc(r.title||'')+'</div></div>'
+        +'<div class="z3-col z3-lead">'+(role?'<span class="z3-role">'+role+'</span>':'')+'<div class="z3-title">'+esc(r.title||'')+'</div>'+gist+'</div>'
         +'<div class="z3-col"><div class="z3-col-h">'+ICO.eye+' What we saw</div><p>'+esc(r.saw||'')+'</p></div>'
         +'<div class="z3-col"><div class="z3-col-h">'+ICO.shield+' Why it matters</div><p>'+esc(r.why||'')+'</p></div>'
-        +'<div class="z3-col z3-col-act"><div class="z3-col-h">'+ICO.rocket+' Recommended action</div><a class="z3-cta" href="'+dgHref(r.action)+'">'+esc(r.action_label||'Take action')+' <span class="z3-cta-ar">\u2192</span></a></div>'
+        +'<div class="z3-col z3-col-act"><div class="z3-col-h">'+ICO.rocket+' Recommended action</div><div class="z3-act-lead">The fastest fix:</div><a class="z3-cta" href="'+dgHref(r.action)+'">'+esc(r.action_label||'Take action')+' <span class="z3-cta-ar">\u2192</span></a></div>'
         +'<div class="z3-rrail">'
           +'<div class="z3-tags">'+tagHtml+'</div>'
           +'<div class="z3-rrow">'+impBadge+'<div class="z3-conf"><span class="z3-conf-l">Confidence'+dgTip('conf')+'</span>'+confRing(conf)+'</div></div>'
@@ -1813,8 +1819,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var count=(fired>0)?'<span class="dg-count">'+fired+' finding'+(fired===1?'':'s')+'</span>':'';
     var bottom='<div class="z3-bottom">'
       +'<div class="z3-bt"><span class="z3-bt-ic">'+ICO.trophy+'</span><div><b>Prioritize to win</b><small>Fix the top one or two first \u2014 that is where the points are.</small></div></div>'
-      +'<div class="z3-bt"><span class="z3-bt-ic">'+ICO.spark+'</span><div><b>Why this order?'+dgTip('order')+'</b><small>Ranked by potential impact \u00d7 confidence \u00d7 frequency.</small></div></div>'
-      +'<div class="z3-bt"><span class="z3-bt-ic">'+ICO.rocket+'</span><div><b>Your potential improvement</b><small>Clearing the top findings lifts your reviewer and author scores.</small></div></div>'
+      +'<div class="z3-bt"><span class="z3-bt-ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h5"/></svg></span><div><b>Why this order?'+dgTip('order')+'</b><small>Ranked by potential impact \u00d7 confidence \u00d7 frequency.</small></div></div>'
+      +'<div class="z3-bt"><span class="z3-bt-ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg></span><div><b>Your potential improvement</b><small>Clearing the top findings lifts your reviewer and author scores.</small></div></div>'
       +'</div>';
     return '<div class="vt-zone z3d">'
       +'<div class="vt-zh"><span class="vt-zn">Zone 3</span><span class="vt-zt">Diagnosis</span>'+count
@@ -1967,10 +1973,9 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var x=function(i){ return PL + (pts===1? iw/2 : (iw*i/(pts-1))); };
     var y=function(v){ var t=(Number(v)-mn)/(mx-mn); if(opts.invert) t=1-t; return PT + ih - t*ih; };
     var o='<svg viewBox="0 0 '+W+' '+H+'" role="img" class="vt-linechart">';
-    for(var g=0; g<=3; g++){ var gy=PT+ih*g/3; o+='<line x1="'+PL+'" y1="'+gy.toFixed(1)+'" x2="'+(W-PR)+'" y2="'+gy.toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>'; }
-    var topV = opts.invert ? mn : mx, botV = opts.invert ? mx : mn;
-    o+='<text x="'+(PL-7)+'" y="'+(PT+4)+'" text-anchor="end" font-size="10.5" fill="#aeb4c2">'+(opts.fmt?opts.fmt(topV):topV)+'</text>';
-    o+='<text x="'+(PL-7)+'" y="'+(PT+ih+3)+'" text-anchor="end" font-size="10.5" fill="#aeb4c2">'+(opts.fmt?opts.fmt(botV):botV)+'</text>';
+    for(var g=0; g<=3; g++){ var gy=PT+ih*g/3; o+='<line x1="'+PL+'" y1="'+gy.toFixed(1)+'" x2="'+(W-PR)+'" y2="'+gy.toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>';
+      var gv = opts.invert ? (mn+(mx-mn)*g/3) : (mx-(mx-mn)*g/3);
+      o+='<text x="'+(PL-7)+'" y="'+(gy+3.5).toFixed(1)+'" text-anchor="end" font-size="10" fill="#aeb4c2">'+(opts.fmt?opts.fmt(gv):Math.round(gv))+'</text>'; }
     series.forEach(function(se){
       var seg=[], last=null;
       weeks.forEach(function(w,i){ var v=w[se.key]; if(v===null||v===undefined){ last=null; return; } var px=x(i), py=y(v); seg.push((last===null?'M':'L')+px.toFixed(1)+' '+py.toFixed(1)); last=1; });
@@ -1988,13 +1993,14 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function vtLegend(series){ return '<div class="vt-leg">'+series.map(function(se){ return '<i><b style="background:'+se.color+'"></b>'+se.label+'</i>'; }).join('')+'</div>'; }
   function vtRadar(cats){
     if(!cats || !cats.length) return '<div class="vt-gempty">Score a few GutCheck calls and your category radar appears here \u2014 it is the map of which PM problems you actually read well.</div>';
-    var n=cats.length, S=250, cx=S/2, cy=S/2, R=92;
+    var n=cats.length, S=250, cx=S/2, cy=S/2, R=74;
     var o='<svg viewBox="0 0 '+S+' '+S+'" role="img" class="vt-radarsvg">';
     for(var r=1;r<=4;r++){ var rr=R*r/4, pp=[]; for(var i=0;i<Math.max(n,3);i++){ var a=(Math.PI*2*i/Math.max(n,3))-Math.PI/2; pp.push((cx+rr*Math.cos(a)).toFixed(1)+','+(cy+rr*Math.sin(a)).toFixed(1)); } o+='<polygon points="'+pp.join(' ')+'" fill="none" stroke="#EEF1F8" stroke-width="1"/>'; }
     var poly=[];
     for(var j=0;j<n;j++){ var ang=(Math.PI*2*j/n)-Math.PI/2; var val=Math.max(0,Math.min(100,Number(cats[j].signal)||0))/100; poly.push((cx+R*val*Math.cos(ang)).toFixed(1)+','+(cy+R*val*Math.sin(ang)).toFixed(1)); o+='<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+R*Math.cos(ang)).toFixed(1)+'" y2="'+(cy+R*Math.sin(ang)).toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>'; }
     if(n>=3) o+='<polygon class="vt-radarpoly" points="'+poly.join(' ')+'" fill="rgba(139,127,240,.24)" stroke="#8B7FF0" stroke-width="2.4" stroke-linejoin="round"/>';
     for(var k=0;k<n;k++){ var a2=(Math.PI*2*k/n)-Math.PI/2; var v2=Math.max(0,Math.min(100,Number(cats[k].signal)||0))/100; o+='<circle cx="'+(cx+R*v2*Math.cos(a2)).toFixed(1)+'" cy="'+(cy+R*v2*Math.sin(a2)).toFixed(1)+'" r="3.4" fill="#8B7FF0" stroke="#fff" stroke-width="1.4"><title>'+esc(drCat(cats[k].category))+': signal '+cats[k].signal+'/100 \u00b7 '+cats[k].match_rate+'% match \u00b7 '+cats[k].reps+' calls</title></circle>'; }
+    for(var m=0;m<n;m++){ var am=(Math.PI*2*m/n)-Math.PI/2; var lx=cx+(R+17)*Math.cos(am), ly=cy+(R+17)*Math.sin(am); var anc=Math.cos(am)>0.35?'start':(Math.cos(am)<-0.35?'end':'middle'); var nm=drCat(cats[m].category); if(nm.length>11) nm=nm.slice(0,10)+'\u2026'; o+='<text x="'+lx.toFixed(1)+'" y="'+(ly+3).toFixed(1)+'" text-anchor="'+anc+'" font-size="8.5" font-weight="600" fill="#8a91a0">'+esc(nm)+'</text>'; }
     o+='</svg>';
     var pal=['#D64545','#7c3aed','#2563eb','#0EA46A','#CA8A04','#5B4BD4'];
     var list='<div class="vt-rlist">'+cats.map(function(c,i){
@@ -2066,11 +2072,11 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var nums=vals.filter(function(v){ return v!=null; }).map(Number);
     if(!nums.length) return '<div class="vt-gempty">'+(opts.empty||'No data in these weeks yet.')+'</div>';
     var mx=Math.max.apply(null,nums); if(opts.max!==undefined) mx=Math.max(mx,opts.max); if(mx<=0) mx=1;
-    var W=340,H=156,PL=8,PR=8,PT=18,PB=24,n=vals.length;
+    var W=340,H=156,PL=28,PR=8,PT=18,PB=24,n=vals.length;
     var gap=(W-PL-PR)/n, bw=gap*0.54;
     var gid='bg'+key;
     var o='<svg viewBox="0 0 '+W+' '+H+'" role="img"><defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+color+'"/><stop offset="1" stop-color="'+hexA(color,'0.55')+'"/></linearGradient></defs>';
-    for(var gi=0;gi<=3;gi++){ var gy=PT+(H-PT-PB)*gi/3; o+='<line x1="'+PL+'" y1="'+gy.toFixed(1)+'" x2="'+(W-PR)+'" y2="'+gy.toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>'; }
+    for(var gi=0;gi<=3;gi++){ var gy=PT+(H-PT-PB)*gi/3; o+='<line x1="'+PL+'" y1="'+gy.toFixed(1)+'" x2="'+(W-PR)+'" y2="'+gy.toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>'; var gv=mx*(3-gi)/3; o+='<text x="'+(PL-6)+'" y="'+(gy+3.5).toFixed(1)+'" text-anchor="end" font-size="10" fill="#aeb4c2">'+(opts.fmt?opts.fmt(gv):(gv%1===0?gv:gv.toFixed(1)))+'</text>'; }
     var lastIdx=-1; vals.forEach(function(v,i){ if(v!=null) lastIdx=i; });
     vals.forEach(function(v,i){
       var cx=PL+gap*i+gap/2;
@@ -2172,7 +2178,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var achv=bestPct?('<div class="z2-achv"><div class="z2-achv-top"><span>Keep it up! You\u2019re in the top '+bestPct.p+'% of '+bestPct.w+' this window.</span><span class="z2-achv-pill">Top '+bestPct.p+'%</span></div><div class="z2-achv-bar"><i style="width:'+Math.max(6,Math.min(100,100-bestPct.p))+'%"></i></div></div>'):'';
     var insightBar='<div class="z2-insight"><span class="z2-insight-ic">\u2728</span><div class="z2-insight-tx"><b>Insight.</b> '+insight+'</div>'+achv+'</div>';
 
-    var radarCard='<div class="z2-card z2-radar-card"><div class="z2-card-h"><div class="z2-card-hl"><span class="z2-card-t">Category radar'+vTip('z2radar')+'</span><span class="z2-card-d">Agreement with the room (0\u2013100) \u2014 which PM problems you read well</span></div></div><div class="z2-card-b">'+vtRadar(radar)+'</div></div>';
+    var radarCard='<div class="z2-card z2-radar-card"><div class="z2-card-h"><div class="z2-card-hl"><span class="z2-card-t">Category radar'+vTip('z2radar')+'</span><span class="z2-card-d">Agreement with the room (0\u2013100) \u2014 which PM problems you read well</span></div></div><div class="z2-card-b">'+vtRadar(radar)+'<div class="z2-tipbox"><span class="z2-tipbox-ic">\uD83D\uDCA1</span><span>Stronger in your top categories \u2014 keep sharpening the rest to become a more well-rounded PM.</span></div></div></div>';
     return '<div class="vt-zone z2">'
       +'<div class="vt-zh"><span class="vt-zn">Zone 2</span><span class="vt-zt">Trajectory</span>'
       +'<span class="vt-zs">The last 8 weeks \u2014 this is the part that actually tells you whether you\u2019re improving.</span></div>'
@@ -2274,6 +2280,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       }
       var rf=(e.target.closest)?e.target.closest('.pc-refresh'):null;
       if(rf){ var sec2=rf.getAttribute('data-sec'); if(sec2){ rf.classList.add('spinning'); setTimeout(function(){ rf.classList.remove('spinning'); }, 700); loadSection(sec2); } return; }
+      var dm=(e.target.closest)?e.target.closest('.dg-more'):null;
+      if(dm){ var dl=document.getElementById('dg-list'); if(dl){ Array.prototype.forEach.call(dl.querySelectorAll('.dg-hidden'), function(x){ x.classList.remove('dg-hidden'); }); } dm.style.display='none'; return; }
       if(e.target.closest && !e.target.closest('.lb-tip-i')){
         var tr=e.target.closest('tr.lb-tr');
         if(tr){
