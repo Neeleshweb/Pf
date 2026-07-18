@@ -8,7 +8,7 @@
    PASTE the same Supabase URL + anon key you use in gutcheck.html:
    ============================================================ */
 (function () {
-  var GC_PROD_HOSTS = ['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','pm-gut-check.pages.dev'];
+  var GC_PROD_HOSTS = ['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','productjudgmentlabs.com','www.productjudgmentlabs.com','pm-gut-check.pages.dev'];
   var GC_IS_PROD = GC_PROD_HOSTS.indexOf(location.hostname) !== -1;
   var SUPA_URL  = GC_IS_PROD
     ? 'https://oxxzygbfgmlnvavjmhct.supabase.co/rest/v1/'
