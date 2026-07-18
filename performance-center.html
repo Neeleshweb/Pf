@@ -268,6 +268,23 @@
   .pc-refresh svg{width:14px;height:14px}
   .pc-refresh.spinning svg{animation:pc-spin .7s linear infinite}
   @keyframes pc-spin{to{transform:rotate(360deg)}}
+  /* ---- shared zone headers ---- */
+  .z-hd{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.45rem;margin-bottom:1.8rem;position:relative}
+  .z-hd-ic{width:56px;height:56px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;color:var(--z,#5B4BD4);background:color-mix(in srgb, var(--z) 13%, #fff);box-shadow:0 10px 26px color-mix(in srgb, var(--z) 26%, transparent),inset 0 0 0 1.5px color-mix(in srgb, var(--z) 24%, transparent);margin-bottom:.2rem}
+  .z-hd-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center}
+  .z-hd-n{font-size:.64rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--z,#5B4BD4);background:color-mix(in srgb, var(--z) 11%, #fff);border:1px solid color-mix(in srgb, var(--z) 22%, transparent);border-radius:99px;padding:.28rem .8rem}
+  .z-hd-t{margin:0;font-size:2rem;font-weight:800;letter-spacing:-.6px;line-height:1.15;color:var(--z,#5B4BD4)}
+  .z-hd-s{margin:0;max-width:680px;font-size:.9rem;line-height:1.6;color:var(--muted,#6b7280)}
+  .z-hd .dg-count{margin-left:0}
+  .z-hd .z1-dl-btn,.z-hd .z4-export{margin-left:0;margin-top:.5rem}
+  @media(max-width:640px){ .z-hd-t{font-size:1.55rem} .z-hd-ic{width:48px;height:48px} }
+  /* radar list additions */
+  .vt-r-nd .vt-r-n{color:var(--muted,#9aa0b0)}
+  .vt-r-nodata{flex:1;font-size:.72rem;font-style:italic;color:var(--muted,#b0b6c4)}
+  .vt-radar-need{flex:none;width:300px;max-width:100%;display:flex;align-items:center;gap:.6rem;background:#f7f8fc;border:1px dashed #dfe3ef;border-radius:14px;padding:1rem 1.1rem;font-size:.82rem;line-height:1.5;color:var(--muted,#6b7280)}
+  .z2-bulb{flex:none;display:inline-flex;align-items:center}
+  .z2-tipbox b{color:#1f5c3d;font-weight:800}
+  .z2-tipbox-lg{margin-top:1.1rem;font-size:.86rem;padding:.95rem 1.1rem}
   /* ---- Zone 1 (Your Standing) ---- */
   .vt-zone.z1{animation:z2fade .5s ease both}
   .vt-zone.z1 .vt-zh{margin-bottom:1.5rem;align-items:center}
@@ -311,6 +328,9 @@
   .z1-gc-foot{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem;padding-top:1rem;border-top:1px solid #eaf2ed;font-size:.78rem;color:var(--muted,#7a8291)}
   .z1-gc-foot b{color:var(--ink,#3a4358)}
   .z1-gc-cta{display:inline-flex;align-items:center;gap:.35rem;font-size:.82rem;font-weight:800;color:#15803d;text-decoration:none}
+  .z1-gc-btn{display:inline-flex;align-items:center;gap:.45rem;background:linear-gradient(135deg,#22A45D,#15803d);color:#fff;font-size:.84rem;font-weight:800;padding:.65rem 1.05rem;border-radius:12px;text-decoration:none;box-shadow:0 6px 16px rgba(21,128,61,.32);transition:transform .16s ease,box-shadow .16s ease}
+  .z1-gc-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(21,128,61,.4)}
+  .z1-gc-btn:hover .z1-cta-ar{transform:translateX(3px)}
   .z1-side-rail{display:flex;flex-direction:column;gap:1.2rem;position:sticky;top:1rem}
   .z1-side{border:1px solid var(--border,#e7eaf4);border-radius:20px;background:var(--card,#fff);padding:1.3rem 1.35rem;box-shadow:0 10px 30px rgba(20,25,45,.055),0 2px 6px rgba(20,25,45,.04);transition:transform .18s ease,box-shadow .18s ease}
   .z1-side:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(20,25,45,.09)}
@@ -880,8 +900,10 @@
   .wk-seeall{text-align:center;margin-top:1rem;padding-top:.9rem;border-top:1px solid #f2f4fa}
   .wk-seeall a{font-size:.82rem;font-weight:800;color:#5B4BD4;text-decoration:none}
   .wk-seeall a:hover{text-decoration:underline}
-  .wk-seeall-btn{background:var(--card,#fff);border:1px solid var(--border,#e2e6f2);color:#5B4BD4;font-size:.82rem;font-weight:800;padding:.5rem 1.05rem;border-radius:11px;cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(20,25,45,.06);transition:border-color .15s,box-shadow .15s,transform .15s}
-  .wk-seeall-btn:hover{border-color:#5B4BD4;box-shadow:0 6px 16px rgba(91,75,212,.16);transform:translateY(-1px)}
+  .wk-seeall-btn{border:none;color:#fff;font-size:.84rem;font-weight:800;padding:.62rem 1.15rem;border-radius:12px;cursor:pointer;font-family:inherit;transition:box-shadow .16s ease,transform .16s ease}
+  .wk-seeall-btn.resp{background:linear-gradient(135deg,#6D5EF0,#5B4BD4);box-shadow:0 6px 16px rgba(91,75,212,.34)}
+  .wk-seeall-btn.case{background:linear-gradient(135deg,#5AA0F0,#2F82E4);box-shadow:0 6px 16px rgba(47,130,228,.32)}
+  .wk-seeall-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(20,25,45,.2)}
   .wk-table thead th{white-space:nowrap}
   .wk-empty{text-align:center;padding:2rem 1rem;color:var(--muted,#9aa0b0)}
   .wk-empty svg{color:#c9cfe0;margin-bottom:.5rem}
@@ -924,7 +946,30 @@
   .wk-ach-s{font-size:.72rem;color:var(--muted,#7a8291);line-height:1.35}
   .wk-ach-d{flex:none;font-size:.68rem;font-weight:700;color:var(--muted,#9aa0b0)}
   @media(max-width:1080px){ .z4-cols{grid-template-columns:1fr} .z4-side{position:static;flex-direction:row;flex-wrap:wrap} .z4-side>*{flex:1;min-width:240px} }
-  @media(max-width:720px){ .wk-table{display:block;overflow-x:auto;white-space:nowrap} .wk-c-title{max-width:none} .wk-tools{flex-direction:column;align-items:stretch} .wk-right{margin-left:0} .wk-search-in{width:100%} }
+  .wk-ecta{display:inline-flex;align-items:center;gap:.45rem;color:#fff;font-size:.84rem;font-weight:800;padding:.65rem 1.05rem;border-radius:12px;text-decoration:none;transition:transform .16s ease,box-shadow .16s ease}
+  .wk-ecta.resp{background:linear-gradient(135deg,#6D5EF0,#5B4BD4);box-shadow:0 6px 16px rgba(91,75,212,.34)}
+  .wk-ecta.case{background:linear-gradient(135deg,#5AA0F0,#2F82E4);box-shadow:0 6px 16px rgba(47,130,228,.32)}
+  .wk-ecta:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(20,25,45,.2)}
+  .wk-ecta:hover .z3-cta-ar{transform:translateX(3px)}
+  @media(max-width:720px){
+    .wk-tools{flex-direction:column;align-items:stretch} .wk-right{margin-left:0} .wk-search-in{width:100%}
+    /* stacked cards instead of a horizontally scrolling table \u2014 every column kept */
+    .wk-table,.wk-table tbody,.wk-table tr,.wk-table td{display:block;width:100%}
+    .wk-table thead{display:none}
+    .wk-tr{border:1px solid var(--border,#e7eaf4);border-radius:16px;background:var(--card,#fff);box-shadow:0 4px 14px rgba(20,25,45,.05);padding:.4rem .2rem;margin-bottom:.85rem}
+    .wk-tr.resp{border-left:3px solid #6D5EF0}
+    .wk-tr.case{border-left:3px solid #2F82E4}
+    .wk-tr td{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.5rem .85rem;border-bottom:1px solid #f4f6fb;text-align:right}
+    .wk-tr td:last-child{border-bottom:none}
+    .wk-tr.resp td:first-child,.wk-tr.case td:first-child{box-shadow:none}
+    .wk-tr td::before{content:attr(data-l);flex:none;font-size:.64rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted,#9aa0b0);text-align:left}
+    .wk-tr td.wk-c-title{display:block;text-align:left;padding-top:.7rem}
+    .wk-tr td.wk-c-title::before{display:block;margin-bottom:.2rem}
+    .wk-c-title{max-width:none}
+    .wk-track{margin-left:auto;max-width:100px}
+    .wk-grp td{display:block;text-align:left;border-radius:8px}
+    .wk-grp td::before{content:none}
+  }
   /* ===================== D6-4: ZONE 3 DIAGNOSIS ===================== */
   .dg-list{display:flex;flex-direction:column;gap:.7rem}
   .dg-count{display:inline-block;margin-left:.6rem;font-size:.68rem;font-weight:800;letter-spacing:.3px;text-transform:uppercase;color:#c0392b;background:#FDF0F0;border-radius:99px;padding:.16rem .55rem;vertical-align:middle}
@@ -1772,6 +1817,12 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function vTip(k){ return '<button type="button" class="lb-tip-i" data-tip="vt:'+k+'" aria-label="What is this?">i</button>'; }
   /* ===================== D6-3: ZONE 4 YOUR WORK ===================== */
   var WKTIPS={
+    s_resp:{t:'Responses written',b:'What it is: how many responses you posted in this window.\n\nWhy it matters: volume is the raw input \u2014 nothing else can happen until you show up.\n\nImproves when: you answer live cases regularly.\n\nDrops when: weeks pass without contributing.\n\nLeadership edge: consistent presence is what makes you the person others turn to for a read.'},
+    s_cases:{t:'Cases posted',b:'What it is: how many decisions you brought to the room in this window.\n\nWhy it matters: posting is how you get pressure-tested by other PMs.\n\nImproves when: you share real, current dilemmas instead of sitting on them.\n\nDrops when: you stop asking for input.\n\nLeadership edge: leaders who invite scrutiny early make far fewer expensive mistakes.'},
+    s_pts:{t:'Total points earned',b:'What it is: your reviewer plus author points across this window.\n\nWhy it matters: this is the headline number behind both leaderboards.\n\nImproves when: your work gets acted on, marked helpful, and closes resolved.\n\nDrops when: activity stalls or items get flagged.\n\nLeadership edge: a rising total is objective evidence of contribution \u2014 not a self-assessment.'},
+    s_exem:{t:'Exemplary items',b:'What it is: the count of your work rated top-tier.\n\nWhy it matters: it is the clearest quality signal in the whole Vault.\n\nImproves when: your briefs are unusually clear and your answers genuinely decide things.\n\nDrops when: you optimise for volume over craft.\n\nLeadership edge: a few exemplary pieces do more for your reputation than a pile of average ones.'},
+    s_hr:{t:'Helpful rate',b:'What it is: the share of your responses that earned at least one helpful mark.\n\nWhy it matters: it measures whether your reasoning actually lands with readers.\n\nImproves when: you explain the tradeoff, not just the verdict.\n\nDrops when: answers are generic or restate the question.\n\nLeadership edge: PMs whose explanations teach \u2014 not just decide \u2014 raise the level of everyone around them.'},
+    glance:{t:'Contribution at a glance',b:'What it is: the split between the responses you wrote and the cases you posted.\n\nWhy it matters: it shows whether you are mostly advising, mostly asking, or balanced.\n\nImproves when: you deliberately work the side you have been neglecting.\n\nDrops when: you stay entirely on one side and the other score stagnates.\n\nLeadership edge: strong PMs both give and seek counsel \u2014 balance is the mark of a mature operator.'},
     c_rtitle:{t:'Response',b:'What it is: the case you answered, with the date you posted.\n\nWhy it matters: these are the concrete decisions you weighed in on \u2014 your reviewing track record.\n\nImproves when: you answer more live cases, especially ones you can speak to well.\n\nDrops when: you go quiet and stop contributing.\n\nLeadership edge: a visible body of advice is how others come to trust your judgment.'},
     c_rstatus:{t:'Status',b:'What it is: what happened to your answer \u2014 acted on, marked helpful, posted, or flagged.\n\nWhy it matters: it separates advice that landed from advice that was merely written.\n\nImproves when: you give specific, decision-ready answers the author can act on.\n\nDrops when: answers are vague, generic, or off-topic (which can get them flagged).\n\nLeadership edge: being the person whose input actually changes decisions is real influence.'},
     c_helpful:{t:'Helpful',b:'What it is: how many readers marked your response helpful.\n\nWhy it matters: it is peer validation that your reasoning was useful beyond the author.\n\nImproves when: you explain the tradeoff clearly so others learn from it too.\n\nDrops when: answers only restate the question or lack reasoning.\n\nLeadership edge: PMs who teach through their reasoning lift the whole team, not just one decision.'},
@@ -1809,22 +1860,41 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     star:'<polygon points="12 2 15 9 22 9.3 16.5 14 18.5 21 12 17 5.5 21 7.5 14 2 9.3 9 9"/>',
     eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>'
   };
+  /* routes to DecisionRoom with a real live case selected + composer open */
+  function pcAnswerLatest(e){
+    if(e&&e.preventDefault) e.preventDefault();
+    var me=(typeof jlUserId==='function')?jlUserId():null;
+    var go=function(u){ location.href=u; };
+    try{
+      jlRpc('dr_feed',{p_limit:6,p_before:null,p_category:null,p_status:'live',p_urgency:null,p_product:null,p_experience:null})
+        .then(function(rows){
+          var list=(rows&&rows.length)?rows:[];
+          var pick=null;
+          for(var i=0;i<list.length;i++){ var c=list[i]; if(c && c.id && !(me && c.submitter===me)){ pick=c; break; } }
+          go(pick? ('/decisionroom.html?case='+encodeURIComponent(pick.id)+'&do=respond') : '/decisionroom.html');
+        })
+        .catch(function(){ go('/decisionroom.html'); });
+    }catch(err){ go('/decisionroom.html'); }
+  }
+  document.addEventListener('click', function(e){
+    var a=e.target.closest?e.target.closest('[data-pc-answer]'):null; if(a) pcAnswerLatest(e);
+  });
   function z4ic(k,sz){ sz=sz||18; return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+Z4IC[k]+'</svg>'; }
   function wkTier(p){ p=Number(p)||0; return p>=15?'high':(p>=6?'medium':(p>0?'low':'none')); }
   function wkTierLabel(p){ var t=wkTier(p); return t==='high'?'High impact':(t==='medium'?'Medium impact':(t==='low'?'Low impact':'\u2014')); }
-  function wkPtsCell(p){ p=Number(p)||0; var cls=p<0?'neg':(p===0?'zero':'pos'); return '<td class="wk-c-pts"><span class="wk-pill '+cls+'">'+(p>0?'+':'')+fmtN(p)+'</span><span class="wk-pts-sub">'+wkTierLabel(p)+'</span></td>'; }
+  function wkPtsCell(p){ p=Number(p)||0; var cls=p<0?'neg':(p===0?'zero':'pos'); return '<td class="wk-c-pts" data-l="Points"><span class="wk-pill '+cls+'">'+(p>0?'+':'')+fmtN(p)+'</span><span class="wk-pts-sub">'+wkTierLabel(p)+'</span></td>'; }
   function wkQualResp(r){ if((r.reports||0)>0) return ['Needs work','nw']; var p=Number(r.points)||0; if(r.acted && (r.helpful||0)>=2 && p>=12) return ['Exemplary','ex']; if(r.acted || (r.helpful||0)>=2 || p>=10) return ['Strong','st']; if((r.helpful||0)>0 || p>0) return ['Good','gd']; return ['Posted','po']; }
   function wkQualCase(c){ if(c.exemplary) return ['Exemplary','ex']; if((c.context_flags||0)>0 || c.abandoned===1) return ['Needs work','nw']; var p=Number(c.points)||0, fp=Number(c.final_pct)||0; if(p>=15 || fp>=70) return ['Strong','st']; if(p>0) return ['Good','gd']; return ['Posted','po']; }
-  function wkQualCell(q){ var medal=(q[1]==='ex')?'<span class="wk-medal">'+z4ic('medal',13)+'</span>':''; return '<td class="wk-c-qual"><span class="wk-qual wk-q-'+q[1]+'">'+medal+q[0]+'</span></td>'; }
+  function wkQualCell(q){ var medal=(q[1]==='ex')?'<span class="wk-medal">'+z4ic('medal',13)+'</span>':''; return '<td class="wk-c-qual" data-l="Quality"><span class="wk-qual wk-q-'+q[1]+'">'+medal+q[0]+'</span></td>'; }
   function wkRespStatus(r){ if((r.reports||0)>0) return ['Needs attention','att','Flagged by readers']; if(r.acted) return ['Acted on','acted','Used in a decision']; if((r.helpful||0)>0) return ['Helpful','help','Well received']; return ['Posted','po','Awaiting response']; }
   function wkCaseStatus(c){ if(c.status==='closed') return ['Closed','closed','Resolved']; if(c.abandoned===1) return ['Stalled','att','Went quiet']; return ['Open','open','Active']; }
-  function wkStatusCell(s){ return '<td class="wk-c-status"><span class="wk-badge wk-b-'+s[1]+'">'+s[0]+'</span><span class="wk-badge-sub">'+s[2]+'</span></td>'; }
+  function wkStatusCell(s){ return '<td class="wk-c-status" data-l="Status"><span class="wk-badge wk-b-'+s[1]+'">'+s[0]+'</span><span class="wk-badge-sub">'+s[2]+'</span></td>'; }
   function wkBar(pct,color){ pct=Math.max(0,Math.min(100,Number(pct)||0)); return '<span class="wk-track"><i style="width:'+pct+'%;background:'+color+'"></i></span>'; }
-  function wkHelpfulCell(r,maxH){ var h=Number(r.helpful||0); var pct=maxH>0?(h/maxH*100):0; return '<td class="wk-c-help"><span class="wk-help-top"><b>'+h+'</b> helpful</span>'+wkBar(pct,'#16A34A')+'</td>'; }
-  function wkClarityCell(c){ var v=Number(c.clarity)||0; var lab=v>=4.5?'Excellent':(v>=4?'Very good':(v>=3?'Good':(v>0?'Average':'\u2014'))); return '<td class="wk-c-clar"><span class="wk-clar-v">'+(v>0?fmtN(v)+'/5':'\u2014')+' <span class="wk-clar-star">'+z4ic('star',11)+'</span></span><span class="wk-clar-l">'+lab+'</span></td>'; }
-  function wkResolCell(c){ if(c.status!=='closed'){ return '<td class="wk-c-resol"><span class="wk-resol-l">In progress</span></td>'; } var fp=Number(c.final_pct)||0; return '<td class="wk-c-resol"><span class="wk-resol-top"><b>'+Math.round(fp)+'%</b> resolved</span>'+wkBar(fp, fp>=60?'#16A34A':(fp>=30?'#D97706':'#DC2626'))+'</td>'; }
-  function wkTitleCell(item, href){ return '<td class="wk-c-title"><a class="wk-t-link" href="'+href+'">'+esc(item.title||'Untitled')+'</a><span class="wk-t-meta">'+wkDateFmt(item.created_at)+' \u00b7 DecisionRoom</span></td>'; }
-  function wkActionCell(href){ return '<td class="wk-c-act"><a class="wk-view" href="'+href+'" title="Open">'+z4ic('eye',15)+'</a></td>'; }
+  function wkHelpfulCell(r,maxH){ var h=Number(r.helpful||0); var pct=maxH>0?(h/maxH*100):0; return '<td class="wk-c-help" data-l="Helpful"><span class="wk-help-top"><b>'+h+'</b> helpful</span>'+wkBar(pct,'#16A34A')+'</td>'; }
+  function wkClarityCell(c){ var v=Number(c.clarity)||0; var lab=v>=4.5?'Excellent':(v>=4?'Very good':(v>=3?'Good':(v>0?'Average':'\u2014'))); return '<td class="wk-c-clar" data-l="Clarity"><span class="wk-clar-v">'+(v>0?fmtN(v)+'/5':'\u2014')+' <span class="wk-clar-star">'+z4ic('star',11)+'</span></span><span class="wk-clar-l">'+lab+'</span></td>'; }
+  function wkResolCell(c){ if(c.status!=='closed'){ return '<td class="wk-c-resol" data-l="Resolution"><span class="wk-resol-l">In progress</span></td>'; } var fp=Number(c.final_pct)||0; return '<td class="wk-c-resol" data-l="Resolution"><span class="wk-resol-top"><b>'+Math.round(fp)+'%</b> resolved</span>'+wkBar(fp, fp>=60?'#16A34A':(fp>=30?'#D97706':'#DC2626'))+'</td>'; }
+  function wkTitleCell(item, href){ return '<td class="wk-c-title" data-l="Item"><a class="wk-t-link" href="'+href+'">'+esc(item.title||'Untitled')+'</a><span class="wk-t-meta">'+wkDateFmt(item.created_at)+' \u00b7 DecisionRoom</span></td>'; }
+  function wkActionCell(href){ return '<td class="wk-c-act" data-l="Action"><a class="wk-view" href="'+href+'" title="Open">'+z4ic('eye',15)+'</a></td>'; }
 
   function wkRespRow(r,maxH){
     var href='/decisionroom.html?case='+encodeURIComponent(r.case_id)+(r.response_id?'&resp='+encodeURIComponent(r.response_id):'');
@@ -1832,7 +1902,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   }
   function wkCaseRow(c){
     var href='/decisionroom.html?case='+encodeURIComponent(c.case_id);
-    return '<tr class="wk-tr case">'+wkTitleCell(c,href)+wkStatusCell(wkCaseStatus(c))+wkClarityCell(c)+wkResolCell(c)+wkPtsCell(c.points)+wkQualCell(wkQualCase(c))+'<td class="wk-c-resp"><span class="wk-resp-n">'+(c.responses||0)+'</span></td></tr>';
+    return '<tr class="wk-tr case">'+wkTitleCell(c,href)+wkStatusCell(wkCaseStatus(c))+wkClarityCell(c)+wkResolCell(c)+wkPtsCell(c.points)+wkQualCell(wkQualCase(c))+'<td class="wk-c-resp" data-l="Replies"><span class="wk-resp-n">'+(c.responses||0)+'</span></td></tr>';
   }
   function wkRespPass(r,f){ if(f==='acted') return !!r.acted; if(f==='helpful') return (r.helpful||0)>0; if(f==='attention') return (r.reports||0)>0; return true; }
   function wkCasePass(c,f){ if(f==='exemplary') return !!c.exemplary; if(f==='open') return c.status!=='closed'; if(f==='closed') return c.status==='closed'; if(f==='attention') return c.abandoned===1 || (c.context_flags||0)>0; return true; }
@@ -1856,7 +1926,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
 
   function wkRespList(){
     var arr=(wkData&&wkData.responses)||[];
-    if(!arr.length) return '<div class="wk-empty">'+z4ic('chat',30)+'<p>No responses in this window yet.</p><a href="/decisionroom.html">Answer a live decision \u2192</a></div>';
+    if(!arr.length) return '<div class="wk-empty">'+z4ic('chat',30)+'<p>No responses in this window yet.</p><a class="wk-ecta resp" href="/decisionroom.html" data-pc-answer="1">Answer a live decision <span class="z3-cta-ar">\u2192</span></a></div>';
     var rows=arr.filter(function(r){ return wkRespPass(r,wkRespFilter) && wkQmatch(r,wkRespQuery); });
     rows.sort(function(a,b){ if(wkRespSort==='recent') return wkTime(b.created_at)-wkTime(a.created_at); var pa=Number(a.points)||0, pb=Number(b.points)||0; if(pb!==pa) return pb-pa; return wkTime(b.created_at)-wkTime(a.created_at); });
     if(!rows.length) return '<div class="wk-none">No responses match this filter.</div>';
@@ -1864,19 +1934,19 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var shown=wkRespAll?rows:rows.slice(0,6);
     var head='<thead><tr>'+wkTh('Response','c_rtitle')+wkTh('Status','c_rstatus')+wkTh('Helpful','c_helpful')+wkTh('Points','c_points')+wkTh('Quality','c_quality')+wkTh('Action','c_action')+'</tr></thead>';
     var more='';
-    if(rows.length>6) more='<div class="wk-seeall"><button type="button" class="wk-seeall-btn" data-wk-all="resp">'+(wkRespAll?('Show fewer \u25B4'):('See all '+rows.length+' responses \u25BE'))+'</button></div>';
+    if(rows.length>6) more='<div class="wk-seeall"><button type="button" class="wk-seeall-btn resp" data-wk-all="resp">'+(wkRespAll?('Show fewer \u25B4'):('See all '+rows.length+' responses \u25BE'))+'</button></div>';
     return '<table class="wk-table">'+head+'<tbody>'+wkGrouped(shown, function(r){ return wkRespRow(r,maxH); }, 6, wkRespSort==='recent')+'</tbody></table>'+more;
   }
   function wkCaseList(){
     var arr=(wkData&&wkData.cases)||[];
-    if(!arr.length) return '<div class="wk-empty">'+z4ic('folder',30)+'<p>You haven\u2019t posted any cases in this window.</p><a href="/decisionroom.html?do=submit">Open the case form \u2192</a></div>';
+    if(!arr.length) return '<div class="wk-empty">'+z4ic('folder',30)+'<p>You haven\u2019t posted any cases in this window.</p><a class="wk-ecta case" href="/decisionroom.html?do=submit">Post your first case <span class="z3-cta-ar">\u2192</span></a></div>';
     var rows=arr.filter(function(c){ return wkCasePass(c,wkCaseFilter) && wkQmatch(c,wkCaseQuery); });
     rows.sort(function(a,b){ if(wkCaseSort==='recent') return wkTime(b.created_at)-wkTime(a.created_at); if(wkCaseSort==='clarity'){ var ca=Number(a.clarity)||0, cb=Number(b.clarity)||0; if(cb!==ca) return cb-ca; return wkTime(b.created_at)-wkTime(a.created_at); } var pa=Number(a.points)||0, pb=Number(b.points)||0; if(pb!==pa) return pb-pa; return wkTime(b.created_at)-wkTime(a.created_at); });
     if(!rows.length) return '<div class="wk-none">No cases match this filter.</div>';
     var shown=wkCaseAll?rows:rows.slice(0,6);
     var head='<thead><tr>'+wkTh('Case','c_ctitle')+wkTh('Status','c_cstatus')+wkTh('Clarity','c_clarity')+wkTh('Resolution','c_resolution')+wkTh('Points','c_points')+wkTh('Quality','c_cquality')+wkTh('Replies','c_replies')+'</tr></thead>';
     var more='';
-    if(rows.length>6) more='<div class="wk-seeall"><button type="button" class="wk-seeall-btn" data-wk-all="case">'+(wkCaseAll?('Show fewer \u25B4'):('See all '+rows.length+' cases \u25BE'))+'</button></div>';
+    if(rows.length>6) more='<div class="wk-seeall"><button type="button" class="wk-seeall-btn case" data-wk-all="case">'+(wkCaseAll?('Show fewer \u25B4'):('See all '+rows.length+' cases \u25BE'))+'</button></div>';
     return '<table class="wk-table">'+head+'<tbody>'+wkGrouped(shown, wkCaseRow, 7, wkCaseSort==='recent')+'</tbody></table>'+more;
   }
   function wkRespRecon(w){
@@ -1921,7 +1991,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +(arr.length?wkTools('case'):'')+'<div class="wk-list" id="wk-case-list">'+wkCaseList()+'</div>'
       +(arr.length?wkCaseRecon(wkData):'');
   }
-  function wkStat(icon, color, label, big, sub){ return '<div class="wk-stat" style="--c:'+color+'"><span class="wk-stat-ic">'+z4ic(icon,20)+'</span><div class="wk-stat-tx"><span class="wk-stat-l">'+label+'</span><span class="wk-stat-big">'+big+'</span><span class="wk-stat-s">'+sub+'</span></div></div>'; }
+  function wkStat(icon, color, label, big, sub, tipKey){ return '<div class="wk-stat" style="--c:'+color+'"><span class="wk-stat-ic">'+z4ic(icon,20)+'</span><div class="wk-stat-tx"><span class="wk-stat-l">'+label+(tipKey?wkTip(tipKey):'')+'</span><span class="wk-stat-big">'+big+'</span><span class="wk-stat-s">'+sub+'</span></div></div>'; }
   /* period-over-period: same metrics recomputed on the previous equivalent window */
   function wkStatNums(w){
     if(!w||!w.ok) return null;
@@ -1943,11 +2013,11 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var n=wkStatNums(w)||{resp:0,cases:0,pts:0,exem:0,hr:0}, pv=wkStatNums(wPrev);
     function sub(cur, prevKey, fallback, suffix, word){ var dl=pv?wkDelta(cur, pv[prevKey], suffix, word):''; return dl||fallback; }
     return '<div class="z4-stats">'
-      +wkStat('chat','#6D5EF0','Responses written', n.resp, sub(n.resp,'resp','logged this window'))
-      +wkStat('folder','#2F82E4','Cases posted', n.cases, sub(n.cases,'cases','logged this window'))
-      +wkStat('target','#7c3aed','Total points earned', fmtN(n.pts), sub(n.pts,'pts','across all your work'))
-      +wkStat('medal','#CA8A04','Exemplary items', n.exem, sub(n.exem,'exem','top-tier work'))
-      +wkStat('thumb','#16A34A','Helpful rate', n.hr+'%', sub(n.hr,'hr','of responses got a helpful mark','pts',' vs last period'))
+      +wkStat('chat','#6D5EF0','Responses written', n.resp, sub(n.resp,'resp','logged this window'),'s_resp')
+      +wkStat('folder','#2F82E4','Cases posted', n.cases, sub(n.cases,'cases','logged this window'),'s_cases')
+      +wkStat('target','#7c3aed','Total points earned', fmtN(n.pts), sub(n.pts,'pts','across all your work'),'s_pts')
+      +wkStat('medal','#CA8A04','Exemplary items', n.exem, sub(n.exem,'exem','top-tier work'),'s_exem')
+      +wkStat('thumb','#16A34A','Helpful rate', n.hr+'%', sub(n.hr,'hr','of responses got a helpful mark','pts',' vs last period'),'s_hr')
       +'</div>';
   }
   /* ---- achievements (derived from the same data \u2014 no extra backend) ---- */
@@ -1994,7 +2064,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var rN=(w.totals&&w.totals.responses_count)||(w.responses||[]).length;
     var cN=(w.totals&&w.totals.cases_count)||(w.cases||[]).length;
     return '<aside class="z4-side">'
-      +'<div class="wk-side"><div class="wk-side-h">Your contribution at a glance</div>'+wkDonut(rN,cN)+'</div>'
+      +'<div class="wk-side"><div class="wk-side-h">Your contribution at a glance'+wkTip('glance')+'</div>'+wkDonut(rN,cN)+'</div>'
       +'<div class="wk-side"><div class="wk-side-h">Points by impact'+wkTip('pbi')+'</div>'+wkPointsByImpact(w)+'</div>'
       +wkTopPerformer(d)
       +wkAchievements(w,d)
@@ -2004,9 +2074,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     if(!w || !w.ok || !w.signed_in){ wkData=null; return ''; }
     wkData=w;
     return '<div class="vt-zone z4">'
-      +'<div class="vt-zh"><span class="vt-zn">Zone 4</span><span class="vt-zt">Your Work</span>'
-      +'<span class="vt-zs">Every contribution you\u2019ve made \u2014 and the impact you\u2019ve created. Each row adds up to the scores at the top.'+wkTip('what')+'</span>'
-      +'<button type="button" class="z4-export" data-wk-export="1">'+z4ic('eye',13)+' Export CSV</button></div>'
+      +zoneHead(4,'Your Track Record','Every contribution you\u2019ve made and the impact it created \u2014 the receipts behind every score above.'+wkTip('what'),'#16A34A','z4','',
+          '<button type="button" class="z4-export" data-wk-export="1">'+z4ic('eye',13)+' Export CSV</button>')
       +wkStatsBar(w, wPrev)
       +'<div class="z4-cols"><div class="z4-main">'
         +'<div class="wk-panel" id="wk-resp-panel">'+wkRespPanelInner()+'</div>'
@@ -2037,6 +2106,10 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   });
   /* ===================== D6-4: ZONE 3 DIAGNOSIS ===================== */
   var DGTIPS={
+    bk_high:{t:'High impact',b:'What it is: the findings costing you the most right now.\n\nWhy it matters: these are where the biggest, fastest score gains are sitting.\n\nImproves when: you clear them \u2014 each one directly lifts your reviewer or author score.\n\nDrops when: they are left alone and keep subtracting week after week.\n\nLeadership edge: attacking your biggest problem first, not your easiest, is what separates senior operators.'},
+    bk_med:{t:'Worth fixing',b:'What it is: real gaps that are holding you back, but cost less than the high-impact ones.\n\nWhy it matters: they quietly cap how far your score can climb.\n\nImproves when: you work through them after the top items are handled.\n\nDrops when: they accumulate into a long tail of small losses.\n\nLeadership edge: steadily clearing medium issues is how good becomes consistently great.'},
+    bk_opp:{t:'Opportunities',b:'What it is: upside you have not claimed yet \u2014 strengths you are under-using.\n\nWhy it matters: these are gains available without fixing anything broken.\n\nImproves when: you lean into a category or domain where you already read well.\n\nDrops when: you stay in the same narrow lane and the upside goes unused.\n\nLeadership edge: knowing where your edge is \u2014 and deliberately spending it \u2014 compounds faster than fixing weaknesses alone.'},
+    bk_growth:{t:'Great progress',b:'What it is: things you are already doing well, or the first steps if you are new.\n\nWhy it matters: it shows what to keep doing, not just what to fix.\n\nImproves when: you sustain the habits that got you here.\n\nDrops when: momentum stops and streaks break.\n\nLeadership edge: recognising and repeating what works is as important as correcting what does not.'},
     what:{t:'How Diagnosis works',b:'What it is: a read of ALL your activity (not the window pill) that surfaces the few patterns most worth fixing, ranked by the points at stake.\n\nWhy it matters: it turns a pile of data into a short, prioritized to-do list.\n\nImproves when: you act on the top cards \u2014 each links to the exact case, response, or form to fix.\n\nDrops when: findings pile up unaddressed.\n\nLeadership edge: great PMs fix the highest-leverage thing first \u2014 this tells you what that is.'},
     impact:{t:'Vault Impact Score',b:'What it is: a 0\u2013100 read of how healthy your record is right now \u2014 it starts high and is reduced by the weight of what is still worth fixing.\n\nWhy it matters: one number for how much upside is still on the table.\n\nImproves when: you clear findings, especially high-impact ones.\n\nDrops when: new high-severity gaps appear or old ones linger.\n\nLeadership edge: steadily raising this shows you convert feedback into fixes \u2014 the habit that compounds into mastery.'},
     improve:{t:'Estimated improvement',b:'What it is: the points this fix is worth \u2014 to your reviewer or author score \u2014 based on the gap it closes.\n\nWhy it matters: it lets you spend effort where it pays off most.\n\nImproves when: you close the gap the finding points to.\n\nDrops when: you leave it and the points stay on the table.\n\nLeadership edge: prioritizing by expected value \u2014 not by what is easiest \u2014 is exactly how strong PMs allocate their time.'},
@@ -2104,6 +2177,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     if(r.kind==='reviewer') n=meta.reviewer_responses||0;
     else if(r.kind==='author') n=meta.author_cases||0;
     else n=Math.max(meta.reviewer_responses||0, meta.author_cases||0, Math.round((meta.gutcheck_reps||0)/3));
+    if(!(n>0)) return 0;   /* no activity yet \u2014 we cannot be confident about anything */
     return Math.max(55, Math.min(95, 55+n*4));
   }
   function dgImprove(r){
@@ -2115,18 +2189,23 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function confRing(pct){
     pct=Math.max(0,Math.min(100,Math.round(pct)));
     var R=20, C=2*Math.PI*R, off=C*(1-pct/100);
-    var c1=pct>=75?'#16A34A':(pct>=60?'#F59E0B':'#DC2626'), c2=pct>=75?'#4ADE80':(pct>=60?'#FCD34D':'#F87171');
+    var c1=pct>=75?'#16A34A':(pct>=60?'#F59E0B':(pct>0?'#DC2626':'#c2c7d4')), c2=pct>=75?'#4ADE80':(pct>=60?'#FCD34D':(pct>0?'#F87171':'#e2e6f2'));
     var gid='cr'+Math.floor(Math.random()*1e6);
-    return '<svg class="z3-ring" viewBox="0 0 48 48" role="img"><defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+c2+'"/><stop offset="1" stop-color="'+c1+'"/></linearGradient></defs><circle cx="24" cy="24" r="20" fill="none" stroke="#EEF1F8" stroke-width="5"/><circle class="z3-ring-arc" cx="24" cy="24" r="20" fill="none" stroke="url(#'+gid+')" stroke-width="5" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 24 24)"/><text x="24" y="28.5" text-anchor="middle" font-size="13.5" font-weight="800" fill="'+c1+'">'+pct+'</text></svg>';
+    return '<svg class="z3-ring" viewBox="0 0 48 48" role="img"><defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+c2+'"/><stop offset="1" stop-color="'+c1+'"/></linearGradient></defs><circle cx="24" cy="24" r="20" fill="none" stroke="#EEF1F8" stroke-width="5"/><circle class="z3-ring-arc" cx="24" cy="24" r="20" fill="none" stroke="url(#'+gid+')" stroke-width="5" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 24 24)"/><text x="24" y="28.5" text-anchor="middle" font-size="13.5" font-weight="800" fill="'+c1+'">'+(pct>0?pct:'\u2014')+'</text></svg>';
   }
   function z3ImpactGauge(score){
     score=Math.max(0,Math.min(100,Math.round(score)));
     var R=40, C=2*Math.PI*R, off=C*(1-score/100), gid='ig'+Math.floor(Math.random()*1e6);
     return '<svg class="z3-impact-g" viewBox="0 0 96 96" role="img"><defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5B4BD4"/><stop offset=".5" stop-color="#C13584"/><stop offset="1" stop-color="#DC2626"/></linearGradient></defs><circle cx="48" cy="48" r="40" fill="none" stroke="#EEF1F8" stroke-width="8"/><circle class="z3-ring-arc" cx="48" cy="48" r="40" fill="none" stroke="url(#'+gid+')" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 48 48)"/><text x="48" y="46" text-anchor="middle" font-size="25" font-weight="800" fill="var(--ink,#16233f)">'+score+'</text><text x="48" y="63" text-anchor="middle" font-size="10.5" font-weight="700" fill="#9aa0b0">/ 100</text></svg>';
   }
-  function impactLabel(s){ return s>=85?'Strong record':(s>=70?'Solid \u2014 a few gaps':(s>=55?'Room to improve':'Focus needed')); }
-  function dgBucket(kicker, label, sub, count, color, icon){
-    return '<div class="z3-bucket"><span class="z3-bk-ic" style="--c:'+color+'">'+icon+'</span><div class="z3-bk-tx"><div class="z3-bk-k">'+kicker+'</div><div class="z3-bk-l">'+label+'</div><div class="z3-bk-s">'+sub+'</div></div></div>';
+  function impactLabel(s){ if(!(s>0)) return 'No data yet'; return s>=85?'Strong record':(s>=70?'Solid \u2014 a few gaps':(s>=55?'Room to improve':'Focus needed')); }
+  function dgBucket(kicker, label, sub, count, color, icon, tipKey){
+    return '<div class="z3-bucket"><span class="z3-bk-ic" style="--c:'+color+'">'+icon+'</span><div class="z3-bk-tx"><div class="z3-bk-k">'+kicker+'</div><div class="z3-bk-l">'+label+(tipKey?dgTip(tipKey):'')+'</div><div class="z3-bk-s">'+sub+'</div></div></div>';
+  }
+  function dgWhyFallback(r){
+    if(r.kind==='author') return 'Your author score only starts moving once a real decision is on the board \u2014 this is the step that opens it.';
+    if(r.kind==='reviewer') return 'Your reviewer score only starts moving when your judgment reaches someone else\u2019s decision \u2014 this is the step that opens it.';
+    return 'Everything else in this Vault is built from your activity. This is the fastest way to get your first real signal on the board.';
   }
   function dgLearnWhy(r, conf, meta, affects){
     meta=meta||{};
@@ -2154,7 +2233,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +'<div class="z3-card">'
         +'<div class="z3-col z3-lead">'+(role?'<span class="z3-role">'+role+'</span>':'')+'<div class="z3-title">'+esc(r.title||'')+'</div>'+gist+'</div>'
         +'<div class="z3-col"><div class="z3-col-h">'+ICO.eye+' What we saw</div><p>'+esc(r.saw||'')+'</p></div>'
-        +'<div class="z3-col"><div class="z3-col-h">'+ICO.shield+' Why it matters</div><p>'+esc(r.why||'')+'</p></div>'
+        +'<div class="z3-col"><div class="z3-col-h">'+ICO.shield+' Why it matters</div><p>'+esc(r.why||dgWhyFallback(r))+'</p></div>'
         +'<div class="z3-col z3-col-act"><div class="z3-col-h">'+ICO.rocket+' Recommended action</div><div class="z3-act-lead">The fastest fix:</div><a class="z3-cta" href="'+dgHref(r.action)+'">'+esc(r.action_label||'Take action')+' <span class="z3-cta-ar">\u2192</span></a></div>'
         +'<div class="z3-rrail">'
           +'<div class="z3-tags">'+tagHtml+'</div>'
@@ -2171,15 +2250,16 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var cHigh=0,cMed=0,cOpp=0,cGrow=0;
     rules.forEach(function(r){ var s=r.severity; if(s==='high'||s==='critical')cHigh++; else if(s==='medium')cMed++; else if(s==='opportunity')cOpp++; else cGrow++; });
     var fired=meta.fired||0;
+    var hasActivity=((meta.reviewer_responses||0)>0)||((meta.author_cases||0)>0)||((meta.gutcheck_reps||0)>0);
     var sw={critical:14,high:9,medium:5,opportunity:2,growth:0};
     var pen=0; rules.forEach(function(r){ pen+=(sw[r.severity]!=null?sw[r.severity]:5); });
-    var impactScore=Math.max(40, 100-Math.min(58,pen));
+    var impactScore=hasActivity?Math.max(40, 100-Math.min(58,pen)):0;
     function fnd(n){ return n+' finding'+(n===1?'':'s'); }
     var buckets='<div class="z3-buckets">'
-      +dgBucket('Focus first','High Impact',fnd(cHigh),cHigh,'#DC2626',ICO.target)
-      +dgBucket('Next best','Worth Fixing',fnd(cMed),cMed,'#D97706',ICO.wrench)
-      +dgBucket('Keep building','Opportunities',fnd(cOpp),cOpp,'#2563EB',ICO.trend)
-      +dgBucket('Great progress',(cGrow>0?'Getting started':'You\u2019re improving'),(cGrow>0?fnd(cGrow):'Keep it up!'),cGrow,'#16A34A',ICO.check)
+      +dgBucket('Focus first','High Impact',fnd(cHigh),cHigh,'#DC2626',ICO.target,'bk_high')
+      +dgBucket('Next best','Worth Fixing',fnd(cMed),cMed,'#D97706',ICO.wrench,'bk_med')
+      +dgBucket('Keep building','Opportunities',fnd(cOpp),cOpp,'#2563EB',ICO.trend,'bk_opp')
+      +dgBucket('Great progress',(cGrow>0?'Getting started':'You\u2019re improving'),(cGrow>0?fnd(cGrow):'Keep it up!'),cGrow,'#16A34A',ICO.check,'bk_growth')
       +'</div>';
     var gauge='<div class="z3-impact"><div class="z3-impact-gw">'+z3ImpactGauge(impactScore)+'</div><div class="z3-impact-tx"><div class="z3-impact-l">Vault Impact Score'+dgTip('impact')+'</div><div class="z3-impact-s">'+impactLabel(impactScore)+'</div></div></div>';
     var prevBand=null;
@@ -2197,8 +2277,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +'<div class="z3-bt"><span class="z3-bt-ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg></span><div><b>Your potential improvement</b><small>Clearing the top findings lifts your reviewer and author scores.</small></div></div>'
       +'</div>';
     return '<div class="vt-zone z3d">'
-      +'<div class="vt-zh"><span class="vt-zn">Zone 3</span><span class="vt-zt">Diagnosis</span>'+count
-      +'<span class="vt-zs">The few things most worth fixing right now \u2014 based on all your activity, ranked by impact.'+dgTip('what')+'</span></div>'
+      +zoneHead(3,'Your Next Moves','The few things most worth fixing right now \u2014 read from all your activity, ranked by impact, each with the exact action to take.'+dgTip('what'),'#D97706','z3',count,'')
       +'<div class="z3-summary">'+buckets+gauge+'</div>'
       +'<div class="z3-timeline dg-list" id="dg-list">'+items+'</div>'+more
       +bottom
@@ -2309,6 +2388,11 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     dl:'<path d="M12 3v12"/><path d="m7 12 5 5 5-5"/><path d="M4 21h16"/>'
   };
   function z1ic(k,sz){ sz=sz||16; return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+Z1IC[k]+'</svg>'; }
+  /* registers a percentile tooltip carrying THIS card's real numbers */
+  function z1PctTip(key, pct, rank, total, who){
+    VTIPS[key]={t:'Percentile and rank', b:'What it is: \u201CTop '+pct+'%'+(rank?(' \u00b7 #'+rank):'')+'\u201D means that of everyone ACTIVE '+who+' in this window'+(total?(' ('+total+' people)'):'')+(rank?(', you are #'+rank):'')+' \u2014 putting you in the top '+pct+'%.\n\nWhy it matters: the denominator is people who actually showed up, not everyone who ever signed up, so it is an honest comparison.\n\nImproves when: you earn more points than the people around you \u2014 work that gets acted on, marked helpful, and resolves.\n\nDrops when: you stay flat while active peers keep contributing, or you sit out the window entirely.\n\nLeadership edge: knowing exactly where you stand against people doing the same work is how you turn effort into measurable progress.'};
+    return vTip(key);
+  }
   function z1M(lab,val,tip,icon,color){
     return '<div class="z1-m"><span class="z1-m-ic" style="--c:'+color+'">'+z1ic(icon,14)+'</span><div class="z1-m-tx"><span class="z1-m-l">'+lab+(tip?vTip(tip):'')+'</span><b class="z1-m-v">'+val+'</b></div></div>';
   }
@@ -2317,8 +2401,10 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       return '<div class="z1-hero '+cls+'" style="--a:'+accent+'"><div class="z1-hero-top"><span class="z1-role">'+role+'</span></div>'
         +'<div class="vt-none">Nothing scored in this window yet. Pick a wider window above, or go and do the work \u2014 the number only moves when other people act on what you wrote.</div></div>';
     }
+    var pkey='pctile_'+cls;
     var pct=(x.percentile!=null)
-      ? '<span class="z1-pct" title="Rank '+x.rank+' of '+x.total_active+' active">Top '+x.percentile+'% \u00b7 #'+x.rank+'<span class="z1-pct-ar">\u2197</span>'+vTip('pctile')+'</span>' : '';
+      ? '<span class="z1-pct" title="Rank '+x.rank+' of '+x.total_active+' active">Top '+x.percentile+'% \u00b7 #'+x.rank+'<span class="z1-pct-ar">\u2197</span>'
+        +z1PctTip(pkey, x.percentile, x.rank, x.total_active, (cls==='rev'?'as a reviewer':'as a case author'))+'</span>' : '';
     return '<div class="z1-hero '+cls+'" style="--a:'+accent+'">'
       +'<div class="z1-hero-top"><span class="z1-role">'+role+'</span>'+pct+'</div>'
       +'<div class="z1-score"><span class="z1-emb">'+z1ic(iconKey,30)+'</span>'
@@ -2388,7 +2474,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var best=Math.min.apply(null,ps);
     var dl=(Number(r.delta)||0)+(Number(a.delta)||0);
     var dlHtml=dl?('<span class="z1-ov-d '+(dl>0?'up':'down')+'">'+(dl>0?'\u2191 ':'\u2193 ')+fmtN(Math.abs(dl))+' pts vs last period</span>'):'<span class="z1-ov-d flat">\u2192 steady vs last period</span>';
-    return '<div class="z1-side z1-ov"><div class="z1-side-h">Overall standing'+vTip('pctile')+'</div>'
+    var ovTip=z1PctTip('pctile_ov', best, null, null, 'on either leaderboard');
+    return '<div class="z1-side z1-ov"><div class="z1-side-h">Overall standing'+ovTip+'</div>'
       +'<div class="z1-ov-body"><span class="z1-ov-shield">'+z1ic('shield',34)+'</span>'
       +'<div><div class="z1-ov-big">Top '+best+'%</div><div class="z1-ov-s">of all ranked users</div>'+dlHtml+'</div></div></div>';
   }
@@ -2401,6 +2488,20 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     o+='<g transform="translate(59,59)" stroke="#22a45d" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><svg viewBox="0 0 24 24" width="32" height="32">'+Z1IC.brain+'</svg></g>';
     o+='</svg>';
     return o;
+  }
+  var ZHIC={
+    z1:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m8.6 11.6 2.4 2.4 4.4-4.6"/>',
+    z2:'<path d="M3 17.5 9.5 11l4 4L21 7"/><path d="M15 7h6v6"/><path d="M3 21h18"/>',
+    z3:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5 13 13l-4.5 2.5L11 11z"/>',
+    z4:'<path d="M5 3v18l2.2-1.4L9.4 21l2.2-1.4L13.8 21l2.2-1.4L18.2 21V3z"/><path d="M8.5 8h7"/><path d="M8.5 12h7"/><path d="M8.5 16h4"/>'
+  };
+  function zoneHead(n, title, sub, color, iconKey, badgeHtml, actionHtml){
+    return '<div class="vt-zh z-hd" style="--z:'+color+'">'
+      +'<span class="z-hd-ic"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">'+ZHIC[iconKey]+'</svg></span>'
+      +'<div class="z-hd-row"><span class="z-hd-n">Zone '+n+'</span>'+(badgeHtml||'')+'</div>'
+      +'<h3 class="z-hd-t">'+title+'</h3>'
+      +'<p class="z-hd-s">'+sub+'</p>'
+      +(actionHtml||'')+'</div>';
   }
   function vaultZone1(d, t, w){
     var r=d.reviewer||{}, a=d.author||{}, g=d.gutcheck||{};
@@ -2436,21 +2537,20 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
         : '<div class="z1-gc-body"><div class="z1-gc-viz">'+z1GcRadar(g)+'</div>'+gcTiles+'</div>')
       +'<div class="z1-gc-foot"><span>Lifetime: <b>'+esc(gl.level||'\u2014')+'</b> \u00b7 '+(gl.calls||0)+' calls \u00b7 '
         +(gl.calibration!=null?(Math.round(gl.calibration)+'% calibration'):'calibration \u2014')+'</span>'
-        +'<a class="z1-gc-cta" href="/gutcheck.html">Explore GutCheck details <span class="z1-cta-ar">\u2192</span></a></div>'
+        +'<a class="z1-gc-btn" href="/gutcheck.html#profile">Explore GutCheck details <span class="z1-cta-ar">\u2192</span></a></div>'
       +'</div>';
     var ps=[]; if(r.percentile!=null) ps.push(Number(r.percentile)); if(a.percentile!=null) ps.push(Number(a.percentile));
     var bestPct=ps.length?Math.min.apply(null,ps):null;
     var momentum='<div class="z1-mom"><div class="z1-mom-l"><div class="z1-mom-t">Keep building momentum! \uD83D\uDE80</div>'
       +'<p>'+(bestPct!=null?('You\u2019re in the <b>top '+bestPct+'%</b> of all ranked users. '):'')+'Every rep here compounds \u2014 pick one of these next.</p></div>'
       +'<div class="z1-mom-r">'
-        +'<a class="z1-next" href="#pc-rev"><span class="z1-next-ic" style="--c:#6D5EF0">'+z1ic('users',15)+'</span><div><b>Review more</b><small>Cover diverse cases to level up</small></div><span class="z1-cta-ar">\u203A</span></a>'
-        +'<a class="z1-next" href="/decisionroom.html"><span class="z1-next-ic" style="--c:#CA8A04">'+z1ic('pencil',15)+'</span><div><b>Write impactful cases</b><small>Briefs that drive strong discussion</small></div><span class="z1-cta-ar">\u203A</span></a>'
-        +'<a class="z1-next" href="/gutcheck.html"><span class="z1-next-ic" style="--c:#16A34A">'+z1ic('brain',15)+'</span><div><b>Strengthen calibration</b><small>Sharper gut for better intuition</small></div><span class="z1-cta-ar">\u203A</span></a>'
+        +'<a class="z1-next" href="/decisionroom.html" data-pc-answer="1"><span class="z1-next-ic" style="--c:#6D5EF0">'+z1ic('users',15)+'</span><div><b>Review more</b><small>Opens a live case, ready to answer</small></div><span class="z1-cta-ar">\u203A</span></a>'
+        +'<a class="z1-next" href="/decisionroom.html?do=submit"><span class="z1-next-ic" style="--c:#CA8A04">'+z1ic('pencil',15)+'</span><div><b>Write impactful cases</b><small>Opens the case form straight away</small></div><span class="z1-cta-ar">\u203A</span></a>'
+        +'<a class="z1-next" href="/gutcheck.html#today"><span class="z1-next-ic" style="--c:#16A34A">'+z1ic('brain',15)+'</span><div><b>Strengthen calibration</b><small>Jumps to today\u2019s dilemma</small></div><span class="z1-cta-ar">\u203A</span></a>'
       +'</div></div>';
     return '<div class="vt-zone z1">'
-      +'<div class="vt-zh"><span class="vt-zn">Zone 1</span><span class="vt-zt">Your Standing</span>'
-      +'<span class="vt-zs">Where you sit right now \u2014 in the window selected above.</span>'
-      +'<button type="button" class="z1-dl-btn" data-z1-report="1">'+z1ic('dl',13)+' Download report</button></div>'
+      +zoneHead(1,'Your Standing','Exactly where you sit right now \u2014 your score, your rank, and how you compare in the window selected above.','#5B4BD4','z1','',
+          '<button type="button" class="z1-dl-btn" data-z1-report="1">'+z1ic('dl',13)+' Download report</button>')
       +'<div class="z1-grid">'
         +'<div class="z1-main">'
           +'<div class="z1-heroes">'
@@ -2530,25 +2630,65 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     return o+'</svg>';
   }
   function vtLegend(series){ return '<div class="vt-leg">'+series.map(function(se){ return '<i><b style="background:'+se.color+'"></b>'+se.label+'</i>'; }).join('')+'</div>'; }
+  function z2Slug(x){ return String(x==null?'':x).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,''); }
+  var Z2PAL=['#D64545','#7c3aed','#2563eb','#0EA46A','#CA8A04','#5B4BD4','#E2683C','#0891B2','#BE185D','#65A30D'];
+  function z2Bulb(color){ return '<span class="z2-bulb" style="color:'+(color||'#15803d')+'"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.8.9.9 1.5l.1.7h5.2l.1-.7c.1-.6.4-1.1.9-1.5A6 6 0 0 0 12 3z"/></svg></span>'; }
   function vtRadar(cats){
-    if(!cats || !cats.length) return '<div class="vt-gempty">Score a few GutCheck calls and your category radar appears here \u2014 it is the map of which PM problems you actually read well.</div>';
-    var n=cats.length, S=250, cx=S/2, cy=S/2, R=74;
-    var o='<svg viewBox="0 0 '+S+' '+S+'" role="img" class="vt-radarsvg">';
-    for(var r=1;r<=4;r++){ var rr=R*r/4, pp=[]; for(var i=0;i<Math.max(n,3);i++){ var a=(Math.PI*2*i/Math.max(n,3))-Math.PI/2; pp.push((cx+rr*Math.cos(a)).toFixed(1)+','+(cy+rr*Math.sin(a)).toFixed(1)); } o+='<polygon points="'+pp.join(' ')+'" fill="none" stroke="#EEF1F8" stroke-width="1"/>'; }
-    var poly=[];
-    for(var j=0;j<n;j++){ var ang=(Math.PI*2*j/n)-Math.PI/2; var val=Math.max(0,Math.min(100,Number(cats[j].signal)||0))/100; poly.push((cx+R*val*Math.cos(ang)).toFixed(1)+','+(cy+R*val*Math.sin(ang)).toFixed(1)); o+='<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+R*Math.cos(ang)).toFixed(1)+'" y2="'+(cy+R*Math.sin(ang)).toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>'; }
-    if(n>=3) o+='<polygon class="vt-radarpoly" points="'+poly.join(' ')+'" fill="rgba(139,127,240,.24)" stroke="#8B7FF0" stroke-width="2.4" stroke-linejoin="round"/>';
-    for(var k=0;k<n;k++){ var a2=(Math.PI*2*k/n)-Math.PI/2; var v2=Math.max(0,Math.min(100,Number(cats[k].signal)||0))/100; o+='<circle cx="'+(cx+R*v2*Math.cos(a2)).toFixed(1)+'" cy="'+(cy+R*v2*Math.sin(a2)).toFixed(1)+'" r="3.4" fill="#8B7FF0" stroke="#fff" stroke-width="1.4"><title>'+esc(drCat(cats[k].category))+': signal '+cats[k].signal+'/100 \u00b7 '+cats[k].match_rate+'% match \u00b7 '+cats[k].reps+' calls</title></circle>'; }
-    for(var m=0;m<n;m++){ var am=(Math.PI*2*m/n)-Math.PI/2; var lx=cx+(R+17)*Math.cos(am), ly=cy+(R+17)*Math.sin(am); var anc=Math.cos(am)>0.35?'start':(Math.cos(am)<-0.35?'end':'middle'); var nm=drCat(cats[m].category); if(nm.length>11) nm=nm.slice(0,10)+'\u2026'; o+='<text x="'+lx.toFixed(1)+'" y="'+(ly+3).toFixed(1)+'" text-anchor="'+anc+'" font-size="8.5" font-weight="600" fill="#8a91a0">'+esc(nm)+'</text>'; }
-    o+='</svg>';
-    var pal=['#D64545','#7c3aed','#2563eb','#0EA46A','#CA8A04','#5B4BD4'];
-    var list='<div class="vt-rlist">'+cats.map(function(c,i){
-      var col=pal[i%pal.length];
+    /* merge live results with the canonical category list, so a category added to
+       DecisionRoom/GutCheck always shows up here (as "not enough data" until scored) */
+    var have={}; (cats||[]).forEach(function(c){ if(c&&c.category!=null) have[z2Slug(c.category)]=c; });
+    var merged=[], seen={};
+    try{
+      if(typeof LAB_CATS!=='undefined' && LAB_CATS && LAB_CATS.length){
+        LAB_CATS.forEach(function(lc){
+          var k=z2Slug(lc.n); if(!k||seen[k]) return; seen[k]=1;
+          merged.push(have[k] ? have[k] : {category:lc.n, signal:null, reps:0, match_rate:null});
+        });
+      }
+    }catch(e){}
+    Object.keys(have).forEach(function(k){ if(!seen[k]){ seen[k]=1; merged.push(have[k]); } });
+    if(!merged.length) return '<div class="vt-gempty">Score a few GutCheck calls and your category radar appears here \u2014 it is the map of which PM problems you actually read well.</div>';
+    var withData=merged.filter(function(c){ return (c.reps||0)>0 && c.signal!=null; })
+                       .sort(function(a,b){ return (Number(b.signal)||0)-(Number(a.signal)||0); });
+    var noData=merged.filter(function(c){ return !((c.reps||0)>0 && c.signal!=null); });
+    var colOf={}; withData.forEach(function(c,i){ colOf[z2Slug(c.category)]=Z2PAL[i%Z2PAL.length]; });
+    var viz;
+    if(withData.length>=3){
+      var n=withData.length, W=340, H=250, cx=W/2, cy=H/2, R=68, LR=R+20;
+      var o='<svg viewBox="0 0 '+W+' '+H+'" role="img" class="vt-radarsvg">';
+      for(var r=1;r<=4;r++){ var rr=R*r/4, pp=[]; for(var i=0;i<n;i++){ var a=(Math.PI*2*i/n)-Math.PI/2; pp.push((cx+rr*Math.cos(a)).toFixed(1)+','+(cy+rr*Math.sin(a)).toFixed(1)); } o+='<polygon points="'+pp.join(' ')+'" fill="none" stroke="#EEF1F8" stroke-width="1"/>'; }
+      var poly=[];
+      for(var j=0;j<n;j++){
+        var ang=(Math.PI*2*j/n)-Math.PI/2;
+        var val=Math.max(0,Math.min(100,Number(withData[j].signal)||0))/100;
+        poly.push((cx+R*val*Math.cos(ang)).toFixed(1)+','+(cy+R*val*Math.sin(ang)).toFixed(1));
+        o+='<line x1="'+cx+'" y1="'+cy+'" x2="'+(cx+R*Math.cos(ang)).toFixed(1)+'" y2="'+(cy+R*Math.sin(ang)).toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>';
+      }
+      o+='<polygon class="vt-radarpoly" points="'+poly.join(' ')+'" fill="rgba(139,127,240,.22)" stroke="#8B7FF0" stroke-width="2.4" stroke-linejoin="round"/>';
+      for(var k=0;k<n;k++){
+        var a2=(Math.PI*2*k/n)-Math.PI/2, c2=withData[k];
+        var v2=Math.max(0,Math.min(100,Number(c2.signal)||0))/100;
+        var col=colOf[z2Slug(c2.category)]||'#8B7FF0';
+        o+='<circle cx="'+(cx+R*v2*Math.cos(a2)).toFixed(1)+'" cy="'+(cy+R*v2*Math.sin(a2)).toFixed(1)+'" r="4" fill="'+col+'" stroke="#fff" stroke-width="1.6"><title>'+esc(drCat(c2.category))+': signal '+c2.signal+'/100 \u00b7 '+(c2.match_rate!=null?(c2.match_rate+'% match \u00b7 '):'')+c2.reps+' calls</title></circle>';
+        var lx=cx+LR*Math.cos(a2), ly=cy+LR*Math.sin(a2);
+        var cosv=Math.cos(a2), anc=cosv>0.30?'start':(cosv<-0.30?'end':'middle');
+        var nm=drCat(c2.category); if(nm.length>15) nm=nm.slice(0,14)+'\u2026';
+        o+='<text x="'+lx.toFixed(1)+'" y="'+(ly+3).toFixed(1)+'" text-anchor="'+anc+'" font-size="9.5" font-weight="700" fill="'+col+'">'+esc(nm)+'</text>';
+      }
+      viz=o+'</svg>';
+    } else {
+      viz='<div class="vt-radar-need">'+z2Bulb('#8B7FF0')+'<span>Score at least <b>3 categories</b> in GutCheck and your radar shape appears here.</span></div>';
+    }
+    var rows=withData.map(function(c){
+      var col=colOf[z2Slug(c.category)]||'#8B7FF0';
       return '<div class="vt-r"><span class="vt-r-dot" style="background:'+col+'"></span><span class="vt-r-n">'+esc(drCat(c.category))+'</span>'
         +'<span class="vt-r-b"><i style="width:'+Math.max(0,Math.min(100,Number(c.signal)||0))+'%;background:'+col+'"></i></span>'
-        +'<span class="vt-r-v">'+(c.signal!=null?c.signal:'\u2014')+'</span></div>';
-    }).join('')+'</div>';
-    return '<div class="vt-radar-wrap">'+o+list+'</div>';
+        +'<span class="vt-r-v">'+c.signal+'</span></div>';
+    }).concat(noData.map(function(c){
+      return '<div class="vt-r vt-r-nd"><span class="vt-r-dot" style="background:#d7dbe8"></span><span class="vt-r-n">'+esc(drCat(c.category))+'</span>'
+        +'<span class="vt-r-nodata">Not enough data yet</span></div>';
+    })).join('');
+    return '<div class="vt-radar-wrap">'+viz+'<div class="vt-rlist">'+rows+'</div></div>';
   }
   /* ---- Zone 2 (Trajectory) helpers ---- */
   function vtFirstLast(weeks, key){ var f=null,l=null; weeks.forEach(function(w){ var v=w[key]; if(v!=null){ if(f===null) f=Number(v); l=Number(v); } }); return [f,l]; }
@@ -2592,7 +2732,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function z2Gauge(pct){
     if(pct==null) return '<div class="vt-gempty">Score GutCheck calls at both confidence levels and your calibration gauge appears here.</div>';
     pct=Math.max(0,Math.min(100,Math.round(Number(pct))));
-    var W=210,H=126,cx=W/2,cy=110,R=86;
+    var W=210,H=146,cx=W/2,cy=112,R=84;
     function pt(pp){ var a=Math.PI*(1-pp/100); return [cx+R*Math.cos(a), cy-R*Math.sin(a)]; }
     var s=pt(0), e=pt(100), v=pt(pct);
     var color=pct>=70?'#22a45d':(pct>=50?'#E39B0C':'#c0392b');
@@ -2602,7 +2742,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     o+='<path class="z2-gauge-arc" d="M'+s[0].toFixed(1)+' '+s[1].toFixed(1)+' A'+R+' '+R+' 0 0 1 '+v[0].toFixed(1)+' '+v[1].toFixed(1)+'" fill="none" stroke="url(#z2gg)" stroke-width="17" stroke-linecap="round"/>';
     o+='<text x="'+cx+'" y="'+(cy-18)+'" text-anchor="middle" font-size="36" font-weight="800" fill="'+color+'">'+pct+'%</text>';
     o+='<text x="'+cx+'" y="'+(cy)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#9aa0b0">'+(pct>=70?'Excellent calibration':(pct>=50?'On track':'Building'))+'</text>';
-    o+='<text x="'+(cx-R)+'" y="'+(cy+14)+'" text-anchor="middle" font-size="10.5" fill="#b6bccb">0%</text><text x="'+(cx+R)+'" y="'+(cy+14)+'" text-anchor="middle" font-size="10.5" fill="#b6bccb">100%</text>';
+    o+='<text x="'+(cx-R)+'" y="'+(cy+30)+'" text-anchor="middle" font-size="10.5" fill="#b6bccb">0%</text><text x="'+(cx+R)+'" y="'+(cy+30)+'" text-anchor="middle" font-size="10.5" fill="#b6bccb">100%</text>';
     return o+'</svg>';
   }
   function z2Bars(weeks, key, color, opts){
@@ -2683,7 +2823,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var midW=wks[Math.max(0,Math.floor(wks.length/2))]||{}; var calMid=(midW.calibration!=null)?Number(midW.calibration):null;
     function calBar(lbl,val){ if(val==null) return ''; var c=val>=70?'#22a45d':(val>=50?'#E39B0C':'#c0392b'); return '<div class="z2-calb"><span class="z2-calb-l">'+lbl+'</span><span class="z2-calb-t"><i style="width:'+Math.max(3,Math.min(100,val))+'%;background:linear-gradient(90deg,'+hexA(c,'0.65')+','+c+')"></i></span><span class="z2-calb-v">'+Math.round(val)+'%</span></div>'; }
     var calHist='<div class="z2-calhist">'+calBar('This week',calNow)+calBar('4 wks ago',calMid)+calBar('8 wks ago',calOld)+'</div>';
-    var calTip=(calNow!=null)?('<div class="z2-tipbox"><span class="z2-tipbox-ic">\uD83D\uDCA1</span><span>'+(calNow>=70?'You\u2019re confident when right and open when wrong. That\u2019s how you grow.':(calNow>=50?'Solid calibration \u2014 keep noticing when a confident call misses.':'Aim for confidence that tracks reality \u2014 sure when right, humble when unsure.'))+'</span></div>'):'';
+    var calTip=(calNow!=null)?('<div class="z2-tipbox">'+z2Bulb()+'<span>'+(calNow>=70?'You\u2019re confident when right and open when wrong. That\u2019s how you grow.':(calNow>=50?'Solid calibration \u2014 keep noticing when a confident call misses.':'Aim for confidence that tracks reality \u2014 sure when right, humble when unsure.'))+'</span></div>'):'';
     var pctBits=[]; if((d.reviewer||{}).percentile!=null) pctBits.push({p:d.reviewer.percentile,w:'reviewers'}); if((d.author||{}).percentile!=null) pctBits.push({p:d.author.percentile,w:'authors'});
     var bestPct=pctBits.length?pctBits.sort(function(a,z){return a.p-z.p;})[0]:null;
     var insight = topImp ? ('You\u2019re improving across the board! Your <b>'+esc(topImp.n.toLowerCase())+'</b>'+(strong?(' and <b>'+esc(drCat(strong.category))+'</b> are standout strengths'):' is a standout strength')+'. '+(weak?('Focus on <b>'+esc(drCat(weak.category))+'</b> to become a more well-rounded decision-maker.'):'Keep the streak going.'))
@@ -2717,10 +2857,9 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var achv=bestPct?('<div class="z2-achv"><div class="z2-achv-top"><span>Keep it up! You\u2019re in the top '+bestPct.p+'% of '+bestPct.w+' this window.</span><span class="z2-achv-pill">Top '+bestPct.p+'%</span></div><div class="z2-achv-bar"><i style="width:'+Math.max(6,Math.min(100,100-bestPct.p))+'%"></i></div></div>'):'';
     var insightBar='<div class="z2-insight"><span class="z2-insight-ic">\u2728</span><div class="z2-insight-tx"><b>Insight.</b> '+insight+'</div>'+achv+'</div>';
 
-    var radarCard='<div class="z2-card z2-radar-card"><div class="z2-card-h"><div class="z2-card-hl"><span class="z2-card-t">Category radar'+vTip('z2radar')+'</span><span class="z2-card-d">Agreement with the room (0\u2013100) \u2014 which PM problems you read well</span></div></div><div class="z2-card-b">'+vtRadar(radar)+'<div class="z2-tipbox"><span class="z2-tipbox-ic">\uD83D\uDCA1</span><span>Stronger in your top categories \u2014 keep sharpening the rest to become a more well-rounded PM.</span></div></div></div>';
+    var radarCard='<div class="z2-card z2-radar-card"><div class="z2-card-h"><div class="z2-card-hl"><span class="z2-card-t">Category radar'+vTip('z2radar')+'</span><span class="z2-card-d">Agreement with the room (0\u2013100) \u2014 which PM problems you read well</span></div></div><div class="z2-card-b">'+vtRadar(radar)+'<div class="z2-tipbox z2-tipbox-lg">'+z2Bulb()+'<span><b>Stronger in your top categories.</b> Keep sharpening the rest to become a more well-rounded PM.</span></div></div></div>';
     return '<div class="vt-zone z2">'
-      +'<div class="vt-zh"><span class="vt-zn">Zone 2</span><span class="vt-zt">Trajectory</span>'
-      +'<span class="vt-zs">The last 8 weeks \u2014 this is the part that actually tells you whether you\u2019re improving.</span></div>'
+      +zoneHead(2,'Trajectory','Your last 8 weeks \u2014 the part that actually tells you whether you\u2019re improving, and where.','#2F82E4','z2','','')
       +summary+grid+radarCard+insightBar+'</div>';
   }
   function vaultRender(d, t, w, dg, wPrev){
