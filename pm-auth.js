@@ -15,7 +15,7 @@
 ============================================================================ */
 (function(){
   'use strict';
-  var HOSTS=['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','pm-gut-check.pages.dev'];
+  var HOSTS=['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','productjudgmentlabs.com','www.productjudgmentlabs.com','pm-gut-check.pages.dev'];
   var PROD=HOSTS.indexOf(location.hostname)!==-1;
   var URL=PROD?'https://oxxzygbfgmlnvavjmhct.supabase.co':'https://wdfttdakwygkdgfakavc.supabase.co';
   var ANON=PROD?'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94eHp5Z2JmZ21sbnZhdmptaGN0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODE0MTYsImV4cCI6MjA5Njk1NzQxNn0.mJN45x-3-E1ctXlivr-nqJUt0D4F5Xs1gIWAs9BLxBc':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndkZnR0ZGFrd3lna2RnZmFrYXZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxNjI2NTYsImV4cCI6MjA5NzczODY1Nn0.1D85vTzCoi7nUYH9YllsdV47AEDhFliT3zsjUfYXJss';
