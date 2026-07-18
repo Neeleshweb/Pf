@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:gc-domain-hosts 2026-07-18T12:00:00Z -->
+<!-- build:gc-domain-brand 2026-07-18T15:00:00Z -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Gut Check by Neelesh Singh — daily practice for product judgment. Make the call before you see the crowd, compare with PMs worldwide, and build a judgment profile no AI can hand you."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://neeleshpmtoolkit.com/gutcheck.html"/>
+  <link rel="canonical" href="https://productjudgmentlabs.com/gutcheck.html"/>
+  <meta property="og:url" content="https://productjudgmentlabs.com/gutcheck.html"/>
   <meta property="og:title" content="PM Gut Check — make the call before you see the crowd"/>
   <meta property="og:description" content="Daily practice for product managers. Make the call before you see the crowd, then compare with PMs worldwide and build your judgment profile."/>
-  <meta property="og:image" content="https://neeleshpmtoolkit.com/og-gutcheck.png"/>
+  <meta property="og:image" content="https://productjudgmentlabs.com/og-gutcheck.png"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="PM Gut Check — make the call before you see the crowd"/>
   <meta name="twitter:description" content="Make one real product call a day. See how PMs worldwide voted, then what actually happened."/>
-  <meta name="twitter:image" content="https://neeleshpmtoolkit.com/og-gutcheck.png"/>
+  <meta name="twitter:image" content="https://productjudgmentlabs.com/og-gutcheck.png"/>
   <title>PM Gut Check — Neelesh Singh</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <script>(function(){try{var t=localStorage.getItem('dr-theme');var ok={signal:1,editorial:1,warm:1,classic:1};if(t==='indigo')t='signal';if(!ok[t])t='signal';document.documentElement.setAttribute('data-dr-theme',t);}catch(e){document.documentElement.setAttribute('data-dr-theme','signal');}})();</script>
@@ -2987,7 +2988,7 @@ function renderShareCard(kind,d){
     ctx.textBaseline='alphabetic'; ctx.textAlign='left';
     ctx.font="46px 'Bebas Neue', Impact, sans-serif"; ctx.fillStyle='#f0ece4'; ctx.fillText('PM GUT ',70,102);
     var w=ctx.measureText('PM GUT ').width; ctx.fillStyle='#e8540a'; ctx.fillText('CHECK',70+w,102);
-    ctx.textAlign='right'; ctx.fillStyle='#6b6b6b'; ctx.font="22px 'DM Sans', Arial, sans-serif"; ctx.fillText('neeleshpmtoolkit.com',1130,100); ctx.textAlign='left';
+    ctx.textAlign='right'; ctx.fillStyle='#6b6b6b'; ctx.font="22px 'DM Sans', Arial, sans-serif"; ctx.fillText('productjudgmentlabs.com',1130,100); ctx.textAlign='left';
     if(kind==='profile'){
       var cs=calibStats(); var calib=cs.a?Math.round(cs.c/cs.a*100)+'%':'\u2014';
       ctx.fillStyle='#6b6b6b'; ctx.font="600 26px 'DM Sans',Arial,sans-serif"; ctx.fillText('MY PM JUDGMENT',70,205);
@@ -2996,7 +2997,7 @@ function renderShareCard(kind,d){
       stat(70,(GC.streak||1)+'','DAY STREAK','#f0a500');
       stat(340,(GC.decisions||0)+'','CALLS MADE','#f0ece4');
       stat(640,calib,'MATCHED THE PROS','#4ade80');
-      ctx.fillStyle='#e8540a'; ctx.font="600 30px 'DM Sans',Arial,sans-serif"; ctx.fillText('Make your call \u2192  neeleshpmtoolkit.com/gutcheck',70,592);
+      ctx.fillStyle='#e8540a'; ctx.font="600 30px 'DM Sans',Arial,sans-serif"; ctx.fillText('Make your call \u2192  productjudgmentlabs.com/gutcheck',70,592);
     } else {
       ctx.fillStyle='#6b6b6b'; ctx.font="600 26px 'DM Sans',Arial,sans-serif"; ctx.fillText("TODAY'S CALL  \u00B7  DAY "+(TODAY_INDEX+1),70,192);
       ctx.fillStyle='#f0ece4'; ctx.font="600 52px 'DM Sans',Arial,sans-serif";
@@ -3004,13 +3005,13 @@ function renderShareCard(kind,d){
       var dis=shDisagree(d);
       ctx.fillStyle='#f0a500'; ctx.font="600 36px 'DM Sans',Arial,sans-serif";
       ctx.fillText(dis!=null ? (dis+'% of PMs made a different call.') : 'I committed before seeing the crowd.',70,Math.min(528,endY+56));
-      ctx.fillStyle='#e8540a'; ctx.font="600 30px 'DM Sans',Arial,sans-serif"; ctx.fillText("What's your call? \u2192  neeleshpmtoolkit.com/gutcheck",70,592);
+      ctx.fillStyle='#e8540a'; ctx.font="600 30px 'DM Sans',Arial,sans-serif"; ctx.fillText("What's your call? \u2192  productjudgmentlabs.com/gutcheck",70,592);
     }
   }
   try { if(document.fonts && document.fonts.ready){ document.fonts.ready.then(draw).catch(draw); setTimeout(draw,350); } else draw(); } catch(e){ try{ draw(); }catch(_){} }
 }
 function shareCaption(kind,d){
-  var url='https://neeleshpmtoolkit.com/gutcheck.html';
+  var url='https://productjudgmentlabs.com/gutcheck.html';
   if(kind==='profile'){ var cs=calibStats(); var calib=cs.a?(Math.round(cs.c/cs.a*100)+'%'):'just getting started';
     return 'My product-judgment scorecard on PM Gut Check \uD83E\uDDED\n\n\u2022 '+(GC.streak||1)+'-day streak\n\u2022 '+(GC.decisions||0)+' real calls made\n\u2022 Matched the strong-PM read: '+calib+'\n\nOne real product decision a day \u2014 you commit your call before seeing the crowd. Think you can read them better than me?\n\n'+url+'\n\n#productmanagement #productmanager #PMskills'; }
   var dis=shDisagree(d);
@@ -3023,7 +3024,7 @@ function closeShare(){ var ov=document.getElementById('share-overlay'); if(ov) o
   var ov=document.getElementById('share-overlay'); if(!ov) return;
   ov.addEventListener('click', function(e){ if(e.target===ov) closeShare(); });
   var cl=document.getElementById('share-close'); if(cl) cl.onclick=closeShare;
-  var li=document.getElementById('share-linkedin'); if(li) li.onclick=function(){ var cap=document.getElementById('share-caption').value; shCopy(cap); toast('Caption copied \u2014 paste it into your LinkedIn post.'); window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent('https://neeleshpmtoolkit.com/gutcheck.html'),'_blank','noopener'); };
+  var li=document.getElementById('share-linkedin'); if(li) li.onclick=function(){ var cap=document.getElementById('share-caption').value; shCopy(cap); toast('Caption copied \u2014 paste it into your LinkedIn post.'); window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent('https://productjudgmentlabs.com/gutcheck.html'),'_blank','noopener'); };
   var cp=document.getElementById('share-copy'); if(cp) cp.onclick=function(){ toast(shCopy(document.getElementById('share-caption').value)?'Caption copied.':'Select and copy the caption.'); };
   var dl=document.getElementById('share-download'); if(dl) dl.onclick=function(){ var c=document.getElementById('share-canvas'); try{ var a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download='pm-gut-check.png'; document.body.appendChild(a); a.click(); document.body.removeChild(a); }catch(e){ toast('Could not generate the image.'); } };
   var rs=document.getElementById('rec-share'); if(rs) rs.onclick=function(){ openShare('profile'); };
