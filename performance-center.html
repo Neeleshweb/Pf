@@ -56,7 +56,7 @@
     ::-webkit-scrollbar-track { background: var(--black); }
     ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
     :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
-    .container { max-width: 1440px; margin: 0 auto; padding: 0 1.5rem; }
+    .container { max-width: 1440px; margin: 0 auto; padding: 0 2rem; }
 
     /* NAV */
     .nav { position: sticky; top: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; height: 60px; background: var(--nav-bg); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
@@ -268,6 +268,92 @@
   .pc-refresh svg{width:14px;height:14px}
   .pc-refresh.spinning svg{animation:pc-spin .7s linear infinite}
   @keyframes pc-spin{to{transform:rotate(360deg)}}
+  /* ---- Zone 1 (Your Standing) ---- */
+  .vt-zone.z1{animation:z2fade .5s ease both}
+  .vt-zone.z1 .vt-zh{margin-bottom:1.5rem;align-items:center}
+  .z1-dl-btn{margin-left:auto;display:inline-flex;align-items:center;gap:.4rem;background:var(--card,#fff);border:1px solid var(--border,#e2e6f2);color:var(--ink,#3a4358);font-size:.74rem;font-weight:800;padding:.45rem .8rem;border-radius:12px;cursor:pointer;box-shadow:0 1px 3px rgba(20,25,45,.06);font-family:inherit;transition:border-color .18s,color .18s,box-shadow .18s}
+  .z1-dl-btn:hover{border-color:#5B4BD4;color:#5B4BD4;box-shadow:0 4px 13px rgba(91,75,212,.16)}
+  .z1-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:1.5rem;align-items:start}
+  .z1-main{min-width:0;display:flex;flex-direction:column;gap:1.5rem}
+  .z1-heroes{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:stretch}
+  .z1-hero{--a:#6D5EF0;display:flex;flex-direction:column;border:1px solid var(--border,#e7eaf4);border-radius:20px;padding:1.6rem;background:var(--card,#fff);background:radial-gradient(120% 130% at 0% 0%, color-mix(in srgb, var(--a) 9%, #fff) 0%, rgba(255,255,255,.94) 58%);box-shadow:0 10px 30px rgba(20,25,45,.06),0 2px 6px rgba(20,25,45,.04);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+  .z1-hero:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(20,25,45,.1),0 3px 8px rgba(20,25,45,.05);border-color:color-mix(in srgb, var(--a) 30%, var(--border,#e7eaf4))}
+  .z1-hero-top{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap;margin-bottom:1.1rem}
+  .z1-role{font-size:.66rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--a);background:color-mix(in srgb, var(--a) 12%, #fff);border:1px solid color-mix(in srgb, var(--a) 22%, transparent);border-radius:12px;padding:.34rem .7rem}
+  .z1-pct{display:inline-flex;align-items:center;gap:.15rem;font-size:.72rem;font-weight:800;color:var(--a);background:color-mix(in srgb, var(--a) 10%, #fff);border:1px solid color-mix(in srgb, var(--a) 20%, transparent);border-radius:12px;padding:.32rem .68rem}
+  .z1-pct-ar{margin-left:.15rem}
+  .z1-score{display:flex;align-items:center;gap:.85rem;flex-wrap:wrap;margin-bottom:1.4rem}
+  .z1-emb{flex:none;width:60px;height:60px;border-radius:16px;display:inline-flex;align-items:center;justify-content:center;color:#fff;background:var(--a);background:linear-gradient(150deg, color-mix(in srgb, var(--a) 78%, #fff 16%), var(--a));box-shadow:0 10px 26px color-mix(in srgb, var(--a) 42%, transparent),0 0 0 6px color-mix(in srgb, var(--a) 9%, transparent)}
+  .z1-num{font-size:3rem;font-weight:800;color:var(--a);line-height:1;letter-spacing:-1px}
+  .z1-unit{font-size:.82rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--muted,#9098a8);align-self:flex-end;padding-bottom:.35rem}
+  .z1-dl{margin-left:auto;align-self:center}
+  .z1-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:.7rem;margin-bottom:1.2rem}
+  .z1-m{display:flex;align-items:center;gap:.5rem;border:1px solid var(--border,#eef1f8);border-radius:14px;background:rgba(255,255,255,.72);padding:.62rem .7rem;transition:border-color .18s ease,box-shadow .18s ease}
+  .z1-m:hover{border-color:#dfe4f2;box-shadow:0 4px 12px rgba(20,25,45,.05)}
+  .z1-m-ic{flex:none;width:30px;height:30px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;color:var(--c);background:color-mix(in srgb, var(--c) 13%, #fff);box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--c) 16%, transparent)}
+  .z1-m-tx{display:flex;flex-direction:column;min-width:0}
+  .z1-m-l{font-size:.66rem;font-weight:700;color:var(--muted,#8a91a0);display:flex;align-items:center;gap:.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .z1-m-v{font-size:.98rem;font-weight:800;color:var(--ink,#16233f);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .z1-cta{margin-top:auto;display:flex;align-items:center;justify-content:center;gap:.45rem;border:1px solid color-mix(in srgb, var(--a) 22%, transparent);background:color-mix(in srgb, var(--a) 7%, #fff);color:var(--a);font-size:.84rem;font-weight:800;padding:.72rem 1rem;border-radius:14px;text-decoration:none;transition:background .18s ease,box-shadow .18s ease,transform .18s ease}
+  .z1-cta:hover{background:color-mix(in srgb, var(--a) 13%, #fff);box-shadow:0 6px 18px color-mix(in srgb, var(--a) 26%, transparent);transform:translateY(-1px)}
+  .z1-cta-ar{transition:transform .18s ease;display:inline-block}
+  .z1-cta:hover .z1-cta-ar,.z1-gc-cta:hover .z1-cta-ar,.z1-next:hover .z1-cta-ar{transform:translateX(3px)}
+  .z1-gc{border:1px solid var(--border,#e7eaf4);border-radius:20px;padding:1.6rem;background:radial-gradient(110% 130% at 0% 0%, #f1faf4 0%, rgba(255,255,255,.94) 55%);box-shadow:0 10px 30px rgba(20,25,45,.06),0 2px 6px rgba(20,25,45,.04);transition:transform .18s ease,box-shadow .18s ease}
+  .z1-gc:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(20,25,45,.09)}
+  .z1-gc-h{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:1.2rem}
+  .z1-gc-ic{flex:none;width:34px;height:34px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(150deg,#57C98A,#16A34A);box-shadow:0 6px 16px rgba(22,163,74,.3)}
+  .z1-gc-t{font-size:1.12rem;font-weight:800;color:var(--ink,#16233f)}
+  .z1-gc-win{margin-left:auto;display:inline-flex;align-items:center;font-size:.7rem;font-weight:800;color:#15803d;background:#E7F3EC;border:1px solid #cfeadb;border-radius:12px;padding:.3rem .66rem}
+  .z1-gc-body{display:flex;gap:1.4rem;align-items:center;flex-wrap:wrap}
+  .z1-gc-viz{flex:none}
+  .z1-gcr{width:132px;height:132px}
+  .z1-gc-tiles{flex:1;min-width:260px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.7rem}
+  .z1-gc-foot{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem;padding-top:1rem;border-top:1px solid #eaf2ed;font-size:.78rem;color:var(--muted,#7a8291)}
+  .z1-gc-foot b{color:var(--ink,#3a4358)}
+  .z1-gc-cta{display:inline-flex;align-items:center;gap:.35rem;font-size:.82rem;font-weight:800;color:#15803d;text-decoration:none}
+  .z1-side-rail{display:flex;flex-direction:column;gap:1.2rem;position:sticky;top:1rem}
+  .z1-side{border:1px solid var(--border,#e7eaf4);border-radius:20px;background:var(--card,#fff);padding:1.3rem 1.35rem;box-shadow:0 10px 30px rgba(20,25,45,.055),0 2px 6px rgba(20,25,45,.04);transition:transform .18s ease,box-shadow .18s ease}
+  .z1-side:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(20,25,45,.09)}
+  .z1-side-h{display:flex;align-items:center;gap:.3rem;font-size:.92rem;font-weight:800;color:var(--ink,#16233f);margin-bottom:1rem}
+  .z1-side-l{font-size:.68rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted,#9098a8)}
+  .z1-side-empty{font-size:.8rem;line-height:1.5;color:var(--muted,#9aa0b0)}
+  .z1-ov{border-color:#ddd8f7;background:radial-gradient(120% 130% at 100% 0%, #f3f0fe 0%, rgba(255,255,255,.95) 60%)}
+  .z1-ov-body{display:flex;align-items:center;gap:1rem}
+  .z1-ov-shield{flex:none;width:70px;height:70px;border-radius:20px;display:inline-flex;align-items:center;justify-content:center;color:#5B4BD4;background:linear-gradient(150deg,#efecfe,#ddd6fb);box-shadow:0 10px 26px rgba(91,75,212,.22),inset 0 0 0 1px #ded8fa}
+  .z1-ov-big{font-size:1.85rem;font-weight:800;color:#5B4BD4;line-height:1.05;letter-spacing:-.5px}
+  .z1-ov-s{font-size:.78rem;color:var(--muted,#7a8291);margin-top:.1rem}
+  .z1-ov-d{display:inline-block;margin-top:.5rem;font-size:.74rem;font-weight:800;border-radius:12px;padding:.24rem .6rem}
+  .z1-ov-d.up{background:#e7f8ee;color:#12793a}
+  .z1-ov-d.down{background:#fdecec;color:#c0392b}
+  .z1-ov-d.flat{background:#eef1f8;color:#6b7280}
+  .z1-trend-h{display:flex;align-items:flex-end;justify-content:space-between;gap:.6rem;margin-bottom:.5rem}
+  .z1-trend-big{font-size:1.6rem;font-weight:800;color:var(--ink,#16233f);line-height:1.1}
+  .z1-trend-d{text-align:right}
+  .z1-trend-d span{display:block;font-size:.82rem;font-weight:800}
+  .z1-trend-d .up{color:#12793a}.z1-trend-d .down{color:#c0392b}.z1-trend-d .flat{color:#8a91a0}
+  .z1-trend-d small{font-size:.68rem;color:var(--muted,#9aa0b0)}
+  .z1-trend{width:100%;height:auto;display:block}
+  .z1-act-list{display:flex;flex-direction:column;gap:.85rem}
+  .z1-act{display:flex;align-items:flex-start;gap:.55rem}
+  .z1-act-ic{flex:none;width:30px;height:30px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;color:#fff;background:var(--c);background:linear-gradient(150deg, color-mix(in srgb, var(--c) 80%, #fff 14%), var(--c));box-shadow:0 4px 12px color-mix(in srgb, var(--c) 32%, transparent)}
+  .z1-act-tx{display:flex;flex-direction:column;min-width:0;flex:1}
+  .z1-act-t{font-size:.8rem;font-weight:800;color:var(--ink,#16233f);line-height:1.25}
+  .z1-act-s{font-size:.72rem;color:var(--muted,#7a8291);line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .z1-act-d{flex:none;font-size:.68rem;font-weight:700;color:var(--muted,#9aa0b0)}
+  .z1-mom{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;margin-top:1.5rem;padding:1.4rem 1.6rem;border-radius:20px;background:linear-gradient(120deg,#f3f1fe,#eef4ff);border:1px solid #e2e0f7;box-shadow:0 8px 26px rgba(20,25,45,.05)}
+  .z1-mom-l{flex:1;min-width:250px}
+  .z1-mom-t{font-size:1.12rem;font-weight:800;color:#5B4BD4;margin-bottom:.3rem}
+  .z1-mom-l p{margin:0;font-size:.85rem;line-height:1.55;color:var(--muted,#5c6479)}
+  .z1-mom-l p b{color:var(--ink,#16233f)}
+  .z1-mom-r{flex:2;min-width:280px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.7rem}
+  .z1-next{display:flex;align-items:center;gap:.55rem;background:rgba(255,255,255,.8);border:1px solid #e4e2f5;border-radius:14px;padding:.7rem .8rem;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+  .z1-next:hover{transform:translateY(-2px);background:#fff;box-shadow:0 8px 20px rgba(20,25,45,.08)}
+  .z1-next-ic{flex:none;width:32px;height:32px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;color:var(--c);background:color-mix(in srgb, var(--c) 13%, #fff);box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--c) 18%, transparent)}
+  .z1-next b{display:block;font-size:.8rem;color:var(--ink,#16233f)}
+  .z1-next small{display:block;font-size:.7rem;color:var(--muted,#8a91a0);line-height:1.35;margin-top:.1rem}
+  .z1-next .z1-cta-ar{margin-left:auto;color:var(--muted,#b6bccb);font-size:1.1rem}
+  @media(max-width:1180px){ .z1-grid{grid-template-columns:1fr} .z1-side-rail{position:static;flex-direction:row;flex-wrap:wrap} .z1-side-rail>*{flex:1;min-width:260px} }
+  @media(max-width:820px){ .z1-heroes{grid-template-columns:1fr} .z1-num{font-size:2.5rem} .z1-gcr{width:112px;height:112px} }
   /* ---- Zone 2 (Trajectory) redesign ---- */
   .vt-zone.z2{animation:z2fade .5s ease both}
   @keyframes z2fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -794,6 +880,9 @@
   .wk-seeall{text-align:center;margin-top:1rem;padding-top:.9rem;border-top:1px solid #f2f4fa}
   .wk-seeall a{font-size:.82rem;font-weight:800;color:#5B4BD4;text-decoration:none}
   .wk-seeall a:hover{text-decoration:underline}
+  .wk-seeall-btn{background:var(--card,#fff);border:1px solid var(--border,#e2e6f2);color:#5B4BD4;font-size:.82rem;font-weight:800;padding:.5rem 1.05rem;border-radius:11px;cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(20,25,45,.06);transition:border-color .15s,box-shadow .15s,transform .15s}
+  .wk-seeall-btn:hover{border-color:#5B4BD4;box-shadow:0 6px 16px rgba(91,75,212,.16);transform:translateY(-1px)}
+  .wk-table thead th{white-space:nowrap}
   .wk-empty{text-align:center;padding:2rem 1rem;color:var(--muted,#9aa0b0)}
   .wk-empty svg{color:#c9cfe0;margin-bottom:.5rem}
   .wk-empty p{margin:.2rem 0 .6rem;font-size:.86rem}
@@ -1644,6 +1733,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
 
   /* ===================== D6: PERFORMANCE VAULT ===================== */
   var VTIPS={
+    z1trend:{t:'Points trend',b:'What it is: your cumulative points across the last 8 weeks, with the most recent week\u2019s gain.\n\nWhy it matters: it shows whether your contribution is compounding or flattening.\n\nImproves when: you add scored work every week \u2014 answers that land, cases that resolve.\n\nDrops when: weeks pass with no scored activity, so the curve goes flat.\n\nLeadership edge: steady accumulation beats bursts \u2014 consistency is what builds a reputation.'},
+    z1act:{t:'Recent activity',b:'What it is: your latest wins \u2014 exemplary cases, helpful responses, and answers authors acted on.\n\nWhy it matters: it is immediate feedback on which contributions actually landed.\n\nImproves when: you write specific, decision-ready answers and close your cases properly.\n\nDrops when: activity stalls, or work is posted but never engaged with.\n\nLeadership edge: noticing what worked \u2014 and doing more of it \u2014 is how deliberate practice turns into judgment.'},
     z2best:{t:'Best week',b:'What it is: the week in the last 8 where your combined reviewer + author points were highest.\n\nWhy it matters: it shows what your best looks like \u2014 a bar worth repeating.\n\nImproves when: you stack a strong review week with a well-received case.\n\nDrops when: activity is thin or scattered.\n\nLeadership edge: knowing your peak and how you hit it makes it repeatable \u2014 consistency is what compounds.'},
     z2strong:{t:'Top strength',b:'What it is: the PM category where your GutCheck reads agree most with strong outcomes.\n\nWhy it matters: it is your sharpest instinct \u2014 your edge.\n\nImproves when: you keep practicing and applying judgment here.\n\nDrops when: you coast and stop testing it.\n\nLeadership edge: leaning into a real strength is how PMs build a reputation others seek out.'},
     z2imp:{t:'Top improvement',b:'What it is: the metric that climbed the most across the last 8 weeks.\n\nWhy it matters: momentum in the right direction is the clearest sign the work is paying off.\n\nImproves when: you keep repeating whatever drove the gain.\n\nDrops when: you switch focus before the habit sticks.\n\nLeadership edge: visible, sustained improvement is the growth story that earns trust and bigger scope.'},
@@ -1681,6 +1772,18 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function vTip(k){ return '<button type="button" class="lb-tip-i" data-tip="vt:'+k+'" aria-label="What is this?">i</button>'; }
   /* ===================== D6-3: ZONE 4 YOUR WORK ===================== */
   var WKTIPS={
+    c_rtitle:{t:'Response',b:'What it is: the case you answered, with the date you posted.\n\nWhy it matters: these are the concrete decisions you weighed in on \u2014 your reviewing track record.\n\nImproves when: you answer more live cases, especially ones you can speak to well.\n\nDrops when: you go quiet and stop contributing.\n\nLeadership edge: a visible body of advice is how others come to trust your judgment.'},
+    c_rstatus:{t:'Status',b:'What it is: what happened to your answer \u2014 acted on, marked helpful, posted, or flagged.\n\nWhy it matters: it separates advice that landed from advice that was merely written.\n\nImproves when: you give specific, decision-ready answers the author can act on.\n\nDrops when: answers are vague, generic, or off-topic (which can get them flagged).\n\nLeadership edge: being the person whose input actually changes decisions is real influence.'},
+    c_helpful:{t:'Helpful',b:'What it is: how many readers marked your response helpful.\n\nWhy it matters: it is peer validation that your reasoning was useful beyond the author.\n\nImproves when: you explain the tradeoff clearly so others learn from it too.\n\nDrops when: answers only restate the question or lack reasoning.\n\nLeadership edge: PMs who teach through their reasoning lift the whole team, not just one decision.'},
+    c_points:{t:'Points',b:'What it is: the points this item earned, plus its impact tier (high, medium, or low).\n\nWhy it matters: points are the currency behind your leaderboard standing.\n\nImproves when: your work gets acted on, marked helpful, or resolves well.\n\nDrops when: items are flagged or left unresolved \u2014 some can score negative.\n\nLeadership edge: consistently earning high-impact points shows you spend effort where it counts.'},
+    c_quality:{t:'Quality',b:'What it is: an at-a-glance grade for this response \u2014 Exemplary, Strong, Good, or Needs work.\n\nWhy it matters: it summarizes status, helpful marks, and points into one read.\n\nImproves when: your answer is acted on AND marked helpful by several readers.\n\nDrops when: it draws reports or earns nothing.\n\nLeadership edge: a portfolio weighted toward Exemplary is the clearest proof of dependable judgment.'},
+    c_action:{t:'Action',b:'What it is: a link that opens this exact item in DecisionRoom.\n\nWhy it matters: every number here is traceable \u2014 you can always go read the original.\n\nImproves when: you revisit items to answer follow-ups or fix flagged responses.\n\nDrops when: items needing attention are never reopened.\n\nLeadership edge: reviewing your own past calls with fresh eyes is how judgment actually compounds.'},
+    c_ctitle:{t:'Case',b:'What it is: a decision you posted for review, with the date.\n\nWhy it matters: these are the real problems you brought to the room \u2014 your authoring record.\n\nImproves when: you post genuine, current dilemmas worth debating.\n\nDrops when: you stop posting and the room has nothing to help you with.\n\nLeadership edge: asking for input on hard calls is a strength, not a weakness \u2014 it is how good decisions get pressure-tested.'},
+    c_cstatus:{t:'Status',b:'What it is: whether the case is open, closed and resolved, or stalled.\n\nWhy it matters: closing the loop is what turns discussion into a decision.\n\nImproves when: you return, mark which asks were met, and close the case.\n\nDrops when: cases go quiet and are abandoned.\n\nLeadership edge: finishing what you start \u2014 and telling people how it ended \u2014 is a defining leadership habit.'},
+    c_clarity:{t:'Clarity',b:'What it is: how clear and complete your brief was, scored 0\u20135 by reviewers.\n\nWhy it matters: it is the single biggest term in your author score.\n\nImproves when: you give crisp context, the real options, and exactly what you need help with.\n\nDrops when: briefs are ambiguous, missing context, or bury the decision.\n\nLeadership edge: clear writing is clear thinking \u2014 the most visible PM skill there is.'},
+    c_resolution:{t:'Resolution',b:'What it is: the share of your asks that were actually met when the case closed.\n\nWhy it matters: it measures whether the discussion produced answers, not just opinions.\n\nImproves when: you state specific asks up front and mark them met on close.\n\nDrops when: cases close without measuring resolution \u2014 that scores zero.\n\nLeadership edge: defining what \u201Cdone\u201D means before you start is how strong PMs run decisions.'},
+    c_cquality:{t:'Quality',b:'What it is: an at-a-glance grade for this case \u2014 Exemplary, Strong, Good, or Needs work.\n\nWhy it matters: it blends clarity, resolution, and points into one read.\n\nImproves when: a well-framed brief draws real discussion and closes resolved.\n\nDrops when: context flags pile up or the case stalls.\n\nLeadership edge: consistently exemplary cases mark you as someone who frames problems worth solving.'},
+    c_replies:{t:'Replies',b:'What it is: how many reviewers responded to this case.\n\nWhy it matters: it shows how much useful discussion your framing sparked.\n\nImproves when: you post a real dilemma with a genuine open question.\n\nDrops when: cases are vague, over-explained, or leave nothing to debate.\n\nLeadership edge: PMs who frame decisions so others engage pull the best thinking out of a room.'},
     what:{t:'Your Work',b:'What it is: your portfolio \u2014 every response and case you logged in this window, with what each earned.\n\nWhy it matters: these rows are the receipts behind your reviewer and author scores; nothing here is a guess.\n\nImproves when: you add work that gets acted on, marked helpful, and resolved.\n\nDrops when: activity stalls, or items get flagged and left unfixed.\n\nLeadership edge: a track record you can point to \u2014 specific decisions, specific outcomes \u2014 is what makes seniority legible to others.'},
     pbi:{t:'Points by impact',b:'What it is: your earned points split by how much each item was worth \u2014 high, medium, or low impact.\n\nWhy it matters: it shows whether your points come from a few strong contributions or many small ones.\n\nImproves when: more of your work lands in the high-impact band (acted on, resolved, exemplary).\n\nDrops when: your points come mostly from low-impact activity.\n\nLeadership edge: concentrating effort where impact is highest \u2014 rather than staying busy \u2014 is the habit that separates senior PMs.'},
     resp:{t:'Responses you wrote',b:'Every answer you posted to a DecisionRoom case in the window selected above, with the points it earned:\n\nowner acted on it +2 \u00b7 each helpful mark +1 \u00b7 answering the asks in depth +1 \u00b7 a small GutCheck-credibility bonus \u00b7 \u2212 2 per report.\n\nThese are the SAME points that make up your reviewer score \u2014 add them up and you get the number in Zone 1.'},
@@ -1695,7 +1798,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function wkFilBtns(group, active, opts){ var cls=(group.indexOf('sort')>=0)?'wk-sort':'wk-fil'; return opts.map(function(o){ return '<button type="button" class="'+cls+(o[0]===active?' on':'')+'" data-wk="'+group+'" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join(''); }
   /* ---- responses ---- */
   /* ===================== ZONE 4: YOUR WORK (portfolio) ===================== */
-  var wkRespQuery='', wkCaseQuery='';
+  var wkRespQuery='', wkCaseQuery='', wkRespAll=false, wkCaseAll=false;
+  function wkTh(label, tipKey){ return '<th>'+label+(tipKey?wkTip(tipKey):'')+'</th>'; }
   var Z4IC={
     chat:'<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
     folder:'<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
@@ -1757,9 +1861,10 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     rows.sort(function(a,b){ if(wkRespSort==='recent') return wkTime(b.created_at)-wkTime(a.created_at); var pa=Number(a.points)||0, pb=Number(b.points)||0; if(pb!==pa) return pb-pa; return wkTime(b.created_at)-wkTime(a.created_at); });
     if(!rows.length) return '<div class="wk-none">No responses match this filter.</div>';
     var maxH=1; arr.forEach(function(r){ maxH=Math.max(maxH, Number(r.helpful||0)); });
-    var shown=rows.slice(0,6);
-    var head='<thead><tr><th>Response</th><th>Status</th><th>Helpful</th><th>Points</th><th>Quality</th><th></th></tr></thead>';
-    var more=(rows.length>shown.length)?('<div class="wk-seeall"><a href="/decisionroom.html">See all '+rows.length+' responses \u2192</a></div>'):'';
+    var shown=wkRespAll?rows:rows.slice(0,6);
+    var head='<thead><tr>'+wkTh('Response','c_rtitle')+wkTh('Status','c_rstatus')+wkTh('Helpful','c_helpful')+wkTh('Points','c_points')+wkTh('Quality','c_quality')+wkTh('Action','c_action')+'</tr></thead>';
+    var more='';
+    if(rows.length>6) more='<div class="wk-seeall"><button type="button" class="wk-seeall-btn" data-wk-all="resp">'+(wkRespAll?('Show fewer \u25B4'):('See all '+rows.length+' responses \u25BE'))+'</button></div>';
     return '<table class="wk-table">'+head+'<tbody>'+wkGrouped(shown, function(r){ return wkRespRow(r,maxH); }, 6, wkRespSort==='recent')+'</tbody></table>'+more;
   }
   function wkCaseList(){
@@ -1768,9 +1873,10 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var rows=arr.filter(function(c){ return wkCasePass(c,wkCaseFilter) && wkQmatch(c,wkCaseQuery); });
     rows.sort(function(a,b){ if(wkCaseSort==='recent') return wkTime(b.created_at)-wkTime(a.created_at); if(wkCaseSort==='clarity'){ var ca=Number(a.clarity)||0, cb=Number(b.clarity)||0; if(cb!==ca) return cb-ca; return wkTime(b.created_at)-wkTime(a.created_at); } var pa=Number(a.points)||0, pb=Number(b.points)||0; if(pb!==pa) return pb-pa; return wkTime(b.created_at)-wkTime(a.created_at); });
     if(!rows.length) return '<div class="wk-none">No cases match this filter.</div>';
-    var shown=rows.slice(0,6);
-    var head='<thead><tr><th>Case</th><th>Status</th><th>Clarity</th><th>Resolution</th><th>Points</th><th>Quality</th><th>Replies</th></tr></thead>';
-    var more=(rows.length>shown.length)?('<div class="wk-seeall"><a href="/decisionroom.html">See all '+rows.length+' cases \u2192</a></div>'):'';
+    var shown=wkCaseAll?rows:rows.slice(0,6);
+    var head='<thead><tr>'+wkTh('Case','c_ctitle')+wkTh('Status','c_cstatus')+wkTh('Clarity','c_clarity')+wkTh('Resolution','c_resolution')+wkTh('Points','c_points')+wkTh('Quality','c_cquality')+wkTh('Replies','c_replies')+'</tr></thead>';
+    var more='';
+    if(rows.length>6) more='<div class="wk-seeall"><button type="button" class="wk-seeall-btn" data-wk-all="case">'+(wkCaseAll?('Show fewer \u25B4'):('See all '+rows.length+' cases \u25BE'))+'</button></div>';
     return '<table class="wk-table">'+head+'<tbody>'+wkGrouped(shown, wkCaseRow, 7, wkCaseSort==='recent')+'</tbody></table>'+more;
   }
   function wkRespRecon(w){
@@ -1915,6 +2021,11 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     else { wkCaseQuery=v; var ce=document.getElementById('wk-case-list'); if(ce) ce.innerHTML=wkCaseList(); }
   });
   document.addEventListener('click', function(e){
+    var ex=e.target.closest?e.target.closest('[data-wk-all]'):null;
+    if(ex){ var kk=ex.getAttribute('data-wk-all');
+      if(kk==='resp'){ wkRespAll=!wkRespAll; var rl=document.getElementById('wk-resp-list'); if(rl) rl.innerHTML=wkRespList(); }
+      else { wkCaseAll=!wkCaseAll; var cl=document.getElementById('wk-case-list'); if(cl) cl.innerHTML=wkCaseList(); }
+      return; }
     var b=e.target.closest?e.target.closest('[data-wk-export]'):null; if(!b||!wkData) return;
     e.preventDefault();
     function esc2(s){ s=String(s==null?'':s); return /[",\n]/.test(s)?('"'+s.replace(/"/g,'""')+'"'):s; }
@@ -2177,36 +2288,208 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
         + extra
       +'</div></div>';
   }
-  function vaultZone1(d){
+  /* ---- Zone 1 (Your Standing) : premium hero cards + side rail ---- */
+  var Z1IC={
+    medal:'<circle cx="12" cy="9" r="5.5"/><path d="M8.6 13.2 7 22l5-3 5 3-1.6-8.8"/>',
+    crown:'<path d="M4 18h16"/><path d="m3 7 4.5 4L12 5l4.5 6L21 7l-1.8 9H4.8z"/>',
+    flame:'<path d="M12 2s5 5 5 9a5 5 0 0 1-10 0c0-1.6.7-3 1.5-4 .2 1.4 1 2.2 1.8 2.2C11.9 9.2 12 5.6 12 2z"/><path d="M7 15a5 5 0 0 0 10 0"/>',
+    check:'<circle cx="12" cy="12" r="9"/><path d="m8.5 12 2.4 2.4 4.6-4.8"/>',
+    thumb:'<path d="M7 11v9H3v-9zM7 11l4-8a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 2 2.4l-1.4 7A2 2 0 0 1 17.1 20H7"/>',
+    doc:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/>',
+    flag:'<path d="M4 22V4"/><path d="M4 5h11l-1.2 3L15 11H4z"/>',
+    folder:'<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+    star:'<polygon points="12 2 15 9 22 9.3 16.5 14 18.5 21 12 17 5.5 21 7.5 14 2 9.3 9 9"/>',
+    target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+    trophy:'<path d="M6 4h12v3a6 6 0 0 1-12 0V4Z"/><path d="M6 5H4a2 2 0 0 0 0 4h2"/><path d="M18 5h2a2 2 0 0 1 0 4h-2"/><path d="M12 13v3"/><path d="M9 20h6"/>',
+    shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    users:'<path d="M16 20v-1.5a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4V20"/><circle cx="9" cy="7" r="3.5"/><path d="M22 20v-1.5a4 4 0 0 0-3-3.8"/><path d="M16 3.7a4 4 0 0 1 0 7.6"/>',
+    brain:'<path d="M9.5 3A2.5 2.5 0 0 0 7 5.5 2.5 2.5 0 0 0 5 8a2.5 2.5 0 0 0 .6 1.6A2.5 2.5 0 0 0 5 12a2.5 2.5 0 0 0 1.4 2.2A2.5 2.5 0 0 0 9 18h1V3z"/><path d="M14.5 3A2.5 2.5 0 0 1 17 5.5 2.5 2.5 0 0 1 19 8a2.5 2.5 0 0 1-.6 1.6A2.5 2.5 0 0 1 19 12a2.5 2.5 0 0 1-1.4 2.2A2.5 2.5 0 0 1 15 18h-1V3z"/><path d="M12 18v3"/>',
+    globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18z"/>',
+    pencil:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+    dl:'<path d="M12 3v12"/><path d="m7 12 5 5 5-5"/><path d="M4 21h16"/>'
+  };
+  function z1ic(k,sz){ sz=sz||16; return '<svg viewBox="0 0 24 24" width="'+sz+'" height="'+sz+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+Z1IC[k]+'</svg>'; }
+  function z1M(lab,val,tip,icon,color){
+    return '<div class="z1-m"><span class="z1-m-ic" style="--c:'+color+'">'+z1ic(icon,14)+'</span><div class="z1-m-tx"><span class="z1-m-l">'+lab+(tip?vTip(tip):'')+'</span><b class="z1-m-v">'+val+'</b></div></div>';
+  }
+  function z1Hero(cls, role, x, tiles, ctaLabel, ctaHref, accent, iconKey, tipKey){
+    if(!x || !x.active){
+      return '<div class="z1-hero '+cls+'" style="--a:'+accent+'"><div class="z1-hero-top"><span class="z1-role">'+role+'</span></div>'
+        +'<div class="vt-none">Nothing scored in this window yet. Pick a wider window above, or go and do the work \u2014 the number only moves when other people act on what you wrote.</div></div>';
+    }
+    var pct=(x.percentile!=null)
+      ? '<span class="z1-pct" title="Rank '+x.rank+' of '+x.total_active+' active">Top '+x.percentile+'% \u00b7 #'+x.rank+'<span class="z1-pct-ar">\u2197</span>'+vTip('pctile')+'</span>' : '';
+    return '<div class="z1-hero '+cls+'" style="--a:'+accent+'">'
+      +'<div class="z1-hero-top"><span class="z1-role">'+role+'</span>'+pct+'</div>'
+      +'<div class="z1-score"><span class="z1-emb">'+z1ic(iconKey,30)+'</span>'
+        +'<span class="z1-num">'+fmtN(x.score)+'</span><span class="z1-unit">pts'+vTip(tipKey)+'</span>'
+        +'<span class="z1-dl">'+vtDelta(x.delta)+vTip('delta')+'</span></div>'
+      +'<div class="z1-tiles">'+tiles+'</div>'
+      +'<a class="z1-cta" href="'+ctaHref+'">'+z1ic('users',15)+' '+ctaLabel+' <span class="z1-cta-ar">\u2192</span></a>'
+      +'</div>';
+  }
+  function z1Trend(t){
+    var wks=(t&&t.weeks)||[];
+    var pts=[], run=0, any=false;
+    wks.forEach(function(w){
+      var v=(w.rev_score!=null?Number(w.rev_score):0)+(w.aut_score!=null?Number(w.aut_score):0);
+      if(w.rev_score!=null||w.aut_score!=null) any=true;
+      run+=v; pts.push({v:run, ws:w.week_start, gain:v});
+    });
+    if(!any||pts.length<2) return '<div class="z1-side-empty">Your points trend appears once you have a couple of scored weeks.</div>';
+    var W=250,H=104,PL=32,PR=8,PT=10,PB=20, iw=W-PL-PR, ih=H-PT-PB;
+    var vals=pts.map(function(p){ return p.v; });
+    var mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals); if(mn===mx){ mn=Math.max(0,mn-1); mx=mx+1; }
+    var X=function(i){ return PL+(pts.length===1?iw/2:iw*i/(pts.length-1)); };
+    var Y=function(v){ return PT+ih-((v-mn)/(mx-mn))*ih; };
+    var line=[], area=[];
+    pts.forEach(function(p,i){ var px=X(i), py=Y(p.v); line.push((i?'L':'M')+px.toFixed(1)+' '+py.toFixed(1)); area.push((i?'L':'M'+px.toFixed(1)+' '+(PT+ih)+' L')+px.toFixed(1)+' '+py.toFixed(1)); });
+    area.push('L'+X(pts.length-1).toFixed(1)+' '+(PT+ih)+' Z');
+    var o='<svg viewBox="0 0 '+W+' '+H+'" class="z1-trend" role="img"><defs><linearGradient id="z1tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5B4BD4" stop-opacity=".28"/><stop offset="1" stop-color="#5B4BD4" stop-opacity="0"/></linearGradient></defs>';
+    for(var g=0; g<=2; g++){ var gy=PT+ih*g/2, gv=mx-(mx-mn)*g/2;
+      o+='<line x1="'+PL+'" y1="'+gy.toFixed(1)+'" x2="'+(W-PR)+'" y2="'+gy.toFixed(1)+'" stroke="#EEF1F8" stroke-width="1"/>';
+      o+='<text x="'+(PL-6)+'" y="'+(gy+3.5).toFixed(1)+'" text-anchor="end" font-size="9" fill="#aeb4c2">'+Math.round(gv)+'</text>'; }
+    o+='<path d="'+area.join(' ')+'" fill="url(#z1tg)"/><path d="'+line.join(' ')+'" fill="none" stroke="#5B4BD4" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>';
+    var li=pts.length-1;
+    o+='<circle cx="'+X(li).toFixed(1)+'" cy="'+Y(pts[li].v).toFixed(1)+'" r="6" fill="#5B4BD4" opacity=".16"/><circle cx="'+X(li).toFixed(1)+'" cy="'+Y(pts[li].v).toFixed(1)+'" r="3.6" fill="#5B4BD4" stroke="#fff" stroke-width="1.6"/>';
+    o+='<text x="'+PL+'" y="'+(H-5)+'" font-size="9" fill="#aeb4c2">'+wkLabel(pts[0].ws)+'</text>';
+    o+='<text x="'+(W-PR)+'" y="'+(H-5)+'" text-anchor="end" font-size="9" fill="#aeb4c2">'+wkLabel(pts[li].ws)+'</text>';
+    o+='</svg>';
+    var gain=pts[li].gain;
+    var head='<div class="z1-trend-h"><div><span class="z1-side-l">Points</span><div class="z1-trend-big">'+fmtN(pts[li].v)+'</div></div>'
+      +'<div class="z1-trend-d"><span class="'+(gain>0?'up':(gain<0?'down':'flat'))+'">'+(gain>0?'\u2191 ':(gain<0?'\u2193 ':'\u2192 '))+fmtN(Math.abs(gain))+'</span><small>vs last week</small></div></div>';
+    return head+o;
+  }
+  function z1Activity(w){
+    if(!w||!w.ok) return '<div class="z1-side-empty">Your recent wins will show up here.</div>';
+    var ev=[];
+    (w.cases||[]).forEach(function(c){
+      if(c.exemplary) ev.push({t:wkTime(c.created_at),iso:c.created_at,ic:'crown',c:'#CA8A04',ti:'Case marked exemplary',su:'\u201C'+(c.title||'Untitled')+'\u201D'});
+      else if(c.status==='closed') ev.push({t:wkTime(c.created_at),iso:c.created_at,ic:'check',c:'#16A34A',ti:'Case closed & resolved',su:'\u201C'+(c.title||'Untitled')+'\u201D'});
+    });
+    (w.responses||[]).forEach(function(r){
+      var p=Number(r.points)||0;
+      if(r.acted) ev.push({t:wkTime(r.created_at),iso:r.created_at,ic:'check',c:'#16A34A',ti:'Acted on by author',su:(p>0?('+'+fmtN(p)+' pts earned'):'Used in a decision')});
+      else if((r.helpful||0)>0) ev.push({t:wkTime(r.created_at),iso:r.created_at,ic:'thumb',c:'#2563EB',ti:'Helpful response',su:(p>0?('+'+fmtN(p)+' pts earned'):'Marked helpful')});
+    });
+    if(!ev.length) return '<div class="z1-side-empty">No wins logged in this window yet \u2014 answer a case or post one to get started.</div>';
+    ev.sort(function(a,b){ return b.t-a.t; });
+    return '<div class="z1-act-list">'+ev.slice(0,4).map(function(e){
+      return '<div class="z1-act"><span class="z1-act-ic" style="--c:'+e.c+'">'+z1ic(e.ic,14)+'</span>'
+        +'<div class="z1-act-tx"><span class="z1-act-t">'+e.ti+'</span><span class="z1-act-s">'+esc(e.su)+'</span></div>'
+        +'<span class="z1-act-d">'+wkDateFmt(e.iso)+'</span></div>';
+    }).join('')+'</div>';
+  }
+  function z1Overall(d){
+    var r=d.reviewer||{}, a=d.author||{}, ps=[];
+    if(r.percentile!=null) ps.push(Number(r.percentile));
+    if(a.percentile!=null) ps.push(Number(a.percentile));
+    if(!ps.length) return '<div class="z1-side"><div class="z1-side-h">Overall standing'+vTip('pctile')+'</div><div class="z1-side-empty">Score in a window and your overall standing appears here.</div></div>';
+    var best=Math.min.apply(null,ps);
+    var dl=(Number(r.delta)||0)+(Number(a.delta)||0);
+    var dlHtml=dl?('<span class="z1-ov-d '+(dl>0?'up':'down')+'">'+(dl>0?'\u2191 ':'\u2193 ')+fmtN(Math.abs(dl))+' pts vs last period</span>'):'<span class="z1-ov-d flat">\u2192 steady vs last period</span>';
+    return '<div class="z1-side z1-ov"><div class="z1-side-h">Overall standing'+vTip('pctile')+'</div>'
+      +'<div class="z1-ov-body"><span class="z1-ov-shield">'+z1ic('shield',34)+'</span>'
+      +'<div><div class="z1-ov-big">Top '+best+'%</div><div class="z1-ov-s">of all ranked users</div>'+dlHtml+'</div></div></div>';
+  }
+  function z1GcRadar(g){
+    var cal=(g&&g.calibration!=null)?Math.max(0,Math.min(100,Number(g.calibration))):null;
+    var o='<svg viewBox="0 0 150 150" class="z1-gcr" role="img">';
+    for(var i=4;i>=1;i--){ o+='<circle cx="75" cy="75" r="'+(i*16)+'" fill="'+(i%2?'#F2FAF5':'#EAF6EF')+'" stroke="#DCEFE4" stroke-width="1"/>'; }
+    if(cal!=null){ var R=64, C=2*Math.PI*R, off=C*(1-cal/100);
+      o+='<circle cx="75" cy="75" r="'+R+'" fill="none" stroke="#22a45d" stroke-width="5" stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 75 75)" opacity=".85"/>'; }
+    o+='<g transform="translate(59,59)" stroke="#22a45d" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><svg viewBox="0 0 24 24" width="32" height="32">'+Z1IC.brain+'</svg></g>';
+    o+='</svg>';
+    return o;
+  }
+  function vaultZone1(d, t, w){
     var r=d.reviewer||{}, a=d.author||{}, g=d.gutcheck||{};
-    var revExtra=vtM('Acted on',(r.acted||0),'vacted')+vtM('Helpful',(r.helpful||0),'vhelpful')+vtM('Covered',(r.covered||0),'vcovered')+vtM('Reports',(r.reports||0),'vreports');
-    var autExtra=vtM('Cases',(a.cases||0),'vcases')+vtM('Avg clarity',(a.avg_clarity!=null?fmtN(a.avg_clarity)+'/5':'\u2014'),'vclarity')+vtM('Close rate',((a.close_rate||0)+'%'),'vclose')+vtM('Exemplary \uD83C\uDFC5',(a.exemplary||0),'vexemplary');
+    var revTiles=z1M('Best rank', (r.best_rank?('#'+r.best_rank):'\u2014'),'bestrank','medal','#B57E1B')
+      +z1M('Crowns',(r.crowns||0),'crowns','crown','#CA8A04')
+      +z1M('Streak',(r.streak||0),'streak','flame','#E2683C')
+      +z1M('Acted on',(r.acted||0),'vacted','check','#16A34A')
+      +z1M('Helpful',(r.helpful||0),'vhelpful','thumb','#2563EB')
+      +z1M('Covered',(r.covered||0),'vcovered','doc','#6D5EF0')
+      +z1M('Reports',(r.reports||0),'vreports','flag','#DC2626');
+    var autTiles=z1M('Best rank',(a.best_rank?('#'+a.best_rank):'\u2014'),'bestrank','medal','#B57E1B')
+      +z1M('Crowns',(a.crowns||0),'crowns','crown','#CA8A04')
+      +z1M('Streak',(a.streak||0),'streak','flame','#E2683C')
+      +z1M('Cases',(a.cases||0),'vcases','folder','#B8791B')
+      +z1M('Avg clarity',(a.avg_clarity!=null?fmtN(a.avg_clarity)+'/5':'\u2014'),'vclarity','star','#CA8A04')
+      +z1M('Close rate',((a.close_rate||0)+'%'),'vclose','target','#16A34A')
+      +z1M('Exemplary',(a.exemplary||0),'vexemplary','trophy','#B57E1B');
     var gl=d.gutcheck_life||{};
     var noCalls=!(g.calls>0);
-    var gc='<div class="vt-gc"><div class="vt-ct"><span class="vt-ct-t">\uD83E\uDDED GutCheck judgment</span>'
-      +'<span class="vt-pct" style="background:#E7F3EC;color:#15803d">This window'+vTip('gcwindow')+'</span></div>'
+    var gcTiles=noCalls ? '' :
+      '<div class="z1-gc-tiles">'
+        +z1M('Level', esc(g.level||'\u2014'), 'gclevel','star','#16A34A')
+        +z1M('Calls scored', (g.calls||0), 'gccalls','check','#16A34A')
+        +z1M('Calibration', (g.calibration!=null?(Math.round(g.calibration)+'%'):'\u2014'), 'gccalib','target','#16A34A')
+        +z1M('Strongest', drCat(g.strongest), 'gcstrong','shield','#16A34A')
+        +z1M('Weakest', drCat(g.weakest), 'gcweak','flag','#D97706')
+        +z1M('Best domain', esc(g.best_domain||'\u2014'), 'gcdomain','globe','#2563EB')
+      +'</div>';
+    var gc='<div class="z1-gc"><div class="z1-gc-h"><span class="z1-gc-ic">'+z1ic('brain',18)+'</span><span class="z1-gc-t">GutCheck judgment</span>'
+      +'<span class="z1-gc-win">This window'+vTip('gcwindow')+'</span></div>'
       +(noCalls
         ? '<div class="vt-none">No GutCheck calls scored in this window. Your lifetime judgment level is <b>'+esc(gl.level||'\u2014')+'</b> from '+(gl.calls||0)+' scored call'+((gl.calls===1)?'':'s')+' \u2014 widen the window, or take today\u2019s call.</div>'
-        : '<div class="vt-mini">'
-          +vtM('Level', esc(g.level||'\u2014'), 'gclevel')
-          +vtM('Calls scored', (g.calls||0), 'gccalls')
-          +vtM('Calibration', (g.calibration!=null?(Math.round(g.calibration)+'%'):'\u2014'), 'gccalib')
-          +vtM('Strongest', drCat(g.strongest), 'gcstrong')
-          +vtM('Weakest', drCat(g.weakest), 'gcweak')
-          +vtM('Best domain', esc(g.best_domain||'\u2014'), 'gcdomain')
-          +'</div>'
-          +'<div style="margin-top:.6rem;font-size:.74rem;color:var(--muted,#8a91a0);line-height:1.5">'
-          +'Lifetime: <b>'+esc(gl.level||'\u2014')+'</b> \u00b7 '+(gl.calls||0)+' calls \u00b7 '
-          +(gl.calibration!=null?(Math.round(gl.calibration)+'% calibration'):'calibration \u2014')+'</div>')
+        : '<div class="z1-gc-body"><div class="z1-gc-viz">'+z1GcRadar(g)+'</div>'+gcTiles+'</div>')
+      +'<div class="z1-gc-foot"><span>Lifetime: <b>'+esc(gl.level||'\u2014')+'</b> \u00b7 '+(gl.calls||0)+' calls \u00b7 '
+        +(gl.calibration!=null?(Math.round(gl.calibration)+'% calibration'):'calibration \u2014')+'</span>'
+        +'<a class="z1-gc-cta" href="/gutcheck.html">Explore GutCheck details <span class="z1-cta-ar">\u2192</span></a></div>'
       +'</div>';
-    return '<div class="vt-zone">'
+    var ps=[]; if(r.percentile!=null) ps.push(Number(r.percentile)); if(a.percentile!=null) ps.push(Number(a.percentile));
+    var bestPct=ps.length?Math.min.apply(null,ps):null;
+    var momentum='<div class="z1-mom"><div class="z1-mom-l"><div class="z1-mom-t">Keep building momentum! \uD83D\uDE80</div>'
+      +'<p>'+(bestPct!=null?('You\u2019re in the <b>top '+bestPct+'%</b> of all ranked users. '):'')+'Every rep here compounds \u2014 pick one of these next.</p></div>'
+      +'<div class="z1-mom-r">'
+        +'<a class="z1-next" href="#pc-rev"><span class="z1-next-ic" style="--c:#6D5EF0">'+z1ic('users',15)+'</span><div><b>Review more</b><small>Cover diverse cases to level up</small></div><span class="z1-cta-ar">\u203A</span></a>'
+        +'<a class="z1-next" href="/decisionroom.html"><span class="z1-next-ic" style="--c:#CA8A04">'+z1ic('pencil',15)+'</span><div><b>Write impactful cases</b><small>Briefs that drive strong discussion</small></div><span class="z1-cta-ar">\u203A</span></a>'
+        +'<a class="z1-next" href="/gutcheck.html"><span class="z1-next-ic" style="--c:#16A34A">'+z1ic('brain',15)+'</span><div><b>Strengthen calibration</b><small>Sharper gut for better intuition</small></div><span class="z1-cta-ar">\u203A</span></a>'
+      +'</div></div>';
+    return '<div class="vt-zone z1">'
       +'<div class="vt-zh"><span class="vt-zn">Zone 1</span><span class="vt-zt">Your Standing</span>'
-      +'<span class="vt-zs">Where you sit right now \u2014 in the window selected above.</span></div>'
-      +'<div class="vt-cards">'
-        +vaultCard('rev','As a reviewer', d.reviewer, revExtra)
-        +vaultCard('aut','As a case author', d.author, autExtra)
-      +'</div><div style="margin-top:1rem">'+gc+'</div></div>';
+      +'<span class="vt-zs">Where you sit right now \u2014 in the window selected above.</span>'
+      +'<button type="button" class="z1-dl-btn" data-z1-report="1">'+z1ic('dl',13)+' Download report</button></div>'
+      +'<div class="z1-grid">'
+        +'<div class="z1-main">'
+          +'<div class="z1-heroes">'
+            +z1Hero('rev','As a reviewer', d.reviewer, revTiles, 'View reviewer leaderboard', '#pc-rev', '#6D5EF0','shield','revscore')
+            +z1Hero('aut','As a case author', d.author, autTiles, 'View author leaderboard', '#pc-sub', '#D9930B','trophy','autscore')
+          +'</div>'
+          +gc
+        +'</div>'
+        +'<aside class="z1-side-rail">'
+          +z1Overall(d)
+          +'<div class="z1-side"><div class="z1-side-h">Points trend'+vTip('z1trend')+'</div>'+z1Trend(t)+'</div>'
+          +'<div class="z1-side"><div class="z1-side-h">Recent activity'+vTip('z1act')+'</div>'+z1Activity(w)+'</div>'
+        +'</aside>'
+      +'</div>'
+      +momentum
+      +'</div>';
   }
+  /* Zone 1 "Download report" \u2014 client-side snapshot, no backend */
+  document.addEventListener('click', function(e){
+    var b=e.target.closest?e.target.closest('[data-z1-report]'):null; if(!b) return;
+    e.preventDefault();
+    var d=(window.__vaultD||null); if(!d) return;
+    var r=d.reviewer||{}, a=d.author||{}, g=d.gutcheck||{}, gl=d.gutcheck_life||{};
+    function row(k,v){ return k+','+(v==null?'':String(v).replace(/"/g,'""')); }
+    var L=['Metric,Value',
+      row('Reviewer score', r.active?fmtN(r.score):'not active'),
+      row('Reviewer rank', r.rank||''), row('Reviewer percentile', r.percentile!=null?('Top '+r.percentile+'%'):''),
+      row('Reviewer best rank', r.best_rank||''), row('Reviewer crowns', r.crowns||0), row('Reviewer streak', r.streak||0),
+      row('Acted on', r.acted||0), row('Helpful', r.helpful||0), row('Covered', r.covered||0), row('Reports', r.reports||0),
+      row('Author score', a.active?fmtN(a.score):'not active'),
+      row('Author rank', a.rank||''), row('Author percentile', a.percentile!=null?('Top '+a.percentile+'%'):''),
+      row('Author best rank', a.best_rank||''), row('Author crowns', a.crowns||0), row('Author streak', a.streak||0),
+      row('Cases', a.cases||0), row('Avg clarity', a.avg_clarity!=null?fmtN(a.avg_clarity)+'/5':''),
+      row('Close rate', (a.close_rate||0)+'%'), row('Exemplary', a.exemplary||0),
+      row('GutCheck level', g.level||''), row('GutCheck calls', g.calls||0),
+      row('GutCheck calibration', g.calibration!=null?(Math.round(g.calibration)+'%'):''),
+      row('Lifetime level', gl.level||''), row('Lifetime calls', gl.calls||0)];
+    try{ var bl=new Blob([L.join('\n')],{type:'text/csv'}); var u=URL.createObjectURL(bl); var el=document.createElement('a'); el.href=u; el.download='your-standing.csv'; document.body.appendChild(el); el.click(); document.body.removeChild(el); setTimeout(function(){ URL.revokeObjectURL(u); },1000); }catch(err){}
+  });
   /* ===================== D6-2: ZONE 2 TRAJECTORY ===================== */
   function wkLabel(ws){
     var d=new Date(ws+'T00:00:00Z');
@@ -2441,13 +2724,14 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +summary+grid+radarCard+insightBar+'</div>';
   }
   function vaultRender(d, t, w, dg, wPrev){
+    try{ window.__vaultD=d; }catch(e){}
     var el=document.getElementById(LBLIST); if(!el) return;
     if(!d || !d.ok){ el.innerHTML='<div class="lb-empty">Could not load your Vault. Tap Refresh to retry.</div>'; return; }
     if(!d.signed_in){ el.innerHTML=vaultSignedOut(); return; }
     var u=d.unlock||{};
     var html='';
     if(!u.all_done) html+=vaultLadder(u)+'<div style="height:1.4rem"></div>';
-    html+=vaultZone1(d);
+    html+=vaultZone1(d, t, w);
     html+=vaultZone2(t, d);
     html+=vaultZone3(dg, d);
     html+=vaultZone4(w, d, wPrev);
