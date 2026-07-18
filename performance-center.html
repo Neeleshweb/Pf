@@ -269,18 +269,29 @@
   .pc-refresh.spinning svg{animation:pc-spin .7s linear infinite}
   @keyframes pc-spin{to{transform:rotate(360deg)}}
   /* ---- shared zone headers ---- */
-  .z-hd{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.45rem;margin-bottom:1.8rem;position:relative}
+  .z-hd{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:.45rem;margin-bottom:1.8rem;position:relative}
   .z-hd-ic{width:56px;height:56px;border-radius:18px;display:inline-flex;align-items:center;justify-content:center;color:var(--z,#5B4BD4);background:color-mix(in srgb, var(--z) 13%, #fff);box-shadow:0 10px 26px color-mix(in srgb, var(--z) 26%, transparent),inset 0 0 0 1.5px color-mix(in srgb, var(--z) 24%, transparent);margin-bottom:.2rem}
-  .z-hd-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:center}
+  .z-hd-row{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:flex-start}
   .z-hd-n{font-size:.64rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--z,#5B4BD4);background:color-mix(in srgb, var(--z) 11%, #fff);border:1px solid color-mix(in srgb, var(--z) 22%, transparent);border-radius:99px;padding:.28rem .8rem}
   .z-hd-t{margin:0;font-size:2rem;font-weight:800;letter-spacing:-.6px;line-height:1.15;color:var(--z,#5B4BD4)}
-  .z-hd-s{margin:0;max-width:680px;font-size:.9rem;line-height:1.6;color:var(--muted,#6b7280)}
+  .z-hd-s{margin:0;max-width:760px;font-size:.9rem;line-height:1.6;color:var(--muted,#6b7280)}
+  .z-hd-t{display:flex;align-items:center;gap:.35rem;flex-wrap:wrap}
+  .z-hd-t .lb-tip-i{vertical-align:middle}
   .z-hd .dg-count{margin-left:0}
   .z-hd .z1-dl-btn,.z-hd .z4-export{margin-left:0;margin-top:.5rem}
   @media(max-width:640px){ .z-hd-t{font-size:1.55rem} .z-hd-ic{width:48px;height:48px} }
   /* radar list additions */
   .vt-r-nd .vt-r-n{color:var(--muted,#9aa0b0)}
-  .vt-r-nodata{flex:1;font-size:.72rem;font-style:italic;color:var(--muted,#b0b6c4)}
+  .vt-r-nd .vt-r-dot{background:#d7dbe8}
+  .vt-rcols{flex:1;min-width:300px;display:grid;grid-template-columns:1fr 1fr;gap:.4rem 2.4rem;align-items:start}
+  .vt-rcol{min-width:0}
+  .vt-rcol-h{display:flex;align-items:center;gap:.45rem;font-size:.66rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding-bottom:.5rem;margin-bottom:.85rem;border-bottom:2px solid currentColor}
+  .vt-rcol-h.scored{color:#5B4BD4}
+  .vt-rcol-h.open{color:#94a3b8}
+  .vt-rcol-n{margin-left:auto;font-size:.64rem;font-weight:800;border:1.5px solid currentColor;border-radius:99px;padding:.05rem .45rem;line-height:1.5}
+  .vt-rcol .vt-r{margin-bottom:.55rem}
+  .vt-rcol-e{font-size:.76rem;line-height:1.5;color:var(--muted,#9aa0b0)}
+  @media(max-width:720px){ .vt-rcols{grid-template-columns:1fr;gap:1.2rem} }
   .vt-radar-need{flex:none;width:300px;max-width:100%;display:flex;align-items:center;gap:.6rem;background:#f7f8fc;border:1px dashed #dfe3ef;border-radius:14px;padding:1rem 1.1rem;font-size:.82rem;line-height:1.5;color:var(--muted,#6b7280)}
   .z2-bulb{flex:none;display:inline-flex;align-items:center}
   .z2-tipbox b{color:#1f5c3d;font-weight:800}
@@ -450,12 +461,12 @@
   .z2-radar-card{margin-top:1rem;background:radial-gradient(120% 130% at 0% 0%, #f4f2fe 0%, var(--card,#fff) 58%)}
   .z2-radar-card .vt-radar-wrap{gap:2.5rem;justify-content:center;align-items:center}
   .z2-radar-card .vt-radarsvg{width:330px;max-width:44%}
-  .z2-radar-card .vt-rlist{flex:1;min-width:280px;max-width:680px;display:grid;grid-template-columns:1fr 1fr;gap:.6rem 2.2rem}
+  .z2-radar-card .vt-rcols{flex:1;min-width:300px;max-width:760px}
   .z2-radar-card .vt-r-n{width:auto;flex:1;min-width:0;max-width:none}
   .z2-radar-card .vt-r-b{flex:none;width:66px}
   .z2-wl{min-width:38px;flex:none;text-align:center;font-size:.66rem;color:#aeb4c2;font-weight:600}
   .z2-boxlabels{margin-top:.15rem}
-  @media(max-width:720px){ .z2-radar-card .vt-rlist{grid-template-columns:1fr} .z2-radar-card .vt-radarsvg{max-width:100%;margin:0 auto} }
+  @media(max-width:720px){ .z2-radar-card .vt-radarsvg{max-width:100%;margin:0 auto} }
   .vt-gempty{font-size:.8rem;line-height:1.5;color:var(--muted,#9098a8);padding:1.2rem;text-align:center;background:#f8fafc;border-radius:12px}
   .z2-insight{display:flex;align-items:center;gap:1rem;margin-top:1.4rem;padding:1.15rem 1.35rem;border-radius:18px;background:linear-gradient(120deg,#f2f0fe,#eaf3ff);border:1px solid #e1def6;box-shadow:0 8px 26px rgba(20,25,45,.05)}
   .z2-insight-ic{font-size:1.4rem;flex:none;filter:drop-shadow(0 3px 6px rgba(91,75,212,.25))}
@@ -909,6 +920,7 @@
   .wk-empty svg{color:#c9cfe0;margin-bottom:.5rem}
   .wk-empty p{margin:.2rem 0 .6rem;font-size:.86rem}
   .wk-empty a{font-size:.84rem;font-weight:800;color:#5B4BD4;text-decoration:none}
+  .wk-empty a.wk-ecta{color:#fff}
   .wk-side{border:1px solid var(--border,#e7eaf4);border-radius:18px;background:var(--card,#fff);padding:1.2rem 1.25rem;box-shadow:0 8px 26px rgba(20,25,45,.05)}
   .wk-side-h{display:flex;align-items:center;gap:.35rem;font-size:.86rem;font-weight:800;color:var(--ink,#16233f);margin-bottom:.9rem}
   .wk-side-empty{font-size:.8rem;color:var(--muted,#9aa0b0)}
@@ -1778,6 +1790,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
 
   /* ===================== D6: PERFORMANCE VAULT ===================== */
   var VTIPS={
+    z1zone:{t:'Zone 1 \u2014 Your Standing',b:'What it is: your live position in the window you picked \u2014 score, rank, percentile, and the stats behind them, on both sides of the room.\n\nWhy it matters: it is the single honest answer to \u201Cwhere do I actually stand?\u201D measured against people who showed up in the same window.\n\nImproves when: your work gets acted on, marked helpful, and your cases close resolved.\n\nDrops when: you sit a window out, or your contributions stop landing.\n\nLeadership edge: knowing your real position \u2014 not your felt position \u2014 is the starting point for deliberately getting better.'},
+    z2zone:{t:'Zone 2 \u2014 Trajectory',b:'What it is: the last 8 weeks of your rank, score, calibration, brief quality, and category signal.\n\nWhy it matters: a single week is noise; the slope is the signal. This is the part that tells you whether you are actually improving.\n\nImproves when: you contribute consistently and your quality metrics climb week over week.\n\nDrops when: activity is sporadic, or you repeat the same mistakes without correcting.\n\nLeadership edge: leaders are judged on direction and consistency, not one good week \u2014 this is where that shows.'},
     z1trend:{t:'Points trend',b:'What it is: your cumulative points across the last 8 weeks, with the most recent week\u2019s gain.\n\nWhy it matters: it shows whether your contribution is compounding or flattening.\n\nImproves when: you add scored work every week \u2014 answers that land, cases that resolve.\n\nDrops when: weeks pass with no scored activity, so the curve goes flat.\n\nLeadership edge: steady accumulation beats bursts \u2014 consistency is what builds a reputation.'},
     z1act:{t:'Recent activity',b:'What it is: your latest wins \u2014 exemplary cases, helpful responses, and answers authors acted on.\n\nWhy it matters: it is immediate feedback on which contributions actually landed.\n\nImproves when: you write specific, decision-ready answers and close your cases properly.\n\nDrops when: activity stalls, or work is posted but never engaged with.\n\nLeadership edge: noticing what worked \u2014 and doing more of it \u2014 is how deliberate practice turns into judgment.'},
     z2best:{t:'Best week',b:'What it is: the week in the last 8 where your combined reviewer + author points were highest.\n\nWhy it matters: it shows what your best looks like \u2014 a bar worth repeating.\n\nImproves when: you stack a strong review week with a well-received case.\n\nDrops when: activity is thin or scattered.\n\nLeadership edge: knowing your peak and how you hit it makes it repeatable \u2014 consistency is what compounds.'},
@@ -2074,8 +2088,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     if(!w || !w.ok || !w.signed_in){ wkData=null; return ''; }
     wkData=w;
     return '<div class="vt-zone z4">'
-      +zoneHead(4,'Your Track Record','Every contribution you\u2019ve made and the impact it created \u2014 the receipts behind every score above.'+wkTip('what'),'#16A34A','z4','',
-          '<button type="button" class="z4-export" data-wk-export="1">'+z4ic('eye',13)+' Export CSV</button>')
+      +zoneHead(4,'Your Track Record','Every contribution you\u2019ve made and the impact it created \u2014 the receipts behind every score above.','#16A34A','z4','',
+          '<button type="button" class="z4-export" data-wk-export="1">'+z4ic('eye',13)+' Export CSV</button>', wkTip('what'))
       +wkStatsBar(w, wPrev)
       +'<div class="z4-cols"><div class="z4-main">'
         +'<div class="wk-panel" id="wk-resp-panel">'+wkRespPanelInner()+'</div>'
@@ -2277,7 +2291,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +'<div class="z3-bt"><span class="z3-bt-ic"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg></span><div><b>Your potential improvement</b><small>Clearing the top findings lifts your reviewer and author scores.</small></div></div>'
       +'</div>';
     return '<div class="vt-zone z3d">'
-      +zoneHead(3,'Your Next Moves','The few things most worth fixing right now \u2014 read from all your activity, ranked by impact, each with the exact action to take.'+dgTip('what'),'#D97706','z3',count,'')
+      +zoneHead(3,'Your Next Moves','The few things most worth fixing right now \u2014 read from all your activity, ranked by impact, each with the exact action to take.','#D97706','z3',count,'', dgTip('what'))
       +'<div class="z3-summary">'+buckets+gauge+'</div>'
       +'<div class="z3-timeline dg-list" id="dg-list">'+items+'</div>'+more
       +bottom
@@ -2495,11 +2509,11 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     z3:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5 13 13l-4.5 2.5L11 11z"/>',
     z4:'<path d="M5 3v18l2.2-1.4L9.4 21l2.2-1.4L13.8 21l2.2-1.4L18.2 21V3z"/><path d="M8.5 8h7"/><path d="M8.5 12h7"/><path d="M8.5 16h4"/>'
   };
-  function zoneHead(n, title, sub, color, iconKey, badgeHtml, actionHtml){
+  function zoneHead(n, title, sub, color, iconKey, badgeHtml, actionHtml, tipHtml){
     return '<div class="vt-zh z-hd" style="--z:'+color+'">'
       +'<span class="z-hd-ic"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">'+ZHIC[iconKey]+'</svg></span>'
       +'<div class="z-hd-row"><span class="z-hd-n">Zone '+n+'</span>'+(badgeHtml||'')+'</div>'
-      +'<h3 class="z-hd-t">'+title+'</h3>'
+      +'<h3 class="z-hd-t">'+title+(tipHtml||'')+'</h3>'
       +'<p class="z-hd-s">'+sub+'</p>'
       +(actionHtml||'')+'</div>';
   }
@@ -2550,7 +2564,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +'</div></div>';
     return '<div class="vt-zone z1">'
       +zoneHead(1,'Your Standing','Exactly where you sit right now \u2014 your score, your rank, and how you compare in the window selected above.','#5B4BD4','z1','',
-          '<button type="button" class="z1-dl-btn" data-z1-report="1">'+z1ic('dl',13)+' Download report</button>')
+          '<button type="button" class="z1-dl-btn" data-z1-report="1">'+z1ic('dl',13)+' Download report</button>', vTip('z1zone'))
       +'<div class="z1-grid">'
         +'<div class="z1-main">'
           +'<div class="z1-heroes">'
@@ -2679,16 +2693,22 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     } else {
       viz='<div class="vt-radar-need">'+z2Bulb('#8B7FF0')+'<span>Score at least <b>3 categories</b> in GutCheck and your radar shape appears here.</span></div>';
     }
-    var rows=withData.map(function(c){
+    var scoredRows=withData.map(function(c){
       var col=colOf[z2Slug(c.category)]||'#8B7FF0';
       return '<div class="vt-r"><span class="vt-r-dot" style="background:'+col+'"></span><span class="vt-r-n">'+esc(drCat(c.category))+'</span>'
         +'<span class="vt-r-b"><i style="width:'+Math.max(0,Math.min(100,Number(c.signal)||0))+'%;background:'+col+'"></i></span>'
         +'<span class="vt-r-v">'+c.signal+'</span></div>';
-    }).concat(noData.map(function(c){
-      return '<div class="vt-r vt-r-nd"><span class="vt-r-dot" style="background:#d7dbe8"></span><span class="vt-r-n">'+esc(drCat(c.category))+'</span>'
-        +'<span class="vt-r-nodata">Not enough data yet</span></div>';
-    })).join('');
-    return '<div class="vt-radar-wrap">'+viz+'<div class="vt-rlist">'+rows+'</div></div>';
+    }).join('');
+    var openRows=noData.map(function(c){
+      return '<div class="vt-r vt-r-nd"><span class="vt-r-dot"></span><span class="vt-r-n">'+esc(drCat(c.category))+'</span></div>';
+    }).join('');
+    var cols='<div class="vt-rcols">'
+      +'<div class="vt-rcol"><div class="vt-rcol-h scored">Where you have signal<span class="vt-rcol-n">'+withData.length+'</span></div>'
+        +(scoredRows||'<div class="vt-rcol-e">Nothing scored yet \u2014 take a few GutCheck calls.</div>')+'</div>'
+      +'<div class="vt-rcol"><div class="vt-rcol-h open">Still to explore<span class="vt-rcol-n">'+noData.length+'</span></div>'
+        +(openRows||'<div class="vt-rcol-e">You have signal in every category. Outstanding.</div>')+'</div>'
+      +'</div>';
+    return '<div class="vt-radar-wrap">'+viz+cols+'</div>';
   }
   /* ---- Zone 2 (Trajectory) helpers ---- */
   function vtFirstLast(weeks, key){ var f=null,l=null; weeks.forEach(function(w){ var v=w[key]; if(v!=null){ if(f===null) f=Number(v); l=Number(v); } }); return [f,l]; }
@@ -2859,7 +2879,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
 
     var radarCard='<div class="z2-card z2-radar-card"><div class="z2-card-h"><div class="z2-card-hl"><span class="z2-card-t">Category radar'+vTip('z2radar')+'</span><span class="z2-card-d">Agreement with the room (0\u2013100) \u2014 which PM problems you read well</span></div></div><div class="z2-card-b">'+vtRadar(radar)+'<div class="z2-tipbox z2-tipbox-lg">'+z2Bulb()+'<span><b>Stronger in your top categories.</b> Keep sharpening the rest to become a more well-rounded PM.</span></div></div></div>';
     return '<div class="vt-zone z2">'
-      +zoneHead(2,'Trajectory','Your last 8 weeks \u2014 the part that actually tells you whether you\u2019re improving, and where.','#2F82E4','z2','','')
+      +zoneHead(2,'Trajectory','Your last 8 weeks \u2014 the part that actually tells you whether you\u2019re improving, and where.','#2F82E4','z2','','', vTip('z2zone'))
       +summary+grid+radarCard+insightBar+'</div>';
   }
   function vaultRender(d, t, w, dg, wPrev){
