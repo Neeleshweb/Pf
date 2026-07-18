@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:pc-stage2 2026-07-16T14:00:00Z -->
+  <!-- build:pc-z1234-final 2026-07-18T09:00:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Performance Center — Product Judgment Lab</title>
@@ -459,14 +459,14 @@
   .vt-r-b i{display:block;height:100%;border-radius:99px;transition:width .6s ease}
   .vt-r-v{font-size:.76rem;font-weight:800;color:var(--ink,#16233f);width:26px;text-align:right;flex:none}
   .z2-radar-card{margin-top:1rem;background:radial-gradient(120% 130% at 0% 0%, #f4f2fe 0%, var(--card,#fff) 58%)}
-  .z2-radar-card .vt-radar-wrap{gap:2.5rem;justify-content:center;align-items:center}
-  .z2-radar-card .vt-radarsvg{width:452px;max-width:50%}
+  .z2-radar-card .vt-radar-wrap{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2.5rem;justify-content:start;align-items:center}
+  .z2-radar-card .vt-radarsvg{width:460px;max-width:100%}
   .z2-radar-card .vt-rcols{flex:1;min-width:300px;max-width:760px}
   .z2-radar-card .vt-r-n{width:auto;flex:1;min-width:0;max-width:none}
   .z2-radar-card .vt-r-b{flex:none;width:66px}
   .z2-wl{min-width:38px;flex:none;text-align:center;font-size:.66rem;color:#aeb4c2;font-weight:600}
   .z2-boxlabels{margin-top:.15rem}
-  @media(max-width:720px){ .z2-radar-card .vt-radarsvg{max-width:100%;margin:0 auto} }
+  @media(max-width:900px){ .z2-radar-card .vt-radar-wrap{grid-template-columns:1fr} .z2-radar-card .vt-radarsvg{width:100%;max-width:460px;margin:0 auto} }
   .vt-gempty{font-size:.8rem;line-height:1.5;color:var(--muted,#9098a8);padding:1.2rem;text-align:center;background:#f8fafc;border-radius:12px}
   .z2-insight{display:flex;align-items:center;gap:1rem;margin-top:1.4rem;padding:1.15rem 1.35rem;border-radius:18px;background:linear-gradient(120deg,#f2f0fe,#eaf3ff);border:1px solid #e1def6;box-shadow:0 8px 26px rgba(20,25,45,.05)}
   .z2-insight-ic{font-size:1.4rem;flex:none;filter:drop-shadow(0 3px 6px rgba(91,75,212,.25))}
@@ -566,7 +566,21 @@
   .dg-more{margin:0 auto 1rem;display:block;background:var(--card,#fff);border:1px solid var(--border,#e2e6f2);color:var(--ink,#3a4358);font-size:.8rem;font-weight:800;padding:.55rem 1.1rem;border-radius:11px;cursor:pointer;box-shadow:0 2px 8px rgba(20,25,45,.06)}
   .dg-more:hover{border-color:#5B4BD4;color:#5B4BD4}
   @media(max-width:1180px){ .z3-card{grid-template-columns:1fr 1fr 1fr} .z3-lead{grid-column:1/-1} .z3-lead .z3-gist{border-top:none;padding-top:0} .z3-rrail{grid-column:1/-1;border-left:none;border-top:1px solid #eef1f8;padding-left:0;padding-top:.9rem} .z3-rrow{justify-content:flex-start;gap:2rem} .z3-card .z3-col + .z3-col{border-left:none;padding-left:0} .z3-bucket + .z3-bucket{border-left:none;padding-left:0} }
-  @media(max-width:720px){ .z3-card{grid-template-columns:1fr} .z3-lead,.z3-rrail{grid-column:auto} .z3-rail{width:72px} .z3-band small{display:none} .z3-item{gap:.7rem} }
+  @media(max-width:720px){
+    .z3-card{grid-template-columns:1fr;margin-bottom:0}
+    .z3-lead,.z3-rrail{grid-column:auto}
+    /* stack: the timeline marker sits centred BETWEEN cards, cards go full width */
+    .z3-item{flex-direction:column;gap:0}
+    .z3-rail{width:100%;flex-direction:row;justify-content:center;align-items:center;gap:.6rem;padding-top:0;margin:0 0 .9rem}
+    .z3-rail::before{content:'';position:absolute;left:50%;top:-1.75rem;bottom:auto;height:1.5rem;transform:translateX(-50%);border-left:2px dashed #d7dbe8}
+    .z3-item:first-child .z3-rail::before{display:none}
+    .z3-item:last-child .z3-rail::before{display:block}
+    .z3-item + .z3-item{margin-top:1.75rem}
+    .z3-band{order:0;flex-direction:row;align-items:center;gap:.45rem;margin-bottom:0;text-align:left}
+    .z3-band-ic{margin-bottom:0;width:26px;height:26px}
+    .z3-band small{display:none}
+    .z3-band b{white-space:nowrap}
+  }
   @media(max-width:640px){ .pc-head{flex-direction:column;align-items:flex-start} .pc-ctrl{width:100%} .pc-pills{flex-wrap:wrap} }
   @media(max-width:560px){ .pcx-grid{grid-template-columns:1fr} }
   .lb-list{}
@@ -969,8 +983,8 @@
     .wk-table,.wk-table tbody,.wk-table tr,.wk-table td{display:block;width:100%}
     .wk-table thead{display:none}
     .wk-tr{border:1px solid var(--border,#e7eaf4);border-radius:16px;background:var(--card,#fff);box-shadow:0 4px 14px rgba(20,25,45,.05);padding:.4rem .2rem;margin-bottom:.85rem}
-    .wk-tr.resp{border-left:3px solid #6D5EF0}
-    .wk-tr.case{border-left:3px solid #2F82E4}
+    .wk-tr.resp{border-left:3px solid #6D5EF0;border-right:3px solid #6D5EF0}
+    .wk-tr.case{border-left:3px solid #2F82E4;border-right:3px solid #2F82E4}
     .wk-tr td{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.5rem .85rem;border-bottom:1px solid #f4f6fb;text-align:right}
     .wk-tr td:last-child{border-bottom:none}
     .wk-tr.resp td:first-child,.wk-tr.case td:first-child{box-shadow:none}
