@@ -718,5 +718,25 @@
   });
 })();
 </script>
+<script>
+/* Staging/preview: both sites are served from ONE origin, so rewrite absolute
+   cross-domain links to same-origin paths. Production hosts are left untouched. */
+(function(){
+  var PH=['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','productjudgmentlabs.com','www.productjudgmentlabs.com'];
+  if(PH.indexOf(location.hostname)!==-1) return;
+  var RX=/^https?:\/\/(?:www\.)?(neeleshpmtoolkit|productjudgmentlabs)\.com(\/[^\s"']*)?$/i;
+  function rw(){
+    var as=document.querySelectorAll('a[href]');
+    for(var i=0;i<as.length;i++){
+      var h=as[i].getAttribute('href')||'', m=h.match(RX);
+      if(!m) continue;
+      var p=m[2]||'/';
+      if(p==='/') p=(m[1].toLowerCase()==='productjudgmentlabs')?'/judgment-lab.html':'/index.html';
+      as[i].setAttribute('href',p);
+    }
+  }
+  if(document.readyState!=='loading') rw(); else document.addEventListener('DOMContentLoaded',rw);
+})();
+</script>
 </body>
 </html>
