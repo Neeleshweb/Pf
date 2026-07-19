@@ -1107,7 +1107,7 @@
 </style>
 <style>
   /* uniform nav buttons — every item is a button, sized like Home, theme-coloured */
-  .nav-links{display:flex;align-items:center;gap:.45rem;list-style:none;flex-wrap:wrap}
+  .nav-links{gap:.45rem;flex-wrap:wrap}  /* NOTE: no display here — each page owns its own desktop/mobile display rules */
   .nav-links li{display:flex}
   .nav-links a{display:inline-flex;align-items:center;gap:.42rem;height:auto;line-height:1;padding:.55rem .85rem;border-radius:var(--radius,8px);border:1px solid var(--border,#e4e8f4);background:transparent;color:var(--muted,#6b7280);font-size:.74rem;letter-spacing:.3px;text-transform:uppercase;font-weight:600;white-space:nowrap;transition:color .18s,border-color .18s,background .18s}
   .nav-links a:hover{color:var(--ink,#16233f);border-color:var(--accent,#5B4BD4);background:rgba(127,127,127,.06)}
@@ -1120,6 +1120,21 @@
   .nav-prod.dr:hover{border-color:#2F82E4;color:#2F82E4}
   .nav-prod.pc:hover{border-color:#5B4BD4;color:#5B4BD4}
   @media(max-width:900px){ .nav-links a{padding:.5rem .6rem;font-size:.7rem} }
+</style>
+<style>
+  /* ---- mobile drawer: icons, separators, expandable group ---- */
+  #mm-body{padding:.3rem .55rem !important}
+  #mm-body .mm-link{display:flex !important;align-items:center;gap:.75rem;padding:.88rem .7rem;font-size:.94rem;font-weight:600;cursor:pointer;border-bottom:1px solid rgba(128,128,128,.16);border-radius:0}
+  #mm-body .mm-link:last-child{border-bottom:none}
+  .mm-ic{width:20px;height:20px;flex:none;display:inline-flex;align-items:center;justify-content:center;opacity:.7}
+  .mm-ic svg{width:18px;height:18px}
+  .mm-grp{border-top:1px solid rgba(128,128,128,.22);margin-top:.5rem}
+  .mm-grp > summary{display:flex;align-items:center;gap:.75rem;padding:.9rem .7rem;font-size:.72rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;opacity:.65;cursor:pointer;list-style:none}
+  .mm-grp > summary::-webkit-details-marker{display:none}
+  .mm-chev{margin-left:auto;width:16px;height:16px;transition:transform .2s ease;opacity:.7}
+  .mm-grp[open] .mm-chev{transform:rotate(180deg)}
+  .mm-grp .mm-link{padding-left:1.5rem}
+  .mm-cta{font-size:.82rem !important;padding:.6rem .9rem !important;border-radius:10px !important}
 </style>
 </head>
 <body>
@@ -1158,12 +1173,7 @@
 <aside class="mobile-menu" id="mobile-menu">
   <div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div>
   <div id="mm-account" class="mm-account" style="display:none"></div>
-  <details class="mm-jl" open>
-    <summary class="mm-jl-sum">Judgment Lab<svg class="mm-jl-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
-    <a class="mm-jl-item mm-jl-ov" href="/judgment-lab.html"><b>The Judgment Lab</b><small>Overview</small></a>
-    <a class="mm-jl-item" href="/gutcheck.html"><b>GutCheck</b><small>Practice product judgment</small></a>
-    <a class="mm-jl-item" href="/decisionroom.html"><b>DecisionRoom</b><small>Pressure-test real decisions</small></a>
-  </details>
+  
   <nav class="mm-body" id="mm-body"></nav>
   <div class="mm-theme"><div class="mm-theme-h">Appearance</div><button class="theme-opt" data-theme="signal"><span class="theme-sw sw-signal"></span><span class="theme-nm">Signal <span class="theme-def">default</span></span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="editorial"><span class="theme-sw sw-editorial"></span><span class="theme-nm">Editorial</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="warm"><span class="theme-sw sw-warm"></span><span class="theme-nm">Warm dark</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="classic"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic</span><span class="theme-chk">✓</span></button></div>
 </aside>
@@ -3109,6 +3119,46 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     }
   }
   if(document.readyState!=='loading') rw(); else document.addEventListener('DOMContentLoaded',rw);
+})();
+</script>
+<script>
+(function(){
+  var ICONS={"home": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z\"/></svg>", "gutcheck": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><circle cx=\"12\" cy=\"12\" r=\"4.5\"/><circle cx=\"12\" cy=\"12\" r=\"1.3\" fill=\"currentColor\"/></svg>", "decisionroom": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3.5\" y=\"5\" width=\"17\" height=\"14\" rx=\"2.5\"/><line x1=\"7.5\" y1=\"10\" x2=\"16.5\" y2=\"10\"/><line x1=\"7.5\" y1=\"14\" x2=\"13\" y2=\"14\"/></svg>", "performance": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M6 20V10M12 20V4M18 20v-6\"/><path d=\"M3 21h18\"/></svg>", "about": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1\"/></svg>", "labs": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 3h6M10 3v6.5L5.2 18a2 2 0 0 0 1.8 3h10a2 2 0 0 0 1.8-3L14 9.5V3\"/></svg>", "doc": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z\"/><path d=\"M14 3v5h5\"/></svg>", "grid": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1.5\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1.5\"/></svg>", "star": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polygon points=\"12 2 15 9 22 9.3 16.5 14 18.5 21 12 17 5.5 21 7.5 14 2 9.3 9 9\"/></svg>", "mail": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"m3 7 9 6 9-6\"/></svg>", "wrench": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2-2z\"/></svg>", "dot": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\"><circle cx=\"12\" cy=\"12\" r=\"3.2\"/></svg>"};
+  var KEY=[["home", "home"], ["today", "gutcheck"], ["call", "gutcheck"], ["archive", "doc"], ["gut check", "star"], ["suggest", "doc"], ["email", "mail"], ["open case", "decisionroom"], ["library", "doc"], ["how it works", "doc"], ["example", "grid"], ["reviewer", "about"], ["template", "doc"], ["tool", "wrench"], ["teardown", "doc"], ["framework", "grid"], ["series", "doc"], ["coaching", "about"], ["book", "doc"], ["about", "about"], ["experience", "doc"], ["case study", "grid"], ["featured", "star"], ["skill", "star"], ["writing", "doc"], ["contact", "mail"]];
+  var REMOVE=["pm toolkit", "portfolio"];
+  var HOME="/";
+  var GRP="Explore";
+  var ITEMS=[{"l": "GutCheck", "h": "/gutcheck.html", "i": "gutcheck", "x": 0}, {"l": "DecisionRoom", "h": "/decisionroom.html", "i": "decisionroom", "x": 0}, {"l": "Judgment Lab", "h": "/", "i": "labs", "x": 0}, {"l": "About Us", "h": "https://neeleshpmtoolkit.com/portfolio.html", "i": "about", "x": 1}];
+  function ico(k){ var s=document.createElement('span'); s.className='mm-ic'; s.innerHTML=ICONS[k]||ICONS.dot; return s; }
+  function pick(t){ t=t.toLowerCase(); for(var i=0;i<KEY.length;i++){ if(t.indexOf(KEY[i][0])>=0) return KEY[i][1]; } return 'dot'; }
+  function boot(){
+    var body=document.getElementById('mm-body'); if(!body) return;
+    var links=[].slice.call(body.querySelectorAll('.mm-link'));
+    links.forEach(function(el){
+      var t=(el.textContent||'').toLowerCase().replace(/[\u2197\u2192\uD83C-\uDBFF\uDC00-\uDFFF]/g,'').trim();
+      for(var i=0;i<REMOVE.length;i++){ if(t.indexOf(REMOVE[i])>=0){ el.parentNode.removeChild(el); return; } }
+      if(HOME && t.indexOf('home')>=0){ el.onclick=function(){ location.href=HOME; }; }
+      if(!el.querySelector('.mm-ic')){ el.insertBefore(ico(pick(t)), el.firstChild); }
+    });
+    if(body.querySelector('.mm-grp')) return;
+    var d=document.createElement('details'); d.className='mm-grp'; d.open=true;
+    var sm=document.createElement('summary');
+    sm.innerHTML='<span>'+GRP+'</span><svg class="mm-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+    d.appendChild(sm);
+    ITEMS.forEach(function(it){
+      var a=document.createElement('div'); a.className='mm-link';
+      a.appendChild(ico(it.i));
+      var sp=document.createElement('span'); sp.textContent=it.l; a.appendChild(sp);
+      if(it.x){ a.setAttribute('data-leave','1');
+        a.onclick=function(){ var m=document.getElementById('mobile-menu'), b=document.getElementById('mobile-backdrop'), h=document.getElementById('hamburger');
+          if(m) m.classList.remove('open'); if(b) b.classList.remove('open'); if(h) h.classList.remove('open'); document.body.style.overflow=''; }; }
+      else { a.onclick=function(){ location.href=it.h; }; }
+      d.appendChild(a);
+    });
+    body.appendChild(d);
+  }
+  if(document.readyState==='complete') boot();
+  else window.addEventListener('load', boot);
 })();
 </script>
 </body>
