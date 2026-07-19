@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:gc-domain-links 2026-07-18T18:00:00Z -->
+<!-- build:gc-navfoot 2026-07-18T22:00:00Z -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Gut Check by Neelesh Singh — daily practice for product judgment. Make the call before you see the crowd, compare with PMs worldwide, and build a judgment profile no AI can hand you."/>
@@ -810,6 +810,50 @@
 .fbar-pill.on{background:rgba(var(--accent-rgb),.16);border-color:var(--accent);color:var(--white);font-weight:700}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  /* ---- product-site nav buttons + leave-site modal ---- */
+  .nav-prod{display:inline-flex;align-items:center;gap:.4rem;font-size:.76rem;font-weight:800;padding:.5rem .85rem;border-radius:11px;color:#fff !important;white-space:nowrap;text-decoration:none;transition:transform .16s ease,box-shadow .16s ease}
+  .nav-prod svg{width:15px;height:15px;flex:none}
+  .nav-prod:hover{transform:translateY(-1px)}
+  .nav-prod.gc{background:linear-gradient(135deg,#22A45D,#15803d);box-shadow:0 5px 14px rgba(21,128,61,.34)}
+  .nav-prod.gc:hover{box-shadow:0 8px 20px rgba(21,128,61,.46)}
+  .nav-prod.dr{background:linear-gradient(135deg,#5AA0F0,#2F82E4);box-shadow:0 5px 14px rgba(47,130,228,.34)}
+  .nav-prod.dr:hover{box-shadow:0 8px 20px rgba(47,130,228,.46)}
+  .nav-prod.pc{background:linear-gradient(135deg,#7c6ef0,#5B4BD4);box-shadow:0 5px 14px rgba(91,75,212,.34)}
+  .nav-prod.pc:hover{box-shadow:0 8px 20px rgba(91,75,212,.46)}
+  .nav-about{display:inline-flex;align-items:center;font-size:.78rem;font-weight:700;padding:.5rem .8rem;border-radius:11px;border:1px solid var(--border,#e2e6f2);color:var(--ink,#3a4358) !important;text-decoration:none;transition:border-color .16s,color .16s}
+  .nav-about:hover{border-color:var(--accent,#5B4BD4);color:var(--accent,#5B4BD4) !important}
+  .ca-flag{width:19px;height:10px;border-radius:2px;vertical-align:middle;box-shadow:0 0 0 1px rgba(0,0,0,.10)}
+  .ft-love{font-size:.85rem}
+  .foot-copy,.footer-copy{display:flex;align-items:center;justify-content:center;gap:.3rem;flex-wrap:wrap}
+  .lv-ov{position:fixed;inset:0;background:rgba(12,14,22,.62);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:1.2rem;z-index:960}
+  .lv-ov.open{display:flex;animation:lvFade .2s ease both}
+  @keyframes lvFade{from{opacity:0}to{opacity:1}}
+  .lv-card{position:relative;width:100%;max-width:560px;border-radius:20px;padding:2rem 2rem 1.6rem;background:radial-gradient(120% 130% at 0% 0%, #f2f0fe 0%, var(--card,#fff) 58%);border:1px solid #e0dcf7;box-shadow:0 30px 70px rgba(20,25,45,.28);animation:lvUp .24s ease both}
+  @keyframes lvUp{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+  .lv-card::before{content:'';position:absolute;inset:0;border-radius:20px;padding:1px;background:linear-gradient(135deg,#5B4BD4,#2F82E4 45%,#22A45D 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.5}
+  .lv-eyebrow{display:inline-flex;align-items:center;gap:.4rem;font-size:.64rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#5B4BD4;background:rgba(91,75,212,.10);border:1px solid rgba(91,75,212,.24);border-radius:99px;padding:.3rem .7rem;margin-bottom:.9rem}
+  .lv-h{font-size:1.6rem;font-weight:800;letter-spacing:-.4px;color:var(--ink,#16233f);line-height:1.15;margin-bottom:.5rem}
+  .lv-p{font-size:.88rem;line-height:1.6;color:var(--muted,#6b7280);margin-bottom:1.2rem}
+  .lv-p b{color:var(--ink,#16233f)}
+  .lv-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:1.3rem}
+  .lv-f{text-align:center;border:1px solid var(--border,#e7eaf4);border-radius:13px;background:rgba(255,255,255,.7);padding:.85rem .5rem}
+  .lv-f-ic{width:36px;height:36px;margin:0 auto .45rem;border-radius:11px;display:flex;align-items:center;justify-content:center;color:#fff}
+  .lv-f-ic svg{width:19px;height:19px}
+  .lv-f1 .lv-f-ic{background:linear-gradient(150deg,#7c6ef0,#5B4BD4);box-shadow:0 6px 16px rgba(91,75,212,.36)}
+  .lv-f2 .lv-f-ic{background:linear-gradient(150deg,#f7c14e,#CA8A04);box-shadow:0 6px 16px rgba(202,138,4,.36)}
+  .lv-f3 .lv-f-ic{background:linear-gradient(150deg,#3fd6a8,#0d9488);box-shadow:0 6px 16px rgba(13,148,136,.36)}
+  .lv-f b{display:block;font-size:.76rem;color:var(--ink,#16233f);font-weight:800}
+  .lv-f small{display:block;font-size:.66rem;color:var(--muted,#8a91a0);line-height:1.35;margin-top:.15rem}
+  .lv-note{display:flex;gap:.5rem;align-items:flex-start;font-size:.76rem;line-height:1.5;color:var(--muted,#6b7280);background:#f7f8fc;border:1px solid var(--border,#eef1f8);border-radius:12px;padding:.7rem .85rem;margin-bottom:1.3rem}
+  .lv-acts{display:flex;gap:.7rem;flex-wrap:wrap}
+  .lv-go,.lv-cancel{flex:1;min-width:150px;text-align:center;font-family:inherit;font-size:.9rem;font-weight:800;padding:.85rem 1.2rem;border-radius:13px;cursor:pointer;border:none;text-decoration:none;transition:transform .16s ease,box-shadow .16s ease}
+  .lv-go{color:#fff !important;background:linear-gradient(135deg,#6D5EF0,#5B4BD4);box-shadow:0 8px 22px rgba(91,75,212,.4)}
+  .lv-go:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(91,75,212,.5)}
+  .lv-cancel{color:var(--ink,#3a4358);background:#fff;border:1px solid var(--border,#e2e6f2)}
+  .lv-cancel:hover{border-color:#b9c0d8}
+  @media(max-width:640px){ .lv-feats{grid-template-columns:1fr} .nav-prod span{display:none} .nav-prod{padding:.5rem .6rem} }
+</style>
 </head>
 <body>
 
@@ -823,17 +867,7 @@
     <li><a href="#today" class="active">Today's Call</a></li>
     <li><a href="#archive">The Archive</a></li>
     <li><a href="#profile">Your Gut Check</a></li>
-    <li class="nav-dd">
-      <a href="/judgment-lab.html" class="nav-dd-trigger" id="jl-trigger" aria-haspopup="true">Judgment Lab<svg class="nav-dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></a>
-      <div class="nav-dd-menu" id="jl-menu" role="menu" aria-label="Judgment Lab">
-        <a href="/judgment-lab.html" class="nav-dd-overview" role="menuitem"><span class="nav-dd-ov-tx"><b>The Judgment Lab</b><small>How the two products fit together</small></span><svg class="nav-dd-ov-ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <div class="nav-dd-div"></div>
-        <a href="/gutcheck.html" class="nav-dd-item active" role="menuitem"><span class="nav-dd-ic gc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13a8 8 0 0 1 16 0"/><line x1="12" y1="13" x2="16" y2="9"/></svg></span><span class="nav-dd-tx"><b>GutCheck</b><small>Practice product judgment</small></span></a>
-        <a href="/decisionroom.html" class="nav-dd-item" role="menuitem"><span class="nav-dd-ic dr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="13" y2="14"/></svg></span><span class="nav-dd-tx"><b>DecisionRoom</b><small>Pressure-test real decisions</small></span></a>
-      </div>
-    </li>
-        <li><a href="https://neeleshpmtoolkit.com/toolkit.html">Toolkit ↗</a></li>
-    <li><a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio ↗</a></li>
+    <li><a href="/decisionroom.html" class="nav-prod dr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><line x1="7.5" y1="10" x2="16.5" y2="10"/><line x1="7.5" y1="14" x2="13" y2="14"/></svg><span>DecisionRoom</span></a></li><li><a href="/performance-center.html" class="nav-prod pc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10M12 20V4M18 20v-6"/><path d="M3 21h18"/></svg><span>Performance Center</span></a></li><li><a href="https://neeleshpmtoolkit.com" class="nav-about" data-leave="1">About Us</a></li>
   </ul>
   <div class="nav-right">
     <div class="search-wrap">
@@ -997,17 +1031,13 @@
 
 <!-- FOOTER -->
 <footer class="footer">
-  <div class="footer-logo">NEELESH<span>.</span>PM</div>
   <div class="footer-links">
-    <a href="/">Judgment Lab</a>
-    <a href="/decisionroom.html">DecisionRoom</a>
-    <a href="https://neeleshpmtoolkit.com/toolkit.html">PM Toolkit</a>
-    <a href="https://neeleshpmtoolkit.com/portfolio.html">Portfolio</a>
-    <a href="https://www.linkedin.com/in/neelesh-singh" target="_blank">LinkedIn</a>
-    <a href="mailto:Neelesh.singh@dal.ca">Contact</a>
+    <a href="/privacy-policy.html">Privacy Policy</a>
+    <a href="/terms.html">Terms &amp; Conditions</a>
+    <a href="https://neeleshpmtoolkit.com" data-leave="1">About Us</a>
+    <a href="/sitemap.xml">Sitemap</a>
   </div>
-  <div style="margin-top:.6rem;font-size:.82rem;opacity:.75">Built by <a href="https://neeleshpmtoolkit.com" style="color:inherit;text-decoration:underline">Neelesh Singh</a> · <a href="https://neeleshpmtoolkit.com/portfolio.html" style="color:inherit;text-decoration:underline">see the portfolio →</a></div>
-  <div class="footer-copy">© 2026 Neelesh Singh · PM Gut Check · A network for product judgment.</div>
+  <div class="footer-copy">© 2026 &nbsp;|&nbsp; ProductJudgmentlabs.com &nbsp;|&nbsp; All Rights Reserved &nbsp;|&nbsp; Built with <span class="ft-love">❤️</span> in Canada <svg class="ca-flag" viewBox="0 0 32 16" role="img" aria-label="Canada"><rect width="32" height="16" fill="#fff"/><rect width="8" height="16" fill="#D52B1E"/><rect x="24" width="8" height="16" fill="#D52B1E"/><path fill="#D52B1E" d="M16 3.2l.9 1.7c.1.2.3.2.5.1l.7-.4-.5 2.5c-.1.4.2.5.4.3l1.1-1.2.3.8c.1.2.2.2.4.2l1.1-.2-.4 1.3v.2l1 .8-2.2 1c-.2.1-.2.2-.2.4l.2.7-2.1-.3c-.1 0-.3.1-.3.3l.1 2.2h-.6l.1-2.2c0-.2-.1-.3-.3-.3l-2.1.3.2-.7c0-.2 0-.3-.2-.4l-2.2-1 1-.8v-.2l-.4-1.3 1.1.2c.2 0 .3 0 .4-.2l.3-.8 1.1 1.2c.2.2.5.1.4-.3L14.4 4.6l.7.4c.2.1.4.1.5-.1L16 3.2z"/></svg></div>
 </footer>
 
 <!-- NOTIFICATIONS -->
@@ -3192,6 +3222,37 @@ boot();
     if(pop && !e.target.closest('.theme-wrap')) pop.classList.remove('open');
   });
   mark(cur());
+})();
+</script>
+<div class="lv-ov" id="leave-ov" role="dialog" aria-modal="true" aria-labelledby="lv-h">
+  <div class="lv-card">
+    <span class="lv-eyebrow"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14 21 3"/><path d="M15 3h6v6"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/></svg> You’re leaving this site</span>
+    <div class="lv-h" id="lv-h">About the person who built this</div>
+    <p class="lv-p">You’re about to leave <b>productjudgmentlabs.com</b> and open <b>neeleshpmtoolkit.com</b> — the personal site of <b>Neelesh Singh</b>, who designed and built this product. You’ll find the story behind it there, plus a free PM toolkit.</p>
+    <div class="lv-feats">
+      <div class="lv-f lv-f1"><span class="lv-f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></span><b>The builder</b><small>Background &amp; story</small></div>
+      <div class="lv-f lv-f2"><span class="lv-f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M8 9h8"/><path d="M8 13h5"/></svg></span><b>Case studies</b><small>Shipped product work</small></div>
+      <div class="lv-f lv-f3"><span class="lv-f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18"/><path d="M6 7v13h12V7"/><path d="M9 4h6v3H9z"/></svg></span><b>PM Toolkit</b><small>Free templates</small></div>
+    </div>
+    <div class="lv-note"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01"/><path d="M11 12h1v4h1"/></svg><span>Your session here stays active — come straight back any time.</span></div>
+    <div class="lv-acts">
+      <a class="lv-go" href="https://neeleshpmtoolkit.com">Continue →</a>
+      <button type="button" class="lv-cancel" data-leave-cancel="1">Stay here</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var ov=document.getElementById('leave-ov'); if(!ov) return;
+  function op(){ ov.classList.add('open'); document.body.style.overflow='hidden'; var b=ov.querySelector('.lv-go'); if(b) setTimeout(function(){ try{b.focus();}catch(e){} },60); }
+  function cl(){ ov.classList.remove('open'); document.body.style.overflow=''; }
+  document.addEventListener('click',function(e){
+    var t=e.target.closest?e.target.closest('[data-leave]'):null;
+    if(t){ e.preventDefault(); op(); return; }
+    if(e.target.closest&&e.target.closest('[data-leave-cancel]')){ e.preventDefault(); cl(); return; }
+    if(e.target===ov) cl();
+  });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&ov.classList.contains('open')) cl(); });
 })();
 </script>
 </body>
