@@ -103,10 +103,30 @@
   <div class="foot-links">
     <a href="/privacy-policy.html">Privacy Policy</a>
     <a href="/terms.html">Terms &amp; Conditions</a>
-    <a href="https://neeleshpmtoolkit.com">About Us</a>
+    <a href="https://neeleshpmtoolkit.com/portfolio.html">About Us</a>
     <a href="/sitemap.xml">Sitemap</a>
   </div>
   <div class="foot-copy">&#169; 2026 &nbsp;|&nbsp; ProductJudgmentlabs.com &nbsp;|&nbsp; All Rights Reserved &nbsp;|&nbsp; Built with &#10084;&#65039; in Canada <svg class="ca-flag" viewBox="0 0 32 16" role="img" aria-label="Canada"><rect width="32" height="16" fill="#fff"/><rect width="8" height="16" fill="#D52B1E"/><rect x="24" width="8" height="16" fill="#D52B1E"/><path fill="#D52B1E" d="M16 3.2l.9 1.7c.1.2.3.2.5.1l.7-.4-.5 2.5c-.1.4.2.5.4.3l1.1-1.2.3.8c.1.2.2.2.4.2l1.1-.2-.4 1.3v.2l1 .8-2.2 1c-.2.1-.2.2-.2.4l.2.7-2.1-.3c-.1 0-.3.1-.3.3l.1 2.2h-.6l.1-2.2c0-.2-.1-.3-.3-.3l-2.1.3.2-.7c0-.2 0-.3-.2-.4l-2.2-1 1-.8v-.2l-.4-1.3 1.1.2c.2 0 .3 0 .4-.2l.3-.8 1.1 1.2c.2.2.5.1.4-.3L14.4 4.6l.7.4c.2.1.4.1.5-.1L16 3.2z"/></svg></div>
 </footer>
+<script>
+/* Staging/preview: both sites are served from ONE origin, so rewrite absolute
+   cross-domain links to same-origin paths. Production hosts are left untouched. */
+(function(){
+  var PH=['neeleshpmtoolkit.com','www.neeleshpmtoolkit.com','productjudgmentlabs.com','www.productjudgmentlabs.com'];
+  if(PH.indexOf(location.hostname)!==-1) return;
+  var RX=/^https?:\/\/(?:www\.)?(neeleshpmtoolkit|productjudgmentlabs)\.com(\/[^\s"']*)?$/i;
+  function rw(){
+    var as=document.querySelectorAll('a[href]');
+    for(var i=0;i<as.length;i++){
+      var h=as[i].getAttribute('href')||'', m=h.match(RX);
+      if(!m) continue;
+      var p=m[2]||'/';
+      if(p==='/') p=(m[1].toLowerCase()==='productjudgmentlabs')?'/judgment-lab.html':'/index.html';
+      as[i].setAttribute('href',p);
+    }
+  }
+  if(document.readyState!=='loading') rw(); else document.addEventListener('DOMContentLoaded',rw);
+})();
+</script>
 </body>
 </html>
