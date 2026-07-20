@@ -684,6 +684,9 @@
   #mm-body .mmd-ext-ic{flex:0 0 44px !important;width:44px !important;height:44px !important;min-width:44px;max-width:44px;min-height:44px;max-height:44px;border-radius:50% !important;align-self:center !important}
   #mm-body .mmd-ext-go{flex:0 0 30px !important;width:30px !important;height:30px !important;align-self:center !important}
   #mm-body .mmd-ext-tx{flex:1 1 auto !important;min-width:0}
+  #mm-body{min-height:0 !important}                 /* flex child must be able to shrink, or overflow-y never engages */
+  #mm-body > *{flex:0 0 auto !important}            /* nothing stretches or squashes */
+  #mm-body .mmd-ext-ic svg{width:20px !important;height:20px !important}
   .mm-cta{display:none !important}
 </style>
 </head>
@@ -714,7 +717,7 @@
         <button class="theme-opt" data-theme="classic" role="menuitem"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic</span><span class="theme-chk">✓</span></button>
       </div>
     </div>
-    <div class="nav-account" id="nav-account"><div id="gc-auth-slot"></div></div>
+    <div class="nav-account" id="nav-account"></div>
     <button class="hamburger" id="hamburger" aria-label="Open menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
@@ -1980,7 +1983,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   if(document.readyState!=='loading') initLb(); else document.addEventListener('DOMContentLoaded', initLb);
 })();
 </script>
-<script src="/gc-auth.js"></script>
+<script src="/pm-auth.js"></script>
 <div class="lv-ov" id="leave-ov" role="dialog" aria-modal="true" aria-labelledby="lv-h">
   <div class="lv-card">
     <span class="lv-eyebrow"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14 21 3"/><path d="M15 3h6v6"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/></svg> You’re leaving this site</span>

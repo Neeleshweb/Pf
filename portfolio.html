@@ -548,6 +548,9 @@
   #mm-body .mmd-ext-ic{flex:0 0 44px !important;width:44px !important;height:44px !important;min-width:44px;max-width:44px;min-height:44px;max-height:44px;border-radius:50% !important;align-self:center !important}
   #mm-body .mmd-ext-go{flex:0 0 30px !important;width:30px !important;height:30px !important;align-self:center !important}
   #mm-body .mmd-ext-tx{flex:1 1 auto !important;min-width:0}
+  #mm-body{min-height:0 !important}                 /* flex child must be able to shrink, or overflow-y never engages */
+  #mm-body > *{flex:0 0 auto !important}            /* nothing stretches or squashes */
+  #mm-body .mmd-ext-ic svg{width:20px !important;height:20px !important}
   .mm-cta{display:none !important}
 </style>
 </head>

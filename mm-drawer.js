@@ -73,7 +73,7 @@
     return null;
   }
   var ADAPTERS=[
-    {btn:'#acct-btn', edit:'#acct-editprof', out:'#acct-signout', signin:'#nav-signin, .nav-signin'},
+    {btn:'#acct-btn', edit:'#acct-editprof, #acct-edit', out:'#acct-signout', signin:'#nav-signin, .nav-signin'},
     {btn:'#gca-btn',  edit:'#gca-editprof',  out:'#gca-signout',  signin:'#gca-signin, .gca-signin'}
   ];
   function adapter(){ for(var i=0;i<ADAPTERS.length;i++){ if(q(ADAPTERS[i].btn)||q(ADAPTERS[i].signin)) return ADAPTERS[i]; } return null; }
