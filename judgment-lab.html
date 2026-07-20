@@ -615,7 +615,7 @@
 </style>
 <style>
   /* uniform nav buttons — every item is a button, sized like Home, theme-coloured */
-  .nav-links{display:flex;align-items:center;gap:.45rem;list-style:none;flex-wrap:wrap}
+  .nav-links{gap:.45rem;flex-wrap:wrap}  /* NOTE: no display here — each page owns its own desktop/mobile display rules */
   .nav-links li{display:flex}
   .nav-links a{display:inline-flex;align-items:center;gap:.42rem;height:auto;line-height:1;padding:.55rem .85rem;border-radius:var(--radius,8px);border:1px solid var(--border,#e4e8f4);background:transparent;color:var(--muted,#6b7280);font-size:.74rem;letter-spacing:.3px;text-transform:uppercase;font-weight:600;white-space:nowrap;transition:color .18s,border-color .18s,background .18s}
   .nav-links a:hover{color:var(--ink,#16233f);border-color:var(--accent,#5B4BD4);background:rgba(127,127,127,.06)}
@@ -628,6 +628,66 @@
   .nav-prod.dr:hover{border-color:#2F82E4;color:#2F82E4}
   .nav-prod.pc:hover{border-color:#5B4BD4;color:#5B4BD4}
   @media(max-width:900px){ .nav-links a{padding:.5rem .6rem;font-size:.7rem} }
+</style>
+
+<style>
+  /* ---- mobile drawer (mockup-matched) ---- */
+  #mm-body{padding:.6rem .7rem 1.2rem !important;display:flex;flex-direction:column;gap:.1rem}
+  .mmd-acct{border:1px solid rgba(128,128,128,.20);border-radius:16px;padding:1rem;margin-bottom:.7rem;background:rgba(109,94,240,.06)}
+  .mmd-si-top{display:flex;align-items:center;gap:.8rem;margin-bottom:.9rem}
+  .mmd-si-ic{flex:none;width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(150deg,#8b7df5,#5B4BD4);box-shadow:0 8px 20px rgba(91,75,212,.35)}
+  .mmd-si-tx b{display:block;font-size:1.05rem;font-weight:800;color:#6D5EF0;line-height:1.2}
+  .mmd-si-tx small{display:block;font-size:.78rem;line-height:1.4;opacity:.75;margin-top:.15rem}
+  .mmd-si-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:.5rem;border:none;cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:800;color:#fff;padding:.85rem;border-radius:12px;background:linear-gradient(135deg,#7c6ef0,#5B4BD4);box-shadow:0 8px 20px rgba(91,75,212,.34)}
+  .mmd-acct-top{display:flex;align-items:center;gap:.75rem;margin-bottom:.8rem}
+  .mmd-av{flex:none;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(150deg,#8b7df5,#5B4BD4)}
+  .mmd-acct-tx b{display:block;font-size:1rem;font-weight:800;line-height:1.2}
+  .mmd-acct-tx small{display:block;font-size:.76rem;opacity:.65}
+  .mmd-badge{display:flex;align-items:center;gap:.65rem;background:rgba(202,138,4,.12);border:1px solid rgba(202,138,4,.25);border-radius:12px;padding:.7rem .8rem;margin-bottom:.8rem}
+  .mmd-badge-ic{flex:none;color:#CA8A04;display:flex}
+  .mmd-badge b{display:block;font-size:.86rem;font-weight:800;color:#6D5EF0}
+  .mmd-badge small{display:block;font-size:.72rem;opacity:.7}
+  .mmd-acct-acts{display:flex;gap:.5rem}
+  .mmd-abtn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:.35rem;font-family:inherit;font-size:.8rem;font-weight:700;padding:.6rem .5rem;border-radius:10px;cursor:pointer;border:1px solid rgba(128,128,128,.28);background:transparent;color:inherit}
+  .mmd-abtn.ghost{opacity:.8}
+  #mm-body .mm-link.mmd-row{display:flex !important;align-items:center;gap:.8rem;padding:.85rem .55rem;border-bottom:1px solid rgba(128,128,128,.14);border-radius:0;cursor:pointer;font-weight:700}
+  #mm-body .mm-link.mmd-row:last-of-type{border-bottom:none}
+  .mmd-ic{flex:none;width:38px;height:38px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center}
+  .mmd-lbl{flex:1;font-size:.96rem;font-weight:700}
+  .mmd-chev{width:16px;height:16px;opacity:.35;flex:none}
+  .mmd-set{border-top:1px solid rgba(128,128,128,.18);margin-top:.5rem;padding-top:.2rem}
+  .mmd-set>summary{display:flex;align-items:center;gap:.8rem;padding:.85rem .55rem;cursor:pointer;list-style:none;font-weight:700}
+  .mmd-set>summary::-webkit-details-marker{display:none}
+  .mmd-caret{width:16px;height:16px;opacity:.5;transition:transform .2s ease;flex:none}
+  .mmd-set[open] .mmd-caret{transform:rotate(180deg)}
+  .mmd-set .mm-theme{border:none;padding:.2rem .3rem .6rem}
+  .mmd-ext{display:flex;align-items:center;gap:.75rem;border:1px solid rgba(128,128,128,.22);border-radius:16px;padding:.9rem;margin-top:.7rem;cursor:pointer}
+  .mmd-ext.hero{background:linear-gradient(135deg,rgba(109,94,240,.12),rgba(91,75,212,.06));border-color:rgba(109,94,240,.3)}
+  .mmd-ext-ic{flex:none;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(150deg,#8b7df5,#5B4BD4);box-shadow:0 6px 16px rgba(91,75,212,.3)}
+  .mmd-ext-ic.hero{border-radius:13px}
+  .mmd-ext-tx{flex:1;min-width:0}
+  .mmd-ext-tx b{display:block;font-size:.92rem;font-weight:800;line-height:1.25}
+  .mmd-ext-tx small{display:block;font-size:.76rem;line-height:1.4;opacity:.7;margin-top:.1rem}
+  .mmd-ext-go{flex:none;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(128,128,128,.3);opacity:.75}
+  /* ---- bug fixes: mobile nav / drawer ---- */
+  @media(max-width:860px){
+    #gc-auth-slot{display:none !important}          /* sign-in lives in the drawer on mobile */
+    .theme-wrap{display:none !important}            /* themes live in drawer Settings */
+  }
+  /* the page's own auth widget inside the drawer would duplicate our card */
+  #mm-body #mm-account, #mm-body #mnav-account,
+  #mobile-menu #mm-account, #mobile-menu #mnav-account{display:none !important}
+  /* drawer must scroll — .mobile-menu is a fixed-height flex column */
+  #mm-body{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:2.5rem !important}
+  /* force the external card to stay a row with a fixed icon (was stretching) */
+  #mm-body .mmd-ext{display:flex !important;flex-direction:row !important;align-items:center !important}
+  #mm-body .mmd-ext-ic{flex:0 0 44px !important;width:44px !important;height:44px !important;min-width:44px;max-width:44px;min-height:44px;max-height:44px;border-radius:50% !important;align-self:center !important}
+  #mm-body .mmd-ext-go{flex:0 0 30px !important;width:30px !important;height:30px !important;align-self:center !important}
+  #mm-body .mmd-ext-tx{flex:1 1 auto !important;min-width:0}
+  #mm-body{min-height:0 !important}                 /* flex child must be able to shrink, or overflow-y never engages */
+  #mm-body > *{flex:0 0 auto !important}            /* nothing stretches or squashes */
+  #mm-body .mmd-ext-ic svg{width:20px !important;height:20px !important}
+  .mm-cta{display:none !important}
 </style>
 </head>
 <body>
@@ -665,13 +725,7 @@
 <div class="mobile-backdrop" id="mobile-backdrop"></div>
 <aside class="mobile-menu" id="mobile-menu">
   <div class="mm-head"><span class="mm-title">MENU</span><button class="mm-close" id="mm-close" aria-label="Close menu">✕</button></div>
-  <details class="mm-jl" open>
-    <summary class="mm-jl-sum">Judgment Lab<svg class="mm-jl-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></summary>
-    <a class="mm-jl-item mm-jl-ov" href="/judgment-lab.html"><b>The Judgment Lab</b><small>Overview</small></a>
-    <a class="mm-jl-item" href="/gutcheck.html"><b>GutCheck</b><small>Practice product judgment</small></a>
-    <a class="mm-jl-item" href="/decisionroom.html"><b>DecisionRoom</b><small>Pressure-test real decisions</small></a>
-    <a class="mm-jl-item" href="/performance-center.html"><b>Performance Center</b><small>Rankings, growth &amp; your next move</small></a>
-  </details>
+  
   <nav class="mm-body" id="mm-body"></nav>
   <div class="mm-theme"><div class="mm-theme-h">Appearance</div><button class="theme-opt" data-theme="signal"><span class="theme-sw sw-signal"></span><span class="theme-nm">Signal <span class="theme-def">default</span></span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="editorial"><span class="theme-sw sw-editorial"></span><span class="theme-nm">Editorial</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="warm"><span class="theme-sw sw-warm"></span><span class="theme-nm">Warm dark</span><span class="theme-chk">✓</span></button><button class="theme-opt" data-theme="classic"><span class="theme-sw sw-classic"></span><span class="theme-nm">Classic</span><span class="theme-chk">✓</span></button></div>
 </aside>
@@ -1929,7 +1983,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   if(document.readyState!=='loading') initLb(); else document.addEventListener('DOMContentLoaded', initLb);
 })();
 </script>
-<script src="/gc-auth.js"></script>
+<script src="/pm-auth.js"></script>
 <div class="lv-ov" id="leave-ov" role="dialog" aria-modal="true" aria-labelledby="lv-h">
   <div class="lv-card">
     <span class="lv-eyebrow"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14 21 3"/><path d="M15 3h6v6"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/></svg> You’re leaving this site</span>
@@ -1981,5 +2035,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   if(document.readyState!=='loading') rw(); else document.addEventListener('DOMContentLoaded',rw);
 })();
 </script>
+
+<script>window.MMCFG={"settings": 1, "badge": 0, "home": "/judgment-lab.html", "remove": ["pm toolkit", "portfolio"], "rows": [["GutCheck", "/gutcheck.html", "gutcheck", "green"], ["DecisionRoom", "/decisionroom.html", "decisionroom", "purple"], ["Performance Center", "/performance-center.html", "performance", "indigo"]], "ext": [{"title": "NeeleshPmToolkit", "desc": "Portfolio, PM toolkit & the story behind this.", "icon": "about", "leave": 1, "hero": 0}]};</script>
+<script src="/mm-drawer.js"></script>
 </body>
 </html>
