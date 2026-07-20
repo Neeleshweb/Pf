@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:toolkit-pjl 2026-07-18T23:00:00Z -->
+<!-- build:tk-mm4 2026-07-20T12:00:00Z -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Toolkit by Neelesh Singh — Templates, frameworks, coaching and resources for aspiring and growing Product Managers."/>
@@ -3451,5 +3451,32 @@
 
 <script>window.MMCFG={"settings": 0, "badge": 0, "home": null, "remove": ["gut check", "portfolio", "home"], "rows": [["Home", "/index.html", "home", "purple"], ["Portfolio", "/portfolio.html", "about", "red"]], "ext": [{"title": "Product Judgment Labs", "desc": "Train your product judgment. Free to start.", "icon": "diamond", "leave": 1, "hero": 1}]};</script>
 <script src="/mm-drawer.js"></script>
+<style id="tk-ext-fix">
+  /* toolkit-only hard clamp for the Judgment Labs card.
+     Placed last in <body> so it wins document order, uses the child combinator
+     for higher specificity, and caps height absolutely so nothing can stretch it. */
+  #mm-body .mmd-ext, .mm-body .mmd-ext, .mmd-ext{
+    display:flex !important; flex-direction:row !important; align-items:center !important;
+    gap:.75rem !important; height:auto !important; max-height:78px !important;
+    overflow:hidden !important; padding:.9rem !important; box-sizing:border-box !important;
+  }
+  .mmd-ext > .mmd-ext-ic{
+    display:flex !important; align-items:center !important; justify-content:center !important;
+    flex:0 0 44px !important; width:44px !important; height:44px !important;
+    min-width:44px !important; max-width:44px !important;
+    min-height:44px !important; max-height:44px !important;
+    align-self:center !important; border-radius:50% !important; padding:0 !important; margin:0 !important;
+  }
+  .mmd-ext > .mmd-ext-ic > svg{ width:20px !important; height:20px !important; max-width:20px !important; max-height:20px !important; }
+  .mmd-ext > .mmd-ext-tx{ flex:1 1 auto !important; min-width:0 !important; align-self:center !important; }
+  .mmd-ext > .mmd-ext-tx > b{ display:block !important; font-size:.92rem !important; line-height:1.25 !important; }
+  .mmd-ext > .mmd-ext-tx > small{ display:block !important; font-size:.76rem !important; line-height:1.35 !important;
+    white-space:nowrap !important; overflow:hidden !important; text-overflow:ellipsis !important; }
+  .mmd-ext > .mmd-ext-go{
+    display:flex !important; align-items:center !important; justify-content:center !important;
+    flex:0 0 30px !important; width:30px !important; height:30px !important;
+    min-width:30px !important; max-height:30px !important; align-self:center !important;
+  }
+</style>
 </body>
 </html>
