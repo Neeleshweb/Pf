@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:pc-mm3 2026-07-20T10:00:00Z -->
+  <!-- build:pc-navdesk 2026-07-20T14:00:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Performance Center — Product Judgment Lab</title>
@@ -1180,6 +1180,44 @@
   #mm-body > *{flex:0 0 auto !important}            /* nothing stretches or squashes */
   #mm-body .mmd-ext-ic svg{width:20px !important;height:20px !important}
   .mm-cta{display:none !important}
+</style>
+<style>
+  /* ---- desktop navbar (>=861px only; mobile drawer untouched) ---- */
+  @media(min-width:861px){
+    .nav-links{gap:.3rem !important}
+    .nav-links a.nvd-item{display:inline-flex !important;align-items:center;gap:.5rem;height:auto;line-height:1;
+      padding:.5rem .7rem;border:1px solid transparent;border-radius:12px;background:transparent;
+      color:var(--muted,#6b7280);font-size:.8rem;font-weight:700;letter-spacing:.1px;text-transform:none;
+      white-space:nowrap;transition:background .16s,color .16s}
+    .nav-links a.nvd-item:hover{background:rgba(127,127,127,.08);color:var(--ink,#16233f)}
+    .nvd-ic{flex:none;width:30px;height:30px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center}
+    .nav-links a.nvd-active{background:color-mix(in srgb, var(--nc) 12%, transparent);color:var(--nc) !important;
+      border-color:color-mix(in srgb, var(--nc) 22%, transparent)}
+    /* themes now live in the profile dropdown — hide the navbar button once moved */
+    html.nvd-theme-moved .theme-wrap{display:none !important}
+  }
+  /* ---- profile dropdown ---- */
+  .nvd-menu{min-width:270px}
+  .nvd-pct{font-size:.72rem;font-weight:700;color:#6D5EF0;margin-top:.15rem}
+  .nvd-impact{margin:.55rem .55rem .35rem;padding:.75rem .85rem;border-radius:13px;
+    background:linear-gradient(135deg,rgba(109,94,240,.10),rgba(47,130,228,.07));border:1px solid rgba(109,94,240,.18)}
+  .nvd-impact-l{font-size:.68rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#6D5EF0;margin-bottom:.25rem}
+  .nvd-impact-row{display:flex;align-items:center;justify-content:space-between;gap:.6rem}
+  .nvd-impact-row b{display:block;font-size:1.35rem;font-weight:800;color:var(--ink,#16233f);line-height:1.1}
+  .nvd-impact-row small{display:block;font-size:.68rem;color:var(--muted,#8a91a0)}
+  .nvd-spark{width:110px;height:36px;flex:none}
+  .nvd-set{border-top:1px solid var(--border,#eef1f8);margin-top:.3rem}
+  .nvd-set > summary{display:flex;align-items:center;gap:.5rem;list-style:none;cursor:pointer;
+    padding:.6rem .55rem;font-size:.84rem;font-weight:600;color:var(--ink,#3a4358);border-radius:8px}
+  .nvd-set > summary::-webkit-details-marker{display:none}
+  .nvd-set > summary:hover{background:var(--tint,#f4f6fc)}
+  .nvd-set-ic{display:inline-flex;color:var(--muted,#8a91a0)}
+  .nvd-set-c{margin-left:auto;opacity:.55;transition:transform .18s ease}
+  .nvd-set[open] .nvd-set-c{transform:rotate(180deg)}
+  .nvd-menu .theme-pop.nvd-theme{position:static !important;display:block !important;opacity:1 !important;
+    visibility:visible !important;transform:none !important;box-shadow:none !important;border:none !important;
+    background:transparent !important;padding:.15rem .2rem .4rem !important;min-width:0 !important;width:auto !important}
+  .nvd-menu .theme-pop.nvd-theme .theme-pop-h{display:none}
 </style>
 </head>
 <body>
@@ -2991,7 +3029,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
       +summary+grid+radarCard+insightBar+'</div>';
   }
   function vaultRender(d, t, w, dg, wPrev){
-    try{ window.__vaultD=d; }catch(e){}
+    try{ window.__vaultD=d; window.__vaultT=t; }catch(e){}
     try{ var _ps=[]; if(d&&d.reviewer&&d.reviewer.percentile!=null) _ps.push(Number(d.reviewer.percentile));
          if(d&&d.author&&d.author.percentile!=null) _ps.push(Number(d.author.percentile));
          if(_ps.length && window.mmdBadge) window.mmdBadge(Math.min.apply(null,_ps)); }catch(e){}
@@ -3172,5 +3210,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
 
 <script>window.MMCFG={"settings": 1, "badge": 1, "home": "/judgment-lab.html", "remove": ["pm toolkit", "portfolio"], "rows": [["GutCheck", "/gutcheck.html", "gutcheck", "green"], ["DecisionRoom", "/decisionroom.html", "decisionroom", "purple"], ["Judgment Lab", "/judgment-lab.html", "labs", "teal"]], "ext": [{"title": "NeeleshPmToolkit", "desc": "Portfolio, PM toolkit & the story behind this.", "icon": "about", "leave": 1, "hero": 0}]};</script>
 <script src="/mm-drawer.js"></script>
+<script>window.NAVCFG={"impact":true};</script>
+<script src="/nav-desktop.js"></script>
 </body>
 </html>
