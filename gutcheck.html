@@ -899,6 +899,21 @@
   .mmd-ext-tx b{display:block;font-size:.92rem;font-weight:800;line-height:1.25}
   .mmd-ext-tx small{display:block;font-size:.76rem;line-height:1.4;opacity:.7;margin-top:.1rem}
   .mmd-ext-go{flex:none;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(128,128,128,.3);opacity:.75}
+  /* ---- bug fixes: mobile nav / drawer ---- */
+  @media(max-width:860px){
+    #gc-auth-slot{display:none !important}          /* sign-in lives in the drawer on mobile */
+    .theme-wrap{display:none !important}            /* themes live in drawer Settings */
+  }
+  /* the page's own auth widget inside the drawer would duplicate our card */
+  #mm-body #mm-account, #mm-body #mnav-account,
+  #mobile-menu #mm-account, #mobile-menu #mnav-account{display:none !important}
+  /* drawer must scroll — .mobile-menu is a fixed-height flex column */
+  #mm-body{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:2.5rem !important}
+  /* force the external card to stay a row with a fixed icon (was stretching) */
+  #mm-body .mmd-ext{display:flex !important;flex-direction:row !important;align-items:center !important}
+  #mm-body .mmd-ext-ic{flex:0 0 44px !important;width:44px !important;height:44px !important;min-width:44px;max-width:44px;min-height:44px;max-height:44px;border-radius:50% !important;align-self:center !important}
+  #mm-body .mmd-ext-go{flex:0 0 30px !important;width:30px !important;height:30px !important;align-self:center !important}
+  #mm-body .mmd-ext-tx{flex:1 1 auto !important;min-width:0}
   .mm-cta{display:none !important}
 </style>
 </head>
@@ -3323,7 +3338,7 @@ boot();
 })();
 </script>
 
-<script>window.MMCFG={"settings": 1, "badge": 0, "home": "/", "remove": ["pm toolkit", "portfolio"], "rows": [["DecisionRoom", "/decisionroom.html", "decisionroom", "purple"], ["Performance Center", "/performance-center.html", "performance", "indigo"], ["Judgment Lab", "/", "labs", "teal"]], "ext": [{"title": "NeeleshPmToolkit", "desc": "Portfolio, PM toolkit & the story behind this.", "icon": "about", "leave": 1, "hero": 0}]};</script>
+<script>window.MMCFG={"settings": 1, "badge": 0, "home": "/judgment-lab.html", "remove": ["pm toolkit", "portfolio"], "rows": [["DecisionRoom", "/decisionroom.html", "decisionroom", "purple"], ["Performance Center", "/performance-center.html", "performance", "indigo"], ["Judgment Lab", "/judgment-lab.html", "labs", "teal"]], "ext": [{"title": "NeeleshPmToolkit", "desc": "Portfolio, PM toolkit & the story behind this.", "icon": "about", "leave": 1, "hero": 0}]};</script>
 <script src="/mm-drawer.js"></script>
 </body>
 </html>

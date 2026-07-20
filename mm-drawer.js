@@ -58,37 +58,72 @@
 
   /* --- proxy helpers: click whatever control the page already renders --- */
   function q(sel){ try{ return document.querySelector(sel); }catch(e){ return null; } }
-  function signedIn(){ return !!(q('#acct-btn') || q('.acct-btn') || q('#gc-acct-btn') || q('.gc-avatar')); }
-  function proxy(openSel, itemSel){
-    var o=q(openSel); if(o) o.click();
-    setTimeout(function(){ var t=q(itemSel); if(t) t.click(); }, 30);
+  /* signed-in state read from the SHARED supabase session — works for every auth impl */
+  function session(){
+    try{
+      for(var i=0;i<localStorage.length;i++){
+        var k=localStorage.key(i);
+        if(k && /^sb-.+-auth-token$/.test(k)){
+          var raw=localStorage.getItem(k); if(!raw) continue;
+          var v=JSON.parse(raw); var ss=v&&(v.access_token?v:(v.currentSession||null));
+          if(ss && ss.access_token) return ss;
+        }
+      }
+    }catch(e){}
+    return null;
+  }
+  var ADAPTERS=[
+    {btn:'#acct-btn', edit:'#acct-editprof', out:'#acct-signout', signin:'#nav-signin, .nav-signin'},
+    {btn:'#gca-btn',  edit:'#gca-editprof',  out:'#gca-signout',  signin:'#gca-signin, .gca-signin'}
+  ];
+  function adapter(){ for(var i=0;i<ADAPTERS.length;i++){ if(q(ADAPTERS[i].btn)||q(ADAPTERS[i].signin)) return ADAPTERS[i]; } return null; }
+  function hasTarget(k){ var a=adapter(); return !!(a&&a[k]&&q(a[k])); }
+  function signedIn(){ return !!session(); }
+  function proxy(k){
+    var a=adapter(); if(!a) return;
+    var o=q(a.btn); if(o) o.click();
+    setTimeout(function(){ var t=q(a[k]); if(t) t.click(); }, 40);
   }
   function doSignIn(){
-    var b=q('#nav-signin')||q('.nav-signin')||q('#gc-signin')||q('[data-gc-signin]');
-    if(b){ b.click(); return true; }
+    var a=adapter(); if(a){ var b=q(a.signin); if(b){ b.click(); return true; } }
+    var any=q('#gca-signin')||q('.gca-signin')||q('#nav-signin')||q('.nav-signin');
+    if(any){ any.click(); return true; }
     try{ if(window.GCAuth&&window.GCAuth.signIn){ window.GCAuth.signIn(); return true; } }catch(e){}
     return false;
   }
+  function aliasText(){
+    var n=q('.acct-name')||q('.gca-name');
+    if(n && n.textContent.trim()) return n.textContent.trim();
+    var ss=session(); if(ss&&ss.user&&ss.user.email) return ss.user.email.split('@')[0];
+    return 'Your account';
+  }
 
+  function renderAcct(){
+    var host=document.getElementById('mmd-acct'); if(!host) return;
+    var on=signedIn(), st=on?'in':'out';
+    if(host.getAttribute('data-state')===st) return;
+    host.setAttribute('data-state',st);
+    if(on){
+      host.innerHTML='<div class="mmd-acct-top"><span class="mmd-av">'+svg(IC.about,22)+'</span>'
+        +'<div class="mmd-acct-tx"><b>'+aliasText()+'</b><small>Signed in</small></div></div>'
+        +(C.badge?'<div class="mmd-badge" id="mmd-badge" style="display:none"><span class="mmd-badge-ic">'+svg(IC.crown,18)+'</span><div><b id="mmd-badge-t"></b><small>Keep going \u2014 you\u2019re doing great.</small></div></div>':'')
+        +'<div class="mmd-acct-acts">'
+        +(hasTarget('edit')?'<button type="button" class="mmd-abtn" data-mmd-edit="1">'+svg(IC.pen,15)+' Edit profile</button>':'')
+        +'<button type="button" class="mmd-abtn ghost" data-mmd-out="1">'+svg(IC.signout,15)+' Sign out</button></div>';
+    } else {
+      host.innerHTML='<div class="mmd-si-top"><span class="mmd-si-ic">'+svg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="10" r="2.2"/><path d="M8.4 16.2a4.2 4.2 0 0 1 7.2 0"/>',30)+'</span>'
+        +'<div class="mmd-si-tx"><b>Sign in</b><small>'+(C.signinSub||'Post anonymously \u2014 alias + PM context only.')+'</small></div></div>'
+        +'<button type="button" class="mmd-si-btn" data-mmd-in="1">Sign in <span>\u2192</span></button>';
+    }
+  }
   function build(){
     var body=document.getElementById('mm-body'); if(!body||body.getAttribute('data-mmd')) return;
     body.setAttribute('data-mmd','1');
 
-    /* ---------- 1. account card ---------- */
-    var acc=document.createElement('div'); acc.className='mmd-acct';
-    if(signedIn()){
-      var alias=''; var an=q('.acct-name')||q('#acct-menu .acct-name'); if(an) alias=an.textContent.trim();
-      acc.innerHTML='<div class="mmd-acct-top"><span class="mmd-av">'+svg(IC.about,22)+'</span>'
-        +'<div class="mmd-acct-tx"><b>'+(alias||'Your account')+'</b><small>Signed in</small></div></div>'
-        +(C.badge?'<div class="mmd-badge" id="mmd-badge" style="display:none"><span class="mmd-badge-ic">'+svg(IC.crown,18)+'</span><div><b id="mmd-badge-t"></b><small>Keep going \u2014 you\u2019re doing great.</small></div></div>':'')
-        +'<div class="mmd-acct-acts"><button type="button" class="mmd-abtn" data-mmd-edit="1">'+svg(IC.pen,15)+' Edit profile</button>'
-        +'<button type="button" class="mmd-abtn ghost" data-mmd-out="1">'+svg(IC.signout,15)+' Sign out</button></div>';
-    } else {
-      acc.innerHTML='<div class="mmd-si-top"><span class="mmd-si-ic">'+svg('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="10" r="2.2"/><path d="M8.4 16.2a4.2 4.2 0 0 1 7.2 0"/>',30)+'</span>'
-        +'<div class="mmd-si-tx"><b>Sign in</b><small>'+(C.signinSub||'Post anonymously \u2014 alias + PM context only.')+'</small></div></div>'
-        +'<button type="button" class="mmd-si-btn" data-mmd-in="1">Sign in <span>\u2192</span></button>';
-    }
+    /* ---------- 1. account card (live) ---------- */
+    var acc=document.createElement('div'); acc.className='mmd-acct'; acc.id='mmd-acct';
     body.insertBefore(acc, body.firstChild);
+    renderAcct();
 
     /* ---------- 2. restyle the page's own section links ---------- */
     var links=[].slice.call(body.querySelectorAll('.mm-link'));
@@ -127,7 +162,7 @@
     /* ---------- 5. external-link cards ---------- */
     (C.ext||[]).forEach(function(x){
       var a=document.createElement('div'); a.className='mmd-ext'+(x.hero?' hero':'');
-      a.innerHTML='<span class="mmd-ext-ic'+(x.hero?' hero':'')+'">'+svg(IC[x.icon]||IC.labs,20)+'</span>'
+      a.innerHTML='<span class="mmd-ext-ic">'+svg(IC[x.icon]||IC.labs,20)+'</span>'
         +'<div class="mmd-ext-tx"><b>'+x.title+'</b><small>'+x.desc+'</small></div>'
         +'<span class="mmd-ext-go"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14 21 3"/><path d="M15 3h6v6"/><path d="M19 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h6"/></svg></span>';
       if(x.leave){ a.setAttribute('data-leave','1'); a.onclick=function(){ closeMenu(); }; }
@@ -136,13 +171,20 @@
     });
 
     /* ---------- 6. wire account actions (proxy to existing auth) ---------- */
+    try{ window.addEventListener('storage', renderAcct); }catch(e){}
+    ['#nav-account','#gc-auth-slot','#mm-account','#mnav-account'].forEach(function(sel){
+      var n=q(sel); if(!n) return;
+      try{ new MutationObserver(renderAcct).observe(n,{childList:true,subtree:true}); }catch(e){}
+    });
+    setInterval(renderAcct, 1200);
+
     body.addEventListener('click', function(e){
       var t=e.target.closest?e.target.closest('[data-mmd-in],[data-mmd-edit],[data-mmd-out]'):null;
       if(!t) return;
       e.preventDefault();
-      if(t.hasAttribute('data-mmd-in')){ closeMenu(); if(!doSignIn()) location.href=C.signinFallback||'#'; return; }
-      if(t.hasAttribute('data-mmd-edit')){ closeMenu(); proxy('#acct-btn','#acct-editprof'); return; }
-      if(t.hasAttribute('data-mmd-out')){ closeMenu(); proxy('#acct-btn','#acct-signout'); return; }
+      if(t.hasAttribute('data-mmd-in')){ closeMenu(); doSignIn(); return; }
+      if(t.hasAttribute('data-mmd-edit')){ closeMenu(); proxy('edit'); return; }
+      if(t.hasAttribute('data-mmd-out')){ closeMenu(); proxy('out'); return; }
     });
   }
 
