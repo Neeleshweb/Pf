@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-feed-p1b 2026-07-21T22:00:00Z -->
+<!-- build:dr-feed-p1c 2026-07-22T09:00:00Z -->
 <!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
 <!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
 <!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
@@ -1953,6 +1953,11 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
    the rail to col 2, the body into the 232px col 3, and wrapping the side panel onto
    a second row. Neutralised here — .fx-accent replaces it and is position:absolute,
    so it never participates in grid flow. Specificity (0,2,2) beats the theme rule. */
+/* signal theme sets: html[data-dr-theme="signal"] .feed-card > * {position:relative}
+   That hit .fx-accent (needs absolute) and turned it into a real grid item, displacing
+   every column. (0,3,1) + !important beats the theme's (0,2,1). Only signal has this
+   rule — which is why only signal broke. */
+html .feed-card.fx-card > .fx-accent{position:absolute !important;z-index:2 !important}
 html .feed-card.fx-card::before,
 html .feed-card.fx-card::after{content:none !important;display:none !important}
 .fx-card{position:relative;display:grid;grid-template-columns:96px minmax(0,1fr) 232px;gap:0 28px;
@@ -1978,7 +1983,11 @@ html .feed-card.fx-card::after{content:none !important;display:none !important}
 .fx-pulse{font-size:13px;font-weight:700}
 .p-new{color:#16A34A}.p-urgent{color:#EA580C}.p-res{color:#0d9488}.p-wait{color:#64748B}.p-active{color:#2F82E4}
 /* body */
-.fx-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.fx-chips{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:16px;align-items:flex-end}
+.fx-lc{display:flex;flex-direction:column;gap:5px}
+.fx-lc > small{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#94A3B8}
+.fx-groups{display:flex;flex-direction:column;gap:0;margin-bottom:18px}
+.fx-tag.src{background:#F1F5F9;color:#64748B}
 .fx-chip{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 12px;border-radius:999px;
   font-size:13px;font-weight:600;background:#F1F5F9;color:#475569;border:1px solid transparent}
 .fx-chip.st-live{background:#E9F8EF;color:#15803D}
@@ -1997,7 +2006,17 @@ html .feed-card.fx-card::after{content:none !important;display:none !important}
 .fx-m{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
 .fx-m b{font-size:15px;font-weight:700;color:var(--white)}
 .fx-m small{font-size:12px;color:var(--muted)}
-.fx-i{flex:none;color:#7C8AA5}
+.fx-i{flex:none;color:#5B6B85;stroke-width:2.5}
+/* continuous timeline connector down the whole feed (like Vault Zone 3) */
+.feed-grid{position:relative}
+.feed-grid::before{content:"";position:absolute;left:73px;top:18px;bottom:18px;width:2px;
+  background:linear-gradient(180deg,#DCE3F0,#E8ECF3 60%,transparent);pointer-events:none;z-index:0}
+.fx-card{z-index:1}
+/* section labels */
+.fx-lab{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:#94A3B8;margin:0 0 7px}
+.fx-grp{margin-bottom:14px}
+.fx-grp:last-child{margin-bottom:0}
 .fx-ctx{margin-left:auto;font-size:12px;color:var(--muted)}
 /* right panel */
 .fx-side{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 16px;
@@ -2009,10 +2028,15 @@ html .feed-card.fx-card::after{content:none !important;display:none !important}
 .fx-ring-n{font-size:22px;font-weight:800;fill:var(--white)}
 .fx-ringl{font-size:11px;line-height:1.35;text-align:center;color:var(--muted);font-weight:600}
 .fx-top{font-size:12px;font-weight:600;color:var(--muted)}
-.fx-cta{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:2px;
-  padding:11px 12px;border-radius:12px;font-size:14px;font-weight:700;color:#5B4BD4;
-  background:#fff;border:1px solid #DDE3F2;transition:background .18s,box-shadow .18s,transform .18s}
-.fx-card:hover .fx-cta{background:#F3F1FE;box-shadow:0 6px 16px rgba(91,75,212,.16);transform:translateY(-1px)}
+.fx-cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:4px;
+  padding:13px 14px;border-radius:14px;font-size:14.5px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,#6D5EF0,#2F82E4);border:none;
+  box-shadow:0 6px 18px rgba(91,75,212,.30),inset 0 1px 0 rgba(255,255,255,.18);
+  transition:box-shadow .2s ease,transform .2s ease,filter .2s ease}
+.fx-cta .fx-i{color:#fff}
+.fx-card:hover .fx-cta{transform:translateY(-2px);filter:brightness(1.05);
+  box-shadow:0 12px 28px rgba(91,75,212,.42),inset 0 1px 0 rgba(255,255,255,.22)}
+.fx-card:hover .fx-cta .fx-i{transform:translateX(3px);transition:transform .2s ease}
 .fx-share{width:100%;display:flex;justify-content:center}
 /* ---- tablet ---- */
 @media(max-width:1180px){
@@ -2025,6 +2049,7 @@ html .feed-card.fx-card::after{content:none !important;display:none !important}
 /* ---- mobile (matches the mobile mockup) ---- */
 @media(max-width:760px){
   .feed-grid{gap:20px}
+  .feed-grid::before{display:none}
   .fx-card{grid-template-columns:1fr;gap:0;padding:20px 18px 18px;border-radius:20px}
   .fx-rail{flex-direction:row;align-items:center;gap:10px;margin-bottom:12px}
   .fx-node{width:14px;height:14px;border-width:3px}
@@ -3099,21 +3124,28 @@ boot();
     gauge:'<path d="M4 18a8 8 0 1 1 16 0"/><path d="M12 18l4.5-4.5"/>',
     arrow:'<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>'
   };
-  function fxIc(p,sz){ return '<svg class="fx-i" viewBox="0 0 24 24" width="'+(sz||15)+'" height="'+(sz||15)+'" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'; }
+  function fxIc(p,sz){ return '<svg class="fx-i" viewBox="0 0 24 24" width="'+(sz||17)+'" height="'+(sz||17)+'" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'; }
 
   function feedCardHtml(r){
     var rc=Number(r.response_count)||0, hs=Number(r.high_signal)||0;
     var pulse=fcPulse(r), score=fcInterest(r), res=fcResolution(r);
     var st=caseStatusClass(r);
-    var chips='<span class="fx-chip st-'+escHtml(st)+'">'+escHtml(caseStatusLabel(r))+'</span>'
-      + '<span class="fx-chip neutral">'+escHtml(urgLabel(r.urgency))+'</span>'
-      + (r.product_context?'<span class="fx-chip neutral">'+escHtml(r.product_context)+'</span>':'')
+    function lchip(lab, html){ return '<span class="fx-lc"><small>'+lab+'</small>'+html+'</span>'; }
+    var chips=lchip('Status','<span class="fx-chip st-'+escHtml(st)+'">'+escHtml(caseStatusLabel(r))+'</span>')
+      + lchip('Urgency','<span class="fx-chip neutral">'+escHtml(urgLabel(r.urgency))+'</span>')
+      + (r.product_context?lchip('Product','<span class="fx-chip neutral">'+escHtml(r.product_context)+'</span>'):'')
       + (hs>0?'<span class="fx-chip signal">'+fxIc(FXI.star,13)+hs+' high-signal '+(hs===1?'response':'responses')+'</span>':'')
       + (r.needs_context?'<span class="fx-chip warn">Needs more context</span>':'')
       + (rc===0?'<span class="fx-chip need">Needs responses</span>':'');
-    var cats=(r.categories||[]).map(function(c){ return '<span class="fx-tag cat">'+escHtml(c)+'</span>'; }).join('');
-    var wants=(r.help_types||[]).map(function(c){ return '<span class="fx-tag want">'+escHtml(helpLabel(c))+'</span>'; }).join('');
-    var stk=(r.stakeholders||[]).map(function(c){ return '<span class="fx-tag stk">'+escHtml(c)+'</span>'; }).join('');
+    function grp(lab, items, cls){
+      if(!items || !items.length) return '';
+      return '<div class="fx-grp"><span class="fx-lab">'+lab+'</span><div class="fx-tags">'
+        + items.map(function(c){ return '<span class="fx-tag '+cls+'">'+escHtml(c)+'</span>'; }).join('') + '</div></div>';
+    }
+    var groups = grp('Category', r.categories||[], 'cat')
+      + grp('Wants', (r.help_types||[]).map(helpLabel), 'want')
+      + grp('Who\u2019s involved', r.stakeholders||[], 'stk')
+      + (r.source_type?'<div class="fx-grp"><span class="fx-lab">Source</span><div class="fx-tags"><span class="fx-tag src">'+escHtml(drSrcLabel(r.source_type))+'</span></div></div>':'');
     return '<div class="feed-card fx-card" data-id="'+escHtml(r.id)+'">'
       + '<span class="fx-accent a-'+escHtml(st)+' u-'+escHtml(r.urgency||'')+'"></span>'
       + '<div class="fx-rail"><span class="fx-time">'+fcRel(r.created_at)+'</span>'
@@ -3122,7 +3154,7 @@ boot();
         + '<div class="fx-chips">'+chips+'</div>'
         + '<div class="fx-title">'+escHtml(r.title)+'</div>'
         + '<div class="fx-sub">'+escHtml(r.decision)+'</div>'
-        + (cats||wants||stk ? '<div class="fx-tags">'+cats+wants+stk+'</div>' : '')
+        + (groups ? '<div class="fx-groups">'+groups+'</div>' : '')
         + '<div class="fx-strip">'
           + '<span class="fx-m">'+fxIc(FXI.clock)+'<b>'+fcReadMin(r)+' min</b><small>Read time</small></span>'
           + '<span class="fx-m">'+fxIc(FXI.chat)+'<b>'+rc+'</b><small>'+(rc===1?'Response':'Responses')+'</small></span>'
