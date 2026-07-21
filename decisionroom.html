@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-feed-p1 2026-07-21T20:00:00Z -->
+<!-- build:dr-feed-p1b 2026-07-21T22:00:00Z -->
 <!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
 <!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
 <!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
@@ -1948,6 +1948,13 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 <style>
 /* ================= DecisionRoom feed cards (Phase 1) ================= */
 .feed-grid{max-width:none;margin-left:0;margin-right:0;gap:28px}
+/* The active theme injects .feed-card::before (a decorative top strip). In a GRID
+   container a pseudo-element becomes a real GRID ITEM: it consumed cell 1, shifting
+   the rail to col 2, the body into the 232px col 3, and wrapping the side panel onto
+   a second row. Neutralised here — .fx-accent replaces it and is position:absolute,
+   so it never participates in grid flow. Specificity (0,2,2) beats the theme rule. */
+html .feed-card.fx-card::before,
+html .feed-card.fx-card::after{content:none !important;display:none !important}
 .fx-card{position:relative;display:grid;grid-template-columns:96px minmax(0,1fr) 232px;gap:0 28px;
   align-items:start;background:var(--card);border:1px solid #E8ECF3;border-radius:24px;
   padding:32px 32px 28px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 12px 32px rgba(16,24,40,.06);
