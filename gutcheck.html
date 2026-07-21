@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:gc-v7 2026-07-21T13:00:00Z -->
+<!-- build:gc-wide 2026-07-21T15:00:00Z -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Gut Check by Neelesh Singh — daily practice for product judgment. Make the call before you see the crowd, compare with PMs worldwide, and build a judgment profile no AI can hand you."/>
@@ -218,6 +218,18 @@
     /* SECTIONS */
     .section { padding: 3.6rem 2.5rem; max-width: 920px; margin: 0 auto; }
     .section.wide { max-width: 1160px; }
+
+    /* ---- wider page container (desktop-only by nature: a max-width never binds
+       below its own value, so mobile layout is untouched). Matches
+       performance-center.html at 1440px for site-wide consistency.
+       Prose stays readable: .hero-sub/.sec-sub keep their 660/680px caps. ---- */
+    .section { max-width: 1440px; }
+    .section.wide, .wide { max-width: 1440px; }
+    @media (min-width: 1100px) {
+      /* a touch more air between cards now that rows fit more of them */
+      .rec-grid, .myd-grid, .ex-grid, .feed-grid, .steps { gap: 1.15rem; }
+    }
+
     .sec-eyebrow { font-size: .7rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); margin-bottom: .8rem; font-weight: 600; }
     .sec-eyebrow.y { color: var(--accent2); } .sec-eyebrow.b { color: var(--accent3); } .sec-eyebrow.g { color: var(--green); }
     .sec-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 5vw, 3rem); letter-spacing: 1px; line-height: 1.04; margin-bottom: 1rem; }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-v7 2026-07-21T13:00:00Z -->
+<!-- build:dr-cards 2026-07-21T17:00:00Z -->
 <!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
 <!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
 <!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
@@ -229,6 +229,18 @@
     /* SECTIONS */
     .section { padding: 3.6rem 2.5rem; max-width: 920px; margin: 0 auto; }
     .section.wide { max-width: 1160px; }
+
+    /* ---- wider page container (desktop-only by nature: a max-width never binds
+       below its own value, so mobile layout is untouched). Matches
+       performance-center.html at 1440px for site-wide consistency.
+       Prose stays readable: .hero-sub/.sec-sub keep their 660/680px caps. ---- */
+    .section { max-width: 1440px; }
+    .section.wide, .wide { max-width: 1440px; }
+    @media (min-width: 1100px) {
+      /* a touch more air between cards now that rows fit more of them */
+      .rec-grid, .myd-grid, .ex-grid, .feed-grid, .steps { gap: 1.15rem; }
+    }
+
     .sec-eyebrow { font-size: .7rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); margin-bottom: .8rem; font-weight: 600; }
     .sec-eyebrow.y { color: var(--accent2); } .sec-eyebrow.b { color: var(--accent3); } .sec-eyebrow.g { color: var(--green); }
     .sec-title { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3rem); letter-spacing: 1px; line-height: 1.04; margin-bottom: 1rem; }
@@ -1590,6 +1602,13 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .cd-res-h:first-child{margin-top:0}
 /* ---- Phase 2f: card redesign + labeled capsules + share ---- */
 .feed-grid{grid-template-columns:1fr;gap:1.2rem}
+/* ---- FIX: the rule above at .feed-grid{...max-width:760px;margin:auto} capped the
+   case list at 760px, so cards stayed narrow no matter how wide the container got.
+   (GutCheck's .feed-grid has no such cap, which is why it expanded correctly.)
+   Same specificity (0,1,0) but later in source order, so this wins. ---- */
+.feed-grid{max-width:none;margin-left:0;margin-right:0}
+/* keep body copy readable now that cards span the full container */
+.feed-card > p{max-width:1040px}
 .feed-card{padding:1.4rem 1.5rem;gap:.7rem}
 .fc-attrs{display:flex;flex-wrap:wrap;gap:.55rem .9rem;align-items:flex-end}
 .fc-cap{display:inline-flex;flex-direction:column;gap:.24rem}
