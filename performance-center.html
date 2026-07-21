@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:pc-nav2 2026-07-20T18:00:00Z -->
+  <!-- build:pc-nav3 2026-07-20T20:00:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Performance Center — Product Judgment Lab</title>
@@ -1242,6 +1242,24 @@
     transition:background .16s,border-color .16s}
   .nvd-theme-opt:hover{background:var(--tint,#f4f6fc)}
   .nvd-theme-opt.on{background:rgba(109,94,240,.10);border-color:rgba(109,94,240,.28);color:#5B4BD4}
+  /* ---- fit: DecisionRoom carries 8 nav items; tighten progressively so nothing overflows ---- */
+  @media(min-width:861px){
+    .nav{gap:.7rem}
+    .nav-links{min-width:0;flex:0 1 auto;overflow:visible}
+    .nav-right{flex:none;gap:.5rem}
+  }
+  @media(min-width:861px) and (max-width:1460px){
+    .nav-links{margin-left:1.4rem !important;gap:.2rem !important}
+    .nav-links a.nvd-item{padding:.5rem .58rem;font-size:.8rem;gap:.42rem}
+    .nvd-ic{width:28px;height:28px}
+    .nvd-ic svg{width:17px;height:17px}
+  }
+  @media(min-width:861px) and (max-width:1260px){
+    .nav-links a.nvd-item .nvd-lb{display:none}      /* icon-only; title= tooltip keeps it usable */
+    .nav-links a.nvd-item{padding:.5rem .42rem}
+    .nav-links{margin-left:1rem !important}
+    .search-wrap{max-width:190px}
+  }
 </style>
 </head>
 <body>
@@ -3054,6 +3072,7 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   }
   function vaultRender(d, t, w, dg, wPrev){
     try{ window.__vaultD=d; window.__vaultT=t; }catch(e){}
+    try{ if(window.nvdRefreshStats) window.nvdRefreshStats(); }catch(e){}
     try{ var _ps=[]; if(d&&d.reviewer&&d.reviewer.percentile!=null) _ps.push(Number(d.reviewer.percentile));
          if(d&&d.author&&d.author.percentile!=null) _ps.push(Number(d.author.percentile));
          if(_ps.length && window.mmdBadge) window.mmdBadge(Math.min.apply(null,_ps)); }catch(e){}

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-nav2 2026-07-20T18:00:00Z -->
+<!-- build:dr-nav3 2026-07-20T20:00:00Z -->
 <!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
 <!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
 <!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
@@ -1888,6 +1888,24 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
     transition:background .16s,border-color .16s}
   .nvd-theme-opt:hover{background:var(--tint,#f4f6fc)}
   .nvd-theme-opt.on{background:rgba(109,94,240,.10);border-color:rgba(109,94,240,.28);color:#5B4BD4}
+  /* ---- fit: DecisionRoom carries 8 nav items; tighten progressively so nothing overflows ---- */
+  @media(min-width:861px){
+    .nav{gap:.7rem}
+    .nav-links{min-width:0;flex:0 1 auto;overflow:visible}
+    .nav-right{flex:none;gap:.5rem}
+  }
+  @media(min-width:861px) and (max-width:1460px){
+    .nav-links{margin-left:1.4rem !important;gap:.2rem !important}
+    .nav-links a.nvd-item{padding:.5rem .58rem;font-size:.8rem;gap:.42rem}
+    .nvd-ic{width:28px;height:28px}
+    .nvd-ic svg{width:17px;height:17px}
+  }
+  @media(min-width:861px) and (max-width:1260px){
+    .nav-links a.nvd-item .nvd-lb{display:none}      /* icon-only; title= tooltip keeps it usable */
+    .nav-links a.nvd-item{padding:.5rem .42rem}
+    .nav-links{margin-left:1rem !important}
+    .search-wrap{max-width:190px}
+  }
 </style>
 </head>
 <body>

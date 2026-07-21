@@ -61,7 +61,7 @@
       var t=clean(a.textContent); if(!t) return;
       var m=pick(t), col=C[m[1]]||C.slate;
       var href=(a.getAttribute('href')||'').replace('.html','').replace(/\/$/,'');
-      a.classList.add('nvd-item');
+      a.classList.add('nvd-item'); a.setAttribute('title', t);
       a.innerHTML='<span class="nvd-ic" style="color:'+col+';background:'+rgba(col,.13)+'">'+svg(P[m[0]])+'</span><span class="nvd-lb">'+t+'</span>';
       if(href && href!=='#' && href.indexOf('#')!==0 && (href===here || (here==='/judgment-lab'&&href==='/'))){
         a.classList.add('nvd-active'); a.style.setProperty('--nc',col);
@@ -103,16 +103,24 @@
       +'<div class="nvd-impact-row"><div class="nvd-impact-n"><b>'+(pts%1===0?pts:pts.toFixed(1))+'</b><small>points earned</small></div>'+spark+'</div></div>';
   }
 
+  function injectStats(menu){
+    if(!CFG.impact) return;
+    menu=menu||q('#acct-menu'); if(!menu) return;
+    var html=rankCard()+impactCard(); if(!html) return;
+    var ex=q('.nvd-stats',menu);
+    if(ex){ ex.innerHTML=html; return; }              /* update in place */
+    var w=document.createElement('div'); w.className='nvd-stats'; w.innerHTML=html;
+    var hd=q('.acct-head',menu);
+    if(hd&&hd.nextSibling) menu.insertBefore(w, hd.nextSibling); else menu.appendChild(w);
+  }
+  /* called by the page as soon as vault data resolves — no waiting on the poll */
+  window.nvdRefreshStats=function(){ try{ injectStats(); }catch(e){} };
   function enhanceMenu(){
     var menu=q('#acct-menu'); if(!menu || menu.getAttribute('data-nvd')) return;
     menu.setAttribute('data-nvd','1');
     menu.classList.add('nvd-menu');
 
-    if(CFG.impact){
-      var hd=q('.acct-head',menu), html=rankCard()+impactCard();
-      if(html){ var w=document.createElement('div'); w.className='nvd-stats'; w.innerHTML=html;
-        if(hd&&hd.nextSibling) menu.insertBefore(w, hd.nextSibling); else menu.appendChild(w); }
-    }
+    if(CFG.impact) injectStats(menu);
 
     /* Settings: CLONE the theme options and proxy clicks to the originals.
        (Moving the real node breaks: the auth module re-renders #nav-account,
@@ -156,7 +164,7 @@
     enhanceMenu();
     var host=q('#nav-account');
     if(host){ try{ new MutationObserver(enhanceMenu).observe(host,{childList:true,subtree:true}); }catch(e){} }
-    setInterval(enhanceMenu, 1500);
+    setInterval(function(){ enhanceMenu(); injectStats(); }, 1200);
   }
   if(document.readyState==='complete') boot(); else window.addEventListener('load', boot);
 })();
