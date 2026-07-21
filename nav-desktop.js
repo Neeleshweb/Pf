@@ -28,11 +28,15 @@
     bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.8.9.9 1.5l.1.7h5.2l.1-.7c.1-.6.4-1.1.9-1.5A6 6 0 0 0 12 3z"/>',
     labs:'<path d="M9 3h6M10 3v6.5L5.2 18a2 2 0 0 0 1.8 3h10a2 2 0 0 0 1.8-3L14 9.5V3"/>',
     gear:'<circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.5 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 14a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.1-2.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.6V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.6 1.6 0 0 0 20.4 10H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/>',
+    trophy:'<path d="M6 4h12v3a6 6 0 0 1-12 0V4Z"/><path d="M6 5H4a2 2 0 0 0 0 4h2"/><path d="M18 5h2a2 2 0 0 1 0 4h-2"/><path d="M12 13v3"/><path d="M9 20h6"/>',
+    shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m8.6 11.6 2.4 2.4 4.4-4.6"/>',
     dot:'<circle cx="12" cy="12" r="3.2"/>'
   };
   var C = {purple:'#6D5EF0', green:'#16A34A', amber:'#D97706', blue:'#2F82E4',
            red:'#DC2626', gold:'#CA8A04', teal:'#0d9488', slate:'#64748b', indigo:'#5B4BD4'};
   var MAP = [
+    ['reviewer leaderboard',['person','red']], ['author leaderboard',['trophy','amber']],
+    ['performance vault',['shield','indigo']], ['vault',['shield','indigo']],
     ['home',['home','purple']], ['open case',['chat','green']], ['librar',['book','amber']],
     ['how it works',['info','blue']], ['example',['grid','purple']], ['reviewer',['person','red']],
     ['gutcheck',['target','green']], ['gut check',['target','green']],
@@ -42,7 +46,7 @@
     ['your gut',['star','gold']], ['suggest',['pen','amber']], ['email',['mail','blue']],
     ['subscrib',['mail','blue']]
   ];
-  function svg(p,s){ return '<svg viewBox="0 0 24 24" width="'+(s||17)+'" height="'+(s||17)+'" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'; }
+  function svg(p,s){ return '<svg viewBox="0 0 24 24" width="'+(s||20)+'" height="'+(s||20)+'" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'; }
   function rgba(h,a){ h=h.replace('#',''); return 'rgba('+parseInt(h.substr(0,2),16)+','+parseInt(h.substr(2,2),16)+','+parseInt(h.substr(4,2),16)+','+a+')'; }
   function pick(t){ t=t.toLowerCase(); for(var i=0;i<MAP.length;i++){ if(t.indexOf(MAP[i][0])>=0) return MAP[i][1]; } return ['dot','slate']; }
   function clean(t){ return (t||'').replace(/[\u2197\u2192]/g,'').replace(/[\uD83C-\uDBFF][\uDC00-\uDFFF]/g,'').replace(/\s+/g,' ').trim(); }
@@ -66,6 +70,16 @@
   }
 
   /* ---------- 2. profile dropdown: Settings (themes) + optional impact ---------- */
+  function rankCard(){
+    var d=window.__vaultD||null;
+    if(!d) return '';
+    var ps=[]; if(d.reviewer&&d.reviewer.percentile!=null) ps.push(Number(d.reviewer.percentile));
+    if(d.author&&d.author.percentile!=null) ps.push(Number(d.author.percentile));
+    if(!ps.length) return '<div class="nvd-sec nvd-rank"><div class="nvd-sec-l">Your rank</div>'
+      +'<div class="nvd-empty">Not ranked yet \u2014 answer a case or post one to get on the board.</div></div>';
+    return '<div class="nvd-sec nvd-rank"><div class="nvd-sec-l">Your rank</div>'
+      +'<div class="nvd-rank-row"><b>Top '+Math.min.apply(null,ps)+'%</b><small>of ranked users</small></div></div>';
+  }
   function impactCard(){
     var d=window.__vaultD||null; if(!d) return '';
     var r=d.reviewer||{}, a=d.author||{};
@@ -83,8 +97,10 @@
         seg.push((i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)); });
       spark='<svg class="nvd-spark" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><path d="'+seg.join(' ')+'" fill="none" stroke="#6D5EF0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     }
-    return '<div class="nvd-impact"><div class="nvd-impact-l">Your Impact</div>'
-      +'<div class="nvd-impact-row"><div><b>'+(pts%1===0?pts:pts.toFixed(1))+'</b><small>points earned</small></div>'+spark+'</div></div>';
+    if(!pts && !spark) return '<div class="nvd-sec nvd-impact"><div class="nvd-sec-l">Your impact</div>'
+      +'<div class="nvd-empty">No points yet \u2014 your first scored contribution shows up here.</div></div>';
+    return '<div class="nvd-sec nvd-impact"><div class="nvd-sec-l">Your impact</div>'
+      +'<div class="nvd-impact-row"><div class="nvd-impact-n"><b>'+(pts%1===0?pts:pts.toFixed(1))+'</b><small>points earned</small></div>'+spark+'</div></div>';
   }
 
   function enhanceMenu(){
@@ -92,34 +108,49 @@
     menu.setAttribute('data-nvd','1');
     menu.classList.add('nvd-menu');
 
-    /* Top X% under the name, when the page already has vault data */
-    try{
-      var d=window.__vaultD, head=q('.acct-head',menu);
-      if(d&&head&&!q('.nvd-pct',menu)){
-        var ps=[]; if(d.reviewer&&d.reviewer.percentile!=null) ps.push(Number(d.reviewer.percentile));
-        if(d.author&&d.author.percentile!=null) ps.push(Number(d.author.percentile));
-        if(ps.length){ var s=document.createElement('div'); s.className='nvd-pct';
-          s.textContent='Top '+Math.min.apply(null,ps)+'% of ranked users'; head.appendChild(s); }
-      }
-    }catch(e){}
+    if(CFG.impact){
+      var hd=q('.acct-head',menu), html=rankCard()+impactCard();
+      if(html){ var w=document.createElement('div'); w.className='nvd-stats'; w.innerHTML=html;
+        if(hd&&hd.nextSibling) menu.insertBefore(w, hd.nextSibling); else menu.appendChild(w); }
+    }
 
-    if(CFG.impact){ var ic=impactCard(); if(ic){ var w=document.createElement('div'); w.innerHTML=ic;
-      var hd=q('.acct-head',menu); if(hd&&hd.nextSibling) menu.insertBefore(w.firstChild, hd.nextSibling); else menu.appendChild(w.firstChild); } }
-
-    /* Settings: move the real .theme-pop in so its handlers survive */
-    var pop=q('.theme-pop');
-    if(pop && !q('.nvd-set',menu)){
+    /* Settings: CLONE the theme options and proxy clicks to the originals.
+       (Moving the real node breaks: the auth module re-renders #nav-account,
+       which destroys whatever was inside it.) */
+    var opts=[].slice.call(document.querySelectorAll('.theme-pop .theme-opt'));
+    if(opts.length && !q('.nvd-set',menu)){
       var det=document.createElement('details'); det.className='nvd-set';
-      det.innerHTML='<summary><span class="nvd-set-ic">'+svg(P.gear,15)+'</span><span>Settings</span>'
-        +'<svg class="nvd-set-c" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></summary>';
+      var sm=document.createElement('summary');
+      sm.innerHTML='<span class="nvd-set-ic">'+svg(P.gear,17)+'</span><span>Settings</span>'
+        +'<svg class="nvd-set-c" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+      det.appendChild(sm);
+      var wrap=document.createElement('div'); wrap.className='nvd-themes';
+      var lab=document.createElement('div'); lab.className='nvd-sec-l'; lab.textContent='Appearance';
+      wrap.appendChild(lab);
+      opts.forEach(function(o){
+        var b=document.createElement('button'); b.type='button'; b.className='nvd-theme-opt';
+        b.innerHTML=o.innerHTML;
+        b.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); o.click(); markActive(); });
+        wrap.appendChild(b);
+      });
+      det.appendChild(wrap);
       var out=q('#acct-signout',menu)||q('#gca-signout',menu);
       if(out&&out.parentNode===menu) menu.insertBefore(det,out); else menu.appendChild(det);
-      det.appendChild(pop);                       /* moved, not cloned */
-      pop.classList.add('nvd-theme');
       document.documentElement.classList.add('nvd-theme-moved');
+      markActive();
     }
   }
 
+  function markActive(){
+    try{
+      var cur=document.documentElement.getAttribute('data-dr-theme')||'signal';
+      [].slice.call(document.querySelectorAll('.nvd-theme-opt')).forEach(function(b,i){
+        var src=document.querySelectorAll('.theme-pop .theme-opt')[i];
+        var on=src && src.getAttribute('data-theme')===cur;
+        b.classList.toggle('on', !!on);
+      });
+    }catch(e){}
+  }
   function boot(){
     styleNav();
     enhanceMenu();

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- build:lb-navdesk 2026-07-20T14:00:00Z -->
+  <!-- build:lb-nav2 2026-07-20T18:00:00Z -->
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Judgment Lab — Neelesh Singh</title>
@@ -690,42 +690,66 @@
   .mm-cta{display:none !important}
 </style>
 <style>
-  /* ---- desktop navbar (>=861px only; mobile drawer untouched) ---- */
+  /* ---- premium desktop navbar (>=861px only; mobile drawer untouched) ---- */
   @media(min-width:861px){
-    .nav-links{gap:.3rem !important}
-    .nav-links a.nvd-item{display:inline-flex !important;align-items:center;gap:.5rem;height:auto;line-height:1;
-      padding:.5rem .7rem;border:1px solid transparent;border-radius:12px;background:transparent;
-      color:var(--muted,#6b7280);font-size:.8rem;font-weight:700;letter-spacing:.1px;text-transform:none;
-      white-space:nowrap;transition:background .16s,color .16s}
-    .nav-links a.nvd-item:hover{background:rgba(127,127,127,.08);color:var(--ink,#16233f)}
-    .nvd-ic{flex:none;width:30px;height:30px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center}
-    .nav-links a.nvd-active{background:color-mix(in srgb, var(--nc) 12%, transparent);color:var(--nc) !important;
-      border-color:color-mix(in srgb, var(--nc) 22%, transparent)}
-    /* themes now live in the profile dropdown — hide the navbar button once moved */
+    /* nav sits LEFT, next to the logo (not centred), with breathing room */
+    .nav-links{gap:.35rem !important;margin-left:2.2rem !important;margin-right:auto !important;
+      justify-content:flex-start !important;flex-wrap:nowrap !important}
+    .nav-links a.nvd-item{display:inline-flex !important;align-items:center;gap:.55rem;height:auto;line-height:1;
+      padding:.6rem .85rem;border:1px solid transparent;border-radius:12px;background:transparent;
+      color:var(--muted,#6b7280);font-size:.86rem;font-weight:600;letter-spacing:.1px;text-transform:none;
+      white-space:nowrap;position:relative;
+      transition:background .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease}
+    .nav-links a.nvd-item:hover{background:linear-gradient(180deg,rgba(127,127,127,.05),rgba(127,127,127,.10));
+      color:var(--ink,#17203B);transform:translateY(-1px);box-shadow:0 4px 14px rgba(20,25,45,.07)}
+    .nav-links a.nvd-item:hover .nvd-ic{transform:scale(1.05)}
+    .nvd-ic{flex:none;width:32px;height:32px;border-radius:10px;display:inline-flex;align-items:center;
+      justify-content:center;transition:transform .18s ease,box-shadow .18s ease}
+    /* active: gradient tint + brand border + glow dot under */
+    .nav-links a.nvd-active{color:var(--nc) !important;font-weight:700;
+      background:linear-gradient(180deg, color-mix(in srgb, var(--nc) 14%, transparent), color-mix(in srgb, var(--nc) 7%, transparent));
+      border-color:color-mix(in srgb, var(--nc) 26%, transparent);
+      box-shadow:0 4px 16px color-mix(in srgb, var(--nc) 18%, transparent)}
+    .nav-links a.nvd-active .nvd-ic{box-shadow:0 4px 12px color-mix(in srgb, var(--nc) 34%, transparent)}
+    .nav-links a.nvd-active::after{content:'';position:absolute;left:50%;bottom:-5px;width:5px;height:5px;
+      border-radius:50%;transform:translateX(-50%);background:var(--nc);
+      box-shadow:0 0 8px 1px color-mix(in srgb, var(--nc) 60%, transparent)}
     html.nvd-theme-moved .theme-wrap{display:none !important}
   }
   /* ---- profile dropdown ---- */
-  .nvd-menu{min-width:270px}
-  .nvd-pct{font-size:.72rem;font-weight:700;color:#6D5EF0;margin-top:.15rem}
-  .nvd-impact{margin:.55rem .55rem .35rem;padding:.75rem .85rem;border-radius:13px;
-    background:linear-gradient(135deg,rgba(109,94,240,.10),rgba(47,130,228,.07));border:1px solid rgba(109,94,240,.18)}
-  .nvd-impact-l{font-size:.68rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#6D5EF0;margin-bottom:.25rem}
-  .nvd-impact-row{display:flex;align-items:center;justify-content:space-between;gap:.6rem}
-  .nvd-impact-row b{display:block;font-size:1.35rem;font-weight:800;color:var(--ink,#16233f);line-height:1.1}
-  .nvd-impact-row small{display:block;font-size:.68rem;color:var(--muted,#8a91a0)}
-  .nvd-spark{width:110px;height:36px;flex:none}
-  .nvd-set{border-top:1px solid var(--border,#eef1f8);margin-top:.3rem}
-  .nvd-set > summary{display:flex;align-items:center;gap:.5rem;list-style:none;cursor:pointer;
-    padding:.6rem .55rem;font-size:.84rem;font-weight:600;color:var(--ink,#3a4358);border-radius:8px}
+  .nvd-menu{min-width:288px}
+  .nvd-stats{padding:.15rem .55rem .1rem}
+  .nvd-sec{padding:.7rem .8rem;border-radius:13px;margin-bottom:.5rem;
+    background:linear-gradient(135deg,rgba(109,94,240,.09),rgba(47,130,228,.06));
+    border:1px solid rgba(109,94,240,.16)}
+  .nvd-sec:last-child{margin-bottom:.2rem}
+  .nvd-sec-l{font-size:.66rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;
+    color:#6D5EF0;margin-bottom:.35rem}
+  .nvd-rank-row{display:flex;align-items:baseline;gap:.4rem}
+  .nvd-rank-row b{font-size:1.15rem;font-weight:800;color:var(--ink,#17203B);line-height:1}
+  .nvd-rank-row small{font-size:.72rem;color:var(--muted,#8a91a0)}
+  .nvd-empty{font-size:.74rem;line-height:1.45;color:var(--muted,#8a91a0)}
+  .nvd-impact-row{display:flex;align-items:center;justify-content:space-between;gap:.75rem}
+  .nvd-impact-n b{display:block;font-size:1.5rem;font-weight:800;color:var(--ink,#17203B);line-height:1.05}
+  .nvd-impact-n small{display:block;font-size:.7rem;color:var(--muted,#8a91a0);margin-top:.1rem}
+  .nvd-spark{width:104px;height:34px;flex:none}
+  /* Settings */
+  .nvd-set{border-top:1px solid var(--border,#eef1f8);margin-top:.35rem;padding-top:.15rem}
+  .nvd-set > summary{display:flex;align-items:center;gap:.55rem;list-style:none;cursor:pointer;
+    padding:.62rem .55rem;font-size:.86rem;font-weight:600;color:var(--ink,#3a4358);border-radius:9px}
   .nvd-set > summary::-webkit-details-marker{display:none}
   .nvd-set > summary:hover{background:var(--tint,#f4f6fc)}
   .nvd-set-ic{display:inline-flex;color:var(--muted,#8a91a0)}
   .nvd-set-c{margin-left:auto;opacity:.55;transition:transform .18s ease}
   .nvd-set[open] .nvd-set-c{transform:rotate(180deg)}
-  .nvd-menu .theme-pop.nvd-theme{position:static !important;display:block !important;opacity:1 !important;
-    visibility:visible !important;transform:none !important;box-shadow:none !important;border:none !important;
-    background:transparent !important;padding:.15rem .2rem .4rem !important;min-width:0 !important;width:auto !important}
-  .nvd-menu .theme-pop.nvd-theme .theme-pop-h{display:none}
+  .nvd-themes{padding:.2rem .3rem .5rem}
+  .nvd-themes .nvd-sec-l{padding:0 .25rem .2rem}
+  .nvd-theme-opt{display:flex;align-items:center;gap:.55rem;width:100%;text-align:left;font-family:inherit;
+    font-size:.82rem;font-weight:600;color:var(--ink,#3a4358);background:transparent;cursor:pointer;
+    border:1px solid transparent;border-radius:10px;padding:.5rem .55rem;margin-bottom:.15rem;
+    transition:background .16s,border-color .16s}
+  .nvd-theme-opt:hover{background:var(--tint,#f4f6fc)}
+  .nvd-theme-opt.on{background:rgba(109,94,240,.10);border-color:rgba(109,94,240,.28);color:#5B4BD4}
 </style>
 </head>
 <body>
@@ -739,7 +763,7 @@
     <li><a href="/gutcheck.html" class="nav-prod gc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/></svg><span>GutCheck</span></a></li><li><a href="/decisionroom.html" class="nav-prod dr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><line x1="7.5" y1="10" x2="16.5" y2="10"/><line x1="7.5" y1="14" x2="13" y2="14"/></svg><span>DecisionRoom</span></a></li><li><a href="/performance-center.html" class="nav-prod pc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10M12 20V4M18 20v-6"/><path d="M3 21h18"/></svg><span>Performance Center</span></a></li><li><a href="https://neeleshpmtoolkit.com/portfolio.html" class="nav-about" data-leave="1">About Us</a></li>
   </ul>
   <div class="nav-right">
-    <a href="/" class="nav-home">
+    <a href="/judgment-lab.html" class="nav-home">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/></svg>
       Home
     </a>
