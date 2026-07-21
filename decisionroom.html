@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-wide 2026-07-21T15:00:00Z -->
+<!-- build:dr-cards 2026-07-21T17:00:00Z -->
 <!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
 <!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
 <!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
@@ -1602,6 +1602,13 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
 .cd-res-h:first-child{margin-top:0}
 /* ---- Phase 2f: card redesign + labeled capsules + share ---- */
 .feed-grid{grid-template-columns:1fr;gap:1.2rem}
+/* ---- FIX: the rule above at .feed-grid{...max-width:760px;margin:auto} capped the
+   case list at 760px, so cards stayed narrow no matter how wide the container got.
+   (GutCheck's .feed-grid has no such cap, which is why it expanded correctly.)
+   Same specificity (0,1,0) but later in source order, so this wins. ---- */
+.feed-grid{max-width:none;margin-left:0;margin-right:0}
+/* keep body copy readable now that cards span the full container */
+.feed-card > p{max-width:1040px}
 .feed-card{padding:1.4rem 1.5rem;gap:.7rem}
 .fc-attrs{display:flex;flex-wrap:wrap;gap:.55rem .9rem;align-items:flex-end}
 .fc-cap{display:inline-flex;flex-direction:column;gap:.24rem}
