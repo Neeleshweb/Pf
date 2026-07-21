@@ -168,6 +168,24 @@
       if(x.leave){ a.setAttribute('data-leave','1'); a.onclick=function(){ closeMenu(); }; }
       else { a.onclick=function(){ closeMenu(); location.href=x.href; }; }
       body.appendChild(a);
+      /* Inline !important sits at the very top of the CSS cascade — no stylesheet
+         rule (however specific, however late, even !important) can override it.
+         Guarantees the card is a fixed-height row on every page. */
+      (function(card){
+        function F(el,o){ if(!el) return; for(var k in o) el.style.setProperty(k,o[k],'important'); }
+        F(card,{display:'flex','flex-direction':'row','align-items':'center',gap:'0.75rem',
+                height:'auto','max-height':'78px','box-sizing':'border-box',overflow:'hidden'});
+        F(card.querySelector('.mmd-ext-ic'),{display:'flex','align-items':'center','justify-content':'center',
+                flex:'0 0 44px',width:'44px',height:'44px','min-width':'44px','max-width':'44px',
+                'min-height':'44px','max-height':'44px','align-self':'center','border-radius':'50%',
+                padding:'0',margin:'0'});
+        F(card.querySelector('.mmd-ext-ic svg'),{width:'20px',height:'20px','max-width':'20px','max-height':'20px',flex:'none'});
+        F(card.querySelector('.mmd-ext-tx'),{flex:'1 1 auto','min-width':'0','align-self':'center'});
+        F(card.querySelector('.mmd-ext-go'),{display:'flex','align-items':'center','justify-content':'center',
+                flex:'0 0 30px',width:'30px',height:'30px','min-width':'30px','max-height':'30px','align-self':'center'});
+        var sm=card.querySelector('.mmd-ext-tx small');
+        F(sm,{display:'block','white-space':'nowrap',overflow:'hidden','text-overflow':'ellipsis'});
+      })(a);
     });
 
     /* ---------- 6. wire account actions (proxy to existing auth) ---------- */
