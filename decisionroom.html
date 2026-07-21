@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-nav3 2026-07-20T20:00:00Z -->
+<!-- build:dr-nav4 2026-07-20T22:00:00Z -->
 <!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
 <!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
 <!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
@@ -1904,6 +1904,22 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
     .nav-links a.nvd-item .nvd-lb{display:none}      /* icon-only; title= tooltip keeps it usable */
     .nav-links a.nvd-item{padding:.5rem .42rem}
     .nav-links{margin-left:1rem !important}
+    .search-wrap{max-width:190px}
+  }
+  /* ---- DecisionRoom-specific: unbreak the navbar ----
+     Its "signal" theme capped .nav at max-width:1200px, which centred the bar
+     and left only 1200px for 8 nav items + search + Home + sign-in -> overlap.
+     It also desynced the fit rules above, which key off VIEWPORT width: on a
+     1900px screen they never fired even though the bar only had 1200px.
+     Remove the cap (the other three pages have none) and, because this page
+     carries the most items, start icon-only earlier than the shared rules. */
+  @media(min-width:861px){
+    .nav{max-width:none !important}
+  }
+  @media(min-width:861px) and (max-width:1560px){
+    .nav-links a.nvd-item .nvd-lb{display:none}
+    .nav-links a.nvd-item{padding:.5rem .44rem}
+    .nav-links{margin-left:1.1rem !important;gap:.18rem !important}
     .search-wrap{max-width:190px}
   }
 </style>
