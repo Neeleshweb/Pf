@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:dr-cards 2026-07-21T17:00:00Z -->
+<!-- build:dr-feed-p1 2026-07-21T20:00:00Z -->
 <!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
 <!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
 <!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
@@ -1945,6 +1945,93 @@ textarea.field-err,.cd-want-in.field-err{border-color:var(--red)!important;box-s
     .search-wrap{max-width:190px}
   }
 </style>
+<style>
+/* ================= DecisionRoom feed cards (Phase 1) ================= */
+.feed-grid{max-width:none;margin-left:0;margin-right:0;gap:28px}
+.fx-card{position:relative;display:grid;grid-template-columns:96px minmax(0,1fr) 232px;gap:0 28px;
+  align-items:start;background:var(--card);border:1px solid #E8ECF3;border-radius:24px;
+  padding:32px 32px 28px;box-shadow:0 1px 2px rgba(16,24,40,.04),0 12px 32px rgba(16,24,40,.06);
+  overflow:hidden;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.fx-card:hover{transform:translateY(-4px);border-color:#D9DFEC;
+  box-shadow:0 2px 4px rgba(16,24,40,.05),0 20px 48px rgba(16,24,40,.11)}
+.fx-accent{position:absolute;top:0;left:0;right:0;height:4px;border-radius:24px 24px 0 0;
+  background:linear-gradient(90deg,#2F82E4,#6D5EF0)}
+.fx-accent.u-today{background:linear-gradient(90deg,#F97316,#DC2626)}
+.fx-accent.u-week{background:linear-gradient(90deg,#6D5EF0,#2F82E4)}
+.fx-accent.a-closed{background:linear-gradient(90deg,#16A34A,#0d9488)}
+/* timeline rail */
+.fx-rail{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding-top:2px;position:relative}
+.fx-time{font-size:13px;font-weight:600;color:var(--muted)}
+.fx-node{width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid #2F82E4;
+  box-shadow:0 0 0 4px rgba(47,130,228,.12)}
+.fx-node.n-new{border-color:#16A34A;box-shadow:0 0 0 4px rgba(22,163,74,.13)}
+.fx-node.n-urgent{border-color:#F97316;box-shadow:0 0 0 4px rgba(249,115,22,.15)}
+.fx-node.n-res{border-color:#0d9488;box-shadow:0 0 0 4px rgba(13,148,136,.13)}
+.fx-node.n-wait{border-color:#94A3B8;box-shadow:0 0 0 4px rgba(148,163,184,.15)}
+.fx-pulse{font-size:13px;font-weight:700}
+.p-new{color:#16A34A}.p-urgent{color:#EA580C}.p-res{color:#0d9488}.p-wait{color:#64748B}.p-active{color:#2F82E4}
+/* body */
+.fx-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.fx-chip{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 12px;border-radius:999px;
+  font-size:13px;font-weight:600;background:#F1F5F9;color:#475569;border:1px solid transparent}
+.fx-chip.st-live{background:#E9F8EF;color:#15803D}
+.fx-chip.st-closed{background:#E6F4F1;color:#0F766E}
+.fx-chip.signal{background:#FDF6E3;color:#A16207}
+.fx-chip.warn{background:#FEF3E2;color:#B45309}
+.fx-chip.need{background:#FDECEF;color:#BE123C}
+.fx-title{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.28;color:var(--white);margin-bottom:8px}
+.fx-sub{font-size:16px;line-height:1.6;color:var(--text2);margin-bottom:16px;max-width:70ch}
+.fx-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.fx-tag{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:600}
+.fx-tag.cat{background:#EEF0FE;color:#4F46E5;text-transform:uppercase;letter-spacing:.03em;font-size:11px}
+.fx-tag.want{background:#E8F1FD;color:#1D4ED8}
+.fx-tag.stk{background:#F1F5F9;color:#475569}
+.fx-strip{display:flex;flex-wrap:wrap;align-items:center;gap:22px;padding-top:16px;border-top:1px solid #EEF1F6}
+.fx-m{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+.fx-m b{font-size:15px;font-weight:700;color:var(--white)}
+.fx-m small{font-size:12px;color:var(--muted)}
+.fx-i{flex:none;color:#7C8AA5}
+.fx-ctx{margin-left:auto;font-size:12px;color:var(--muted)}
+/* right panel */
+.fx-side{display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 16px;
+  background:#F6F8FD;border:1px solid #EAEFF8;border-radius:18px}
+.fx-ringwrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px}
+.fx-ring{width:82px;height:82px}
+.fx-ring-a{animation:fxRing .9s ease both}
+@keyframes fxRing{from{stroke-dashoffset:189}}
+.fx-ring-n{font-size:22px;font-weight:800;fill:var(--white)}
+.fx-ringl{font-size:11px;line-height:1.35;text-align:center;color:var(--muted);font-weight:600}
+.fx-top{font-size:12px;font-weight:600;color:var(--muted)}
+.fx-cta{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:2px;
+  padding:11px 12px;border-radius:12px;font-size:14px;font-weight:700;color:#5B4BD4;
+  background:#fff;border:1px solid #DDE3F2;transition:background .18s,box-shadow .18s,transform .18s}
+.fx-card:hover .fx-cta{background:#F3F1FE;box-shadow:0 6px 16px rgba(91,75,212,.16);transform:translateY(-1px)}
+.fx-share{width:100%;display:flex;justify-content:center}
+/* ---- tablet ---- */
+@media(max-width:1180px){
+  .fx-card{grid-template-columns:80px minmax(0,1fr);gap:0 20px;padding:26px 24px 24px}
+  .fx-side{grid-column:2;flex-direction:row;flex-wrap:wrap;justify-content:space-between;margin-top:18px;width:100%}
+  .fx-ringwrap{flex-direction:row;gap:12px}
+  .fx-ringl{text-align:left}
+  .fx-cta{width:auto;flex:1;min-width:180px}
+}
+/* ---- mobile (matches the mobile mockup) ---- */
+@media(max-width:760px){
+  .feed-grid{gap:20px}
+  .fx-card{grid-template-columns:1fr;gap:0;padding:20px 18px 18px;border-radius:20px}
+  .fx-rail{flex-direction:row;align-items:center;gap:10px;margin-bottom:12px}
+  .fx-node{width:14px;height:14px;border-width:3px}
+  .fx-title{font-size:19px;line-height:1.35}
+  .fx-sub{font-size:14.5px;margin-bottom:14px}
+  .fx-strip{gap:14px 18px}
+  .fx-ctx{margin-left:0;width:100%}
+  .fx-side{grid-column:1;flex-direction:column;align-items:stretch;margin-top:16px;padding:16px}
+  .fx-ringwrap{flex-direction:row;align-items:center;justify-content:center;gap:14px}
+  .fx-ringl{text-align:left}
+  .fx-top{text-align:center}
+  .fx-cta{width:100%}
+}
+</style>
 </head>
 <body>
 <nav class="nav">
@@ -2945,22 +3032,106 @@ boot();
   /* ---- feed (keyset) ---- */
   var feedCursor=null, feedDone=false, feedLoading=false;
   function drSrcLabel(st){ var m={community_submission:'Community-submitted',editorial_case:'PM Toolkit Editorial',anonymized_field_case:'Anonymized field case',practice_scenario:'Practice scenario',expert_case:'Expert-created'}; return escHtml(m[st]||'Community-submitted'); }
-  function feedCardHtml(r){
+  /* ---------- metric derivations (deterministic, from real dr_feed fields only) ----------
+     Phase 2 will fold in views + bookmarks; the visuals below already have the slots. */
+  function fcReadMin(r){
+    var chars=(String(r.title||'').length)+(String(r.decision||'').length);
+    chars += ((r.categories||[]).length + (r.help_types||[]).length + (r.stakeholders||[]).length)*14;
+    return Math.max(1, Math.round((chars/5.5)/200));           /* ~200wpm, ~5.5 chars/word */
+  }
+  function fcResolution(r){
+    var rc=Number(r.response_count)||0, hs=Number(r.high_signal)||0;
+    var v = 18;                                                 /* base: posted, nothing yet */
+    v += Math.min(34, rc*7);                                    /* volume of engagement */
+    v += Math.min(28, hs*12);                                   /* QUALITY of engagement */
+    if(r.needs_context) v -= 15;                                /* flagged for more context */
+    if(rc===0) v -= 6;
+    if(caseStatusClass(r)==='closed') v = Math.max(v, 88);      /* already resolved */
+    return Math.max(5, Math.min(96, Math.round(v)));
+  }
+  function fcInterest(r){
+    var rc=Number(r.response_count)||0, hs=Number(r.high_signal)||0;
+    var age=(Date.now()-new Date(r.created_at||Date.now()).getTime())/36e5;   /* hours */
+    var recency = age<24?14 : age<72?9 : age<168?5 : 2;
+    /* Phase 2: + Math.min(24, views/12) */
+    return Math.max(4, Math.min(99, Math.round(rc*9 + hs*8 + recency)));
+  }
+  function fcPct(r){ var s=fcInterest(r); return s>=80?18:s>=65?24:s>=50?35:s>=35?52:70; }
+  function fcRel(iso){
+    if(!iso) return '';
+    var m=Math.floor((Date.now()-new Date(iso).getTime())/6e4);
+    if(m<60) return Math.max(1,m)+'m ago';
+    var h=Math.floor(m/60); if(h<24) return h+'h ago';
+    var d=Math.floor(h/24); if(d<30) return d+'d ago';
+    return Math.floor(d/30)+'mo ago';
+  }
+  function fcPulse(r){
     var rc=Number(r.response_count)||0;
-    var urgent=(r.urgency==='today')?'<span class="fc-urgent">\u23F1 Needs input today</span>':'';
-    var attrs='<div class="fc-attrs">'
-      + capOne('Status','<span class="fc-status s-'+escHtml(caseStatusClass(r))+'">'+escHtml(caseStatusLabel(r))+'</span>')
-      + capOne('Urgency','<span class="fc-urg u-'+escHtml(r.urgency||'')+'">'+escHtml(urgLabel(r.urgency))+'</span>')
-      + (r.product_context?capOne('Product','<span class="fc-prod">'+escHtml(r.product_context)+'</span>'):'')
-      + '<span class="fc-date-r">'+fcDate(r.created_at)+'</span></div>';
-    return '<div class="feed-card" data-id="'+escHtml(r.id)+'">'
-      + attrs
-      + '<div class="fc-src-r">'+capOne('Source','<span class="fc-src">'+drSrcLabel(r.source_type)+'</span>')+(r.needs_context?'<span class="fc-nc">\u2753 Needs more context</span>':'')+'</div>'
-      + '<div class="fc-title">'+escHtml(r.title)+'</div><div class="fc-dec">'+escHtml(r.decision)+'</div>'
-      + '<div class="fc-meta">'+fcChipRow('Category', r.categories||[], 'fc-tag')+fcChipRow('Wants', (r.help_types||[]).map(helpLabel), 'fc-help')+fcChipRow('Who\u2019s involved', r.stakeholders||[], 'fc-stk')+'</div>'
-      + '<div class="fc-foot">'+ctxHtml(r)+'<span class="fc-foot-r">'+urgent+(r.is_mine?shareBtnHtml(r.id):'')+(Number(r.high_signal)>0?'<span class="fc-hs">\u2b50 '+r.high_signal+' high-signal</span>':'')+'<span class="fc-rc'+(rc===0?' need':'')+'">'+(rc===0?'Needs responses':(rc+(rc===1?' response':' responses')))+'</span></span></div>'
+    var age=(Date.now()-new Date(r.created_at||Date.now()).getTime())/36e5;
+    if(caseStatusClass(r)==='closed') return ['Resolved','res'];
+    if(r.urgency==='today')           return ['Needs input','urgent'];
+    if(age<24)                        return ['New','new'];
+    if(rc===0)                        return ['Awaiting','wait'];
+    return ['Active','active'];
+  }
+  function fcRing(score){
+    var R=30, C=2*Math.PI*R, off=C*(1-score/100);
+    return '<svg class="fx-ring" viewBox="0 0 72 72" aria-hidden="true">'
+      +'<defs><linearGradient id="fxg'+score+'" x1="0" y1="1" x2="1" y2="0">'
+      +'<stop offset="0" stop-color="#2F82E4"/><stop offset="1" stop-color="#6D5EF0"/></linearGradient></defs>'
+      +'<circle cx="36" cy="36" r="'+R+'" fill="none" stroke="#EDF0F7" stroke-width="6"/>'
+      +'<circle class="fx-ring-a" cx="36" cy="36" r="'+R+'" fill="none" stroke="url(#fxg'+score+')" stroke-width="6"'
+      +' stroke-linecap="round" stroke-dasharray="'+C.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'"'
+      +' transform="rotate(-90 36 36)"/>'
+      +'<text x="36" y="41" text-anchor="middle" class="fx-ring-n">'+score+'</text></svg>';
+  }
+  var FXI={
+    chat:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.4 8.4 0 0 1-3.8-.9L3 21l2-5.2a8.4 8.4 0 0 1-.9-3.8 8.4 8.4 0 0 1 8.4-8.4h.5a8.4 8.4 0 0 1 8 8v.4z"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+    star:'<polygon points="12 2 15 9 22 9.3 16.5 14 18.5 21 12 17 5.5 21 7.5 14 2 9.3 9 9"/>',
+    gauge:'<path d="M4 18a8 8 0 1 1 16 0"/><path d="M12 18l4.5-4.5"/>',
+    arrow:'<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>'
+  };
+  function fxIc(p,sz){ return '<svg class="fx-i" viewBox="0 0 24 24" width="'+(sz||15)+'" height="'+(sz||15)+'" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">'+p+'</svg>'; }
+
+  function feedCardHtml(r){
+    var rc=Number(r.response_count)||0, hs=Number(r.high_signal)||0;
+    var pulse=fcPulse(r), score=fcInterest(r), res=fcResolution(r);
+    var st=caseStatusClass(r);
+    var chips='<span class="fx-chip st-'+escHtml(st)+'">'+escHtml(caseStatusLabel(r))+'</span>'
+      + '<span class="fx-chip neutral">'+escHtml(urgLabel(r.urgency))+'</span>'
+      + (r.product_context?'<span class="fx-chip neutral">'+escHtml(r.product_context)+'</span>':'')
+      + (hs>0?'<span class="fx-chip signal">'+fxIc(FXI.star,13)+hs+' high-signal '+(hs===1?'response':'responses')+'</span>':'')
+      + (r.needs_context?'<span class="fx-chip warn">Needs more context</span>':'')
+      + (rc===0?'<span class="fx-chip need">Needs responses</span>':'');
+    var cats=(r.categories||[]).map(function(c){ return '<span class="fx-tag cat">'+escHtml(c)+'</span>'; }).join('');
+    var wants=(r.help_types||[]).map(function(c){ return '<span class="fx-tag want">'+escHtml(helpLabel(c))+'</span>'; }).join('');
+    var stk=(r.stakeholders||[]).map(function(c){ return '<span class="fx-tag stk">'+escHtml(c)+'</span>'; }).join('');
+    return '<div class="feed-card fx-card" data-id="'+escHtml(r.id)+'">'
+      + '<span class="fx-accent a-'+escHtml(st)+' u-'+escHtml(r.urgency||'')+'"></span>'
+      + '<div class="fx-rail"><span class="fx-time">'+fcRel(r.created_at)+'</span>'
+        + '<span class="fx-node n-'+pulse[1]+'"></span><span class="fx-pulse p-'+pulse[1]+'">'+pulse[0]+'</span></div>'
+      + '<div class="fx-body">'
+        + '<div class="fx-chips">'+chips+'</div>'
+        + '<div class="fx-title">'+escHtml(r.title)+'</div>'
+        + '<div class="fx-sub">'+escHtml(r.decision)+'</div>'
+        + (cats||wants||stk ? '<div class="fx-tags">'+cats+wants+stk+'</div>' : '')
+        + '<div class="fx-strip">'
+          + '<span class="fx-m">'+fxIc(FXI.clock)+'<b>'+fcReadMin(r)+' min</b><small>Read time</small></span>'
+          + '<span class="fx-m">'+fxIc(FXI.chat)+'<b>'+rc+'</b><small>'+(rc===1?'Response':'Responses')+'</small></span>'
+          + '<span class="fx-m">'+fxIc(FXI.gauge)+'<b>'+res+'%</b><small>Resolution likelihood</small></span>'
+          + '<span class="fx-ctx">'+ctxHtml(r)+'</span>'
+        + '</div>'
+      + '</div>'
+      + '<aside class="fx-side">'
+        + '<div class="fx-ringwrap">'+fcRing(score)+'<span class="fx-ringl">Community<br>Interest Score</span></div>'
+        + '<span class="fx-top">Top '+fcPct(r)+'% of cases</span>'
+        + (r.is_mine?'<span class="fx-share">'+shareBtnHtml(r.id)+'</span>':'')
+        + '<span class="fx-cta">Open discussion '+fxIc(FXI.arrow,15)+'</span>'
+      + '</aside>'
       + '</div>';
   }
+
   var feedReqId=0, feedRetry=0;
   function loadFeed(reset){ detachExp();
     if(!SB||feedLoading) return; feedLoading=true;
