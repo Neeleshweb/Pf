@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:tk-v5 2026-07-21T09:00:00Z -->
+<!-- build:tk-v7 2026-07-21T13:00:00Z -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <meta name="description" content="PM Toolkit by Neelesh Singh — Templates, frameworks, coaching and resources for aspiring and growing Product Managers."/>
@@ -1048,6 +1048,9 @@
   #mm-body{min-height:0 !important}                 /* flex child must be able to shrink, or overflow-y never engages */
   #mm-body > *{flex:0 0 auto !important}            /* nothing stretches or squashes */
   #mm-body .mmd-ext-ic svg{width:20px !important;height:20px !important}
+  .mmd-extrow{border-top:1px solid rgba(128,128,128,.22) !important;margin-top:.35rem}
+  .mmd-extrow .mmd-lbl{font-weight:800}
+  .mmd-extarrow{opacity:.6}
   .mm-cta{display:none !important}
 </style>
 </head>
@@ -3404,7 +3407,7 @@
     body.appendChild(link('🏠  Home', function(){ window.location.href='/index.html'; }));
   })();
 </script>
-<script src="/gc-auth.js?v=5"></script>
+<script src="/gc-auth.js?v=6"></script>
 <div class="lv-ov" id="leave-ov" role="dialog" aria-modal="true" aria-labelledby="lv-h">
   <div class="lv-card">
     <span class="lv-eyebrow">You’re leaving this site</span>
@@ -3450,7 +3453,7 @@
 </script>
 
 <script>window.MMCFG={"settings": 0, "badge": 0, "home": null, "remove": ["gut check", "portfolio", "home"], "rows": [["Home", "/index.html", "home", "purple"], ["Portfolio", "/portfolio.html", "about", "red"]], "ext": [{"title": "Product Judgment Labs", "desc": "Train your product judgment. Free to start.", "icon": "diamond", "leave": 1, "hero": 1}]};</script>
-<script src="/mm-drawer.js?v=5"></script>
+<script src="/mm-drawer.js?v=6"></script>
 <style id="tk-ext-fix">
   /* toolkit-only hard clamp for the Judgment Labs card.
      Placed last in <body> so it wins document order, uses the child combinator
@@ -3478,5 +3481,26 @@
     min-width:30px !important; max-height:30px !important; align-self:center !important;
   }
 </style>
+<script>
+/* Analytics — Cloudflare Web Analytics (cookie-free, so no consent banner needed).
+   Paste your per-domain tokens below (Cloudflare dashboard → Web Analytics → the site
+   → "JS snippet" → copy the token value only). Until then this safely no-ops.
+   Staging/preview hosts are intentionally absent so they are never tracked. */
+(function(){
+  var TOKENS = {
+    'productjudgmentlabs.com'      : 'PJL_TOKEN_HERE',
+    'www.productjudgmentlabs.com'  : 'PJL_TOKEN_HERE',
+    'neeleshpmtoolkit.com'         : 'NPT_TOKEN_HERE',
+    'www.neeleshpmtoolkit.com'     : 'NPT_TOKEN_HERE'
+  };
+  var t = TOKENS[location.hostname];
+  if (!t || t.indexOf('_TOKEN_HERE') > -1) return;   /* not configured yet */
+  var s = document.createElement('script');
+  s.defer = true;
+  s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+  s.setAttribute('data-cf-beacon', '{"token":"' + t + '"}');
+  document.head.appendChild(s);
+})();
+</script>
 </body>
 </html>
