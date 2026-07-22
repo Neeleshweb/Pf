@@ -85,15 +85,33 @@
       '.pjlpw-err{margin-top:.5rem;font-size:.78rem;color:#DC2626;min-height:1em}',
       '.pjlpw-toggle{margin-top:.6rem;background:none;border:none;padding:0;cursor:pointer;',
       '  font:inherit;font-size:.78rem;color:inherit;opacity:.7;text-decoration:underline}',
+      /* Portfolio-side modal. Deliberately styled to neeleshpmtoolkit.com's own
+         tokens (--accent #e8540a, --card #141414, DM Sans, uppercase CTAs) and
+         NOT to the Product Judgment Labs look. Two sites, two identities. */
       '.pjlpw-ov{position:fixed;inset:0;z-index:9999;display:none;align-items:center;',
-      '  justify-content:center;background:rgba(0,0,0,.55);padding:1rem}',
+      '  justify-content:center;background:rgba(0,0,0,.72);padding:1rem}',
       '.pjlpw-ov.open{display:flex}',
-      '.pjlpw-card{width:100%;max-width:340px;background:var(--card,#16181d);color:var(--white,#f0ece4);',
-      '  border:1px solid rgba(128,128,128,.3);border-radius:14px;padding:1.15rem;',
-      '  box-shadow:0 22px 60px rgba(0,0,0,.5)}',
-      '.pjlpw-card h3{margin:0 0 .3rem;font-size:1rem}',
-      '.pjlpw-card p{margin:0 0 .6rem;font-size:.8rem;opacity:.72}',
-      '.pjlpw-x{float:right;background:none;border:none;color:inherit;font-size:1.1rem;cursor:pointer;opacity:.6}'
+      '.pjlpw-card{width:100%;max-width:352px;background:var(--card,#141414);',
+      '  color:var(--white,#f0ece4);border:1px solid var(--border2,#2e2e2e);',
+      '  border-radius:12px;padding:1.4rem;box-shadow:0 22px 60px rgba(0,0,0,.55);',
+      "  font-family:'DM Sans',system-ui,sans-serif}",
+      '.pjlpw-card h3{margin:0 0 .35rem;font-size:.82rem;letter-spacing:.12em;',
+      '  text-transform:uppercase;color:var(--white,#f0ece4);font-weight:700}',
+      '.pjlpw-card p{margin:0 0 .95rem;font-size:.78rem;line-height:1.5;color:var(--muted,#6b6b6b)}',
+      '.pjlpw-x{position:absolute;top:.7rem;right:.85rem;background:none;border:none;',
+      '  color:var(--muted,#6b6b6b);font-size:1.15rem;line-height:1;cursor:pointer}',
+      '.pjlpw-x:hover{color:var(--white,#f0ece4)}',
+      '.pjlpw-card{position:relative}',
+      '.pjlpw-gbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:.55rem;',
+      '  background:var(--accent,#e8540a);color:#fff;border:none;font-weight:600;font-size:.74rem;',
+      '  letter-spacing:.3px;text-transform:uppercase;padding:.7rem .95rem;border-radius:9px;cursor:pointer}',
+      '.pjlpw-gbtn:hover{background:var(--accent2,#f0a500);color:#111}',
+      '.pjlpw-card .pjlpw-go{background:transparent;border:1px solid var(--border2,#2e2e2e);',
+      '  color:var(--white,#f0ece4);font-size:.74rem;letter-spacing:.3px;text-transform:uppercase;',
+      '  padding:.7rem .95rem}',
+      '.pjlpw-card .pjlpw-go:hover{border-color:var(--accent,#e8540a);filter:none}',
+      '.pjlpw-card .pjlpw-f{background:#0f0f0f;border:1px solid var(--border2,#2e2e2e);border-radius:9px}',
+      '.pjlpw-card .pjlpw-f:focus{border-color:var(--accent,#e8540a);box-shadow:0 0 0 3px rgba(232,84,10,.16)}'
     ].join('');
     var st = document.createElement('style');
     st.id = 'pjlpw-styles';
@@ -175,34 +193,71 @@
     return true;
   }
 
-  /* --- surface B: portfolio pages (gc-auth.js renders a bare button) ------- */
-  function attachToGca() {
-    var b = q('#gca-signin');
-    if (!b || document.getElementById('pjlpw-toggle')) return false;
+  /* --- surface B: portfolio pages — one modal, both options ---------------
+     gc-auth.js renders a bare "Sign in" button with no modal. Rather than
+     hang an extra link off the navbar, we intercept that button in the
+     CAPTURE phase and open a single dialog offering Google and password
+     together — the same shape as the product side, dressed in the portfolio's
+     own styling.
 
-    var t = document.createElement('button');
-    t.type = 'button';
-    t.id = 'pjlpw-toggle';
-    t.className = 'pjlpw-toggle';
-    t.textContent = 'Use email & password';
-    t.style.marginLeft = '.5rem';
-    t.style.marginTop = '0';
-    if (b.nextSibling) b.parentNode.insertBefore(t, b.nextSibling); else b.parentNode.appendChild(t);
+     The intercept is additive: gc-auth.js keeps its own onclick handler
+     untouched, and the Google button inside our dialog calls the module's
+     public window.GCAuth.signIn(). If this file fails to load, the original
+     button behaves exactly as it does today. */
+  var GOOGLE_SVG = '<svg width="16" height="16" viewBox="0 0 48 48" aria-hidden="true">'
+    + '<path fill="#FFC107" d="M43.6 20.5h-1.9V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8a12 12 0 1 1 7.9-21l5.7-5.7A20 20 0 1 0 24 44c11 0 20-9 20-20 0-1.2-.1-2.3-.4-3.5z"/>'
+    + '<path fill="#FF3D00" d="M6.3 14.7l6.6 4.8A12 12 0 0 1 24 12c3 0 5.8 1.1 7.9 3l5.7-5.7A20 20 0 0 0 6.3 14.7z"/>'
+    + '<path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2A12 12 0 0 1 12.7 28l-6.6 5.1A20 20 0 0 0 24 44z"/>'
+    + '<path fill="#1976D2" d="M43.6 20.5H24v8h11.3a12 12 0 0 1-4.1 5.6l6.2 5.2C36.9 41.4 44 36 44 24c0-1.2-.1-2.3-.4-3.5z"/></svg>';
 
+  function buildGcaModal() {
+    if (document.getElementById('pjlpw-ov')) return;
     var ov = document.createElement('div');
     ov.className = 'pjlpw-ov';
     ov.id = 'pjlpw-ov';
-    ov.innerHTML = '<div class="pjlpw-card" role="dialog" aria-modal="true">'
+    ov.innerHTML = '<div class="pjlpw-card" role="dialog" aria-modal="true" aria-label="Sign in">'
       + '<button class="pjlpw-x" id="pjlpw-x" aria-label="Close">&times;</button>'
       + '<h3>Sign in</h3>'
-      + '<p>Google sign-in is available from the button behind this dialog.</p>'
-      + formHtml('pjlpw-b') + '</div>';
+      + '<p>Your session is shared across the site. You appear only as an alias on Product Judgment Labs.</p>'
+      + '<button type="button" class="pjlpw-gbtn" id="pjlpw-google">' + GOOGLE_SVG + ' Continue with Google</button>'
+      + formHtml('pjlpw-b')
+      + '</div>';
     document.body.appendChild(ov);
 
-    t.addEventListener('click', function () { ov.classList.add('open'); });
-    q('#pjlpw-x', ov).addEventListener('click', function () { ov.classList.remove('open'); });
-    ov.addEventListener('click', function (e) { if (e.target === ov) ov.classList.remove('open'); });
+    function close() { ov.classList.remove('open'); }
+    q('#pjlpw-x', ov).addEventListener('click', close);
+    ov.addEventListener('click', function (e) { if (e.target === ov) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && ov.classList.contains('open')) close();
+    });
+    q('#pjlpw-google', ov).addEventListener('click', function () {
+      close();
+      try {
+        if (window.GCAuth && window.GCAuth.signIn) { window.GCAuth.signIn(); return; }
+      } catch (e) {}
+      var b = q('#gca-signin');            /* last resort: the original button */
+      if (b) { b.setAttribute('data-pjlpw-pass', '1'); b.click(); }
+    });
     wire('pjlpw-b');
+  }
+
+  function attachToGca() {
+    if (!q('#gca-signin')) return false;
+    buildGcaModal();
+    if (document.documentElement.getAttribute('data-pjlpw-gca')) return true;
+    document.documentElement.setAttribute('data-pjlpw-gca', '1');
+    /* capture phase: stops the event before gc-auth.js's own onclick runs.
+       The escape hatch above sets data-pjlpw-pass so our Google fallback can
+       still reach the original handler. */
+    document.addEventListener('click', function (e) {
+      var t = e.target && e.target.closest ? e.target.closest('#gca-signin') : null;
+      if (!t) return;
+      if (t.getAttribute('data-pjlpw-pass')) { t.removeAttribute('data-pjlpw-pass'); return; }
+      e.preventDefault();
+      e.stopPropagation();
+      var ov = document.getElementById('pjlpw-ov');
+      if (ov) ov.classList.add('open');
+    }, true);
     return true;
   }
 

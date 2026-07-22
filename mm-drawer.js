@@ -93,7 +93,14 @@
   }
   function aliasText(){
     var n=q('.acct-name')||q('.gca-name');
-    if(n && n.textContent.trim()) return n.textContent.trim();
+    var t=n && n.textContent.trim();
+    /* DecisionRoom / Performance Center / Judgment Lab render
+         .acct-name = (DRP && DRP.alias) || 'You'
+       so 'You' is a PLACEHOLDER shown while the profile is still loading, not
+       a name. Treat it as "not ready" and fall back to the email local part;
+       the poll below re-renders as soon as the real alias arrives.
+       GutCheck renders identFull() here, which is a real name — kept as is. */
+    if(t && t!=='You') return t;
     var ss=session(); if(ss&&ss.user&&ss.user.email) return ss.user.email.split('@')[0];
     return 'Your account';
   }
@@ -101,8 +108,13 @@
   function renderAcct(){
     var host=document.getElementById('mmd-acct'); if(!host) return;
     var on=signedIn(), st=on?'in':'out';
-    if(host.getAttribute('data-state')===st) return;
+    /* Re-render when the LABEL changes too, not only the signed-in state.
+       The alias arrives asynchronously after auth resolves, so a state-only
+       guard latched onto the 'You' placeholder and never updated. */
+    var lbl=on?aliasText():'';
+    if(host.getAttribute('data-state')===st && host.getAttribute('data-label')===lbl) return;
     host.setAttribute('data-state',st);
+    host.setAttribute('data-label',lbl);
     if(on){
       host.innerHTML='<div class="mmd-acct-top"><span class="mmd-av">'+svg(IC.about,22)+'</span>'
         +'<div class="mmd-acct-tx"><b>'+aliasText()+'</b><small>Signed in</small></div></div>'
