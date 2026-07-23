@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- build:pw-modal-v2 2026-07-22T21:00:00Z -->
+<!-- build:feed-date 2026-07-23T10:00:00Z -->
 <!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
 <!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
 <!-- build:dr-d6-deeplink 2026-07-12T15:20:00Z -->
@@ -3095,7 +3095,11 @@ boot();
     if(m<60) return Math.max(1,m)+'m ago';
     var h=Math.floor(m/60); if(h<24) return h+'h ago';
     var d=Math.floor(h/24); if(d<30) return d+'d ago';
-    return Math.floor(d/30)+'mo ago';
+    /* Past 30 days "3mo ago" is vaguer than the date itself, and on a feed
+       holding 12 weeks of history most cards land there. Show the real date. */
+    var dt=new Date(iso), ny=new Date().getFullYear();
+    return dt.toLocaleDateString(undefined,{month:'short',day:'numeric'})
+         + (dt.getFullYear()!==ny ? ' '+dt.getFullYear() : '');
   }
   function fcPulse(r){
     var rc=Number(r.response_count)||0;
