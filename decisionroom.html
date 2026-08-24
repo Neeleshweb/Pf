@@ -839,9 +839,17 @@
     }
     html[data-dr-theme="signal"] .fbar select { padding: .55rem 1rem; }
     html[data-dr-theme="signal"] .fbar .btn-primary { border-radius: 999px; box-shadow: 0 14px 30px rgba(79,67,216,.26); }
-    html[data-dr-theme="signal"] .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
-    html[data-dr-theme="signal"] .reveal.in { opacity: 1; transform: none; }
-    @media (prefers-reduced-motion: reduce) { html[data-dr-theme="signal"] .reveal { opacity: 1 !important; transform: none !important; transition: none; } }
+    /* Signal scroll-reveal REMOVED 2026-08-24.
+       It set every non-hero <section> to opacity:0 and relied on an
+       IntersectionObserver to add .in. A section that was display:none when the
+       observer wired never reported an intersection, so it kept .reveal without
+       .in and stayed invisible for the rest of the session -- which is exactly
+       why the resolved / library section could not be seen in Signal but was
+       fine in every other theme. Content must never depend on an animation
+       firing. Both selectors are now visible no-ops, so even a cached copy of
+       the old JS cannot hide anything. */
+    html[data-dr-theme="signal"] .reveal,
+    html[data-dr-theme="signal"] .reveal.in { opacity: 1; transform: none; transition: none; }
     /* ---- Pass 1b: marketing sections ---- */
     /* bento (why it's not a forum) */
     .trust-grid { display: none; }
@@ -3301,7 +3309,14 @@ boot();
     if(!show || !EX_ROWS.length){ strip.style.display='none'; list.innerHTML=''; return; }
     var html='';
     for(var i=0;i<EX_ROWS.length;i++){
-      try{ html+=exDecorate(feedCardHtml(EX_ROWS[i]), EX_ROWS[i]); }catch(e){}
+      /* libCardHtml, NOT feedCardHtml. Every exemplary case is closed by
+         definition (dr_featured_cases filters resolved_high = 1). The feed
+         renderer paints the live timeline rail -- the relative date and the
+         "Active" pulse -- and omits the closed-case extras, which is why these
+         cards showed "Active" and no "N of M met". The .ex-on styles are
+         written against .fc-top / .fc-title / .fc-attrs, i.e. the lib card,
+         which is further confirmation this was the intended renderer. */
+      try{ html+=exDecorate(libCardHtml(EX_ROWS[i]), EX_ROWS[i]); }catch(e){}
     }
     if(!html){ strip.style.display='none'; list.innerHTML=''; return; }
     strip.style.display='block';
@@ -3459,7 +3474,7 @@ boot();
       else {
         var opts=(d.options||[]).map(function(o,i){ return '<div class="cd-opt"><span>'+('ABCDE'.charAt(i)||'\u2022')+'</span>'+escHtml(o)+'</div>'; }).join('');
         var help=(d.help_types||[]).map(function(h){ return '<span class="cd-chip y">'+escHtml(helpLabel(h))+'</span>'; }).join('');
-        m.innerHTML='<div class="cd-head">'+(d.is_mine?'<span class="cd-ctx mine">Your case</span>':'<span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span>')+'<span class="cd-head-r">'+(d.is_mine?'<button type="button" class="cd-share" id="cd-share-btn">\u2197 Share</button>':'')+((d.is_mine&&d.status!=='closed')?'<button type="button" class="cd-share cd-edit" id="cd-edit-btn">\u270E Edit</button>':'')+(d.needs_context?'<span class="cd-nc">\u2753 Needs more context</span>':'')+'<span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span>'+((!d.is_mine&&currentUser)?'<button type="button" class="cd-nc-btn" id="cd-nc-btn"'+(d.i_flagged?' disabled':'')+'>'+(d.i_flagged?'\u2713 Flagged':'Ask for more context')+'</button>':'')+'</span></div>'
+        m.innerHTML='<div class="cd-head">'+(d.is_mine?'<span class="cd-ctx mine">Your case</span>':'<span class="cd-ctx">'+escHtml(d.author_context||d.alias||'PM')+'</span>')+'<span class="cd-head-r">'+(d.is_mine?'<button type="button" class="cd-share" id="cd-share-btn">\u2197 Share</button>':'')+((d.is_mine&&d.status!=='closed')?'<button type="button" class="cd-share cd-edit" id="cd-edit-btn">\u270E Edit</button>':'')+(d.needs_context?'<span class="cd-nc">\u2753 Needs more context</span>':'')+'<span class="cd-status s-'+escHtml(caseStatusClass(d))+'">'+escHtml(caseStatusLabel(d))+'</span>'+((!d.is_mine&&currentUser&&!caseIsResolved(d))?'<button type="button" class="cd-nc-btn" id="cd-nc-btn"'+(d.i_flagged?' disabled':'')+'>'+(d.i_flagged?'\u2713 Flagged':'Ask for more context')+'</button>':'')+'</span></div>'
           +(d.is_mine?'<div id="cb-host"></div>':'')
           +'<h2 class="cd-title">'+escHtml(d.title)+'</h2>'
           +row('The decision','<strong>'+escHtml(d.decision)+'</strong>')
@@ -4225,11 +4240,13 @@ boot();
 (function(){
   function isSignal(){ return document.documentElement.getAttribute('data-dr-theme')==='signal'; }
   function wire(){
-    if(!isSignal() || !('IntersectionObserver' in window)) return;
-    var els=[].slice.call(document.querySelectorAll('section:not(.hero)')).filter(function(el){ return !el._rv; });
-    if(!els.length) return;
-    var io=new IntersectionObserver(function(entries){ entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold:.1, rootMargin:'0px 0px -6% 0px' });
-    els.forEach(function(el){ el._rv=1; el.classList.add('reveal'); var r=el.getBoundingClientRect(); if(r.top < window.innerHeight*0.92){ el.classList.add('in'); } else { io.observe(el); } });
+    /* Disabled 2026-08-24 -- see the .reveal CSS note. Kept as a no-op that
+       also strips any .reveal already on the page, so a stale cached copy of
+       this file cannot leave a section hidden. drWireReveal stays defined
+       because other code calls it after re-rendering a list. */
+    [].slice.call(document.querySelectorAll('.reveal')).forEach(function(el){
+      el.classList.remove('reveal'); el.classList.remove('in');
+    });
   }
   window.drWireReveal=wire;
   if(document.readyState!=='loading') wire(); else document.addEventListener('DOMContentLoaded', wire);
