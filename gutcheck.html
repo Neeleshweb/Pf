@@ -1833,6 +1833,58 @@ function applyStreak(){
 var EPOCH = Date.UTC(2026, 5, 9); // launch day: 9 Jun 2026 (day 0)
 function dayIndexFor(date){ var utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()); return Math.floor((utc - EPOCH)/86400000); }
 var TODAY_INDEX = Math.max(0, dayIndexFor(new Date()));
+/* ── 6.0b: the curated bank now lives in gc_bank_dilemmas ──────────────────
+   The array above is retained as a FALLBACK and is the single source of truth
+   until this loader proves the database copy is good.
+
+   Every existing read of BANK is a lookup by id or by index — there are five,
+   and none of them keeps its own copy — so replacing the contents IN PLACE
+   with splice() is invisible to all of them.
+
+   The bar for swapping is deliberately high: the call must succeed, return at
+   least as many rows as the array, and every row must pass a shape check. If
+   anything fails, BANK is left exactly as it is and the page behaves precisely
+   as it did before. There is no state in which this can leave the bank empty. */
+function gcValidBankRow(r){
+  if(!r || typeof r!=='object') return false;
+  if(typeof r.id!=='string' || !r.id) return false;
+  if(typeof r.scenario!=='string' || !r.scenario) return false;
+  if(typeof r.q!=='string' || !r.q) return false;
+  if(!Array.isArray(r.opts) || r.opts.length<2) return false;
+  for(var i=0;i<r.opts.length;i++){
+    var o=r.opts[i];
+    if(!o || typeof o.k!=='string' || typeof o.t!=='string' || typeof o.d!=='string') return false;
+  }
+  /* best may legitimately be null — a genuine judgment call — but when present
+     it must name one of this dilemma's own options. */
+  if(r.best!=null){
+    var ok=false;
+    for(var j=0;j<r.opts.length;j++){ if(r.opts[j].k===r.best) ok=true; }
+    if(!ok) return false;
+  }
+  return true;
+}
+var BANK_SOURCE='embedded';
+function loadBankFromDB(){
+  if(!SB || !SB.rpc) return Promise.resolve(false);
+  return SB.rpc('gc_bank_all').then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] bank read error:', res.error); return false; }
+    var rows = res && res.data;
+    if(!Array.isArray(rows) || rows.length < BANK.length){
+      if(rows) console.warn('[GutCheck] bank returned', rows.length, 'rows, keeping the embedded copy');
+      return false;
+    }
+    for(var i=0;i<rows.length;i++){
+      if(!gcValidBankRow(rows[i])){
+        console.warn('[GutCheck] bank row failed validation, keeping the embedded copy:', rows[i] && rows[i].id);
+        return false;
+      }
+    }
+    BANK.splice.apply(BANK, [0, BANK.length].concat(rows));
+    BANK_SOURCE='db';
+    return true;
+  }).catch(function(e){ console.warn('[GutCheck] bank load failed:', e); return false; });
+}
 function dilemmaForIndex(i){ return BANK[((i % BANK.length) + BANK.length) % BANK.length]; }
 function dateForIndex(i){ var d = new Date(EPOCH + i*86400000); return d; }
 function fmtDate(d){ return d.toLocaleDateString(undefined, { weekday:'long', month:'long', day:'numeric' }); }
@@ -3311,6 +3363,13 @@ function openTourAfterSignin(){
   if(window.__gcOpenTour) setTimeout(window.__gcOpenTour, 600);
 }
 function boot(){
+  /* 6.0b: load the bank before anything reads it. boot() is the only entry
+     point (called once, below) and nothing touches BANK at top level, so this
+     is the complete gate. loadBankFromDB never rejects, so a failure here can
+     only mean "carry on with the embedded array". */
+  loadBankFromDB().then(bootAfterBank);
+}
+function bootAfterBank(){
   updateAuthUI();
   if(!SB){ applyStreak(); initToday(); renderArchive(); refreshRecord(); return; }
   SB.auth.getSession().then(function(res){
