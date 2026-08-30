@@ -389,6 +389,13 @@
     .rv-dim { font-size: .68rem; padding: .28rem .65rem; border-radius: 100px; border: 1px solid var(--border2); color: var(--muted); }
     .rv-dim.up { color: var(--green); border-color: rgba(var(--green-rgb),.4); }
     .rv-dim.down { color: var(--red); border-color: rgba(var(--red-rgb),.4); }
+        .rv-prov { display:flex; flex-direction:column; gap:.15rem; margin:.7rem 0 .9rem; padding:.6rem .8rem; border-radius:12px; border:1px solid rgba(20,26,60,.10); background:rgba(20,26,60,.03); }
+    .rv-prov-h { font-size:.78rem; font-weight:700; letter-spacing:.02em; }
+    .rv-prov-b { font-size:.78rem; opacity:.75; line-height:1.35; }
+    .rv-prov-outcome { border-color:rgba(22,140,90,.30); background:rgba(22,140,90,.06); }
+    .rv-prov-expert  { border-color:rgba(79,67,216,.28); background:rgba(79,67,216,.06); }
+    .rv-prov-room    { border-color:rgba(196,138,20,.32); background:rgba(196,138,20,.07); }
+    .rv-prov-none    { border-color:rgba(90,100,120,.28); background:rgba(90,100,120,.06); }
     .rv-break { font-size: .92rem; line-height: 1.75; color: var(--text2); }
     .rv-break strong { color: var(--white); }
     .rv-real { background: rgba(var(--green-rgb),.07); border: 1px solid rgba(var(--green-rgb),.3); border-radius: 12px; padding: 1.05rem 1.2rem; margin-top: .5rem; }
@@ -1302,7 +1309,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-06-21-17';
+var SITE_VERSION = '2026-08-25-02';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -2296,7 +2303,21 @@ function reveal(d, instant){
   var __cm = d.category && CAT_META[d.category];
   if(__cm){ var __conf=(GC.conf&&GC.conf[d.id])||2; var __delta=[0,3,5,7][__conf]||5; var __v=d.best||null; if(!__v && d.tier===3 && typeof roomSP!=='undefined' && roomSP){ var __rs=roomSP[d.id]; if(__rs&&__rs.total>=3&&__rs.sp) __v=__rs.sp; } var __mt=(__v!=null)?(youKey===__v):null;
     if(__mt!==null){ h += '<div id="rv-profup-box" data-did="'+escHtml(d.id)+'" class="rv-profup '+(__mt?'up':'down')+'"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(__mt?('You matched the verdict \u2014 <b>+'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'):('A different read \u2014 <b>\u2212'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'))+'</span></div>'; }
-    else { h += '<div id="rv-profup-box" data-did="'+escHtml(d.id)+'" class="rv-profup"><span class="rv-profup-h">\uD83D\uDCC8 Recorded</span><span class="rv-profup-b">Locked in. Your <b>'+escHtml(__cm.l)+'</b> signal updates once the room reaches a verdict (3+ votes).</span></div>'; } }
+    else { h += '<div id="rv-profup-box" data-did="'+escHtml(d.id)+'" class="rv-profup"><span class="rv-profup-h">\uD83D\uDCC8 Recorded</span><span class="rv-profup-b">Locked in. Your <b>'+escHtml(__cm.l)+'</b> signal updates once the room settles (6+ calls, a clear margin, and enough predictions).</span></div>'; } }
+  /* 6.0c: provenance — state plainly what counts as the right answer here, and
+     whether this call feeds your calibration. Type (real call / industry /
+     public / community) is where the CONTENT came from; verdict_source is what
+     the STANDARD is. They correlate but are not the same: an industry dilemma
+     may be expert-verdicted, or may have no right answer at all. */
+  var __vs = (typeof verdictSourceOf==='function') ? verdictSourceOf(d)
+           : (d.verdict_source || (d.best ? 'expert' : (d.tier===3 ? 'room' : 'none')));
+  var __prov = {
+    outcome: ['\u2705','Outcome-backed verdict','Graded against what actually happened. Counts in full toward your calibration.'],
+    expert : ['\uD83C\uDF93','Expert verdict','An authored answer, with the reasoning below. Counts in full toward your calibration.'],
+    room   : ['\uD83D\uDCCA','The room\u2019s answer','Not a verdict \u2014 the surprisingly-popular read from other PMs. Counts at reduced weight, and only once the room settles.'],
+    none   : ['\uD83E\uDD14','No right answer','A genuine judgment call. Deliberately not scored, so it cannot move your calibration either way.']
+  }[__vs] || null;
+  if (__prov){ h += '<div class="rv-prov rv-prov-'+__vs+'"><span class="rv-prov-h">'+__prov[0]+' '+__prov[1]+'</span><span class="rv-prov-b">'+__prov[2]+'</span></div>'; }
   /* breakdown */
   if (d.tier===3){ h += '<div class="rv-h y">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'; if(d.breakdown) h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
   else { h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
