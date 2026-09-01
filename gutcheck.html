@@ -1109,7 +1109,7 @@
 <section class="section" id="submit">
   <div class="sec-eyebrow b">Community · Suggest a dilemma</div>
   <div class="sec-title">Suggest A <span class="b">Dilemma</span></div>
-  <p class="sec-sub">The sharpest practice comes from real forks. <strong>Suggest a dilemma</strong> you've seen and, once it's live, PMs across the community practise their call on it — you'll watch how the room votes over the next 48 hours (credited, if you like).</p>
+  <p class="sec-sub">The sharpest practice comes from real forks. <strong>Suggest a dilemma</strong> you've seen and, once it's live, PMs across the community practise their call on it — you'll watch how the room votes until it settles (credited, if you like).</p>
   <div class="call-card" style="padding:1.6rem 1.8rem">
     <div class="sub-status" id="sub-status"></div>
     <button class="btn-primary" id="open-submit">✍️ Suggest a dilemma</button>
@@ -1309,7 +1309,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-08-25-04';
+var SITE_VERSION = '2026-08-26-01';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -2616,6 +2616,16 @@ function renderMyQueue(rows){
 var mydRowsById = {}, mydAllRows = [], mydCounts = {};
 var mydSort = 'recent', mydStatus = 'all', mydCategory = 'all';
 function mydIsClosed(r){ return r && r.closes_at ? (new Date(r.closes_at) <= new Date()) : false; }
+/* 6.0d: a submitted dilemma no longer runs on a 48-hour fuse. It stays open
+   until the room settles, so tell the author exactly what is still missing
+   rather than a countdown that no longer exists. Vote count is the one part
+   we can state without another round trip; the margin and prediction tests are
+   named so the rule is never a mystery. */
+function mydOpenStatus(r){
+  var n = mydVotes(r);
+  if(n < 6) return (6-n) + ' more call' + ((6-n)===1?'':'s') + ' to settle';
+  return 'enough calls \u2014 waiting on a clear winner';
+}
 function mydVotes(r){ return (mydCounts && mydCounts[r.dilemma_id]) || 0; }
 function renderMyDControls(host){
   if(!host) return;
@@ -2655,8 +2665,8 @@ function renderMyDilemmas(){
     return tb - ta;
   });
   var h = '<div class="myq-h">\uD83D\uDCE4 Your dilemmas</div>'
-    + '<div class="myq-intro">Posted dilemmas go live instantly and collect votes for 48 hours, then lock with a final verdict.'
-    + (openN ? ' <b>'+openN+'</b> of yours '+(openN===1?'is':'are')+' still open.' : ' All of yours have closed.') + '</div>'
+    + '<div class="myq-intro">Posted dilemmas go live instantly and stay open until the room settles \u2014 <b>6+ calls</b>, a <b>10-point</b> gap between the top two answers, and <b>50%</b> of voters predicting. There is no countdown: a dilemma closes when it has an answer worth keeping, not when a clock runs out.'
+    + (openN ? ' <b>'+openN+'</b> of yours '+(openN===1?'is':'are')+' still collecting calls.' : ' All of yours have settled.') + '</div>'
     + '<div id="myd-controls" class="myd-controls"></div>';
   if(!rows.length){
     wrap.innerHTML = h + '<div class="feed-empty">No dilemmas match this view \u2014 try a different status or category.</div>';
@@ -2668,7 +2678,10 @@ function renderMyDilemmas(){
   rows.forEach(function(r){
     var closed = mydIsClosed(r);
     var scn = (r.scenario||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(); if(scn.length>170) scn = scn.slice(0,169)+'\u2026';
-    var status = closed ? '\uD83D\uDD12 Closed \u00B7 final verdict' : '\uD83D\uDFE2 Open \u00B7 '+feedTimeLeft(r.closes_at);
+    /* 6.0d: there is no longer a countdown to show. A dilemma closes on
+       evidence, so the honest status is how far it is from settling. */
+    var status = closed ? '\uD83D\uDD12 Settled \u00B7 final verdict'
+                        : '\uD83D\uDFE2 Open \u00B7 ' + mydOpenStatus(r);
     var nv = mydVotes(r);
     h += '<div class="myd-card">'
       + '<div class="myd-top"><span class="myd-status '+(closed?'closed':'open')+'">'+status+'</span><span class="myd-votes">'+nv+' vote'+(nv===1?'':'s')+'</span></div>'
@@ -3029,11 +3042,11 @@ function loadMyQueue(){
     { eye:'1 · Create', title:'Start with a <span>real</span> fork.',
       body:'Bring an actual product decision you faced — the options, the tension, the part with no clean answer. Turning your own messy call into a sharp dilemma is, by itself, the fastest way to see how you really think.' },
     { eye:'2 · Post it live', title:'No queue. <span>Live in seconds.</span>',
-      body:'Hit post and your dilemma is instantly live to the whole community, open for 48 hours. No gatekeeper, no waiting — your real question is in front of working PMs the moment you ask it.' },
+      body:'Hit post and your dilemma is instantly live to the whole community, and it stays open until the room settles. No gatekeeper, no waiting, no countdown \u2014 your real question is in front of working PMs the moment you ask it.' },
     { eye:'3 · The room responds', title:'A room of PMs <span>weighs in.</span>',
       body:'Product managers worldwide commit their own call and leave their reasoning. You watch the room split — aspiring vs working PMs — an honest, live read on your decision that no AI prompt and no single mentor can give you.' },
     { eye:'4 · The verdict', title:'It closes with a <span>verdict.</span>',
-      body:'After 48 hours it locks. The crowd’s answer crystallizes — including the surprisingly-popular pick the majority underrates but that’s right more often than the obvious favorite. Signal, not noise.' },
+      body:'It locks once the room settles \u2014 6+ calls, a clear gap between the top two, and enough voters predicting. The crowd’s answer crystallizes \u2014 including the surprisingly-popular pick the majority underrates but that’s right more often than the obvious favorite. Signal, not noise.' },
     { eye:'5 · The archive', title:'Every call <span>compounds.</span>',
       body:'Closed calls live forever in the Archive to revisit anytime, and every call you make sharpens your track record. The judgment you build here is portable, compounding, and impossible to copy from a prompt.' }
   ];
@@ -3120,7 +3133,7 @@ var NOTIF = { items:[], unread:0, open:false, poll:null };
 function notifIcon(t){ return ({live:'\uD83D\uDE80', vote:'\uD83D\uDDF3\uFE0F', milestone:'\uD83C\uDF89', like_dilemma:'\u2764\uFE0F', like_reason:'\uD83D\uDC4D', verdict:'\u2696\uFE0F', closing_soon:'\u23F3', closed:'\uD83D\uDCCA', voted_closed:'\uD83D\uDCCA', voted_verdict:'\u2696\uFE0F', voted_reasons:'\uD83D\uDCDD'})[t] || '\uD83D\uDD14'; }
 function notifText(n){
   var d=n.data||{}; var ttl='<span class="notif-hl">'+escHtml(d.title||'your dilemma')+'</span>'; var c=n.cnt||1; var t=n.type;
-  if(t==='live') return 'Your dilemma is <b>live</b> \u2014 open for votes for 48 hours. '+ttl;
+  if(t==='live') return 'Your dilemma is <b>live</b> \u2014 open for votes until the room settles. '+ttl;
   if(t==='vote') return '<b>'+c+'</b> new '+(c===1?'vote':'votes')+' on '+ttl;
   if(t==='milestone') return '\uD83C\uDF89 <b>'+escHtml(String(d.total||c))+' votes</b> on '+ttl;
   if(t==='like_dilemma') return '<b>'+c+'</b> '+(c===1?'PM':'PMs')+' liked your dilemma '+ttl;
@@ -3160,7 +3173,7 @@ function resolveDilemmaForModal(did){ for(var i=0;i<BANK.length;i++){ if(BANK[i]
 function closeNotifModal(){ var ov=document.getElementById('notif-modal'); if(ov) ov.classList.remove('open'); document.body.style.overflow=''; }
 function notifModalBanner(n){
   var d=n.data||{}, c=n.cnt||1, t=n.type, ico='\uD83D\uDD14', txt='New activity on this dilemma.';
-  if(t==='live'){ ico='\uD83D\uDE80'; txt='Your dilemma went live \u2014 open for votes for 48 hours.'; }
+  if(t==='live'){ ico='\uD83D\uDE80'; txt='Your dilemma went live \u2014 open for votes until the room settles.'; }
   else if(t==='vote'){ ico='\uD83D\uDDF3\uFE0F'; txt=c+' new '+(c===1?'vote':'votes')+' came in since you last checked.'; }
   else if(t==='milestone'){ ico='\uD83C\uDF89'; txt=(d.total||c)+' votes \u2014 your dilemma is gaining traction.'; }
   else if(t==='like_dilemma'){ ico='\u2764\uFE0F'; txt=c+' '+(c===1?'PM':'PMs')+' liked this dilemma.'; }
@@ -3467,6 +3480,11 @@ function boot(){
      point (called once, below) and nothing touches BANK at top level, so this
      is the complete gate. loadBankFromDB never rejects, so a failure here can
      only mean "carry on with the embedded array". */
+  /* 6.0d: close any community dilemma that has settled. Lazy, same pattern as
+     dr_seal_weeks in the Performance Center. Fire-and-forget — the page must
+     never wait on it, and a failure is harmless because the dilemma simply
+     stays open until the next load. */
+  try { if (SB && SB.rpc) SB.rpc('gc_close_settled').catch(function(){}); } catch(e){}
   loadBankFromDB().then(bootAfterBank);
 }
 function bootAfterBank(){
