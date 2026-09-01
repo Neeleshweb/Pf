@@ -1309,7 +1309,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-08-25-02';
+var SITE_VERSION = '2026-08-25-04';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1550,12 +1550,14 @@ function injectRoomVerdict(d, box, isLive){
     var _margin = _sorted.length>1 ? ((+_sorted[0].surprise||0)-(+_sorted[1].surprise||0))*100 : 100;
     var _cov    = total>0 ? (totalPred/total)*100 : 0;
     if(total<6 || _cov<50 || _margin<10){
-      var _why = total<6   ? ('only '+total+' call'+(total===1?'':'s')+' so far')
-               : _cov<50   ? 'not enough people predicted what the room would choose'
-                           : 'the top two answers are still too close';
-      box.innerHTML='<div class="rv-break">The room hasn’t settled — '+_why
-        +(isLive?'. Check back as more PMs vote.':' (this one closed before a clear pattern formed).')
-        +'<br><span class="rv-note">Room readings are never scored — only expert and outcome-backed verdicts count toward your calibration.</span></div>';
+      var _why = total<6   ? ('only '+total+' call'+(total===1?'':'s')+' so far, and it needs 6')
+               : _cov<50   ? ('only '+Math.round(_cov)+'% of voters predicted what the room would choose, and it needs 50%')
+                           : ('the top two answers are '+Math.round(_margin)+' points apart, and they need 10');
+      var _need = total<6 ? (6-total)+' more call'+((6-total)===1?'':'s') : null;
+      box.innerHTML='<div class="rv-break">The room hasn’t settled — '+_why+'.'
+        +(isLive ? (_need? ' '+_need+' and it unlocks.' : ' Check back as more PMs vote.')
+                 : ' It closed before a clear pattern formed.')
+        +'<br><span class="rv-note">A room settles at <b>6+ calls</b>, a <b>10-point</b> margin between the top two, and <b>50%</b> of voters predicting. Room readings are never scored either way — only expert and outcome-backed verdicts move your calibration.</span></div>';
       return;
     }
     var sp=null; rows.forEach(function(r){ if(r.is_sp) sp=r; }); if(!sp) sp=rows[0];
@@ -1985,9 +1987,35 @@ var ROOM_WEIGHT = 0.60;
 function verdictSourceOf(d){
   if(!d) return 'none';
   if(d.verdict_source) return d.verdict_source;      /* from gc_bank_all */
-  if(d.best) return 'expert';                        /* embedded fallback */
-  if(d.tier===3) return 'room';
-  return 'none';
+  /* Fallback for the embedded array, or any payload predating the backfill.
+     It mirrors the SQL rule exactly:
+        none    if best is null
+        outcome if a real outcome is recorded
+        expert  otherwise
+     An earlier version returned 'expert' whenever best was set, which
+     mislabelled all 13 outcome-backed dilemmas the moment verdict_source was
+     missing. Same rule in both places means a stale payload degrades to the
+     right answer instead of a confidently wrong one. */
+  if(!d.best) return (d.tier===3) ? 'room' : 'none';
+  if(d.real && String(d.real).trim()) return 'outcome';
+  return 'expert';
+}
+/* The provenance banner. There are TWO reveal renderers — the live one on
+   #today and buildArchDetail() for archive cards — and they are independent.
+   The first version of this shipped into only one of them, so archive cards
+   showed nothing. It lives here as a single helper both call, so the two
+   cannot drift apart again. */
+function provenanceHTML(d){
+  var vs = verdictSourceOf(d);
+  var P = {
+    outcome: ['\u2705','Outcome-backed verdict','Graded against what actually happened. Counts in full toward your calibration.'],
+    expert : ['\uD83C\uDF93','Expert verdict','An authored answer, with the reasoning below. Counts in full toward your calibration.'],
+    room   : ['\uD83D\uDCCA','The room\u2019s answer','Not a verdict \u2014 the surprisingly-popular read from other PMs. Counts at reduced weight, and only once the room settles.'],
+    none   : ['\uD83E\uDD14','No right answer','A genuine judgment call. Deliberately not scored, so it cannot move your calibration either way.']
+  }[vs];
+  if(!P) return '';
+  return '<div class="rv-prov rv-prov-'+vs+'"><span class="rv-prov-h">'+P[0]+' '+P[1]
+       + '</span><span class="rv-prov-b">'+P[2]+'</span></div>';
 }
 /* returns {matched, weight} or null when the call is not scoreable */
 function scoreEntry(e, roomSP){
@@ -2309,15 +2337,7 @@ function reveal(d, instant){
      public / community) is where the CONTENT came from; verdict_source is what
      the STANDARD is. They correlate but are not the same: an industry dilemma
      may be expert-verdicted, or may have no right answer at all. */
-  var __vs = (typeof verdictSourceOf==='function') ? verdictSourceOf(d)
-           : (d.verdict_source || (d.best ? 'expert' : (d.tier===3 ? 'room' : 'none')));
-  var __prov = {
-    outcome: ['\u2705','Outcome-backed verdict','Graded against what actually happened. Counts in full toward your calibration.'],
-    expert : ['\uD83C\uDF93','Expert verdict','An authored answer, with the reasoning below. Counts in full toward your calibration.'],
-    room   : ['\uD83D\uDCCA','The room\u2019s answer','Not a verdict \u2014 the surprisingly-popular read from other PMs. Counts at reduced weight, and only once the room settles.'],
-    none   : ['\uD83E\uDD14','No right answer','A genuine judgment call. Deliberately not scored, so it cannot move your calibration either way.']
-  }[__vs] || null;
-  if (__prov){ h += '<div class="rv-prov rv-prov-'+__vs+'"><span class="rv-prov-h">'+__prov[0]+' '+__prov[1]+'</span><span class="rv-prov-b">'+__prov[2]+'</span></div>'; }
+  h += provenanceHTML(d);
   /* breakdown */
   if (d.tier===3){ h += '<div class="rv-h y">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'; if(d.breakdown) h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
   else { h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
@@ -2449,7 +2469,7 @@ function buildArchDetail(item, d){
   var realLabel = d.tier===1 ? '✅ What I actually did' : (d.tier===3 ? '👥 What the submitter shared' : '🌍 What actually happened');
   var realHtml = d.real ? ('<div class="rv-h '+(d.tier===1?'g':'b')+'" style="margin-top:1.1rem">'+realLabel+'</div><div class="rv-real '+(d.tier===1?'':'public')+'"><p>'+d.real+'</p></div>') : '';
   var bk = (d.tier===3) ? ('<div class="rv-h y" style="margin-top:1.1rem">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'+(d.breakdown?'<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>':'')) : '<div class="rv-h y" style="margin-top:1.1rem">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>';
-  rev.innerHTML = bk+realHtml+(d.lesson?('<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'):'')
+  rev.innerHTML = provenanceHTML(d)+bk+realHtml+(d.lesson?('<div class="rv-lesson"><span>Takeaway:</span> '+d.lesson+'</div>'):'')
     + '<span class="preview-tag crowd-tag" style="margin-top:.8rem;display:inline-block">Crowd numbers are a preview · live community soon</span>'
     + (dilemmaLikeHTML(d)?'<div class="rv-foot-btns" style="margin-top:1rem">'+dilemmaLikeHTML(d)+'</div>':'')
     + '<div class="rv-reasons"></div>';
