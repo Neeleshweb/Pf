@@ -1126,7 +1126,7 @@
   <div class="feed-head">
     <div class="sec-eyebrow" style="margin-top:2.8rem">More open calls</div>
     <div class="sec-title" style="font-size:clamp(1.5rem,3.5vw,2rem);margin-bottom:.6rem">The Room Is <span>Live</span></div>
-    <p class="sec-sub" style="margin-bottom:1.2rem">Every community dilemma still inside its 48-hour window. Make your call before it closes — then watch how the room leans.</p>
+    <p class="sec-sub" style="margin-bottom:1.2rem">Every community dilemma the room has not settled yet. Make your call while it is open — then watch how the room leans. A dilemma closes once it has <b>6+ calls</b>, a <b>10-point</b> gap between the top two answers, and <b>50%</b> of voters predicting. After that it stops taking votes and moves to the archive, where you can still read it.</p>
   </div>
   <div id="feed-controls" class="feed-controls"></div>
   <div id="feed-list" class="feed-list"></div>
@@ -1136,7 +1136,7 @@
 <section class="section" id="my-submissions" style="display:none">
   <div class="sec-eyebrow">Your dilemmas</div>
   <div class="sec-title">Calls You <span>Opened</span></div>
-  <p class="sec-sub">The dilemmas you've put to the room. Track how PMs are voting, watch each verdict form over its 48-hour window, and revisit the calls you started.</p>
+  <p class="sec-sub">The dilemmas you've put to the room. Track how PMs are voting and watch each verdict form. There is no countdown — a dilemma stays open until the room settles it, then stops taking votes and moves to the archive.</p>
   <div id="myq-wrap" class="myq-wrap"></div>
 </section>
 
@@ -1309,7 +1309,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-08-26-01';
+var SITE_VERSION = '2026-08-26-02';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
