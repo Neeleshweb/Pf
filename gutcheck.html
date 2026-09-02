@@ -1309,7 +1309,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-08-26-02';
+var SITE_VERSION = '2026-08-27-01';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -2420,8 +2420,17 @@ function fmtDateStr(sv){ var p=(sv||'').split('-'); if(p.length!==3) return sv||
 function addArchItem(list, dateLabel, d){
   var made = d.id in GC.calls, youKey = GC.calls[d.id];
   var badge = d.tier===1 ? '★ Real call' : (d.tier===3 ? '👥 Community' : 'Industry / public');
+  /* 6.0g: "locked" is no longer true for every unanswered archived dilemma.
+     Curated bank dilemmas (tier 1 and 2) carry an authored verdict and never
+     close, so they stay answerable; only community dilemmas are archived
+     because they SETTLED, and those really are finished. The old label said
+     "locked" for both. */
+  var archOpen = (d.tier !== 3);
   var item = document.createElement('div'); item.className = 'arch-item';
-  item.innerHTML = '<div class="arch-top"><span class="arch-day">'+dateLabel+' · '+badge+'</span><span class="arch-status '+(made?'made':'missed')+'">'+(made?'✓ you called '+youKey:'· locked — not answered')+'</span></div>'
+  item.innerHTML = '<div class="arch-top"><span class="arch-day">'+dateLabel+' · '+badge+'</span><span class="arch-status '+(made?'made':'missed')+'">'
+    +(made ? ('✓ you called '+youKey)
+           : (archOpen ? '· still open — you haven\u2019t called this'
+                       : '· settled — you didn\u2019t call it'))+'</span></div>'
     + '<div class="arch-title">'+d.scenario.replace(/<[^>]+>/g,'')+'</div>'
     + '<div class="arch-status" style="color:var(--accent2)">▾ Tap to study this call</div>'
     + '<div class="arch-detail"><div class="arch-q">'+d.q+'</div><div class="arch-opts"></div><div class="arch-rev"></div></div>';
