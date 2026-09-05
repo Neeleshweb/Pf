@@ -796,11 +796,28 @@
 .feed-h{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:.5px;margin:.4rem 0 .9rem;display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
 .feed-h .feed-sub{font-family:inherit;font-size:.8rem;letter-spacing:0;color:var(--muted);font-weight:400}
 .feed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.9rem}
-.feed-card{text-align:left;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;cursor:pointer;transition:border-color .15s,transform .15s;display:flex;flex-direction:column;gap:.55rem;font:inherit;color:inherit}
+/* 6.1c: card rebuild. The old card was a flat box with the date sitting on top
+   of the category chip, because .fct-badges could grow past its share of a
+   space-between row while .feed-left was nowrap. The date now sits on its own
+   line under the chip, so nothing can collide however long a category name is. */
+.feed-card{text-align:left;position:relative;overflow:hidden;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.15rem 1.2rem 1rem;cursor:pointer;transition:border-color .18s,transform .18s,box-shadow .18s;display:flex;flex-direction:column;gap:.6rem;font:inherit;color:inherit;min-height:210px}
+.feed-card::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--accent),#12b886);opacity:.85}
+.feed-card::after{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(79,67,216,.055),rgba(18,184,134,.03) 45%,transparent 70%);pointer-events:none}
+.feed-card>*{position:relative;z-index:1}
+.feed-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 12px 30px rgba(20,26,60,.10)}
+.feed-card.is-called{border-color:rgba(18,184,134,.45)}
+.fc-meta{display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--muted);font-weight:600}
+.fc-meta svg{flex:0 0 auto;opacity:.75}
+.fc-stats{display:flex;align-items:center;gap:.9rem;margin-top:auto;padding-top:.7rem;border-top:1px solid var(--border);font-size:.76rem;color:var(--muted);font-weight:600}
+.fc-stat{display:inline-flex;align-items:center;gap:.32rem}
+.fc-stat svg{opacity:.7}
+.fc-called{margin-left:auto;display:inline-flex;align-items:center;gap:.3rem;color:#12b886;font-weight:700}
+.fc-open{margin-left:auto;color:var(--accent);font-weight:700}
 .feed-card:hover{border-color:var(--accent);transform:translateY(-2px)}
 .feed-card-top{display:flex;justify-content:space-between;align-items:center;gap:.5rem}
 .feed-badge{font-size:.7rem;font-weight:700;letter-spacing:.4px;color:var(--accent2);background:var(--card2);border:1px solid var(--border2);border-radius:20px;padding:.18rem .5rem;white-space:nowrap;display:inline-flex;align-items:center;gap:.25rem}
-.fct-badges{display:inline-flex;align-items:center;gap:.4rem;flex-wrap:wrap;min-width:0}
+.fct-badges{display:inline-flex;align-items:center;gap:.4rem;flex-wrap:wrap;min-width:0;max-width:100%}
+.fct-badges .cat-chip,.fct-badges .feed-badge{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .feed-left{font-size:.72rem;color:var(--muted);font-weight:600;white-space:nowrap}
 .feed-scn{font-size:.92rem;line-height:1.5;color:var(--white)}
 .feed-card-foot{font-size:.76rem;color:var(--muted);margin-top:auto}
@@ -1327,7 +1344,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-08-29-01';
+var SITE_VERSION = '2026-08-30-01';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1370,7 +1387,22 @@ function parseOptions(text){
 }
 function scheduleRowToDilemma(row){
   if(!row) return null;
-  if(row.kind === 'bank'){ for(var i=0;i<BANK.length;i++){ if(BANK[i].id === row.bank_id) return BANK[i]; } return null; }
+  /* 6.1c: a bank row's dates live on the SCHEDULE row, not in the array, and
+     returning the array entry threw them away — which is why an opened bank
+     dilemma had no date to show and fell back to today. Return a shallow copy
+     carrying them. first_published_at is the ORIGINAL publication; publish_date
+     is rewritten every time the scheduler gives the dilemma another outing. */
+  if(row.kind === 'bank'){
+    for(var i=0;i<BANK.length;i++){
+      if(BANK[i].id === row.bank_id){
+        var b = {}; for(var kk in BANK[i]) b[kk] = BANK[i][kk];
+        b.firstPublishedAt = row.first_published_at || row.published_at || row.publish_date || null;
+        b.publishedAt      = row.published_at || row.publish_date || null;
+        return b;
+      }
+    }
+    return null;
+  }
   var opts = parseOptions(row.options); if(opts.length < 2) return null;
   /* community content is user-supplied — escape every field so it can never inject HTML */
   var esc = (typeof escHtml==='function') ? escHtml : function(x){ return String(x==null?'':x); };
@@ -1384,7 +1416,9 @@ function scheduleRowToDilemma(row){
        Without it verdictSourceOf falls back to re-deriving it from best plus a
        recorded outcome -- which happens to give the right answer for these, but
        leaves two places deciding the same thing. */
-    verdict_source: row.verdict_source || null, dims:(function(){ try{ var x=(typeof row.dims==='string')?JSON.parse(row.dims):row.dims; return (x&&typeof x==='object')?x:null; }catch(e){ return null; } })(),
+    verdict_source: row.verdict_source || null,
+    firstPublishedAt: row.first_published_at || row.published_at || row.publish_date || null,
+    publishedAt: row.published_at || row.publish_date || null, dims:(function(){ try{ var x=(typeof row.dims==='string')?JSON.parse(row.dims):row.dims; return (x&&typeof x==='object')?x:null; }catch(e){ return null; } })(),
     breakdown: row.breakdown ? esc(row.breakdown) : 'This dilemma came straight from the community — there isn\u2019t an official \u201cright\u201d answer here. What matters is whether your reasoning holds together.',
     real: row.outcome ? esc(row.outcome) : null, lesson: row.lesson ? esc(row.lesson) : null, closesAt: row.closes_at || null };
 }
@@ -1536,10 +1570,27 @@ function renderFeed(rows){
     var made = r.dilemma_id in GC.calls;
     var scn = (r.scenario||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(); if(scn.length>150) scn = scn.slice(0,149)+'\u2026';
     var oc = (r.options||'').split('\n').filter(function(x){ return x.trim(); }).length;
-    h += '<button type="button" class="feed-card" data-id="'+escHtml(r.dilemma_id)+'">'
-      + '<div class="feed-card-top"><span class="fct-badges">'+(r.category && CAT_META[r.category] ? catChip(r.category) : '<span class="feed-badge">\uD83D\uDC65 Community</span>')+(GC.skips&&GC.skips[r.dilemma_id]?'<span class="feed-badge skipped">\u23ED\uFE0F Skipped</span>':'')+'</span><span class="feed-left">'+feedOpenedLabel(r)+'</span></div>'
+    /* 6.1c: date moved onto its own meta line beneath the chip, so a long
+       category can never overlap it. Stats footer added: votes and options with
+       icons, plus whether you have already called it. */
+    var _ic = function(pth){ return '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+pth+'</svg>'; };
+    var _cal   = _ic('<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>');
+    var _vote  = _ic('<path d="M17 11V5a2 2 0 0 0-2-2l-3 7v11h8.3a2 2 0 0 0 2-1.7l1.4-9A2 2 0 0 0 21.7 8H17"/><path d="M7 22H4a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h3"/>');
+    var _opt   = _ic('<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.5"/><circle cx="4.5" cy="12" r="1.5"/><circle cx="4.5" cy="18" r="1.5"/>');
+    var _check = _ic('<path d="M20 6L9 17l-5-5"/>');
+    h += '<button type="button" class="feed-card'+(made?' is-called':'')+'" data-id="'+escHtml(r.dilemma_id)+'">'
+      + '<div class="feed-card-top"><span class="fct-badges">'
+        + (r.category && CAT_META[r.category] ? catChip(r.category) : '<span class="feed-badge">\uD83D\uDC65 Community</span>')
+        + (GC.skips&&GC.skips[r.dilemma_id]?'<span class="feed-badge skipped">\u23ED\uFE0F Skipped</span>':'')
+      + '</span></div>'
+      + '<div class="fc-meta">'+_cal+'<span>'+escHtml(feedOpenedLabel(r).replace(/^[^A-Za-z0-9]+/,''))+'</span></div>'
       + '<div class="feed-scn">'+escHtml(scn)+'</div>'
-      + '<div class="feed-card-foot"><span class="feed-votes" id="fv-'+escHtml(r.dilemma_id)+'">\u2026</span>'+(oc?' <span class="feed-dot">\u00B7</span> '+oc+' options':'')+(made?' <span class="feed-dot">\u00B7</span> <span class="feed-voted">\u2713 you called this</span>':' <span class="feed-dot">\u00B7</span> tap to weigh in')+'</div>'
+      + '<div class="fc-stats">'
+        + '<span class="fc-stat" id="fv-'+escHtml(r.dilemma_id)+'">'+_vote+'<span>\u2026</span></span>'
+        + (oc?'<span class="fc-stat">'+_opt+'<span>'+oc+' options</span></span>':'')
+        + (made ? '<span class="fc-called">'+_check+'you called this</span>'
+                : '<span class="fc-open">tap to weigh in</span>')
+      + '</div>'
       + '</button>';
   });
   h += '</div>';
@@ -1551,7 +1602,11 @@ function renderFeed(rows){
   var ids = items.map(function(r){ return r.dilemma_id; });
   if(SB && ids.length){ SB.rpc('gc_vote_counts',{p_ids:ids}).then(function(res){
     if(res && res.data){ var m={}; res.data.forEach(function(x){ m[x.dilemma_id]=Number(x.n)||0; });
-      ids.forEach(function(id){ var el=document.getElementById('fv-'+id); if(el){ var n=m[id]||0; el.textContent=n+' vote'+(n===1?'':'s'); } }); }
+      /* 6.1c: #fv-* is now the whole stat chip and contains an icon, so write
+         into its inner span rather than replacing the element's contents. Falls
+         back to the element itself if the inner span is ever absent. */
+      ids.forEach(function(id){ var el=document.getElementById('fv-'+id); if(el){ var n=m[id]||0;
+        var t=el.querySelector('span')||el; t.textContent=n+' vote'+(n===1?'':'s'); } }); }
   }).catch(function(){}); }
 }
 function loadSkips(){ if(!SB || !currentUser) return Promise.resolve(); return SB.rpc('gc_my_skips').then(function(res){ if(res&&res.data&&res.data.length){ if(!GC.skips) GC.skips={}; res.data.forEach(function(id){ GC.skips[id]=1; }); } }).catch(function(){}); }
@@ -2269,12 +2324,32 @@ function badgesHTML(d){
     + cbPill('lvl','Level', d.level||'')
     + cbPill('diff','Difficulty', d.difficulty||'');
 }
+/* 6.1c: the header read "DAY 89 · SATURDAY, SEPTEMBER 5" — a running day
+   counter plus TODAY's date, on a dilemma that may have been published in June.
+   Both were misleading. It now states when the dilemma was actually posted. */
+function postedLabel(d){
+  var iso = d && (d.firstPublishedAt || d.publishedAt);
+  var out = '';
+  if(iso){
+    var dt = new Date(iso);
+    if(!isNaN(dt.getTime())){
+      out = dt.toLocaleDateString(undefined,{ weekday:'long', month:'long', day:'numeric' });
+    }
+  }
+  if(!out) out = fmtDate(new Date());
+  var live = (d && d.closesAt) ? (' <span class="cd-live">\u00B7 \u23F3 '+feedTimeLeft(d.closesAt)+'</span>') : '';
+  return '<svg class="cd-cal" viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">'
+       + '<rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/>'
+       + '<path d="M3 10h18" stroke="currentColor" stroke-width="1.7"/>'
+       + '<path d="M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'
+       + '</svg><span class="cd-lbl">Posted</span> <b>'+escHtml(out)+'</b>'+live;
+}
 function renderToday(){
   var d = todaysDilemma || dilemmaForIndex(TODAY_INDEX);
   var answered = d.id in GC.calls;
   var html = '<div class="call-card">'
     + (practiceMode ? '<div class="practice-bar"><span>\uD83D\uDCDA Practising an archived call \u2014 your answer still counts toward your calibration.</span><button type="button" class="practice-back" onclick="backToTodaysCall()">\u2190 Back to today\u2019s call</button></div>' : '')
-    + '<div class="call-top"><div class="call-date">'+(d.closesAt ? ('\uD83D\uDC65 Community \u00B7 \u23F3 '+feedTimeLeft(d.closesAt)) : ('Day '+(TODAY_INDEX+1)+' \u00B7 <b>'+fmtDate(new Date())+'</b>'))+'</div><div class="call-badges">'+badgesHTML(d)+'</div></div>'
+    + '<div class="call-top"><div class="call-date">'+postedLabel(d)+'</div><div class="call-badges">'+badgesHTML(d)+'</div></div>'
     + '<div class="call-sec-t">The situation</div><div class="call-scenario">'+d.scenario+'</div>'
     + '<div class="call-q">'+d.q+'</div>'
     + (answered ? '' : '<div class="call-howto">'+(d.tier===3 ? 'Make your call: pick an option, then add your reasoning, your confidence, and your read on the room — then lock it in.' : 'Make your call: pick an option, then add your reasoning and your confidence — then lock it in.')+'</div>')
