@@ -1327,7 +1327,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-08-28-01';
+var SITE_VERSION = '2026-08-28-02';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -2355,6 +2355,29 @@ function doCommit(d, key, conf, pred){
   reveal(d, false);
   if (SB) { recordVote(d, key, reasonText, pred, conf).then(function(){ var rv=document.getElementById('today-reveal'); enhanceLive(rv, d); loadReasons(d, rv); if(d.tier===3 && rv){ var mb=rv.querySelector('.rvv-mount'); if(mb) injectRoomVerdict(d, mb, true); } if(typeof loadMyQueue==='function') loadMyQueue(); }); }
   bumpVoteStreak(); refreshRecord(); saveProfile();
+  refreshArchItem(d);
+}
+
+/* 6.1b-fix: after answering an archived dilemma from practise mode, its card
+   further down the page still showed "still open — you haven't called this"
+   and the Make-your-call button until a reload. The commit knows which dilemma
+   it was, so the card is rebuilt in place: status label, and the panel swapped
+   from the practise box to the full reveal. No re-fetch, no scroll jump, and
+   it is a no-op when the dilemma is not in the archive list. */
+function refreshArchItem(d){
+  if(!d || !d.id) return;
+  var item = document.querySelector('.arch-item[data-did="'+(window.CSS && CSS.escape ? CSS.escape(d.id) : d.id)+'"]');
+  if(!item) return;
+  var st = item.querySelector('.arch-status');
+  if(st){
+    st.className = 'arch-status made';
+    st.textContent = '\u2713 you called ' + (GC.calls[d.id] || '');
+  }
+  var wasOpen = item.classList.contains('open');
+  item._built = false;
+  var opts = item.querySelector('.arch-opts'); if(opts) opts.innerHTML = '';
+  var rev  = item.querySelector('.arch-rev');  if(rev)  rev.innerHTML  = '';
+  if(wasOpen){ try{ buildArchDetail(item, d); item._built = true; }catch(e){} }
 }
 
 function skipToday(d){
@@ -2475,7 +2498,17 @@ function closeAud(){ audOv.classList.remove('open'); }
 function fmtDateStr(sv){ var p=(sv||'').split('-'); if(p.length!==3) return sv||''; var dt=new Date(Date.UTC(+p[0],+p[1]-1,+p[2])); return dt.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'}); }
 function addArchItem(list, dateLabel, d){
   var made = d.id in GC.calls, youKey = GC.calls[d.id];
-  var badge = d.tier===1 ? '★ Real call' : (d.tier===3 ? '👥 Community' : 'Industry / public');
+  /* 6.1b-fix: the card badge used to show the TIER — "👥 Community" — while the
+     detail's Source pill runs through srcLabel(), which returns "Today's
+     curated" for any row whose source_type is editorial_case. Twenty-one
+     community rows on production carry exactly that, so a card said Community
+     and the panel behind it said curated. The card now shows the CATEGORY the
+     submitter picked, which is the useful thing to scan a list by and cannot
+     contradict the Source pill because it is a different field. The tier label
+     stays as the fallback for anything with no category. */
+  var __cm = d.category && CAT_META[d.category];
+  var badge = __cm ? (__cm.i + ' ' + escHtml(__cm.l))
+                   : (d.tier===1 ? '★ Real call' : (d.tier===3 ? '👥 Community' : 'Industry / public'));
   /* 6.0g: "locked" is no longer true for every unanswered archived dilemma.
      Curated bank dilemmas (tier 1 and 2) carry an authored verdict and never
      close, so they stay answerable; only community dilemmas are archived
@@ -2483,6 +2516,7 @@ function addArchItem(list, dateLabel, d){
      "locked" for both. */
   var archOpen = (d.tier !== 3);
   var item = document.createElement('div'); item.className = 'arch-item';
+  item.setAttribute('data-did', d.id);          /* 6.1b-fix: addressable for live refresh */
   item.innerHTML = '<div class="arch-top"><span class="arch-day">'+dateLabel+' · '+badge+'</span><span class="arch-status '+(made?'made':'missed')+'">'
     +(made ? ('✓ you called '+youKey)
            : (archOpen ? '· still open — you haven\u2019t called this'
