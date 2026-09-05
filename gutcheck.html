@@ -1327,7 +1327,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-08-28-02';
+var SITE_VERSION = '2026-08-29-01';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1507,6 +1507,19 @@ function renderFeedControls(){
     pills:{ value:feedCategory, options:categoryPillOptions(), onPick:function(v){ feedCategory=v; loadFeed(); } }
   });
 }
+/* 6.1b-fix: the feed card showed a countdown to closes_at. 6.0d removed the
+   48-hour fuse, so closes_at is null on every open community dilemma and
+   feedTimeLeft had nothing to count down to -- which is why every open call
+   rendered the same date. Open calls now show when they were OPENED, the fact
+   that actually exists, and anything with a real closes_at still counts down. */
+function feedOpenedLabel(r){
+  if(r && r.closes_at){ return '\u23F3 ' + feedTimeLeft(r.closes_at); }
+  var iso = (r && (r.published_at || r.publish_date)) || null;
+  if(!iso) return '\uD83D\uDFE2 Open';
+  var dt = new Date(iso);
+  if(isNaN(dt.getTime())) return '\uD83D\uDFE2 Open';
+  return 'Opened ' + dt.toLocaleDateString(undefined,{ month:'short', day:'numeric' });
+}
 function renderFeed(rows){
   var controls=document.getElementById('feed-controls'), list=document.getElementById('feed-list'); if(!list) return;
   var items = (rows||[]).filter(function(r){ return r && r.dilemma_id && (!todaysDilemma || r.dilemma_id !== todaysDilemma.id); });
@@ -1524,7 +1537,7 @@ function renderFeed(rows){
     var scn = (r.scenario||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(); if(scn.length>150) scn = scn.slice(0,149)+'\u2026';
     var oc = (r.options||'').split('\n').filter(function(x){ return x.trim(); }).length;
     h += '<button type="button" class="feed-card" data-id="'+escHtml(r.dilemma_id)+'">'
-      + '<div class="feed-card-top"><span class="fct-badges">'+(r.category && CAT_META[r.category] ? catChip(r.category) : '<span class="feed-badge">\uD83D\uDC65 Community</span>')+(GC.skips&&GC.skips[r.dilemma_id]?'<span class="feed-badge skipped">\u23ED\uFE0F Skipped</span>':'')+'</span><span class="feed-left">\u23F3 '+feedTimeLeft(r.closes_at)+'</span></div>'
+      + '<div class="feed-card-top"><span class="fct-badges">'+(r.category && CAT_META[r.category] ? catChip(r.category) : '<span class="feed-badge">\uD83D\uDC65 Community</span>')+(GC.skips&&GC.skips[r.dilemma_id]?'<span class="feed-badge skipped">\u23ED\uFE0F Skipped</span>':'')+'</span><span class="feed-left">'+feedOpenedLabel(r)+'</span></div>'
       + '<div class="feed-scn">'+escHtml(scn)+'</div>'
       + '<div class="feed-card-foot"><span class="feed-votes" id="fv-'+escHtml(r.dilemma_id)+'">\u2026</span>'+(oc?' <span class="feed-dot">\u00B7</span> '+oc+' options':'')+(made?' <span class="feed-dot">\u00B7</span> <span class="feed-voted">\u2713 you called this</span>':' <span class="feed-dot">\u00B7</span> tap to weigh in')+'</div>'
       + '</button>';
