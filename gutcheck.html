@@ -1327,7 +1327,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-08-27-02';
+var SITE_VERSION = '2026-08-28-01';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1379,7 +1379,12 @@ function scheduleRowToDilemma(row){
     category: row.category||null, source_type: row.source_type||null, domain: row.domain?esc(row.domain):null, difficulty: row.difficulty?esc(row.difficulty):null,
     source: row.credit ? ('Community · '+esc(row.credit)) : 'Community submission',
     scenario: esc(row.scenario||''), q: esc(row.question||'What would you do?'), opts: opts,
-    best: ((row.best||'').trim().toUpperCase()).replace(/[^A-D]/g,'')||null, dims:(function(){ try{ var x=(typeof row.dims==='string')?JSON.parse(row.dims):row.dims; return (x&&typeof x==='object')?x:null; }catch(e){ return null; } })(),
+    best: ((row.best||'').trim().toUpperCase()).replace(/[^A-D]/g,'')||null,
+    /* 6.1a: carry verdict_source through so the database stays authoritative.
+       Without it verdictSourceOf falls back to re-deriving it from best plus a
+       recorded outcome -- which happens to give the right answer for these, but
+       leaves two places deciding the same thing. */
+    verdict_source: row.verdict_source || null, dims:(function(){ try{ var x=(typeof row.dims==='string')?JSON.parse(row.dims):row.dims; return (x&&typeof x==='object')?x:null; }catch(e){ return null; } })(),
     breakdown: row.breakdown ? esc(row.breakdown) : 'This dilemma came straight from the community — there isn\u2019t an official \u201cright\u201d answer here. What matters is whether your reasoning holds together.',
     real: row.outcome ? esc(row.outcome) : null, lesson: row.lesson ? esc(row.lesson) : null, closesAt: row.closes_at || null };
 }
