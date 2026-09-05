@@ -407,7 +407,67 @@
     .arch-practise { border:0; border-radius:999px; padding:.5rem 1.05rem; cursor:pointer;
       font-weight:700; font-size:.84rem; color:#fff; background:var(--accent); }
     .arch-practise:hover { filter:brightness(1.06); }
-    .rv-prov { display:flex; flex-direction:column; gap:.15rem; margin:.7rem 0 .9rem; padding:.6rem .8rem; border-radius:12px; border:1px solid rgba(20,26,60,.10); background:rgba(20,26,60,.03); }
+    /* 6.1f: "What counts, and why" — reuses the call-card shell so it reads as
+       part of the product rather than as a help page bolted on. */
+    .hw-card { padding:1.4rem 1.5rem; }
+    .hw-tabs { display:flex; gap:.45rem; flex-wrap:wrap; margin-bottom:1rem; }
+    .hw-tab { border:1px solid var(--border); background:var(--card); color:inherit; border-radius:999px;
+      padding:.45rem .9rem; font-size:.82rem; font-weight:600; cursor:pointer; transition:all .15s; }
+    .hw-tab:hover { border-color:var(--accent); }
+    .hw-tab.is-on { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .hw-body { border:1px solid var(--border); border-radius:14px; padding:1rem 1.1rem; background:rgba(20,26,60,.02); }
+    .hw-h { font-size:1rem; font-weight:700; margin-bottom:.3rem; }
+    .hw-w { display:inline-block; font-size:.74rem; font-weight:700; letter-spacing:.03em; text-transform:uppercase;
+      padding:.2rem .6rem; border-radius:999px; margin-bottom:.6rem; }
+    .hw-w.full { background:rgba(18,184,134,.14); color:#0b7a5a; }
+    .hw-w.part { background:rgba(196,138,20,.16); color:#8a6106; }
+    .hw-w.zero { background:rgba(90,100,120,.14); color:#5a6478; }
+    .hw-p { font-size:.88rem; line-height:1.55; margin:.45rem 0; }
+    .hw-eg { border-left:3px solid var(--accent); padding:.5rem .8rem; margin-top:.7rem;
+      background:rgba(79,67,216,.05); border-radius:0 10px 10px 0; font-size:.85rem; }
+    .hw-where { font-size:.78rem; opacity:.72; margin-top:.6rem; }
+    .hw-try { margin-top:1.1rem; padding:1rem 1.1rem; border:1px dashed rgba(79,67,216,.32);
+      border-radius:14px; background:rgba(79,67,216,.04); }
+    .hw-try-h { font-weight:700; font-size:.9rem; }
+    .hw-try-s { font-size:.82rem; opacity:.75; margin:.25rem 0 .8rem; }
+    .hw-row { display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; margin-bottom:.55rem; }
+    .hw-lbl { font-size:.76rem; font-weight:700; opacity:.7; min-width:5.6rem; }
+    .hw-pill { border:1px solid var(--border); background:var(--card); color:inherit; border-radius:999px;
+      padding:.32rem .75rem; font-size:.78rem; cursor:pointer; }
+    .hw-pill.is-on { border-color:var(--accent); background:rgba(79,67,216,.1); font-weight:700; }
+    .hw-out { margin-top:.8rem; padding:.7rem .9rem; border-radius:12px; font-size:.88rem;
+      background:var(--card); border:1px solid var(--border); }
+    .hw-out b { font-size:1rem; }
+    .hw-types { margin-top:1.2rem; padding-top:1rem; border-top:1px solid var(--border); }
+    .hw-types-h { font-weight:700; font-size:.92rem; }
+    .hw-types-s { font-size:.83rem; opacity:.75; margin:.25rem 0 .8rem; line-height:1.5; }
+    .hw-tabs.t2 { margin-bottom:.8rem; }
+    .hw-tab2 { border:1px solid var(--border); background:var(--card); color:inherit; border-radius:999px;
+      padding:.4rem .85rem; font-size:.8rem; font-weight:600; cursor:pointer; transition:all .15s; }
+    .hw-tab2:hover { border-color:#12b886; }
+    .hw-tab2.is-on { background:#12b886; border-color:#12b886; color:#fff; }
+    .hw-tbody { border:1px solid var(--border); border-radius:14px; padding:1rem 1.1rem; background:rgba(18,184,134,.03); }
+    .hw-badge-row { margin-bottom:.5rem; }
+    .hw-badge { display:inline-block; font-size:.74rem; font-weight:700; letter-spacing:.02em;
+      padding:.22rem .65rem; border-radius:999px; background:rgba(20,26,60,.06); border:1px solid var(--border); }
+    .hw-sub { font-size:.74rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+      opacity:.6; margin:.8rem 0 .3rem; }
+    .hw-ul { margin:.2rem 0 .2rem 1.05rem; padding:0; }
+    .hw-ul li { font-size:.86rem; line-height:1.55; margin:.22rem 0; }
+    .hw-why { border-left:3px solid #12b886; padding-left:.7rem; }
+    .hw-admin { display:flex; align-items:center; gap:.7rem; padding:.6rem .75rem; margin-bottom:.75rem;
+      border:1px solid rgba(79,67,216,.25); background:rgba(79,67,216,.06); border-radius:12px; }
+    .hw-av { border-radius:50%; object-fit:cover; flex:0 0 auto; border:2px solid var(--card);
+      box-shadow:0 2px 8px rgba(20,26,60,.18); }
+    .hw-admin-n { font-weight:700; font-size:.88rem; display:flex; align-items:center; gap:.4rem; flex-wrap:wrap; }
+    .hw-adm-tag { font-size:.66rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+      padding:.14rem .45rem; border-radius:999px; background:var(--accent); color:#fff; }
+    .hw-admin-r { font-size:.78rem; opacity:.72; }
+        .hw-foot { margin-top:1.1rem; padding-top:.9rem; border-top:1px solid var(--border); }
+    .hw-foot-h { font-weight:700; font-size:.86rem; margin-bottom:.35rem; }
+    .hw-foot p { font-size:.85rem; line-height:1.55; opacity:.82; margin:.35rem 0; }
+    .hw-foot-b { border-left:3px solid #12b886; padding-left:.7rem; opacity:1 !important; }
+        .rv-prov { display:flex; flex-direction:column; gap:.15rem; margin:.7rem 0 .9rem; padding:.6rem .8rem; border-radius:12px; border:1px solid rgba(20,26,60,.10); background:rgba(20,26,60,.03); }
     .rv-prov-h { font-size:.78rem; font-weight:700; letter-spacing:.02em; }
     .rv-prov-b { font-size:.78rem; opacity:.75; line-height:1.35; }
     .rv-prov-outcome { border-color:rgba(22,140,90,.30); background:rgba(22,140,90,.06); }
@@ -1141,6 +1201,57 @@
 </section>
 
 <!-- SUBMIT A DILEMMA (moved to top) -->
+<section class="section" id="how-scoring">
+  <div class="sec-eyebrow b">How this works</div>
+  <div class="sec-title">What Counts, <span class="b">And Why</span></div>
+  <p class="sec-sub">Not every dilemma is scored the same way, because not every dilemma has the same kind of right answer. <strong>Pick a type below</strong> to see what happens when you call it.</p>
+
+  <div class="call-card hw-card">
+    <div class="hw-tabs" role="tablist">
+      <button type="button" class="hw-tab is-on" data-hw="outcome" role="tab">&#9989; Outcome-backed</button>
+      <button type="button" class="hw-tab" data-hw="expert" role="tab">&#127891; Expert verdict</button>
+      <button type="button" class="hw-tab" data-hw="room" role="tab">&#128202; The room&rsquo;s answer</button>
+      <button type="button" class="hw-tab" data-hw="none" role="tab">&#129300; No right answer</button>
+    </div>
+
+    <div class="hw-body" id="hw-body"></div>
+
+    <div class="hw-try">
+      <div class="hw-try-h">Try it &mdash; what happens to your signal?</div>
+      <p class="hw-try-s">Pick how sure you were, then whether you matched the verdict. This is the real arithmetic, not an illustration.</p>
+      <div class="hw-row">
+        <span class="hw-lbl">Confidence</span>
+        <button type="button" class="hw-pill" data-conf="1">Not sure</button>
+        <button type="button" class="hw-pill is-on" data-conf="2">Fairly sure</button>
+        <button type="button" class="hw-pill" data-conf="3">Certain</button>
+      </div>
+      <div class="hw-row">
+        <span class="hw-lbl">Your call</span>
+        <button type="button" class="hw-pill is-on" data-hit="1">Matched the verdict</button>
+        <button type="button" class="hw-pill" data-hit="0">Differed</button>
+      </div>
+      <div class="hw-out" id="hw-out"></div>
+    </div>
+
+    <div class="hw-types">
+      <div class="hw-types-h">Where a dilemma comes from</div>
+      <p class="hw-types-s">The badge on every card tells you its source. Source and scoring are related but not the same thing &mdash; here is what each one means, and what you will see inside it.</p>
+      <div class="hw-tabs t2" role="tablist">
+        <button type="button" class="hw-tab2 is-on" data-ht="community">&#128101; Community</button>
+        <button type="button" class="hw-tab2" data-ht="bank">&#127970; Industry / public</button>
+        <button type="button" class="hw-tab2" data-ht="real">&#11088; Real call</button>
+      </div>
+      <div class="hw-tbody" id="hw-tbody"></div>
+    </div>
+
+    <div class="hw-foot">
+      <div class="hw-foot-h">Why the weights differ</div>
+      <p>A verdict someone authored, or one grounded in what actually happened, is a considered standard &mdash; so it counts in full. The room&rsquo;s answer is a real signal but an inferred one, so it counts for less and only once enough people have called it. A dilemma with no right answer scores nothing in either direction, on purpose.</p>
+      <p class="hw-foot-b"><strong>Your ranking is never affected by how much you vote.</strong> Volume alone moves nothing &mdash; only whether your calls hold up against a standard, and whether you were more right when you were more confident.</p>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="submit">
   <div class="sec-eyebrow b">Community · Suggest a dilemma</div>
   <div class="sec-title">Suggest A <span class="b">Dilemma</span></div>
@@ -1344,7 +1455,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-09-01-01';
+var SITE_VERSION = '2026-09-03-01';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1557,6 +1668,138 @@ function feedOpenedLabel(r){
   var dt = new Date(iso);
   if(isNaN(dt.getTime())) return '\uD83D\uDFE2 Open';
   return 'Opened ' + dt.toLocaleDateString(undefined,{ month:'short', day:'numeric' });
+}
+/* 6.1f: "What counts, and why". The numbers below are not illustrative — the
+   deltas (3/5/7) and the weights (1.00 / 0.60 / 0) are read from the same rules
+   the scorer uses, so this panel cannot drift away from the product. */
+var NEELESH_AVATAR = 'data:image/jpeg;base64,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';
+/* 6.1g: where a dilemma comes from. Deliberately separate from the verdict
+   tabs above, because source and scoring are related but NOT the same thing —
+   an Industry/public dilemma can be expert-verdicted or have no right answer at
+   all, and a community dilemma can be either room-read or fully verdicted. That
+   distinction was the single thing hardest to work out from the interface. */
+var HWT = {
+  community: { badge:'&#128101; Community', t:'Submitted by a PM in the community',
+    who:'Another member hit <b>Suggest a dilemma</b> and posted a fork they actually faced.',
+    see:['The situation and the options, in their words',
+         '<b>How the room read it</b> &mdash; the surprisingly-popular answer, once enough people have called it',
+         '<b>What the submitter shared</b> &mdash; only if they filled in the optional &ldquo;what happened&rdquo; box'],
+    score:'Depends on whether it has a verdict. If the submitter recorded what actually happened, or we have since adjudicated it, you are graded against that at <b>full weight</b>. If not, the room decides at <b>60%</b>, and only once it settles.',
+    why:'A real fork from a working PM is the most useful practice there is, but it only becomes scoreable once there is something to be right or wrong against.' },
+  bank: { badge:'&#127970; Industry / public', t:'A curated dilemma, or a well-known public moment',
+    who:'Written for the bank, or drawn from a documented industry decision &mdash; Netflix, Slack, Dropbox and the like.',
+    see:['The situation, the options, and a written rationale',
+         '<b>Why this is the call</b> &mdash; the reasoning behind the answer',
+         'For public moments, what the company actually did and how it turned out'],
+    score:'Always has an authored answer, so it counts at <b>full weight</b> &mdash; except for a small number deliberately marked <b>no right answer</b>, which score nothing either way.',
+    why:'Someone stood behind the answer and wrote down why. That is a considered standard, so it carries the same weight as a documented outcome.' },
+  real: { badge:'&#11088; Real call', t:'A decision Neelesh actually made, with the result',
+    who:'These come from the person who built this platform. Every one is a fork he faced in a real product role, and the verdict is what he actually chose &mdash; followed by what it cost or earned.',
+    see:['The situation exactly as it landed on his desk',
+         '<b>What I actually did</b> &mdash; the call, and the measured result',
+         'Whether your call matched his, stated plainly'],
+    score:'Counts at <b>full weight</b>. The verdict is grounded in a documented outcome, which is the strongest standard on the platform.',
+    why:'There is no arguing with what happened. A call with a measured result is the closest thing to ground truth product judgment has.',
+    avatar:true }
+};
+function hwTypes(k){
+  var d = HWT[k] || HWT.community, el = document.getElementById('hw-tbody');
+  if(!el) return;
+  var head = d.avatar
+    ? '<div class="hw-admin"><img class="hw-av" src="'+NEELESH_AVATAR+'" alt="Neelesh Singh" width="44" height="44">'
+      + '<div><div class="hw-admin-n">Neelesh Singh <span class="hw-adm-tag">Platform author</span></div>'
+      + '<div class="hw-admin-r">Technical PM &middot; the calls behind this product</div></div></div>'
+    : '';
+  el.innerHTML = head
+    + '<div class="hw-badge-row"><span class="hw-badge">'+d.badge+'</span></div>'
+    + '<div class="hw-h">'+d.t+'</div>'
+    + '<p class="hw-p">'+d.who+'</p>'
+    + '<div class="hw-sub">What you will see</div>'
+    + '<ul class="hw-ul">'+d.see.map(function(x){ return '<li>'+x+'</li>'; }).join('')+'</ul>'
+    + '<div class="hw-sub">How it is scored</div><p class="hw-p">'+d.score+'</p>'
+    + '<div class="hw-sub">Why that way</div><p class="hw-p hw-why">'+d.why+'</p>';
+  var tabs = document.querySelectorAll('.hw-tab2');
+  for(var i=0;i<tabs.length;i++){ tabs[i].classList.toggle('is-on', tabs[i].getAttribute('data-ht')===k); }
+}
+var HW = {
+  outcome: { t:'Outcome-backed verdict', w:'Counts in full', c:'full',
+    p:['The right answer is what actually happened. Someone made this call for real and recorded how it turned out \u2014 either from the curated bank, or a community dilemma where the person who lived it told us the result.',
+       'Because the standard is a documented outcome rather than an opinion, it counts at full weight.'],
+    eg:'A PM chose to quantify the root cause before promising a rebuild. Complaints fell 40%. That result is the verdict \u2014 not a preference.',
+    wh:'Look for the green \u2705 banner on the reveal.' },
+  expert: { t:'Expert verdict', w:'Counts in full', c:'full',
+    p:['A senior PM wrote down the right answer and the reasoning behind it. There is no recorded outcome \u2014 sometimes because the situation is hypothetical, sometimes because it never played out \u2014 but the answer is considered and defensible.',
+       'It counts the same as an outcome-backed verdict, because both are a standard someone stood behind.'],
+    eg:'A marquee customer wants a bespoke feature. The authored answer is to look for the general capability hiding inside the specific ask, with the reasoning shown underneath.',
+    wh:'Look for the purple \uD83C\uDF93 banner.' },
+  room: { t:'The room\u2019s answer', w:'Counts at 60%, once it settles', c:'part',
+    p:['Nobody has authored a verdict, so the answer comes from the people who called it \u2014 but not simply the most popular option. We use the <b>surprisingly popular</b> one: the answer that drew more votes than people expected it to.',
+       'When you vote you also guess what the room will pick. If an option beats its own expectation, the people who chose it usually knew something the rest did not \u2014 and that answer is right more often than the crowd favourite.',
+       'It only counts once the room has genuinely settled: <b>6 or more calls</b>, a <b>10-point gap</b> between the top two answers, and at least <b>half</b> of voters having made a prediction. Until then it scores nothing either way.'],
+    eg:'Everyone expects B to win. B gets 40% but was predicted at 55%. C gets 35% and was predicted at 20% \u2014 C beat its expectation, so C is the room\u2019s answer.',
+    wh:'Look for the amber \uD83D\uDCCA banner, and the line telling you how many more calls it needs.' },
+  none: { t:'No right answer', w:'Never scored', c:'zero',
+    p:['Some calls are genuinely a matter of judgment with no defensible single answer. Rather than invent one, we mark them as unscored.',
+       'You can still make the call and read how others reasoned \u2014 it simply cannot move your signal in either direction. That is deliberate: being graded against a made-up answer would be worse than not being graded at all.'],
+    eg:'Whether to let technicians define their own failure codes. Both routes are defensible and the trade-off depends entirely on your organisation.',
+    wh:'Look for the grey \uD83E\uDD14 banner.' }
+};
+function hwRender(k){
+  var d = HW[k] || HW.outcome, el = document.getElementById('hw-body');
+  if(!el) return;
+  el.innerHTML = '<div class="hw-w '+d.c+'">'+d.w+'</div>'
+    + '<div class="hw-h">'+d.t+'</div>'
+    + d.p.map(function(x){ return '<p class="hw-p">'+x+'</p>'; }).join('')
+    + '<div class="hw-eg"><b>Example \u2014 </b>'+d.eg+'</div>'
+    + '<div class="hw-where">'+d.wh+'</div>';
+  var tabs = document.querySelectorAll('.hw-tab');
+  for(var i=0;i<tabs.length;i++){ tabs[i].classList.toggle('is-on', tabs[i].getAttribute('data-hw')===k); }
+  hwCalc();
+}
+var hwConf = 2, hwHit = 1, hwType = 'outcome';
+function hwCalc(){
+  var out = document.getElementById('hw-out'); if(!out) return;
+  var delta = [0,3,5,7][hwConf] || 5;               /* same table the reveal uses */
+  var weight = (hwType==='room') ? 0.6 : (hwType==='none' ? 0 : 1);
+  var move = Math.round(delta * weight * 10) / 10;
+  if(weight === 0){
+    out.innerHTML = '<b>No change.</b> This dilemma is not scored, so however confident you were and whichever way you called it, your signal stays exactly where it was.';
+    return;
+  }
+  var signed = (hwHit ? '+' : '\u2212') + move;
+  var wl = (weight === 1) ? 'at full weight' : 'at 60% weight, and only once the room has settled';
+  out.innerHTML = '<b>' + signed + '% </b> to that category\u2019s signal \u2014 '
+    + (hwHit ? 'you matched the verdict' : 'your call differed from the verdict')
+    + ', you were <b>' + ['','not sure','fairly sure','certain'][hwConf] + '</b>, and it counts ' + wl + '.'
+    + '<br><span style="font-size:.8rem;opacity:.7">The more confident you were, the more it moves \u2014 in both directions. That is what makes the score a measure of calibration rather than of certainty.</span>';
+}
+function hwWire(){
+  var tabs = document.querySelectorAll('.hw-tab');
+  if(!tabs.length) return;
+  for(var i=0;i<tabs.length;i++){
+    (function(b){ b.onclick = function(){ hwType = b.getAttribute('data-hw'); hwRender(hwType); }; })(tabs[i]);
+  }
+  var ps = document.querySelectorAll('.hw-pill');
+  for(var j=0;j<ps.length;j++){
+    (function(b){ b.onclick = function(){
+      if(b.hasAttribute('data-conf')){
+        hwConf = +b.getAttribute('data-conf');
+        var g=document.querySelectorAll('.hw-pill[data-conf]');
+        for(var m=0;m<g.length;m++) g[m].classList.toggle('is-on', g[m]===b);
+      } else {
+        hwHit = +b.getAttribute('data-hit');
+        var g2=document.querySelectorAll('.hw-pill[data-hit]');
+        for(var n=0;n<g2.length;n++) g2[n].classList.toggle('is-on', g2[n]===b);
+      }
+      hwCalc();
+    }; })(ps[j]);
+  }
+  var t2 = document.querySelectorAll('.hw-tab2');
+  for(var q=0;q<t2.length;q++){
+    (function(b){ b.onclick = function(){ hwTypes(b.getAttribute('data-ht')); }; })(t2[q]);
+  }
+  hwRender('outcome');
+  hwTypes('community');
 }
 function renderFeed(rows){
   var controls=document.getElementById('feed-controls'), list=document.getElementById('feed-list'); if(!list) return;
@@ -3715,6 +3958,7 @@ function boot(){
      never wait on it, and a failure is harmless because the dilemma simply
      stays open until the next load. */
   try { if (SB && SB.rpc) SB.rpc('gc_close_settled').catch(function(){}); } catch(e){}
+  try{ hwWire(); }catch(e){}
   loadBankFromDB().then(bootAfterBank);
 }
 function bootAfterBank(){
