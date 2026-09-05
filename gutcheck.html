@@ -1344,7 +1344,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-08-30-01';
+var SITE_VERSION = '2026-09-01-01';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1419,7 +1419,11 @@ function scheduleRowToDilemma(row){
     verdict_source: row.verdict_source || null,
     firstPublishedAt: row.first_published_at || row.published_at || row.publish_date || null,
     publishedAt: row.published_at || row.publish_date || null, dims:(function(){ try{ var x=(typeof row.dims==='string')?JSON.parse(row.dims):row.dims; return (x&&typeof x==='object')?x:null; }catch(e){ return null; } })(),
-    breakdown: row.breakdown ? esc(row.breakdown) : 'This dilemma came straight from the community — there isn\u2019t an official \u201cright\u201d answer here. What matters is whether your reasoning holds together.',
+    /* 6.1e (A): the fallback used to read "there isn't an official right
+       answer here". Since 6.1a most community dilemmas DO have one, so that
+       line was actively wrong on the majority of them. Empty now means empty,
+       and the reveal simply omits the block. */
+    breakdown: row.breakdown ? esc(row.breakdown) : null,
     real: row.outcome ? esc(row.outcome) : null, lesson: row.lesson ? esc(row.lesson) : null, closesAt: row.closes_at || null };
 }
 function fetchTodaysScheduled(){
@@ -2486,18 +2490,24 @@ function reveal(d, instant){
     var p = dist[o.k], you = (o.k===youKey);
     h += '<div class="dist-row" data-k="'+o.k+'"><span class="dist-key">'+o.k+'</span><div class="dist-bar'+(you?' you':'')+'"><i data-w="'+p+'"></i><span class="dist-txt"><span class="dl">'+o.t+(you?'<span class="dist-you-tag">· your call</span>':'')+'</span><span class="dp">'+p+'%</span></span></div></div>';
   });
-  /* audience split */
-  var asp = distFor(d,'aspiring'), wrk = distFor(d,'working');
-  h += '<div class="rv-split">'
-    + '<div class="split-card" data-cohort="aspiring"><h6>🌱 Breaking-in PMs</h6>'+ d.opts.map(function(o){ return '<div class="sc-row" data-k="'+o.k+'"><span>'+o.k+'</span><b>'+asp[o.k]+'%</b></div>'; }).join('') +'</div>'
-    + '<div class="split-card" data-cohort="working"><h6>⚙️ Working PMs</h6>'+ d.opts.map(function(o){ return '<div class="sc-row" data-k="'+o.k+'"><span>'+o.k+'</span><b>'+wrk[o.k]+'%</b></div>'; }).join('') +'</div>'
-    + '</div>';
+  /* audience split REMOVED — 6.1e (C).
+     distFor() is a seeded pseudo-random generator: it invents a distribution
+     and gives the correct answer a deliberate lift. The "Breaking-in PMs" and
+     "Working PMs" percentages were therefore fabricated, not counted, which
+     fails the corpus rule outright — it is exactly the kind of invented
+     activity a user could catch. The `audience` field keeps being recorded on
+     every vote, so the split can return the moment there is real data behind it.
+     distFor is left in place because the feed preview still uses it. */
   /* your dims */
   var fx = d.dims && d.dims[youKey];
   if (fx){ var chips=''; for (var k in fx){ var v=fx[k]; chips += '<span class="rv-dim '+(v>0?'up':(v<0?'down':''))+'">'+DIM[k]+' '+(v>0?'+':'')+v+'</span>'; } if(chips) h += '<div class="rv-dims" style="margin-top:1rem">'+chips+'</div>'; }
   var __cm = d.category && CAT_META[d.category];
-  if(__cm){ var __conf=(GC.conf&&GC.conf[d.id])||2; var __delta=[0,3,5,7][__conf]||5; var __v=d.best||null; if(!__v && d.tier===3 && typeof roomSP!=='undefined' && roomSP){ var __rs=roomSP[d.id]; if(__rs&&__rs.total>=3&&__rs.sp) __v=__rs.sp; } var __mt=(__v!=null)?(youKey===__v):null;
-    if(__mt!==null){ h += '<div id="rv-profup-box" data-did="'+escHtml(d.id)+'" class="rv-profup '+(__mt?'up':'down')+'"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(__mt?('You matched the verdict \u2014 <b>+'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'):('A different read \u2014 <b>\u2212'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'))+'</span></div>'; }
+  if(__cm){ var __conf=(GC.conf&&GC.conf[d.id])||2; var __delta=[0,3,5,7][__conf]||5; var __v=d.best||null; /* 6.1d: dropped a leftover `total>=3` here. gc_room_sp already applies the
+       real gate (6 votes, 10-point margin, 50% prediction coverage), so anything
+       that arrives in roomSP has passed it; a second weaker test in front of it
+       let a 3-vote room move a category signal. */
+    if(!__v && d.tier===3 && typeof roomSP!=='undefined' && roomSP){ var __rs=roomSP[d.id]; if(__rs&&__rs.sp) __v=__rs.sp; } var __mt=(__v!=null)?(youKey===__v):null;
+    if(__mt!==null){ h += '<div id="rv-profup-box" data-did="'+escHtml(d.id)+'" class="rv-profup '+(__mt?'up':'down')+'"><span class="rv-profup-h">\uD83D\uDCC8 Profile updated</span><span class="rv-profup-b">'+(__mt?('Your call matched the verdict \u2014 <b>+'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'):('Your call differed from the verdict \u2014 <b>\u2212'+__delta+'%</b> to your <b>'+escHtml(__cm.l)+'</b> signal.'))+'</span></div>'; }
     else { h += '<div id="rv-profup-box" data-did="'+escHtml(d.id)+'" class="rv-profup"><span class="rv-profup-h">\uD83D\uDCC8 Recorded</span><span class="rv-profup-b">Locked in. Your <b>'+escHtml(__cm.l)+'</b> signal updates once the room settles (6+ calls, a clear margin, and enough predictions).</span></div>'; } }
   /* 6.0c: provenance — state plainly what counts as the right answer here, and
      whether this call feeds your calibration. Type (real call / industry /
@@ -2506,7 +2516,10 @@ function reveal(d, instant){
      may be expert-verdicted, or may have no right answer at all. */
   h += provenanceHTML(d);
   /* breakdown */
-  if (d.tier===3){ h += '<div class="rv-h y">📊 The room’s verdict</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'; if(d.breakdown) h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
+  /* 6.1e (B): when the dilemma has its own verdict, the room block is a
+     SECOND reading, not a competing verdict. Calling both "verdict" put two
+     different answers on screen under the same word. */
+  if (d.tier===3){ h += '<div class="rv-h y">📊 '+(d.best ? 'How the room read it' : 'The room’s verdict')+'</div><div class="rvv-mount"><div class="rv-break">Tallying the room…</div></div>'; if(d.breakdown) h += '<div class="rv-h y">🧠 '+(d.best ? 'Why this is the call' : 'How a strong PM weighs this')+'</div><div class="rv-break">'+d.breakdown+'</div>'; }
   else { h += '<div class="rv-h y">🧠 How a strong PM weighs this</div><div class="rv-break">'+d.breakdown+'</div>'; }
   /* real / outcome */
   if (d.tier===1 && d.real){
