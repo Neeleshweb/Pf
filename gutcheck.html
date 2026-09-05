@@ -389,7 +389,25 @@
     .rv-dim { font-size: .68rem; padding: .28rem .65rem; border-radius: 100px; border: 1px solid var(--border2); color: var(--muted); }
     .rv-dim.up { color: var(--green); border-color: rgba(var(--green-rgb),.4); }
     .rv-dim.down { color: var(--red); border-color: rgba(var(--red-rgb),.4); }
-        .rv-prov { display:flex; flex-direction:column; gap:.15rem; margin:.7rem 0 .9rem; padding:.6rem .8rem; border-radius:12px; border:1px solid rgba(20,26,60,.10); background:rgba(20,26,60,.03); }
+            /* 6.0h: practise-a-past-call */
+    .practice-bar { display:flex; align-items:center; justify-content:space-between; gap:.8rem; flex-wrap:wrap;
+      margin:-.2rem 0 1rem; padding:.6rem .9rem; border-radius:12px;
+      border:1px solid rgba(79,67,216,.28); background:rgba(79,67,216,.07); font-size:.82rem; }
+    .practice-back { border:1px solid rgba(20,26,60,.16); background:var(--card); color:inherit;
+      border-radius:999px; padding:.35rem .8rem; font-size:.78rem; cursor:pointer; }
+    .practice-back:hover { border-color:var(--accent); }
+    .arch-opt-plain { display:flex; align-items:baseline; gap:.55rem; padding:.45rem .1rem;
+      border-bottom:1px solid rgba(20,26,60,.07); font-size:.88rem; }
+    .arch-opt-plain:last-child { border-bottom:0; }
+    .arch-opt-plain .ao-d { opacity:.62; font-size:.82rem; }
+    .arch-practise-box { margin-top:1rem; padding:.9rem 1rem; border-radius:14px;
+      border:1px dashed rgba(79,67,216,.34); background:rgba(79,67,216,.05); }
+    .arch-practise-box .ap-h { font-weight:700; font-size:.86rem; margin-bottom:.3rem; }
+    .arch-practise-box .ap-b { font-size:.82rem; opacity:.78; line-height:1.45; margin-bottom:.75rem; }
+    .arch-practise { border:0; border-radius:999px; padding:.5rem 1.05rem; cursor:pointer;
+      font-weight:700; font-size:.84rem; color:#fff; background:var(--accent); }
+    .arch-practise:hover { filter:brightness(1.06); }
+    .rv-prov { display:flex; flex-direction:column; gap:.15rem; margin:.7rem 0 .9rem; padding:.6rem .8rem; border-radius:12px; border:1px solid rgba(20,26,60,.10); background:rgba(20,26,60,.03); }
     .rv-prov-h { font-size:.78rem; font-weight:700; letter-spacing:.02em; }
     .rv-prov-b { font-size:.78rem; opacity:.75; line-height:1.35; }
     .rv-prov-outcome { border-color:rgba(22,140,90,.30); background:rgba(22,140,90,.06); }
@@ -1309,7 +1327,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-08-27-01';
+var SITE_VERSION = '2026-08-27-02';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -2237,6 +2255,7 @@ function renderToday(){
   var d = todaysDilemma || dilemmaForIndex(TODAY_INDEX);
   var answered = d.id in GC.calls;
   var html = '<div class="call-card">'
+    + (practiceMode ? '<div class="practice-bar"><span>\uD83D\uDCDA Practising an archived call \u2014 your answer still counts toward your calibration.</span><button type="button" class="practice-back" onclick="backToTodaysCall()">\u2190 Back to today\u2019s call</button></div>' : '')
     + '<div class="call-top"><div class="call-date">'+(d.closesAt ? ('\uD83D\uDC65 Community \u00B7 \u23F3 '+feedTimeLeft(d.closesAt)) : ('Day '+(TODAY_INDEX+1)+' \u00B7 <b>'+fmtDate(new Date())+'</b>'))+'</div><div class="call-badges">'+badgesHTML(d)+'</div></div>'
     + '<div class="call-sec-t">The situation</div><div class="call-scenario">'+d.scenario+'</div>'
     + '<div class="call-q">'+d.q+'</div>'
@@ -2261,6 +2280,38 @@ function renderToday(){
   if(!answered){ pendingChoice=null; var __rt2=document.getElementById('today-reason'); if(__rt2) __rt2.oninput=function(){ checkReady(d); }; var __sb=document.getElementById('call-submit'); if(__sb) __sb.onclick=function(){ if(pendingChoice) commit(d, pendingChoice); }; var __sk=document.getElementById('call-skip'); if(__sk) __sk.onclick=function(){ skipToday(d); }; checkReady(d); }
   if (answered) reveal(d, true);
 }
+
+/* ── 6.0h: answer a past dilemma from the archive ──────────────────────────
+   The commit flow is bound to fixed ids (#today-opts, #today-reason,
+   #call-submit, .cc-btn, .cp-btn) and to the module-level pendingChoice.
+   Rebuilding it inside an archive card would mean either duplicating all of
+   that -- two copies to keep in step -- or reusing the same ids twice in one
+   document. So the archive ROUTES INTO the existing card instead: it puts the
+   chosen dilemma into the call slot and re-renders. Sign-in, audience,
+   reasoning, confidence, prediction and the RPC are then the same tested path
+   that today's dilemma uses, with nothing forked.
+
+   Commit-before-reveal is preserved because renderToday() reveals only when
+   the dilemma is already answered, and the archive card withholds its own
+   reveal for anything still practisable. */
+var practiceMode = false;
+function practiseCall(d){
+  if(!d) return;
+  practiceMode = true;
+  todaysDilemma = d;
+  renderToday();
+  var m = document.getElementById('call-mount');
+  if(m && m.scrollIntoView) m.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+function backToTodaysCall(){
+  practiceMode = false;
+  todaysDilemma = featuredDilemma || dilemmaForIndex(TODAY_INDEX);
+  renderToday();
+  var m = document.getElementById('call-mount');
+  if(m && m.scrollIntoView) m.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+window.practiseCall = practiseCall;
+window.backToTodaysCall = backToTodaysCall;
 
 var pendingChoice = null;
 function selectOption(d, key, btn){
@@ -2434,7 +2485,17 @@ function addArchItem(list, dateLabel, d){
     + '<div class="arch-title">'+d.scenario.replace(/<[^>]+>/g,'')+'</div>'
     + '<div class="arch-status" style="color:var(--accent2)">▾ Tap to study this call</div>'
     + '<div class="arch-detail"><div class="arch-q">'+d.q+'</div><div class="arch-opts"></div><div class="arch-rev"></div></div>';
-  item.querySelector('.arch-top').parentNode.onclick = function(e){ item.classList.toggle('open'); if (item.classList.contains('open') && !item._built){ buildArchDetail(item, d); item._built = true; } };
+  /* 6.0h: an unanswered, still-open dilemma must NOT reveal on expand -- that
+     would spoil the answer before the call is made. It offers the call instead. */
+  item.querySelector('.arch-top').parentNode.onclick = function(e){
+    if(e && e.target && e.target.classList && e.target.classList.contains('arch-practise')) return;
+    item.classList.toggle('open');
+    if (item.classList.contains('open') && !item._built){
+      if (!(d.id in GC.calls) && archOpen){ buildArchPractise(item, d); }
+      else { buildArchDetail(item, d); }
+      item._built = true;
+    }
+  };
   list.appendChild(item);
 }
 var archSort = 'recent', archFilter = 'all', archCategory = 'all';
@@ -2465,6 +2526,26 @@ function renderArchive(){
     rows.forEach(function(row){ var d = scheduleRowToDilemma(row); if(d) addArchItem(list, fmtDateStr(row.publish_date), d); });
     if(!list.children.length){ list.innerHTML = '<div class="arch-empty">No past calls to show yet.</div>'; }
   }).catch(function(){ list.innerHTML = '<div class="arch-empty">Couldn’t load past calls right now — please refresh.</div>'; });
+}
+/* 6.0h: shown instead of the reveal when the call is still open to you. The
+   question and the options are visible -- you need them to decide -- but no
+   distribution, no verdict, no outcome and no takeaway. */
+function buildArchPractise(item, d){
+  var opts = item.querySelector('.arch-opts');
+  opts.innerHTML = '';
+  d.opts.forEach(function(o){
+    var row = document.createElement('div'); row.className = 'arch-opt-plain';
+    row.innerHTML = '<span class="dist-key">'+o.k+'</span><span class="ao-t">'+o.t+'</span>'
+                  + (o.d ? '<span class="ao-d">'+o.d+'</span>' : '');
+    opts.appendChild(row);
+  });
+  var rev = item.querySelector('.arch-rev');
+  rev.innerHTML = '<div class="arch-practise-box">'
+    + '<div class="ap-h">You haven\u2019t called this one yet</div>'
+    + '<div class="ap-b">The verdict, the room and what actually happened stay hidden until you commit \u2014 that is the whole point. Make the call and it counts toward your calibration like any other.</div>'
+    + '<button type="button" class="arch-practise" onclick="practiseCall(window.__archD[\''+d.id+'\'])">Make your call \u2192</button>'
+    + '</div>';
+  window.__archD = window.__archD || {}; window.__archD[d.id] = d;
 }
 function buildArchDetail(item, d){
   var dist = distFor(d,'all'), youKey = GC.calls[d.id];
