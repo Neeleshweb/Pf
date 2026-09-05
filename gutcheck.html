@@ -860,7 +860,13 @@
    of the category chip, because .fct-badges could grow past its share of a
    space-between row while .feed-left was nowrap. The date now sits on its own
    line under the chip, so nothing can collide however long a category name is. */
-.feed-card{text-align:left;position:relative;overflow:hidden;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.15rem 1.2rem 1rem;cursor:pointer;transition:border-color .18s,transform .18s,box-shadow .18s;display:flex;flex-direction:column;gap:.6rem;font:inherit;color:inherit;min-height:210px}
+.feed-more { grid-column:1/-1; margin-top:.4rem; padding:.85rem 1rem; border-radius:14px; cursor:pointer;
+      border:1px dashed var(--border); background:var(--card); color:inherit; font:inherit; font-weight:700;
+      font-size:.86rem; display:flex; align-items:center; justify-content:center; gap:.5rem; transition:all .15s; }
+    .feed-more:hover { border-color:var(--accent); color:var(--accent); }
+    .feed-more:disabled { opacity:.6; cursor:default; }
+    .feed-more .fm-c { font-weight:600; font-size:.78rem; opacity:.6; }
+    .feed-card{text-align:left;position:relative;overflow:hidden;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.15rem 1.2rem 1rem;cursor:pointer;transition:border-color .18s,transform .18s,box-shadow .18s;display:flex;flex-direction:column;gap:.6rem;font:inherit;color:inherit;min-height:210px}
 .feed-card::before{content:'';position:absolute;inset:0 0 auto 0;height:3px;background:linear-gradient(90deg,var(--accent),#12b886);opacity:.85}
 .feed-card::after{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(79,67,216,.055),rgba(18,184,134,.03) 45%,transparent 70%);pointer-events:none}
 .feed-card>*{position:relative;z-index:1}
@@ -1455,7 +1461,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-09-03-01';
+var SITE_VERSION = '2026-09-04-01';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1627,6 +1633,8 @@ function mountFilterBar(host, cfg){
 }
 
 /* ---- FEED MODEL: featured pick + open community feed (Phase B/C) ---- */
+var FEED_PAGE = 40, feedOffset = 0, feedAll = [], feedMore = false;
+function feedResetPaging(){ feedOffset = 0; feedAll = []; feedMore = false; }
 var featuredDilemma = null, feedRowsById = {};
 var feedSort = 'recent', feedCategory = 'all';
 function fetchFeatured(){
@@ -1652,8 +1660,8 @@ function renderFeedControls(){
     menus:[{ icon:'\u21C5', value:feedSort, options:[
       {v:'recent',label:'Most recent'},{v:'popular',label:'Most popular'},
       {v:'expiring',label:'About to expire'}
-    ], onPick:function(v){ feedSort=v; loadFeed(); } }],
-    pills:{ value:feedCategory, options:categoryPillOptions(), onPick:function(v){ feedCategory=v; loadFeed(); } }
+    ], onPick:function(v){ feedSort=v; feedResetPaging(); loadFeed(); } }],
+    pills:{ value:feedCategory, options:categoryPillOptions(), onPick:function(v){ feedCategory=v; feedResetPaging(); loadFeed(); } }
   });
 }
 /* 6.1b-fix: the feed card showed a countdown to closes_at. 6.0d removed the
@@ -1808,6 +1816,7 @@ function renderFeed(rows){
   if(!items.length && !filtered){ if(controls) controls.innerHTML=''; list.innerHTML=''; return; }
   if(controls) renderFeedControls();
   feedRowsById = {}; items.forEach(function(r){ feedRowsById[r.dilemma_id] = r; });
+  /* 6.1h: rendered after the cards below — see feedMoreHTML() */
   var back = (featuredDilemma && todaysDilemma && todaysDilemma.id !== featuredDilemma.id)
     ? '<button type="button" class="feed-back" id="feed-back">\u2605 Back to today\u2019s featured call</button>' : '';
   var head = '<div class="feed-h">\uD83D\uDFE2 Open community calls <span class="feed-sub">'+(items.length?'vote before they close':'')+'</span></div>';
@@ -1841,7 +1850,15 @@ function renderFeed(rows){
       + '</button>';
   });
   h += '</div>';
+  /* 6.1h: a "Show more" control when the last page came back full, so the
+     remaining open calls are reachable instead of being silently cut at 40. */
+  if(feedMore){
+    h += '<button type="button" class="feed-more" id="feed-more">Show more open calls'
+       + '<span class="fm-c">showing ' + items.length + '</span></button>';
+  }
   list.innerHTML = h;
+  var fm = document.getElementById('feed-more');
+  if(fm){ fm.onclick = function(){ fm.disabled = true; fm.textContent = 'Loading\u2026'; loadFeed(); }; }
   wireFeedBack();
   [].slice.call(list.querySelectorAll('.feed-card')).forEach(function(b){
     b.onclick = function(){ var r = feedRowsById[b.getAttribute('data-id')]; if(!r) return; var d = scheduleRowToDilemma(r); if(!d) return; todaysDilemma = d; renderToday(); var cm = document.getElementById('call-mount'); if(cm && cm.scrollIntoView) cm.scrollIntoView({behavior:'smooth',block:'start'}); loadFeed(); };
@@ -1860,10 +1877,21 @@ function loadSkips(){ if(!SB || !currentUser) return Promise.resolve(); return S
 function loadFeed(){
   var list = document.getElementById('feed-list'); if(!list) return Promise.resolve();
   if(!SB){ list.innerHTML=''; var fc=document.getElementById('feed-controls'); if(fc) fc.innerHTML=''; return Promise.resolve(); }
-  return loadSkips().then(function(){ return SB.rpc('gc_feed_v2', { p_limit:40, p_offset:0, p_sort:feedSort, p_category:feedCategory }); }).then(function(res){
-    if(res && res.error){ console.warn('[GutCheck] feed read error:', res.error); list.innerHTML=''; return; }
-    renderFeed(res && res.data ? res.data : []);
-  }).catch(function(e){ console.warn('[GutCheck] feed failed:', e); list.innerHTML=''; });
+  /* 6.1h: this asked for 40 rows at offset 0 and never paged, so with 84 open
+     dilemmas the feed silently showed the first 40 and there was no way to
+     reach the rest. It now accumulates pages and renders everything fetched so
+     far; renderFeed then appends a "Show more" control when a full page came
+     back, meaning there is probably another. */
+  return loadSkips().then(function(){
+    return SB.rpc('gc_feed_v2', { p_limit:FEED_PAGE, p_offset:feedOffset, p_sort:feedSort, p_category:feedCategory });
+  }).then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] feed read error:', res.error); if(!feedAll.length) list.innerHTML=''; return; }
+    var got = (res && res.data) ? res.data : [];
+    feedAll = feedAll.concat(got);
+    feedMore = (got.length === FEED_PAGE);
+    feedOffset += got.length;
+    renderFeed(feedAll);
+  }).catch(function(e){ console.warn('[GutCheck] feed failed:', e); if(!feedAll.length) list.innerHTML=''; });
 }
 function pctMap(d, map, total){ var out={}; if(total<1){ d.opts.forEach(function(o){ out[o.k]=0; }); return out; } var raw=d.opts.map(function(o){ return (map[o.k]||0)/total*100; }); var fl=raw.map(Math.floor); var rem=100-fl.reduce(function(a,b){return a+b;},0); var ord=raw.map(function(x,i){return [x-Math.floor(x),i];}).sort(function(a,b){return b[0]-a[0];}); for(var i=0;i<rem;i++) fl[ord[i][1]]++; var o={}; d.opts.forEach(function(op,i){ o[op.k]=fl[i]; }); return o; }
 function aggregate(d, rows){ var ov={},asp={},wrk={},tot=0,aT=0,wT=0; d.opts.forEach(function(o){ ov[o.k]=0; asp[o.k]=0; wrk[o.k]=0; }); rows.forEach(function(r){ var k=r.choice, n=Number(r.n)||0; if(!(k in ov)) return; ov[k]+=n; tot+=n; if(r.audience==='aspiring'){ asp[k]+=n; aT+=n; } else if(r.audience==='working'){ wrk[k]+=n; wT+=n; } }); return { total:tot, aspiringTotal:aT, workingTotal:wT, overall:pctMap(d,ov,tot), aspiring:pctMap(d,asp,aT), working:pctMap(d,wrk,wT) }; }
