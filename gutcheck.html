@@ -860,9 +860,9 @@
    of the category chip, because .fct-badges could grow past its share of a
    space-between row while .feed-left was nowrap. The date now sits on its own
    line under the chip, so nothing can collide however long a category name is. */
-.feed-more { grid-column:1/-1; margin-top:.4rem; padding:.85rem 1rem; border-radius:14px; cursor:pointer;
+.feed-more { grid-column:1/-1; width:100%; margin-top:.2rem; padding:1rem; border-radius:14px; cursor:pointer;
       border:1px dashed var(--border); background:var(--card); color:inherit; font:inherit; font-weight:700;
-      font-size:.86rem; display:flex; align-items:center; justify-content:center; gap:.5rem; transition:all .15s; }
+      font-size:.9rem; display:flex; align-items:center; justify-content:center; gap:.6rem; transition:all .15s; }
     .feed-more:hover { border-color:var(--accent); color:var(--accent); }
     .feed-more:disabled { opacity:.6; cursor:default; }
     .feed-more .fm-c { font-weight:600; font-size:.78rem; opacity:.6; }
@@ -1461,7 +1461,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-09-04-01';
+var SITE_VERSION = '2026-09-05-01';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1633,8 +1633,18 @@ function mountFilterBar(host, cfg){
 }
 
 /* ---- FEED MODEL: featured pick + open community feed (Phase B/C) ---- */
-var FEED_PAGE = 40, feedOffset = 0, feedAll = [], feedMore = false;
+var FEED_PAGE = 40, feedOffset = 0, feedAll = [], feedMore = false, feedTotal = null;
 function feedResetPaging(){ feedOffset = 0; feedAll = []; feedMore = false; }
+/* 6.1i: the true number of open calls in the current view, so the control reads
+   "40 of 114" rather than reporting how many happen to be on screen. Re-read on
+   every feed load, which covers a new submission, a dilemma closing on evidence
+   and the daily scheduler — the count moves without a page refresh. */
+function refreshFeedTotal(){
+  if(!SB || !SB.rpc) return Promise.resolve();
+  return SB.rpc('gc_feed_count', { p_category: feedCategory })
+    .then(function(res){ if(res && !res.error && res.data != null) feedTotal = Number(res.data); })
+    .catch(function(){});
+}
 var featuredDilemma = null, feedRowsById = {};
 var feedSort = 'recent', feedCategory = 'all';
 function fetchFeatured(){
@@ -1849,13 +1859,16 @@ function renderFeed(rows){
       + '</div>'
       + '</button>';
   });
-  h += '</div>';
-  /* 6.1h: a "Show more" control when the last page came back full, so the
-     remaining open calls are reachable instead of being silently cut at 40. */
   if(feedMore){
-    h += '<button type="button" class="feed-more" id="feed-more">Show more open calls'
-       + '<span class="fm-c">showing ' + items.length + '</span></button>';
+    h += '<button type="button" class="feed-more" id="feed-more">'
+       + '<span class="fm-l">Show more open calls</span>'
+       + '<span class="fm-c">' + items.length + (feedTotal != null ? ' of ' + feedTotal : '') + '</span>'
+       + '</button>';
   }
+  h += '</div>';
+  /* 6.1i: this was appended AFTER the grid's closing </div>, so grid-column had
+     no grid to span and it rendered at content width on the left. It is now
+     emitted inside the grid and spans every column. */
   list.innerHTML = h;
   var fm = document.getElementById('feed-more');
   if(fm){ fm.onclick = function(){ fm.disabled = true; fm.textContent = 'Loading\u2026'; loadFeed(); }; }
@@ -1882,7 +1895,7 @@ function loadFeed(){
      reach the rest. It now accumulates pages and renders everything fetched so
      far; renderFeed then appends a "Show more" control when a full page came
      back, meaning there is probably another. */
-  return loadSkips().then(function(){
+  return loadSkips().then(refreshFeedTotal).then(function(){
     return SB.rpc('gc_feed_v2', { p_limit:FEED_PAGE, p_offset:feedOffset, p_sort:feedSort, p_category:feedCategory });
   }).then(function(res){
     if(res && res.error){ console.warn('[GutCheck] feed read error:', res.error); if(!feedAll.length) list.innerHTML=''; return; }
