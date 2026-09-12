@@ -2558,7 +2558,11 @@ boot();
 /* ===== DecisionRoom Phase 1a — submit + feed + my cases + detail (read) ===== */
 (function(){
   /* expanded static lists */
-  var PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product','Fintech','Healthtech','DevTools','E-commerce','Mobile Consumer App','Hardware / IoT','Data / Analytics Platform','Infrastructure / Cloud','EdTech','Gaming','Other']
+  var /* 6.1b: 'Consulting' is in pjl_taxonomy(domain), which GutCheck reads, but was
+   missing here. A PM whose GutCheck strength is Consulting could not select it
+   as a Product context, so the Vault had nothing to correlate. Kept in the
+   taxonomy's own order for the rest. */
+PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product','Fintech','Healthtech','DevTools','E-commerce','Mobile Consumer App','Hardware / IoT','Data / Analytics Platform','Infrastructure / Cloud','EdTech','Gaming','Consulting','Other']
   var DR_ROLES=null;;
   var STK_OPTS=['CEO','Founder','Exec Team','Product Leadership','Manager','Engineering','Design','Data','Sales','Marketing','Customer Success','Support','Customer','Finance','Legal','Security','Compliance','Operations','Partnerships / BD','Other PMs'];
   var CONS_OPTS=['Time','Engineering capacity','Revenue pressure','Customer escalation','Leadership pressure','Technical debt','Unclear data'];
