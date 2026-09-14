@@ -674,6 +674,8 @@
     padding:.3rem .78rem;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .15s}
   .lb-sortbtn:hover{border-color:#4f43d8}
   .lb-sortbtn.active{background:#4f43d8;border-color:#4f43d8;color:#fff}
+  .lb-sortone{font-size:.82rem;line-height:1.5;margin:-.2rem 0 .5rem;opacity:.8}
+  .lb-sortone b{font-weight:700;opacity:1}
   .lb-sortexp{font-size:.83rem;line-height:1.55;margin:-.35rem 0 .9rem;padding:.7rem .9rem;
     border-radius:12px;border:1px solid rgba(79,67,216,.2);background:rgba(79,67,216,.05)}
   .lb-sortexp b{font-weight:700}
@@ -1421,6 +1423,14 @@
       <!-- 6.4c: the two orderings answer genuinely different questions, so say
            which is which in plain words with a concrete example rather than
            leaving the labels to carry it. -->
+      <!-- 6.4c: the one-line version, always visible, so the distinction is
+           clear before anyone opens the longer explanation. Deliberately not
+           "quantity vs quality": Score is not volume, since fifty answers
+           nobody acts on score nothing. It is volume of USEFUL work. -->
+      <div class="lb-sortone">
+        <b>Score</b> = how much useful work \u2014 answers other people acted on or found helpful.
+        <b>Judgment</b> = how well they call it \u2014 accuracy and calibration on practice dilemmas.
+      </div>
       <div class="lb-sortexp" id="rev-sortexp"></div>
       <div id="rev-champ" class="lb-champ" style="display:none"></div>
       <div id="rev-list" class="lb-list"><div class="lb-empty">Loading…</div></div>
