@@ -674,6 +674,10 @@
     padding:.3rem .78rem;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .15s}
   .lb-sortbtn:hover{border-color:#4f43d8}
   .lb-sortbtn.active{background:#4f43d8;border-color:#4f43d8;color:#fff}
+  .lb-sortexp{font-size:.83rem;line-height:1.55;margin:-.35rem 0 .9rem;padding:.7rem .9rem;
+    border-radius:12px;border:1px solid rgba(79,67,216,.2);background:rgba(79,67,216,.05)}
+  .lb-sortexp b{font-weight:700}
+  .lb-eg{display:block;margin-top:.45rem;padding-left:.7rem;border-left:3px solid rgba(79,67,216,.4);opacity:.88}
   .lb-sortnote{font-size:.76rem;opacity:.6;margin-left:.2rem}
   .lb-sort{margin-left:.15rem}
   .lb-table tbody tr{background:linear-gradient(90deg,#F3FAF5 0%,#F4F8FC 38%,#F7F5FD 68%,#FDF6F1 100%)}
@@ -1413,8 +1417,11 @@
         <span class="lb-sortlab">Order by</span>
         <button type="button" class="lb-sortbtn active" data-rvsort="score" aria-selected="true">Score</button>
         <button type="button" class="lb-sortbtn" data-rvsort="judgment" aria-selected="false">Judgment</button>
-        <span class="lb-sortnote" id="rev-sortnote"></span>
       </div>
+      <!-- 6.4c: the two orderings answer genuinely different questions, so say
+           which is which in plain words with a concrete example rather than
+           leaving the labels to carry it. -->
+      <div class="lb-sortexp" id="rev-sortexp"></div>
       <div id="rev-champ" class="lb-champ" style="display:none"></div>
       <div id="rev-list" class="lb-list"><div class="lb-empty">Loading…</div></div>
       <div id="rev-hist" class="lb-hist" style="display:none"></div>
@@ -1573,8 +1580,12 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     if(w==='lastmonth'){ var mThis=sod(now); mThis.setDate(1); var mLast=new Date(mThis); mLast.setMonth(mLast.getMonth()-1); return [mLast.toISOString(), mThis.toISOString()]; }
     return ['2020-01-01T00:00:00.000Z', until];
   }
-  function tipI(k){ return '<button type="button" class="lb-tip-i" data-tip="'+k+'" aria-label="What is this?">i</button>'; }
+  /* 6.4c: the Score column is the ranking metric in the Score view and context
+     only in the Judgment view, so its tooltip has to follow the current view. */
+  function tipKey(k){ return (k==='score' && revSort==='judgment') ? 'score_judgment' : k; }
+  function tipI(k){ return '<button type="button" class="lb-tip-i" data-tip="'+tipKey(k)+'" aria-label="What is this?">i</button>'; }
   var LBTIPS={
+   score_judgment:{t:'Score \u2014 shown, but not what ranks this view',b:'The reviewer\u2019s total points for the window. In the Judgment view it is displayed for context only: the board is ordered by GutCheck level, then calibration, then how many scored calls that judgment rests on. Someone can sit near the top here with a modest Score, which is the point \u2014 this view asks how well they call things, not how much they have done. Switch to Score to rank by total contribution.'},
    score:{t:'Score \u2014 the ranking metric',b:'The reviewer\u2019s total points for the selected window, and what orders the board. It adds up only the green stats: owner acted-on is worth 2 points each, helpful marks and high-coverage answers 1 each, GutCheck credibility adds one flat bonus for the whole window \u2014 5 to 20 depending on judgment level, not per answer \u2014 and every report subtracts 2. There is no maximum \u2014 it grows with the value they create. Different from a DecisionRoom response\u2019s \u26A1 /100 score, which rates one single answer out of 100 \u2014 this sums a reviewer\u2019s value across all their answers in the window.'},
    acted:{t:'Owner acted on (this window)',b:'A count of how many of their answers the case owner marked \u201Cacted on\u201D in this window. Worth the most \u2014 each adds 2 points \u2014 because it means real advice was actually used. Green: it raises the Score.'},
    helpful:{t:'Marked helpful (this window)',b:'A count of the helpful marks their answers earned from readers in this window. Each adds 1 point. Green: it raises the Score. Grows when people find their answers genuinely useful.'},
@@ -3148,6 +3159,19 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     score:'Contribution \u2014 grows with how much they reviewed.',
     judgment:'How well they call things \u2014 level first, then calibration.'
   };
+  var REVSORT_EXP={
+    score:'<b>Ranked by Score \u2014 how much useful reviewing someone has done.</b> '
+      +'Every answer they write can earn points: 2 when the case owner acts on it, 1 for a helpful mark, '
+      +'1 for covering every ask. So the more good answers you write, the higher you climb. '
+      +'<span class="lb-eg"><b>For example:</b> Sam wrote 13 answers and earned 41 points. '
+      +'Priya wrote 5 answers and earned 27. Sam ranks above Priya here, because he has simply done more.</span>',
+    judgment:'<b>Ranked by Judgment \u2014 how well someone calls things, regardless of how much they post.</b> '
+      +'This uses their GutCheck level, which comes from practice dilemmas where the right answer is known. '
+      +'Calibration matters most: being confident when you are right, and unsure when you are not. '
+      +'<span class="lb-eg"><b>For example:</b> Priya answered 5 cases but got 76 practice calls right at high confidence, '
+      +'so she is a High-calibration reviewer and ranks near the top. Sam answered 13 cases and is Strong, '
+      +'so he ranks below her \u2014 the opposite of the Score view.</span>'
+  };
   /* Load one leaderboard (reviewer or author) into its own stacked section, for its
      OWN window. Sets the render-target module vars synchronously right before each
      render, so concurrent section loads never cross-render. */
@@ -3160,7 +3184,13 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
     var fn=(board==='sub')?'dr_submitter_leaderboard'
            :(useSort?'dr_reviewer_leaderboard_sorted':'dr_reviewer_leaderboard');
     var listEl=document.getElementById(listId); if(listEl) listEl.classList.add('loading');
-    fetch(URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json'},body:JSON.stringify({p_since:rg[0],p_until:rg[1],p_limit:20,p_me:me,p_sort:revSort})})
+    fetch(URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json'},/* 6.4c fix: p_sort exists ONLY on dr_reviewer_leaderboard_sorted. Sending it
+       to dr_reviewer_leaderboard or dr_submitter_leaderboard makes PostgREST
+       reject the whole call as an unknown parameter, which is why the Score
+       view came back empty. It is now attached only when the sorted sibling is
+       the function being called. */
+      body:JSON.stringify(useSort?{p_since:rg[0],p_until:rg[1],p_limit:20,p_me:me,p_sort:revSort}
+                                 :{p_since:rg[0],p_until:rg[1],p_limit:20,p_me:me})})
       .then(function(r){ return r.ok?r.json():null; })
       .then(function(res){
         if(listEl) listEl.classList.remove('loading');
@@ -3184,8 +3214,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function lbLoad(){ pcLoad(); }  /* back-compat alias */
   window.pmOnAuth=function(){ try{ pcLoad(); }catch(e){} };
   function setSectionCopy(){
-    var nt0=document.getElementById('rev-sortnote');
-    if(nt0 && !nt0.textContent) nt0.textContent=REVSORT_NOTE[revSort]||'';
+    var ex0=document.getElementById('rev-sortexp');
+    if(ex0) ex0.innerHTML=REVSORT_EXP[revSort]||'';
     var rs=document.getElementById('rev-sub'); if(rs) rs.innerHTML=esc(BOARD_COPY.rev.lead)+'<span class="lb-sub2">'+BOARD_COPY.rev.body+' Tap any \u24D8 to learn what a stat means.</span>';
     var ss=document.getElementById('sub-sub'); if(ss) ss.innerHTML=esc(BOARD_COPY.sub.lead)+'<span class="lb-sub2">'+BOARD_COPY.sub.body+' Tap any \u24D8 to learn what a stat means.</span>';
   }
@@ -3211,8 +3241,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
         if(cur2){ cur2.classList.remove('active'); cur2.setAttribute('aria-selected','false'); }
         sb.classList.add('active'); sb.setAttribute('aria-selected','true');
         revSort=sb.getAttribute('data-rvsort')||'score';
-        var nt=document.getElementById('rev-sortnote');
-        if(nt) nt.textContent=REVSORT_NOTE[revSort]||'';
+        var ex=document.getElementById('rev-sortexp');
+        if(ex) ex.innerHTML=REVSORT_EXP[revSort]||'';
         loadSection('rev');
         return;
       }
