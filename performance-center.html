@@ -668,6 +668,13 @@
   .lb-table tbody td + td{border-left:1px solid #f5f7fa}
   .lb-table thead th.l{text-align:left;padding-left:.9rem}
   .lb-th-tp{color:#c98a1a !important;background:#FDF6EA !important;border-left:1px solid #F1E1C1 !important;padding-left:.55rem !important;padding-right:.55rem !important}
+  .lb-sortbar{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap;margin:.5rem 0 .8rem}
+  .lb-sortlab{font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.55}
+  .lb-sortbtn{border:1px solid rgba(20,26,60,.16);background:#fff;color:inherit;border-radius:999px;
+    padding:.3rem .78rem;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .15s}
+  .lb-sortbtn:hover{border-color:#4f43d8}
+  .lb-sortbtn.active{background:#4f43d8;border-color:#4f43d8;color:#fff}
+  .lb-sortnote{font-size:.76rem;opacity:.6;margin-left:.2rem}
   .lb-sort{margin-left:.15rem}
   .lb-table tbody tr{background:linear-gradient(90deg,#F3FAF5 0%,#F4F8FC 38%,#F7F5FD 68%,#FDF6F1 100%)}
   .lb-table tbody tr:nth-child(even){background:linear-gradient(90deg,#FAFDFB 0%,#FAFCFE 38%,#FBFAFE 68%,#FEFBF8 100%)}
@@ -1398,6 +1405,16 @@
     <div class="pc-sec" id="pc-rev">
       <div class="pc-head"><div class="lb-title-row"><span class="lb-trophy" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v3a6 6 0 0 1-12 0V4Z"/><path d="M6 5H4a2 2 0 0 0 0 4h2"/><path d="M18 5h2a2 2 0 0 1 0 4h-2"/><path d="M12 13v3"/><path d="M9 20h6"/><path d="M10 16h4l-.4 4h-3.2Z" fill="currentColor" stroke="none"/></svg></span><h2 class="lb-title">Reviewer Leaderboard</h2></div><div class="pc-ctrl"><div class="pc-pills" data-sec="rev" role="tablist" aria-label="Time window"><button type="button" class="pc-pill" data-win="today" role="tab">Today</button><button type="button" class="pc-pill active" data-win="week" role="tab" aria-selected="true">This Week</button><button type="button" class="pc-pill" data-win="lastweek" role="tab">Last Week</button><button type="button" class="pc-pill" data-win="month" role="tab">This Month</button><button type="button" class="pc-pill" data-win="all" role="tab">All Time</button></div><button type="button" class="pc-refresh" data-sec="rev" aria-label="Refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>Refresh</button></div></div>
       <p class="lb-sub" id="rev-sub"></p>
+      <!-- 6.4 C2: the board answers two different questions. Ordering by Score
+           ranks contribution, which grows with how much someone reviewed.
+           Ordering by Judgment ranks how well they call things. One number
+           cannot honestly carry both, so this asks which you want. -->
+      <div class="lb-sortbar" role="tablist" aria-label="Order the reviewer board">
+        <span class="lb-sortlab">Order by</span>
+        <button type="button" class="lb-sortbtn active" data-rvsort="score" aria-selected="true">Score</button>
+        <button type="button" class="lb-sortbtn" data-rvsort="judgment" aria-selected="false">Judgment</button>
+        <span class="lb-sortnote" id="rev-sortnote"></span>
+      </div>
       <div id="rev-champ" class="lb-champ" style="display:none"></div>
       <div id="rev-list" class="lb-list"><div class="lb-empty">Loading…</div></div>
       <div id="rev-hist" class="lb-hist" style="display:none"></div>
@@ -3124,14 +3141,26 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   var lbBusy=false, lbWin='week', lbBoard='sub';
   var LBLIST='rev-list', LBCHAMP='rev-champ', LBHIST='rev-hist', pcTimer=null;
   var winRev='week', winSub='month', winVault='month';   /* independent per-section windows */
+  /* 6.4 C2: which question the reviewer board is answering. 'score' is the
+     existing behaviour and the default; nothing changes unless it is switched. */
+  var revSort='score';
+  var REVSORT_NOTE={
+    score:'Contribution \u2014 grows with how much they reviewed.',
+    judgment:'How well they call things \u2014 level first, then calibration.'
+  };
   /* Load one leaderboard (reviewer or author) into its own stacked section, for its
      OWN window. Sets the render-target module vars synchronously right before each
      render, so concurrent section loads never cross-render. */
   function loadOneBoard(board, listId, champId, histId, win){
     var rg=lbRange(win), me=jlUserId();
-    var fn=(board==='sub')?'dr_submitter_leaderboard':'dr_reviewer_leaderboard';
+    /* 6.4 C2: the original function is untouched and still serves the default
+       view. Only the judgment ordering goes to the sibling, so nothing can
+       regress for anyone who does not switch. */
+    var useSort=(board==='rev' && revSort==='judgment');
+    var fn=(board==='sub')?'dr_submitter_leaderboard'
+           :(useSort?'dr_reviewer_leaderboard_sorted':'dr_reviewer_leaderboard');
     var listEl=document.getElementById(listId); if(listEl) listEl.classList.add('loading');
-    fetch(URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json'},body:JSON.stringify({p_since:rg[0],p_until:rg[1],p_limit:20,p_me:me})})
+    fetch(URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'apikey':ANON,'Authorization':'Bearer '+ANON,'Content-Type':'application/json'},body:JSON.stringify({p_since:rg[0],p_until:rg[1],p_limit:20,p_me:me,p_sort:revSort})})
       .then(function(r){ return r.ok?r.json():null; })
       .then(function(res){
         if(listEl) listEl.classList.remove('loading');
@@ -3155,6 +3184,8 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
   function lbLoad(){ pcLoad(); }  /* back-compat alias */
   window.pmOnAuth=function(){ try{ pcLoad(); }catch(e){} };
   function setSectionCopy(){
+    var nt0=document.getElementById('rev-sortnote');
+    if(nt0 && !nt0.textContent) nt0.textContent=REVSORT_NOTE[revSort]||'';
     var rs=document.getElementById('rev-sub'); if(rs) rs.innerHTML=esc(BOARD_COPY.rev.lead)+'<span class="lb-sub2">'+BOARD_COPY.rev.body+' Tap any \u24D8 to learn what a stat means.</span>';
     var ss=document.getElementById('sub-sub'); if(ss) ss.innerHTML=esc(BOARD_COPY.sub.lead)+'<span class="lb-sub2">'+BOARD_COPY.sub.body+' Tap any \u24D8 to learn what a stat means.</span>';
   }
@@ -3171,6 +3202,18 @@ document.getElementById('foot-yr').textContent = new Date().getFullYear();
           pill.classList.add('active'); pill.setAttribute('aria-selected','true');
           setWin(sec, pill.getAttribute('data-win')||'week');
         }
+        return;
+      }
+      /* 6.4 C2 */
+      var sb=(e.target.closest)?e.target.closest('.lb-sortbtn'):null;
+      if(sb && !sb.classList.contains('active')){
+        var bar2=sb.parentNode, cur2=bar2.querySelector('.lb-sortbtn.active');
+        if(cur2){ cur2.classList.remove('active'); cur2.setAttribute('aria-selected','false'); }
+        sb.classList.add('active'); sb.setAttribute('aria-selected','true');
+        revSort=sb.getAttribute('data-rvsort')||'score';
+        var nt=document.getElementById('rev-sortnote');
+        if(nt) nt.textContent=REVSORT_NOTE[revSort]||'';
+        loadSection('rev');
         return;
       }
       var rf=(e.target.closest)?e.target.closest('.pc-refresh'):null;
