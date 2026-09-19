@@ -1362,7 +1362,17 @@
 .pf-alias-btn{background:var(--surface);border:1px solid var(--border2);color:var(--white);border-radius:8px;padding:.4rem .9rem;cursor:pointer;font-size:.85rem;white-space:nowrap}
 .pf-alias-note{font-size:.72rem;color:var(--muted);margin:0 0 .6rem}
 .rsp-who{font-size:.74rem;font-weight:600;letter-spacing:.3px;text-transform:uppercase;color:var(--accent3)}
-  .rsp-when{font-size:.72rem;opacity:.55;margin-left:.5rem;white-space:nowrap;cursor:default}
+  /* .rsp-top is justify-content:space-between, so a third child lands dead
+     centre -- which is why the date floated in the middle of the header with
+     nothing to anchor it. margin-right:auto pulls it back against the alias
+     and lets the badges keep the right edge. Styled as a quiet pill: readable
+     without competing with the score and the stars beside it. */
+  .rsp-when{display:inline-flex;align-items:center;gap:.3rem;margin-right:auto;
+    font-size:.72rem;font-weight:700;letter-spacing:.02em;white-space:nowrap;cursor:default;
+    padding:.16rem .5rem;border-radius:999px;
+    color:var(--text2);background:rgba(20,26,60,.055);border:1px solid rgba(20,26,60,.09)}
+  .rsp-when::before{content:'';width:5px;height:5px;border-radius:50%;
+    background:currentColor;opacity:.45;flex:0 0 auto}
 .rsp-hc{font-size:.7rem;font-weight:600;color:var(--green)}
 .rsp-opt{font-size:.8rem;color:var(--muted);margin-bottom:.45rem}
 .rsp-opt b{color:var(--accent2);font-weight:600}
