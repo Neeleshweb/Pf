@@ -1373,6 +1373,16 @@
     color:var(--text2);background:rgba(20,26,60,.055);border:1px solid rgba(20,26,60,.09)}
   .rsp-when::before{content:'';width:5px;height:5px;border-radius:50%;
     background:currentColor;opacity:.45;flex:0 0 auto}
+  /* The native title tooltip did not reliably appear, so the exact time is now
+     drawn by the page instead of the browser. Deterministic, styled, and no
+     one-second delay before it shows. */
+  .rsp-when{position:relative}
+  .rsp-when[data-when]:hover::after{
+    content:attr(data-when);position:absolute;bottom:calc(100% + 7px);left:0;z-index:40;
+    padding:.4rem .6rem;border-radius:8px;white-space:nowrap;
+    font-size:.72rem;font-weight:600;letter-spacing:.01em;
+    background:#141a3c;color:#fff;box-shadow:0 6px 18px rgba(20,26,60,.22);pointer-events:none}
+  .rsp-when[data-when=""]:hover::after{content:none}
 .rsp-hc{font-size:.7rem;font-weight:600;color:var(--green)}
 .rsp-opt{font-size:.8rem;color:var(--muted);margin-bottom:.45rem}
 .rsp-opt b{color:var(--accent2);font-weight:600}
@@ -3786,7 +3796,7 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
            later -- which changes how much weight it deserves. `ago` shows a
            relative label for three days and the real date after that; the
            title attribute carries the exact local time on hover. */
-        +'<span class="rsp-when" title="'+escHtml(fullWhen(r.created_at))+'">'+escHtml(fcRel(r.created_at))+'</span><span class="rsp-top-r">'+qlabel+scorePill(d,r)+'<span class="rsp-stars">'+starsMarkup(stars)+tipI('stars')+'</span></span></div>'+jpBadge(r)
+        +'<span class="rsp-when" data-when="'+escHtml(fullWhen(r.created_at))+'">'+escHtml(fcRel(r.created_at))+'</span><span class="rsp-top-r">'+qlabel+scorePill(d,r)+'<span class="rsp-stars">'+starsMarkup(stars)+tipI('stars')+'</span></span></div>'+jpBadge(r)
         +'<div class="rsp-badges">'+conf+acted+hc+'</div>'+flag
         +opt+'<div class="rsp-body">'+nl(r.body)+'</div>'+wo+askn+nstep
         +wantsGridHtml(d, r)+freeAskGridHtml(d, r)+chk
