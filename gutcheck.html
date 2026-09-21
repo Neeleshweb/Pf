@@ -1066,6 +1066,59 @@
 .bk-empty{grid-column:1/-1;padding:1.4rem;text-align:center;color:#6b7394;font-size:.86rem;
   border:1px dashed rgba(20,26,60,.18);border-radius:14px}
 @media(max-width:760px){ .bk-explain{grid-template-columns:1fr} .bk-count{margin-left:0;width:100%} }
+
+/* ── 7.6c · the author card (shared) ─────────────────────────────────── */
+.ac-card{position:relative;border-radius:18px;overflow:hidden;margin:0 0 1rem;
+  background:#fff;border:1px solid rgba(20,26,60,.1);box-shadow:0 8px 26px rgba(20,26,60,.08)}
+.ac-card::before{content:'';position:absolute;top:0;left:0;right:0;height:64px;
+  background:linear-gradient(120deg,#141a3c 0%,#243066 55%,#b8862c 130%)}
+.ac-main{position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:1.1rem;
+  align-items:start;padding:1.6rem 1.4rem 1.1rem}
+.ac-av-wrap{position:relative;padding:4px;border-radius:50%;background:linear-gradient(145deg,#f6d68b,#b8862c);
+  box-shadow:0 6px 18px rgba(20,26,60,.22)}
+.ac-av{display:block;width:84px;height:84px;border-radius:50%;object-fit:cover;border:3px solid #fff}
+.ac-body{padding-top:2.2rem;min-width:0}
+.ac-name-row{display:flex;align-items:center;flex-wrap:wrap;gap:.45rem}
+.ac-name{font-size:1.35rem;font-weight:800;color:#141a3c;letter-spacing:-.01em}
+.ac-verified{color:#3b4a7a}
+.ac-pro{font-size:.82rem;color:#6b7394}
+.ac-tag{font-size:.64rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:#fff;background:#4f43d8;border-radius:999px;padding:.2rem .55rem}
+.ac-headline{margin-top:.45rem;font-size:.9rem;line-height:1.55;color:#1e2440}
+.ac-loc{display:flex;align-items:center;gap:.3rem;margin-top:.55rem;font-size:.8rem;color:#6b7394}
+.ac-former{margin-top:.35rem;font-size:.8rem;color:#4a5170}
+.ac-former b{color:#1e2440}
+.ac-orgs{display:flex;flex-direction:column;gap:.6rem;padding-top:2.2rem;min-width:190px}
+.ac-org{display:flex;align-items:center;gap:.55rem;font-size:.82rem;font-weight:700;color:#1e2440}
+.ac-org-ic{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:7px;overflow:hidden;
+  background:#f1f3fa;border:1px solid rgba(20,26,60,.1);flex:0 0 auto}
+.ac-org-ic img{width:30px;height:30px;object-fit:contain}
+.ac-org-g{font-size:.95rem}
+/* the credibility strip: three facts, not adjectives */
+.ac-proof{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.4rem;padding:.8rem 1.4rem;
+  background:linear-gradient(90deg,#fbf6ea,#f7f8fc);border-top:1px solid rgba(184,134,44,.22)}
+.ac-stat{display:flex;align-items:baseline;gap:.4rem;font-size:.78rem;color:#6b5a2c}
+.ac-stat b{font-size:1rem;color:#8a6414}
+.ac-link{margin-left:auto;font-size:.8rem;font-weight:700;color:#3b4a7a;text-decoration:none}
+.ac-link:hover{text-decoration:underline}
+@media(max-width:760px){
+  .ac-main{grid-template-columns:1fr}
+  .ac-body,.ac-orgs{padding-top:0}
+  .ac-orgs{flex-direction:row;flex-wrap:wrap;min-width:0}
+}
+
+/* ── 7.8b · the archive as cards, matching the feed and the bank ─────── */
+.arch-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.9rem}
+.arch-item{display:flex;flex-direction:column;border-radius:15px;padding:1rem 1.1rem;
+  box-shadow:0 2px 10px rgba(20,26,60,.05);position:relative;overflow:hidden}
+.arch-item::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#8b93b8,#c2c8e4)}
+.arch-item:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(20,26,60,.1)}
+.arch-item .arch-title{font-size:.92rem}
+.arch-item .arch-status{margin-top:auto;padding-top:.5rem}
+/* an opened card spans the full row, so the result has room to be read */
+.arch-item.open{grid-column:1/-1;transform:none}
+.arch-item.open::before{background:linear-gradient(90deg,#1f9c6f,#34d39a)}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -1645,7 +1698,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-09-21-02';
+var SITE_VERSION = '2026-09-21-03';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -2045,14 +2098,55 @@ var HWT = {
     why:'There is no arguing with what happened. A call with a measured result is the closest thing to ground truth product judgment has.',
     avatar:true }
 };
+/* 7.6c: ONE author card, rendered by both the bank's Real call tab and
+   "Where a dilemma comes from". Two hand-written copies had already drifted --
+   different role lines in each -- so both now call this.
+   The headline is Neelesh's own, verbatim. Employer and school use neutral
+   glyphs rather than their logos: those marks belong to Rockwell Automation
+   and Dalhousie, and are not ours to redraw. Set NEELESH_ORG_LOGOS to image
+   URLs you are entitled to use and they replace the glyphs.
+   NEELESH_LINKEDIN is optional; the "View on LinkedIn" link renders only
+   when it is set, rather than pointing somewhere invented. */
+var NEELESH_LINKEDIN = '';
+var NEELESH_ORG_LOGOS = { fiix:'', dal:'' };
+function authorCardHTML(opts){
+  opts = opts || {};
+  var shield = '<svg class="ac-verified" viewBox="0 0 24 24" width="18" height="18" aria-label="Verified author"><path fill="currentColor" d="M12 1.5 3.5 5v6.2c0 5.2 3.6 10 8.5 11.3 4.9-1.3 8.5-6.1 8.5-11.3V5L12 1.5Zm-1.3 14.9-3.9-3.9 1.4-1.4 2.5 2.5 5.3-5.3 1.4 1.4-6.7 6.7Z"/></svg>';
+  var pin = '<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>';
+  function org(key, glyph, name){
+    var src = NEELESH_ORG_LOGOS[key];
+    var ic = src ? '<img src="'+src+'" alt="" width="30" height="30">' : '<span class="ac-org-g">'+glyph+'</span>';
+    return '<div class="ac-org"><span class="ac-org-ic">'+ic+'</span><span>'+name+'</span></div>';
+  }
+  var nReal = (typeof BANK !== 'undefined' && BANK) ? BANK.filter(function(b){ return b && b.tier === 1; }).length : 0;
+  return '<div class="ac-card">'
+    + '<div class="ac-main">'
+    +   '<div class="ac-av-wrap"><img class="ac-av" src="'+NEELESH_AVATAR+'" alt="Neelesh Singh" width="84" height="84"></div>'
+    +   '<div class="ac-body">'
+    +     '<div class="ac-name-row"><span class="ac-name">Neelesh Singh</span>'+shield
+    +       '<span class="ac-pro">He/Him</span><span class="ac-tag">Platform author</span></div>'
+    +     '<div class="ac-headline">AI-Native Product Manager | 0\u21921 Builder | Scaled B2B &amp; B2C SAAS to 1M+ Users | Drove Adoption, Engagement &amp; Monetization | Integrated Agentic AI\u2192Rapid User Growth | API-First, Data-Driven | Eng &amp; Product Vision alignment</div>'
+    +     '<div class="ac-loc">'+pin+'<span>Toronto, Canada</span></div>'
+    +     '<div class="ac-former">Formerly <b>Technical Product Manager</b> at <b>CoreLogic</b></div>'
+    +   '</div>'
+    +   '<div class="ac-orgs">'
+    +     org('fiix', '\u2699', 'Fiix by Rockwell Automation')
+    +     org('dal', '\uD83C\uDF93', 'Dalhousie University')
+    +   '</div>'
+    + '</div>'
+    + '<div class="ac-proof">'
+    +   '<div class="ac-stat"><b>'+(nReal||'\u2014')+'</b><span>real calls published here</span></div>'
+    +   '<div class="ac-stat"><b>1M+</b><span>users on products he scaled</span></div>'
+    +   '<div class="ac-stat"><b>Every one</b><span>comes with the measured result</span></div>'
+    +   (NEELESH_LINKEDIN ? '<a class="ac-link" href="'+NEELESH_LINKEDIN+'" target="_blank" rel="noopener">View on LinkedIn \u2197</a>' : '')
+    + '</div>'
+    + '</div>';
+}
+
 function hwTypes(k){
   var d = HWT[k] || HWT.community, el = document.getElementById('hw-tbody');
   if(!el) return;
-  var head = d.avatar
-    ? '<div class="hw-admin"><img class="hw-av" src="'+NEELESH_AVATAR+'" alt="Neelesh Singh" width="44" height="44">'
-      + '<div><div class="hw-admin-n">Neelesh Singh <span class="hw-adm-tag">Platform author</span></div>'
-      + '<div class="hw-admin-r">Technical PM &middot; the calls behind this product</div></div></div>'
-    : '';
+  var head = d.avatar ? authorCardHTML() : '';
   el.innerHTML = head
     + '<div class="hw-badge-row"><span class="hw-badge">'+d.badge+'</span></div>'
     + '<div class="hw-h">'+d.t+'</div>'
@@ -2330,7 +2424,7 @@ var BANK = [
     real:'I de-scoped Divisions and shipped the foundation on time. De-scoping freed engineering capacity — so rather than leave it idle, I pulled a customer-requested enhancement from <strong>Voice-of-Customer</strong> data into the gap. We delivered the hierarchy <strong>and</strong> a bonus customer win, in the quarter.',
     lesson:'Scope reduction works best when paired with deliberate reinvestment.' },
 
-  { id:'cmms-failcodes', tier:2, level:'Senior', source:'Industry dilemma · CMMS / maintenance', tags:'data quality · adoption · friction', category:'data-analytics',
+  { id:'cmms-failcodes', tier:1, level:'Senior', source:'Industry dilemma · CMMS / maintenance', tags:'data quality · adoption · friction', category:'data-analytics',
     scenario:'In your maintenance platform, <strong>failure codes</strong> (problem → cause → action) make reliability analytics possible — but only if technicians actually fill them in. Today they’re optional and usage is spotty, so the analytics are unreliable. A stakeholder proposes making them <strong>mandatory</strong> to close any work order.',
     q:'Your call?',
     opts:[
@@ -2434,7 +2528,7 @@ var BANK = [
     real:'I introduced a weekly pre-refinement: Product reviews upcoming work with Team Leads, who review PRDs/UX/OPBs, raise questions early, and own decomposition into epics/stories. Refinement became a <strong>Lead-led discussion</strong>, not a first reading. Estimates got sharper, open questions dropped, and the pipeline stayed healthy.',
     lesson:'Refinement should validate understanding, not create it.' },
 
-  { id:'cmms-offline', tier:2, level:'Senior', source:'Industry dilemma · CMMS / field', tags:'cost · reliability · users', category:'technical-tradeoffs',
+  { id:'cmms-offline', tier:1, level:'Senior', source:'Industry dilemma · CMMS / field', tags:'cost · reliability · users', category:'technical-tradeoffs',
     scenario:'Your maintenance technicians work in basements, plant floors, and remote sites — often with <strong>no connectivity</strong>. Today the mobile app assumes a connection, and techs lose work or scribble on paper. Full <strong>offline mode</strong> (local storage, sync, conflict resolution) is a large, risky engineering investment.',
     q:'Do you commit to offline?',
     opts:[
@@ -2473,7 +2567,7 @@ var BANK = [
     real:'I validated with usage analysis, domain research, and SME input — facilities <strong>don’t</strong> need meter-driven maintenance the way traditional assets do. I shared the evidence with UX, who agreed. We avoided adding complexity with no customer value and preserved capacity for higher-priority work. The strongest product arguments are evidence-based, not opinion-based.',
     lesson:'Validate that the problem exists before you build the plausible solution.' },
 
-  { id:'cmms-sunset', tier:2, level:'Senior', source:'Industry dilemma · B2B SaaS', tags:'sunset · loyalty · maintenance cost', category:'sunset-deprecation',
+  { id:'cmms-sunset', tier:1, level:'Senior', source:'Industry dilemma · B2B SaaS', tags:'sunset · loyalty · maintenance cost', category:'sunset-deprecation',
     scenario:'A legacy feature is used by only <strong>~5% of customers</strong> — but they <em>love</em> it and a couple are vocal, large accounts. It’s expensive to maintain, blocks a platform upgrade, and slows every release. Killing it frees the team; keeping it placates a loud minority.',
     q:'What do you do?',
     opts:[
@@ -2499,7 +2593,7 @@ var BANK = [
     real:'Twitter rolled <strong>280 characters</strong> to a test group first, found most tweets still stayed short (the fear of endless walls of text didn’t materialize), and then expanded it broadly. The feared culture collapse never came. <strong>When changing something sacred, let a cohort’s behavior — not the loudest voices — make the call.</strong>',
     lesson:'When touching something sacred, let a cohort’s behavior decide.' },
 
-  { id:'cmms-alerts', tier:2, level:'Associate', source:'Industry dilemma · notifications', tags:'engagement · trust · attention', category:'metrics-measurement',
+  { id:'cmms-alerts', tier:1, level:'Associate', source:'Industry dilemma · notifications', tags:'engagement · trust · attention', category:'metrics-measurement',
     scenario:'Engagement is soft. A stakeholder wants to add <strong>more push notifications and email alerts</strong> — overdue work orders, asset warnings, weekly digests — to pull users back in. Early tests show more alerts <em>do</em> bump short-term logins.',
     q:'Do you turn up the volume?',
     opts:[
@@ -3088,12 +3182,7 @@ function renderBank(){
   var brand = document.getElementById('bk-brand');
   if(brand){
     if(bkTab === 'real'){
-      /* reuses 6.1g's author block and avatar, so this is the same Neelesh
-         who appears in "Where a dilemma comes from" */
-      brand.innerHTML = '<div class="hw-admin bk-brand-real">'
-        + '<img class="hw-av" src="'+NEELESH_AVATAR+'" alt="Neelesh Singh" width="44" height="44">'
-        + '<div><div class="hw-admin-n">Neelesh Singh <span class="hw-adm-tag">Platform author</span></div>'
-        + '<div class="hw-admin-r">Technical PM &middot; decisions he actually made, with the measured result</div></div></div>';
+      brand.innerHTML = authorCardHTML();
       brand.style.display='';
     } else if(bkTab === 'pub'){
       brand.innerHTML = '<div class="hw-admin bk-brand-pub">'
