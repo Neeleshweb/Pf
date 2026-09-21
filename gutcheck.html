@@ -928,6 +928,57 @@
 .fbar-pill{flex:0 0 auto;background:transparent;border:1px solid var(--border2);color:var(--muted);font-size:.8rem;font-weight:600;padding:.4rem .8rem;border-radius:20px;cursor:pointer;white-space:nowrap;transition:all .15s}
 .fbar-pill:hover{border-color:var(--accent);color:var(--white)}
 .fbar-pill.on{background:rgba(var(--accent-rgb),.16);border-color:var(--accent);color:var(--white);font-weight:700}
+
+/* ── 7.7b · the open-call panel ────────────────────────────────────────── */
+.oc-panel{position:relative;border-radius:20px;padding:1.5rem 1.4rem 1.2rem;margin:.4rem 0 1.2rem;
+  background:linear-gradient(160deg,#141a3c 0%,#1d2350 42%,#241b4a 100%);
+  box-shadow:0 18px 44px rgba(20,26,60,.28),0 2px 0 rgba(255,255,255,.05) inset;overflow:hidden}
+.oc-panel::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:20px;
+  background:radial-gradient(760px 220px at 12% -10%,rgba(255,196,84,.14),transparent 60%)}
+.oc-rail{position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#f5c451 0%,#7c6cf0 45%,#2fb6a4 100%)}
+.oc-sub{position:relative;z-index:1;margin:-.55rem 0 1rem;color:#c3c8ef;font-size:.84rem;line-height:1.55}
+  .oc-back{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#e7e9ff;
+    font:inherit;font-size:.74rem;font-weight:600;border-radius:999px;padding:.22rem .7rem;cursor:pointer}
+  .oc-back:hover{background:rgba(255,255,255,.18)}
+  /* the rail colour tells you which mode you are in before you read anything */
+  .oc-panel.is-picked .oc-rail{background:linear-gradient(90deg,#7c6cf0,#a08cff)}
+  .oc-panel.is-practice .oc-rail{background:linear-gradient(90deg,#8b93b8,#c2c8e4)}
+  .oc-panel.is-practice{background:linear-gradient(160deg,#232842 0%,#2b3152 55%,#333a5e 100%)}
+  .oc-head{display:flex;align-items:center;gap:.55rem;margin-bottom:1rem;flex-wrap:wrap;position:relative;z-index:1}
+.oc-mark{color:#f5c451;font-size:.8rem;line-height:1}
+.oc-label{color:#fff;font-size:.74rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+.oc-state{margin-left:auto;font-size:.74rem;font-weight:700;color:#cfd3f5;
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);
+  border-radius:999px;padding:.22rem .65rem;white-space:nowrap}
+.oc-state.is-ready{color:#0e2a22;background:#7ee3c7;border-color:#7ee3c7}
+.oc-panel > #call-mount{position:relative;z-index:1;background:#fff;border-radius:14px;
+  padding:.1rem;box-shadow:0 8px 24px rgba(10,14,40,.18)}
+.oc-progress{position:relative;z-index:1;margin-top:1rem;padding-top:.9rem;
+  border-top:1px solid rgba(255,255,255,.13)}
+.oc-prog-head{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;margin-bottom:.7rem}
+.oc-prog-head b{color:#fff;font-size:.86rem;font-weight:700}
+.oc-why{margin-left:auto;background:none;border:none;color:#a9b0ee;font:inherit;font-size:.78rem;
+  font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:0}
+.oc-why:hover{color:#fff}
+.oc-bars{display:grid;gap:.55rem}
+.oc-bar{display:grid;grid-template-columns:minmax(92px,auto) 1fr minmax(78px,auto);
+  align-items:center;gap:.65rem;font-size:.78rem;color:#cfd3f5}
+.oc-bar-t{font-weight:700;color:#e7e9ff}
+.oc-track{height:7px;border-radius:99px;background:rgba(255,255,255,.13);overflow:hidden}
+.oc-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#7c6cf0,#a08cff);
+  transition:width .45s cubic-bezier(.2,.7,.3,1)}
+.oc-fill.is-done{background:linear-gradient(90deg,#2fb6a4,#7ee3c7)}
+.oc-bar-n{text-align:right;font-variant-numeric:tabular-nums;color:#b9bfeb}
+.oc-bar-n.is-done{color:#7ee3c7;font-weight:700}
+.oc-why-text{margin-top:.8rem;padding:.75rem .85rem;border-radius:12px;font-size:.8rem;line-height:1.6;
+  color:#d7daf8;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12)}
+.oc-why-text b{color:#fff}
+@media(max-width:560px){
+  .oc-panel{padding:1.15rem 1rem 1rem;border-radius:16px}
+  .oc-bar{grid-template-columns:1fr;gap:.25rem}
+  .oc-bar-n{text-align:left}
+}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -1271,10 +1322,38 @@
 <!-- TODAY'S CALL -->
 <section class="section" id="today">
   <div class="sec-eyebrow">Open Gut Checks</div>
-  <div class="sec-title">Make <span>The</span> Call</div>
-  <p class="sec-sub">Read the situation, commit to a decision, and then — and only then — the crowd unlocks. No take-backs, just like the real thing. <strong>New community dilemmas go live every day &mdash; vote before they close.</strong></p>
+  <div class="sec-title">The <span>Open</span> Call</div>
+  <p class="sec-sub">Read the situation, commit to a decision, and then &mdash; and only then &mdash; the crowd unlocks. No take-backs, just like the real thing.<br><strong>Every call stays open until the room reaches an answer worth keeping &mdash; there&rsquo;s no countdown.</strong> When a newer call goes up it takes this spot, and the previous one keeps collecting votes in the feed below.</p>
   <div id="auth-bar" class="auth-bar" style="display:none"></div>
-  <div id="call-mount"></div>
+  <!-- 7.7b: the featured panel. It explains WHY this dilemma is here and how
+       close it is to settling. Every threshold shown is read from
+       gc_settle_progress, which computes them the way gc_room_sp does. -->
+  <div class="oc-panel">
+    <div class="oc-rail"></div>
+    <div class="oc-head">
+      <span class="oc-mark">&#9670;</span>
+      <span class="oc-label" id="oc-label-txt">The open call</span>
+      <button type="button" class="oc-back" id="oc-back" style="display:none">&larr; Back to the open call</button>
+      <span class="oc-state" id="oc-state"></span>
+    </div>
+    <p class="oc-sub" id="oc-sub">The newest call the room hasn&rsquo;t settled yet.</p>
+    <div id="call-mount"></div>
+    <div class="oc-progress" id="oc-progress" style="display:none">
+      <div class="oc-prog-head">
+        <b>How close is this to a verdict?</b>
+        <button type="button" class="oc-why" id="oc-why" aria-expanded="false">What decides it?</button>
+      </div>
+      <div class="oc-bars" id="oc-bars"></div>
+      <div class="oc-why-text" id="oc-why-text" hidden>
+        A call settles when the room has given an answer worth keeping &mdash; not when a clock runs out.
+        Three things have to be true at once: at least <b>6 people</b> have called it, at least
+        <b>half of them</b> (rounded up) also predicted what the room would say, and one answer is
+        <b>clearly ahead</b> of the runner-up once predictions are taken into account.
+        That last test is why the <em>surprisingly popular</em> answer can beat the plain majority.
+        There is also a <b>24-hour floor</b>, so nothing locks before another timezone has seen it.
+      </div>
+    </div>
+  </div>
   <div class="feed-head">
     <div class="sec-eyebrow" style="margin-top:2.8rem">More open calls</div>
     <div class="sec-title" style="font-size:clamp(1.5rem,3.5vw,2rem);margin-bottom:.6rem">The Room Is <span>Live</span></div>
@@ -1461,7 +1540,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-09-05-01';
+var SITE_VERSION = '2026-09-20-01';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1515,6 +1594,10 @@ function scheduleRowToDilemma(row){
         var b = {}; for(var kk in BANK[i]) b[kk] = BANK[i][kk];
         b.firstPublishedAt = row.first_published_at || row.published_at || row.publish_date || null;
         b.publishedAt      = row.published_at || row.publish_date || null;
+        /* 7.7b: `kind` was read here to branch and never carried out, so
+           d.kind was undefined downstream. The settling indicator needs it:
+           a bank dilemma has no room to settle and must not show one. */
+        b.kind             = row.kind || null;
         return b;
       }
     }
@@ -1649,11 +1732,79 @@ var featuredDilemma = null, feedRowsById = {};
 var feedSort = 'recent', feedCategory = 'all';
 function fetchFeatured(){
   if(!SB) return Promise.resolve(null);
-  return SB.rpc('gc_featured').then(function(res){
+  /* 7.7a: gc_featured() selects `where kind = 'bank'`, so no community
+     dilemma could ever reach this card -- including the ten published in 7.0h.
+     gc_featured_v2 returns the newest OPEN COMMUNITY dilemma and falls back to
+     the bank when none qualifies, so the worst case is the old behaviour.
+     The original function is untouched; reverting is this one line. */
+  return SB.rpc('gc_featured_v2').then(function(res){
     if(res && res.error){ console.warn('[GutCheck] featured read error:', res.error); return null; }
     return scheduleRowToDilemma(res && res.data && res.data[0]);
   }).catch(function(e){ console.warn('[GutCheck] featured failed:', e); return null; });
 }
+/* ── 7.7b · the settling indicator ──────────────────────────────────────
+   Every number here comes from gc_settle_progress, which computes the
+   thresholds the way gc_room_sp does. Nothing is recomputed in the browser:
+   a bar that disagreed with the function deciding the outcome would be worse
+   than no bar at all.
+
+   The margin test is deliberately NOT shown. It depends on the surprise
+   spread between the top two answers, which moves with every vote, so a bar
+   implying a user could push it by voting would mislead. `would_settle_now`
+   covers it, because it asks gc_room_sp directly. */
+function ocRenderProgress(p){
+  var wrap = document.getElementById('oc-progress');
+  var bars = document.getElementById('oc-bars');
+  var state = document.getElementById('oc-state');
+  if(!wrap || !bars) return;
+  /* practice mode is a settled call: there is no room still deciding, so a
+     progress display would be describing something that already happened. */
+  if(!p || (OC_MODES[ocMode] && !OC_MODES[ocMode].progress)){
+    wrap.style.display='none'; if(state) state.textContent=''; return;
+  }
+
+  var votes = Number(p.votes)||0, vNeed = Number(p.votes_needed)||6;
+  var pred = Number(p.predictions)||0, pNeed = Number(p.predictions_needed)||0;
+  var hrs = Number(p.hours_open)||0, hNeed = Number(p.hours_needed)||24;
+  var ready = p.would_settle_now === true;
+
+  if(state){
+    state.textContent = p.settled ? 'Settled'
+      : ready ? 'Ready to settle'
+      : 'Open \u00b7 collecting calls';
+    state.classList.toggle('is-ready', !!ready);
+  }
+
+  function row(label, have, need, doneText, shortText){
+    var done = have >= need;
+    var pct = need>0 ? Math.min(100, Math.round(have/need*100)) : 100;
+    return '<div class="oc-bar">'
+      + '<span class="oc-bar-t">'+label+'</span>'
+      + '<span class="oc-track"><span class="oc-fill'+(done?' is-done':'')+'" style="width:'+pct+'%"></span></span>'
+      + '<span class="oc-bar-n'+(done?' is-done':'')+'">'+(done?doneText:shortText)+'</span>'
+      + '</div>';
+  }
+
+  bars.innerHTML =
+      row('Calls made', votes, vNeed, votes+' \u2713',
+          votes+' of '+vNeed)
+    + row('Predicted the room', pred, pNeed, pred+' \u2713',
+          pred+' of '+pNeed)
+    + row('Open long enough', Math.min(hrs,hNeed), hNeed, 'Yes \u2713',
+          Math.max(0, hNeed-hrs)+'h to go');
+  wrap.style.display='';
+}
+
+function ocLoadProgress(d){
+  if(!SB || !d || !d.id){ ocRenderProgress(null); return; }
+  /* the bank has no room to settle, so the indicator does not apply to it */
+  if(d.kind === 'bank'){ ocRenderProgress(null); return; }
+  SB.rpc('gc_settle_progress', { p_dilemma: d.id }).then(function(res){
+    if(res && res.error){ console.warn('[GutCheck] settle progress:', res.error); ocRenderProgress(null); return; }
+    ocRenderProgress(res && res.data);
+  }).catch(function(e){ console.warn('[GutCheck] settle progress failed:', e); ocRenderProgress(null); });
+}
+
 function feedTimeLeft(closesAt){
   if(!closesAt) return '';
   var ms = new Date(closesAt) - new Date(); if(isNaN(ms)) return '';
@@ -1874,7 +2025,7 @@ function renderFeed(rows){
   if(fm){ fm.onclick = function(){ fm.disabled = true; fm.textContent = 'Loading\u2026'; loadFeed(); }; }
   wireFeedBack();
   [].slice.call(list.querySelectorAll('.feed-card')).forEach(function(b){
-    b.onclick = function(){ var r = feedRowsById[b.getAttribute('data-id')]; if(!r) return; var d = scheduleRowToDilemma(r); if(!d) return; todaysDilemma = d; renderToday(); var cm = document.getElementById('call-mount'); if(cm && cm.scrollIntoView) cm.scrollIntoView({behavior:'smooth',block:'start'}); loadFeed(); };
+    b.onclick = function(){ var r = feedRowsById[b.getAttribute('data-id')]; if(!r) return; var d = scheduleRowToDilemma(r); if(!d) return; todaysDilemma = d; ocSetMode('picked'); renderToday(); var cm = document.getElementById('call-mount'); if(cm && cm.scrollIntoView) cm.scrollIntoView({behavior:'smooth',block:'start'}); loadFeed(); };
   });
   var ids = items.map(function(r){ return r.dilemma_id; });
   if(SB && ids.length){ SB.rpc('gc_vote_counts',{p_ids:ids}).then(function(res){
@@ -2633,6 +2784,9 @@ function postedLabel(d){
        + '</svg><span class="cd-lbl">Posted</span> <b>'+escHtml(out)+'</b>'+live;
 }
 function renderToday(){
+  /* 7.7b: refresh the settling indicator whenever the card re-renders, so it
+     tracks a vote the user has just cast rather than going stale. */
+  try{ ocLoadProgress(todaysDilemma); }catch(e){ console.warn('[GutCheck] progress:', e); }
   var d = todaysDilemma || dilemmaForIndex(TODAY_INDEX);
   var answered = d.id in GC.calls;
   var html = '<div class="call-card">'
@@ -2676,17 +2830,68 @@ function renderToday(){
    the dilemma is already answered, and the archive card withholds its own
    reveal for anything still practisable. */
 var practiceMode = false;
+/* 7.7c: the panel now asserts an identity -- "the newest call the room hasn't
+   settled yet" -- and THREE entry points load into the same mount:
+     featured  the open call, loaded on page load
+     picked    a dilemma clicked in the feed below
+     practice  an archived call opened to answer late
+   Without this the panel would claim a feed dilemma from August was the newest
+   open call, which the heading, the copy and the settling bars would all
+   contradict. The navigation is unchanged; only what the panel says about
+   itself changes. */
+var ocMode = 'featured';
+var OC_MODES = {
+  featured: { label:'The open call',
+              sub:'The newest call the room hasn\u2019t settled yet.',
+              progress:true },
+  picked:   { label:'You opened this one',
+              sub:'From the feed below. It is still open, so your call counts the same \u2014 the room just hasn\u2019t settled it yet.',
+              progress:true },
+  practice: { label:'Practising a past call',
+              sub:'This one has already settled. Commit first and you\u2019ll see how the room went \u2014 it still counts toward your calibration.',
+              progress:false }
+};
+function ocSetMode(m){
+  ocMode = OC_MODES[m] ? m : 'featured';
+  var cfg = OC_MODES[ocMode];
+  var lab = document.getElementById('oc-label-txt');
+  var sub = document.getElementById('oc-sub');
+  var pan = document.querySelector('.oc-panel');
+  if(lab) lab.textContent = cfg.label;
+  if(sub) sub.innerHTML = cfg.sub;
+  if(pan){ pan.classList.remove('is-featured','is-picked','is-practice'); pan.classList.add('is-'+ocMode); }
+  var back = document.getElementById('oc-back');
+  if(back) back.style.display = (ocMode === 'featured') ? 'none' : '';
+}
 function practiseCall(d){
   if(!d) return;
   practiceMode = true;
   todaysDilemma = d;
+  ocSetMode('practice');
   renderToday();
   var m = document.getElementById('call-mount');
   if(m && m.scrollIntoView) m.scrollIntoView({ behavior:'smooth', block:'start' });
 }
+/* 7.7b: the explainer is collapsed by default -- the bars answer "how close",
+   and only someone who wants the mechanism opens this. */
+(function(){
+  document.addEventListener('click', function(e){
+    var bk = e.target && e.target.closest ? e.target.closest('#oc-back') : null;
+    if(bk){ backToTodaysCall(); return; }
+    var b = e.target && e.target.closest ? e.target.closest('#oc-why') : null;
+    if(!b) return;
+    var t = document.getElementById('oc-why-text'); if(!t) return;
+    var open = !t.hidden;
+    t.hidden = open;
+    b.setAttribute('aria-expanded', String(!open));
+    b.textContent = open ? 'What decides it?' : 'Hide';
+  });
+})();
+
 function backToTodaysCall(){
   practiceMode = false;
   todaysDilemma = featuredDilemma || dilemmaForIndex(TODAY_INDEX);
+  ocSetMode('featured');
   renderToday();
   var m = document.getElementById('call-mount');
   if(m && m.scrollIntoView) m.scrollIntoView({ behavior:'smooth', block:'start' });
@@ -3217,7 +3422,7 @@ function renderMyDilemmas(){
   [].slice.call(wrap.querySelectorAll('.myd-open')).forEach(function(b){
     b.onclick = function(){ var r = mydRowsById[b.getAttribute('data-open')]; if(!r) return;
       if(mydIsClosed(r)){ var a = document.getElementById('archive'); if(a && a.scrollIntoView) a.scrollIntoView({behavior:'smooth',block:'start'}); }
-      else { var d = scheduleRowToDilemma(r); if(d){ todaysDilemma = d; renderToday(); var cm = document.getElementById('call-mount'); if(cm && cm.scrollIntoView) cm.scrollIntoView({behavior:'smooth',block:'start'}); loadFeed(); } }
+      else { var d = scheduleRowToDilemma(r); if(d){ todaysDilemma = d; ocSetMode('picked'); renderToday(); var cm = document.getElementById('call-mount'); if(cm && cm.scrollIntoView) cm.scrollIntoView({behavior:'smooth',block:'start'}); loadFeed(); } }
     };
   });
 }
