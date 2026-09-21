@@ -1005,7 +1005,18 @@
 .oc-bar.is-done .oc-fill{background:linear-gradient(90deg,#1f9c6f,var(--oc-ok))}
 .oc-tick{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;display:block;border-radius:2px;
   background:#fff;box-shadow:0 0 0 2px rgba(13,18,36,.9)}
-.oc-bar-hint{margin-top:.4rem;font-size:.74rem;line-height:1.5;color:#7f88ad}
+.oc-verdict{display:flex;gap:.7rem;align-items:flex-start;margin:0 0 1.1rem;padding:.8rem .9rem;
+    border-radius:12px;background:rgba(232,181,74,.08);border:1px solid rgba(232,181,74,.26);
+    font-size:.83rem;line-height:1.55;color:#d9dcf0}
+  .oc-verdict b{color:#fff}
+  .oc-v-ic{flex:0 0 auto;display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;
+    font-size:.78rem;background:rgba(232,181,74,.18);color:var(--oc-gold2)}
+  .oc-v-ic.is-done{background:rgba(52,211,154,.18);color:var(--oc-ok)}
+  /* the threshold, written on the tick so it is read rather than inferred */
+  .oc-track{margin-bottom:1.15rem}
+  .oc-tick-lab{position:absolute;top:13px;transform:translateX(-50%);white-space:nowrap;
+    font-size:.66rem;font-weight:700;letter-spacing:.02em;color:#c9cee8;pointer-events:none}
+  .oc-bar-hint{margin-top:.4rem;font-size:.74rem;line-height:1.5;color:#7f88ad}
 .oc-why-text{margin-top:1rem;padding:.85rem .95rem;border-radius:12px;font-size:.8rem;line-height:1.65;
   color:#d4d8ee;background:rgba(255,255,255,.05);border:1px solid var(--oc-line)}
 .oc-why-text b{color:#fff}
@@ -1378,6 +1389,7 @@
         <b>How close is this to a verdict?</b>
         <button type="button" class="oc-why" id="oc-why" aria-expanded="false">What decides it?</button>
       </div>
+      <div class="oc-verdict" id="oc-verdict" style="display:none"></div>
       <div class="oc-bars" id="oc-bars"></div>
       <div class="oc-why-text" id="oc-why-text" hidden>
         A call settles when the room has given an answer worth keeping &mdash; not when a clock runs out.
@@ -1575,7 +1587,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-09-20-02';
+var SITE_VERSION = '2026-09-20-03';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1811,7 +1823,7 @@ function ocRenderProgress(p){
   if(state){
     state.textContent = p.settled ? 'Settled'
       : ready ? 'Ready to settle'
-      : 'Open \u00b7 collecting calls';
+      : 'Open \u00b7 collecting votes';
     state.classList.toggle('is-ready', !!ready);
   }
 
@@ -1821,36 +1833,71 @@ function ocRenderProgress(p){
      elements ignore width and height. Now each bar is scaled so the threshold
      sits partway along it, marked by a tick, and the fill shows where the room
      actually is -- so "well past the bar" and "only just there" look different. */
+  /* 7.7e: hours read as days once past 72 -- "999h" was a cap hiding a
+     call more than six weeks old, and nobody reasons in four-digit hours. */
+  function fmtHours(h){ return h > 72 ? Math.round(h/24)+' days' : h+'h'; }
+  function fmt(v, unit){ return unit === 'h' ? fmtHours(v) : String(v); }
+
+  /* Each bar carries its threshold as a label on the tick itself, so the
+     point where that condition is met is readable rather than inferred. */
   function row(label, hint, have, need, unit){
     var done = have >= need;
     var scale = Math.max(need * 1.6, have * 1.1, need + 1);
     var fill = Math.min(100, (have / scale) * 100);
     var tick = Math.min(100, (need / scale) * 100);
-    var u = unit || '';
     var status = done
-      ? '<b>'+have+u+'</b> <span class="oc-ok">\u2713 cleared</span>'
-      : '<b>'+have+u+'</b> <span class="oc-need">of '+need+u+' needed</span>';
+      ? '<b>'+fmt(have,unit)+'</b> <span class="oc-ok">\u2713 met</span>'
+      : '<b>'+fmt(have,unit)+'</b> <span class="oc-need">of '+fmt(need,unit)+'</span>';
     return '<div class="oc-bar'+(done?' is-done':'')+'">'
       + '<div class="oc-bar-top"><span class="oc-bar-t">'+label+'</span>'
       +   '<span class="oc-bar-n">'+status+'</span></div>'
       + '<div class="oc-track">'
       +   '<i class="oc-fill" style="width:'+fill.toFixed(1)+'%"></i>'
-      +   '<i class="oc-tick" style="left:'+tick.toFixed(1)+'%" title="needs '+need+u+'"></i>'
+      +   '<i class="oc-tick" style="left:'+tick.toFixed(1)+'%"></i>'
+      +   '<span class="oc-tick-lab" style="left:'+tick.toFixed(1)+'%">needs '+fmt(need,unit)+'</span>'
       + '</div>'
       + '<div class="oc-bar-hint">'+hint+'</div>'
       + '</div>';
   }
 
+  var vDone = votes >= vNeed, pDone = pred >= pNeed, hDone = hrs >= hNeed;
+
   bars.innerHTML =
-      row('People who have made the call',
+      row('People who have voted',
           'The room needs at least six before its answer means anything.',
           votes, vNeed, '')
     + row('Of them, how many predicted the room\u2019s answer',
-          'At least half of everyone who voted, rounded up. Predictions are what let a surprising answer beat the plain majority.',
+          'At least half of everyone who voted, rounded up \u2014 so this bar moves as more people vote.',
           pred, pNeed, '')
-    + row('Hours it has been open',
-          'A 24-hour floor, so nobody in another timezone misses it. After that it can close whenever the room agrees.',
-          Math.min(hrs, 999), hNeed, 'h');
+    + row('How long it has been open',
+          'A 24-hour floor, so nobody in another timezone misses it.',
+          hrs, hNeed, 'h');
+
+  /* THE MISSING FOURTH CONDITION. gc_room_sp also requires one answer to be
+     clearly ahead of the runner-up -- 10 points, once predictions are counted.
+     The bars cannot show it (it moves with every vote), but leaving it out
+     entirely meant three green ticks and no verdict, which reads as broken.
+     This is derived from would_settle_now, so it cannot disagree with the
+     function that actually decides. */
+  var verdict = document.getElementById('oc-verdict');
+  if(verdict){
+    var html;
+    if(p.settled){
+      html = '<span class="oc-v-ic is-done">\u2713</span><div><b>Settled.</b> The room reached a verdict.</div>';
+    } else if(ready){
+      html = '<span class="oc-v-ic is-done">\u2713</span><div><b>Every condition is met.</b> It settles the next time the page is loaded by anyone.</div>';
+    } else if(vDone && pDone && hDone){
+      html = '<span class="oc-v-ic">\u23f3</span><div><b>Waiting on a clear winner.</b> Enough people have voted and predicted, but the top two answers are still too close to call. It settles the moment one pulls ahead by about ten points &mdash; which could be the next few votes, or never, if the room stays genuinely split.</div>';
+    } else {
+      var left = [];
+      if(!vDone) left.push((vNeed - votes)+' more vote'+((vNeed-votes)===1?'':'s'));
+      if(!pDone) left.push((pNeed - pred)+' more prediction'+((pNeed-pred)===1?'':'s'));
+      if(!hDone) left.push('about '+fmtHours(hNeed - hrs)+' more');
+      html = '<span class="oc-v-ic">\u23f3</span><div><b>Needs '+left.join(', ')+'.</b> Then one answer has to pull clearly ahead of the runner-up before it settles.</div>';
+    }
+    verdict.innerHTML = html;
+    verdict.style.display = '';
+  }
   wrap.style.display='';
 }
 
@@ -3454,7 +3501,7 @@ function renderMyDilemmas(){
   });
   var h = '<div class="myq-h">\uD83D\uDCE4 Your dilemmas</div>'
     + '<div class="myq-intro">Posted dilemmas go live instantly and stay open until the room settles \u2014 <b>6+ calls</b>, a <b>10-point</b> gap between the top two answers, and <b>50%</b> of voters predicting. There is no countdown: a dilemma closes when it has an answer worth keeping, not when a clock runs out.'
-    + (openN ? ' <b>'+openN+'</b> of yours '+(openN===1?'is':'are')+' still collecting calls.' : ' All of yours have settled.') + '</div>'
+    + (openN ? ' <b>'+openN+'</b> of yours '+(openN===1?'is':'are')+' still collecting votes.' : ' All of yours have settled.') + '</div>'
     + '<div id="myd-controls" class="myd-controls"></div>';
   if(!rows.length){
     wrap.innerHTML = h + '<div class="feed-empty">No dilemmas match this view \u2014 try a different status or category.</div>';
