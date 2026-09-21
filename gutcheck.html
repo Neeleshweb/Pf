@@ -1039,7 +1039,12 @@
 .bk-tab:hover{border-color:#b8862c}
 .bk-tab.is-on{background:#141a3c;color:#fff;border-color:#141a3c}
 .bk-count{margin-left:auto;font-size:.8rem;font-weight:700;color:#8a6414}
-.bk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.85rem}
+.bk-brand{margin:0 0 1rem}
+  .bk-brand .hw-admin{margin:0}
+  .bk-brand-ic{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:50%;
+    font-size:1.3rem;background:linear-gradient(145deg,#eef1fb,#dfe4f5);flex:0 0 auto}
+  .bk-tag-pub{background:#e7ebf7;color:#3b4a7a}
+  .bk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.85rem}
 .bk-card{display:flex;flex-direction:column;gap:.55rem;text-align:left;cursor:pointer;
   padding:1rem 1.05rem;border-radius:15px;background:#fff;border:1px solid rgba(20,26,60,.1);
   font:inherit;color:inherit;position:relative;overflow:hidden;
@@ -1483,6 +1488,7 @@
     <div class="bk-ex"><span class="bk-ex-ic">&#8734;</span><div><b>Always open, never repeating.</b> Nothing here closes. Work through them in any order, whenever you want &mdash; each one once.</div></div>
   </div>
   <div class="bk-tabs" id="bk-tabs" role="tablist"></div>
+  <div class="bk-brand" id="bk-brand" style="display:none"></div>
   <div class="bk-grid" id="bk-grid"><div class="bk-empty">Loading the bank&hellip;</div></div>
 </section>
 
@@ -1639,7 +1645,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-09-21-01';
+var SITE_VERSION = '2026-09-21-02';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -2605,6 +2611,11 @@ function loadBankFromDB(){
         return false;
       }
     }
+    /* 7.6b: posted_at is the bank dilemma's own date. postedLabel() reads
+       firstPublishedAt || publishedAt, and a bank row carried neither, so every
+       opened bank card fell back to TODAY. Mapping it here fixes the label with
+       no change to postedLabel itself. */
+    rows.forEach(function(r){ if(r && r.posted_at && !r.firstPublishedAt){ r.firstPublishedAt = r.posted_at; } });
     BANK.splice.apply(BANK, [0, BANK.length].concat(rows));
     BANK_SOURCE='db';
     return true;
@@ -3052,10 +3063,15 @@ function renderBank(){
   var all = (typeof BANK !== 'undefined' && BANK) ? BANK.filter(function(b){ return b && b.id; }) : [];
   if(!all.length){ grid.innerHTML = '<div class="bk-empty">The bank is unavailable right now.</div>'; return; }
   var mine = all.filter(function(b){ return GC && GC.calls && (b.id in GC.calls); }).length;
+  /* 7.6b: the SAME vocabulary and icons as "Where a dilemma comes from" --
+     Real call and Industry / public -- so the product names each source one
+     way everywhere, rather than "Real call" in one section and "real product
+     work" in the next. */
+  var nReal = all.filter(function(b){ return b.tier === 1; }).length;
   var groups = [
     { v:'all',  label:'All '+all.length },
-    { v:'real', label:'From real product work' },
-    { v:'pub',  label:'Famous public decisions' },
+    { v:'real', label:'\u2B50 Real call ('+nReal+')' },
+    { v:'pub',  label:'\uD83C\uDFE2 Industry / public ('+(all.length-nReal)+')' },
     { v:'todo', label:'Not yet called ('+(all.length-mine)+')' }
   ];
   if(tabs){
@@ -3069,6 +3085,26 @@ function renderBank(){
     if(bkTab==='todo') return !(GC && GC.calls && (b.id in GC.calls));
     return true;
   });
+  var brand = document.getElementById('bk-brand');
+  if(brand){
+    if(bkTab === 'real'){
+      /* reuses 6.1g's author block and avatar, so this is the same Neelesh
+         who appears in "Where a dilemma comes from" */
+      brand.innerHTML = '<div class="hw-admin bk-brand-real">'
+        + '<img class="hw-av" src="'+NEELESH_AVATAR+'" alt="Neelesh Singh" width="44" height="44">'
+        + '<div><div class="hw-admin-n">Neelesh Singh <span class="hw-adm-tag">Platform author</span></div>'
+        + '<div class="hw-admin-r">Technical PM &middot; decisions he actually made, with the measured result</div></div></div>';
+      brand.style.display='';
+    } else if(bkTab === 'pub'){
+      brand.innerHTML = '<div class="hw-admin bk-brand-pub">'
+        + '<span class="bk-brand-ic">\uD83C\uDFE2</span>'
+        + '<div><div class="hw-admin-n">Industry / public <span class="hw-adm-tag bk-tag-pub">Documented record</span></div>'
+        + '<div class="hw-admin-r">Decisions real companies made in public, where the outcome is on the record</div></div></div>';
+      brand.style.display='';
+    } else {
+      brand.innerHTML=''; brand.style.display='none';
+    }
+  }
   if(!list.length){ grid.innerHTML = '<div class="bk-empty">You have called every one in this group.</div>'; return; }
   grid.innerHTML = list.map(function(b){
     var done = GC && GC.calls && (b.id in GC.calls);
@@ -3076,7 +3112,7 @@ function renderBank(){
        function I assumed existed; it does not. */
     var cm = (typeof CAT_META !== 'undefined' && CAT_META) ? CAT_META[b.category] : null;
     var cat = cm ? (cm.i+' '+cm.l) : String(b.category||'').replace(/-/g,' ');
-    var src = b.tier === 1 ? 'Real product work' : 'Public decision';
+    var src = b.tier === 1 ? '\u2B50 Real call' : '\uD83C\uDFE2 Industry / public';
     var txt = bkStrip(b.scenario);
     if(txt.length > 150) txt = txt.slice(0,147).replace(/\s+\S*$/,'') + '\u2026';
     return '<button type="button" class="bk-card'+(done?' is-done':'')+'" data-bkid="'+b.id+'">'
