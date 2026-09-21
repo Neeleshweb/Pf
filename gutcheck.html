@@ -1025,6 +1025,42 @@
   .oc-state{margin-left:0}
   .oc-bar-top{flex-direction:column;gap:.15rem}
 }
+
+/* ── 7.6 · the decision bank ─────────────────────────────────────────── */
+.bk-explain{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin:1.2rem 0 1.4rem}
+.bk-ex{display:flex;gap:.7rem;align-items:flex-start;padding:.95rem 1rem;border-radius:14px;
+  background:#fff;border:1px solid rgba(20,26,60,.09);font-size:.83rem;line-height:1.55;color:#4a5170}
+.bk-ex b{color:#141a3c}
+.bk-ex-ic{flex:0 0 auto;display:inline-grid;place-items:center;width:30px;height:30px;border-radius:9px;
+  font-size:.95rem;color:#8a6414;background:linear-gradient(145deg,#fbeccb,#f3d690)}
+.bk-tabs{display:flex;flex-wrap:wrap;align-items:center;gap:.45rem;margin-bottom:1rem}
+.bk-tab{border:1px solid rgba(20,26,60,.14);background:#fff;color:#3b4262;border-radius:999px;
+  padding:.36rem .85rem;font:inherit;font-size:.8rem;font-weight:600;cursor:pointer}
+.bk-tab:hover{border-color:#b8862c}
+.bk-tab.is-on{background:#141a3c;color:#fff;border-color:#141a3c}
+.bk-count{margin-left:auto;font-size:.8rem;font-weight:700;color:#8a6414}
+.bk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.85rem}
+.bk-card{display:flex;flex-direction:column;gap:.55rem;text-align:left;cursor:pointer;
+  padding:1rem 1.05rem;border-radius:15px;background:#fff;border:1px solid rgba(20,26,60,.1);
+  font:inherit;color:inherit;position:relative;overflow:hidden;
+  transition:transform .15s,box-shadow .15s,border-color .15s}
+.bk-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,#b8862c,#e8b54a,#f6d68b)}
+.bk-card:hover{transform:translateY(-2px);border-color:rgba(184,134,44,.45);box-shadow:0 10px 26px rgba(20,26,60,.1)}
+.bk-card.is-done{background:#fbfaf6}
+.bk-card.is-done::before{background:linear-gradient(90deg,#1f9c6f,#34d39a)}
+.bk-card-top{display:flex;justify-content:space-between;align-items:center;gap:.5rem;flex-wrap:wrap}
+.bk-src{font-size:.66rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#6b7394}
+.bk-src.is-real{color:#8a6414}
+.bk-done{font-size:.72rem;font-weight:700;color:#1f9c6f}
+.bk-todo{font-size:.72rem;font-weight:600;color:#8a91b0}
+.bk-cat{font-size:.74rem;font-weight:600;color:#4a5170}
+.bk-txt{font-size:.86rem;line-height:1.5;color:#1e2440;flex:1}
+.bk-go{font-size:.8rem;font-weight:700;color:#8a6414}
+.bk-card.is-done .bk-go{color:#1f9c6f}
+.bk-empty{grid-column:1/-1;padding:1.4rem;text-align:center;color:#6b7394;font-size:.86rem;
+  border:1px dashed rgba(20,26,60,.18);border-radius:14px}
+@media(max-width:760px){ .bk-explain{grid-template-columns:1fr} .bk-count{margin-left:0;width:100%} }
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -1434,10 +1470,26 @@
 </section>
 
 <!-- ARCHIVE -->
+<!-- 7.6: THE DECISION BANK. Curated real decisions with a known outcome.
+     They used to rotate through the featured slot and repeat every 18
+     weekdays; now they live here, all at once, answerable any time. -->
+<section class="section bk-section" id="bank">
+  <div class="sec-eyebrow">The Decision Bank</div>
+  <div class="sec-title">Calls With <span>Known</span> Outcomes</div>
+  <p class="sec-sub">Eighteen real product decisions where we already know what happened. They work differently from the community calls above, and that difference is the point.</p>
+  <div class="bk-explain">
+    <div class="bk-ex"><span class="bk-ex-ic">&#9878;</span><div><b>Scored against reality.</b> Community calls are settled by the room. These are settled by <em>what actually happened</em> &mdash; the shipped product, the metric that moved, the decision that aged well or badly.</div></div>
+    <div class="bk-ex"><span class="bk-ex-ic">&#9678;</span><div><b>Your &ldquo;matched the pros&rdquo; number.</b> Every call you make here feeds a separate score from your community calls: how often your instinct matched the decision that proved right.</div></div>
+    <div class="bk-ex"><span class="bk-ex-ic">&#8734;</span><div><b>Always open, never repeating.</b> Nothing here closes. Work through them in any order, whenever you want &mdash; each one once.</div></div>
+  </div>
+  <div class="bk-tabs" id="bk-tabs" role="tablist"></div>
+  <div class="bk-grid" id="bk-grid"><div class="bk-empty">Loading the bank&hellip;</div></div>
+</section>
+
 <section class="section" id="archive">
   <div class="sec-eyebrow b">The Archive</div>
-  <div class="sec-title">Past <span class="b">Calls</span></div>
-  <p class="sec-sub">Missed a day? Read any past dilemma and see how the crowd called it. <strong>Past calls are locked</strong> — you can study them, but the decision window has closed. That's the point: judgment is a daily practice.</p>
+  <div class="sec-title">Settled <span class="b">Calls</span></div>
+  <p class="sec-sub">Every call here has <strong>settled</strong> &mdash; the room reached a verdict and voting has closed. Open any of them to see how the room split, what it decided, and what the person who posted it actually did. <strong>Nothing here can be voted on</strong>: a call arrives in the archive by settling in the feed above, and from then on it is there to study, not to answer.</p>
   <div class="arch-controls" id="arch-controls"></div>
   <div class="arch-list" id="arch-list"></div>
 </section>
@@ -1587,7 +1639,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-09-20-03';
+var SITE_VERSION = '2026-09-21-01';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -1687,9 +1739,19 @@ function fetchTodaysScheduled(){
 }
 function fetchArchive(){
   if(!SB) return Promise.resolve(null);
-  return SB.rpc('gc_archive_v2', { p_limit: 60, p_offset: 0, p_sort: archSort, p_filter: archFilter, p_uid: (currentUser?currentUser.id:null), p_category: archCategory }).then(function(res){
+  /* 7.8: the archive holds SETTLED community calls and nothing else. 'all' is
+     sent as 'community' so the server never returns the bank, and 'bank' is no
+     longer offered. The bank has its own section now (7.6). */
+  var srvFilter = (archFilter === 'mine') ? 'mine' : 'community';
+  return SB.rpc('gc_archive_v2', { p_limit: 60, p_offset: 0, p_sort: archSort, p_filter: srvFilter, p_uid: (currentUser?currentUser.id:null), p_category: archCategory }).then(function(res){
     if(res && res.error){ console.warn('[GutCheck] archive read error:', res.error); return null; }
-    return (res && res.data) ? res.data : null;
+    var rows = (res && res.data) ? res.data : null;
+    /* A client guard as well as the server filter. 'mine' returns calls the
+       user answered regardless of kind, so it can include a bank dilemma or an
+       open one. The archive's rule -- settled, finished, read-only -- is
+       enforced here rather than trusted to every filter the server offers. */
+    if(rows) rows = rows.filter(function(r){ return r && r.kind !== 'bank' && !!r.closes_at; });
+    return rows;
   }).catch(function(e){ console.warn('[GutCheck] archive failed:', e); return null; });
 }
 
@@ -2893,6 +2955,9 @@ function renderToday(){
   /* 7.7b: refresh the settling indicator whenever the card re-renders, so it
      tracks a vote the user has just cast rather than going stale. */
   try{ ocLoadProgress(todaysDilemma); }catch(e){ console.warn('[GutCheck] progress:', e); }
+  /* 7.6: keep the bank's "You called X" badges current after a vote, rather
+     than showing "Not called yet" until the next reload. 18 cards; cheap. */
+  try{ if(typeof renderBank === 'function') renderBank(); }catch(e){}
   var d = todaysDilemma || dilemmaForIndex(TODAY_INDEX);
   var answered = d.id in GC.calls;
   var html = '<div class="call-card">'
@@ -2957,6 +3022,9 @@ var OC_MODES = {
   archiveOpen: { label:'Opened from the archive',
                  sub:'Still open \u2014 nobody has settled this one, so your call is live and counts like any other.',
                  progress:true },
+  bank:        { label:'From the decision bank',
+                 sub:'A real decision where the outcome is known. Your call is scored against what actually happened \u2014 not against what the room thinks \u2014 and it feeds your \u201cmatched the pros\u201d number.',
+                 progress:false },
   practice:    { label:'Practising a settled call',
                  sub:'The room already reached a verdict. Commit first, then see how it went \u2014 it still counts toward your calibration.',
                  progress:false }
@@ -2974,6 +3042,73 @@ function ocSetMode(m){
   if(pan){ pan.classList.remove('is-featured','is-picked','is-practice'); pan.classList.add('is-'+ocMode); }
   var back = document.getElementById('oc-back');
   if(back) back.style.display = (ocMode === 'featured') ? 'none' : '';
+}
+/* ── 7.6 · the decision bank ────────────────────────────────────────── */
+var bkTab = 'all';
+function bkStrip(h){ return String(h||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim(); }
+function renderBank(){
+  var grid = document.getElementById('bk-grid'), tabs = document.getElementById('bk-tabs');
+  if(!grid) return;
+  var all = (typeof BANK !== 'undefined' && BANK) ? BANK.filter(function(b){ return b && b.id; }) : [];
+  if(!all.length){ grid.innerHTML = '<div class="bk-empty">The bank is unavailable right now.</div>'; return; }
+  var mine = all.filter(function(b){ return GC && GC.calls && (b.id in GC.calls); }).length;
+  var groups = [
+    { v:'all',  label:'All '+all.length },
+    { v:'real', label:'From real product work' },
+    { v:'pub',  label:'Famous public decisions' },
+    { v:'todo', label:'Not yet called ('+(all.length-mine)+')' }
+  ];
+  if(tabs){
+    tabs.innerHTML = groups.map(function(g){
+      return '<button type="button" role="tab" class="bk-tab'+(bkTab===g.v?' is-on':'')+'" data-bk="'+g.v+'" aria-selected="'+(bkTab===g.v)+'">'+g.label+'</button>';
+    }).join('') + '<span class="bk-count">'+mine+' of '+all.length+' called</span>';
+  }
+  var list = all.filter(function(b){
+    if(bkTab==='real') return b.tier === 1;
+    if(bkTab==='pub')  return b.tier !== 1;
+    if(bkTab==='todo') return !(GC && GC.calls && (b.id in GC.calls));
+    return true;
+  });
+  if(!list.length){ grid.innerHTML = '<div class="bk-empty">You have called every one in this group.</div>'; return; }
+  grid.innerHTML = list.map(function(b){
+    var done = GC && GC.calls && (b.id in GC.calls);
+    /* CAT_META is the page's own category table (label + icon). catLabel was a
+       function I assumed existed; it does not. */
+    var cm = (typeof CAT_META !== 'undefined' && CAT_META) ? CAT_META[b.category] : null;
+    var cat = cm ? (cm.i+' '+cm.l) : String(b.category||'').replace(/-/g,' ');
+    var src = b.tier === 1 ? 'Real product work' : 'Public decision';
+    var txt = bkStrip(b.scenario);
+    if(txt.length > 150) txt = txt.slice(0,147).replace(/\s+\S*$/,'') + '\u2026';
+    return '<button type="button" class="bk-card'+(done?' is-done':'')+'" data-bkid="'+b.id+'">'
+      + '<span class="bk-card-top"><span class="bk-src'+(b.tier===1?' is-real':'')+'">'+src+'</span>'
+      +   (done ? '<span class="bk-done">\u2713 You called '+GC.calls[b.id]+'</span>' : '<span class="bk-todo">Not called yet</span>')
+      + '</span>'
+      + '<span class="bk-cat">'+cat+'</span>'
+      + '<span class="bk-txt">'+txt+'</span>'
+      + '<span class="bk-go">'+(done ? 'See the outcome \u2192' : 'Make the call \u2192')+'</span>'
+      + '</button>';
+  }).join('');
+}
+document.addEventListener('click', function(e){
+  var t = e.target && e.target.closest ? e.target.closest('[data-bk]') : null;
+  if(t){ bkTab = t.getAttribute('data-bk'); renderBank(); return; }
+  var c = e.target && e.target.closest ? e.target.closest('[data-bkid]') : null;
+  if(c){ openBankCall(c.getAttribute('data-bkid')); }
+});
+
+/* 7.6: the bank is always answerable, so opening one is never "practice".
+   The mode, not d.kind, turns the settling bars off -- embedded BANK items do
+   not carry `kind`, so relying on it would show bars on a dilemma with no room. */
+function openBankCall(id){
+  var d = null;
+  for(var i=0;i<BANK.length;i++){ if(BANK[i] && BANK[i].id === id){ d = BANK[i]; break; } }
+  if(!d) return;
+  practiceMode = false;
+  todaysDilemma = d;
+  ocSetMode('bank');
+  renderToday();
+  var m = document.getElementById('call-mount');
+  if(m && m.scrollIntoView) m.scrollIntoView({ behavior:'smooth', block:'start' });
 }
 function practiseCall(d){
   if(!d) return;
@@ -3224,11 +3359,10 @@ function addArchItem(list, dateLabel, d){
   var item = document.createElement('div'); item.className = 'arch-item';
   item.setAttribute('data-did', d.id);          /* 6.1b-fix: addressable for live refresh */
   item.innerHTML = '<div class="arch-top"><span class="arch-day">'+dateLabel+' · '+badge+'</span><span class="arch-status '+(made?'made':'missed')+'">'
-    +(made ? ('✓ you called '+youKey)
-           : (archOpen ? '· still open — you haven\u2019t called this'
-                       : '· settled — you didn\u2019t call it'))+'</span></div>'
+    +(made ? ('\u2713 You called '+youKey)
+           : '\u00b7 Settled \u2014 you didn\u2019t vote on this one')+'</span></div>'
     + '<div class="arch-title">'+d.scenario.replace(/<[^>]+>/g,'')+'</div>'
-    + '<div class="arch-status" style="color:var(--accent2)">▾ Tap to study this call</div>'
+    + '<div class="arch-status" style="color:var(--accent2)">▾ See how the room called it</div>'
     + '<div class="arch-detail"><div class="arch-q">'+d.q+'</div><div class="arch-opts"></div><div class="arch-rev"></div></div>';
   /* 6.0h: an unanswered, still-open dilemma must NOT reveal on expand -- that
      would spoil the answer before the call is made. It offers the call instead. */
@@ -3236,8 +3370,9 @@ function addArchItem(list, dateLabel, d){
     if(e && e.target && e.target.classList && e.target.classList.contains('arch-practise')) return;
     item.classList.toggle('open');
     if (item.classList.contains('open') && !item._built){
-      if (!(d.id in GC.calls) && archOpen){ buildArchPractise(item, d); }
-      else { buildArchDetail(item, d); }
+      /* 7.8: read-only. Every archive call has settled, so it opens straight
+         to the result -- never to an answer form. */
+      buildArchDetail(item, d);
       item._built = true;
     }
   };
@@ -3248,8 +3383,9 @@ function renderArchControls(){
   var box = document.getElementById('arch-controls'); if(!box) return;
   if(!SB){ box.innerHTML = ''; return; }
   if(archFilter === 'mine' && !currentUser) archFilter = 'all';
-  var showOpts = [{v:'all',label:'Everything'},{v:'community',label:'Community'},{v:'bank',label:'Featured'}];
-  if(currentUser) showOpts.push({v:'mine',label:'Mine'});
+  if(archFilter === 'bank' || archFilter === 'community') archFilter = 'all';
+  var showOpts = [{v:'all',label:'All settled calls'}];
+  if(currentUser) showOpts.push({v:'mine',label:'Calls I made'});
   mountFilterBar(box, {
     menus:[
       { icon:'\u21C5', value:archSort, options:[
@@ -4325,6 +4461,10 @@ function boot(){
 }
 function bootAfterBank(){
   updateAuthUI();
+  /* 7.6: render the bank once BANK is populated -- from the DB or the
+     embedded copy. Without this the section sat on "Loading..." forever:
+     renderBank's only callers were inside its own tab handler. */
+  try{ renderBank(); }catch(e){ console.warn('[GutCheck] bank section:', e); }
   if(!SB){ applyStreak(); initToday(); renderArchive(); refreshRecord(); return; }
   SB.auth.getSession().then(function(res){
     var sess = res && res.data && res.data.session; currentUser = sess ? sess.user : null;
