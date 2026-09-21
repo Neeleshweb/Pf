@@ -1698,7 +1698,7 @@ var GC_URL = (GC_CONFIG.url || '').trim().replace(/\/+$/,'').replace(/\/rest\/v1
 var GC_LIVE = (GC_URL.indexOf('supabase.co') !== -1) && ((GC_CONFIG.anon||'').length > 20);
 var wasRedirect = /[#&?](access_token|code)=/.test((location.hash||'') + (location.search||''));
 /* ---- safe auto cache-buster: reload once if a newer deploy is live (never loops) ---- */
-var SITE_VERSION = '2026-09-21-03';
+var SITE_VERSION = '2026-09-21-04';
 (function(){ try {
   if (location.protocol === 'file:') return;
   fetch('gc-version.json?ts=' + Date.now(), { cache:'no-store' }).then(function(r){ return r.ok ? r.json() : null; }).then(function(j){
@@ -3492,7 +3492,13 @@ function addArchItem(list, dateLabel, d){
   /* 6.0h: an unanswered, still-open dilemma must NOT reveal on expand -- that
      would spoil the answer before the call is made. It offers the call instead. */
   item.querySelector('.arch-top').parentNode.onclick = function(e){
-    if(e && e.target && e.target.classList && e.target.classList.contains('arch-practise')) return;
+    /* 7.8c: a click on anything INSIDE the opened result -- Like, a reason
+       reaction, a link -- bubbled up here and collapsed the card under the
+       cursor, so the like landed in a card you could no longer see. Only the
+       card's header toggles it now. */
+    var tg = e && e.target;
+    if(tg && tg.closest && (tg.closest('.arch-detail') || tg.closest('button,a,input,textarea,select,label,.dlike'))) return;
+    if(tg && tg.classList && tg.classList.contains('arch-practise')) return;
     item.classList.toggle('open');
     if (item.classList.contains('open') && !item._built){
       /* 7.8: read-only. Every archive call has settled, so it opens straight
@@ -4382,7 +4388,7 @@ function wireDilemmaLikes(scopeEl, d){
     if(b._busy || b.classList.contains('on')) return;
     if(!currentUser){ openSignIn('Sign in to like this dilemma — it also builds your judgment profile.'); return; }
     b._busy=true;
-    SB.rpc('gc_like_dilemma',{p_dilemma_id:d.id}).then(function(res){ b._busy=false; var dd=res&&res.data; if(dd&&dd.ok){ setDlike(b, dd.count, true); } else if(dd&&dd.reason==='auth'){ openSignIn(); } }).catch(function(){ b._busy=false; });
+    SB.rpc('gc_like_dilemma',{p_dilemma_id:d.id}).then(function(res){ b._busy=false; var dd=res&&res.data; if(dd&&dd.ok){ setDlike(b, dd.count, true); } else if(dd&&dd.reason==='auth'){ openSignIn(); } else { /* 7.8c: every other refusal used to be dropped silently */ console.warn('[GutCheck] like refused:', dd, res&&res.error); if(typeof toast==='function') toast('That like didn\u2019t go through'+(dd&&dd.reason?' ('+dd.reason+')':'')+'. Try again in a moment.'); } }).catch(function(){ b._busy=false; });
   }; });
 }
 function loadReasons(d, scopeEl){
