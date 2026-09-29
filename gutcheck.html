@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- build:7.9-reasons-newest-first 2026-09-29T20:00:00Z -->
 <!-- build:pw-modal-v2 2026-07-22T21:00:00Z -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -771,6 +772,16 @@
     .rsn-help.on { border-color: var(--green); color: var(--green); }
     .rsn-help:disabled { cursor: default; opacity: .85; }
     .rsn-hl { color: var(--muted2); }
+    /* 7.9: one tab per option; newest first inside each */
+    .rsn-tabs { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .65rem; }
+    .rsn-tab { display: inline-flex; align-items: center; gap: .4rem; max-width: 100%; background: var(--card2); border: 1px solid var(--border2); color: var(--text2); border-radius: 8px; padding: .3rem .6rem; font-size: .76rem; line-height: 1.3; }
+    .rsn-tab:hover { border-color: var(--accent2); }
+    .rsn-tab.on { border-color: var(--accent); color: var(--white); }
+    .rsn-tab-t { max-width: 11rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+    .rsn-tab.on .rsn-tab-t { color: var(--text2); }
+    .rsn-tab-n { background: var(--surface); color: var(--muted); border-radius: 20px; padding: 0 .42rem; font-size: .68rem; }
+    .rsn-hide { display: none !important; }
+    @media (max-width: 520px) { .rsn-tab-t { max-width: 6.5rem; } }
     .dlike { background: none; border: 1px solid var(--border2); color: var(--muted); border-radius: 8px; padding: .6rem 1.1rem; font-size: .86rem; cursor: pointer; display: inline-flex; align-items: center; gap: .4rem; transition: border-color .15s, color .15s, background .15s; }
     .dlike:hover:not(.on) { border-color: var(--accent); color: var(--white); }
     .dlike.on { border-color: var(--accent); color: var(--accent); background: rgba(var(--accent-rgb),.08); cursor: default; }
@@ -4395,7 +4406,7 @@ function loadReasons(d, scopeEl){
   if(!d) return; var mount=(scopeEl||document).querySelector('.rv-reasons'); if(!mount) return;
   if(!SB){ mount.innerHTML=''; return; }
   mount.innerHTML='<div class="rv-h b">\uD83E\uDDE0 How other PMs reasoned</div><div class="rsn-loading">Loading reasoning from PMs who\u2019ve called this\u2026</div>';
-  SB.rpc('gc_reasons', { p_dilemma: d.id, p_limit: 12 }).then(function(res){
+  SB.rpc('gc_reasons', { p_dilemma: d.id, p_limit: 200 }).then(function(res){   /* 7.9: every reason (was the top 12), grouped into option tabs below */
     if(res && res.error){ console.warn('[GutCheck] reasons error:', res.error); mount.innerHTML=''; return; }
     var rows=(res && res.data)?res.data:[];
     rows=rows.filter(function(r){ return r && r.reason && reasonClean(r.reason); });
@@ -4403,19 +4414,47 @@ function loadReasons(d, scopeEl){
   }).catch(function(e){ console.warn('[GutCheck] reasons failed:', e); mount.innerHTML=''; });
 }
 function renderReasons(mount, d, rows){
+  /* 7.9: reasons are grouped into one tab per option, newest first inside each
+     tab (whatever order the server sends). The tab opens on the option you
+     chose if it has reasons, else the option with the most reasons. */
+  rows=(rows||[]).slice().sort(function(a,b){ return (new Date(b.created_at)-new Date(a.created_at)) || String(b.vote_id||'').localeCompare(String(a.vote_id||'')); });
   var head='<div class="rv-h b">\uD83E\uDDE0 How other PMs reasoned'+(rows.length?' <span class="rsn-count">'+rows.length+'</span>':'')+'</div>';
   if(!rows.length){ mount.innerHTML=head+'<div class="rsn-empty">No one\u2019s explained their call yet. Add your reasoning above next time \u2014 it\u2019ll show here for others once they vote.</div>'; return; }
-  var html=head+'<div class="rsn-list">';
-  rows.forEach(function(r){
+  var keys=((d&&d.opts)||[]).map(function(o){ return o.k; });
+  rows.forEach(function(r){ var k=r.choice||''; if(k && keys.indexOf(k)<0) keys.push(k); });
+  var by={}; keys.forEach(function(k){ by[k]=[]; }); rows.forEach(function(r){ if(by[r.choice||'']) by[r.choice||''].push(r); });
+  var mineK=(typeof GC!=='undefined' && GC && GC.calls) ? GC.calls[d.id] : null;
+  var active=(mineK && by[mineK] && by[mineK].length) ? mineK
+             : keys.slice().sort(function(a,b){ return (by[b].length-by[a].length) || (keys.indexOf(a)-keys.indexOf(b)); })[0];
+  function card(r){
     var k=r.choice||'', title=escHtml(rsnOptTitle(d,k));
-    html += '<div class="rsn-card'+(r.mine?' mine':'')+'">'
+    return '<div class="rsn-card'+(r.mine?' mine':'')+'">'
       + '<div class="rsn-top"><span class="rsn-badge">'+escHtml(k)+(title?' \u00B7 '+title:'')+'</span>'+(r.mine?'<span class="rsn-you">you</span>':'')+'<span class="rsn-time">'+rsnTimeAgo(r.created_at)+'</span></div>'
       + '<div class="rsn-text">'+escHtml(r.reason)+'</div>'
       + '<button class="rsn-help'+(r.reacted?' on':'')+'" data-vote="'+escHtml(r.vote_id)+'"'+((r.mine||r.reacted)?' disabled':'')+'>\uD83D\uDC4D <span class="rsn-hc">'+(r.helpful||0)+'</span> <span class="rsn-hl">sharp</span></button>'
       + '</div>';
+  }
+  var html=head+'<div class="rsn-tabs" role="tablist" aria-label="Reasons by option">';
+  keys.forEach(function(k){
+    var t=rsnOptTitle(d,k), n=by[k].length;
+    html += '<button type="button" role="tab" class="rsn-tab'+(k===active?' on':'')+'" data-rsn-tab="'+escHtml(k)+'" aria-selected="'+(k===active?'true':'false')+'" title="'+escHtml(k+(t?' \u00B7 '+t:''))+'">'
+      + '<b>'+escHtml(k)+'</b>'+(t?'<span class="rsn-tab-t">'+escHtml(t)+'</span>':'')+'<span class="rsn-tab-n">'+n+'</span></button>';
   });
   html+='</div>';
+  keys.forEach(function(k){
+    var list=by[k];
+    html += '<div class="rsn-list rsn-pane'+(k===active?'':' rsn-hide')+'" role="tabpanel" data-rsn-pane="'+escHtml(k)+'">'
+      + (list.length ? list.map(card).join('') : '<div class="rsn-empty">No one who chose '+escHtml(k)+' has explained it yet.</div>')
+      + '</div>';
+  });
   mount.innerHTML=html;
+  [].slice.call(mount.querySelectorAll('.rsn-tab')).forEach(function(tab){
+    tab.onclick=function(){
+      var k=tab.getAttribute('data-rsn-tab');
+      [].slice.call(mount.querySelectorAll('.rsn-tab')).forEach(function(t){ var on=(t===tab); t.classList.toggle('on', on); t.setAttribute('aria-selected', on?'true':'false'); });
+      [].slice.call(mount.querySelectorAll('.rsn-pane')).forEach(function(p){ p.classList.toggle('rsn-hide', p.getAttribute('data-rsn-pane')!==k); });
+    };
+  });
   [].slice.call(mount.querySelectorAll('.rsn-help')).forEach(function(btn){
     btn.onclick=function(){
       if(btn.disabled) return;

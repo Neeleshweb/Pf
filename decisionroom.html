@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- build:7.9-replies-newest-first 2026-09-29T20:00:00Z -->
 <!-- build:feed-date 2026-07-23T10:00:00Z -->
 <!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
 <!-- build:dr-d6-caseedit 2026-07-14T18:00:00Z -->
@@ -3677,7 +3678,7 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
     tip.style.top=(r.bottom+window.scrollY+8)+'px'; tip.style.left=Math.max(8, Math.min(r.left+window.scrollX-8, window.innerWidth-w-12))+'px';
   }
   document.addEventListener('click', function(e){ var b=(e.target.closest)?e.target.closest('.tip-i'):null; if(b){ e.preventDefault(); e.stopPropagation(); showTip(b.getAttribute('data-tip'), b); return; } var tip=document.getElementById('rsp-tip'); if(tip && tip.classList.contains('show') && !tip.contains(e.target)) tip.classList.remove('show'); });
-  var respSortMode='score';
+  var respSortMode='recent';   /* 7.9: newest first by default; the Sort menu still offers every other order */
   function jpNorm(x){ return String(x||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
   function respScore(d, r){
     var s=0;
@@ -3767,7 +3768,7 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
     var maxHelp=0; rs.forEach(function(x){ if((Number(x.helpful_count)||0)>maxHelp) maxHelp=Number(x.helpful_count)||0; });
     var CONF={low:'Low confidence',med:'Medium confidence',high:'High confidence'};
     rs=sortResponses(rs, d, respSortMode);
-    var rsBar='<div class="rsp-sort-bar"><span>Sort</span><select id="rsp-sort">'+[['score','Response quality'],['helpful','Most helpful'],['acted','Acted on by owner'],['recent','Most recent'],['reported','Most reported']].map(function(o){ return '<option value="'+o[0]+'"'+(respSortMode===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></div>';
+    var rsBar='<div class="rsp-sort-bar"><span>Sort</span><select id="rsp-sort">'+[['recent','Most recent'],['score','Response quality'],['helpful','Most helpful'],['acted','Acted on by owner'],['reported','Most reported']].map(function(o){ return '<option value="'+o[0]+'"'+(respSortMode===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></div>';
     listEl.innerHTML=rsBar+rs.map(function(r){
       var flagged=(Number(r.report_count)||0)>=5;
       var wpct=respCombinedPct(d, r); var hpct=maxHelp>0?((Number(r.helpful_count)||0)/maxHelp*100):0;
