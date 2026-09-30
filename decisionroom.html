@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- build:7.9b-resolved-newest-first 2026-09-30T12:00:00Z -->
 <!-- build:7.9-replies-newest-first 2026-09-29T20:00:00Z -->
 <!-- build:feed-date 2026-07-23T10:00:00Z -->
 <!-- build:dr-d6-deeplinkfix 2026-07-15T12:00:00Z -->
@@ -3318,6 +3319,8 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
 
   /* ---- exemplary ids are needed BEFORE the list renders, so we can dedupe ---- */
   var EX_ROWS=[], exIdsLoaded=false;
+  /* 7.9b: exemplary cases are listed newest closed first, like every other list */
+  function exByClosed(a,b){ return (new Date(b.closed_at||b.created_at||0)-new Date(a.closed_at||a.created_at||0)); }
   function fetchExIds(force){
     if(!SB) return Promise.resolve({});
     if(exIdsLoaded && !force) return Promise.resolve(EX_IDS);
@@ -3336,8 +3339,8 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
     var strip=document.getElementById('ex-strip'), list=document.getElementById('ex-list');
     if(!strip||!list) return;
     if(!show || !EX_ROWS.length){ strip.style.display='none'; list.innerHTML=''; return; }
-    var html='';
-    for(var i=0;i<EX_ROWS.length;i++){
+    var html='', exSorted=EX_ROWS.slice().sort(exByClosed);   /* 7.9b */
+    for(var i=0;i<exSorted.length;i++){
       /* libCardHtml, NOT feedCardHtml. Every exemplary case is closed by
          definition (dr_featured_cases filters resolved_high = 1). The feed
          renderer paints the live timeline rail -- the relative date and the
@@ -3345,7 +3348,7 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
          cards showed "Active" and no "N of M met". The .ex-on styles are
          written against .fc-top / .fc-title / .fc-attrs, i.e. the lib card,
          which is further confirmation this was the intended renderer. */
-      try{ html+=exDecorate(libCardHtml(EX_ROWS[i]), EX_ROWS[i]); }catch(e){}
+      try{ html+=exDecorate(libCardHtml(exSorted[i]), exSorted[i]); }catch(e){}
     }
     if(!html){ strip.style.display='none'; list.innerHTML=''; return; }
     strip.style.display='block';
@@ -3370,8 +3373,8 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
       list.innerHTML='<div class="feed-empty">No exemplary decisions yet \u2014 a case earns the medal once it is closed with at least 70% of what the asker needed answered, and at least one PM actually helped.</div>';
       return;
     }
-    var html='';
-    for(var i=0;i<EX_ROWS.length;i++){ try{ html+=exDecorate(libCardHtml(EX_ROWS[i]), EX_ROWS[i]); }catch(e){} }
+    var html='', exSorted=EX_ROWS.slice().sort(exByClosed);   /* 7.9b: newest closed first */
+    for(var i=0;i<exSorted.length;i++){ try{ html+=exDecorate(libCardHtml(exSorted[i]), exSorted[i]); }catch(e){} }
     list.innerHTML=html;
     if(typeof wireCards==='function') wireCards(list);
   }
@@ -3390,7 +3393,7 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
     fetchExIds(!!reset).then(function(){
       if(myReq!==libReqId) return null;
       if(st==='exemplary'){ loadLibraryExemplary(myReq); return null; }
-      renderExStrip(st==='closed');            /* strip ONLY on "All decisions" */
+      renderExStrip(false);   /* 7.9b: no exemplary-first strip. "All decisions" is one list, newest closed first, exemplary cases inline with their medal */
       var catEl=document.getElementById('lib-cat'); var cat=catEl?catEl.value:null;
       return SB.rpc('dr_feed',{p_limit:12,p_before:libCursor,p_category:cat,p_status:st,
                                p_urgency:null,p_product:null,p_experience:null});
@@ -3403,16 +3406,19 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
            closed   -> exemplary are already in the strip above  => hide here
            resolved -> "excluding exemplary" (they have their own filter) => hide here
            partial  -> an exemplary case can't be partial anyway  => nothing to hide */
-      var hideEx=(st==='closed'||st==='resolved');
+      var hideEx=(st==='resolved');   /* 7.9b: only "Resolved -- excluding exemplary" hides them; "All decisions" shows them in date order */
       var shown=hideEx ? rows.filter(function(r){ return !EX_IDS[r.id]; }) : rows;
       if(reset) list.innerHTML='';
       shown.forEach(function(r){ list.insertAdjacentHTML('beforeend', libDecorate(libCardHtml(r), r)); });
-      if(reset && !list.children.length){
-        list.innerHTML='<div class="feed-empty">No cases match this filter yet.</div>';
-      }
       /* cursor/paging must follow the RAW rows, not the filtered view */
       if(rows.length){ libCursor=rows[rows.length-1].closed_at||rows[rows.length-1].created_at; }
       if(rows.length<12) libDone=true;
+      /* 7.9b: a page whose every row was filtered out (all exemplary, under
+         "Resolved -- excluding exemplary") must not end the list: fetch on */
+      if(!shown.length && !libDone){ wireCards(list); loadLibrary(false); return; }
+      if(!list.children.length){
+        list.innerHTML='<div class="feed-empty">No cases match this filter yet.</div>';
+      }
       var more=document.getElementById('lib-more'); if(more) more.style.display=libDone?'none':'';
       wireCards(list);
     }, function(){ if(myReq===libReqId) libLoading=false; });
