@@ -1494,39 +1494,23 @@ html body .feed-card.ex-on:hover{border-color:rgba(227,155,12,.85);box-shadow:0 
 html body .feed-card.ex-on::before{content:"";position:absolute;left:0;right:0;top:0;bottom:auto;width:auto;height:4px;border-radius:0;
   background:linear-gradient(90deg,#FBD24B,#E39B0C 55%,#FBD24B);z-index:2}
 html body .feed-card.ex-on::after{background:rgba(227,155,12,.08)}
-/* Signal (light): an exemplary card takes the Warm theme's look -- a warm
-   espresso card, a touch lighter than Warm's own, with Warm's text colours and
-   a quiet gold glow -- so it stands out as the best of the list. Its variables
-   are redefined on this one card only; Signal's fixed-colour chips get warm-dark
-   equivalents. (0,3,2) and (0,4,2) outrank Signal's own rules (0,2,1). */
+/* Signal (light): a LIGHT golden card -- honey to cream, a warm glow, a gold
+   edge and bar -- with Signal's own dark text, so it matches the theme, reads
+   easily and still feels gold. The "Decided" line and the date turn a deep,
+   readable gold; the pill is a shade richer so it stands out on the gold.
+   (0,3,2) and (0,4,2) outrank Signal's own rules (0,2,1). */
 html[data-dr-theme="signal"] body .feed-card.ex-on{
-  --white:#f3ebdf; --text2:#dcd1c2; --text3:#c1b4a2; --muted:#b5a792; --muted2:#9d907d;
-  --border:#463a2d; --border2:#524436; --card:#30271e; --card2:#3a2f25;
-  --accent-rgb:216,155,74; --accent2-rgb:236,183,104; --accent3-rgb:132,184,208; --green-rgb:140,204,136; --red-rgb:232,132,120;
-  --stk-fg:#d9c6f7; --prod-fg:#a6d3e8;
-  /* the finished colours too: :root resolves these once, so the -rgb values
-     above would not reach them on their own */
-  --accent:rgb(216,155,74); --accent2:rgb(236,183,104); --accent3:rgb(132,184,208);
-  --green:rgb(140,204,136); --red:rgb(232,132,120);
-  --accent-dim:rgba(216,155,74,.12); --accent2-dim:rgba(236,183,104,.10); --accent3-dim:rgba(132,184,208,.10);
-  color:var(--white);
-  background-color:#30271e;
-  background-image:radial-gradient(110% 90% at 100% 0%,rgba(245,195,90,.10),rgba(245,195,90,0) 58%),
-                   linear-gradient(180deg,#332a20 0%,#2c241b 100%);
-  border-color:rgba(214,158,46,.55);box-shadow:0 20px 54px rgba(60,40,12,.22),0 0 0 1px rgba(214,158,46,.12)}
-html[data-dr-theme="signal"] body .feed-card.ex-on:hover{border-color:rgba(214,158,46,.85);box-shadow:0 30px 70px rgba(60,40,12,.30),0 0 0 1px rgba(214,158,46,.22)}
+  --accent2:rgb(160,104,14); --accent2-rgb:160,104,14;
+  background-color:#FFF7E6;
+  background-image:radial-gradient(120% 100% at 100% 0%,rgba(244,190,72,.26),rgba(244,190,72,0) 60%),
+                   linear-gradient(160deg,#FFFBF2 0%,#FEF2D8 55%,#FBE8C0 100%);
+  border-color:rgba(214,158,46,.60);box-shadow:0 20px 54px rgba(176,124,30,.15),0 0 0 1px rgba(214,158,46,.14)}
+html[data-dr-theme="signal"] body .feed-card.ex-on:hover{border-color:rgba(214,158,46,.9);box-shadow:0 30px 70px rgba(176,124,30,.22),0 0 0 1px rgba(214,158,46,.24)}
 html[data-dr-theme="signal"] body .feed-card.ex-on::before{background:linear-gradient(90deg,#F3C95C,#D99A1E 55%,#F3C95C)}
-html[data-dr-theme="signal"] body .feed-card.ex-on::after{background:rgba(236,183,104,.07)}
-html[data-dr-theme="signal"] body .feed-card.ex-on .fc-tag{color:#F2BD7C;background:rgba(242,189,124,.12);border-color:rgba(242,189,124,.34)}
-html[data-dr-theme="signal"] body .feed-card.ex-on .fc-help,
-html[data-dr-theme="signal"] body .feed-card.ex-on .fc-prod{color:#A6D3E8;background:rgba(132,184,208,.13);border-color:rgba(132,184,208,.36)}
-html[data-dr-theme="signal"] body .feed-card.ex-on .fc-stk{color:#D9C6F7;background:rgba(167,139,250,.13);border-color:rgba(167,139,250,.32)}
-html[data-dr-theme="signal"] body .feed-card.ex-on .fc-ctx{color:#EDE3D5;background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15)}
-html[data-dr-theme="signal"] body .feed-card.ex-on .fc-ctx.mine{color:#F2BD7C;background:rgba(242,189,124,.12);border-color:rgba(242,189,124,.34)}
-html[data-dr-theme="signal"] body .feed-card.ex-on .fc-share{color:#A6D3E8;border-color:rgba(132,184,208,.45)}
-html[data-dr-theme="signal"] body .feed-card.ex-on .fc-met.g,
-html[data-dr-theme="signal"] body .feed-card.ex-on .fc-rc{color:#95D59A;background:rgba(140,204,136,.12);border-color:rgba(140,204,136,.36)}
-html[data-dr-theme="signal"] body .feed-card.ex-on .fc-met.r{color:#F0A89C;background:rgba(232,132,120,.12);border-color:rgba(232,132,120,.36)}
+html[data-dr-theme="signal"] body .feed-card.ex-on::after{background:rgba(214,158,46,.10)}
+html[data-dr-theme="signal"] body .feed-card.ex-on .fc-status.ex-pill{color:#5E3A00;background:linear-gradient(180deg,#FFE9A8,#F6CD62);
+  border-color:rgba(184,124,18,.70);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 2px 10px rgba(184,124,18,.22)}
+html[data-dr-theme="signal"] body .feed-card.ex-on .ex-cap .fc-caplab{color:#9A6410}
 html body .feed-card.ex-on .ex-cap .fc-caplab{color:#B7791F}
 /* the pill takes its SIZE from each theme's own .fc-status chip (so it lines
    up with "Resolved" exactly) and only its COLOURS from here */
