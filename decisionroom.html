@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- build:7.9c-exemplary-redesign 2026-10-01T12:00:00Z -->
 <!-- build:7.9b-resolved-newest-first 2026-09-30T12:00:00Z -->
 <!-- build:7.9-replies-newest-first 2026-09-29T20:00:00Z -->
 <!-- build:feed-date 2026-07-23T10:00:00Z -->
@@ -1482,6 +1483,60 @@
 .ex-lab .tip-i{width:13px;height:13px;font-size:.55rem;border-color:currentColor;color:inherit;opacity:.75}
 .ex-lab .tip-i:hover{opacity:1}
 .feed-card.ex-on .fc-top,.feed-card.ex-on .fc-title,.feed-card.ex-on .fc-attrs{position:relative;z-index:1}
+/* --- 7.9c: exemplary card, redesigned. A gold top bar, a gold edge, a soft
+   warm glow in the top-right corner, and a gold "Exemplary" pill beside the
+   Status chip. "html body" outranks every theme's own .feed-card rules
+   (Signal's are html[data-dr-theme] .feed-card, specificity 0,2,1). --- */
+html body .feed-card.ex-on{border-color:rgba(227,155,12,.55);
+  background-image:radial-gradient(120% 95% at 100% 0%,rgba(251,210,75,.15),rgba(251,210,75,.04) 38%,rgba(251,210,75,0) 62%);
+  box-shadow:0 0 0 1px rgba(227,155,12,.12),0 16px 44px rgba(227,155,12,.12)}
+html body .feed-card.ex-on:hover{border-color:rgba(227,155,12,.85);box-shadow:0 0 0 1px rgba(227,155,12,.22),0 22px 56px rgba(227,155,12,.18)}
+html body .feed-card.ex-on::before{content:"";position:absolute;left:0;right:0;top:0;bottom:auto;width:auto;height:4px;border-radius:0;
+  background:linear-gradient(90deg,#FBD24B,#E39B0C 55%,#FBD24B);z-index:2}
+html body .feed-card.ex-on::after{background:rgba(227,155,12,.08)}
+/* Signal (light): an exemplary card takes the Warm theme's look -- a warm
+   espresso card, a touch lighter than Warm's own, with Warm's text colours and
+   a quiet gold glow -- so it stands out as the best of the list. Its variables
+   are redefined on this one card only; Signal's fixed-colour chips get warm-dark
+   equivalents. (0,3,2) and (0,4,2) outrank Signal's own rules (0,2,1). */
+html[data-dr-theme="signal"] body .feed-card.ex-on{
+  --white:#f3ebdf; --text2:#dcd1c2; --text3:#c1b4a2; --muted:#b5a792; --muted2:#9d907d;
+  --border:#463a2d; --border2:#524436; --card:#30271e; --card2:#3a2f25;
+  --accent-rgb:216,155,74; --accent2-rgb:236,183,104; --accent3-rgb:132,184,208; --green-rgb:140,204,136; --red-rgb:232,132,120;
+  --stk-fg:#d9c6f7; --prod-fg:#a6d3e8;
+  /* the finished colours too: :root resolves these once, so the -rgb values
+     above would not reach them on their own */
+  --accent:rgb(216,155,74); --accent2:rgb(236,183,104); --accent3:rgb(132,184,208);
+  --green:rgb(140,204,136); --red:rgb(232,132,120);
+  --accent-dim:rgba(216,155,74,.12); --accent2-dim:rgba(236,183,104,.10); --accent3-dim:rgba(132,184,208,.10);
+  color:var(--white);
+  background-color:#30271e;
+  background-image:radial-gradient(110% 90% at 100% 0%,rgba(245,195,90,.10),rgba(245,195,90,0) 58%),
+                   linear-gradient(180deg,#332a20 0%,#2c241b 100%);
+  border-color:rgba(214,158,46,.55);box-shadow:0 20px 54px rgba(60,40,12,.22),0 0 0 1px rgba(214,158,46,.12)}
+html[data-dr-theme="signal"] body .feed-card.ex-on:hover{border-color:rgba(214,158,46,.85);box-shadow:0 30px 70px rgba(60,40,12,.30),0 0 0 1px rgba(214,158,46,.22)}
+html[data-dr-theme="signal"] body .feed-card.ex-on::before{background:linear-gradient(90deg,#F3C95C,#D99A1E 55%,#F3C95C)}
+html[data-dr-theme="signal"] body .feed-card.ex-on::after{background:rgba(236,183,104,.07)}
+html[data-dr-theme="signal"] body .feed-card.ex-on .fc-tag{color:#F2BD7C;background:rgba(242,189,124,.12);border-color:rgba(242,189,124,.34)}
+html[data-dr-theme="signal"] body .feed-card.ex-on .fc-help,
+html[data-dr-theme="signal"] body .feed-card.ex-on .fc-prod{color:#A6D3E8;background:rgba(132,184,208,.13);border-color:rgba(132,184,208,.36)}
+html[data-dr-theme="signal"] body .feed-card.ex-on .fc-stk{color:#D9C6F7;background:rgba(167,139,250,.13);border-color:rgba(167,139,250,.32)}
+html[data-dr-theme="signal"] body .feed-card.ex-on .fc-ctx{color:#EDE3D5;background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15)}
+html[data-dr-theme="signal"] body .feed-card.ex-on .fc-ctx.mine{color:#F2BD7C;background:rgba(242,189,124,.12);border-color:rgba(242,189,124,.34)}
+html[data-dr-theme="signal"] body .feed-card.ex-on .fc-share{color:#A6D3E8;border-color:rgba(132,184,208,.45)}
+html[data-dr-theme="signal"] body .feed-card.ex-on .fc-met.g,
+html[data-dr-theme="signal"] body .feed-card.ex-on .fc-rc{color:#95D59A;background:rgba(140,204,136,.12);border-color:rgba(140,204,136,.36)}
+html[data-dr-theme="signal"] body .feed-card.ex-on .fc-met.r{color:#F0A89C;background:rgba(232,132,120,.12);border-color:rgba(232,132,120,.36)}
+html body .feed-card.ex-on .ex-cap .fc-caplab{color:#B7791F}
+/* the pill takes its SIZE from each theme's own .fc-status chip (so it lines
+   up with "Resolved" exactly) and only its COLOURS from here */
+html body .fc-status.ex-pill{display:inline-flex;align-items:center;gap:.32em;white-space:nowrap;font-weight:800;
+  color:#7A4B00;background:linear-gradient(180deg,#FFF6D6,#FDE39A);border-color:rgba(227,155,12,.62);border-style:solid;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65),0 2px 10px rgba(227,155,12,.20)}
+html body .ex-pill-medal{width:.95em;height:1.2em;flex:none;line-height:0;margin:-.1em 0 -.1em -.14em}
+html body .ex-pill-medal svg{width:100%;height:100%;display:block}
+html body .ex-pill .tip-i{width:1.25em;height:1.25em;font-size:.82em;line-height:1;border:1px solid currentColor;color:inherit;background:transparent;opacity:.7;margin-left:.08em;padding:0}
+html body .ex-pill .tip-i:hover{opacity:1}
 /* --- D4: private case breakdown (owner only) --- */
 .cb-wrap{border:1px solid var(--border2);border-radius:12px;background:var(--card2);padding:.85rem 1rem;margin:.9rem 0}
 .cb-h{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;flex-wrap:wrap;margin-bottom:.6rem}
@@ -2295,8 +2350,8 @@ html .feed-card.fx-card::after{content:none !important;display:none !important}
 <section class="section wide" id="library">
   <div class="sec-eyebrow g">The library</div>
   <div class="sec-title">Resolved <span class="g">Decisions</span></div>
-  <p class="sec-sub">Closed cases &mdash; <b>Resolved</b> (70%+ of asks met) and <b>Partially resolved</b>. See what the PM decided and how each ask was met. The record a forum thread never keeps.</p>
-  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All decisions</option><option value="exemplary">🏅 Exemplary only</option><option value="resolved">Resolved — excluding exemplary</option><option value="partial">Partially resolved</option></select></div>
+  <p class="sec-sub">Closed cases &mdash; <b>🏅 Exemplary</b> (90%+ of asks met, a brief rated 4.5+ for clarity, and a reply readers marked helpful), <b>Resolved</b> (70%+ of asks met) and <b>Partially resolved</b> (under 70% &mdash; the author can reopen). See what the PM decided and how each ask was met. The record a forum thread never keeps.</p>
+  <div class="fbar"><select id="lib-cat" aria-label="Filter by category"></select><select id="lib-status" aria-label="Filter by resolution"><option value="closed">All cases</option><option value="exemplary">Resolved Exemplary cases</option><option value="resolved">Resolved cases</option><option value="partial">Partially resolved cases</option></select></div>
   <div class="ex-strip" id="ex-strip" style="display:none">
     <div class="ex-h"><span class="ex-h-t">🏅 Exemplary decisions</span><span class="ex-h-s">Closed with a strong resolution — this is what a great case looks like.</span></div>
     <div id="ex-list" class="feed-grid ex-grid"></div>
@@ -3284,26 +3339,39 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
         rc=Number(c.responses||c.response_count)||0,
         hs=Number(c.high_signal)||0,
         cl=Number(c.clarity)||0;
-    var b='A case earns the medal when the person who asked it closed it having got at least 70% of what they needed. It is here because other PMs actually solved it \u2014 not because of who wrote it.\n\n';
-    b+='\u2022 Resolved: the asker got '+pct+'% of what they asked for answered.\n';
-    b+='\u2022 Responses: it drew '+rc+' '+(rc===1?'reply':'replies')+(hs>0?(', '+hs+' of which '+(hs===1?'was':'were')+' marked genuinely helpful by readers'):'')+'.\n';
-    b+='\u2022 Brief quality: the case itself scored '+cl.toFixed(1)+' out of 5 on Clarity & Completeness.\n\n';
+    /* 7.9c: the medal's rule -- 90%+ of asks met, a brief rated 4.5+ for
+       clarity, and at least one reply a reader marked helpful */
+    var b='The medal goes to a closed case that shows what a great decision request looks like: nearly every ask answered, a clear and complete brief, and replies other PMs found genuinely helpful. It is here because of the case and the room, not because of who wrote it.\n\n';
+    b+='\u2022 Asks met: '+pct+'% of what the asker needed was answered (the medal needs 90%+).\n';
+    b+='\u2022 Brief quality: the case scored '+cl.toFixed(1)+' out of 5 on Clarity & Completeness (the medal needs 4.5+).\n';
+    b+='\u2022 Helped: it drew '+rc+' '+(rc===1?'reply':'replies')+', and readers marked '+(hs>1?'several':'at least one')+' of them helpful.\n\n';
     b+='Read it as a worked example: this is what a case worth answering looks like.';
     return {t:'Why this is exemplary', b:b};
   }
   /* turn a standard feed card into an exemplary one WITHOUT wrapping it
      (a wrapper would break the inline-expand panel that gets inserted after the card) */
+  /* 7.9c: a gold "Exemplary" pill in its own labelled cell, right beside the
+     Status chip -- so the card reads "Resolved · Exemplary". The confetti and
+     the big medal block are gone: in the Signal theme a blanket
+     ".feed-card > * {position:relative}" pushed them into the card's flow. */
+  function exPillSvg(){
+    return '<svg viewBox="0 0 26 34" aria-hidden="true"><path d="M8 15 L5 31 L10 27 L10.5 15 Z" fill="#E39B0C"/><path d="M18 15 L21 31 L16 27 L15.5 15 Z" fill="#E39B0C"/>'
+      +'<circle cx="13" cy="11" r="10" fill="#F4B92F" stroke="#FFF6D6" stroke-width="1.4"/><path d="M13 5.4l1.8 3.7 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4-2.9-2.8 4-.6Z" fill="#8a5a05" opacity=".6"/></svg>';
+  }
   function exBadgeHtml(c){
     EXTIPS[c.id]=exReason(c);
-    return '<span class="ex-conf">'+exConfettiSvg()+'</span>'
-      +'<span class="ex-ribbon"><span class="ex-medal">'+exMedalSvg()+'</span>'
-      +'<span class="ex-lab">Exemplary'+tipI('ex:'+c.id)+'</span></span>';
+    return '<span class="fc-cap ex-cap"><span class="fc-caplab">Award</span>'
+      +'<span class="fc-status ex-pill"><span class="ex-pill-medal">'+exPillSvg()+'</span>Exemplary'+tipI('ex:'+c.id)+'</span></span>';   /* fc-status: each theme's own chip size */
   }
   function exDecorate(html, c){
     var badge=exBadgeHtml(c);
     var out=html.replace('class="feed-card', 'class="feed-card ex-on');   /* matches "feed-card" AND "feed-card lib" */
-    var i=out.indexOf('>');
-    return (i<0) ? out : (out.slice(0,i+1) + badge + out.slice(i+1));
+    /* the pill's cell goes straight after the Status cell */
+    var st=out.indexOf('<span class="fc-caplab">Status</span>');
+    var end=(st<0)?-1:out.indexOf('</span></span>', st);
+    if(end>=0){ end+='</span></span>'.length; return out.slice(0,end)+badge+out.slice(end); }
+    var i=out.indexOf('>');                                                 /* no Status cell: top of the card */
+    return (i<0) ? out : (out.slice(0,i+1) + '<div class="fc-attrs">'+badge+'</div>' + out.slice(i+1));
   }
   /* The library list can paint BEFORE dr_featured_cases resolves. When the ids
      land, retro-fit the medal onto any already-rendered card. */
@@ -3313,7 +3381,9 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
       var id=card.getAttribute('data-id'), c=EX_IDS[id];
       if(!c || card.classList.contains('ex-on')) return;
       card.classList.add('ex-on');
-      card.insertAdjacentHTML('afterbegin', exBadgeHtml(c));
+      var stc=card.querySelector('.fc-status:not(.ex-pill)'), cell=stc&&stc.closest?stc.closest('.fc-cap'):null;   /* 7.9c: beside Status */
+      if(cell) cell.insertAdjacentHTML('afterend', exBadgeHtml(c));
+      else card.insertAdjacentHTML('afterbegin', '<div class="fc-attrs">'+exBadgeHtml(c)+'</div>');
     });
   }
 
@@ -3324,7 +3394,7 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
   function fetchExIds(force){
     if(!SB) return Promise.resolve({});
     if(exIdsLoaded && !force) return Promise.resolve(EX_IDS);
-    return SB.rpc('dr_featured_cases',{p_limit:60}).then(function(res){
+    return SB.rpc('dr_featured_cases',{p_limit:500}).then(function(res){   /* 7.9c: all of them, so no exemplary card ever shows without its medal */
       var d=(res&&res.data)||null;
       EX_ROWS=(d&&d.ok&&d.cases)?d.cases:[];
       EX_IDS={};
@@ -3370,10 +3440,18 @@ PRODUCT=['B2B SaaS','B2C','Marketplace','Platform','Internal Tool','AI Product',
     if(myReq!==libReqId) return;
     libLoading=false; libDone=true;
     if(!EX_ROWS.length){
-      list.innerHTML='<div class="feed-empty">No exemplary decisions yet \u2014 a case earns the medal once it is closed with at least 70% of what the asker needed answered, and at least one PM actually helped.</div>';
+      list.innerHTML='<div class="feed-empty">No exemplary decisions yet \u2014 the medal goes to a closed case with 90%+ of its asks met, a brief rated 4.5+ for clarity, and at least one reply a reader marked helpful.</div>';
       return;
     }
-    var html='', exSorted=EX_ROWS.slice().sort(exByClosed);   /* 7.9b: newest closed first */
+    /* 7.9c: the category filter applies here too (it used to be ignored) */
+    var catEl=document.getElementById('lib-cat'), cat=catEl?catEl.value:'';
+    var pool=(cat && cat!=='all') ? EX_ROWS.filter(function(r){ return (r.categories||[]).indexOf(cat)>=0; }) : EX_ROWS;
+    if(!pool.length){
+      list.innerHTML='<div class="feed-empty">No exemplary decisions in this category yet.</div>';
+      if(typeof wireCards==='function') wireCards(list);
+      return;
+    }
+    var html='', exSorted=pool.slice().sort(exByClosed);   /* 7.9b: newest closed first */
     for(var i=0;i<exSorted.length;i++){ try{ html+=exDecorate(libCardHtml(exSorted[i]), exSorted[i]); }catch(e){} }
     list.innerHTML=html;
     if(typeof wireCards==='function') wireCards(list);
